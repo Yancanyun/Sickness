@@ -64,5 +64,5 @@ public interface SecurityUserMapper {
 
     public SecurityUser queryByPartyId(@Param("partyId")int partyId) throws SSException;
 
-    public void updateSecurityUser(@Param("securityUser") SecurityUser securityUser)throws SSException;
+    public void updateSecurityUser(@Param("securityUser")  SecurityUser securityUser)throws SSException;
 }

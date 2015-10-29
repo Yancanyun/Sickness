@@ -300,8 +300,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     /**
-     * 密码修改
-     * @param employeeId
+     *
+     * @param securityUserId
      * @param oldPwd
      * @param newPwd
      * @throws SSException
