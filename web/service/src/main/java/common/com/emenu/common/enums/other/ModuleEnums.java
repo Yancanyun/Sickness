@@ -82,13 +82,22 @@ public enum ModuleEnums {
     AdminDishTagUpdate("Admin:Dish:Tag:Update"),
     AdminDishTagDel("Admin:Dish:Tag:Del"),
 
+
+    //用户管理
+    AdminUserManagement("Admin:User:Management"),
+
     //会员基本信息管理
     AdminVipInfo("Admin:Vip:VipInfo"),
     AdminVipInfoList("Admin:Vip:VipInfo:List"),
     AdminVipInfoNew("Admin:Vip:VipInfo:New"),
     AdminVipInfoUpdate("Admin:Vip:VipInfo:Update"),
     AdminVipInfoDetail("Admin:Vip:VipInfo:Detail"),
-    AdminVipInfoDel("Admin:Vip:VipInfo:Del")
+    AdminVipInfoDel("Admin:Vip:VipInfo:Del"),
+
+    //员工管理
+
+    AdminUserManagementEmployee("Admin:User:Management:Employee"),
+
     ;
 
     private String name;
