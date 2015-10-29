@@ -1,7 +1,7 @@
 package com.emenu.service.party.group.employee;
 
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
-import com.emenu.common.entity.party.employee.Employee;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;

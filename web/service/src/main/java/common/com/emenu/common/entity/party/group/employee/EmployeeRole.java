@@ -1,4 +1,4 @@
-package com.emenu.common.entity.party.employee;
+package com.emenu.common.entity.party.group.employee;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 

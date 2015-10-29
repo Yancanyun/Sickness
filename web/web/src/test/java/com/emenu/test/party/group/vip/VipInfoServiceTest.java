@@ -1,8 +1,8 @@
-package com.emenu.test.party.vip;
+package com.emenu.test.party.group.vip;
 
-import com.emenu.common.entity.party.vip.VipInfo;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
-import com.emenu.service.party.vip.VipInfoService;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;

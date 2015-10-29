@@ -1,7 +1,7 @@
 package com.emenu.test.party.group.employee;
 
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
-import com.emenu.common.entity.party.employee.Employee;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;

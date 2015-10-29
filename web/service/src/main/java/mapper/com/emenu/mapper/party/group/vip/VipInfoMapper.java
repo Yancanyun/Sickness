@@ -1,7 +1,7 @@
-package com.emenu.mapper.party.vip;
+package com.emenu.mapper.party.group.vip;
 
 
-import com.emenu.common.entity.party.vip.VipInfo;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

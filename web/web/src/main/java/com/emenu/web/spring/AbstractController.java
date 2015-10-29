@@ -12,7 +12,7 @@ import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
-import com.emenu.service.party.vip.VipInfoService;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;

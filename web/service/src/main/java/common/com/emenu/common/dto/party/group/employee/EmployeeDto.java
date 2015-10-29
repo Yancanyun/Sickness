@@ -1,6 +1,6 @@
 package com.emenu.common.dto.party.group.employee;
 
-import com.emenu.common.entity.party.employee.Employee;
+import com.emenu.common.entity.party.group.employee.Employee;
 
 import java.util.List;
 

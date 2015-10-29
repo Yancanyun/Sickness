@@ -1,8 +1,8 @@
 package com.emenu.service.party.group.employee.impl;
 
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
-import com.emenu.common.entity.party.employee.Employee;
-import com.emenu.common.entity.party.employee.EmployeeRole;
+import com.emenu.common.entity.party.group.employee.Employee;
+import com.emenu.common.entity.party.group.employee.EmployeeRole;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.table.WaiterTable;

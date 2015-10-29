@@ -1,17 +1,17 @@
-package com.emenu.service.party.vip.impl;
+package com.emenu.service.party.group.vip.impl;
 
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
-import com.emenu.common.entity.party.vip.VipInfo;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.exception.VipInfoException;
 import com.emenu.common.utils.CommonUtil;
-import com.emenu.mapper.party.vip.VipInfoMapper;
+import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
-import com.emenu.service.party.vip.VipInfoService;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.pandawork.core.common.exception.ExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -129,6 +129,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
             //2.再向t_party_security_user表添加一条登录信息，默认登录名为手机号码，密码为000000；
             SecurityUser securityUser = new SecurityUser();
+            String password = com.pandawork.core.common.util.CommonUtil.md5("123456");
             securityUser.setPartyId(partyId);
             securityUser.setLoginName(phone);
             securityUser.setPassword("000000");

@@ -1,7 +1,6 @@
-package com.emenu.common.entity.party.employee;
+package com.emenu.common.entity.party.group.vip;
 
 import com.pandawork.core.common.entity.AbstractEntity;
-
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,32 +9,45 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 员工信息实体
- * @author xiaozl
- * @time 17:14
+ * 会员基本信息实体
+ *
+ * @author chenyuting
+ * @time 2015/10/22  17:34
  */
 @Entity
-@Table(name = "t_party_employee")
-public class Employee extends AbstractEntity {
+@Table(name = "t_party_vip_info")
+public class VipInfo extends AbstractEntity{
 
     // 主键
     @Id
     private Integer id;
 
-    //抽象用户id
+    //当事人id
     @Column(name = "party_id")
     private Integer partyId;
 
-    // 员工真实姓名
+    //会员姓名
     private String name;
 
-    // 员工电话
-    private  String phone;
+    //性别,0-未说明,1-男,2-女,3-其他
+    private Integer sex;
 
-    //员工状态：0代表禁用，1代表启用，2代表已删除
-    private  Integer status;
+    //出生日期
+    private Date birthday;
 
-    // 创建时间
+    //电话号码
+    private String phone;
+
+    //qq号码
+    private String qq;
+
+    //邮箱
+    private String email;
+
+    //帐号状态,1-启用,2-停用,3-删除
+    private Integer state;
+
+    //创建时间
     @Column(name = "created_time")
     private Date createdTime;
 
@@ -43,6 +55,7 @@ public class Employee extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+    //get、set方法
     public Integer getId() {
         return id;
     }
@@ -68,6 +81,22 @@ public class Employee extends AbstractEntity {
         this.name = name;
     }
 
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -76,12 +105,28 @@ public class Employee extends AbstractEntity {
         this.phone = phone;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getQq() {
+        return qq;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public Date getCreatedTime() {

@@ -1,9 +1,9 @@
-package com.emenu.web.controller.admin.party.vip;
+package com.emenu.web.controller.admin.party.group.vip;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.party.vip.VipInfo;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
