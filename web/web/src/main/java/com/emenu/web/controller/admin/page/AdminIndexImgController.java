@@ -110,12 +110,4 @@ public class AdminIndexImgController extends AbstractController{
             return sendErrMsgAndErrCode(e);
         }
     }
-
-    @Module(ModuleEnums.AdminBasicInfoIndexImgNew)
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject uploadImg(){
-
-        return null;
-    }
 }
