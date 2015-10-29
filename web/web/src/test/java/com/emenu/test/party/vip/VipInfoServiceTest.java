@@ -46,7 +46,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
     public void updateVipInfoStateById() throws SSException{
         int id = 2;
         vipInfoService.updateVipInfoStateById(id, UserStatusEnums.Disabled);
-        System.out.println("id为" + id + "的状态已经修改为" + UserStatusEnums.Disabled.getDescription());
+        System.out.println("id为" + id + "的状态已经修改为" + UserStatusEnums.Disabled.getState());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
         String phone = vipInfo.getPhone();
         Date birthday = vipInfo.getBirthday();
         int state = vipInfo.getState();
-        String status =UserStatusEnums.getDescriptionById(state);
-        System.out.println("id为" + id + "的详细信息为" + "姓名：" + name + "；电话： " + phone + "；生日：" + birthday + "；用户状态：" + status );
+        //String status =UserStatusEnums.getDescriptionById(state);
+        //System.out.println("id为" + id + "的详细信息为" + "姓名：" + name + "；电话： " + phone + "；生日：" + birthday + "；用户状态：" + status );
     }
 }

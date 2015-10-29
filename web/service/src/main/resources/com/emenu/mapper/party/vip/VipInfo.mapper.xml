@@ -14,7 +14,7 @@
         LIMIT #{pCurrent},#{pSize}
     </select>
 
-    <select id="listVipInfo" resultMap="VipInfo">
+    <select id="listVipInfo" resultType="VipInfo">
         SELECT *
         FROM `t_party_vip_info`
         LIMIT #{offset},#{pageSize}

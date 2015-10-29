@@ -2,7 +2,9 @@ package com.emenu.web.controller.admin.party.vip;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.party.vip.VipInfo;
+import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
@@ -23,13 +25,15 @@ import java.util.List;
  * @date 2015/10/27 10:55
  */
 @Controller
-@RequestMapping(value = URLConstants.VIPINFO_URL)
+@Module(ModuleEnums.AdminVipInfo)
+@RequestMapping(value = URLConstants.VIP_VIPINFO_URL)
 public class VipInfoController extends AbstractController {
 
     /**
      * 去会员基本信息列表页面
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(){
         return "admin/party/vip/vip_info_list";
@@ -41,6 +45,7 @@ public class VipInfoController extends AbstractController {
      * @param pageSize
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = "ajax/list/{curPage}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxListVipInfo(@PathVariable("curPage") Integer curPage,
@@ -76,6 +81,7 @@ public class VipInfoController extends AbstractController {
      * 去新增会员页面
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewVipInfo(){
         return "admin/party/vip/vip_info_new";
@@ -91,6 +97,7 @@ public class VipInfoController extends AbstractController {
      * @param email
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipInfo(@RequestParam("name") String name,
                              @RequestParam("sex") int sex,
@@ -141,6 +148,7 @@ public class VipInfoController extends AbstractController {
      * @param state
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject lock(@RequestParam("id") int id,
@@ -161,6 +169,7 @@ public class VipInfoController extends AbstractController {
      * @param model
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoDetail)
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
     public String detailVipInfo(@PathVariable("id") int id,
                                 Model model){
@@ -174,6 +183,4 @@ public class VipInfoController extends AbstractController {
         }
         return "admin/party/vip/vip_info_detail";
     }
-
-
 }

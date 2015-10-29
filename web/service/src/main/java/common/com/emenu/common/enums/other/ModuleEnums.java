@@ -80,8 +80,17 @@ public enum ModuleEnums {
     AdminDishTagList("Admin:Dish:Tag:List"),
     AdminDishTagNew("Admin:Dish:Tag:New"),
     AdminDishTagUpdate("Admin:Dish:Tag:Update"),
-    AdminDishTagDel("Admin:Dish:Tag:Del")
+    AdminDishTagDel("Admin:Dish:Tag:Del"),
+
+    //会员基本信息管理
+    AdminVipInfo("Admin:Vip:VipInfo"),
+    AdminVipInfoList("Admin:Vip:VipInfo:List"),
+    AdminVipInfoNew("Admin:Vip:VipInfo:New"),
+    AdminVipInfoUpdate("Admin:Vip:VipInfo:Update"),
+    AdminVipInfoDetail("Admin:Vip:VipInfo:Detail"),
+    AdminVipInfoDel("Admin:Vip:VipInfo:Del")
     ;
+
     private String name;
 
     ModuleEnums(String name) {
