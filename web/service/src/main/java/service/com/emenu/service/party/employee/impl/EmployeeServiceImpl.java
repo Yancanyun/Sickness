@@ -80,7 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                 //数据存入dto
                 employeeDto.setRole(role);
                 employeeDto.setRoleName(roleName);
-                employeeDto.setStatus(UserStatusEnums.getDescriptionById(employee.getStatus()));
+                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
                 employeeDtos.add(employeeDto);
             }
             return employeeDtos;
@@ -204,15 +204,19 @@ public class EmployeeServiceImpl implements EmployeeService{
                                String newPwd) throws SSException {
         try {
 
+            //获取员工角色
             List<Integer> role = employeeDto.getRole();
 
+            //获取当前partyId员工注册信息
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
 
+            //更新员工登录名和密码
             securityUser.setPassword(newPwd);
             securityUser.setLoginName(newloginName);
 
-            System.out.println(securityUser.getLoginName()+securityUser.getId());
+           // System.out.println(securityUser.getLoginName()+securityUser.getId());
 
+            //更新t_party_security_user
             securityUserService.updateSecurityUser(securityUser);
 
             //更新员工姓名、电话等信息t_party_employee
@@ -296,8 +300,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     /**
-     * 密码修改
-     * @param employeeId
+     *
+     * @param securityUserId
      * @param oldPwd
      * @param newPwd
      * @throws SSException
