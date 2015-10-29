@@ -47,5 +47,7 @@
             `status` = #{securityUser.status},
             `account_type` = #{securityUser.accountType}
         WHERE `id` = #{securityUser.id}
+
+
     </update>
 </mapper>
