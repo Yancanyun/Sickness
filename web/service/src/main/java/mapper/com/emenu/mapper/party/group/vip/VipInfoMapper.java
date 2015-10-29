@@ -17,14 +17,14 @@ public interface VipInfoMapper {
     /**
      * 根据关键字查看会员信息列表
      * @param keyword
-     * @param pCurrent
-     * @param pSize
+     * @param curPage
+     * @param pageSize
      * @return
      * @throws Exception
      */
     public List<VipInfo> listVipInfoByKeyword(@Param("keyword") String keyword,
-                                              @Param("pCurrent") int pCurrent,
-                                              @Param("pSize")int pSize) throws Exception;
+                                              @Param("curPage") int curPage,
+                                              @Param("pageSize")int pageSize) throws Exception;
 
     /**
      * 根据关键词计算会员信息数量

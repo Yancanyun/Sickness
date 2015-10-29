@@ -6,7 +6,6 @@ import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
-import com.emenu.common.exception.VipInfoException;
 import com.emenu.common.utils.CommonUtil;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
@@ -17,7 +16,6 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
-import com.pandawork.core.framework.util.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -80,14 +78,15 @@ public class VipInfoServiceImpl implements VipInfoService{
     }
 
     @Override
-    public List<VipInfo> listVipInfoByKeyword(String keyword, Pagination page) throws SSException{
-        int pCurrent=0, pSize=10;
-        if(page!=null){
-            pCurrent = page.getCurrentPage();
-            pSize = page.getPageCount();
+    public List<VipInfo> listVipInfoByKeyword(String keyword, int curPage, int pageSize) throws SSException{
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        int offset = curPage * pageSize;
+        if (Assert.lessZero(offset)) {
+            return Collections.emptyList();
         }
+        //Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
         try{
-            return vipInfoMapper.listVipInfoByKeyword(keyword, pCurrent, pSize);
+            return vipInfoMapper.listVipInfoByKeyword(keyword, curPage, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
@@ -187,7 +186,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     public VipInfo queryVipInfoById(int id) throws SSException{
-        CommonUtil.checkId(id, VipInfoException.VipIdNotNull);
+        CommonUtil.checkId(id, EmenuException.VipIdNotNull);
 
         try {
             return vipInfoMapper.queryVipInfoById(id);
@@ -201,8 +200,8 @@ public class VipInfoServiceImpl implements VipInfoService{
         if (Assert.isNull(vipInfo)){
             return false;
         }
-        Assert.isNotNull(vipInfo.getName(), VipInfoException.VipNameNotNUll);
-        Assert.isNotNull(vipInfo.getPhone(), VipInfoException.VipPhoneNotNull);
+        Assert.isNotNull(vipInfo.getName(), EmenuException.VipNameNotNUll);
+        Assert.isNotNull(vipInfo.getPhone(), EmenuException.VipPhoneNotNull);
         return true;
     }
 

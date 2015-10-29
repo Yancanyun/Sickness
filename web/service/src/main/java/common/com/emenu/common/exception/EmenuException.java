@@ -85,6 +85,11 @@ public enum EmenuException implements IBizExceptionMes {
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
+    VipInfoKeywordNotNull("请输入关键字",8002),
+    PartyIdNotNull("当事人Id不能为空", 8003),
+    VipNameNotNUll("用户姓名不能为空", 8004),
+    VipPhoneNotNull("电话号码不能为空", 8005),
+    VipIdNotNull("用户id不能为空",8006)
 
     ;
 

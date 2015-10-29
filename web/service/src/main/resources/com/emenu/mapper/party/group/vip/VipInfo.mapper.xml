@@ -34,6 +34,7 @@
                 vipInfo.phone like "%"#{keyword}"%"
             </if>
         </where>
+        LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="queryVipInfoById" parameterType="Integer" resultType="VipInfo">

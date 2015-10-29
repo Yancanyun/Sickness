@@ -46,7 +46,8 @@ public final class URLConstants {
     public static final String INDEX_IMG_URL = "admin/index/img";
 
     //会员基本信息管理
-    public static final String VIP_VIPINFO_URL = "admin/party/vip";
+    public static final String VIP_VIPINFO_URL = "admin/party/group/vip";
 
     public static final String EMPLOYEE_MANAGEMENT = "admin/party/employee";
+
 }

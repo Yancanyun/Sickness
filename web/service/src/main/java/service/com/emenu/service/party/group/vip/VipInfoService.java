@@ -35,11 +35,12 @@ public interface VipInfoService {
     /**
      * 根据关键词获取会员信息列表
      * @param keyword
-     * @param page
+     * @param curPage
+     * @param pageSize
      * @return
      * @throws SSException
      */
-    public List<VipInfo> listVipInfoByKeyword(String keyword, Pagination page) throws SSException;
+    public List<VipInfo> listVipInfoByKeyword(String keyword, int curPage, int pageSize) throws SSException;
 
     /**
      * 根据关键字查询会员信息数量

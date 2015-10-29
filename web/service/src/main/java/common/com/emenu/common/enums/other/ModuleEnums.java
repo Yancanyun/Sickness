@@ -87,16 +87,18 @@ public enum ModuleEnums {
     AdminUserManagement("Admin:User:Management"),
 
     //会员基本信息管理
-    AdminVipInfo("Admin:Vip:VipInfo"),
-    AdminVipInfoList("Admin:Vip:VipInfo:List"),
-    AdminVipInfoNew("Admin:Vip:VipInfo:New"),
-    AdminVipInfoUpdate("Admin:Vip:VipInfo:Update"),
-    AdminVipInfoDetail("Admin:Vip:VipInfo:Detail"),
-    AdminVipInfoDel("Admin:Vip:VipInfo:Del"),
+    AdminVipInfo("Admin:User:Management:Vip:VipInfo"),
+    AdminVipInfoList("Admin:User:Management:Vip:VipInfo:List"),
+    AdminVipInfoNew("Admin:User:Management:Vip:VipInfo:New"),
+    AdminVipInfoUpdate("Admin:User:Management:Vip:VipInfo:Update"),
+    AdminVipInfoDetail("Admin:User:Management:Vip:VipInfo:Detail"),
+    AdminVipInfoDel("Admin:User:Management:Vip:VipInfo:Del"),
+    AdminVipInfoSearch("Admin:User:Management:Vip:VipInfo:Search"),
 
     //员工管理
 
     AdminUserManagementEmployee("Admin:User:Management:Employee"),
+
 
     ;
 

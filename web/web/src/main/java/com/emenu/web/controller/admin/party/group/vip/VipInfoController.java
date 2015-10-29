@@ -36,7 +36,7 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(){
-        return "admin/party/vip/vip_info_list";
+        return "admin/party/group/vip/vip_info_list";
     }
 
     /**
@@ -84,7 +84,7 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewVipInfo(){
-        return "admin/party/vip/vip_info_new";
+        return "admin/party/group/vip/vip_info_new";
     }
 
     /**
@@ -119,8 +119,16 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "redirect:/admin/vip/party/list";
+        return "redirect:admin/party/group/vip/list";
     }
+
+    /*@Module(ModuleEnums.AdminVipInfoUpdate)
+    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    public String updateVipInfo(@PathVariable("id") int id){
+        try{
+            return "admin/party/group/vip/update";
+        }
+    }*/
 
     /**
      * ajax返回电话号码存在的错误信息
@@ -152,7 +160,7 @@ public class VipInfoController extends AbstractController {
     @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject lock(@RequestParam("id") int id,
-                                         @RequestParam("state") int state){
+                           @RequestParam("state") int state){
         try{
             UserStatusEnums vipInfostate = UserStatusEnums.valueOf(state);
             vipInfoService.updateVipInfoStateById(id, vipInfostate);
@@ -181,6 +189,46 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/party/vip/vip_info_detail";
+        return "admin/party/group/vip/vip_info_detail";
+    }
+
+    /**
+     * 分页获取关键字搜索列表
+     * @param curPage
+     * @param pageSize
+     * @param keyword
+     * @return
+     */
+    @Module(ModuleEnums.AdminVipInfoSearch)
+    @RequestMapping(value = "ajax/search/{curPage}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxListVipInfoByKeyWord(@PathVariable("curPage") Integer curPage,
+                                               @RequestParam Integer pageSize,
+                                               @RequestParam("keyword") String keyword){
+        List<VipInfo> vipInfoList = Collections.emptyList();
+        try{
+            vipInfoService.listVipInfoByKeyword(keyword, curPage, pageSize);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (VipInfo vipInfo: vipInfoList){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", vipInfo.getId());
+            jsonObject.put("name", vipInfo.getName());
+            jsonObject.put("phone", vipInfo.getPhone());
+            jsonObject.put("state", vipInfo.getState());
+            jsonArray.add(jsonObject);
+        }
+        int dataCount = 0;
+        try {
+            dataCount = vipInfoService.count();
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonArray(jsonArray, dataCount);
     }
 }
