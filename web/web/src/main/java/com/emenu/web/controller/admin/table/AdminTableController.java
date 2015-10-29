@@ -104,7 +104,7 @@ public class AdminTableController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/table/table/list_home";
+        return "admin/restaurant/table/list_home";
     }
 
     /**
@@ -124,7 +124,7 @@ public class AdminTableController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/table/table/new_home";
+        return "admin/restaurant/table/new_home";
     }
 
     /**
@@ -163,7 +163,7 @@ public class AdminTableController extends AbstractController {
             List<Area> areaList = areaService.listAllArea();
             model.addAttribute("areaList",areaList);
 
-            return "admin/table/table/update_home";
+            return "admin/restaurant/table/update_home";
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -183,7 +183,7 @@ public class AdminTableController extends AbstractController {
         try {
             table.setId(id);
             tableService.updateTable(table);
-            return "redirect:/admin/table/table";
+            return "redirect:/admin/restaurant/table";
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

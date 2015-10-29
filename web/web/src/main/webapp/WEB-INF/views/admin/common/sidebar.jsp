@@ -22,9 +22,15 @@
     <li id="firstMenu2" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">饭店管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li><a class="J_menu" href="javascript:;">餐台区域管理</a></li>
-            <li><a class="J_menu" href="javascript:;">餐台管理</a></li>
-            <li><a class="J_menu" href="javascript:;">餐台二维码</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:Restaurant:Area:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/restaurant/area">餐台区域管理</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:Restaurant:Table:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/restaurant/table">餐台管理</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:Restaurant:QrCode:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/restaurant/qrcode">餐台二维码</a>
+            </li>
             <li><a class="J_menu" href="javascript:;">今日特价</a></li>
             <li><a class="J_menu" href="javascript:;">销售排行</a></li>
             <li><a class="J_menu" href="javascript:;">本店特色</a></li>

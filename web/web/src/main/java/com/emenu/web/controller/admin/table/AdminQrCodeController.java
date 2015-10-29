@@ -52,7 +52,7 @@ public class AdminQrCodeController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/table/qrcode/list_home";
+        return "admin/restaurant/qrcode/list_home";
     }
 
     /**
@@ -70,7 +70,7 @@ public class AdminQrCodeController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "redirect:/admin/table/qrcode";
+        return "redirect:/admin/restaurant/qrcode";
     }
 
     /**
