@@ -5,7 +5,7 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
 
 /**
- * FileUploadService
+ * 文件上传服务
  *
  * @author: zhangteng
  * @time: 2015/10/29 8:56

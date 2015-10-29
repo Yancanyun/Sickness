@@ -11,6 +11,9 @@ public enum EmenuException implements IBizExceptionMes {
     SystemException("系统内部异常", 1),
 
     ImageCompressedFail("图片压缩失败!", 1001),
+    UploadFileNotNull("上传的文件不能为空!", 1002),
+    UploadPathNotNull("上传的文件路径不能为空!", 1003),
+    UploadDirCreateFail("上传文件夹创建失败!", 1004),
 
     //菜品管理模块
     //分类管理

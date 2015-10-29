@@ -5,7 +5,9 @@
     <li id="firstMenu1" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">基本信息管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li><a href="#">后台欢迎页</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:IndexImg:List'}">class="active"</c:if>>
+                <a href="${website}admin/index/img">后台欢迎页</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:Basic:Info:Keywords:List'}">class="active"</c:if>>
                 <a href="${website}admin/keywords">搜索风向标</a>
             </li>

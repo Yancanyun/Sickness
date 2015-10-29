@@ -43,7 +43,6 @@ public final class ImageUtils {
             bais = new ByteArrayInputStream(os.toByteArray());
             com.pandawork.core.common.util.CommonUtil.copyStreamToFile(bais, file);
         } catch (Exception e) {
-            LogClerk.errLog.error(e);
             throw e;
         } finally {
             IOUtils.closeQuietly(is);

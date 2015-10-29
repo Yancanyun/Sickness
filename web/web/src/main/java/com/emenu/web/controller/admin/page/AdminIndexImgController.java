@@ -1,5 +1,6 @@
 package com.emenu.web.controller.admin.page;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.page.IndexImg;
@@ -9,12 +10,10 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,9 +46,23 @@ public class AdminIndexImgController extends AbstractController{
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return PUB_SYS_ERR_PAGE;
+            return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/index/img/list";
+        return "admin/index/img/list_home";
+    }
+
+    @Module(ModuleEnums.AdminBasicInfoIndexImgNew)
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
+    public JSON uploadIndexImg(@RequestParam("file") PandaworkMultipartFile file) {
+        try {
+            indexImgService.newIndexImg(file, getRequest());
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
     /**

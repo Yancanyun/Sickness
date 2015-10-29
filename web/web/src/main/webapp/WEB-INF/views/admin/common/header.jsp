@@ -10,10 +10,10 @@
     <a class="pull-left logo-text menu-list-logo" href="javascript:;"><i class="fa fa-cutlery"></i>&nbsp;餐饮后台管理</a>
     <a class="pull-right header-menu" href="javascript:;"><i class="fa fa-bars"></i>&nbsp;</a>
     <ul class="nav navbar-nav">
-        <li <c:if test="${PWModule eq 'Admin:Basic:Info'}">class="active"</c:if> >
+        <li <c:if test="${PWModule eq 'Admin:BasicInfo'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="1" href="javascript:;">基本信息管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a class="J_menu" href="/pages/admin/welcome.html">后台欢迎页</a></li>
+                <li><a class="J_menu" href="${website}admin/index/img">后台欢迎页</a></li>
                 <li><a class="J_menu" href="${website}admin/keywords">搜索风向标</a></li>
                 <li><a class="J_menu" href="javascript:;">点餐平台首页</a></li>
                 <li><a class="J_menu" href="javascript:;">菜品打印机管理</a></li>
