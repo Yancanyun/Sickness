@@ -1,4 +1,4 @@
-package com.emenu.service.party.employee;
+package com.emenu.service.party.group.employee;
 
 /**
  * @author xiaozl

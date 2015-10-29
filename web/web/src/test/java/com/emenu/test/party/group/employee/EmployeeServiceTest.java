@@ -1,18 +1,13 @@
-package com.emenu.test.party.employee;
+package com.emenu.test.party.group.employee;
 
-import com.emenu.common.dto.party.employee.EmployeeDto;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.party.employee.Employee;
-import com.emenu.service.party.employee.EmployeeService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.CommonUtil;
-import com.pandawork.core.framework.web.WebConstants;
-import junit.framework.TestResult;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;

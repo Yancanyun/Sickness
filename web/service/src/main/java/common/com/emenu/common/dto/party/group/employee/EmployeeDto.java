@@ -1,4 +1,4 @@
-package com.emenu.common.dto.party.employee;
+package com.emenu.common.dto.party.group.employee;
 
 import com.emenu.common.entity.party.employee.Employee;
 

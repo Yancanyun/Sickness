@@ -1,4 +1,4 @@
-package com.emenu.common.enums.employee;
+package com.emenu.common.enums.party.group.employee;
 
 import java.util.HashMap;
 

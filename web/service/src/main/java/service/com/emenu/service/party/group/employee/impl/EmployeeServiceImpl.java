@@ -1,19 +1,19 @@
-package com.emenu.service.party.employee.impl;
+package com.emenu.service.party.group.employee.impl;
 
-import com.emenu.common.dto.party.employee.EmployeeDto;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.party.employee.Employee;
 import com.emenu.common.entity.party.employee.EmployeeRole;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.table.WaiterTable;
-import com.emenu.common.enums.employee.EmployeeRoleEnums;
+import com.emenu.common.enums.party.group.employee.EmployeeRoleEnums;
 import com.emenu.common.enums.party.PartyTypeEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
-import com.emenu.mapper.party.employee.EmployeeMapper;
-import com.emenu.service.party.employee.EmployeeService;
+import com.emenu.mapper.party.group.employee.EmployeeMapper;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.table.WaiterTableService;
@@ -342,7 +342,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public void delEmployeeById(Integer partyId) throws SSException {
+    public void delEmployeeByPartyId(Integer partyId) throws SSException {
         Employee employee=queryEmployeeByPartyId(partyId);
         if(employee!=null&&employee.getStatus().equals(UserStatusEnums.Enabled.getId())){
             throw SSException.get(EmenuException.EmployeeIsActivity,new Exception());

@@ -1,4 +1,4 @@
-package com.emenu.mapper.party.employee;
+package com.emenu.mapper.party.group.employee;
 
 import com.emenu.common.entity.party.employee.Employee;
 import com.emenu.common.entity.party.employee.EmployeeRole;

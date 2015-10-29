@@ -1,6 +1,6 @@
-package com.emenu.service.party.employee.impl;
+package com.emenu.service.party.group.employee.impl;
 
-import com.emenu.service.party.employee.EmployeeRoleService;
+import com.emenu.service.party.group.employee.EmployeeRoleService;
 
 /**
  * @author xiaozl

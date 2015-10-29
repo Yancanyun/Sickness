@@ -1,12 +1,8 @@
-package com.emenu.service.party.employee;
+package com.emenu.service.party.group.employee;
 
-import com.emenu.common.dto.party.employee.EmployeeDto;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.party.employee.Employee;
-import com.emenu.common.entity.party.group.Party;
-import com.emenu.common.entity.party.security.PartyType;
 import com.pandawork.core.common.exception.SSException;
-import org.springframework.http.server.ServletServerHttpAsyncRequestControl;
-import sun.rmi.server.InactiveGroupException;
 
 import java.util.List;
 
@@ -82,7 +78,7 @@ public interface EmployeeService {
      * @param partyId
      * @throws SSException
      */
-    public void delEmployeeById(Integer partyId) throws SSException;
+    public void delEmployeeByPartyId(Integer partyId) throws SSException;
 
     /**
      * 根据partyId查询员工
