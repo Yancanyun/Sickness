@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.party.vip.VipInfoMapper">
+
+    <select id="listVipInfoByKeyword">
+        SELECT *
+        FROM `t_party_vip_info` vipInfo
+        <where>
+            <if test="keyword != null">
+                vipInfo.name LIKE"%"#{keyword}"%" OR
+                vipInfo.phone like "%"#{keyword}"%"
+            </if>
+        </where>
+        LIMIT #{pCurrent},#{pSize}
+    </select>
+
+    <select id="listVipInfo" resultMap="VipInfo">
+        SELECT *
+        FROM `t_party_vip_info`
+        LIMIT #{offset},#{pageSize}
+    </select>
+    
+    <select id="count" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_party_vip_info`
+    </select>
+
+    <select id="countVipInfoByKeyword" resultType="int">
+        SELECT COUNT(*)
+        FROM `t_party_vip_info` vipInfo
+        <where>
+            <if test="keyword != null">
+                vipInfo.name LIKE"%"#{keyword}"%" OR
+                vipInfo.phone like "%"#{keyword}"%"
+            </if>
+        </where>
+    </select>
+
+    <select id="queryVipInfoById" parameterType="Integer" resultType="VipInfo">
+        SELECT *
+        FROM `t_party_vip_info` vipInfo
+        WHERE vipInfo.id = #{id}
+    </select>
+
+    <select id="countVipInfoByPhone" parameterType="String" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_party_vip_info` vipInfo
+        WHERE vipInfo.phone = #{phone}
+    </select>
+    
+    <update id="updateStateById">
+        UPDATE `t_party_vip_info`
+        SET `state` = #{state}
+        WHERE `id` = #{id}
+    </update>
+
+</mapper>

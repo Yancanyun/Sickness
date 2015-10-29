@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.other.ConstantMapper">
+    
+    <select id="queryValueByKey" resultType="String">
+        select `value` from `t_constant` where `key`=#{key}
+    </select>
+
+    <update id="updateValueByKey">
+        update `t_constant` set `value`=#{value} where `key`=#{key}
+    </update>
+
+	
+	<select id="queryAllConstants" resultType="Constant">
+         select * from t_constant
+    </select>
+</mapper>

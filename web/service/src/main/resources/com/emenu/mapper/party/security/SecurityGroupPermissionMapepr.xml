@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.party.security.SecurityGroupPermissionMapper">
+
+    <delete id="delByGroupId">
+        DELETE FROM `t_party_security_group_permission`
+        WHERE `group_id` = #{groupId}
+    </delete>
+
+    <select id="listByGroupId" resultMap="pw.SecurityGroupPermission">
+        SELECT
+            groupPermission.*,
+            permission.`description` AS permissionDescription,
+            permission.`expression` AS permissionExpression
+        FROM `t_party_security_group_permission` groupPermission
+        LEFT JOIN `t_party_security_permision` permission ON groupPermission.`permissionId` = permission.`id`
+        WHERE `group_id` = #{groupId}
+        ORDER BY `id` DESC
+    </select>
+
+    <select id="listPermissionIdByGroupId" resultType="int">
+        SELECT
+            `permission_id`
+        FROM `t_party_security_group_permission`
+        WHERE `group_id` = #{groupId}
+    </select>
+</mapper>

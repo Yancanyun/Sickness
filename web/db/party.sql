@@ -1,0 +1,68 @@
+CREATE TABLE `t_party` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `party_type_id` INT(11) NOT NULL DEFAULT '0' COMMENT '当事人类型ID',
+  `description` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `created_user_id` INT(11) NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='当事人表';
+
+CREATE TABLE `t_party_security_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL DEFAULT '' COMMENT '安全组名称',
+  `description` varchar(1024) DEFAULT '' COMMENT '安全组的简短描述',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='安全组表';
+
+CREATE TABLE `t_party_security_group_permission` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `group_id` INT(11) NOT NULL DEFAULT '0' COMMENT '安全组ID',
+  `permission_id` INT(11) NOT NULL DEFAULT '0' COMMENT '权限ID',
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='安全组-权限关联表';
+
+CREATE TABLE `t_party_security_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `expression` VARCHAR(512) NOT NULL DEFAULT '' COMMENT '权限表达式',
+  `description` varchar(1024) NOT NULL DEFAULT '' COMMENT '权限描述',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
+
+CREATE TABLE `t_party_security_user_group` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `group_id` INT(11) NOT NULL DEFAULT '0' COMMENT '安全组ID',
+  `user_id` INT(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户-安全组关联表';
+
+CREATE table `t_party_type` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '类型名称',
+  `parent_id` INT(11) NOT NULL DEFAULT '0' COMMENT '上级类型ID',
+  `description` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '描述',
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='当事人类别(默认1-员工,2-会员)';
+
+CREATE TABLE `t_party_security_user` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `party_id` INT(11) NOT NULL DEFAULT '0' COMMENT '当事人ID',
+  `login_name` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '登录名',
+  `password` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '密码',
+  `status` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '用户状态:0-禁用,1-启用',
+  `account_type` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '账户类型:1-正常账户,2-微信账户',
+  `update_password` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否需要更新密码:0-不需要,1-需要',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录表';

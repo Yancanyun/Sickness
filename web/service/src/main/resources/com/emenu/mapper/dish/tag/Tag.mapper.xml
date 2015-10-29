@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.dish.tag.TagMapper">
+
+    <select id="listTag" resultMap="pw.Tag">
+        SELECT *
+        FROM `t_dish_tag`
+        ORDER BY `weight`,`p_id`
+    </select>
+
+    <delete id="delTags">
+        DELETE FROM `t_dish_tag`
+        WHERE id IN
+        <foreach item="tagId" collection="ids" open="(" separator="," close=")">
+            #{tagId}
+        </foreach>
+    </delete>
+</mapper>

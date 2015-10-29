@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.table.TableMapper">
+    <select id="listAllTableItself" resultMap="pw.Table">
+        SELECT `id`, `area_id`, `name`, `seat_num`, `seat_fee`, `table_fee`, `min_cost`, `state`, `qrcode_path`
+        FROM `t_table` WHERE `state` != 6
+    </select>
+
+    <select id="listTableItselfByAreaId" resultMap="pw.Table">
+        SELECT `id`, `area_id`, `name`, `seat_num`, `seat_fee`, `table_fee`, `min_cost`, `state`, `qrcode_path`
+        FROM `t_table` WHERE `area_id` = #{areaId} AND `state` != 6
+    </select>
+
+    <select id="listTableItselfByState" resultMap="pw.Table">
+        SELECT `id`, `area_id`, `name`, `seat_num`, `seat_fee`, `table_fee`, `min_cost`, `state`, `qrcode_path`
+        FROM `t_table` WHERE `state` = #{state}
+    </select>
+
+    <select id="listTableItselfByAreaIdAndState" resultMap="pw.Table">
+        SELECT `id`, `area_id`, `name`, `seat_num`, `seat_fee`, `table_fee`, `min_cost`, `state`, `qrcode_path`
+        FROM `t_table` WHERE `area_id` = #{areaId} AND `state` = #{state}
+    </select>
+
+    <select id="queryTableStateById" resultType="int">
+        SELECT `state` FROM `t_table` WHERE `id` = #{id}
+    </select>
+
+    <select id="checkTableName" resultType="int">
+        SELECT COUNT(1) FROM `t_table` WHERE `name` = #{name} AND `state` != 6
+    </select>
+
+    <select id="countTableNumByAreaId" resultType="int">
+        SELECT COUNT(1) FROM `t_table` WHERE `area_id` = #{areaId} AND `state` != 6
+    </select>
+
+    <update id="delTableById">
+        UPDATE `t_table` SET `state` = 6 WHERE `id` = #{id}
+    </update>
+</mapper>

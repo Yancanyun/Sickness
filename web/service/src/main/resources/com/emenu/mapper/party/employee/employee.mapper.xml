@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.party.employee.EmployeeMapper">
+
+    <!-- 查询所有员工 -->
+    <select id="listEmployee" resultType="Employee" parameterType="Integer">
+
+
+        SELECT `id` AS `id`
+        ,`party_id` AS `partyId`
+        , `name` AS `name`
+        , `phone` AS `phone`
+        , `status` AS `status`
+        FROM `t_party_employee`
+        WHERE `status` != 3 AND `party_id` !=#{partyId}
+
+
+    </select>
+
+    <select id="queryEmployeeRoleByEmployeeId" parameterType="Integer" resultType="Integer">
+        SELECT `role_id` FROM `t_party_employee_role` WHERE `party_id` = #{partyId}
+    </select>
+
+
+    <select id="checkEmployeeName" parameterType="String" resultType="Employee">
+
+        SELECT `id`,`name`,`status` FROM `t_party_employee` WHERE `name` = #{employeeName}
+
+    </select>
+
+    <select id="listEmployeeRoleByPartyId" parameterType="Integer"  resultType="EmployeeRole">
+        SELECT `id` AS `id`,
+        `party_id` AS `partyId`,
+        `role_id~ AS  `roleId`,
+        `created_time` AS `createdTime`,
+        `last_modified_time` AS `lastModifiedTime`
+        from `t_party_employee_role` WHERE `party_id` = #{partyId}
+    </select>
+
+    <update id="updateEmployeeStatus" >
+        UPDATE `t_party_employee` SET `status` = #{status} WHERE `party_id` = #{partyId}
+    </update>
+
+    <delete id="delEmployeeRoleByPartyId" parameterType="Integer" >
+        DELETE FROM `t_party_employee_role` WHERE `party_id` = #{partyId}
+    </delete>
+
+    <delete id="delEmployeeWaiterTableByPartyId" parameterType="integer">
+        DELETE FROM `t_party_employee_waiter_table` WHERE `party_id` = #{partyId}
+    </delete>
+    <!-- <select id="checkUsername" parameterType="String" resultType="User">
+         select id, username from `t_user` where `username` = #{username}
+     </select>
+
+     <delete id="deleteUserRoleByUserId" parameterType="int">
+         delete from `t_user_role` where user_id = #{uid}
+     </delete>
+
+     <select id="checkUserLogin" resultType="User">
+         SELECT u.id,u.state
+         FROM t_user AS u,
+         t_user_role AS ur
+         WHERE u.username=#{username} AND u.password=#{password} AND u.id=ur.user_id AND ur.role=#{role}
+     </select>-->
+
+</mapper>

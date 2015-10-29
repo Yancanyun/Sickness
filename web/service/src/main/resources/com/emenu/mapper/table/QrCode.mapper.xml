@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.table.QrCodeMapper">
+    <select id="listQrCodeByAreaId" resultType="QrCodeDto">
+        SELECT `area_id` AS areaId,
+        `name` AS tableName,
+        `qrcode_path` AS qrCodePath
+        FROM `t_table` WHERE `area_id` = #{areaId} AND `state` != 6
+    </select>
+
+    <select id="listAllQrCode" resultType="QrCodeDto">
+        SELECT `t_table`.`area_id` AS areaId,
+        `t_area`.`name` AS areaName,
+        `t_table`.`name` AS tableName,
+        `t_table`.`qrcode_path` AS qrCodePath
+        FROM `t_table`
+        LEFT JOIN `t_area` ON `t_area`.`id` = `t_table`.`area_id`
+        WHERE `t_table`.`state` != 6
+    </select>
+</mapper>

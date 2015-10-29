@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.page.KeywordsMapper">
+
+    <select id="listByType" resultMap="pw.Keywords">
+        SELECT *
+        FROM `t_keywords`
+        WHERE `type` = #{type}
+    </select>
+    
+    <select id="countByKeyAndType" resultType="int">
+        SELECT count(id) FROM `t_keywords`
+        WHERE `key` = #{key}
+        AND `type` = #{type}
+    </select>
+</mapper>

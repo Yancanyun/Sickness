@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.page.IndexImgMapper">
+
+    <select id="listAll" resultMap="pw.IndexImg">
+        SELECT *
+        FROM `t_index_img`
+    </select>
+
+    <select id="queryByState" resultMap="pw.IndexImg">
+        SELECT *
+        FROM `t_index_img`
+        WHERE `state` = #{state}
+    </select>
+</mapper>
