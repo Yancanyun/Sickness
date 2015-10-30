@@ -53,8 +53,10 @@ public class AdminAreaController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxNewArea(Area area) {
         try {
-            areaService.newArea(area);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            Area area1 = areaService.newArea(area);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", area1.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
