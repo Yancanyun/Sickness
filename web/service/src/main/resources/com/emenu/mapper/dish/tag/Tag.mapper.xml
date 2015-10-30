@@ -8,6 +8,21 @@
         ORDER BY `weight`,`p_id`
     </select>
 
+    <select id="listUnit" resultMap="pw.Tag">
+        SELECT
+        *
+        FROM
+        `t_dish_tag`
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="countUnit" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        `t_dish_tag`
+    </select>
+
     <delete id="delTags">
         DELETE FROM `t_dish_tag`
         WHERE id IN

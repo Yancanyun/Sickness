@@ -17,8 +17,8 @@
 <!-- 编辑模板 -->
 <script type="text/template" id="editTpl">
   <tr data-authority-id="&{authority.id}" oper-type="&{authority.type}">
-    <td><input type="text" class="form-control" name="exp" value="&{authority.exp}"/></td>
-    <td><input type="text" class="form-control" name="desc" value="&{authority.desc}"/></td>
+    <td><input type="text" class="form-control" name="name" value="&{authority.exp}"/></td>
+    <td><input type="text" class="form-control" name="description" value="&{authority.desc}"/></td>
     <td>
       <a href="javascript:;" class="label-info J_save">
         <i class="fa fa-save"></i>&nbsp;保存

@@ -50,4 +50,10 @@ public final class URLConstants {
 
     public static final String EMPLOYEE_MANAGEMENT = "admin/party/employee";
 
+    //菜品单位管理
+    public static final String ADMIN_DISH_UNIT = "admin/dish/unit";
+
+    //菜品分类管理
+    public static final String ADMIN_DISH_TAG = "admin/dish/tag";
+
 }

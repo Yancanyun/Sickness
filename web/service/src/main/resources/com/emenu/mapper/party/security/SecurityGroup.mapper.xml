@@ -28,7 +28,7 @@
 
     <select id="listByIdList" resultMap="pw.SecurityGroup">
         SELECT *
-        FROM `t_party_securit_group`
+        FROM `t_party_security_group`
         <where>
             <if test="idList != null and idList.size != 0">
                 <if test="isInList == true">
@@ -46,7 +46,7 @@
 
     <select id="countByGroupName" resultType="int">
         SELECT COUNT(1)
-        FROM `t_party_securit_group`
+        FROM `t_party_security_group`
         WHERE `name` = #{groupName}
     </select>
 </mapper>

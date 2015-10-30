@@ -23,6 +23,22 @@ public interface TagService {
     public List<Tag> listTag() throws SSException;
 
     /**
+     * 根据分页获取分类列表
+     * @param curPage
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listTagByPageId(int curPage, int pageSize) throws SSException;
+
+    /**
+     * 获取分类总数
+     * @return
+     * @throws SSException
+     */
+    public int countTag() throws SSException;
+
+    /**
      * 添加一个tag
      * @param tag
      * @return

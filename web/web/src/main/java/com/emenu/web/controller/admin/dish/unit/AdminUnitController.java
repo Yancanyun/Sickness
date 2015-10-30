@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.dish.unit.Unit;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @Module(ModuleEnums.AdminDishUnit)
-@RequestMapping(value = "admin/dish/unit")
+@RequestMapping(value = URLConstants.ADMIN_DISH_UNIT)
 public class AdminUnitController extends AbstractController{
 
     /**
@@ -71,7 +72,6 @@ public class AdminUnitController extends AbstractController{
         }
         return sendJsonArray(jsonArray, dataCount);
     }
-
 
     /**
      * Ajax添加
