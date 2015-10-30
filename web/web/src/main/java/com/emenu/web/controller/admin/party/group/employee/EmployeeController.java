@@ -20,7 +20,6 @@ public class EmployeeController  extends AbstractController {
 
     @RequestMapping(value = "/delete/employee",method = RequestMethod.GET)
     public String delEmployee(){
-
         return null;
     }
 
