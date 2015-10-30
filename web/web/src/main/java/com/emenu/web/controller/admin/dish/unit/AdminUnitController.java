@@ -35,7 +35,6 @@ public class AdminUnitController extends AbstractController{
         return "admin/dish/unit/list_home";
     }
 
-
     /**
      * Ajax获取分页数据
      * @param curPage
