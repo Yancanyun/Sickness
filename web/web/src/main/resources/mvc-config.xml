@@ -19,7 +19,7 @@
     <mvc:interceptors>
         <!-- Module拦截器 -->
         <bean class="com.emenu.web.interceptor.ModuleInterceptor" />
-        <!--<bean class="com.pandawork.web.interceptor.LoginInterceptor" />-->
+        <bean class="com.emenu.web.interceptor.LoginInterceptor" />
         <!--<bean class="com.pandawork.web.interceptor.AuthorInterceptor" />-->
     </mvc:interceptors>
 

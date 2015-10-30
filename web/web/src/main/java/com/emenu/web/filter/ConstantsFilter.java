@@ -38,7 +38,7 @@ public class ConstantsFilter extends AbstractConstansFilter {
 
     public String getTinyStaticWebsite() {
 //      return basePath + "resources/";
-        return WebConstants.staticWebsite;
+        return WebConstants.staticWebsite + "uploads";
     }
 
     public  String getUploadStaticWebsite(){

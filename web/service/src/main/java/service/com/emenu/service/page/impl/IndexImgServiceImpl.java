@@ -1,9 +1,11 @@
 package com.emenu.service.page.impl;
 
 import com.emenu.common.entity.page.IndexImg;
+import com.emenu.common.enums.other.FileUploadPathEnums;
 import com.emenu.common.enums.page.IndexImgEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.page.IndexImgMapper;
+import com.emenu.service.other.FileUploadService;
 import com.emenu.service.page.IndexImgService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -34,9 +36,21 @@ public class IndexImgServiceImpl implements IndexImgService {
     @Autowired
     private IndexImgMapper indexImgMapper;
 
+    @Autowired
+    private FileUploadService fileUploadService;
+
     @Override
     public IndexImg newIndexImg(PandaworkMultipartFile file, HttpServletRequest request) throws SSException {
-        return null;
+        if (file.isEmpty()) {
+            return null;
+        }
+        String path = fileUploadService.uploadFile(file, FileUploadPathEnums.IndexImgPath);
+
+        IndexImg indexImg = new IndexImg();
+        indexImg.setImgPath(path);
+        indexImg.setState(IndexImgEnum.UnUsing.getId());
+
+        return this.newIndexImg(indexImg);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class AdminController extends AbstractController {
         try {
             Subject subject = loginManageService.isLogined(getRequest());
             if (!Assert.isNull(subject)) {
-                return "admin/";
+                return "redirect:/admin";
             }
         } catch (SSException e) {
             LogClerk.errLog.error(e);

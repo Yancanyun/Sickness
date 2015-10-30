@@ -6,7 +6,7 @@
             PW.page.BaseInfoManagement.IndexManagement({
                 upload: {
                     // 文件接收服务端
-                    uploadUrl: '/mock/admin/dish.json',
+                    uploadUrl: '${website}admin/index/img/ajax',
                     // 文件列表
                     fileList: '#fileList',
                     // 选择图片按钮
