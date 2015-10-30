@@ -21,7 +21,7 @@
       <div class="panel-body">
         <a class="btn btn-success margin-bottom-15 J_addBtn" href="#"><i class="fa fa-plus"></i>&nbsp;添加权限组</a>
         <form class="J_operForm">
-          <input type = "hidden" class="J_id"name="id" value=""/>
+          <input type = "hidden" class="J_id" name="id" value=""/>
           <div class="table-responsive">
             <table class="table table-hover table-bordered">
               <thead>

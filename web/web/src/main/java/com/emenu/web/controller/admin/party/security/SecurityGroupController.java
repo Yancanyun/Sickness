@@ -42,6 +42,7 @@ public class SecurityGroupController extends AbstractController {
      * @param pageSize
      * @return
      */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupList)
     @RequestMapping(value = "ajax/list/{curPage}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject listSecurityGroup(@PathVariable("curPage") Integer curPage,
@@ -79,6 +80,7 @@ public class SecurityGroupController extends AbstractController {
      * @param securityGroup
      * @return
      */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupNew)
     @RequestMapping(value = "ajax/securityGroup", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewSecurityGroup(SecurityGroup securityGroup){
@@ -96,6 +98,7 @@ public class SecurityGroupController extends AbstractController {
      * @param securityGroup
      * @return
      */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupUpdate)
     @RequestMapping(value = "ajax/securityGroup",method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateSecurityGroup(SecurityGroup securityGroup){
@@ -113,6 +116,7 @@ public class SecurityGroupController extends AbstractController {
      * @param id
      * @return
      */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupDel)
     @RequestMapping(value = "ajax/securityGroup/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDelSecurityGroup(@PathVariable("id") Integer id){

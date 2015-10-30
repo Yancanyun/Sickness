@@ -21,6 +21,23 @@ public interface TagMapper {
     public List<Tag> listTag() throws SSException;
 
     /**
+     * 根据分页显示获取列表
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listTagByPageId(@Param("offset")int offset,
+                                     @Param("pageSize")int pageSize) throws SSException;
+
+    /**
+     * 获取单位总数
+     * @return
+     * @throws SSException
+     */
+    public int countTag() throws SSException;
+
+    /**
      * 批量删除Tag
      * @param ids
      * @throws SSException

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -169,6 +170,33 @@ public class TagServiceImpl implements TagService{
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListTagFailed);
+        }
+    }
+
+    @Override
+    public List<Tag> listTagByPageId(int curPage, int pageSize) throws SSException {
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        int offset = curPage * pageSize;
+        if (Assert.lessZero(offset)) {
+            return Collections.emptyList();
+        }
+        List<Tag> tagList = Collections.<Tag>emptyList();
+        try {
+            tagList = tagMapper.listTagByPageId(curPage,pageSize);
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListUnitFailed, e);
+        }
+        return tagList;
+    }
+
+    @Override
+    public int countTag() throws SSException {
+        try{
+            return tagMapper.countTag();
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListUnitFailed, e);
         }
     }
 }

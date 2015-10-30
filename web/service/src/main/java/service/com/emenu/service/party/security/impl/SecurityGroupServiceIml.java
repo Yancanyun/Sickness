@@ -92,14 +92,13 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
     }
 
     @Override
-    public List<SecurityGroup> listByPage(int page, int pageSize) throws SSException {
-        List<SecurityGroup> list = Collections.emptyList();
-        // 计算偏移量
-        int offset = page * pageSize;
-        if (Assert.lessZero(offset)){
-            return list;
+    public List<SecurityGroup> listByPage(int curPage, int pageSize) throws SSException {
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        int offset = curPage * pageSize;
+        if (Assert.lessZero(offset)) {
+            return Collections.emptyList();
         }
-
+        List<SecurityGroup> list = Collections.emptyList();
         try {
             list = securityGroupMapper.listByPage(offset, pageSize);
         } catch(Exception e){
