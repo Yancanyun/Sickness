@@ -5,12 +5,15 @@ import com.emenu.common.entity.party.group.employee.Employee;
 import java.util.List;
 
 /**
+ * 员工信息Dto
  * @author xiaozl
- * @time 10:30
+ * @date 2015-10-23
  */
 public class EmployeeDto {
 
     private Employee employee;//用户实体
+
+    private String loginName;//员工登录名
 
     private List<Integer> role;//用户角色标识：1代表后台，2代表吧台，3代表后厨，4代表服务员，5代表顾客
 
@@ -59,5 +62,13 @@ public class EmployeeDto {
 
     public void setTables(List<Integer> tables) {
         this.tables = tables;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 }

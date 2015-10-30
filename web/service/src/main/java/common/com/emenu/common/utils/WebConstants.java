@@ -77,4 +77,14 @@ public class WebConstants {
     // 二维码地址
     public final static String uploadQrCodePath = "/upload/qrcode/";
 
+    //错误码
+    // 错误码
+    public final static String sysErrorCode = "admin/500";
+
+    public final static String accessErrorCode = "admin/403";
+
+    public final static String notFoundErrorCode = "admin/404";
+
+    public final static String SESSIONUID="sessionUid";
+
 }

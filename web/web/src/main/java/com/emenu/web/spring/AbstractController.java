@@ -9,10 +9,12 @@ import com.emenu.service.other.ConstantService;
 import com.emenu.service.page.IndexImgService;
 import com.emenu.service.page.KeywordsService;
 import com.emenu.service.party.group.PartyService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
+import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;
@@ -193,6 +195,10 @@ public class AbstractController extends Base {
     protected static SecurityGroupService securityGroupService;
 
     @StaticAutoWire
+    @Qualifier("securityUserService")
+    protected static SecurityUserService securityService;
+
+    @StaticAutoWire
     @Qualifier("keywordsService")
     protected static KeywordsService keywordsService;
 
@@ -224,4 +230,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("unitService")
     protected static UnitService unitService;
+
+    //员工管理
+    @StaticAutoWire
+    @Qualifier("employeeService")
+    protected static EmployeeService employeeService;
+
 }

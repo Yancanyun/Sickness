@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.emenu.mapper.party.employee.EmployeeMapper">
+<mapper namespace="com.emenu.mapper.party.group.employee.EmployeeMapper">
 
     <!-- 查询所有员工 -->
     <select id="listEmployee" resultType="Employee" parameterType="Integer">
@@ -24,13 +24,13 @@
     </select>
 
 
-    <select id="checkEmployeeName" parameterType="String" resultType="Employee">
+    <select id="checkEmployeeName" parameterType="String" resultMap="pw.Employee">
 
         SELECT `id`,`name`,`status` FROM `t_party_employee` WHERE `name` = #{employeeName}
 
     </select>
 
-    <select id="listEmployeeRoleByPartyId" parameterType="Integer"  resultType="EmployeeRole">
+    <select id="listEmployeeRoleByPartyId" parameterType="Integer"  resultMap="pw.EmployeeRole">
         SELECT `id` AS `id`,
         `party_id` AS `partyId`,
         `role_id~ AS  `roleId`,
@@ -39,7 +39,7 @@
         from `t_party_employee_role` WHERE `party_id` = #{partyId}
     </select>
 
-    <update id="updateEmployeeStatus" >
+    <update id="updateEmployeeStatusByPartyId" >
         UPDATE `t_party_employee` SET `status` = #{status} WHERE `party_id` = #{partyId}
     </update>
 
@@ -50,6 +50,10 @@
     <delete id="delEmployeeWaiterTableByPartyId" parameterType="integer">
         DELETE FROM `t_party_employee_waiter_table` WHERE `party_id` = #{partyId}
     </delete>
+
+    <select id="queryEmployeeByPartyId" parameterType="Integer" resultMap="pw.Employee">
+        SELECT * from `t_party_employee` WHERE `party_id` = #{partyId}
+    </select>
     <!-- <select id="checkUsername" parameterType="String" resultType="User">
          select id, username from `t_user` where `username` = #{username}
      </select>

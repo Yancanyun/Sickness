@@ -1,12 +1,23 @@
 package com.emenu.web.controller.admin.party.group.employee;
 
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
+import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.CommonUtil;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author xiaozl
@@ -14,14 +25,94 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @time 18:01
  */
 @Controller
-@Module(ModuleEnums.AdminSAdmin)
+@Module(ModuleEnums.AdminUserManagementEmployee)
 @RequestMapping(value = URLConstants.EMPLOYEE_MANAGEMENT)
 public class EmployeeController  extends AbstractController {
 
-    @RequestMapping(value = "/delete/employee",method = RequestMethod.GET)
-    public String delEmployee(){
-
-        return null;
+    @RequestMapping(value = "",method = RequestMethod.GET)
+    public String toEmployeePage(Model model,HttpServletRequest request){
+        try{
+            Integer partyId = (Integer)request.getSession().getAttribute(WebConstants.SESSIONUID);//获取当前登录用户id，admin
+            List<EmployeeDto> employeeDtoList = employeeService.listEmployee(partyId);//向前端返回用户列表数据
+            model.addAttribute("employeeDtoList", employeeDtoList);
+            return "admin/party/group/employee_list";
+        }catch (SSException e){
+            sendErrMsg(e.getMessage());
+            return WebConstants.sysErrorCode;
+        }
     }
+
+    /**
+     * 修改用户状态
+     * @param partyId
+     * @param status
+     * @return
+     */
+    @RequestMapping(value = "ajax/status/{partyId}")
+    @ResponseBody
+    public JSONObject updateEmployeeStatus(@PathVariable("partyId")Integer partyId,
+                                                         @RequestParam String status){
+        try {
+            if(status.equals("true")) {
+                employeeService.updateEmployeeStatus(partyId, UserStatusEnums.Enabled.getId());
+            } else {
+                employeeService.updateEmployeeStatus(partyId, UserStatusEnums.Disabled.getId());
+
+            }
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * ajax删除员工
+     * @param partyId
+     * @return
+     */
+    @RequestMapping(value = "ajax/del/{partyId}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public
+    JSONObject delEmployee(@PathVariable("partyId") Integer partyId){
+        try {
+            employeeService.delEmployeeByPartyId(partyId);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    @RequestMapping(value = "new",method = RequestMethod.GET)
+    public String newEmployee(@RequestParam("roleList")List<Integer> roleList,
+                              @RequestParam(required = false) List<Integer> tableList,
+                              @RequestParam("loginName")String loginName,
+                              @RequestParam("password")String password,
+                              Employee employee){
+        try {
+        EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setEmployee(employee);
+        employeeDto.setRole(roleList);
+        employeeDto.setTables(tableList);
+        employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
+        return "admin/party/group/employee_list";
+        } catch (SSException e) {
+            sendErrMsg(e.getMessage());
+            return WebConstants.sysErrorCode;
+        }
+    }
+
+    @RequestMapping(value = "ajax/chkname",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject checkLoginName(@RequestParam("loginName")String loginName){
+        try {
+            securityService.checkLoginNameIsExist(loginName);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
 
 }

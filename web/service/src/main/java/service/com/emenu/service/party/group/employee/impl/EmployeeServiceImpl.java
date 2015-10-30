@@ -67,7 +67,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         try {
             List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
-            List<Employee> employees = employeeMapper.listEmployee(partyId);//取出启用的所有用户
+            //根据取出启用的员工信息t_party_employee
+            List<Employee> employees = employeeMapper.listEmployee(partyId);
+            //获取所有启用的员工登录名
+            List<SecurityUser> securityUsers = securityUserService.listByPartyId(partyId);
+
             for(Employee employee : employees) {
                 EmployeeDto employeeDto = new EmployeeDto();
                 employeeDto.setEmployee(employee);
@@ -82,6 +86,14 @@ public class EmployeeServiceImpl implements EmployeeService{
                 employeeDto.setRoleName(roleName);
                 employeeDto.setStatus(UserStatusEnums.Disabled.getState());
                 employeeDtos.add(employeeDto);
+            }
+
+            for(EmployeeDto employeeDto : employeeDtos){
+                for(SecurityUser securityUser : securityUsers){
+                    if(employeeDto.getEmployee().getPartyId()==securityUser.getPartyId()){
+                        employeeDto.setLoginName(securityUser.getLoginName());
+                    }
+                }
             }
             return employeeDtos;
         } catch (Exception e) {
@@ -198,6 +210,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @throws SSException
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateEmployee(EmployeeDto employeeDto,
                                Integer partyId,
                                String newloginName,
@@ -307,6 +320,7 @@ public class EmployeeServiceImpl implements EmployeeService{
      * @throws SSException
      */
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updatePwd(Integer securityUserId, String oldPwd, String newPwd) throws SSException {
         try {
             if(checkOldPwd(securityUserId, CommonUtil.md5(oldPwd))) {
@@ -323,18 +337,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateEmployeeStatus(Integer partyId, Integer status) throws SSException {
         try {
             //User user = commonDao.queryById(User.class, uid);
-            employeeMapper.updateEmployeeStatusByPartyId(partyId,status);
+            //修改t_party_employee表中员工状态
+            employeeMapper.updateEmployeeStatusByPartyId(partyId, status);
 
-            SecurityUser securityUser = new SecurityUser();
-            securityUser.setPartyId(partyId);
+            SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
             securityUser.setStatus(status);
-
-            // todo 更新t_party_sercurity_user status
-            //根据securityUserId修改员工状态
-            commonDao.updateFieldsById(securityUser, "status");
+            //根据securityUserId修改员工状态t_party_security_user
+            securityUserService.updateSecurityUser(securityUser);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateEmployeeStateFail, e);
@@ -342,7 +355,9 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delEmployeeByPartyId(Integer partyId) throws SSException {
+        //查员工信息t_party_employee
         Employee employee=queryEmployeeByPartyId(partyId);
         if(employee!=null&&employee.getStatus().equals(UserStatusEnums.Enabled.getId())){
             throw SSException.get(EmenuException.EmployeeIsActivity,new Exception());
@@ -364,7 +379,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
 
         try {
-            employee = commonDao.queryById(Employee.class, partyId);
+            employee = employeeMapper.queryEmployeeByPartyId(partyId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryEmployeeException, e);

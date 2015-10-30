@@ -106,14 +106,14 @@ public class EmployeeServiceTest extends AbstractTestCase {
 
         Employee employee = new Employee();
         employee.setId(5);
-        employee.setName("张腾");
+        employee.setName("杜鹃");
         employee.setPhone("22222222");
 
 
         EmployeeDto employeeDto = new EmployeeDto();
         // 对密码进行md5加密
         String password = CommonUtil.md5("123456");
-        String newloginName = "腾腾";
+        String newloginName = "dujuan";
 
 
         List<Integer> roleList = new ArrayList<Integer>();
@@ -134,5 +134,10 @@ public class EmployeeServiceTest extends AbstractTestCase {
         employeeDto.setTables(tableList);
 
         employeeService.updateEmployee(employeeDto,3,newloginName,password);
+    }
+
+    @Test
+    public void delEmployee() throws SSException{
+        employeeService.delEmployeeByPartyId(3);
     }
 }

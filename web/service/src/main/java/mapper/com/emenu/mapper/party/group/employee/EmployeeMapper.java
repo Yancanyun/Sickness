@@ -60,7 +60,17 @@ public interface EmployeeMapper {
      */
     public void delEmployeeRoleByPartyId(@Param("partyId") Integer partyId) throws Exception;
 
+    /**
+     * 删除服务员服务的餐桌
+     * @param partyId
+     * @throws Exception
+     */
     public void delEmployeeWaiterTableByPartyId(@Param("partyId") Integer partyId) throws  Exception;
 
-
+    /**
+     * 根据partyId查询员工信息t_party_employee
+     * @param partyId
+     * @throws Exception
+     */
+    public Employee queryEmployeeByPartyId(@Param("partyId") Integer partyId) throws  Exception;
 }
