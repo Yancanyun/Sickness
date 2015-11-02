@@ -42,12 +42,54 @@ public class TagServiceImpl implements TagService{
             return commonDao.insert(tag);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewTagFailed);
+            throw SSException.get(EmenuException.NewTagFailed, e);
         }
     }
 
     @Override
-    public void updateName(Integer tagId, String name) throws SSException {
+    public void delById(int tagId) throws SSException {
+        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        try {
+            Tag tag = commonDao.queryById(Tag.class, tagId);
+            if(tag != null){
+                commonDao.delete(tag);
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteTagFailed, e);
+        }
+    }
+
+    @Override
+    public void delByIds(List<Integer> ids) throws SSException {
+        if(Assert.isNull(ids)){
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        try{
+            tagMapper.delByIds(ids);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteTagFailed, e);
+        }
+    }
+
+    @Override
+    public void updateTag(Tag tag) throws SSException {
+        if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        try {
+            commonDao.update(tag);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTagFailed, e);
+        }
+    }
+
+    @Override
+    public void updateName(int tagId, String name) throws SSException {
         // 检查id是否<=0，如果是，直接返回
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
@@ -60,12 +102,12 @@ public class TagServiceImpl implements TagService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTagFailed);
+            throw SSException.get(EmenuException.UpdateTagFailed, e);
         }
     }
 
     @Override
-    public void updateWeight(Integer tagId, Integer weight) throws SSException {
+    public void updateWeight(int tagId, Integer weight) throws SSException {
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -80,12 +122,12 @@ public class TagServiceImpl implements TagService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTagFailed);
+            throw SSException.get(EmenuException.UpdateTagFailed, e);
         }
     }
 
     @Override
-    public void updateTagPid(Integer tagId, Integer pId) throws SSException {
+    public void updatePid(int tagId, Integer pId) throws SSException {
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -105,38 +147,12 @@ public class TagServiceImpl implements TagService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTagFailed);
+            throw SSException.get(EmenuException.UpdateTagFailed, e);
         }
     }
 
     @Override
-    public void delTagById(Integer tagId) throws SSException {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
-            throw SSException.get(EmenuException.TagIdError);
-        }
-        try {
-            Tag tag = commonDao.queryById(Tag.class, tagId);
-            if(tag != null){
-                commonDao.delete(tag);
-            }
-        }catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DeleteTagFailed);
-        }
-    }
-
-    @Override
-    public void delTags(List<Integer> ids) throws SSException {
-        try{
-            tagMapper.delTags(ids);
-        }catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DeleteTagFailed);
-        }
-    }
-
-    @Override
-    public Tag queryTagById(Integer tagId) throws SSException {
+    public Tag queryById(int tagId) throws SSException {
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -144,35 +160,22 @@ public class TagServiceImpl implements TagService{
             return commonDao.queryById(Tag.class, tagId);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTagFailed);
+            throw SSException.get(EmenuException.UpdateTagFailed, e);
         }
     }
 
     @Override
-    public void updateTag(Tag tag) throws SSException {
-        if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
-            throw SSException.get(EmenuException.TagIdError);
-        }
+    public List<Tag> listAll() throws SSException {
         try {
-            commonDao.update(tag);
+            return tagMapper.listAll();
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTagFailed);
+            throw SSException.get(EmenuException.ListTagFailed, e);
         }
     }
 
     @Override
-    public List<Tag> listTag() throws SSException {
-        try {
-            return tagMapper.listTag();
-        }catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListTagFailed);
-        }
-    }
-
-    @Override
-    public List<Tag> listTagByPage(int curPage, int pageSize) throws SSException {
+    public List<Tag> listByPage(int curPage, int pageSize) throws SSException {
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
         if (Assert.lessZero(offset)) {
@@ -180,7 +183,7 @@ public class TagServiceImpl implements TagService{
         }
         List<Tag> tagList = Collections.<Tag>emptyList();
         try {
-            tagList = tagMapper.listTagByPage(curPage, pageSize);
+            tagList = tagMapper.listByPage(curPage, pageSize);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
@@ -189,9 +192,9 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public int countTag() throws SSException {
+    public int countAll() throws SSException {
         try{
-            return tagMapper.countTag();
+            return tagMapper.countAll();
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);

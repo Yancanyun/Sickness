@@ -49,7 +49,7 @@ public class AdminTagController extends AbstractController{
                                   @RequestParam Integer pageSize){
         List<Tag> tagList = Collections.emptyList();
         try {
-            tagList = tagService.listTagByPage(curPage, pageSize);
+            tagList = tagService.listByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -67,7 +67,7 @@ public class AdminTagController extends AbstractController{
         }
         int dataCount = 0;
         try {
-            dataCount = tagService.countTag();
+            dataCount = tagService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -121,7 +121,7 @@ public class AdminTagController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
         try{
-            tagService.delTagById(id);
+            tagService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         }catch (SSException e){
             LogClerk.errLog.error(e);

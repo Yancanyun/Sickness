@@ -43,7 +43,4 @@ public interface UnitMapper {
      * @throws SSException
      */
     public Unit queryUnitById(@Param("id")Integer id)throws SSException;
-
-
-
 }

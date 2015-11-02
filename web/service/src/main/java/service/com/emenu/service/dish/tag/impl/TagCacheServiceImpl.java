@@ -4,13 +4,10 @@ import com.emenu.common.dto.dish.tag.TagChildDto;
 import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.common.utils.CommonUtil;
 import com.emenu.mapper.dish.tag.TagMapper;
 import com.emenu.service.dish.tag.TagCacheService;
-import com.emenu.service.dish.tag.TagService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.Assert;
-import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -46,7 +43,7 @@ public class TagCacheServiceImpl implements TagCacheService {
     @PostConstruct
     public void initTagCache() throws Exception {
         //获取所有的类别
-        List<Tag> tagList = tagMapper.listTag();
+        List<Tag> tagList = tagMapper.listAll();
         //第一次遍历，初始化所有DTO
         for (Tag tag : tagList){
             TagDto tagDto = new TagDto();

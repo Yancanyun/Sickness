@@ -32,19 +32,19 @@ public class TagTest extends AbstractTestCase{
 
     @Test
     public void query() throws SSException{
-        System.out.println(tagService.queryTagById(1).getName());
+        System.out.println(tagService.queryById(1).getName());
     }
 
     @Test
     public void update() throws SSException{
         tagService.updateName(5, "hai嗨");
         tagService.updateWeight(5, 10);
-        tagService.updateTagPid(5, 2);
+        tagService.updatePid(5, 2);
     }
 
     @Test
     public void list() throws SSException{
-        List<Tag> tagList = tagService.listTag();
+        List<Tag> tagList = tagService.listAll();
         for(Tag tag : tagList){
             System.out.println(tag.getName());
         }
@@ -52,8 +52,8 @@ public class TagTest extends AbstractTestCase{
 
     @Test
     public void listByPage() throws SSException {
-        List<Tag> tagList = tagService.listTagByPage(1, 10);
-        System.out.println(tagService.countTag());
+        List<Tag> tagList = tagService.listByPage(1, 10);
+        System.out.println(tagService.countAll());
         for(Tag tag : tagList){
             System.out.println(tag.getName());
         }
@@ -65,7 +65,7 @@ public class TagTest extends AbstractTestCase{
         List<Integer> ids = new ArrayList<Integer>();
         ids.add(5);
         ids.add(7);
-        tagService.delTags(ids);
+        tagService.delByIds(ids);
     }
 
 }

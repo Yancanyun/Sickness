@@ -2,32 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.dish.tag.TagMapper">
 
-    <select id="listTag" resultMap="pw.Tag">
-        SELECT *
-        FROM `t_dish_tag`
-        ORDER BY `weight`,`p_id`
+    <select id="listAll" resultMap="pw.Tag">
+        SELECT
+            *
+        FROM
+            `t_tag`
+        ORDER BY
+            `weight`
     </select>
 
-    <select id="listTagByPage" resultMap="pw.Tag">
+    <select id="listByPage" resultMap="pw.Tag">
         SELECT
-        *
+            *
         FROM
-        `t_dish_tag`
+            `t_tag`
+        ORDER BY
+            `weight`
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="countTag" resultType="int">
+    <select id="countAll" resultType="int">
         SELECT
-        COUNT(*)
+            COUNT(*)
         FROM
-        `t_dish_tag`
+            `t_tag`
     </select>
 
-    <delete id="delTags">
-        DELETE FROM `t_dish_tag`
-        WHERE id IN
+    <delete id="delByIds">
+        DELETE
+        FROM
+        `t_tag`
+        WHERE
+        id
+        IN
         <foreach item="tagId" collection="ids" open="(" separator="," close=")">
             #{tagId}
-        </foreach>
+        </foreach >
     </delete>
 </mapper>

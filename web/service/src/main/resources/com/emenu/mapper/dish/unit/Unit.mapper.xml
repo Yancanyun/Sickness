@@ -23,7 +23,9 @@
     </select>
 
     <select id ="queryUnitById" resultMap="pw.Unit">
-        SELECT * FROM `t_dish_unit` WHERE `id`=#{id}
+        SELECT *
+        FROM `t_dish_unit`
+        WHERE `id`=#{id}
     </select>
 
 
