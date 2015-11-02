@@ -21,6 +21,8 @@ public interface EmployeeService {
      */
     public List<EmployeeDto> listEmployee(Integer partyId) throws SSException;
 
+    public List<EmployeeDto> listEmployeeByContition(List<Integer> roleList,Integer partyId) throws SSException;
+
     /**
      * 检查注册员工是否用户名重名
      * @param employeeName
