@@ -25,16 +25,19 @@ public enum EmenuException implements IBizExceptionMes {
     TagPIdError("分类Tag的父亲Id为空或者小于0或者不存在", 3005),
     ListTagFailed("分类Tag列表查询失败", 3006),
     DeleteTagFailed("删除分类Tag失败", 3007),
+    TagNameIsNull("分类名称为空", 3008),
+    TagTypeError("分类Tag的type为空或者小于0或者不存在", 3009),
+    TagChildrenIsNull("分类的子节点为空", 3010),
 
-//    QueryTagPIdFailed("查询类别失败，该类别不存在父类别",3006),
     //单位管理
-    ListUnitFailed("单位列表查询失败", 3010),
-    NewUnitFailed("添加单位失败", 3011),
-    QueryUnitFailed("查询单位失败", 3012),
-    UnitIdError("单位的ID为空或者小于0", 3013),
-    DeleteUnitFailed("删除单位失败", 3014),
-    UpdateUnitFailed("查询单位失败", 3015),
-    UnitNameError("单位名称为空", 3016),
+    ListUnitFailed("单位列表查询失败", 3020),
+    NewUnitFailed("添加单位失败", 3021),
+    QueryUnitFailed("查询单位失败", 3022),
+    UnitIdError("单位的ID为空或者小于0", 3023),
+    DeleteUnitFailed("删除单位失败", 3024),
+    UpdateUnitFailed("查询单位失败", 3025),
+    UnitNameError("单位名称为空", 3026),
+    UnitTypeError("单位类型为空或者小于0", 3027),
 
     //餐台区域
     QueryAreaFail("查询区域失败", 4001),

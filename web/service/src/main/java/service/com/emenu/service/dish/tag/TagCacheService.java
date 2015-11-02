@@ -17,13 +17,13 @@ public interface TagCacheService {
      * 初始化类别缓存,在容器启动时自动执行
      * @throws SSException
      */
-    public void initTagCache() throws Exception;
+    public void initCache() throws Exception;
 
     /**
      * 刷新类别缓存
      * @throws Exception
      */
-    public void refreshTagCache() throws Exception;
+    public void refreshCache() throws Exception;
 
     /**
      * 根据TagId获取上一级（父亲）Tag
@@ -31,7 +31,7 @@ public interface TagCacheService {
      * @return
      * @throws SSException
      */
-    public Tag queryParentTagById(Integer tagId) throws Exception;
+    public Tag queryParentById(int tagId) throws Exception;
 
     /**
      * 根据tagId得到儿子节点列表——按权重排序
@@ -39,7 +39,7 @@ public interface TagCacheService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listChildrenTagById(Integer tagId) throws Exception;
+    public List<Tag> listChildrenById(int tagId) throws Exception;
 
     /**
      * 根据tagId查询根节点
@@ -47,7 +47,7 @@ public interface TagCacheService {
      * @return Tag
      * @throws SSException
      */
-    public Tag queryRootTagById(Integer tagId) throws Exception;
+    public Tag queryRootById(int tagId) throws Exception;
 
     /**
      * 获得所有根Tag——按权重排序
@@ -56,14 +56,14 @@ public interface TagCacheService {
      * @return List<Tag>
      * @throws Exception
      */
-    public List<Tag> listAllRootTag(Integer type) throws Exception;
+    public List<Tag> listAllRootByType(int type) throws Exception;
 
     /**
      * 获得所有Tag
      * @return
      * @throws Exception
      */
-    public List<Tag> listAllTag() throws Exception;
+    public List<Tag> listAll() throws Exception;
 
     /**
      * 由当前节点获取展开tag
@@ -71,7 +71,7 @@ public interface TagCacheService {
      * @return List<Tag>
      * @throws SSException
      */
-    public List<Tag> listTagByCurrentId(Integer tagId) throws Exception;
+    public List<Tag> listByCurrentId(int tagId) throws Exception;
 
     /**
      * 根据id查找tag,返回tag的clone对象，防止直接修改内存数据
@@ -79,7 +79,7 @@ public interface TagCacheService {
      * @return Tag
      * @throws Exception
      */
-    public Tag queryTagCloneById(Integer tagId) throws Exception;
+    public Tag queryCloneById(int tagId) throws Exception;
 
     /**
      * 添加一个Tag——添加到缓存中
@@ -91,11 +91,18 @@ public interface TagCacheService {
     public Tag newTag(Tag tag) throws Exception;
 
     /**
+     * 删除一个tag
+     * @param tagId
+     * @throws SSException
+     */
+    public void delById(int tagId) throws Exception;
+
+    /**
      * 根据ID修改Tag名称
      * @param tagId
      * @param name
      */
-    public void updateTagName(Integer tagId, String name) throws Exception;
+    public void updateName(Integer tagId, String name) throws Exception;
 
     /**
      * 更改tag权重
@@ -103,21 +110,21 @@ public interface TagCacheService {
      * @param weight
      * @throws SSException
      */
-    public void updateTagWeight(Integer tagId, Integer weight) throws Exception;
+    public void updateWeight(Integer tagId, Integer weight) throws Exception;
 
     /**
      * 更改tag的父亲节点
      * @param tagId
      * @param pId
      */
-    public void updateTagPid(Integer tagId, Integer pId) throws Exception;
+    public void updatePid(Integer tagId, Integer pId) throws Exception;
 
     /**
      * 根据ID联级删除Tag
      * @param tagId
      * @throws SSException
      */
-    public void delTagCascadeById(Integer tagId) throws Exception;
+    public void delCascadeById(int tagId) throws Exception;
 
     /**
      * 查询tag的祖先路径
@@ -125,6 +132,6 @@ public interface TagCacheService {
      * @return
      * @throws Exception
      */
-    public List<Tag> listPathByTagId(Integer tagId) throws Exception;
+    public List<Tag> listPathById(int tagId) throws Exception;
 
 }

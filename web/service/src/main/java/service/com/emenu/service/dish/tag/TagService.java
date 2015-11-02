@@ -44,28 +44,11 @@ public interface TagService {
     public void updateTag(Tag tag) throws SSException;
 
     /**
-     * 根据Id修改tag名字
-     * @param tagId
-     * @param name
+     * 更新数据库某一个字段的值
+     * @param tag
      * @throws SSException
      */
-    public void updateName(int tagId, String name) throws SSException;
-
-    /**
-     * 根据ID修改tag权重
-     * @param tagId
-     * @param weight
-     * @throws SSException
-     */
-    public void updateWeight(int tagId, Integer weight) throws SSException;
-
-    /**
-     * 根据ID更新父亲节点ID
-     * @param tagId
-     * @param pId
-     * @throws SSException
-     */
-    public void updatePid(int tagId, Integer pId) throws SSException;
+    public void update(Tag tag) throws SSException;
 
     /**
      * 根据ID查询tag

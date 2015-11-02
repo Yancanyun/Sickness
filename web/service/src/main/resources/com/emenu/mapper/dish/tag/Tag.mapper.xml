@@ -32,11 +32,14 @@
         DELETE
         FROM
         `t_tag`
-        WHERE
-        id
-        IN
-        <foreach item="tagId" collection="ids" open="(" separator="," close=")">
-            #{tagId}
-        </foreach >
+        <where>
+            <if test="ids != null and ids.size != 0">
+                id
+                IN
+                <foreach item="tagId" collection="ids" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach >
+            </if>
+        </where>
     </delete>
 </mapper>
