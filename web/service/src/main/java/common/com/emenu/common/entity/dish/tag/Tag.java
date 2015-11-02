@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2015/10/22
  */
 @Entity
-@Table(name = "t_dish_tag")
+@Table(name = "t_tag")
 public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
 
     private static final long serialVersionUID = -7116994168670878216L;

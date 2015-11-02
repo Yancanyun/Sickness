@@ -1,8 +1,8 @@
 /*菜品与原料的类别*/
 DROP TABLE
-IF EXISTS `t_dish_tag`;
+IF EXISTS `t_tag`;
 
-CREATE TABLE `t_dish_tag` (
+CREATE TABLE `t_tag` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(128) NOT NULL DEFAULT '' COMMENT '类别名称',
   `p_id` int(11) NOT NULL DEFAULT '0' COMMENT '父类别ID',
