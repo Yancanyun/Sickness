@@ -42,7 +42,7 @@ public interface IndexImgService {
      * @param state
      * @throws SSException
      */
-    public void updateStateById(int id, int state) throws SSException;
+    public void updateStateById(int id, IndexImgEnum state) throws SSException;
 
     /**
      * 查询所有首页图片

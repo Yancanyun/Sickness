@@ -38,5 +38,5 @@ public interface KeywordsService {
      * @return
      * @throws SSException
      */
-    public List<Keywords> listByType(int type) throws SSException;
+    public List<Keywords> listByType(KeywordsEnum type) throws SSException;
 }

@@ -39,8 +39,8 @@ public class AdminKeywordsController extends AbstractController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toKeywordsPage(Model model) {
         try {
-            List<Keywords> orderingKeywordsList = keywordsService.listByType(KeywordsEnum.Ordering.getId());
-            List<Keywords> waiterSystemKeywordsList = keywordsService.listByType(KeywordsEnum.WaiterSystem.getId());
+            List<Keywords> orderingKeywordsList = keywordsService.listByType(KeywordsEnum.Ordering);
+            List<Keywords> waiterSystemKeywordsList = keywordsService.listByType(KeywordsEnum.WaiterSystem);
             model.addAttribute("orderingKeywordsList", orderingKeywordsList);
             model.addAttribute("waiterSystemKeywordsList", waiterSystemKeywordsList);
         } catch (SSException e) {

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -70,16 +71,16 @@ public class IndexImgServiceImpl implements IndexImgService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStateById(int id, int state) throws SSException {
+    public void updateStateById(int id, IndexImgEnum state) throws SSException {
         if (Assert.lessOrEqualZero(id)) {
             return;
         }
-        Assert.isNotNull(IndexImgEnum.valueOf(state), EmenuException.ImgStateWrong);
+        Assert.isNotNull(state, EmenuException.ImgStateWrong);
 
         try {
             IndexImg indexImg = new IndexImg();
             indexImg.setId(id);
-            indexImg.setState(state);
+            indexImg.setState(state.getId());
             commonDao.updateFieldsById(indexImg, "state");
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -89,12 +90,14 @@ public class IndexImgServiceImpl implements IndexImgService {
 
     @Override
     public List<IndexImg> listAll() throws SSException {
+        List<IndexImg> list = Collections.emptyList();
         try {
-            return indexImgMapper.listAll();
+            list = indexImgMapper.listAll();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryIndexImgFail, e);
         }
+        return list;
     }
 
     @Override

@@ -51,6 +51,12 @@ public class AdminIndexImgController extends AbstractController{
         return "admin/indexImg/list_home";
     }
 
+    /**
+     * ajax上传首页图片
+     *
+     * @param file
+     * @return
+     */
     @Module(ModuleEnums.AdminBasicInfoIndexImgNew)
     @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
@@ -77,14 +83,8 @@ public class AdminIndexImgController extends AbstractController{
     public JSONObject ajaxChangeIndexImg(@PathVariable("imgId") Integer imgId) {
         try {
             IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using.getId());
-            if (defaultImg != null) {
-                if (!imgId.equals(defaultImg.getId())){
-                    indexImgService.updateStateById(imgId, IndexImgEnum.Using.getId());
-                }
-                indexImgService.updateStateById(defaultImg.getId(), IndexImgEnum.UnUsing.getId());
-            } else {
-                indexImgService.updateStateById(imgId, IndexImgEnum.Using.getId());
-            }
+            indexImgService.updateStateById(defaultImg.getId(), IndexImgEnum.UnUsing);
+            indexImgService.updateStateById(imgId, IndexImgEnum.Using);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

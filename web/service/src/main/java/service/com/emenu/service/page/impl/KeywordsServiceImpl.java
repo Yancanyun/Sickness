@@ -63,14 +63,10 @@ public class KeywordsServiceImpl implements KeywordsService{
     }
 
     @Override
-    public List<Keywords> listByType(int type) throws SSException {
+    public List<Keywords> listByType(KeywordsEnum type) throws SSException {
         List<Keywords> list = Collections.emptyList();
-        if (Assert.isNull(KeywordsEnum.valueOf(type))){
-            return list;
-        }
-
         try {
-            list =  keywordsMapper.listByType(type);
+            list =  keywordsMapper.listByType(type.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryKeywordsFail, e);

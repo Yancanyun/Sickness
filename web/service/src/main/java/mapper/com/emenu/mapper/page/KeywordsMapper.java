@@ -27,5 +27,5 @@ public interface KeywordsMapper {
      * @param type
      * @return
      */
-    public Integer countByKeyAndType(@Param("key") String key, @Param("type") Integer type) throws Exception;
+    public Integer countByKeyAndType(@Param("key") String key, @Param("type") int type) throws Exception;
 }
