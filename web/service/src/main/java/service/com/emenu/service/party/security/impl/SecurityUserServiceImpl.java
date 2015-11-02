@@ -29,7 +29,7 @@ import java.util.List;
  * @time: 15/10/16 上午9:18
  */
 @Service("securityUserService")
-public class SecurityUserServiceIml implements SecurityUserService {
+public class SecurityUserServiceImpl implements SecurityUserService {
 
     @Autowired
     private CommonDao commonDao;
@@ -178,17 +178,13 @@ public class SecurityUserServiceIml implements SecurityUserService {
     @Override
     public void updateSecurityUser(SecurityUser securityUser) throws SSException {
         try {
-            if (this.checkBeforeSave(securityUser));
-            {
+            if (this.checkBeforeSave(securityUser)) {
                 securityUserMapper.updateSecurityUser(securityUser);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
-
-
-
     }
 
     private boolean checkBeforeSave(SecurityUser securityUser) throws SSException {

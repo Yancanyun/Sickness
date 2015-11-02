@@ -13,7 +13,7 @@
             permission.`description` AS permissionDescription,
             permission.`expression` AS permissionExpression
         FROM `t_party_security_group_permission` groupPermission
-        LEFT JOIN `t_party_security_permision` permission ON groupPermission.`permissionId` = permission.`id`
+        LEFT JOIN `t_party_security_permission` permission ON groupPermission.`permission_id` = permission.`id`
         WHERE `group_id` = #{groupId}
         ORDER BY `id` DESC
     </select>
@@ -21,6 +21,24 @@
     <select id="listPermissionIdByGroupId" resultType="int">
         SELECT
             `permission_id`
+        FROM `t_party_security_group_permission`
+        WHERE `group_id` = #{groupId}
+    </select>
+
+    <select id="listByGroupIdAndPage" resultMap="pw.SecurityGroupPermission">
+        SELECT
+            groupPermission.*,
+            permission.`description` AS permissionDescription,
+            permission.`expression` AS permissionExpression
+        FROM `t_party_security_group_permission` groupPermission
+        LEFT JOIN `t_party_security_permission` permission ON groupPermission.`permission_id` = permission.`id`
+        WHERE `group_id` = #{groupId}
+        ORDER BY `id` DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByGroupId" resultType="int">
+        SELECT count(1)
         FROM `t_party_security_group_permission`
         WHERE `group_id` = #{groupId}
     </select>

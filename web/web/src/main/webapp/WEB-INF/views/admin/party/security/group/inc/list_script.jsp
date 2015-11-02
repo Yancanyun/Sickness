@@ -9,7 +9,7 @@
     <td>
       <a class="label-info J_edit" href="javascript:;"><i class="fa fa-pencil"></i> 编辑</a>
       <a class="label-info J_del" href="javascript:;"><i class="fa fa-times"></i> 删除</a>
-      <a class="label-info J_search" href="#"><i class="fa fa-search"></i> 查看权限</a>
+      <a class="label-info J_search" href="${website}admin/party/security/group/permission/&{it.id}"><i class="fa fa-search"></i> 查看权限</a>
     </td>
   </tr>
   {@/each}
@@ -43,12 +43,12 @@
 </script>
 <script type="text/javascript">
   KISSY.ready(function(S){
-    S.use('page/authority-management/authority-config', function(S){
+    S.use('page/authority-management/authority-group-list', function(S){
       PW.page.AuthorityConfig({
         renderTo: '.J_pagination',
         juicerRender: '#tpl',
         dataRender: '#J_template',
-        url: '/admin/party/security/group/ajax/list',
+        url: '${website}admin/party/security/group/ajax/list',
         pageSize: 10,
         configUrl: function(url,page,me,prevPaginationData){
           //return url;

@@ -1,15 +1,19 @@
 package com.emenu.web.controller.admin.party.security;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.party.security.SecurityGroup;
+import com.emenu.common.entity.party.security.SecurityGroupPermission;
+import com.emenu.common.entity.party.security.SecurityPermission;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -129,4 +133,111 @@ public class SecurityGroupController extends AbstractController {
         }
     }
 
+    /**
+     * 去安全组-权限列表页
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupPermissionList)
+    @RequestMapping(value = "permission/{id}", method = RequestMethod.GET)
+    public String toPermissionList(@PathVariable("id") Integer id,
+                                   Model model) {
+        try {
+            SecurityGroup securityGroup = securityGroupService.queryById(id);
+            List<SecurityPermission> noSelectedPermissionList = securityGroupPermissionService.listNotSelectedPermission(id);
+
+            model.addAttribute("securityGroup", securityGroup);
+            model.addAttribute("noSelectedPermissionList", noSelectedPermissionList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        return "admin/party/security/group/permission_list_home";
+    }
+
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupPermissionList)
+    @RequestMapping(value = "permission/{id}/ajax/{pageNo}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxPermissionList(@PathVariable("id") Integer id,
+                                   @PathVariable("pageNo") Integer pageNo,
+                                   @RequestParam("pageSize") Integer pageSize) {
+
+        int dataCount = 0;
+        try {
+            dataCount = securityGroupPermissionService.countByGroupId(id);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        List<SecurityGroupPermission> list = Collections.emptyList();
+        try {
+            list = securityGroupPermissionService.listByGroupIdAndPage(id, pageNo, pageSize);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (SecurityGroupPermission securityGroupPermission : list) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", securityGroupPermission.getId());
+            jsonObject.put("permissionExpression", securityGroupPermission.getPermissionExpression());
+            jsonObject.put("permissionDescription", securityGroupPermission.getPermissionDescription());
+
+            jsonArray.add(jsonObject);
+        }
+
+        return sendJsonArray(jsonArray, dataCount);
+    }
+
+    /**
+     * 添加权限
+     *
+     * @param groupId
+     * @param permissionId
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupPermissionNew)
+    @RequestMapping(value = "permission", method = RequestMethod.POST)
+    public String newPermission(@RequestParam("groupId") Integer groupId,
+                                @RequestParam("permissionId") Integer permissionId) {
+        SecurityGroupPermission securityGroupPermission = new SecurityGroupPermission();
+        securityGroupPermission.setGroupId(groupId);
+        securityGroupPermission.setPermissionId(permissionId);
+        try {
+            securityGroupPermissionService.newSecurityGroupPermission(securityGroupPermission);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        	return ADMIN_SYS_ERR_PAGE;
+        }
+
+        String redirectUrl = URLConstants.ADMIN_PARTY_SECURITY_GROUP + "/permission/" + groupId;
+        return "redirect:/" + redirectUrl;
+    }
+
+    /**
+     * ajax删除权限
+     *
+     * @param id
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupPermissionDelete)
+    @RequestMapping(value = "permission/ajax/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSON ajaxDeletePermission(@PathVariable("id") Integer id) {
+        try {
+            securityGroupPermissionService.delById(id);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
 }

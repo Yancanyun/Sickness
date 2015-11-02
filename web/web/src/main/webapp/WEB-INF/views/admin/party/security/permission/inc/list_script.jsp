@@ -45,7 +45,7 @@
 </script>
 <script type="text/javascript">
     KISSY.ready(function (S) {
-        S.use('page/authority-management/authority-config', function (S) {
+        S.use('page/authority-management/base-config', function (S) {
             PW.page.AuthorityConfig({
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',

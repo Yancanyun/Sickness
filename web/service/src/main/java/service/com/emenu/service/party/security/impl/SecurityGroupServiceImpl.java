@@ -26,7 +26,7 @@ import java.util.List;
  * @time: 15/10/12 上午11:14
  */
 @Service("securityGroupService")
-public class SecurityGroupServiceIml implements SecurityGroupService {
+public class SecurityGroupServiceImpl implements SecurityGroupService {
     @Autowired
     private CommonDao commonDao;
 
@@ -43,15 +43,14 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public SecurityGroup newSecurityGroup(SecurityGroup securityGroup) throws SSException {
-        if (!checkBeforeSave(securityGroup)) {
-            return null;
-        }
-
         try {
+            if (!checkBeforeSave(securityGroup)) {
+                return null;
+            }
             return commonDao.insert(securityGroup);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupInsertFailed, e);
         }
     }
 
@@ -71,23 +70,23 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             securityUserGroupService.delByGroupId(id);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupDeleteFailed, e);
         }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void update(SecurityGroup securityGroup) throws SSException {
-        if (!checkBeforeSave(securityGroup)) {
-            return ;
-        }
-        CommonUtil.checkId(securityGroup.getId(), PartyException.SecurityGroupIdNotNull);
-
         try {
+            if (!checkBeforeSave(securityGroup)) {
+                return;
+            }
+            CommonUtil.checkId(securityGroup.getId(), PartyException.SecurityGroupIdNotNull);
+
             commonDao.update(securityGroup);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupUpdateFailed, e);
         }
     }
 
@@ -103,7 +102,7 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             list = securityGroupMapper.listByPage(offset, pageSize);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
 
         return list;
@@ -112,10 +111,10 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
     @Override
     public List<SecurityGroup> listAll() throws SSException {
         try {
-           return securityGroupMapper.listAll();
+            return securityGroupMapper.listAll();
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
     }
 
@@ -126,7 +125,7 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             return securityGroupMapper.listAllGroupId();
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
     }
 
@@ -137,7 +136,7 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             num = securityGroupMapper.count();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
         return num == null ? 0 : num;
     }
@@ -153,7 +152,7 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             list = securityGroupMapper.listByIdList(groupIdList, isInList);
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
 
         return list;
@@ -168,7 +167,7 @@ public class SecurityGroupServiceIml implements SecurityGroupService {
             return commonDao.queryById(SecurityGroup.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupQueryFailed, e);
         }
     }
 

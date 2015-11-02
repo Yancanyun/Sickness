@@ -31,6 +31,7 @@
         FROM `t_party_security_permission`
         <where>
             <if test="idList != null and idList.size != 0">
+                id
                 <if test="isInList == true">
                     IN
                 </if>

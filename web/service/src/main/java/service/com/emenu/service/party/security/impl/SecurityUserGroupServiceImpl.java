@@ -49,24 +49,24 @@ public class SecurityUserGroupServiceImpl implements SecurityUserGroupService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public SecurityUserGroup newSecurityUserGroup(SecurityUserGroup securityUserGroup) throws SSException {
-        if (Assert.isNull(securityUserGroup)) {
-            return null;
-        }
-        // 非空检查
-        CommonUtil.checkId(securityUserGroup.getUserId(), PartyException.UserIdNotNull);
-        CommonUtil.checkId(securityUserGroup.getGroupId(), PartyException.SecurityGroupIdNotNull);
-
         try {
+            if (Assert.isNull(securityUserGroup)) {
+                return null;
+            }
+            // 非空检查
+            CommonUtil.checkId(securityUserGroup.getUserId(), PartyException.UserIdNotNull);
+            CommonUtil.checkId(securityUserGroup.getGroupId(), PartyException.SecurityGroupIdNotNull);
+
             return commonDao.insert(securityUserGroup);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.UserGroupInsertFailed, e);
         }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void delById(Integer id) throws SSException {
+    public void delById(int id) throws SSException {
         if (Assert.lessOrEqualZero(id)){
             return ;
         }
@@ -74,7 +74,7 @@ public class SecurityUserGroupServiceImpl implements SecurityUserGroupService {
             commonDao.deleteById(SecurityUserGroup.class, id);
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.UserGroupDeleteFailed, e);
         }
     }
 
@@ -89,7 +89,7 @@ public class SecurityUserGroupServiceImpl implements SecurityUserGroupService {
             list = securityUserGroupMapper.listByUserId(userId);
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.UserGroupQueryFailed, e);
         }
         return list;
     }

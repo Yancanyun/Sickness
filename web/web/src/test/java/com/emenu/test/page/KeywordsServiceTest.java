@@ -7,8 +7,6 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 /**
  * KeywordsServiceTest
  *
@@ -31,7 +29,7 @@ public class KeywordsServiceTest extends AbstractTestCase {
 
     @Test
     public void queryKeywordsByType() throws SSException{
-        List<Keywords> orderingList = keywordsService.listByType(0);
+       /* List<Keywords> orderingList = keywordsService.listByType(0);
         List<Keywords> waiterList = keywordsService.listByType(3);
 
         for (Keywords keywords:orderingList){
@@ -39,7 +37,7 @@ public class KeywordsServiceTest extends AbstractTestCase {
         }
         for (Keywords keywords:waiterList){
             System.out.println("id:"+keywords.getId()+"  key:"+keywords.getKey()+"  type:"+keywords.getType());
-        }
+        }*/
     }
 
     @Test

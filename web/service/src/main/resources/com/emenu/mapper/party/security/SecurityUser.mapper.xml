@@ -35,19 +35,17 @@
     </select>
 
     <select id="queryByPartyId" resultMap="pw.SecurityUser">
-           SELECT *
+        SELECT *
         FROM `t_party_security_user`
         WHERE `party_id` = #{partyId}
     </select>
 
     <update id="updateSecurityUser" >
-           UPDATE `t_party_security_user`
+        UPDATE `t_party_security_user`
         SET `login_name` = #{securityUser.loginName},
             `password` = #{securityUser.password},
             `status` = #{securityUser.status},
             `account_type` = #{securityUser.accountType}
         WHERE `id` = #{securityUser.id}
-
-
     </update>
 </mapper>

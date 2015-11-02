@@ -12,7 +12,7 @@ import java.util.Date;
  * @time: 15/10/12 上午8:56
  */
 @Entity
-@Table(name = "t_security_group_permission")
+@Table(name = "t_party_security_group_permission")
 public class SecurityGroupPermission extends AbstractEntity {
 
     // 主键

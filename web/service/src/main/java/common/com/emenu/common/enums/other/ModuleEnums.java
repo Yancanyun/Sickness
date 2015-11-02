@@ -31,6 +31,10 @@ public enum ModuleEnums {
     AdminPartySecurityGroupNew("Admin:SAdmin:Party:Security:Group:New"),
     AdminPartySecurityGroupUpdate("Admin:SAdmin:Party:Security:Group:Update"),
     AdminPartySecurityGroupDel("Admin:SAdmin:Party:Security:Group:Del"),
+    AdminPartySecurityGroupPermission("Admin:SAdmin:Party:Security:Group:Permission"),
+    AdminPartySecurityGroupPermissionList("Admin:SAdmin:Party:Security:Group:Permission:List"),
+    AdminPartySecurityGroupPermissionNew("Admin:SAdmin:Party:Security:Group:Permission:New"),
+    AdminPartySecurityGroupPermissionDelete("Admin:SAdmin:Party:Security:Group:Permission:Delete"),
 
 
 

@@ -12,6 +12,7 @@ import com.emenu.service.page.KeywordsService;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.login.LoginManageService;
+import com.emenu.service.party.security.SecurityGroupPermissionService;
 import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
@@ -194,6 +195,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("securityGroupService")
     protected static SecurityGroupService securityGroupService;
+
+    @StaticAutoWire
+    @Qualifier("securityGroupPermissionService")
+    protected static SecurityGroupPermissionService securityGroupPermissionService;
 
     @StaticAutoWire
     @Qualifier("keywordsService")

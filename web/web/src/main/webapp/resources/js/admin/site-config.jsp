@@ -132,7 +132,10 @@
                     //保存新添加的权限
                     saveNewAuthority: site.website + 'admin/party/security/permission/ajax',
                     //删除权限时，发送权限id
-                    delAuthority: site.website + 'admin/party/security/permission/ajax'
+                    delAuthority: site.website + 'admin/party/security/permission/ajax',
+
+                    //authority-group-config.html 权限组配置页面，删除权限
+                    delAuthorityOfGroup: site.website + 'admin/party/security/group/permission/ajax'
                 },
             },
             // 原配料管理
@@ -144,7 +147,7 @@
                     //保存的原配料单位
                     saveNewIngredient: site.website + 'admin/dish/unit/ajax/unit',
                     //删除原配料单位时，发送原配料单位id
-                    delIngredient: site.website + 'admin/dish/unit/ajax/unit'
+                    delIngredient: site.website + 'admin/dish/unit/ajax/unit',
                 },
             },
 

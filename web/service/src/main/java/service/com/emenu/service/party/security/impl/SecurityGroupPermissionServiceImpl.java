@@ -2,6 +2,7 @@ package com.emenu.service.party.security.impl;
 
 import com.emenu.common.entity.party.security.SecurityGroupPermission;
 import com.emenu.common.entity.party.security.SecurityPermission;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.mapper.party.security.SecurityGroupPermissionMapper;
 import com.emenu.service.other.EncodeService;
@@ -26,7 +27,7 @@ import java.util.List;
  * @time: 15/10/12 上午11:14
  */
 @Service("securityGroupPermissionService")
-public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissionService {
+public class SecurityGroupPermissionServiceImpl implements SecurityGroupPermissionService {
 
     @Autowired
     private CommonDao commonDao;
@@ -43,15 +44,14 @@ public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissio
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public SecurityGroupPermission newSecurityGroupPermission(SecurityGroupPermission securityGroupPermission) throws SSException {
-        if (!checkBeforeSave(securityGroupPermission)) {
-            return null;
-        }
-
         try {
+            if (!checkBeforeSave(securityGroupPermission)) {
+                return null;
+            }
             return commonDao.insert(securityGroupPermission);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupPermissionInsertFailed, e);
         }
     }
 
@@ -65,7 +65,7 @@ public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissio
             commonDao.deleteById(SecurityGroupPermission.class, id);
         } catch(Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupPermissionDeleteFailed, e);
         }
     }
 
@@ -79,7 +79,7 @@ public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissio
             securityGroupPermissionMapper.delByGroupId(groupId);
         } catch(Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupPermissionDeleteFailed, e);
         }
     }
 
@@ -94,10 +94,41 @@ public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissio
             list = securityGroupPermissionMapper.listByGroupId(groupId);
         } catch(Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.SecurityGroupPermissionQueryFailed, e);
         }
         return list == null ? Collections.<SecurityGroupPermission>emptyList() : list;
     }
+
+    @Override
+    public List<SecurityGroupPermission> listByGroupIdAndPage(int groupId, int pageNo, int pageSize) throws SSException {
+        List<SecurityGroupPermission> list = Collections.emptyList();
+        pageNo = pageNo > 0 ? pageNo - 1 : 0;
+        int offset = pageNo * pageSize;
+        if (Assert.lessOrEqualZero(groupId)
+                || Assert.lessZero(offset)) {
+            return list;
+        }
+        try {
+            list = securityGroupPermissionMapper.listByGroupIdAndPage(groupId, offset, pageSize);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SecurityGroupPermissionQueryFailed, e);
+        }
+        return list;
+    }
+
+    @Override
+    public int countByGroupId(int groupId) throws SSException {
+        Integer count = 0;
+        try {
+            count = securityGroupPermissionMapper.countByGroupId(groupId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SecurityGroupPermissionQueryFailed, e);
+        }
+        return count == null ? 0 : count;
+    }
+
 
     @Override
     public List<SecurityPermission> listNotSelectedPermission(int groupId) throws SSException {
@@ -118,12 +149,10 @@ public class SecurityGroupPermissionServiceIml implements SecurityGroupPermissio
         // 获取未选择的权限ID列表
         List<SecurityPermission> notSelectedList = Collections.emptyList();
         try {
-            if (!Assert.isNotEmpty(selectedIdList)) {
-                notSelectedList = securityPermissionService.listByIdList(selectedIdList, false);
-            }
+            notSelectedList = securityPermissionService.listByIdList(selectedIdList, false);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.QueryNotSelectedPermissionFailed, e);
         }
 
         return notSelectedList;

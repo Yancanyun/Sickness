@@ -39,13 +39,33 @@ public interface SecurityGroupPermissionService {
     public void delByGroupId(int groupId) throws SSException;
 
     /**
-     * 获取权限组的权限
+     * 根据安全组的id分页获取权限
      *
      * @param groupId
      * @return
      * @throws SSException
      */
     public List<SecurityGroupPermission> listByGroupId(int groupId) throws SSException;
+
+    /**
+     * 根据安全组的id分页获取权限
+     *
+     * @param groupId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<SecurityGroupPermission> listByGroupIdAndPage(int groupId, int pageNo, int pageSize) throws SSException;
+
+    /**
+     * 根据安全组的id获取权限数量
+     *
+     * @param groupId
+     * @return
+     * @throws SSException
+     */
+    public int countByGroupId(int groupId) throws SSException;
 
     /**
      * 获取当前组未选择的权限

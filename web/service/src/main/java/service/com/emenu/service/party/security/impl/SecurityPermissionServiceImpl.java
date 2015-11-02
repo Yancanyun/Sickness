@@ -36,15 +36,14 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public SecurityPermission newPermission(SecurityPermission securityPermission) throws SSException {
-        if (!checkBeforeSave(securityPermission)) {
-            return null;
-        }
-
         try {
+            if (!checkBeforeSave(securityPermission)) {
+                return null;
+            }
             return commonDao.insert(securityPermission);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionInsertFailed, e);
         }
     }
 
@@ -58,7 +57,7 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             commonDao.deleteById(SecurityPermission.class, id);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionDeleteFailed, e);
         }
     }
 
@@ -68,35 +67,35 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
         if (Assert.isNull(securityPermission)) {
             return ;
         }
-        // 权限表达式不能为空
-        Assert.isNotNull(securityPermission.getExpression(), PartyException.PermissionExpressionNotNull);
 
-        if (Assert.isNull(securityPermission.getId())
-                || Assert.lessOrEqualZero(securityPermission.getId())) {
-            throw SSException.get(PartyException.PermissionIdNotNull);
-        }
-
-        // 判断权限表达式是否和重复
-        SecurityPermission oldPermission;
         try {
-            oldPermission = commonDao.queryById(SecurityPermission.class, securityPermission.getId());
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
-        }
-        Assert.isNotNull(oldPermission, PartyException.PermissionNotExist);
-        if (!oldPermission.getExpression().equals(securityPermission.getExpression())) {
-            // 表达式重复判断
-            if (this.queryExpressionIsExist(securityPermission.getExpression())) {
-                throw SSException.get(PartyException.PermissionExpressionExist);
-            }
-        }
+            // 权限表达式不能为空
+            Assert.isNotNull(securityPermission.getExpression(), PartyException.PermissionExpressionNotNull);
 
-        try{
+            if (Assert.isNull(securityPermission.getId())
+                    || Assert.lessOrEqualZero(securityPermission.getId())) {
+                throw SSException.get(PartyException.PermissionIdNotNull);
+            }
+
+            // 判断权限表达式是否和重复
+            SecurityPermission oldPermission;
+            try {
+                oldPermission = commonDao.queryById(SecurityPermission.class, securityPermission.getId());
+            } catch (Exception e) {
+                LogClerk.errLog.error(e);
+                throw SSException.get(PartyException.SystemException, e);
+            }
+            Assert.isNotNull(oldPermission, PartyException.PermissionNotExist);
+            if (!oldPermission.getExpression().equals(securityPermission.getExpression())) {
+                // 表达式重复判断
+                if (this.queryExpressionIsExist(securityPermission.getExpression())) {
+                    throw SSException.get(PartyException.PermissionExpressionExist);
+                }
+            }
             commonDao.update(securityPermission);
-        } catch(Exception e){
+        } catch(Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionUpdateFailed, e);
         }
     }
 
@@ -112,7 +111,7 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             list = securityPermissionMapper.listByPage(offset, pageSize);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
 
         return list;
@@ -124,7 +123,7 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             return securityPermissionMapper.listAll();
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
     }
 
@@ -134,22 +133,19 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             return securityPermissionMapper.listAllIds();
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
     }
 
     @Override
     public List<SecurityPermission> listByIdList(List<Integer> idList, boolean isInList) throws SSException {
         List<SecurityPermission> list = Collections.emptyList();
-        if (Assert.isEmpty(idList)) {
-            return list;
-        }
 
         try {
             list = securityPermissionMapper.listByIdList(idList, isInList);
         } catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
 
         return list;
@@ -162,7 +158,7 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             count = securityPermissionMapper.count();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException);
+            throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
         return count == null ? 0 : count;
     }

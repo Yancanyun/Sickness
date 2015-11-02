@@ -1,6 +1,7 @@
 package com.emenu.mapper.party.security;
 
 import com.emenu.common.entity.party.security.SecurityGroupPermission;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,6 +29,28 @@ public interface SecurityGroupPermissionMapper {
      * @throws Exception
      */
     public List<SecurityGroupPermission> listByGroupId(@Param("groupId") int groupId) throws Exception;
+
+    /**
+     * 根据安全组的id分页获取权限
+     *
+     * @param groupId
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<SecurityGroupPermission> listByGroupIdAndPage(@Param("groupId") int groupId,
+                                                              @Param("offset") int offset,
+                                                              @Param("pageSize") int pageSize) throws Exception;
+
+    /**
+     * 根据安全组的id获取权限数量
+     *
+     * @param groupId
+     * @return
+     * @throws SSException
+     */
+    public int countByGroupId(@Param("groupId") int groupId) throws Exception;
 
     /**
      * 根据安全组ID获取权限ID

@@ -83,6 +83,7 @@ public interface SecurityUserService {
 
     /**
      * 根据partyId查询security
+     *
      * @param partyId
      * @return
      * @throws SSException
@@ -91,6 +92,7 @@ public interface SecurityUserService {
 
     /**
      * 更新securityuser
+     *
      * @param securityUser
      * @throws SSException
      */

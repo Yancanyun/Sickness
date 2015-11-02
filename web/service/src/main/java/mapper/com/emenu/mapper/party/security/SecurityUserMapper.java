@@ -62,7 +62,21 @@ public interface SecurityUserMapper {
     public SecurityUser queryByPartyIdAndAccountType(@Param("partyId") int partyId,
                                                      @Param("accountType") int accountType) throws Exception;
 
+    /**
+     * 根据partyId查询
+     *
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
     public SecurityUser queryByPartyId(@Param("partyId")int partyId) throws SSException;
 
+
+    /**
+     * 更新
+     *
+     * @param securityUser
+     * @throws SSException
+     */
     public void updateSecurityUser(@Param("securityUser") SecurityUser securityUser)throws SSException;
 }

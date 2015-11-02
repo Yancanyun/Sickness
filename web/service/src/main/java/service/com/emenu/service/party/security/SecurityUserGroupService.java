@@ -30,7 +30,7 @@ public interface SecurityUserGroupService {
      * @param id
      * @throws SSException
      */
-    public void delById(Integer id) throws SSException;
+    public void delById(int id) throws SSException;
 
 
     /**
