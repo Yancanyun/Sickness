@@ -99,6 +99,10 @@ public enum ModuleEnums {
     //员工管理
 
     AdminUserManagementEmployee("Admin:User:Management:Employee"),
+    AdminUserManagementEmployeeList("Admin:User:Management:Employee:List"),
+    AdminUserManagementEmployeeUpdate("Admin:User:Management:Employee:Update"),
+    AdminUserManagementEmployeeDelete("Admin:User:Managemetn:Employee:Delete"),
+    AdminUserManagementEmployeeNew("Admin:User:Managemetn:Employee:New"),
 
 
     ;

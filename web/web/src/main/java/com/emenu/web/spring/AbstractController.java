@@ -227,4 +227,18 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("unitService")
     protected static UnitService unitService;
+
+    @StaticAutoWire
+    @Qualifier("employeeService")
+    protected static EmployeeService employeeService;
+
+    @StaticAutoWire
+    @Qualifier("securityUserService")
+    protected static SecurityUserService securityUserService;
+
+    @StaticAutoWire
+    @Qualifier("tagService")
+    protected static TagService tagService;
+
+
 }

@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping(value = URLConstants.EMPLOYEE_MANAGEMENT)
 public class EmployeeController  extends AbstractController {
 
+    @Module(ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String toEmployeePage(Model model,HttpServletRequest request){
         try{
@@ -48,6 +49,7 @@ public class EmployeeController  extends AbstractController {
      * @param status
      * @return
      */
+    @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "ajax/status/{partyId}")
     @ResponseBody
     public JSONObject updateEmployeeStatus(@PathVariable("partyId")Integer partyId,
@@ -70,6 +72,7 @@ public class EmployeeController  extends AbstractController {
      * @param partyId
      * @return
      */
+    @Module(ModuleEnums.AdminUserManagementEmployeeDelete)
     @RequestMapping(value = "ajax/del/{partyId}",method = RequestMethod.DELETE)
     @ResponseBody
     public
@@ -83,6 +86,7 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
+    @Module(ModuleEnums.AdminUserManagementEmployeeNew)
     @RequestMapping(value = "new",method = RequestMethod.GET)
     public String newEmployee(@RequestParam("roleList")List<Integer> roleList,
                               @RequestParam(required = false) List<Integer> tableList,
@@ -102,11 +106,12 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
+
     @RequestMapping(value = "ajax/chkname",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject checkLoginName(@RequestParam("loginName")String loginName){
         try {
-            securityService.checkLoginNameIsExist(loginName);
+            securityUserService.checkLoginNameIsExist(loginName);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
