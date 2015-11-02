@@ -1,6 +1,5 @@
 package com.emenu.web.controller.admin.table;
 
-import com.alibaba.fastjson.JSON;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -52,10 +51,12 @@ public class AdminAreaController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantAreaNew)
     @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
-    public JSON ajaxNewArea(Area area) {
+    public JSONObject ajaxNewArea(Area area) {
         try {
-            areaService.newArea(area);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            Area area1 = areaService.newArea(area);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", area1.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

@@ -154,9 +154,9 @@
                     //保存新添加区域信息
                     saveNewArea: site.website + 'admin/restaurant/area/ajax/new',
                     //保存编辑原有区域信息结果
-                    saveEditArea: site.staticWebsite + 'mock/admin/login.json',
+                    saveEditArea: site.website + 'admin/restaurant/area/ajax',
                     //删除餐台区域时，发送需删除的id
-                    delAreaId: site.staticWebsite + 'mock/admin/login.json',
+                    delAreaId: site.website + 'admin/restaurant/area/ajax',
                     //改变餐台状态（停用、恢复）
                     changeState: site.staticWebsite + 'mock/admin/login.json',
                     //删除单个餐台

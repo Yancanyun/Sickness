@@ -110,7 +110,7 @@ public class LoginManageServiceImpl implements LoginManageService {
 
         // 绑定到当前的线程中
         ThreadContext.bind(subject);
-        return null;
+        return subject;
     }
 
     @Override

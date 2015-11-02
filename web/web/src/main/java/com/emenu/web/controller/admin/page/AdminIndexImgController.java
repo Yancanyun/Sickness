@@ -48,11 +48,11 @@ public class AdminIndexImgController extends AbstractController{
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/index/img/list_home";
+        return "admin/indexImg/list_home";
     }
 
     @Module(ModuleEnums.AdminBasicInfoIndexImgNew)
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSON uploadIndexImg(@RequestParam("file") PandaworkMultipartFile file) {
         try {

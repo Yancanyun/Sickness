@@ -58,7 +58,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         IgnoreLogin ignoreClazz = ((HandlerMethod) handler).getBean().getClass().getAnnotation(IgnoreLogin.class);
         IgnoreLogin ignoreMethod = ((HandlerMethod) handler).getMethod().getAnnotation(IgnoreLogin.class);
         if (ignoreClazz != null
-                || ignoreClazz != null) {
+                || ignoreMethod != null) {
             return true;
         }
         LogClerk.sysout.debug("class or method IgnoreLogin annotation is null, means this request need interceptor");
@@ -106,7 +106,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String constructSspLoginUrl(String sUrl, String returnUrl) {
-        sUrl = sUrl + "login?returnURL=" + returnUrl;
+        sUrl = sUrl + "admin/login?returnURL=" + returnUrl;
         LogClerk.sysout.debug("sURL for login is " + sUrl);
         return sUrl;
     }

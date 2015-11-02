@@ -25,6 +25,9 @@
         </property>
     </bean>
 
+    <!-- 文件上传 -->
+    <!--<bean id="fileUploadService" class="com.emenu.service.other.impl.FileUpload2LocalService" />-->
+    <bean id="fileUploadService" class="com.emenu.service.other.impl.FileUpload2ServerService" />
 
     <!--主配置文件,其他配置文件以import形式引入-->
     <context:annotation-config/>

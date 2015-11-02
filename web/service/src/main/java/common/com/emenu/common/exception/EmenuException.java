@@ -14,6 +14,7 @@ public enum EmenuException implements IBizExceptionMes {
     UploadFileNotNull("上传的文件不能为空!", 1002),
     UploadPathNotNull("上传的文件路径不能为空!", 1003),
     UploadDirCreateFail("上传文件夹创建失败!", 1004),
+    UploadFileFail("文件上传失败", 1005),
 
     //菜品管理模块
     //分类管理
@@ -42,16 +43,18 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateAreaFail("更新区域失败", 4004),
     DeleteAreaFail("删除区域失败", 4005),
     AreaHasTableExist("区域中有餐台存在，不允许删除", 4006),
+    AreaNameIsNull("区域名称不能为空", 4007),
     //餐台
-    QueryTableFail("查询餐台失败", 4007),
-    TableNameExist("餐台名称已存在", 4008),
-    InsertTableFail("添加餐台失败", 4009),
-    UpdateTableFail("更新餐台失败", 4010),
-    DeleteTableFail("删除餐台失败", 4011),
-    TableHasUsed("餐台正在被使用", 4012),
-    AreaNotExist("区域不存在", 4013),
+    QueryTableFail("查询餐台失败", 4020),
+    TableNameExist("餐台名称已存在", 4021),
+    InsertTableFail("添加餐台失败", 4022),
+    UpdateTableFail("更新餐台失败", 4023),
+    DeleteTableFail("删除餐台失败", 4024),
+    TableHasUsed("餐台正在被使用", 4025),
+    AreaNotExist("区域不存在", 4026),
+    TableNameIsNull("名称名称不能为空", 4027),
     //餐台二维码
-    DownloadQrCodeFail("下载二维码失败", 4014),
+    DownloadQrCodeFail("下载二维码失败", 4040),
 
 
     //搜索风向标

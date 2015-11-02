@@ -10,19 +10,18 @@ import com.pandawork.core.common.sytem.SystemInstance;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.CommonUtil;
 import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 
 /**
  * 默认的文件上传实现
+ * 上传到本地
  *
  * @author: zhangteng
  * @time: 2015/10/29 15:09
  **/
-@Service("defaultFileUploadService")
-public class DefaultFileUploadServiceImpl implements FileUploadService {
+public class FileUpload2LocalService implements FileUploadService {
 
     private String defaultUploadPath;
 
@@ -34,6 +33,7 @@ public class DefaultFileUploadServiceImpl implements FileUploadService {
 
     @Override
     public String uploadFile(PandaworkMultipartFile file, FileUploadPathEnums pathEnums, int width, int height) throws SSException {
+        // 非空检查
         Assert.isNotNull(file, EmenuException.UploadFileNotNull);
         Assert.isNotNull(pathEnums, EmenuException.UploadPathNotNull);
         if (file.isEmpty()) {
@@ -48,12 +48,12 @@ public class DefaultFileUploadServiceImpl implements FileUploadService {
         if (!tmpPath.endsWith("/")) {
             tmpPath += "/";
         }
-        String returnPath = defaultUploadPath + tmpPath;
-        File path = new File(returnPath);
+        String targetPath = defaultUploadPath + tmpPath;
+        File path = new File(targetPath);
         boolean mkdirSuccess = true;
         if (!path.isDirectory()) {
             // 创建目录
-            synchronized (DefaultFileUploadServiceImpl.class) {
+            synchronized (FileUpload2LocalService.class) {
                 if (!path.isDirectory()) {
                     mkdirSuccess = path.mkdirs();
                 }
@@ -67,14 +67,14 @@ public class DefaultFileUploadServiceImpl implements FileUploadService {
         // 对文件名进行md5加密
         File srcFile = file.getFile();
         String fileName = CommonUtil.md5(srcFile) + System.currentTimeMillis();
-        fileName = returnPath + fileName;
         String format = CommonUtil.getExtention(file.getOriginalFilename());
         if (!Assert.isNull(format)) {
-            fileName += ("." + format);
+            fileName += format;
         }
 
+        String targetFileName = targetPath + fileName;
         // 拷贝文件
-        File targetFile = new File(fileName);
+        File targetFile = new File(targetFileName);
         if (CommonUtil.copyFile(srcFile, targetFile)) {
             // 判断是否需要压缩
             if (!Assert.lessOrEqualZero(width)
@@ -90,7 +90,7 @@ public class DefaultFileUploadServiceImpl implements FileUploadService {
             throw SSException.get(EmenuException.ImageCompressedFail);
         }
 
-        return fileName;
+        return tmpPath + fileName;
     }
 
     @Override

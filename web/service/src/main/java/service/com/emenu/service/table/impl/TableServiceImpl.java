@@ -207,6 +207,10 @@ public class TableServiceImpl implements TableService{
             if (checkTableName(table.getName())) {
                 throw SSException.get(EmenuException.TableNameExist);
             }
+            //判断是否为空
+            if (table.getName() == null || "".equals(table.getName())) {
+                throw SSException.get(EmenuException.TableNameIsNull);
+            }
 
             //将状态设为可用
             table.setState(TableEnums.Enabled.getId());
@@ -251,6 +255,10 @@ public class TableServiceImpl implements TableService{
             if (checkTableName(table.getName())) {
                 throw SSException.get(EmenuException.TableNameExist);
             }
+            //判断是否为空
+            if (table.getName() == null || "".equals(table.getName())) {
+                throw SSException.get(EmenuException.TableNameIsNull);
+            }
 
             commonDao.update(table);
         } catch (Exception e) {
@@ -266,6 +274,10 @@ public class TableServiceImpl implements TableService{
             //判断是否重名
             if (checkTableName(table.getName())) {
                 throw SSException.get(EmenuException.TableNameExist);
+            }
+            //判断是否为空
+            if (table.getName() == null || "".equals(table.getName())) {
+                throw SSException.get(EmenuException.TableNameIsNull);
             }
 
             commonDao.update(table);

@@ -41,10 +41,7 @@
                                     <h5 class="margin-top-15">当前顾客点餐平台首页</h5>
                                 </c:if>
                                 <c:if test="${indexImg.id != defaultImg.id}">
-                                    <button class="margin-top-15 btn btn-success" type="button"><i
-                                            class="fa fa-check"></i>&nbsp;点击设置为首页
-                                    </button>
-
+                                    <button class="margin-top-15 btn btn-success" type="button"><i class="fa fa-check"></i>&nbsp;点击设置为首页</button>
                                 </c:if>
                             </div>
                         </c:forEach>

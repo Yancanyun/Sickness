@@ -20,7 +20,7 @@
         <a class="btn btn-success margin-bottom-15 J_addBtn" href="#"><i class="fa fa-plus"></i>添加餐台区域</a>
         <form class="J_operForm">
           <!-- 使用隐藏input存放id -->
-          <input type = "hidden" id="J_hiddenId" name="${area.id}" value=""/>
+          <input type = "hidden" id="J_hiddenId"name="id" value=""/>
           <div class="table-responsive">
             <table class="table table-hover table-bordered">
               <thead>

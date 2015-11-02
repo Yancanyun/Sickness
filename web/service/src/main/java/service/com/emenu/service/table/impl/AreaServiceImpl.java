@@ -9,6 +9,7 @@ import com.emenu.service.table.AreaService;
 import com.emenu.service.table.TableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,10 @@ public class AreaServiceImpl implements AreaService{
         try {
             //判断是否重名
             if (checkAreaName(area.getName())) {
+                throw SSException.get(EmenuException.AreaNameExist);
+            }
+            //判断是否为空
+            if (area.getName() == null || "".equals(area.getName())) {
                 throw SSException.get(EmenuException.AreaNameExist);
             }
             //将状态设为可用
