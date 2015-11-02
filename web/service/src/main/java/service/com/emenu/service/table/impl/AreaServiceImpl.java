@@ -102,6 +102,10 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     public boolean checkNameIsExist(String name) throws SSException {
+        //检查Name是否为空
+        if (Assert.isNull(name)) {
+            return false;
+        }
         try {
             if (areaMapper.countByName(name) > 0) {
                 return true;
@@ -136,6 +140,10 @@ public class AreaServiceImpl implements AreaService{
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void delById(int id) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
         try {
             //判断该区域内是否有餐台，若有则不能删除
             if (tableService.countByAreaId(id) > 0) {
