@@ -17,25 +17,27 @@ public interface AreaMapper {
      * 查询全部区域
      * @return List<Area>
      */
-    public List<Area> listAllArea();
+    public List<Area> listAll() throws Exception;
 
     /**
      * 据ID查询区域状态
      * @param id
      * @return int : 0、可用；1、已删除
      */
-    public int queryAreaStateById(@Param("id") int id);
+    public int queryStateById(@Param("id") int id) throws Exception;
 
     /**
-     * 检查是否有重复的区域名称存在
+     * 查询某区域名称的数量
      * @param name
-     * @return int : 0、未重复；1、重复
+     * @return int
      */
-    public int checkAreaName(@Param("name") String name);
+    public int countByName(@Param("name") String name) throws Exception;
 
     /**
-     * 根据ID删除区域（假删）
+     * 根据ID修改区域状态
      * @param id
+     * @param state
+     * @throws Exception
      */
-    public void delTableById(@Param("id") int id);
+    public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
 }

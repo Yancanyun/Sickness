@@ -25,7 +25,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listAllTableItself() throws SSException;
+    public List<Table> listAll() throws SSException;
 
     /**
      * 根据区域ID查询餐台（包含区域表中的信息）
@@ -41,7 +41,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listTableItselfByAreaId(int areaId) throws SSException;
+    public List<Table> listByAreaId(int areaId) throws SSException;
 
     /**
      * 根据状态查询餐台（包含区域表中的信息）
@@ -57,7 +57,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listTableItselfByState(int state) throws SSException;
+    public List<Table> listByState(int state) throws SSException;
 
     /**
      * 根据区域及状态查询餐台（包含区域表中的信息）
@@ -75,7 +75,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listTableItselfByAreaIdAndState(int areaId, int state) throws SSException;
+    public List<Table> listByAreaIdAndState(int areaId, int state) throws SSException;
 
     /**
      * 根据ID查询餐台（包含区域表中的信息）
@@ -91,7 +91,7 @@ public interface TableService {
      * @return Table
      * @throws SSException
      */
-    public Table queryTableItselfById(int id) throws SSException;
+    public Table queryById(int id) throws SSException;
 
     /**
      * 根据ID查询餐台状态
@@ -99,7 +99,7 @@ public interface TableService {
      * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账4、已并桌；5、已预订；6、已删除
      * @throws SSException
      */
-    public int queryTableStateById(int id) throws SSException;
+    public int queryStateById(int id) throws SSException;
 
     /**
      * 添加餐台
@@ -115,7 +115,7 @@ public interface TableService {
      * @return boolean : true: 存在；false：不存在
      * @throws SSException
      */
-    public boolean checkTableName(String name) throws SSException;
+    public boolean checkNameIsExist(String name) throws SSException;
 
     /**
      * 修改餐台
@@ -136,7 +136,7 @@ public interface TableService {
      * @param id
      * @throws SSException
      */
-    public void delTableById(int id) throws SSException;
+    public void delById(int id) throws SSException;
 
     /**
      * 根据区域ID查询区域内餐台的数量
@@ -144,5 +144,5 @@ public interface TableService {
      * @return int
      * @throws SSException
      */
-    public int countTableNumByAreaId(int areaId) throws SSException;
+    public int countByAreaId(int areaId) throws SSException;
 }

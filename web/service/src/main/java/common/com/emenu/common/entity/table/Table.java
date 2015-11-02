@@ -28,7 +28,6 @@ public class Table extends AbstractEntity {
     private Integer areaId;
 
     //餐台名称
-    @Column(name = "name")
     private String name;
 
     //标准座位数
@@ -51,8 +50,7 @@ public class Table extends AbstractEntity {
     @Column(name = "qrcode_path")
     private String qrCodePath;
 
-    //状态
-    @Column(name = "state")
+    //状态(0-停用, 1-可用, 2-占用已结账, 3-占用未结账, 4-已并桌, 5-已预订, 6-已删除)
     private Integer state;
 
     //实际人数
@@ -68,7 +66,7 @@ public class Table extends AbstractEntity {
     private Date createdTime;
 
     //最近修改时间
-    @Column(name = "last_moedified_time")
+    @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
     public Integer getId() {

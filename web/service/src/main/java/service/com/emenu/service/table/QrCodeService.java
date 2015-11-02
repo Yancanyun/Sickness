@@ -20,7 +20,7 @@ public interface QrCodeService {
      * @return
      * @throws SSException
      */
-    public String newQrCodeByTableId(int tableId, String webDomain, HttpServletRequest request) throws SSException;
+    public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException;
 
     /**
      * 生成全部餐台的二维码
@@ -38,7 +38,7 @@ public interface QrCodeService {
      * @param response
      * @throws SSException
      */
-    public void downloadQrCodeByAreaId(int areaId, HttpServletRequest request, HttpServletResponse response) throws SSException;
+    public void downloadByAreaId(int areaId, HttpServletRequest request, HttpServletResponse response) throws SSException;
 
     /**
      * 下载全部二维码

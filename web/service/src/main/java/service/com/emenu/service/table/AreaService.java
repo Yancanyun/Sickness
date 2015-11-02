@@ -18,14 +18,14 @@ public interface AreaService {
      * @return List<Area>
      * @throws SSException
      */
-    public List<Area> listAllArea() throws SSException;
+    public List<Area> listAll() throws SSException;
 
     /**
      * 根据ID查询区域
      * @return Area
      * @throws SSException
      */
-    public Area queryAreaById(int id) throws SSException;
+    public Area queryById(int id) throws SSException;
 
     /**
      * 根据ID查询区域状态
@@ -33,7 +33,7 @@ public interface AreaService {
      * @return int : 0、可用；1、已删除
      * @throws SSException
      */
-    public int queryAreaStateById(int id) throws SSException;
+    public int queryStateById(int id) throws SSException;
 
     /**
      * 添加区域
@@ -49,7 +49,7 @@ public interface AreaService {
      * @return boolean : true: 存在；false：不存在
      * @throws SSException
      */
-    public boolean checkAreaName(String name) throws SSException;
+    public boolean checkNameIsExist(String name) throws SSException;
 
     /**
      * 修改区域
@@ -63,12 +63,12 @@ public interface AreaService {
      * @param id
      * @throws SSException
      */
-    public void delAreaById(int id) throws SSException;
+    public void delById(int id) throws SSException;
 
     /**
      * 查询区域及其拥有的餐台
      * @return
      * @throws SSException
      */
-    public List<AreaDto> listAreaAndTable() throws SSException;
+    public List<AreaDto> listDto() throws SSException;
 }

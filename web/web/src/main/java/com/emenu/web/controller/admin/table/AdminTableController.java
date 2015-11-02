@@ -72,7 +72,7 @@ public class AdminTableController extends AbstractController {
             model.addAttribute("tableDtoList", tableDtoList);
 
             //显示区域选择框
-            List<Area> areaList = areaService.listAllArea();
+            List<Area> areaList = areaService.listAll();
             boolean[] flags = new boolean[areaList.size()];
             if(areaId != null){
                 for(int i = 0 ; i < areaList.size() ; i++){
@@ -117,7 +117,7 @@ public class AdminTableController extends AbstractController {
     public String toTableInsertPage(Model model) {
         try {
             //显示区域选择框
-            List<Area> areaList = areaService.listAllArea();
+            List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -136,7 +136,7 @@ public class AdminTableController extends AbstractController {
     @ResponseBody
     public JSONObject tableExist(@RequestParam("name") String name) {
         try {
-            if(tableService.checkTableName(name)){
+            if(tableService.checkNameIsExist(name)){
                 throw SSException.get(EmenuException.TableNameExist);
             } else {
                 return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -157,10 +157,10 @@ public class AdminTableController extends AbstractController {
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toTableUpdate(@PathVariable("id") Integer id, Model model) {
         try {
-            Table table = tableService.queryTableItselfById(id);
+            Table table = tableService.queryById(id);
             model.addAttribute("table", table);
             //显示区域选择框
-            List<Area> areaList = areaService.listAllArea();
+            List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList",areaList);
 
             return "admin/restaurant/table/update_home";
@@ -201,7 +201,7 @@ public class AdminTableController extends AbstractController {
     @ResponseBody
     public JSONObject queryState(@RequestParam("id") Integer id) {
         try {
-            int state = tableService.queryTableStateById(id);
+            int state = tableService.queryStateById(id);
             JSONObject jsonObject = new JSONObject();
             //传递state数值给前端
             jsonObject.put("state", state);
@@ -248,7 +248,7 @@ public class AdminTableController extends AbstractController {
             //删除多个区域
             if(idList != null) {
                 for(int i : idList) {
-                    tableService.delTableById(i);
+                    tableService.delById(i);
                 }
             }
             return sendJsonObject(AJAX_SUCCESS_CODE);

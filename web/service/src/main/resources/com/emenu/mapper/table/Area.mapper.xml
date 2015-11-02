@@ -3,19 +3,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.emenu.mapper.table.AreaMapper">
-    <select id="listAllArea" resultMap="pw.Area">
-        SELECT `id`, `name` FROM `t_area` WHERE `state` = 1
+    <select id="listAll" resultMap="pw.Area">
+        SELECT
+            `id`,
+            `name`
+        FROM `t_area`
+        WHERE `state` = 1
     </select>
 
-    <select id="queryAreaStateById" resultType="int">
-        SELECT `state` FROM `t_area` WHERE `id` = #{id}
+    <select id="queryStateById" resultType="int">
+        SELECT `state`
+        FROM `t_area`
+        WHERE `id` = #{id}
     </select>
 
-    <select id="checkAreaName" resultType="int">
-        SELECT COUNT(1) FROM `t_area` WHERE `name` = #{name} AND `state` = 1
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_area`
+        WHERE `name` = #{name} AND `state` = 1
     </select>
 
-    <update id="delTableById">
-        UPDATE `t_area` SET `state` = 2 WHERE `id` = #{id}
+    <update id="updateState">
+        UPDATE `t_area`
+        SET `state` = #{state}
+        WHERE `id` = #{id}
     </update>
 </mapper>

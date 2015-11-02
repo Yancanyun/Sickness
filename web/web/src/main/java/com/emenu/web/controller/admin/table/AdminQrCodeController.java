@@ -39,7 +39,7 @@ public class AdminQrCodeController extends AbstractController {
         try {
             //获取域名信息
             String webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
-            List<AreaDto> areaDtoList = areaService.listAreaAndTable();
+            List<AreaDto> areaDtoList = areaService.listDto();
             for(AreaDto areaDto : areaDtoList) {
                 for(Table table : areaDto.getTableList()) {
                     System.out.println(table.getQrCodePath());
@@ -87,7 +87,7 @@ public class AdminQrCodeController extends AbstractController {
                                                 HttpServletRequest request,
                                                 HttpServletResponse response) {
         try {
-            qrCodeService.downloadQrCodeByAreaId(areaId, request, response);
+            qrCodeService.downloadByAreaId(areaId, request, response);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             return sendErrMsgAndErrCode(e);

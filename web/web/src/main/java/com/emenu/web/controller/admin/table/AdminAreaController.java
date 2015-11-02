@@ -33,7 +33,7 @@ public class AdminAreaController extends AbstractController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toAreaPage(Model model) {
         try {
-            List<Area> areaList = areaService.listAllArea();
+            List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -94,7 +94,7 @@ public class AdminAreaController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxDelArea(@PathVariable Integer id) {
         try {
-            areaService.delAreaById(id);
+            areaService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             return sendErrMsgAndErrCode(e);

@@ -1,14 +1,12 @@
 package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.QrCodeDto;
-import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.mapper.table.AreaMapper;
 import com.emenu.mapper.table.QrCodeMapper;
-import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
@@ -58,7 +56,7 @@ public class QrCodeServiceImpl implements QrCodeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public String newQrCodeByTableId(int tableId, String webDomain, HttpServletRequest request) throws SSException {
+    public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException {
         //获取网站域名
         if (webDomain == null || ("").equals(webDomain)) {
             webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
@@ -113,11 +111,11 @@ public class QrCodeServiceImpl implements QrCodeService {
             //首先更新常量表中的webDomain
             constantService.updateValueByKey(ConstantEnum.WebDomain.getKey(), webDomain);
 
-            List<Table> tableList = tableService.listAllTableItself();
+            List<Table> tableList = tableService.listAll();
 
             //为每张餐台生成二维码
             for (Table t : tableList) {
-                String path = newQrCodeByTableId(t.getId(), webDomain, request);
+                String path = newQrCode(t.getId(), webDomain, request);
                 Table table = new Table();
                 table.setId(t.getId());
                 table.setQrCodePath(path);
@@ -131,19 +129,19 @@ public class QrCodeServiceImpl implements QrCodeService {
     }
 
     @Override
-    public void downloadQrCodeByAreaId(int areaId, HttpServletRequest request, HttpServletResponse response) throws SSException {
+    public void downloadByAreaId(int areaId, HttpServletRequest request, HttpServletResponse response) throws SSException {
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         File downloadFile = null;
         try {
             String contentType = "application/octet-stream";
             //区域名称
-            String areaName = areaService.queryAreaById(areaId).getName();
+            String areaName = areaService.queryById(areaId).getName();
             //获取zip包的路径
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
             String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
             //获取二维码路径
-            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listQrCodeByAreaId(areaId);
+            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listByAreaId(areaId);
             //打包为zip文件
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载
@@ -204,7 +202,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
             String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
             //获取二维码路径
-            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listAllQrCode();
+            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listAll();
             //打包为zip文件
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载

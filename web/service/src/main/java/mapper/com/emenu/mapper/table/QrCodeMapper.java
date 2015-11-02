@@ -17,11 +17,11 @@ public interface QrCodeMapper {
      * @param areaId
      * @return
      */
-    public List<QrCodeDto> listQrCodeByAreaId(@Param("areaId") int areaId);
+    public List<QrCodeDto> listByAreaId(@Param("areaId") int areaId) throws Exception;
 
     /**
      * 查询全部二维码
      * @return
      */
-    public List<QrCodeDto> listAllQrCode();
+    public List<QrCodeDto> listAll() throws Exception;
 }

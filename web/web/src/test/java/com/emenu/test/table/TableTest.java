@@ -35,7 +35,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void queryAllTableItself() throws SSException {
-        List<Table> tableList = tableService.listAllTableItself();
+        List<Table> tableList = tableService.listAll();
 
         for (Table table:tableList){
             System.out.println("name:" + table.getName() + "  seat_num:" + table.getSeatNum()
@@ -58,7 +58,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void queryTableItselfByAreaId() throws SSException {
-        List<Table> tableList = tableService.listTableItselfByAreaId(2);
+        List<Table> tableList = tableService.listByAreaId(2);
 
         for (Table table:tableList){
             System.out.println("name:" + table.getName() + "  seat_num:" + table.getSeatNum()
@@ -80,7 +80,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void queryTableItselfById() throws SSException {
-        Table table = tableService.queryTableItselfById(1);
+        Table table = tableService.queryById(1);
 
         System.out.println("name:" + table.getName() + "  seat_num:" + table.getSeatNum()
                 + "  seat_fee:" + table.getSeatFee() + "  table_fee:" + table.getTableFee()
@@ -99,7 +99,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void queryTableStateById() throws SSException {
-        int state = tableService.queryTableStateById(1);
+        int state = tableService.queryStateById(1);
 
         System.out.println("state:" + state);
     }
@@ -114,12 +114,12 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void delTableById() throws SSException {
-        tableService.delTableById(5);
+        tableService.delById(5);
     }
 
     @Test
     public void countTableNumByAreaId() throws SSException {
-        int num = tableService.countTableNumByAreaId(1);
+        int num = tableService.countByAreaId(1);
         System.out.println(num);
     }
 

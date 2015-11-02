@@ -1,8 +1,10 @@
 package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.AreaDto;
+import com.emenu.common.entity.party.security.SecurityGroup;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.table.AreaStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.AreaMapper;
 import com.emenu.service.table.AreaService;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,17 +40,23 @@ public class AreaServiceImpl implements AreaService{
     private TableService tableService;
 
     @Override
-    public List<Area> listAllArea() throws SSException {
+    public List<Area> listAll() throws SSException {
+        List<Area> list = Collections.emptyList();
         try {
-            return areaMapper.listAllArea();
+            list = areaMapper.listAll();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryAreaFail, e);
         }
+        return list;
     }
 
     @Override
-    public Area queryAreaById(int id) throws SSException {
+    public Area queryById(int id) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return null;
+        }
         try {
             return commonDao.queryById(Area.class, id);
         } catch (Exception e) {
@@ -57,9 +66,13 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public int queryAreaStateById(int id) throws SSException {
+    public int queryStateById(int id) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return 0;
+        }
         try {
-            return areaMapper.queryAreaStateById(id);
+            return areaMapper.queryStateById(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryAreaFail, e);
@@ -71,15 +84,15 @@ public class AreaServiceImpl implements AreaService{
     public Area newArea(Area area) throws SSException {
         try {
             //判断是否重名
-            if (checkAreaName(area.getName())) {
+            if (checkNameIsExist(area.getName())) {
                 throw SSException.get(EmenuException.AreaNameExist);
             }
-            //判断是否为空
-            if (area.getName() == null || "".equals(area.getName())) {
-                throw SSException.get(EmenuException.AreaNameExist);
+            //判断名称是否为空
+            if (Assert.isNull(area.getName())) {
+                throw SSException.get(EmenuException.AreaNameIsNull);
             }
-            //将状态设为可用
-            area.setState(1);
+            //将状态设为"可用"
+            area.setState(AreaStateEnums.Enabled.getId());
             return commonDao.insert(area);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -88,9 +101,9 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public boolean checkAreaName(String name) throws SSException {
+    public boolean checkNameIsExist(String name) throws SSException {
         try {
-            if (areaMapper.checkAreaName(name) > 0) {
+            if (areaMapper.countByName(name) > 0) {
                 return true;
             } else {
                 return false;
@@ -106,10 +119,13 @@ public class AreaServiceImpl implements AreaService{
     public void updateArea(Area area) throws SSException {
         try {
             //判断是否重名
-            if (checkAreaName(area.getName())) {
+            if (checkNameIsExist(area.getName())) {
                 throw SSException.get(EmenuException.AreaNameExist);
             }
-
+            //判断名称是否为空
+            if (Assert.isNull(area.getName())) {
+                throw SSException.get(EmenuException.AreaNameIsNull);
+            }
             commonDao.update(area);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -119,14 +135,14 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void delAreaById(int id) throws SSException {
+    public void delById(int id) throws SSException {
         try {
             //判断该区域内是否有餐台，若有则不能删除
-            if (tableService.countTableNumByAreaId(id) != 0) {
+            if (tableService.countByAreaId(id) > 0) {
                 throw SSException.get(EmenuException.AreaHasTableExist);
             }
-
-            areaMapper.delTableById(id);
+            //将状态设为"删除"
+            areaMapper.updateState(id, AreaStateEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteAreaFail, e);
@@ -134,12 +150,12 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public List<AreaDto> listAreaAndTable() throws SSException {
-        List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
+    public List<AreaDto> listDto() throws SSException {
+        List<AreaDto> areaDtoList = Collections.emptyList();
         try {
-            List<Area> areaList = listAllArea();
+            List<Area> areaList = listAll();
             for(Area area : areaList) {
-                List<Table> tableList = tableService.listTableItselfByAreaId(area.getId());
+                List<Table> tableList = tableService.listByAreaId(area.getId());
                 if(tableList != null && tableList.size() != 0){
                     AreaDto areaDto = new AreaDto();
                     areaDto.setArea(area);
@@ -147,10 +163,10 @@ public class AreaServiceImpl implements AreaService{
                     areaDtoList.add(areaDto);
                 }
             }
-            return areaDtoList;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryTableFail, e);
         }
+        return areaDtoList;
     }
 }

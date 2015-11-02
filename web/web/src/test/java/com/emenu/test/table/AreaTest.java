@@ -29,7 +29,7 @@ public class AreaTest extends AbstractTestCase {
     
     @Test
     public void queryAllArea() throws SSException {
-        List<Area> areaList = areaService.listAllArea();
+        List<Area> areaList = areaService.listAll();
 
         for (Area area:areaList){
             System.out.println(area.getName());
@@ -38,14 +38,14 @@ public class AreaTest extends AbstractTestCase {
 
     @Test
     public void queryAreaById() throws SSException {
-        Area area = areaService.queryAreaById(1);
+        Area area = areaService.queryById(1);
 
         System.out.println(area.getName());
     }
 
     @Test
     public void queryAreaStateById() throws SSException {
-        int state = areaService.queryAreaStateById(1);
+        int state = areaService.queryStateById(1);
 
         System.out.println(state);
     }
@@ -60,6 +60,6 @@ public class AreaTest extends AbstractTestCase {
 
     @Test
     public void delAreaById() throws SSException{
-        areaService.delAreaById(8);
+        areaService.delById(8);
     }
 }

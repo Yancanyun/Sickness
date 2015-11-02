@@ -22,11 +22,9 @@ public class Area extends AbstractEntity {
     private Integer id;
 
     //区域名称
-    @Column(name = "name")
     private String name;
 
-    //状态
-    @Column(name = "state")
+    //状态(1-可用, 2-已删除)
     private Integer state;
 
     //创建时间
@@ -34,7 +32,7 @@ public class Area extends AbstractEntity {
     private Date createdTime;
 
     //最近修改时间
-    @Column(name = "last_moedified_timelili")
+    @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
     public Integer getId() {
