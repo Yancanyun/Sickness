@@ -20,6 +20,9 @@
   生日：<input name="birthday"/><br>
   QQ：<input name="qq"/><br>
   Email：<input name="email"/><br>
+  <button type="submit">提交</button>
+  <bttton type="reset">重置</bttton>
+  <a href="${website}admin/party/group/vip/list">返回</a>
 </form>
 </body>
 </html>

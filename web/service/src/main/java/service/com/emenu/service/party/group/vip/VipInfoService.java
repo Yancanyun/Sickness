@@ -30,7 +30,7 @@ public interface VipInfoService {
      * @return
      * @throws SSException
      */
-    public int count() throws SSException;
+    public int countAll() throws SSException;
 
     /**
      * 根据关键词获取会员信息列表
@@ -40,7 +40,7 @@ public interface VipInfoService {
      * @return
      * @throws SSException
      */
-    public List<VipInfo> listVipInfoByKeyword(String keyword, int curPage, int pageSize) throws SSException;
+    public List<VipInfo> listByKeyword(String keyword, int curPage, int pageSize) throws SSException;
 
     /**
      * 根据关键字查询会员信息数量
@@ -48,7 +48,7 @@ public interface VipInfoService {
      * @return
      * @throws SSException
      */
-    public int countVipInfoByKeyword(String keyword) throws SSException;
+    public int countByKeyword(String keyword) throws SSException;
 
     /**
      * 增加一条会员信息
@@ -78,7 +78,7 @@ public interface VipInfoService {
      * @param state
      * @throws SSException
      */
-    public void updateVipInfoStateById(int id, UserStatusEnums state) throws SSException;
+    public void updateStateById(int id, UserStatusEnums state) throws SSException;
 
     /**
      * 根据会员id查询会员信息
@@ -86,7 +86,7 @@ public interface VipInfoService {
      * @return
      * @throws SSException
      */
-    public VipInfo queryVipInfoById(int id) throws SSException;
+    public VipInfo queryById(int id) throws SSException;
 
 
 }

@@ -69,7 +69,7 @@ public class VipInfoController extends AbstractController {
         }
         int dataCount = 0;
         try {
-            dataCount = vipInfoService.count();
+            dataCount = vipInfoService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -100,7 +100,7 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipInfo(@RequestParam("name") String name,
-                             @RequestParam("sex") int sex,
+                             @RequestParam("sex") Integer sex,
                              @RequestParam("birthday") Date birthday,
                              @RequestParam("phone") String phone,
                              @RequestParam("qq") String qq,
@@ -119,7 +119,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "redirect:admin/party/group/vip/list";
+        return "redirect:list";
     }
 
     /*@Module(ModuleEnums.AdminVipInfoUpdate)
@@ -159,11 +159,11 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject lock(@RequestParam("id") int id,
-                           @RequestParam("state") int state){
+    public JSONObject lock(@RequestParam("id") Integer id,
+                           @RequestParam("state") Integer state){
         try{
             UserStatusEnums vipInfostate = UserStatusEnums.valueOf(state);
-            vipInfoService.updateVipInfoStateById(id, vipInfostate);
+            vipInfoService.updateStateById(id, vipInfostate);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -179,10 +179,10 @@ public class VipInfoController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipInfoDetail)
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
-    public String detailVipInfo(@PathVariable("id") int id,
+    public String detailVipInfo(@PathVariable("id") Integer id,
                                 Model model){
         try{
-            VipInfo vipInfo = vipInfoService.queryVipInfoById(id);
+            VipInfo vipInfo = vipInfoService.queryById(id);
             model.addAttribute(vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -200,14 +200,14 @@ public class VipInfoController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoSearch)
-    @RequestMapping(value = "ajax/search/{curPage}", method = RequestMethod.GET)
+    @RequestMapping(value = "ajax/search/{curPage}", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxListVipInfoByKeyWord(@PathVariable("curPage") Integer curPage,
                                                @RequestParam Integer pageSize,
                                                @RequestParam("keyword") String keyword){
         List<VipInfo> vipInfoList = Collections.emptyList();
         try{
-            vipInfoService.listVipInfoByKeyword(keyword, curPage, pageSize);
+            vipInfoService.listByKeyword(keyword, curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -222,9 +222,9 @@ public class VipInfoController extends AbstractController {
             jsonObject.put("state", vipInfo.getState());
             jsonArray.add(jsonObject);
         }
-        int dataCount = 0;
+        Integer dataCount = 0;
         try {
-            dataCount = vipInfoService.count();
+            dataCount = vipInfoService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

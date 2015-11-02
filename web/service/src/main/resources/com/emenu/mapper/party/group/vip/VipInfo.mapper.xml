@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.party.group.vip.VipInfoMapper">
 
-    <select id="listVipInfoByKeyword">
+    <select id="listByKeyword">
         SELECT *
         FROM `t_party_vip_info` vipInfo
         <where>
@@ -14,18 +14,18 @@
         LIMIT #{pCurrent},#{pSize}
     </select>
 
-    <select id="listVipInfo" resultType="VipInfo">
+    <select id="listByPage" resultType="VipInfo">
         SELECT *
         FROM `t_party_vip_info`
         LIMIT #{offset},#{pageSize}
     </select>
     
-    <select id="count" resultType="int">
+    <select id="countAll" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info`
     </select>
 
-    <select id="countVipInfoByKeyword" resultType="int">
+    <select id="countByKeyword" resultType="int">
         SELECT COUNT(*)
         FROM `t_party_vip_info` vipInfo
         <where>
@@ -37,13 +37,13 @@
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="queryVipInfoById" parameterType="Integer" resultType="VipInfo">
+    <select id="queryById" parameterType="Integer" resultType="VipInfo">
         SELECT *
         FROM `t_party_vip_info` vipInfo
         WHERE vipInfo.id = #{id}
     </select>
 
-    <select id="countVipInfoByPhone" parameterType="String" resultType="int">
+    <select id="countByPhone" parameterType="String" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info` vipInfo
         WHERE vipInfo.phone = #{phone}

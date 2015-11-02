@@ -31,7 +31,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
 
     @Test
     public void countVipInfoByKeyword() throws SSException{
-        int number = vipInfoService.countVipInfoByKeyword("18543132151");
+        int number = vipInfoService.countByKeyword("18543132151");
         System.out.println(number);
     }
 
@@ -45,14 +45,14 @@ public class VipInfoServiceTest extends AbstractTestCase {
     @Test
     public void updateVipInfoStateById() throws SSException{
         int id = 2;
-        vipInfoService.updateVipInfoStateById(id, UserStatusEnums.Disabled);
+        vipInfoService.updateStateById(id, UserStatusEnums.Disabled);
         System.out.println("id为" + id + "的状态已经修改为" + UserStatusEnums.Disabled.getState());
     }
 
     @Test
     public void queryVipInfoById() throws SSException{
         int id = 2;
-        VipInfo vipInfo = vipInfoService.queryVipInfoById(id);
+        VipInfo vipInfo = vipInfoService.queryById(id);
         String name = vipInfo.getName();
         String phone = vipInfo.getPhone();
         Date birthday = vipInfo.getBirthday();

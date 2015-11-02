@@ -22,7 +22,7 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public List<VipInfo> listVipInfoByKeyword(@Param("keyword") String keyword,
+    public List<VipInfo> listByKeyword(@Param("keyword") String keyword,
                                               @Param("curPage") int curPage,
                                               @Param("pageSize")int pageSize) throws Exception;
 
@@ -32,12 +32,12 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public int countVipInfoByKeyword(@Param("keyword") String keyword) throws Exception;
+    public int countByKeyword(@Param("keyword") String keyword) throws Exception;
 
-    public List<VipInfo> listVipInfo(@Param("offset")int offset,
+    public List<VipInfo> listByPage(@Param("offset")int offset,
                                      @Param("pageSize")int pageSize) throws Exception;
 
-    public int count() throws Exception;
+    public int countAll() throws Exception;
 
     /**
      * 根据id查询会员信息
@@ -45,9 +45,9 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public VipInfo queryVipInfoById(@Param("id") int id) throws Exception;
+    public VipInfo queryById(@Param("id") int id) throws Exception;
 
-    public int countVipInfoByPhone(@Param("phone") String phone) throws Exception;
+    public int countByPhone(@Param("phone") String phone) throws Exception;
 
     /**
      * 根据会员id更改会员状态
