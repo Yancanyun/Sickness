@@ -1,20 +1,20 @@
 package com.emenu.service.party.group.employee.impl;
 
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
+import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.group.employee.EmployeeRole;
-import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.table.WaiterTable;
-import com.emenu.common.enums.party.group.employee.EmployeeRoleEnums;
 import com.emenu.common.enums.party.PartyTypeEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.enums.party.group.employee.EmployeeRoleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
 import com.emenu.mapper.party.group.employee.EmployeeMapper;
-import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.PartyService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.table.WaiterTableService;
 import com.pandawork.core.common.exception.SSException;
@@ -104,6 +104,57 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     }
 
+    @Override
+    public List<EmployeeDto> listEmployeeByContition(List<Integer> roleList, Integer partyId) throws SSException {
+        try {
+            List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+            List<Employee> employees = new ArrayList<Employee>();
+            //获取所有启用的员工登录名
+            List<SecurityUser> securityUsers = securityUserService.listByPartyId(partyId);
+            List<Integer> partyIdList = employeeMapper.listPartIdByContition(roleList);
+
+                for (Integer id : partyIdList){
+
+                    Employee employee = employeeMapper.queryEmployeeByPartyId(id);
+
+                    employees.add(employee);
+                }
+
+                for(Employee employee : employees) {
+                    EmployeeDto employeeDto = new EmployeeDto();
+                    employeeDto.setEmployee(employee);
+
+                    System.out.println("hello" + employee.getPartyId());
+
+                    List<Integer> role = employeeMapper.queryEmployeeRoleByEmployeeId(employee.getPartyId());//查询每个用户的对应的所有角色
+                    List<String> roleName = new ArrayList<String>();//根据取出的角色标识，赋予角色名
+                    //获得用户角色名
+                    for(int r : role) {
+                        roleName.add(EmployeeRoleEnums.getDescriptionById(r));
+                    }
+                    //数据存入dto
+                    //数据存入dto
+                    employeeDto.setRole(role);
+                    employeeDto.setRoleName(roleName);
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                    employeeDtos.add(employeeDto);
+                }
+
+                for(EmployeeDto employeeDto : employeeDtos){
+                    for(SecurityUser securityUser : securityUsers){
+                        if(employeeDto.getEmployee().getPartyId()==securityUser.getPartyId()){
+                            employeeDto.setLoginName(securityUser.getLoginName());
+                        }
+                    }
+                }
+            return employeeDtos;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryEmployeeInfoFail, e);
+        }
+    }
+
+
 
     /**
      * 检查注册员工是否用户名重名
@@ -143,7 +194,6 @@ public class EmployeeServiceImpl implements EmployeeService{
         try {
 
             List<Integer> role = employeeDto.getRole();
-
             //新添加运功时新建抽象员工
             Party party = new Party();
 
@@ -204,9 +254,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 
     /**
-     * 添加新员工
+     * 更新员工信息
      * @param employeeDto
-     * @return
+     * @param partyId
+     * @param newloginName
+     * @param newPwd
      * @throws SSException
      */
     @Override
@@ -268,25 +320,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
     }
 
-    /**
-     * 添加新的当事人
-     * @param party
-     * @return
-     * @throws SSException
-     */
-   /* @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public Party newParty(Party party) throws SSException {
-        Assert.isNotNull(party, EmenuException.PartyNotNull);
-        Assert.isNotNull(party.getPartyTypeId(), PartyException.AccountTypeNotNull);
-        try{
-            return  commonDao.insert(party);
-        }catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
-        }
 
-    }*/
 
     /**
      * 修改密码时检查原密码是否正确

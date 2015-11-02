@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -59,19 +60,19 @@ public class EmployeeServiceTest extends AbstractTestCase {
     public void newEmploee() throws SSException{
 
         Employee employee = new Employee();
-        employee.setName("王黎明");
-        employee.setPhone("666666666");
+        employee.setName("陈玉婷");
+        employee.setPhone("55555555");
 
 
         EmployeeDto employeeDto = new EmployeeDto();
         // 对密码进行md5加密
         String password = CommonUtil.md5("123456");
-        String username = "wanglm";
+        String username = "chenyt";
 
 
         List<Integer> roleList = new ArrayList<Integer>();
 
-        roleList.add(1);
+        roleList.add(2);
         roleList.add(4);
 
 
@@ -140,4 +141,33 @@ public class EmployeeServiceTest extends AbstractTestCase {
     public void delEmployee() throws SSException{
         employeeService.delEmployeeByPartyId(3);
     }
+
+    @Test
+    public void listByCondition() throws SSException{
+
+        List<Integer> roleList = new ArrayList<Integer>();
+        roleList.add(2);
+//        roleList.add(4);
+
+        List<EmployeeDto> employeeDtoList =  employeeService.listEmployeeByContition(roleList,1 );
+
+        for (EmployeeDto employeeDto : employeeDtoList){
+            Employee employee = employeeDto.getEmployee();
+
+            System.out.println(employee.getName()+" "+employee.getPhone()+" "+employee.getStatus());
+
+            List<String> roleNameList = employeeDto.getRoleName();
+
+            for (String roleName : roleNameList){
+                System.out.println(roleName);
+            }
+
+            System.out.println(employeeDto.getStatus());
+
+            System.out.println("test");
+
+        }
+
+    }
+
 }

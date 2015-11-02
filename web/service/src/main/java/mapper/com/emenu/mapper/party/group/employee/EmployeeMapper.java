@@ -73,4 +73,7 @@ public interface EmployeeMapper {
      * @throws Exception
      */
     public Employee queryEmployeeByPartyId(@Param("partyId") Integer partyId) throws  Exception;
+
+    public List<Integer> listPartIdByContition(@Param("roles")List<Integer> roles) throws Exception;
+
 }
