@@ -17,15 +17,15 @@ public class TagDto {
     private Tag tag;
 
     //子类别列表
-    SortedMap<TagChildDto, Integer> childrenTagMap = new ConcurrentSkipListMap<TagChildDto, Integer>();
+    SortedMap<TagChildDto, Integer> childrenMap = new ConcurrentSkipListMap<TagChildDto, Integer>();
 
     /**
      * 添加一个子类别
      * @param tag
      */
-    public void addChildTagMap(Tag tag){
+    public void addChildMap(Tag tag){
         TagChildDto childTagDto = new TagChildDto(tag.getId(),tag.getWeight());
-        childrenTagMap.put(childTagDto, childTagDto.getTagId());
+        childrenMap.put(childTagDto, childTagDto.getTagId());
     }
 
     /**
@@ -33,9 +33,9 @@ public class TagDto {
      * @param tagId
      * @param weight
      */
-    public  void removeChildTagMap(Integer tagId,Integer weight){
+    public  void removeChildMap(Integer tagId,Integer weight){
         TagChildDto childTagDto = new TagChildDto(tagId,weight);
-        childrenTagMap.remove(childTagDto);
+        childrenMap.remove(childTagDto);
     }
 
     /********************* getter and setter ***********************/
@@ -48,10 +48,10 @@ public class TagDto {
     }
 
     public SortedMap<TagChildDto, Integer> getChildrenTagMap() {
-        return childrenTagMap;
+        return childrenMap;
     }
 
-    public void setChildrenTagMap(SortedMap<TagChildDto, Integer> childrenTagMap) {
-        this.childrenTagMap = childrenTagMap;
+    public void setChildrenMap(SortedMap<TagChildDto, Integer> childrenTagMap) {
+        this.childrenMap = childrenTagMap;
     }
 }

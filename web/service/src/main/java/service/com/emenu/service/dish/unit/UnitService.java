@@ -38,23 +38,24 @@ public interface UnitService {
     /**
      * 根据id查询一条单位信息
      * @param
+     * @param id
      * @throws SSException
      */
-    public Unit queryUnitById(Integer id) throws SSException;
+    public Unit queryById(int id) throws SSException;
 
     /**
      * 增加一个单元
      * @param unit
      * @throws SSException
      */
-    public void newUnit(Unit unit) throws SSException;
+    public Unit newUnit(Unit unit) throws SSException;
 
     /**
      * 删除一个单元
      * @param id
      * @throws SSException
      */
-    public void delUnit(Integer id) throws SSException;
+    public void delById(int id) throws SSException;
 
     /**
      * 修改一个单元

@@ -32,7 +32,7 @@ public class UnitTest extends AbstractTestCase {
 
     @Test
     public void delUnitById() throws SSException {
-        unitService.delUnit(4);
+        unitService.delById(4);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UnitTest extends AbstractTestCase {
     @Test
     public void queryUnitById() throws SSException {
         Unit unit = new Unit();
-        unit = unitService.queryUnitById(2);
+        unit = unitService.queryById(2);
         System.out.print(unit.getName());
     }
 }

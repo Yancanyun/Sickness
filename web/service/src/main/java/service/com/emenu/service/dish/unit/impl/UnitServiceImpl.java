@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public List<Unit> listAllUnit() throws SSException {
-        List<Unit> list = new ArrayList<Unit>();
+        List<Unit> list = Collections.emptyList();
         try {
             list = unitMapper.listAllUnit();
         }catch(Exception e){
@@ -52,12 +51,12 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public List<Unit> listUnitByPage(int curPage, int pageSize) throws SSException {
+        List<Unit> unitList = Collections.emptyList();
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
         if (Assert.lessZero(offset)) {
-            return Collections.emptyList();
+            return unitList;
         }
-        List<Unit> unitList = Collections.<Unit>emptyList();
         try {
             unitList = unitMapper.listUnitByPage(offset, pageSize);
         }catch (SSException e){
@@ -81,12 +80,13 @@ public class UnitServiceImpl implements UnitService {
      * 根据id查询一条单位信息
      *
      * @param
+     * @param id
      * @throws SSException
      */
     @Override
-    public Unit queryUnitById(Integer id) throws SSException {
+    public Unit queryById(int id) throws SSException {
         // 检查id是否<=0，如果是，直接返回
-        if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
+        if (Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.UnitIdError);
         }
         try {
@@ -104,16 +104,15 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
-    public void newUnit(Unit unit) throws SSException {
-        if(Assert.isNull(unit)){
-            return;
-        }
-        // 检查名称是否为空
-        if (Assert.isNull(unit.getName())) {
+    public Unit newUnit(Unit unit) throws SSException {
+        if(Assert.isNull(unit.getName())){
             throw SSException.get(EmenuException.UnitNameError);
         }
+        if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
+            throw SSException.get(EmenuException.UnitTypeError);
+        }
         try {
-            commonDao.insert(unit);
+            return commonDao.insert(unit);
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.NewUnitFailed,e);
@@ -127,9 +126,9 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
-    public void delUnit(Integer id) throws SSException {
+    public void delById(int id) throws SSException {
         // 检查id是否<=0，如果是，直接返回
-        if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
+        if (Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.UnitIdError);
         }
         try {
@@ -148,12 +147,15 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public void updateUnit(Unit unit) throws SSException {
-        if (Assert.isNull(unit)) {
-            return;
-        }
         // 检查id是否<=0，如果是，直接返回
         if (!Assert.isNull(unit.getId()) && Assert.lessOrEqualZero(unit.getId())) {
             throw SSException.get(EmenuException.UnitIdError);
+        }
+        if(Assert.isNull(unit.getName())){
+            throw SSException.get(EmenuException.UnitNameError);
+        }
+        if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
+            throw SSException.get(EmenuException.UnitTypeError);
         }
         try {
             commonDao.update(unit);

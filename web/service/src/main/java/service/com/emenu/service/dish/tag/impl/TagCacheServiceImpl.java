@@ -41,7 +41,7 @@ public class TagCacheServiceImpl implements TagCacheService {
      */
     @Override
     @PostConstruct
-    public void initTagCache() throws Exception {
+    public void initCache() throws Exception {
         //获取所有的类别
         List<Tag> tagList = tagMapper.listAll();
         //第一次遍历，初始化所有DTO
@@ -59,7 +59,7 @@ public class TagCacheServiceImpl implements TagCacheService {
             //否则获取该节点父亲节点的DTO，把该节点放到父亲节点的childrenTagMap中
             TagDto tagDto = tagCache.get(tag.getpId());
             if(tagDto !=null){
-                tagDto.addChildTagMap(tag);
+                tagDto.addChildMap(tag);
             }else {
                 throw SSException.get(EmenuException.TagIdError);
             }
@@ -67,14 +67,14 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public void refreshTagCache() throws Exception {
+    public void refreshCache() throws Exception {
         //刷新缓存即重新调用初始化缓存
-        initTagCache();
+        initCache();
     }
 
     @Override
-    public Tag queryParentTagById(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public Tag queryParentById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -97,8 +97,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public List<Tag> listChildrenTagById(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public List<Tag> listChildrenById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         //如果该节点不存在则返回空
@@ -121,8 +121,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public Tag queryRootTagById(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public Tag queryRootById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -137,9 +137,9 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public List<Tag> listAllRootTag(Integer type) throws Exception {
+    public List<Tag> listAllRootByType(int type) throws Exception {
         List<Tag> rootTagList = new ArrayList<Tag>();
-        if(type == 0 || type == null) {
+        if(type == 0 ) {
             for (TagDto tagDto : tagCache.values()) {
                 Tag tag = tagDto.getTag();
                 if (tag.getpId() == 0) {
@@ -160,9 +160,9 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public List<Tag> listAllTag() throws Exception {
+    public List<Tag> listAll() throws Exception {
         //获取所有根节点
-        List<Tag> tagRootList = listAllRootTag(0);
+        List<Tag> tagRootList = listAllRootByType(0);
         List<Tag> tagList = new ArrayList<Tag>();
         for (Tag tag : tagRootList){
             tagList = dfsTagById(tag.getId(), tagList);
@@ -171,8 +171,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public List<Tag> listTagByCurrentId(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public List<Tag> listByCurrentId(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         List<Tag> tagList = new ArrayList<Tag>();
@@ -180,8 +180,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public Tag queryTagCloneById(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public Tag queryCloneById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -200,12 +200,33 @@ public class TagCacheServiceImpl implements TagCacheService {
         //把添加的Tag放到缓存中
         tagCache.put(tag.getId(), tagDto);
         //把新的Tag放到父Tag的儿子列表中
-        parentTagDto.addChildTagMap(tag);
+        parentTagDto.addChildMap(tag);
         return (Tag) tag.clone();
     }
 
     @Override
-    public void updateTagName(Integer tagId, String name) throws SSException{
+    public void delById(int tagId) throws Exception {
+        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        //如果该节点下有子节点不能删除
+        TagDto tagDto = tagCache.get(tagId);
+        Map<TagChildDto, Integer> childrenMap = tagDto.getChildrenTagMap();
+        if(childrenMap == null || childrenMap.size() == 0 || childrenMap.isEmpty()){
+            throw SSException.get(EmenuException.TagChildrenIsNull);
+        }
+        Integer pid = tagDto.getTag().getpId();
+        if(pid != 0){
+            TagDto fatherTagDto = tagCache.get(pid);
+            //删除父亲的key
+            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
+        }
+        //删除Tag
+        tagCache.remove(tagDto.getTag().getId());
+    }
+
+    @Override
+    public void updateName(Integer tagId, String name) throws SSException{
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -216,7 +237,7 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public void updateTagWeight(Integer tagId, Integer weight) throws Exception{
+    public void updateWeight(Integer tagId, Integer weight) throws Exception{
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -232,15 +253,15 @@ public class TagCacheServiceImpl implements TagCacheService {
             TagDto pTagDto = tagCache.get(pid);
             if(!oldWeight.equals(weight)){
                 //先删除以前的成员，再添加新的成员
-                pTagDto.removeChildTagMap(tagId, oldWeight);
+                pTagDto.removeChildMap(tagId, oldWeight);
                 tagDto.getTag().setWeight(weight);
-                pTagDto.addChildTagMap(tagDto.getTag());
+                pTagDto.addChildMap(tagDto.getTag());
             }
         }
     }
 
     @Override
-    public void updateTagPid(Integer tagId, Integer pId) throws Exception{
+    public void updatePid(Integer tagId, Integer pId) throws Exception{
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -256,26 +277,26 @@ public class TagCacheServiceImpl implements TagCacheService {
             //改变pid
             tagDto.getTag().setpId(pId);
             //父亲Tag删除key
-            fatherTagDto.removeChildTagMap(tagId, tagDto.getTag().getWeight());
+            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
             //新父亲Tag添加key
             TagDto newFatherTagDto = tagCache.get(pId);
-            newFatherTagDto.addChildTagMap(tagDto.getTag());
+            newFatherTagDto.addChildMap(tagDto.getTag());
         }
     }
 
     @Override
-    public void delTagCascadeById(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public void delCascadeById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
-        List<Tag> tagList = new ArrayList<Tag>();
+        List<Tag> tagList = Collections.emptyList();
         tagList = dfsTagById(tagId, tagList);
         TagDto tagDto = tagCache.get(tagId);
         Integer pid = tagDto.getTag().getpId();
         if(pid != 0){
             TagDto fatherTagDto = tagCache.get(pid);
             //删除父亲的key
-            fatherTagDto.removeChildTagMap(tagId, tagDto.getTag().getWeight());
+            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
         }
         //删除Tag
         for(Tag tag : tagList){
@@ -284,8 +305,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public List<Tag> listPathByTagId(Integer tagId) throws Exception {
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public List<Tag> listPathById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         List<Tag> tagList = new ArrayList<Tag>();
@@ -296,7 +317,7 @@ public class TagCacheServiceImpl implements TagCacheService {
         tagList.add((Tag) (tagDto.getTag().clone()));
         if(tagCache.get(tagId).getTag().getpId() >= 0){
             while (tagId != 0){
-                Tag tag = queryParentTagById(tagId);
+                Tag tag = queryParentById(tagId);
                 if(tag != null){
                     tagList.add(tag);
                     tagId = tag.getId();
