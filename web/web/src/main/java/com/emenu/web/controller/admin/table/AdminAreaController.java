@@ -53,9 +53,9 @@ public class AdminAreaController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxNewArea(Area area) {
         try {
-            Area area1 = areaService.newArea(area);
+            areaService.newArea(area);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", area1.getId());
+            jsonObject.put("id", area.getId());
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -72,16 +72,13 @@ public class AdminAreaController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantAreaUpdate)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateArea(@PathVariable("id") Integer id,
-                                             @RequestParam String name) {
+    public JSONObject ajaxUpdateArea(@PathVariable("id") Integer id, @RequestParam String name) {
         try {
             Area area = new Area();
             area.setId(id);
             area.setName(name);
             areaService.updateArea(area);
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("areaId", area.getId());
-            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             return sendErrMsgAndErrCode(e);
         }
