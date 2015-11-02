@@ -19,9 +19,9 @@ public interface EmployeeService {
      * @return
      * @throws SSException
      */
-    public List<EmployeeDto> listEmployee(Integer partyId) throws SSException;
+    public List<EmployeeDto> listAll(int partyId) throws SSException;
 
-    public List<EmployeeDto> listEmployeeByContition(List<Integer> roleList,Integer partyId) throws SSException;
+    public List<EmployeeDto> listByRoles(List<Integer> roleList, int partyId) throws SSException;
 
     /**
      * 检查注册员工是否用户名重名
@@ -29,7 +29,7 @@ public interface EmployeeService {
      * @return
      * @throws SSException
      */
-    public boolean checkEmployeeName(String employeeName) throws SSException;
+    public boolean checkName(String employeeName) throws SSException;
 
     /**
      * 添加新员工
@@ -40,14 +40,14 @@ public interface EmployeeService {
     public Employee newEmployee(EmployeeDto employeeDto,String loginName,String password) throws SSException;
 
     /**
-     *
+     * 编辑员工信息
      * @param employeeDto
      * @param partyId
      * @param newloginName
      * @param newPwd
      * @throws SSException
      */
-    public void updateEmployee(EmployeeDto employeeDto,Integer partyId, String newloginName,String newPwd) throws SSException;
+    public void update(EmployeeDto employeeDto, int partyId, String newloginName, String newPwd) throws SSException;
 
     /**
      * 修改密码时检查原密码是否正确
@@ -56,7 +56,7 @@ public interface EmployeeService {
      * @return
      * @throws SSException
      */
-    public boolean checkOldPwd(Integer securityUserId,String oldPwd) throws SSException;
+    public boolean checkOldPwd(int securityUserId,String oldPwd) throws SSException;
 
     /**
      * 修改密码
@@ -65,7 +65,7 @@ public interface EmployeeService {
      * @param newPwd
      * @throws SSException
      */
-    public void updatePwd(Integer securityUserId,String oldPwd,String newPwd) throws SSException;
+    public void updatePwd(int securityUserId,String oldPwd,String newPwd) throws SSException;
 
     /**
      * 更新用户状态
@@ -73,14 +73,14 @@ public interface EmployeeService {
      * @param status
      * @throws SSException
      */
-    public void updateEmployeeStatus(Integer partyId,Integer status) throws SSException;
+    public void updateStatus(int partyId, Integer status) throws SSException;
 
     /**
      * 删除员工
      * @param partyId
      * @throws SSException
      */
-    public void delEmployeeByPartyId(Integer partyId) throws SSException;
+    public void delByPartyId(int partyId) throws SSException;
 
     /**
      * 根据partyId查询员工
@@ -88,5 +88,5 @@ public interface EmployeeService {
      * @return
      * @throws SSException
      */
-    public Employee queryEmployeeByPartyId(Integer partyId) throws SSException;
+    public Employee queryByPartyId(int partyId) throws SSException;
 }

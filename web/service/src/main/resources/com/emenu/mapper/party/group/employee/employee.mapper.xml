@@ -5,7 +5,7 @@
 <mapper namespace="com.emenu.mapper.party.group.employee.EmployeeMapper">
 
     <!-- 查询所有员工 -->
-    <select id="listEmployee" resultType="Employee" parameterType="Integer">
+    <select id="listAll" resultType="Employee" parameterType="Integer">
 
 
         SELECT `id` AS `id`

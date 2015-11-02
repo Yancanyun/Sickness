@@ -34,7 +34,7 @@ public class EmployeeController  extends AbstractController {
     public String toEmployeePage(Model model,HttpServletRequest request){
         try{
             Integer partyId = (Integer)request.getSession().getAttribute(WebConstants.SESSIONUID);//获取当前登录用户id，admin
-            List<EmployeeDto> employeeDtoList = employeeService.listEmployee(partyId);//向前端返回用户列表数据
+            List<EmployeeDto> employeeDtoList = employeeService.listAll(partyId);//向前端返回用户列表数据
             model.addAttribute("employeeDtoList", employeeDtoList);
             return "admin/party/group/employee_list";
         }catch (SSException e){
@@ -55,10 +55,11 @@ public class EmployeeController  extends AbstractController {
     public JSONObject updateEmployeeStatus(@PathVariable("partyId")Integer partyId,
                                                          @RequestParam String status){
         try {
+
             if(status.equals("true")) {
-                employeeService.updateEmployeeStatus(partyId, UserStatusEnums.Enabled.getId());
+                employeeService.updateStatus(partyId, UserStatusEnums.Enabled.getId());
             } else {
-                employeeService.updateEmployeeStatus(partyId, UserStatusEnums.Disabled.getId());
+                employeeService.updateStatus(partyId, UserStatusEnums.Disabled.getId());
 
             }
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -78,7 +79,7 @@ public class EmployeeController  extends AbstractController {
     public
     JSONObject delEmployee(@PathVariable("partyId") Integer partyId){
         try {
-            employeeService.delEmployeeByPartyId(partyId);
+            employeeService.delByPartyId(partyId);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

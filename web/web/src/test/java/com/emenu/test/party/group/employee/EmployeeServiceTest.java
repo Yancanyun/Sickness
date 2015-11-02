@@ -5,6 +5,7 @@ import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.CommonUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,8 @@ public class EmployeeServiceTest extends AbstractTestCase {
     @Test
     public void listEmployee() throws SSException{
 
-        Integer partyId = 0;//获取当前登录用户id，admin
-        List<EmployeeDto> employeeDtoList = employeeService.listEmployee(partyId);//向前端返回用户列表数据
+        Integer partyId = 1;//获取当前登录用户id，admin
+        List<EmployeeDto> employeeDtoList = employeeService.listAll(partyId);//向前端返回用户列表数据
 
         for (EmployeeDto employeeDto : employeeDtoList){
             Employee employee = employeeDto.getEmployee();
@@ -50,6 +51,22 @@ public class EmployeeServiceTest extends AbstractTestCase {
             System.out.println("test");
 
         }
+
+        List<EmployeeDto> m = new ArrayList<EmployeeDto>();
+
+        for(EmployeeDto employeeDto : m){
+            System.out.println(employeeDto.toString());
+        }
+
+        System.out.println(m);
+        EmployeeDto ep = new EmployeeDto();
+
+        m.add(ep);
+
+        if(Assert.isNull(m)){
+            System.out.println("你好");
+        }
+
     }
 
     /**
@@ -134,12 +151,12 @@ public class EmployeeServiceTest extends AbstractTestCase {
         employeeDto.setRole(roleList);
         employeeDto.setTables(tableList);
 
-        employeeService.updateEmployee(employeeDto,3,newloginName,password);
+        employeeService.update(employeeDto, 3, newloginName, password);
     }
 
     @Test
     public void delEmployee() throws SSException{
-        employeeService.delEmployeeByPartyId(3);
+        employeeService.delByPartyId(3);
     }
 
     @Test
@@ -149,7 +166,7 @@ public class EmployeeServiceTest extends AbstractTestCase {
         roleList.add(2);
 //        roleList.add(4);
 
-        List<EmployeeDto> employeeDtoList =  employeeService.listEmployeeByContition(roleList,1 );
+        List<EmployeeDto> employeeDtoList =  employeeService.listByRoles(roleList, 1);
 
         for (EmployeeDto employeeDto : employeeDtoList){
             Employee employee = employeeDto.getEmployee();

@@ -88,6 +88,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryEmployeeException("查询员工信息失败",6007),
     EmployeeIsActivity("员工处于激活状态，请先将它转为未激活！",6008),
     DeleteEmployeeFail("删除员工信息失败",6009),
+    PartyIdIdError("当事人ID为空或者小于0", 3002),
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
