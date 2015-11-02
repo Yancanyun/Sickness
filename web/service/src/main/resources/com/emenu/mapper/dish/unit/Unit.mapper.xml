@@ -7,7 +7,7 @@
         FROM `t_dish_unit`
     </select>
 
-    <select id="listUnit" resultMap="pw.Unit">
+    <select id="listUnitByPage" resultMap="pw.Unit">
         SELECT
             *
         FROM

@@ -51,7 +51,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<Unit> listUnit(int curPage, int pageSize) throws SSException {
+    public List<Unit> listUnitByPage(int curPage, int pageSize) throws SSException {
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
         if (Assert.lessZero(offset)) {
@@ -59,7 +59,7 @@ public class UnitServiceImpl implements UnitService {
         }
         List<Unit> unitList = Collections.<Unit>emptyList();
         try {
-            unitList = unitMapper.listUnit(offset, pageSize);
+            unitList = unitMapper.listUnitByPage(offset, pageSize);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);

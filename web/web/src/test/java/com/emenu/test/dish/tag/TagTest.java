@@ -51,6 +51,15 @@ public class TagTest extends AbstractTestCase{
     }
 
     @Test
+    public void listByPage() throws SSException {
+        List<Tag> tagList = tagService.listTagByPage(1, 10);
+        System.out.println(tagService.countTag());
+        for(Tag tag : tagList){
+            System.out.println(tag.getName());
+        }
+    }
+
+    @Test
     public void del() throws SSException {
 //        tagService.deleteTag(6);
         List<Integer> ids = new ArrayList<Integer>();

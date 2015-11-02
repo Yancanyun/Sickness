@@ -29,7 +29,7 @@ public interface TagService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listTagByPageId(int curPage, int pageSize) throws SSException;
+    public List<Tag> listTagByPage(int curPage, int pageSize) throws SSException;
 
     /**
      * 获取分类总数

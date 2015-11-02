@@ -49,7 +49,7 @@ public class AdminUnitController extends AbstractController{
                                        @RequestParam Integer pageSize) {
         List<Unit> unitList = Collections.emptyList();
         try {
-            unitList = unitService.listUnit(curPage, pageSize);
+            unitList = unitService.listUnitByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

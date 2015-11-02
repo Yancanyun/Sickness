@@ -1,7 +1,6 @@
 package com.emenu.test.dish.unit;
 
 import com.emenu.common.entity.dish.unit.Unit;
-import com.emenu.mapper.dish.unit.UnitMapper;
 import com.emenu.service.dish.unit.UnitService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -49,7 +48,7 @@ public class UnitTest extends AbstractTestCase {
     public void listAllUnit() throws SSException {
         List<Unit> list = new ArrayList<Unit>();
 //        list = unitService.listAllUnit();
-        list = unitService.listUnit(1,10);
+        list = unitService.listUnitByPage(1, 10);
         for (Unit unit : list) {
             System.out.println(unit.getName()+"  "+unit.getCreatedTime());
         }

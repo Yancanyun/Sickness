@@ -27,8 +27,8 @@ public interface TagMapper {
      * @return
      * @throws SSException
      */
-    public List<Tag> listTagByPageId(@Param("offset")int offset,
-                                     @Param("pageSize")int pageSize) throws SSException;
+    public List<Tag> listTagByPage(@Param("offset") int offset,
+                                   @Param("pageSize") int pageSize) throws SSException;
 
     /**
      * 获取单位总数

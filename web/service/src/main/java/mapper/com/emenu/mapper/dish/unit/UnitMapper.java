@@ -27,8 +27,8 @@ public interface UnitMapper {
      * @return
      * @throws SSException
      */
-    public List<Unit> listUnit(@Param("offset")int offset,
-                               @Param("pageSize")int pageSize) throws SSException;
+    public List<Unit> listUnitByPage(@Param("offset") int offset,
+                                     @Param("pageSize") int pageSize) throws SSException;
 
     /**
      * 获取单位总数

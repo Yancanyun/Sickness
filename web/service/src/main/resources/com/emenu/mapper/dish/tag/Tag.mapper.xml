@@ -8,7 +8,7 @@
         ORDER BY `weight`,`p_id`
     </select>
 
-    <select id="listUnit" resultMap="pw.Tag">
+    <select id="listTagByPage" resultMap="pw.Tag">
         SELECT
         *
         FROM
@@ -16,7 +16,7 @@
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="countUnit" resultType="int">
+    <select id="countTag" resultType="int">
         SELECT
         COUNT(*)
         FROM

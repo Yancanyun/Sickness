@@ -26,7 +26,7 @@ public interface UnitService {
      * @return
      * @throws SSException
      */
-    public List<Unit> listUnit(int curPage, int pageSize) throws SSException;
+    public List<Unit> listUnitByPage(int curPage, int pageSize) throws SSException;
 
     /**
      * 获取单位总数

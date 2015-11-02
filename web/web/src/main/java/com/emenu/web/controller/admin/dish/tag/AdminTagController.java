@@ -49,7 +49,7 @@ public class AdminTagController extends AbstractController{
                                   @RequestParam Integer pageSize){
         List<Tag> tagList = Collections.emptyList();
         try {
-            tagList = tagService.listTagByPageId(curPage, pageSize);
+            tagList = tagService.listTagByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
