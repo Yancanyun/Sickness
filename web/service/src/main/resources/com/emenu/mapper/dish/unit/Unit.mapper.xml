@@ -3,7 +3,8 @@
 <mapper namespace="com.emenu.mapper.dish.unit.UnitMapper">
 
     <select id ="listAll" resultMap="pw.Unit">
-        SELECT *
+        SELECT
+            *
         FROM `t_unit`
     </select>
 
@@ -21,10 +22,22 @@
         FROM
             `t_unit`
     </select>
+
     <select id ="queryById" resultMap="pw.Unit">
-        SELECT * FROM `t_unit` WHERE `id`=#{id}
+        SELECT
+            *
+        FROM
+            `t_unit`
+        WHERE `id`=#{id}
     </select>
 
+    <select id="checkNameIsExist" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            t_unit
+        WHERE `name` = #{name}
+    </select>
 
 
 </mapper>

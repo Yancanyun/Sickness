@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.dish.unit.Unit;
+import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -60,6 +61,7 @@ public class AdminUnitController extends AbstractController{
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", unit.getId());
             jsonObject.put("name", unit.getName());
+            jsonObject.put("type", UnitEnum.valueOf(unit.getType()).getName());
             jsonArray.add(jsonObject);
         }
 

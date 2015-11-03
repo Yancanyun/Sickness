@@ -11,7 +11,7 @@
     var
         site = {
             website: '${website}', //站点地址
-            staticWebsite: '${staticWebsite}', // 前端服务器地址
+            staticWebsite: '${website}', // 前端服务器地址
             puiWebsite: '${staticWebsite}tool/pui2/'
         };
 
@@ -68,7 +68,7 @@
         DishManagement: [
             // 单位管理--列表
             ['saveUnit', site.staticWebsite + 'mock/admin/save-unit.json', 'get', '编辑单位'],
-            ['saveNewUnit', site.staticWebsite + 'mock/admin/save-unit.json', 'get', '添加单位'],
+            ['saveNewUnit', site.staticWebsite + 'admin/dish/unit/ajax', 'post', '添加单位'],
             ['delUnit', site.staticWebsite + 'mock/admin/login.json', 'get', '删除单位'],
 
             //菜品管理--列表

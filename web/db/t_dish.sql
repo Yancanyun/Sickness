@@ -25,6 +25,7 @@ CREATE TABLE `t_dish_tag_printer` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `dish_tag_id` int(11) NOT NULL DEFAULT '0' COMMENT '菜品分类ID',
   `printer_id` int(11) NOT NULL DEFAULT '0' COMMENT '打印机ID',
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1-菜品类别，2-具体某一个菜',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)

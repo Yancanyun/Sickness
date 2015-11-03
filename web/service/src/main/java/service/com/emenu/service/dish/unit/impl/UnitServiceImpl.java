@@ -42,7 +42,7 @@ public class UnitServiceImpl implements UnitService {
         List<Unit> list = Collections.emptyList();
         try {
             list = unitMapper.listAll();
-        }catch(Exception e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -59,7 +59,7 @@ public class UnitServiceImpl implements UnitService {
         }
         try {
             unitList = unitMapper.listByPage(offset, pageSize);
-        }catch (SSException e){
+        } catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -70,7 +70,7 @@ public class UnitServiceImpl implements UnitService {
     public int countAll() throws SSException {
         try{
             return unitMapper.countAll();
-        }catch (SSException e){
+        } catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -95,7 +95,7 @@ public class UnitServiceImpl implements UnitService {
                 throw SSException.get(EmenuException.UnitIdError);
             }
             return commonDao.queryById(Unit.class, id);
-        }catch(Exception e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryUnitFailed, e);
         }
@@ -113,11 +113,15 @@ public class UnitServiceImpl implements UnitService {
             if(Assert.isNull(unit.getName())){
                 throw SSException.get(EmenuException.UnitNameError);
             }
+            //检查用户名是否存在
+            if(checkNameIsExist(unit.getName())){
+                throw SSException.get(EmenuException.UnitNameIsExist);
+            }
             if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
                 throw SSException.get(EmenuException.UnitTypeError);
             }
             return commonDao.insert(unit);
-        }catch(Exception e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.NewUnitFailed,e);
         }
@@ -141,7 +145,7 @@ public class UnitServiceImpl implements UnitService {
                 throw SSException.get(EmenuException.UnitIdError);
             }
             commonDao.deleteById(Unit.class, id);
-        }catch(Exception e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteUnitFailed, e);
         }
@@ -163,14 +167,35 @@ public class UnitServiceImpl implements UnitService {
             if(Assert.isNull(unit.getName())){
                 throw SSException.get(EmenuException.UnitNameError);
             }
+            //检查用户名是否存在
+            if(checkNameIsExist(unit.getName())){
+                throw SSException.get(EmenuException.UnitNameIsExist);
+            }
             if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
                 throw SSException.get(EmenuException.UnitTypeError);
             }
             commonDao.update(unit);
-        }catch(Exception e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateUnitFailed, e);
         }
+    }
+
+    /**
+     * 检查名称是否重复
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    private boolean checkNameIsExist(String name) throws SSException {
+        int count = 0;
+        try {
+            count = unitMapper.checkNameIsExist(name);
+        } catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryUnitFailed, e);
+        }
+        return count == 0 ? false : true;
     }
 
 }

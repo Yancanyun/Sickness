@@ -38,6 +38,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateUnitFailed("查询单位失败", 3025),
     UnitNameError("单位名称为空", 3026),
     UnitTypeError("单位类型为空或者小于0", 3027),
+    UnitNameIsExist("单位名称已存在", 3028),
 
     //餐台区域
     QueryAreaFail("查询区域失败", 4001),

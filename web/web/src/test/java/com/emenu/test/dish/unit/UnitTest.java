@@ -25,7 +25,7 @@ public class UnitTest extends AbstractTestCase {
     @Test
     public void addUnit() throws SSException {
         Unit unit = new Unit();
-        unit.setName("碗");
+        unit.setName("斤");
         unit.setType(2);
         unitService.newUnit(unit);
     }

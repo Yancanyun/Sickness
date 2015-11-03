@@ -43,4 +43,12 @@ public interface UnitMapper {
      * @throws SSException
      */
     public Unit queryById(@Param("id")int id)throws SSException;
+
+    /**
+     * 检查是否有重名
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public int checkNameIsExist(@Param("name") String name) throws SSException;
 }
