@@ -67,9 +67,9 @@
         // 菜品管理
         DishManagement: [
             // 单位管理--列表
-            ['saveUnit', site.staticWebsite + 'mock/admin/save-unit.json', 'get', '编辑单位'],
+            ['saveUnit', site.staticWebsite + 'admin/dish/unit/ajax', 'put', '编辑单位'],
             ['saveNewUnit', site.staticWebsite + 'admin/dish/unit/ajax', 'post', '添加单位'],
-            ['delUnit', site.staticWebsite + 'mock/admin/login.json', 'get', '删除单位'],
+            ['delUnit', site.staticWebsite + 'admin/dish/unit/ajax/&{id}', 'delete', '删除单位'],
 
             //菜品管理--列表
             ['delDish', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除菜品'],
