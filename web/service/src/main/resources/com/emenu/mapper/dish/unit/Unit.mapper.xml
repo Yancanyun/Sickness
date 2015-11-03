@@ -2,27 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.dish.unit.UnitMapper">
 
-    <select id ="listAllUnit" resultMap="pw.Unit">
+    <select id ="listAll" resultMap="pw.Unit">
         SELECT *
-        FROM `t_dish_unit`
+        FROM `t_unit`
     </select>
 
-    <select id="listUnit" resultMap="pw.Unit">
+    <select id="listByPage" resultMap="pw.Unit">
         SELECT
             *
         FROM
-            `t_dish_unit`
+            `t_unit`
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="countUnit" resultType="int">
+    <select id="countAll" resultType="int">
         SELECT
             COUNT(*)
         FROM
-            `t_dish_unit`
+            `t_unit`
     </select>
-    <select id ="queryUnitById" resultMap="pw.Unit">
-        SELECT * FROM `t_dish_unit` WHERE `id`=#{id}
+    <select id ="queryById" resultMap="pw.Unit">
+        SELECT * FROM `t_unit` WHERE `id`=#{id}
     </select>
 
 

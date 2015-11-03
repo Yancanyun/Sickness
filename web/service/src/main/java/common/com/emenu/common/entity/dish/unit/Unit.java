@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 2015/10/23.
  */
 @Entity
-@Table(name = "t_dish_unit")
+@Table(name = "t_unit")
 public class Unit extends AbstractEntity{
 
     private static final long serialVersionUID = -4348318293591069581L;

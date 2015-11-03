@@ -27,6 +27,7 @@ public class TagTest extends AbstractTestCase{
         tag.setName("商品10");
         tag.setpId(8);
         tag.setType(1);
+        tag.setWeight(20);
         tagService.newTag(tag);
     }
 

@@ -39,10 +39,10 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
-    public List<Unit> listAllUnit() throws SSException {
-        List<Unit> list = new ArrayList<Unit>();
+    public List<Unit> listAll() throws SSException {
+        List<Unit> list = Collections.emptyList();
         try {
-            list = unitMapper.listAllUnit();
+            list = unitMapper.listAll();
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
@@ -51,7 +51,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<Unit> listUnit(int curPage, int pageSize) throws SSException {
+    public List<Unit> listByPage(int curPage, int pageSize) throws SSException {
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
         if (Assert.lessZero(offset)) {
@@ -59,7 +59,7 @@ public class UnitServiceImpl implements UnitService {
         }
         List<Unit> unitList = Collections.<Unit>emptyList();
         try {
-            unitList = unitMapper.listUnit(offset, pageSize);
+            unitList = unitMapper.listByPage(offset, pageSize);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
@@ -68,9 +68,9 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public int countUnit() throws SSException {
+    public int countAll() throws SSException {
         try{
-            return unitMapper.countUnit();
+            return unitMapper.countAll();
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
@@ -84,7 +84,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
-    public Unit queryUnitById(Integer id) throws SSException {
+    public Unit queryById(int id) throws SSException {
         // 检查id是否<=0，如果是，直接返回
         if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.UnitIdError);
@@ -127,7 +127,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
-    public void delUnit(Integer id) throws SSException {
+    public void delById(int id) throws SSException {
         // 检查id是否<=0，如果是，直接返回
         if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.UnitIdError);

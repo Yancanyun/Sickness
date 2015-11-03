@@ -48,7 +48,7 @@ public class AdminUnitController extends AbstractController{
                                        @RequestParam Integer pageSize) {
         List<Unit> unitList = Collections.emptyList();
         try {
-            unitList = unitService.listUnit(curPage, pageSize);
+            unitList = unitService.listByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -64,7 +64,7 @@ public class AdminUnitController extends AbstractController{
 
         int dataCount = 0;
         try {
-            dataCount = unitService.countUnit();
+            dataCount = unitService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -119,7 +119,7 @@ public class AdminUnitController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxDelDishUint(@PathVariable("id") Integer id){
         try{
-            unitService.delUnit(id);
+            unitService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         }catch (SSException e){
             LogClerk.errLog.error(e);
