@@ -17,7 +17,7 @@ public interface UnitService {
      * 获取所有单位
      * @throws SSException
      */
-    public List<Unit> listAllUnit() throws SSException;
+    public List<Unit> listAll() throws SSException;
 
     /**
      * 根据分页获取单位列表
@@ -26,14 +26,14 @@ public interface UnitService {
      * @return
      * @throws SSException
      */
-    public List<Unit> listUnitByPage(int curPage, int pageSize) throws SSException;
+    public List<Unit> listByPage(int curPage, int pageSize) throws SSException;
 
     /**
      * 获取单位总数
      * @return
      * @throws SSException
      */
-    public int countUnit() throws SSException;
+    public int countAll() throws SSException;
 
     /**
      * 根据id查询一条单位信息

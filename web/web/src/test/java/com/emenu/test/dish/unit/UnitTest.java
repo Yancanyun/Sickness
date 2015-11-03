@@ -26,37 +26,37 @@ public class UnitTest extends AbstractTestCase {
     public void addUnit() throws SSException {
         Unit unit = new Unit();
         unit.setName("包");
-        unit.setType(2);
+        unit.setType(14);
         unitService.newUnit(unit);
     }
 
     @Test
-    public void delUnitById() throws SSException {
-        unitService.delById(4);
+    public void delById() throws SSException {
+        unitService.delById(14);
     }
 
     @Test
     public void updateUnit() throws SSException {
         Unit unit = new Unit();
-        unit.setId(5);
-        unit.setName("碗");
+        unit.setId(14);
+        unit.setName("碗1");
         unit.setType(2);
         unitService.updateUnit(unit);
     }
 
     @Test
-    public void listAllUnit() throws SSException {
+    public void listByPage() throws SSException {
         List<Unit> list = new ArrayList<Unit>();
 //        list = unitService.listAllUnit();
-        list = unitService.listUnitByPage(1, 10);
+        list = unitService.listByPage(1,10);
         for (Unit unit : list) {
             System.out.println(unit.getName()+"  "+unit.getCreatedTime());
         }
-        System.out.println(unitService.countUnit());
+        System.out.println(unitService.countAll());
     }
 
     @Test
-    public void queryUnitById() throws SSException {
+    public void queryById() throws SSException {
         Unit unit = new Unit();
         unit = unitService.queryById(2);
         System.out.print(unit.getName());
