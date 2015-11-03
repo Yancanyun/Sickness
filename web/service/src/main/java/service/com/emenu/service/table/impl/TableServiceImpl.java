@@ -331,17 +331,10 @@ public class TableServiceImpl implements TableService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateTableForce(Table table) throws SSException {
+    public void updateQrCode(int id, String qrCodePath) throws SSException {
         try {
-            //判断是否重名
-            if (checkNameIsExist(table.getName())) {
-                throw SSException.get(EmenuException.TableNameExist);
-            }
-            //判断是否为空
-            if (Assert.isNull(table.getName())) {
-                throw SSException.get(EmenuException.TableNameIsNull);
-            }
-            commonDao.update(table);
+            //仅更新qrcode_path字段
+            tableMapper.updateQrCode(id, qrCodePath);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);

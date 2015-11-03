@@ -56,7 +56,7 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteTableFail("删除餐台失败", 4024),
     TableHasUsed("餐台正在被使用", 4025),
     AreaNotExist("区域不存在", 4026),
-    TableNameIsNull("名称名称不能为空", 4027),
+    TableNameIsNull("餐台名称不能为空", 4027),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4040),
 

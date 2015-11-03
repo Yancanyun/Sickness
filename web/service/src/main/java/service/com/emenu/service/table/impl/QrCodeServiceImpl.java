@@ -53,9 +53,6 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Autowired
     private ConstantService constantService;
 
-    @Autowired
-    private AreaMapper areaMapper;
-
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException {
@@ -118,12 +115,12 @@ public class QrCodeServiceImpl implements QrCodeService {
 
             //为每张餐台生成二维码
             for (Table t : tableList) {
-                String path = newQrCode(t.getId(), webDomain, request);
+                String qrCodePath = newQrCode(t.getId(), webDomain, request);
                 Table table = new Table();
                 table.setId(t.getId());
-                table.setQrCodePath(path);
-                //强制修改Table表
-                tableService.updateTableForce(table);
+                table.setQrCodePath(qrCodePath);
+                //修改Table表中qrcode_path字段
+                tableService.updateQrCode(t.getId(), qrCodePath);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);

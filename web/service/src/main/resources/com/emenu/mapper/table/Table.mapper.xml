@@ -86,4 +86,10 @@
         SET `state` = #{state}
         WHERE `id` = #{id}
     </update>
+
+    <update id="updateQrCode">
+        UPDATE `t_table`
+        SET `qrcode_path` = #{qrCodePath}
+        WHERE `id` = #{id}
+    </update>
 </mapper>

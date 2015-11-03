@@ -70,7 +70,7 @@ public class AdminQrCodeController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "redirect:/admin/restaurant/qrcode";
+        return "redirect:";
     }
 
     /**

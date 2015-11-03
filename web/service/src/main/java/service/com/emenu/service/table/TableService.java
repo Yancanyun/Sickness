@@ -127,11 +127,13 @@ public interface TableService {
     public void updateTable(Table table) throws SSException;
 
     /**
-     * 强制修改餐台(忽略餐台当前状态，仅生成二维码时使用)
-     * @param table
+     * 修改餐台二维码信息
+     *
+     * @param id
+     * @param qrCodePath
      * @throws SSException
      */
-    public void updateTableForce(Table table) throws SSException;
+    public void updateQrCode(int id, String qrCodePath) throws SSException;
 
     /**
      * 删除餐台

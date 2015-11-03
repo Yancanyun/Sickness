@@ -69,4 +69,11 @@ public interface TableMapper {
      * @throws Exception
      */
     public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+
+    /**
+     * 修改餐台二维码信息
+     * @param qrCodePath
+     * @throws Exception
+     */
+    public void updateQrCode(@Param("id") int id, @Param("qrCodePath") String qrCodePath) throws Exception;
 }
