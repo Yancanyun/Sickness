@@ -14,7 +14,7 @@
         , `phone` AS `phone`
         , `status` AS `status`
         FROM `t_party_employee`
-        WHERE `status` != 3 AND `party_id` !=#{partyId}
+        WHERE `status` != 3
 
 
     </select>

@@ -48,7 +48,8 @@ public final class URLConstants {
     //会员基本信息管理
     public static final String VIP_VIPINFO_URL = "admin/party/group/vip";
 
-    public static final String EMPLOYEE_MANAGEMENT = "admin/party/employee";
+    //员工管理
+    public static final String EMPLOYEE_MANAGEMENT = "admin/party/group/employee";
 
     //菜品单位管理
     public static final String ADMIN_DISH_UNIT = "admin/dish/unit";

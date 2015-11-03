@@ -20,10 +20,10 @@
         // 用户管理
         UserManagement: [
             // 员工管理--列表
-            ['delEmployee', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '删除员工'],
+            ['delEmployee', site.Website + 'mock/admin/employee-list.json', 'get', '删除员工'],
             ['convertEmployeeStatus', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '转换员工的状态,即启用\停用互换'],
             ['sendEmployeeId', site.staticWebsite + 'mock/admin/employee-table.json', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
-            ['searchEmployee', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '搜索当前角色下的员工'],
+            ['searchEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
             // 员工管理--员工添加\编辑
             ['sendEmployeePhone', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的电话是否重复'],
             ['sendEmployeeUserName', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的用户命是否重复'],

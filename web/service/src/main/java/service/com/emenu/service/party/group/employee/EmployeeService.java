@@ -15,20 +15,18 @@ public interface EmployeeService {
 
     /**
      * 获取所有员工信息
-     * @param partyId
      * @return
      * @throws SSException
      */
-    public List<EmployeeDto> listAll(int partyId) throws SSException;
+    public List<EmployeeDto> listAll() throws SSException;
 
     /**
      * 根据不同的角色获取员工信息
      * @param roleList
-     * @param partyId
      * @return
      * @throws SSException
      */
-    public List<EmployeeDto> listByRoles(List<Integer> roleList, int partyId) throws SSException;
+    public List<EmployeeDto> listByRoles(List<Integer> roleList) throws SSException;
 
     /**
      * 检查注册员工是否用户名重名

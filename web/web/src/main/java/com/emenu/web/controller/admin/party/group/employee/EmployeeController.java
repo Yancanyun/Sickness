@@ -1,9 +1,11 @@
 package com.emenu.web.controller.admin.party.group.employee;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.party.group.employee.Employee;
+import com.emenu.common.entity.party.security.SecurityPermission;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.utils.URLConstants;
@@ -17,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,24 +36,76 @@ public class EmployeeController  extends AbstractController {
 
     /**
      * 去员工列表页
-     * @param model
-     * @param request
      * @return
      */
     @Module(ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "",method = RequestMethod.GET)
-    public String toEmployeePage(Model model,HttpServletRequest request){
+    public String toEmployeePage(){
+        //@RequestParam("roleList")List<Integer> roleList,Model model,HttpServletRequest request
+            //Integer partyId = (Integer)request.getSession().getAttribute(WebConstants.SESSIONUID);//获取当前登录用户id，admin
+
+        /*    List<TableDto> tableDtoList = new ArrayList<TableDto>();
+            if(areaId != null) {
+                for(int id : areaId) {
+                    if(id>0){
+                        tableDtoList.addAll(tableService.queryTableDtoByAreaId(id));
+                    }
+                }
+            } else {
+                tableDtoList = tableService.queryAllTable();
+            }*/
+
+/*            List<EmployeeDto> employeeDtoList = Collections.emptyList();
+
+            if(roleList == null) {
+               employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
+            }else {
+                employeeDtoList = employeeService.listByRoles(roleList);
+            }
+            model.addAttribute("employeeDtoList", employeeDtoList);*/
+
+            return "admin/party/group/employee/list_home";
+
+    }
+
+    @Module(ModuleEnums.AdminUserManagementEmployeeList)
+    @RequestMapping(value = "ajax/list",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listByRoles(@RequestParam("roles")Integer [] roles,Model model,HttpServletRequest request){
+
+        List<EmployeeDto> employeeDtoList = Collections.emptyList();
+
         try{
-            Integer partyId = (Integer)request.getSession().getAttribute(WebConstants.SESSIONUID);//获取当前登录用户id，admin
-            List<EmployeeDto> employeeDtoList = employeeService.listAll(partyId);//向前端返回用户列表数据
-            model.addAttribute("employeeDtoList", employeeDtoList);
-            return "admin/party/group/employee_list";
+            if(roles == null) {
+                employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
+            }else {
+                List<Integer> roleList = new ArrayList<Integer>();
+                for (int i = 0; i <roles.length ; i++) {
+                    roleList.add(roles[i]);
+                }
+                employeeDtoList = employeeService.listByRoles(roleList);
+
+            }
+
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+
         }
+
+        JSONArray jsonArray = new JSONArray();
+        for (EmployeeDto employeeDto : employeeDtoList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("loginName", employeeDto.getLoginName());
+            jsonObject.put("employeeNumber", employeeDto.getEmployee().getEmployeeNumber());
+            jsonObject.put("name", employeeDto.getEmployee().getName());
+            jsonObject.put("phone", employeeDto.getEmployee().getPhone());
+            jsonObject.put("status", employeeDto.getEmployee().getStatus());
+            jsonArray.add(jsonObject);
+        }
+        return sendJsonArray(jsonArray, 0);
     }
+
 
     /**
      * 修改用户状态
@@ -116,7 +172,7 @@ public class EmployeeController  extends AbstractController {
         employeeDto.setRole(roleList);
         employeeDto.setTables(tableList);
         employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
-        return "admin/party/group/employee_list";
+        return "redirect:admin/party/group/employee";
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);

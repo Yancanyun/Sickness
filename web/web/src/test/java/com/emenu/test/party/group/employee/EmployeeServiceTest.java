@@ -5,13 +5,11 @@ import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
-import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.CommonUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +31,7 @@ public class EmployeeServiceTest extends AbstractTestCase {
     public void listEmployee() throws SSException{
 
         Integer partyId = 1;//获取当前登录用户id，admin
-        List<EmployeeDto> employeeDtoList = employeeService.listAll(partyId);//向前端返回用户列表数据
+        List<EmployeeDto> employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
 
         for (EmployeeDto employeeDto : employeeDtoList){
             Employee employee = employeeDto.getEmployee();
@@ -158,7 +156,7 @@ public class EmployeeServiceTest extends AbstractTestCase {
         roleList.add(2);
 //        roleList.add(4);
 
-        List<EmployeeDto> employeeDtoList =  employeeService.listByRoles(roleList, 1);
+        List<EmployeeDto> employeeDtoList =  employeeService.listByRoles(roleList);
 
         for (EmployeeDto employeeDto : employeeDtoList){
             Employee employee = employeeDto.getEmployee();

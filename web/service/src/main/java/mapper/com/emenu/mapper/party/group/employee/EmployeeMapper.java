@@ -20,7 +20,7 @@ public interface EmployeeMapper {
      * @param
      * @return List<Employee>
      */
-    public List<Employee> listAll(int partyId) throws Exception;;
+    public List<Employee> listAll() throws Exception;;
 
     /**
      * 根据partyId查询用户角色
