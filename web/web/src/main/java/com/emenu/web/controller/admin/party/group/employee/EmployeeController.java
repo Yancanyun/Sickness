@@ -29,6 +29,13 @@ import java.util.List;
 @RequestMapping(value = URLConstants.EMPLOYEE_MANAGEMENT)
 public class EmployeeController  extends AbstractController {
 
+
+    /**
+     * 去员工列表页
+     * @param model
+     * @param request
+     * @return
+     */
     @Module(ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String toEmployeePage(Model model,HttpServletRequest request){
@@ -38,8 +45,9 @@ public class EmployeeController  extends AbstractController {
             model.addAttribute("employeeDtoList", employeeDtoList);
             return "admin/party/group/employee_list";
         }catch (SSException e){
+            LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return WebConstants.sysErrorCode;
+            return ADMIN_SYS_ERR_PAGE;
         }
     }
 
@@ -55,15 +63,14 @@ public class EmployeeController  extends AbstractController {
     public JSONObject updateEmployeeStatus(@PathVariable("partyId")Integer partyId,
                                                          @RequestParam String status){
         try {
-
             if(status.equals("true")) {
                 employeeService.updateStatus(partyId, UserStatusEnums.Enabled.getId());
             } else {
                 employeeService.updateStatus(partyId, UserStatusEnums.Disabled.getId());
-
             }
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
+            LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
     }
@@ -87,6 +94,15 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
+    /**
+     * 添加员工
+     * @param roleList
+     * @param tableList
+     * @param loginName
+     * @param password
+     * @param employee
+     * @return
+     */
     @Module(ModuleEnums.AdminUserManagementEmployeeNew)
     @RequestMapping(value = "new",method = RequestMethod.GET)
     public String newEmployee(@RequestParam("roleList")List<Integer> roleList,
@@ -103,6 +119,7 @@ public class EmployeeController  extends AbstractController {
         return "admin/party/group/employee_list";
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
+            LogClerk.errLog.error(e);
             return WebConstants.sysErrorCode;
         }
     }
@@ -113,6 +130,18 @@ public class EmployeeController  extends AbstractController {
     public JSONObject checkLoginName(@RequestParam("loginName")String loginName){
         try {
             securityUserService.checkLoginNameIsExist(loginName);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    @RequestMapping(value = "ajax/chknum",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject checkNumber(@RequestParam("employeeNumber")String employeeNumber){
+        try {
+            employeeService.checkNumber(employeeNumber);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

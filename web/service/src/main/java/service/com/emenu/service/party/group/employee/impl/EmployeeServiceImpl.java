@@ -6,6 +6,7 @@ import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.group.employee.EmployeeRole;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.table.WaiterTable;
+import com.emenu.common.enums.party.EnableEnums;
 import com.emenu.common.enums.party.PartyTypeEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.enums.party.group.employee.EmployeeRoleEnums;
@@ -66,45 +67,47 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public List<EmployeeDto> listAll(int partyId) throws SSException {
 
-        List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
 
-        if(Assert.lessOrEqualZero(partyId)) {
-            return employeeDtos;
-        }
         try {
-                //根据取出启用的员工信息t_party_employee
+            List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
+
+            if(Assert.lessOrEqualZero(partyId)) {
+                return employeeDtos;
+            }
+
+            //根据取出启用的员工信息t_party_employee
 
             List<Employee> employees = Collections.emptyList();
             employees = employeeMapper.listAll(partyId);
 
-            //获取所有启用的员工登录名
+           /* //获取所有启用的员工登录名
             List<SecurityUser> securityUsers = Collections.emptyList();
+            securityUsers = securityUserService.listByPartyId(partyId);*/
 
-             securityUsers = securityUserService.listByPartyId(partyId);
+            for (Employee employee : employees) {
+                EmployeeDto employeeDto = new EmployeeDto();
+                employeeDto.setEmployee(employee);
 
-                for (Employee employee : employees) {
-                    EmployeeDto employeeDto = new EmployeeDto();
-                    employeeDto.setEmployee(employee);
-                    List<Integer> role = employeeMapper.queryEmployeeRoleByEmployeeId(employee.getPartyId());//查询每个用户的对应的所有角色
-                    List<String> roleName = new ArrayList<String>();//根据取出的角色标识，赋予角色名
+                List<Integer> roles = Collections.emptyList();
+                roles = employeeMapper.queryRoleByPartyId(employee.getPartyId());//查询每个用户的对应的所有角色
+
+                List<String> roleNames = new ArrayList<String>();//根据取出的角色标识，赋予角色名
                     //获得用户角色名
-                    for (int r : role) {
-                        roleName.add(EmployeeRoleEnums.getDescriptionById(r));
+                    for (int r : roles) {
+                        roleNames.add(EmployeeRoleEnums.getDescriptionById(r));
                     }
                     //数据存入dto
-                    employeeDto.setRole(role);
-                    employeeDto.setRoleName(roleName);
-                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
-                    employeeDtos.add(employeeDto);
+                employeeDto.setRole(roles);
+                employeeDto.setRoleName(roleNames);
+                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+
+                SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
+                employeeDto.setLoginName(securityUser.getLoginName());
+
+                employeeDtos.add(employeeDto);
+
                 }
 
-                for (EmployeeDto employeeDto : employeeDtos) {
-                    for (SecurityUser securityUser : securityUsers) {
-                        if (employeeDto.getEmployee().getPartyId() == securityUser.getPartyId()) {
-                            employeeDto.setLoginName(securityUser.getLoginName());
-                        }
-                    }
-                }
                 return employeeDtos;
 
         } catch (Exception e) {
@@ -115,52 +118,62 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<EmployeeDto> listByRoles(List<Integer> roleList, int partyId) throws SSException {
+
+
         try {
+            List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
             if(Assert.lessOrEqualZero(partyId)){
-                throw SSException.get(EmenuException.PartyIdIdError);
-            }else {
-                List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
-                List<Employee> employees = new ArrayList<Employee>();
-                //获取所有启用的员工登录名
-                List<SecurityUser> securityUsers = securityUserService.listByPartyId(partyId);
-                List<Integer> partyIdList = employeeMapper.listPartIdByContition(roleList);
-
-                for (Integer id : partyIdList) {
-
-                    Employee employee = employeeMapper.queryEmployeeByPartyId(id);
-
-                    employees.add(employee);
-                }
-
-                for (Employee employee : employees) {
-                    EmployeeDto employeeDto = new EmployeeDto();
-                    employeeDto.setEmployee(employee);
-
-                    System.out.println("hello" + employee.getPartyId());
-
-                    List<Integer> role = employeeMapper.queryEmployeeRoleByEmployeeId(employee.getPartyId());//查询每个用户的对应的所有角色
-                    List<String> roleName = new ArrayList<String>();//根据取出的角色标识，赋予角色名
-                    //获得用户角色名
-                    for (int r : role) {
-                        roleName.add(EmployeeRoleEnums.getDescriptionById(r));
-                    }
-                    //数据存入dto
-                    //数据存入dto
-                    employeeDto.setRole(role);
-                    employeeDto.setRoleName(roleName);
-                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
-                    employeeDtos.add(employeeDto);
-                }
-
-                for (EmployeeDto employeeDto : employeeDtos) {
-                    for (SecurityUser securityUser : securityUsers) {
-                        if (employeeDto.getEmployee().getPartyId() == securityUser.getPartyId()) {
-                            employeeDto.setLoginName(securityUser.getLoginName());
-                        }
-                    }
-                }
                 return employeeDtos;
             }
+            List<Employee> employees = new ArrayList<Employee>();
+            //获取所有启用的员工登录名
+
+            /*List<SecurityUser> securityUsers = Collections.emptyList();
+            securityUsers = securityUserService.listByPartyId(partyId);*/
+
+            //获取具有该角色的所有当事人partId
+            List<Integer> partyIdList =Collections.emptyList();
+            partyIdList = employeeMapper.listPartIdByRoles(roleList);
+
+            for (Integer id : partyIdList) {
+                Employee employee = employeeMapper.queryByPartyId(id);
+                if(employee.getStatus()!=3&&employee.getPartyId()!=partyId) {
+                    employees.add(employee);
+                }
+            }
+
+            for (Employee employee : employees) {
+                EmployeeDto employeeDto = new EmployeeDto();
+                employeeDto.setEmployee(employee);
+
+                List<Integer> roles = Collections.emptyList();
+                roles = employeeMapper.queryRoleByPartyId(employee.getPartyId());//查询每个用户的对应的所有角色
+
+                List<String> roleNames = new ArrayList<String>();
+                roleNames = new ArrayList<String>();//根据取出的角色标识，赋予角色名
+
+                //获得用户角色名
+
+                for (int r : roles) {
+                        roleNames.add(EmployeeRoleEnums.getDescriptionById(r));
+                }
+                //数据存入dto
+                //数据存入dto
+                employeeDto.setRole(roles);
+                employeeDto.setRoleName(roleNames);
+                if(employee.getStatus()==1){
+                    employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                }else if(employee.getStatus()==2){
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                }
+                SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
+                employeeDto.setLoginName(securityUser.getLoginName());
+
+                employeeDtos.add(employeeDto);
+
+                }
+
+                return employeeDtos;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryEmployeeInfoFail, e);
@@ -179,7 +192,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     public boolean checkName(String employeeName) throws SSException {
 
         try {
-            if(employeeMapper.checkEmployeeName(employeeName) != null) {
+            if(employeeMapper.queryByName(employeeName) != null) {
                 return true;
             } else {
                 return  false;
@@ -189,6 +202,22 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw SSException.get(EmenuException.SystemException, e);
         }
 
+
+    }
+
+    @Override
+    public boolean checkNumber(String employeeName) throws SSException {
+
+        try{
+            if(employeeMapper.queryByNumber(employeeName)!= null) {
+                return true;
+            } else {
+                return  false;
+            }
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
 
     }
 
@@ -281,31 +310,37 @@ public class EmployeeServiceImpl implements EmployeeService{
                        String newloginName,
                        String newPwd) throws SSException {
         try {
+            if(Assert.isNull(employeeDto)){
+                return;
+            }
 
-            //获取员工角色
-            List<Integer> role = employeeDto.getRole();
-
+            //修改员工登录名密码等信息
             //获取当前partyId员工注册信息
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
-
-            //更新员工登录名和密码
             securityUser.setPassword(newPwd);
             securityUser.setLoginName(newloginName);
 
-           // System.out.println(securityUser.getLoginName()+securityUser.getId());
-
             //更新t_party_security_user
+
             securityUserService.updateSecurityUser(securityUser);
 
+
             //更新员工姓名、电话等信息t_party_employee
-            Employee employee = employeeDto.getEmployee();
+            Employee employeeNew = employeeDto.getEmployee();
+            Employee employeeOld = employeeMapper.queryByPartyId(partyId);
 
-            commonDao.update(employee);
+            employeeOld.setName(employeeNew.getName());
+            employeeOld.setEmployeeNumber(employeeNew.getEmployeeNumber());
+            employeeOld.setPhone(employeeNew.getPhone());
 
-            employeeMapper.delEmployeeRoleByPartyId(partyId);
-            employeeMapper.delEmployeeWaiterTableByPartyId(partyId);
+            commonDao.update(employeeOld);
 
-            for (int r : role) {
+            employeeMapper.delRoleByPartyId(partyId);
+            employeeMapper.delWaiterTableByPartyId(partyId);
+
+            //获取员工角色
+            List<Integer> roles = employeeDto.getRole();
+            for (int r : roles) {
                 //UserRole类型实体存储要插入角色表中的信息，插入每个用户的所有角色
                 EmployeeRole employeeRole = new EmployeeRole();
                 employeeRole.setPartyId(partyId);
@@ -389,7 +424,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         try {
             //User user = commonDao.queryById(User.class, uid);
             //修改t_party_employee表中员工状态
-            employeeMapper.updateEmployeeStatusByPartyId(partyId, status);
+            employeeMapper.updateStatusByPartyId(partyId, status);
 
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
             securityUser.setStatus(status);
@@ -404,14 +439,17 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delByPartyId(int partyId) throws SSException {
-        //查员工信息t_party_employee
-        Employee employee= queryByPartyId(partyId);
-        if(employee!=null&&employee.getStatus().equals(UserStatusEnums.Enabled.getId())){
-            throw SSException.get(EmenuException.EmployeeIsActivity,new Exception());
-        }
+
         //假删除，在数据库表中并没有删除，只是把status字段设为“删除”
         try {
-            updateStatus(partyId, UserStatusEnums.Deleted.getId());
+            //修改t_employee员工状态
+            employeeMapper.updateStatusByPartyId(partyId, UserStatusEnums.Deleted.getId());
+
+            //修改t_party_security_user员工状态
+            SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
+            securityUser.setStatus(EnableEnums.Disabled.getId());
+            securityUserService.updateSecurityUser(securityUser);
+
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteEmployeeFail, e);
@@ -426,7 +464,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
 
         try {
-            employee = employeeMapper.queryEmployeeByPartyId(partyId);
+            employee = employeeMapper.queryByPartyId(partyId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryEmployeeException, e);

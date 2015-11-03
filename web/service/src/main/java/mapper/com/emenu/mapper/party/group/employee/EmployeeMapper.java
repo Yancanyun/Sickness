@@ -28,22 +28,22 @@ public interface EmployeeMapper {
      * @return
      * @throws Exception
      */
-    public List<Integer> queryEmployeeRoleByEmployeeId(@Param("partyId")Integer partyId) throws Exception;;
+    public List<Integer> queryRoleByPartyId(@Param("partyId") int partyId) throws Exception;;
 
     /**
      * 检查注册用户是否重名
-     * @param employeeName
+     * @param Name
      * @return
      * @throws Exception
      */
-    public Employee checkEmployeeName(@Param("employeeName") String employeeName) throws Exception;
+    public Employee queryByName(@Param("employeeName") String Name) throws Exception;
 
     /**
      * 根据partyId更改员工状态
      * @param partyId
      * @param status
      */
-    public void updateEmployeeStatusByPartyId(@Param("partyId") Integer partyId,@Param("status")Integer status);
+    public void updateStatusByPartyId(@Param("partyId") int partyId, @Param("status") int status);
 
     /**
      * 根据
@@ -51,29 +51,44 @@ public interface EmployeeMapper {
      * @return
      * @throws Exception
      */
-    public List<EmployeeRole> listEmployeeRoleByPartyId(@Param("partyId") Integer partyId) throws Exception;
+    public List<EmployeeRole> listRoleByPartyId(@Param("partyId") int partyId) throws Exception;
 
     /**
      * 根据partyId删除员工角色
      * @param  partyId
      * @throws Exception
      */
-    public void delEmployeeRoleByPartyId(@Param("partyId") Integer partyId) throws Exception;
+    public void delRoleByPartyId(@Param("partyId") int partyId) throws Exception;
 
     /**
      * 删除服务员服务的餐桌
      * @param partyId
      * @throws Exception
      */
-    public void delEmployeeWaiterTableByPartyId(@Param("partyId") Integer partyId) throws  Exception;
+    public void delWaiterTableByPartyId(@Param("partyId") int partyId) throws  Exception;
 
     /**
      * 根据partyId查询员工信息t_party_employee
      * @param partyId
      * @throws Exception
      */
-    public Employee queryEmployeeByPartyId(@Param("partyId") Integer partyId) throws  Exception;
+    public Employee queryByPartyId(@Param("partyId") int partyId) throws  Exception;
 
-    public List<Integer> listPartIdByContition(@Param("roles")List<Integer> roles) throws Exception;
+    /**
+     * 根据获取对应角色的partyId
+     * @param roles
+     * @return
+     * @throws Exception
+     */
+    public List<Integer> listPartIdByRoles(@Param("roles") List<Integer> roles) throws Exception;
+
+    /**
+     * 根据员工编号查询员工
+     * @param embployeeNumber
+     * @return
+     * @throws Exception
+     */
+    public Employee queryByNumber(@Param("number")String embployeeNumber) throws Exception;
+
 
 }

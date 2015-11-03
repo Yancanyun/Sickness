@@ -21,6 +21,13 @@ public interface EmployeeService {
      */
     public List<EmployeeDto> listAll(int partyId) throws SSException;
 
+    /**
+     * 根据不同的角色获取员工信息
+     * @param roleList
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
     public List<EmployeeDto> listByRoles(List<Integer> roleList, int partyId) throws SSException;
 
     /**
@@ -30,6 +37,14 @@ public interface EmployeeService {
      * @throws SSException
      */
     public boolean checkName(String employeeName) throws SSException;
+
+    /**
+     * 员工编号是否重复
+     * @param checkNumber
+     * @return
+     * @throws SSException
+     */
+    public boolean checkNumber(String checkNumber) throws SSException;
 
     /**
      * 添加新员工

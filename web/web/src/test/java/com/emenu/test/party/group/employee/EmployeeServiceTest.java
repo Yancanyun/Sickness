@@ -49,23 +49,13 @@ public class EmployeeServiceTest extends AbstractTestCase {
             System.out.println(employeeDto.getStatus());
 
             System.out.println("test");
-
+            System.out.println(employeeDto.getLoginName());
         }
 
-        List<EmployeeDto> m = new ArrayList<EmployeeDto>();
 
-        for(EmployeeDto employeeDto : m){
-            System.out.println(employeeDto.toString());
-        }
 
-        System.out.println(m);
-        EmployeeDto ep = new EmployeeDto();
 
-        m.add(ep);
 
-        if(Assert.isNull(m)){
-            System.out.println("你好");
-        }
 
     }
 
@@ -77,19 +67,19 @@ public class EmployeeServiceTest extends AbstractTestCase {
     public void newEmploee() throws SSException{
 
         Employee employee = new Employee();
-        employee.setName("陈玉婷");
-        employee.setPhone("55555555");
+        employee.setName("崔元");
+        employee.setPhone("99999999");
 
 
         EmployeeDto employeeDto = new EmployeeDto();
         // 对密码进行md5加密
         String password = CommonUtil.md5("123456");
-        String username = "chenyt";
+        String username = "cuiyuan";
 
 
         List<Integer> roleList = new ArrayList<Integer>();
 
-        roleList.add(2);
+        roleList.add(3);
         roleList.add(4);
 
 
@@ -123,21 +113,22 @@ public class EmployeeServiceTest extends AbstractTestCase {
 
 
         Employee employee = new Employee();
-        employee.setId(5);
-        employee.setName("杜鹃");
-        employee.setPhone("22222222");
+        employee.setName("cheng");
+        employee.setPhone("88888888");
+        employee.setEmployeeNumber("81235");
 
 
         EmployeeDto employeeDto = new EmployeeDto();
         // 对密码进行md5加密
         String password = CommonUtil.md5("123456");
-        String newloginName = "dujuan";
+        String newloginName = "laoxiao";
 
 
         List<Integer> roleList = new ArrayList<Integer>();
 
         roleList.add(1);
         roleList.add(2);
+        roleList.add(3);
         roleList.add(4);
 
 
@@ -146,17 +137,18 @@ public class EmployeeServiceTest extends AbstractTestCase {
         tableList.add(1);
         tableList.add(2);
         tableList.add(3);
+        tableList.add(4);
 
         employeeDto.setEmployee(employee);
         employeeDto.setRole(roleList);
         employeeDto.setTables(tableList);
 
-        employeeService.update(employeeDto, 3, newloginName, password);
+        employeeService.update(employeeDto,8, newloginName, password);
     }
 
     @Test
     public void delEmployee() throws SSException{
-        employeeService.delByPartyId(3);
+        employeeService.delByPartyId(5);
     }
 
     @Test
@@ -180,6 +172,7 @@ public class EmployeeServiceTest extends AbstractTestCase {
             }
 
             System.out.println(employeeDto.getStatus());
+            System.out.println(employeeDto.getLoginName());
 
             System.out.println("test");
 

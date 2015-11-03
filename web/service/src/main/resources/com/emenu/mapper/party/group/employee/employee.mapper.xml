@@ -19,18 +19,24 @@
 
     </select>
 
-    <select id="queryEmployeeRoleByEmployeeId" parameterType="Integer" resultType="Integer">
-        SELECT `role_id` FROM `t_party_employee_role` WHERE `party_id` = #{partyId}
+    <select id="queryRoleByPartyId" parameterType="int" resultType="Integer">
+        SELECT `role_id` AS `roleId`
+        FROM `t_party_employee_role`
+        WHERE `party_id` = #{partyId}
     </select>
 
 
-    <select id="checkEmployeeName" parameterType="String" resultMap="pw.Employee">
+    <select id="queryByName" parameterType="String" resultMap="pw.Employee">
 
-        SELECT `id`,`name`,`status` FROM `t_party_employee` WHERE `name` = #{employeeName}
+        SELECT `id`,
+        `name`,
+        `status`
+        FROM `t_party_employee`
+        WHERE `name` = #{employeeName}
 
     </select>
 
-    <select id="listEmployeeRoleByPartyId" parameterType="Integer"  resultMap="pw.EmployeeRole">
+    <select id="listRoleByPartyId" parameterType="Integer"  resultMap="pw.EmployeeRole">
         SELECT `id` AS `id`,
         `party_id` AS `partyId`,
         `role_id~ AS  `roleId`,
@@ -39,30 +45,39 @@
         from `t_party_employee_role` WHERE `party_id` = #{partyId}
     </select>
 
-    <update id="updateEmployeeStatusByPartyId" >
-        UPDATE `t_party_employee` SET `status` = #{status} WHERE `party_id` = #{partyId}
+    <update id="updateStatusByPartyId" >
+        UPDATE `t_party_employee`
+        SET `status` = #{status}
+        WHERE `party_id` = #{partyId}
     </update>
 
-    <delete id="delEmployeeRoleByPartyId" parameterType="Integer" >
-        DELETE FROM `t_party_employee_role` WHERE `party_id` = #{partyId}
+    <delete id="delRoleByPartyId" parameterType="Integer" >
+        DELETE FROM `t_party_employee_role`
+        WHERE `party_id` = #{partyId}
     </delete>
 
-    <delete id="delEmployeeWaiterTableByPartyId" parameterType="integer">
-        DELETE FROM `t_party_employee_waiter_table` WHERE `party_id` = #{partyId}
+    <delete id="delWaiterTableByPartyId" parameterType="integer">
+        DELETE FROM `t_party_employee_waiter_table`
+        WHERE `party_id` = #{partyId}
     </delete>
 
-    <select id="queryEmployeeByPartyId" parameterType="Integer" resultMap="pw.Employee">
-        SELECT * from `t_party_employee` WHERE `party_id` = #{partyId}
+    <select id="queryByPartyId" parameterType="Integer" resultMap="pw.Employee">
+        SELECT * from `t_party_employee`
+        WHERE `party_id` = #{partyId}
     </select>
 
 
-    <select id="listPartIdByContition" parameterType="java.util.List" resultType="Integer">
+    <select id="listPartIdByRoles" parameterType="java.util.List" resultType="Integer">
         SELECT DISTINCT `party_id`
         from `t_party_employee_role`
         WHERE `role_id` IN
         <foreach collection="roles" index="index" item="roleId" open="(" separator="," close=")">
             #{roleId}
         </foreach>
+    </select>
+
+    <select id="queryByNumber" parameterType="String" resultMap="pw.Employee">
+        SELECT * FROM `t_party_employee` WHERE `employee_number` = #{employeeNumber}
     </select>
 
     <!-- <select id="checkUsername" parameterType="String" resultType="User">

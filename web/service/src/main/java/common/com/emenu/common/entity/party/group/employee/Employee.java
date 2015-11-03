@@ -28,7 +28,7 @@ public class Employee extends AbstractEntity {
 
     //员工编号
     @Column(name = "employee_number")
-    private Integer employeeNumber;
+    private String employeeNumber;
 
     // 员工真实姓名
     private String name;
@@ -104,11 +104,11 @@ public class Employee extends AbstractEntity {
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public Integer getEmployeeNumber() {
+    public String getEmployeeNumber() {
         return employeeNumber;
     }
 
-    public void setEmployeeNumber(Integer employeeNumber) {
+    public void setEmployeeNumber(String employeeNumber) {
         this.employeeNumber = employeeNumber;
     }
 }
