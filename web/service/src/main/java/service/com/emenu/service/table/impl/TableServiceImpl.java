@@ -332,8 +332,15 @@ public class TableServiceImpl implements TableService{
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateQrCode(int id, String qrCodePath) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
+        //检查QrCodePath是否合法
+        if (Assert.isNull(qrCodePath)) {
+            return ;
+        }
         try {
-            //仅更新qrcode_path字段
             tableMapper.updateQrCode(id, qrCodePath);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
