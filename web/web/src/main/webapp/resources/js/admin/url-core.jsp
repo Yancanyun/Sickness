@@ -60,9 +60,9 @@
             ['sendTableName', site.staticWebsite + 'mock/admin/login.json', 'get', '判断餐台名称是否重复'],
 
             //餐台区域管理
-            ['saveNewArea', site.staticWebsite + 'mock/admin/save-new-area.json', 'get', '保存新添加区域信息'],
-            ['saveEditArea', site.staticWebsite + 'mock/admin/login.json', 'get', '保存编辑原有区域信息结果'],
-            ['delAreaId', site.staticWebsite + 'mock/admin/login.json', 'get', '删除餐台区域时，发送需删除的id']
+            ['saveNewArea', site.website + 'admin/restaurant/area/ajax', 'post', '保存新添加区域信息'],
+            ['saveEditArea', site.website + 'admin/restaurant/area/ajax', 'put', '保存编辑原有区域信息结果'],
+            ['delAreaId', site.website + 'admin/restaurant/area/ajax', 'delete', '删除餐台区域时，发送需删除的id']
         ],
         // 菜品管理
         DishManagement: [

@@ -155,7 +155,7 @@
             restaurantManagement:{
                 restaurantManagement:{
                     //保存新添加区域信息
-                    saveNewArea: site.website + 'admin/restaurant/area/ajax/new',
+                    saveNewArea: site.website + 'admin/restaurant/area/ajax',
                     //保存编辑原有区域信息结果
                     saveEditArea: site.website + 'admin/restaurant/area/ajax',
                     //删除餐台区域时，发送需删除的id
