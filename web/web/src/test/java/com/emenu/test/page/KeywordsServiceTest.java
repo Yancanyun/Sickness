@@ -1,11 +1,14 @@
 package com.emenu.test.page;
 
 import com.emenu.common.entity.page.Keywords;
+import com.emenu.common.enums.page.KeywordsEnum;
 import com.emenu.service.page.KeywordsService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * KeywordsServiceTest
@@ -29,15 +32,15 @@ public class KeywordsServiceTest extends AbstractTestCase {
 
     @Test
     public void queryKeywordsByType() throws SSException{
-       /* List<Keywords> orderingList = keywordsService.listByType(0);
-        List<Keywords> waiterList = keywordsService.listByType(3);
+        List<Keywords> orderingList = keywordsService.listByType(KeywordsEnum.Ordering);
+        List<Keywords> waiterList = keywordsService.listByType(KeywordsEnum.WaiterSystem);
 
         for (Keywords keywords:orderingList){
             System.out.println("id:"+keywords.getId()+"  key:"+keywords.getKey()+"  type:"+keywords.getType());
         }
         for (Keywords keywords:waiterList){
             System.out.println("id:"+keywords.getId()+"  key:"+keywords.getKey()+"  type:"+keywords.getType());
-        }*/
+        }
     }
 
     @Test
