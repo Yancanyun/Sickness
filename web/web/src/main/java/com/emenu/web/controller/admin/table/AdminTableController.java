@@ -6,6 +6,7 @@ import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -54,14 +55,14 @@ public class AdminTableController extends AbstractController {
             //若state不为空，则根据状态对餐台进行筛选
             if (state != null && areaId == null) {
                 //不存在多选状态的情况
-                tableDtoList.addAll(tableService.listTableDtoByState(state));
+                tableDtoList.addAll(tableService.listTableDtoByState(TableStateEnums.valueOf(state)));
             }
             //若areaId、state均不为空，则根据区域及状态对餐台进行筛选
             if (areaId != null && state != null) {
                 //可能存在多选区域的情况
                 for (int i : areaId) {
                     if (i > 0) {
-                        tableDtoList.addAll(tableService.listTableDtoByAreaIdAndState(i, state));
+                        tableDtoList.addAll(tableService.listTableDtoByAreaIdAndState(i, TableStateEnums.valueOf(state)));
                     }
                 }
             }

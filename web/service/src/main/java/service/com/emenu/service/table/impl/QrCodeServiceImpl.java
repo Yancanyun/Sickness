@@ -13,6 +13,7 @@ import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.zxing.BarcodeFormat;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -58,13 +60,13 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException {
         //获取网站域名
-        if (webDomain == null || ("").equals(webDomain)) {
+        if (Assert.isNull(webDomain)) {
             webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
         }
         //二维码图片名称
         String qrCodePath = "";
 
-        if (webDomain != null || !("").equals(webDomain)) {
+        if (Assert.isNotNull(webDomain)) {
             //二维码的内容(每一个点餐页的地址)
             //地址未定，暂时按照老版本的地址来
             String qrCodeContext = webDomain + "/touch/index/" + tableId;
@@ -107,11 +109,12 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void newAllQrCode(String webDomain, HttpServletRequest request) throws SSException {
+        List<Table> tableList = Collections.emptyList();
         try {
             //首先更新常量表中的webDomain
             constantService.updateValueByKey(ConstantEnum.WebDomain.getKey(), webDomain);
 
-            List<Table> tableList = tableService.listAll();
+            tableList = tableService.listAll();
 
             //为每张餐台生成二维码
             for (Table t : tableList) {
@@ -126,10 +129,12 @@ public class QrCodeServiceImpl implements QrCodeService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
         }
+        return ;
     }
 
     @Override
     public void downloadByAreaId(int areaId, HttpServletRequest request, HttpServletResponse response) throws SSException {
+        List<QrCodeDto> qrCodeDtoList = Collections.emptyList();
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         File downloadFile = null;
@@ -141,7 +146,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
             String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
             //获取二维码路径
-            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listByAreaId(areaId);
+            qrCodeDtoList = qrCodeMapper.listByAreaId(areaId);
             //打包为zip文件
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载
@@ -187,10 +192,12 @@ public class QrCodeServiceImpl implements QrCodeService {
                 downloadFile.delete();
             }
         }
+        return ;
     }
 
     @Override
     public void downloadAllQrCode(HttpServletRequest request, HttpServletResponse response) throws SSException {
+        List<QrCodeDto> qrCodeDtoList = Collections.emptyList();
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         File downloadFile = null;
@@ -202,7 +209,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
             String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
             //获取二维码路径
-            List<QrCodeDto> qrCodeDtoList = qrCodeMapper.listAll();
+            qrCodeDtoList = qrCodeMapper.listAll();
             //打包为zip文件
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载
@@ -249,6 +256,7 @@ public class QrCodeServiceImpl implements QrCodeService {
                 downloadFile.delete();
             }
         }
+        return ;
     }
 
     /**

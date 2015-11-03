@@ -49,7 +49,7 @@ public class AdminAreaController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantAreaNew)
-    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewArea(Area area) {
         try {

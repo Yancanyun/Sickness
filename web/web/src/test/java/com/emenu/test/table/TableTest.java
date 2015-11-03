@@ -2,6 +2,7 @@ package com.emenu.test.table;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.service.table.TableService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -21,17 +22,17 @@ public class TableTest extends AbstractTestCase {
     @Autowired
     private TableService tableService;
 
-    @Test
-    public void newTable() throws SSException {
-        Table table = new Table();
-        table.setAreaId(2);
-        table.setName("6号桌");
-        table.setSeatNum(10);
-        table.setSeatFee(new BigDecimal(9));
-        table.setTableFee(new BigDecimal(20));
-        table.setMinCost(new BigDecimal(99));
-        tableService.newTable(table);
-    }
+//    @Test
+//    public void newTable() throws SSException {
+//        Table table = new Table();
+//        table.setAreaId(2);
+//        table.setName("6号桌");
+//        table.setSeatNum(10);
+//        table.setSeatFee(new BigDecimal(9));
+//        table.setTableFee(new BigDecimal(20));
+//        table.setMinCost(new BigDecimal(99));
+//        tableService.newTable(table);
+//    }
 
     @Test
     public void queryAllTableItself() throws SSException {
@@ -125,7 +126,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void queryTableDtoByAreaIdAndState() throws SSException {
-        List<TableDto> tableDtoList = tableService.listTableDtoByAreaIdAndState(1, 1);
+        List<TableDto> tableDtoList = tableService.listTableDtoByAreaIdAndState(1, TableStateEnums.Enabled);
         for (TableDto tableDto:tableDtoList){
             System.out.println("area_name:" + tableDto.getAreaName() +
                     "   name:" + tableDto.getTable().getName() + "  seat_num:" + tableDto.getTable().getSeatNum()

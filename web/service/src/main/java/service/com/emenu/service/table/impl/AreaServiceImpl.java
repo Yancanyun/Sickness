@@ -41,14 +41,14 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     public List<Area> listAll() throws SSException {
-        List<Area> list = Collections.emptyList();
+        List<Area> areaList = Collections.emptyList();
         try {
-            list = areaMapper.listAll();
+            areaList = areaMapper.listAll();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryAreaFail, e);
         }
-        return list;
+        return areaList;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     public List<AreaDto> listDto() throws SSException {
-        List<AreaDto> areaDtoList = Collections.emptyList();
+        List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
         try {
             List<Area> areaList = listAll();
             for(Area area : areaList) {

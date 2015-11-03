@@ -2,8 +2,10 @@ package com.emenu.service.table;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.table.TableStateEnums;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -49,7 +51,7 @@ public interface TableService {
      * @return List<TableDto>
      * @throws SSException
      */
-    public List<TableDto> listTableDtoByState(int state) throws SSException;
+    public List<TableDto> listTableDtoByState(TableStateEnums state) throws SSException;
 
     /**
      * 根据状态查询餐台（仅餐台表本身的信息）
@@ -57,7 +59,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listByState(int state) throws SSException;
+    public List<Table> listByState(TableStateEnums state) throws SSException;
 
     /**
      * 根据区域及状态查询餐台（包含区域表中的信息）
@@ -66,7 +68,7 @@ public interface TableService {
      * @return List<TableDto>
      * @throws SSException
      */
-    public List<TableDto> listTableDtoByAreaIdAndState(int areaId, int state) throws SSException;
+    public List<TableDto> listTableDtoByAreaIdAndState(int areaId, TableStateEnums state) throws SSException;
 
     /**
      * 根据区域及状态查询餐台（仅餐台表本身的信息）
@@ -75,7 +77,7 @@ public interface TableService {
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listByAreaIdAndState(int areaId, int state) throws SSException;
+    public List<Table> listByAreaIdAndState(int areaId, TableStateEnums state) throws SSException;
 
     /**
      * 根据ID查询餐台（包含区域表中的信息）
@@ -107,7 +109,7 @@ public interface TableService {
      * @return Table
      * @throws SSException
      */
-    public Table newTable(Table table) throws SSException;
+    public Table newTable(Table table, HttpServletRequest request) throws SSException;
 
     /**
      * 检查是否有重复的餐台名称存在
