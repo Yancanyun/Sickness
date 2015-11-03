@@ -1,14 +1,14 @@
 package com.emenu.service.party.group.vip.impl;
 
+import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.party.group.vip.VipInfo;
-import com.emenu.common.enums.party.AccountTypeEnums;
-import com.emenu.common.enums.party.PartyTypeEnums;
-import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.enums.party.*;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
+import com.emenu.common.utils.WebConstants;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
@@ -18,13 +18,16 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
+import jxl.format.Format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,15 +57,15 @@ public class VipInfoServiceImpl implements VipInfoService{
     public List<VipInfo> listByPage(int curPage, int pageSize) throws SSException{
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
-        if (Assert.lessZero(offset)) {
-            return Collections.emptyList();
-        }
         List<VipInfo> vipInfoList = Collections.<VipInfo>emptyList();
         try{
-            vipInfoList = vipInfoMapper.listByPage(offset, pageSize);
+            if (Assert.lessZero(offset)) {
+                return Collections.emptyList();
+            }
+            vipInfoList = vipInfoMapper.listByPage(curPage, pageSize);
         }catch(Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListUnitFailed, e);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
         return vipInfoList;
     }
@@ -83,11 +86,11 @@ public class VipInfoServiceImpl implements VipInfoService{
     public List<VipInfo> listByKeyword(String keyword, int curPage, int pageSize) throws SSException{
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
-        if (Assert.lessZero(offset)) {
-            return Collections.emptyList();
-        }
-        Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
         try{
+            if (Assert.lessZero(offset)) {
+                return Collections.emptyList();
+            }
+            Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
             return vipInfoMapper.listByKeyword(keyword, curPage, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
@@ -110,11 +113,11 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public VipInfo newVipInfo(VipInfo vipInfo) throws SSException{
-        if (!checkBeforeSave(vipInfo)){
-            return null;
-        }
-
         try{
+            if (!checkBeforeSave(vipInfo)){
+                return null;
+            }
+
             //首先判断手机号是否存在
             String phone = vipInfo.getPhone();
             if (this.checkPhoneIsExist(phone)){
@@ -128,17 +131,19 @@ public class VipInfoServiceImpl implements VipInfoService{
             Party newParty = this.partyService.newParty(party);
             int partyId = newParty.getId();//获取刚插入数据的partyId
 
-            //2.再向t_party_security_user表添加一条登录信息，默认登录名为手机号码，密码为000000；
+            //2.再向t_party_security_user表添加一条登录信息，默认登录名为手机号码，密码为123456；
             SecurityUser securityUser = new SecurityUser();
-            String password = com.pandawork.core.common.util.CommonUtil.md5("123456");
+            String password = CommonUtil.md5("123456");
             securityUser.setPartyId(partyId);
             securityUser.setLoginName(phone);
-            securityUser.setPassword("000000");
+            securityUser.setPassword(password);
             securityUser.setAccountType(AccountTypeEnums.Normal.getId());//正常账户
+            securityUser.setStatus(EnableEnums.Enabled.getId());
             this.securityUserService.newSecurityUser(securityUser);
 
             //3.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
+            vipInfo.setState(UserStatusEnums.Enabled.getId());
             commonDao.insert(vipInfo);
 
             return vipInfo;
@@ -162,9 +167,8 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     public void updateVipInfo(VipInfo vipInfo) throws SSException{
-        Assert.isNotNull(vipInfo);
-
         try{
+            Assert.isNotNull(vipInfo);
             commonDao.update(vipInfo);
         } catch (Exception e){
             LogClerk.errLog.error(e);
@@ -175,10 +179,10 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStateById(int id, UserStatusEnums state) throws SSException{
-        CommonUtil.checkId(id, PartyException.UserIdNotNull);
-        Assert.isNotNull(state, PartyException.UserStatusIllegal);
-
         try {
+            CommonUtil.checkId(id, PartyException.UserIdNotNull);
+            Assert.isNotNull(state, PartyException.UserStatusIllegal);
+
             vipInfoMapper.updateStateById(id, state.getId());
         } catch (Exception e){
             LogClerk.errLog.error(e);
@@ -188,10 +192,10 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     public VipInfo queryById(int id) throws SSException{
-        CommonUtil.checkId(id, EmenuException.VipIdNotNull);
-
         try {
-            return vipInfoMapper.queryById(id);
+            CommonUtil.checkId(id, EmenuException.VipIdNotNull);
+            VipInfo vipInfo = vipInfoMapper.queryById(id);
+            return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);

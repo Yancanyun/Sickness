@@ -30,11 +30,11 @@
             ['sendEmployeeNo', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的编号是否重复'],
 
             // 会员管理
-            ['sendVipId', site.staticWebsite + 'mock/admin/change-vip-status.json', 'get', '改变会员状态时，发送会员id'],
+            ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
             // 会员管理--列表--删除
             ['delVip', site.staticWebsite + 'mock/admin/del-vip.json', 'get', '删除会员时，发送会员id'],
             //会员管理--添加\编辑
-            ['hasVip', site.staticWebsite + 'mock/admin/hasVip.json', 'get', '发送新添加会员的手机号，与数据库进行判重']
+            ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重']
         ],
         //  后台登录
         Login: [

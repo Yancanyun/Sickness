@@ -3,8 +3,10 @@ package com.emenu.web.controller.admin.party.group.vip;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -122,13 +125,51 @@ public class VipInfoController extends AbstractController {
         return "redirect:list";
     }
 
-    /*@Module(ModuleEnums.AdminVipInfoUpdate)
+    @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
-    public String updateVipInfo(@PathVariable("id") int id){
-        try{
-            return "admin/party/group/vip/update";
+    public String toUpdateVipInfo(@PathVariable("id") int id,
+                                  Model model){
+        try {
+            VipInfo vipInfo = vipInfoService.queryById(id);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String birthday = sdf.format(vipInfo.getBirthday());
+            model.addAttribute("vipInfo",vipInfo);
+            model.addAttribute("birthday",birthday);
+        }catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
         }
-    }*/
+        return "admin/party/group/vip/vip_info_update";
+    }
+
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    public String updateVipInfo(@PathVariable("id") Integer id,
+                                @RequestParam("name") String name,
+                                @RequestParam("sex") Integer sex,
+                                @RequestParam("birthday") Date birthday,
+                                @RequestParam("phone") String phone,
+                                @RequestParam("qq") String qq,
+                                @RequestParam("email") String email){
+        try{
+            if (vipInfoService.checkPhoneIsExist(phone)) {
+                throw SSException.get(EmenuException.VipInfoPhoneExist);
+            }
+            VipInfo vipInfo = new VipInfo();
+            vipInfo.setName(name);
+            vipInfo.setSex(sex);
+            vipInfo.setBirthday(birthday);
+            vipInfo.setPhone(phone);
+            vipInfo.setQq(qq);
+            vipInfo.setEmail(email);
+            vipInfoService.updateVipInfo(vipInfo);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "redirect:list";
+    }
 
     /**
      * ajax返回电话号码存在的错误信息
@@ -140,14 +181,13 @@ public class VipInfoController extends AbstractController {
     public JSONObject phoneIsExist(@RequestParam("phone") String phone){
         try{
             if (vipInfoService.checkPhoneIsExist(phone)){
-                throw SSException.get(EmenuException.VipInfoPhoneExist);
-            } else {
-                return sendJsonObject(AJAX_SUCCESS_CODE);
+                return sendJsonObject(AJAX_FAILURE_CODE);
             }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -159,8 +199,8 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject lock(@RequestParam("id") Integer id,
-                           @RequestParam("state") Integer state){
+    public JSONObject updateState(@RequestParam("id") Integer id,
+                                  @RequestParam("state") Integer state){
         try{
             UserStatusEnums vipInfostate = UserStatusEnums.valueOf(state);
             vipInfoService.updateStateById(id, vipInfostate);
@@ -183,7 +223,16 @@ public class VipInfoController extends AbstractController {
                                 Model model){
         try{
             VipInfo vipInfo = vipInfoService.queryById(id);
-            model.addAttribute(vipInfo);
+            Date birthday = vipInfo.getBirthday();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            VipInfoDto vipInfoDto = new VipInfoDto();
+            vipInfoDto.setName(vipInfo.getName());
+            vipInfoDto.setSex(SexEnums.valueOf(vipInfo.getSex()).getSex());
+            vipInfoDto.setBirthday(sdf.format(birthday));
+            vipInfoDto.setPhone(vipInfo.getPhone());
+            vipInfoDto.setQq(vipInfo.getQq());
+            vipInfoDto.setEmail(vipInfo.getEmail());
+            model.addAttribute("vipInfoDto",vipInfoDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

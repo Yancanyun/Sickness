@@ -54,7 +54,7 @@
             <a class="menu-list J_layer_1_menu" data-menu-id="5" href="javascript:;">用户信息管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="javascript:;">用户管理</a></li>
-                <li><a class="J_menu" href="javascript:;">会员管理</a></li>
+                <li><a class="J_menu" href="${website}admin/party/group/vip/">会员管理</a></li>
                 <li><a class="J_menu" href="javascript:;">用户密码修改</a></li>
             </ul>
         </li>
