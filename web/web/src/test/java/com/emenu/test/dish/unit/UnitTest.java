@@ -25,8 +25,8 @@ public class UnitTest extends AbstractTestCase {
     @Test
     public void addUnit() throws SSException {
         Unit unit = new Unit();
-        unit.setName("包");
-        unit.setType(14);
+        unit.setName("碗");
+        unit.setType(2);
         unitService.newUnit(unit);
     }
 
@@ -38,8 +38,8 @@ public class UnitTest extends AbstractTestCase {
     @Test
     public void updateUnit() throws SSException {
         Unit unit = new Unit();
-        unit.setId(14);
-        unit.setName("碗1");
+        unit.setId(15);
+        unit.setName("碗");
         unit.setType(2);
         unitService.updateUnit(unit);
     }
@@ -61,6 +61,8 @@ public class UnitTest extends AbstractTestCase {
         unit = unitService.queryById(2);
         System.out.print(unit.getName());
     }
+
+
 }
 
 

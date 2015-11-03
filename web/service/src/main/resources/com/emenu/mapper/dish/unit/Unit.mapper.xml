@@ -7,11 +7,7 @@
         FROM `t_unit`
     </select>
 
-<<<<<<< HEAD
-    <select id="listUnitByPage" resultMap="pw.Unit">
-=======
     <select id="listByPage" resultMap="pw.Unit">
->>>>>>> master
         SELECT
             *
         FROM
@@ -25,16 +21,8 @@
         FROM
             `t_unit`
     </select>
-<<<<<<< HEAD
-
-    <select id ="queryUnitById" resultMap="pw.Unit">
-        SELECT *
-        FROM `t_dish_unit`
-        WHERE `id`=#{id}
-=======
     <select id ="queryById" resultMap="pw.Unit">
         SELECT * FROM `t_unit` WHERE `id`=#{id}
->>>>>>> master
     </select>
 
 
