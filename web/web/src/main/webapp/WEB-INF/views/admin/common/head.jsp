@@ -22,6 +22,7 @@
     var staticWebsite = '${staticWebsite}';
 </script>
 <script type="text/javascript" src="${website}resources/js/admin/site-config.jsp"></script>
+<script type="text/javascript" src="${website}resources/js/admin/url-core.jsp"></script>
 <script type="text/javascript" src="${staticWebsite}tool/pui2/lib/kissy/seed.js"></script>
 <script type="text/javascript" src="${staticWebsite}tool/base-widget/js/widget/loading2.js"></script>
 

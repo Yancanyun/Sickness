@@ -34,7 +34,7 @@
 
     <!-- 会话Cookie 模板， 仅仅是当前回话有效 -->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg value="sid"/>
+        <constructor-arg value="tgt"/>
         <property name="httpOnly" value="true"/>
     </bean>
 

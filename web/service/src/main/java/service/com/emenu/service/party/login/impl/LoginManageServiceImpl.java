@@ -15,6 +15,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.session.ExpiredSessionException;
 import org.apache.shiro.session.UnknownSessionException;
@@ -42,6 +43,8 @@ public class LoginManageServiceImpl implements LoginManageService {
     // 登录用户的cookie标识
     public static final String USER_ID_COOKIE_NAME = "uid";
 
+    public static final String TGT_COOKIE_NAME = "tgt";
+
     @Autowired
     @Qualifier("subjectStoreLRUImpl")
     private SubjectStore subjectStore;
@@ -61,9 +64,12 @@ public class LoginManageServiceImpl implements LoginManageService {
     @Override
     public Subject isLogined(HttpServletRequest request) throws SSException {
         Subject subject = null;
-        String uidCookie = this.queryCookieValue(request, USER_ID_COOKIE_NAME);
-        // 用户ID为空，则说明用户没登录过
-        if (Assert.isNull(uidCookie)) {
+        String uidStr = this.queryCookieValue(request, USER_ID_COOKIE_NAME);
+        if (Assert.isNull(uidStr)) {
+            uidStr = request.getParameter(USER_ID_COOKIE_NAME);
+        }
+        // 如果两个都没有，则说明用户没登录过
+        if (Assert.isNull(uidStr)) {
             return subject;
         }
 
@@ -102,7 +108,7 @@ public class LoginManageServiceImpl implements LoginManageService {
         Integer uid = user.getId();
         EnableEnums statusEnums = EnableEnums.valueOf(user.getId());
         if (Assert.isNull(uid)
-                || !uid.toString().equals(uidCookie)
+                || !uid.toString().equals(uidStr)
                 || Assert.isNull(statusEnums)
                 || statusEnums.equals(EnableEnums.Disabled)) {
             return null;
@@ -205,13 +211,19 @@ public class LoginManageServiceImpl implements LoginManageService {
     @Override
     public Subject querySubject(HttpServletRequest request) throws SSException {
         // 获取subject cookie
-        String subjectCookie = this.queryCookieValue(request, simpleCookie.getName());
+        String subjectId = this.queryCookieValue(request, simpleCookie.getName());
+        // 如果cookie没有，判断是否在参数中
+        if (Assert.isNull(subjectId)) {
+            subjectId = request.getParameter(subjectId);
+        }
         // tgt为空,说明用户没有登录过
-        if (Assert.isNull(subjectCookie)) {
+        if (Assert.isNull(subjectId)) {
             return null;
         }
 
-        Subject subject = subjectStore.querySubject(subjectCookie);
+        // decode
+        subjectId = Base64.decodeToString(subjectId);
+        Subject subject = subjectStore.querySubject(subjectId);
 
         return subject;
     }
@@ -250,6 +262,8 @@ public class LoginManageServiceImpl implements LoginManageService {
             cookie.setMaxAge(DateUtils.SECONDS_OF_ONE_MONTH);
         }
         String idString = sessionId.toString();
+        // base64 encode
+        idString = Base64.encodeToString(idString.getBytes());
         cookie.setValue(idString);
         cookie.saveTo(request, response);
     }
