@@ -1,6 +1,7 @@
 package com.emenu.test.page;
 
 import com.emenu.common.entity.page.IndexImg;
+import com.emenu.common.enums.page.IndexImgEnum;
 import com.emenu.service.page.IndexImgService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -31,7 +32,7 @@ public class IndexImgServiceTest extends AbstractTestCase {
     @Test
     public void updateIndexImg() throws SSException {
         IndexImg indexImg = indexImgService.queryByState(1);
-        //indexImgService.updateStateById(indexImg.getId(), 0);
+        indexImgService.updateStateById(indexImg.getId(), IndexImgEnum.UnUsing);
     }
 
     @Test
