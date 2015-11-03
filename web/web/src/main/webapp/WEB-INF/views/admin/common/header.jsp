@@ -38,8 +38,8 @@
         <li >
             <a class="menu-list J_layer_1_menu" data-menu-id="3" href="javascript:;">菜品管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a class="J_menu" href="javascript:;">菜品单位管理</a></li>
-                <li><a class="J_menu" href="javascript:;">菜品分类管理</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/unit">菜品单位管理</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a></li>
                 <li><a class="J_menu" href="javascript:;">菜品管理</a></li>
             </ul>
         </li>
