@@ -56,7 +56,7 @@ public class AdminTagController extends AbstractController{
         }
 
         JSONArray jsonArray = new JSONArray();
-        for (Tag tag:tagList){
+        for (Tag tag:tagList) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", tag.getId());
             jsonObject.put("name", tag.getName());

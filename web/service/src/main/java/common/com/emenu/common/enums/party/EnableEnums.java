@@ -12,7 +12,7 @@ import java.util.Map;
 public enum EnableEnums {
 
     Enabled(1, "启用"),
-    Disabled(2, "禁用");
+    Disabled(0, "禁用");
 
     private Integer id;
     private String status;
