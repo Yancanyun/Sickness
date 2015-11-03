@@ -79,7 +79,7 @@ public class AdminUnitController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishUnitNew)
-    @RequestMapping(value = "ajax/unit", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewDishUnit(Unit unit){
         try{
@@ -97,7 +97,7 @@ public class AdminUnitController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishUnitUpdate)
-    @RequestMapping(value = "ajax/unit",method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax",method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateDishUnit(Unit unit){
         try{
@@ -115,7 +115,7 @@ public class AdminUnitController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishUnitDel)
-    @RequestMapping(value = "ajax/unit/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDelDishUint(@PathVariable("id") Integer id){
         try{

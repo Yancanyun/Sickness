@@ -32,6 +32,9 @@ public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
     private Integer weight;
     //类别类型，如果为1则为菜品类别，2为原料类别
     private Integer type;
+    //上菜时限
+    @Column(name = "time_limit")
+    private Integer timeLimit;
     //下单之后是否立即打印(0-不立即打印,1-立即打印)
     @Column(name = "print_after_confirm_order")
     private Integer printAfterConfirmOrder;
@@ -96,6 +99,14 @@ public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(Integer timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
     public Integer getPrintAfterConfirmOrder() {

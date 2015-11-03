@@ -68,12 +68,14 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public int countUnit() throws SSException {
+        Integer count = 0;
         try{
-            return unitMapper.countUnit();
+            count = unitMapper.countUnit();
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
+        return count == null ? 0 : count;
     }
 
     /**
@@ -85,11 +87,11 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public Unit queryById(int id) throws SSException {
-        // 检查id是否<=0，如果是，直接返回
-        if (Assert.lessOrEqualZero(id)) {
-            throw SSException.get(EmenuException.UnitIdError);
-        }
         try {
+            // 检查id是否<=0，如果是，直接返回
+            if (Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.UnitIdError);
+            }
             return commonDao.queryById(Unit.class, id);
         }catch(Exception e){
             LogClerk.errLog.error(e);
@@ -105,13 +107,13 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public Unit newUnit(Unit unit) throws SSException {
-        if(Assert.isNull(unit.getName())){
-            throw SSException.get(EmenuException.UnitNameError);
-        }
-        if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
-            throw SSException.get(EmenuException.UnitTypeError);
-        }
         try {
+            if(Assert.isNull(unit.getName())){
+                throw SSException.get(EmenuException.UnitNameError);
+            }
+            if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
+                throw SSException.get(EmenuException.UnitTypeError);
+            }
             return commonDao.insert(unit);
         }catch(Exception e){
             LogClerk.errLog.error(e);
@@ -127,11 +129,11 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public void delById(int id) throws SSException {
-        // 检查id是否<=0，如果是，直接返回
-        if (Assert.lessOrEqualZero(id)) {
-            throw SSException.get(EmenuException.UnitIdError);
-        }
         try {
+            // 检查id是否<=0，如果是，直接返回
+            if (Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.UnitIdError);
+            }
             commonDao.deleteById(Unit.class, id);
         }catch(Exception e){
             LogClerk.errLog.error(e);
@@ -147,17 +149,17 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public void updateUnit(Unit unit) throws SSException {
-        // 检查id是否<=0，如果是，直接返回
-        if (!Assert.isNull(unit.getId()) && Assert.lessOrEqualZero(unit.getId())) {
-            throw SSException.get(EmenuException.UnitIdError);
-        }
-        if(Assert.isNull(unit.getName())){
-            throw SSException.get(EmenuException.UnitNameError);
-        }
-        if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
-            throw SSException.get(EmenuException.UnitTypeError);
-        }
         try {
+            // 检查id是否<=0，如果是，直接返回
+            if (!Assert.isNull(unit.getId()) && Assert.lessOrEqualZero(unit.getId())) {
+                throw SSException.get(EmenuException.UnitIdError);
+            }
+            if(Assert.isNull(unit.getName())){
+                throw SSException.get(EmenuException.UnitNameError);
+            }
+            if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
+                throw SSException.get(EmenuException.UnitTypeError);
+            }
             commonDao.update(unit);
         }catch(Exception e){
             LogClerk.errLog.error(e);
