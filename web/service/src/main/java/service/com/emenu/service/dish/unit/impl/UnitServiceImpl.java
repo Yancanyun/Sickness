@@ -114,7 +114,7 @@ public class UnitServiceImpl implements UnitService {
                 throw SSException.get(EmenuException.UnitNameError);
             }
             //检查用户名是否存在
-            if(checkNameIsExist(unit.getName())){
+            if(checkNameIsExist(unit.getName(), null)){
                 throw SSException.get(EmenuException.UnitNameIsExist);
             }
             if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
@@ -167,8 +167,8 @@ public class UnitServiceImpl implements UnitService {
             if(Assert.isNull(unit.getName())){
                 throw SSException.get(EmenuException.UnitNameError);
             }
-            //检查用户名是否存在
-            if(checkNameIsExist(unit.getName())){
+            //检查用户名是否存在,排除原来的用户名
+            if(checkNameIsExist(unit.getName(), unitMapper.queryById(unit.getId()).getName())){
                 throw SSException.get(EmenuException.UnitNameIsExist);
             }
             if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){
@@ -187,10 +187,10 @@ public class UnitServiceImpl implements UnitService {
      * @return
      * @throws SSException
      */
-    private boolean checkNameIsExist(String name) throws SSException {
+    private boolean checkNameIsExist(String name, String oldname) throws SSException {
         int count = 0;
         try {
-            count = unitMapper.checkNameIsExist(name);
+            count = unitMapper.checkNameIsExist(name,oldname);
         } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryUnitFailed, e);

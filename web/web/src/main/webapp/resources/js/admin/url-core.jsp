@@ -91,9 +91,9 @@
             ['delAuthority', site.website + 'admin/party/security/permission/ajax', 'delete', '删除权限时，发送权限id'],
 
             //authority-group-list.html
-            ['saveAuthorityGroup', site.staticWebsite + 'mock/admin/save-authority.json', 'get', '保存编辑后的权限组'],
-            ['saveNewAuthorityGroup', site.staticWebsite + 'mock/admin/save-authority.json', 'get', '保存新添加的权限组'],
-            ['deleteAuthorityGroup', site.staticWebsite + 'mock/admin/login.json', 'get', '删除权限时，发送权限组id'],
+            ['saveAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax', 'put', '保存编辑后的权限组'],
+            ['saveNewAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax', 'post', '保存新添加的权限组'],
+            ['deleteAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax/&{id}', 'delete', '删除权限时，发送权限组id'],
 
             //authority-group-config.html
             ['delAuthorityOfGroup', site.staticWebsite + 'mock/admin/login.json', 'get', '权限组配置页面，删除权限']
