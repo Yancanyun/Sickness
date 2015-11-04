@@ -94,8 +94,12 @@ public class EmployeeServiceImpl implements EmployeeService{
                     //数据存入dto
                 employeeDto.setRole(roles);
                 employeeDto.setRoleName(roleNames);
-                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
-
+                if(employee.getStatus()==1) {
+                    employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                }
+                if(employee.getStatus()==2){
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                }
                 SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
                 employeeDto.setLoginName(securityUser.getLoginName());
 

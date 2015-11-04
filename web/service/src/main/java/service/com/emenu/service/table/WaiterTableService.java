@@ -1,5 +1,6 @@
 package com.emenu.service.table;
 
+import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.table.WaiterTable;
 import com.pandawork.core.common.exception.SSException;
 
@@ -19,4 +20,14 @@ public interface WaiterTableService {
      */
 
     public void insertWaiterTable(List<WaiterTable> waiterTables) throws SSException;
+
+    /**
+     * 查询服务员服务的餐桌
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> queryByPartyId(int partyId) throws SSException;
+
+    public List<AreaDto> queryAreaDtoByPartyId(int partyId) throws SSException;
 }

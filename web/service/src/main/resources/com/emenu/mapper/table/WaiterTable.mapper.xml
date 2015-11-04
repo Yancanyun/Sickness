@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.table.WaiterTableMapper">
+    <select id="queryByPartyId" parameterType="int" resultType="Integer">
+        SELECT `table_id` As `tableId`
+        FROM t_party_employee_waiter_table
+        WHERE `party_Id` = #{partyId}
+    </select>
+</mapper>

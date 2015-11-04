@@ -4,22 +4,22 @@
 <script type="text/template" id="tooltipTpl">
   {@each list as it}
   <p class="text-center">
-    <span>&{it.region}</span>
-    <span>&{it.table}</span>
+    <span>&{it.area}:</span>
+    <span>&{it.tables}</span>
   </p>
   {@/each}
 </script>
 <script type="text/template" id="searchTpl">
   {@each list as it}
-  <tr data-employee-id="&{it.id}">
+  <tr data-employee-id="&{it.id}" data-party-id = "&{it.partyId}">
     <td>&{it.loginName}</td>
     <td>&{it.name}</td>
     <td>&{it.phone}</td>
     <td>
-      {@each it.role as item}
-      {@if item == 0}吧台{@/if}
-      {@if item == 1}<a class="tool-tip" href="javascript:;" data-tooltip-toggle="tooltip" data-tooltip-placement="bottom" data-tooltip-text="123">服务员</a>{@/if}
-      {@if item == 2}后厨{@/if}
+      {@each it.roles as item}
+      {@if item == 2}吧台{@/if}
+      {@if item == 4}<a class="tool-tip" href="javascript:;" data-tooltip-toggle="tooltip" data-tooltip-placement="bottom" data-tooltip-text="123">服务员</a>{@/if}
+      {@if item == 3}后厨{@/if}
       {@/each}
     </td>
     <td data-employee-status="&{it.status}" class="J_status">
@@ -32,7 +32,7 @@
       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;启用</a>
       {@/if}
       {@if it.status == 2}
-      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-circle"></i>&nbsp;停用</a>
+      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-circle"></i>&nbsp;禁用</a>
       {@/if}
       <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
     </td>
