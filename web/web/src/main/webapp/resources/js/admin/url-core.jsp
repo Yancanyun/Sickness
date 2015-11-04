@@ -43,21 +43,18 @@
         // 基本信息管理
         BaseInfoManagement: [
             // 搜索风向标
-            ['addOrder', site.website + 'admin/keywords/ajax', 'post', '添加风向标关键字'],
-            ['delOrder', site.website + 'admin/keywords/ajax/&{id}', 'delete', '删除风向标关键字']
+            ['addOrder', site.staticWebsite + 'mock/admin/add-order.json', 'get', '添加风向标关键字'],
+            ['delOrder', site.staticWebsite + 'mock/admin/del-order.json', 'get', '删除风向标关键字']
 
-            // 首页图片管理
-            ['delImg', site.website + 'admin/index/img/ajax/{imgId}', 'delete', '删除图片'],
-            ['setImg', site.website + 'admin/index/img/ajax/{imgId}', 'put', '设置图片为首页']
         ],
         // 饭店管理
         RestaurantManagement: [
             //餐台管理--列表
             //table-management-list.html
-            ['changeState', site.staticWebsite + 'mock/admin/login.json', 'get', '改变餐台状态（停用、恢复）'],
-            ['delOneTable', site.staticWebsite + 'mock/admin/login.json', 'get', '删除单个餐台'],
-            ['searchTable', site.staticWebsite + 'mock/admin/table-list.json', 'get', '搜索餐台'],
-            ['batchDelete', site.staticWebsite + 'mock/admin/login.json', 'get', '批量删除'],
+            ['changeState', site.website + 'admin/restaurant/table/ajax/state', 'put', '改变餐台状态（停用、恢复）'],
+            ['delOneTable', site.website + 'admin/restaurant/table/ajax/&{id}', 'delete', '删除单个餐台'],
+            ['searchTable', site.website + 'admin/restaurant/table/ajax/list', 'get', '搜索餐台'],
+            ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
             //餐台管理--添加\编辑
             //table-management-add.html
             ['sendTableName', site.staticWebsite + 'mock/admin/login.json', 'get', '判断餐台名称是否重复'],
