@@ -10,6 +10,7 @@ import com.emenu.common.entity.table.Table;
  */
 public class TableDto {
     private Table table;
+    private String areaId;
     private String areaName;
     private String state;
 
@@ -19,6 +20,14 @@ public class TableDto {
 
     public void setTable(Table table) {
         this.table = table;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 
     public String getAreaName() {

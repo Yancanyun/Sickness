@@ -128,12 +128,19 @@ public interface TableService {
 
     /**
      * 修改餐台二维码信息
-     *
      * @param id
      * @param qrCodePath
      * @throws SSException
      */
     public void updateQrCode(int id, String qrCodePath) throws SSException;
+
+    /**
+     * 修改餐台状态
+     * @param id
+     * @param state
+     * @throws SSException
+     */
+    public void updateState(int id, int state) throws SSException;
 
     /**
      * 删除餐台

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Controller
 @Module(ModuleEnums.AdminRestaurantArea)
-@RequestMapping(value = URLConstants.AREA_URL)
+@RequestMapping(value = URLConstants.ADMIN_AREA_URL)
 public class AdminAreaController extends AbstractController {
     /**
      * 去餐台区域管理页
