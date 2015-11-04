@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
                 <div class="col-sm-4 col-sm-offset-4">
-                    <img class="img-responsive" src="${tinyStaticWebsite}${defaultImg.imgPath}" alt="顾客点餐平台首页">
+                    <img class="img-responsive" src="/resources/img/admin/base-info/index.jpg" alt="顾客点餐平台首页">
                 </div>
             </div>
         </div>
@@ -33,18 +33,18 @@
                 <hr>
                 <div class="col-sm-12 margin-bottom-15">
                     <div class="row">
-                        <c:forEach var="indexImg" items="${indexImgList}">
-                            <div class="col-sm-3 text-center">
-                                <img class="img-responsive" src="${tinyStaticWebsite}${indexImg.imgPath}"
-                                     alt="顾客点餐平台首页备选图片">
-                                <c:if test="${indexImg.id == defaultImg.id}">
-                                    <h5 class="margin-top-15">当前顾客点餐平台首页</h5>
-                                </c:if>
-                                <c:if test="${indexImg.id != defaultImg.id}">
-                                    <button class="margin-top-15 btn btn-success" type="button"><i class="fa fa-check"></i>&nbsp;点击设置为首页</button>
-                                </c:if>
-                            </div>
-                        </c:forEach>
+                        <div class="col-sm-3 text-center">
+                            <img class="img-responsive" src="/resources/img/admin/base-info/index.jpg" alt="顾客点餐平台首页备选图片">
+                            <h5 class="margin-top-15">当前顾客点餐平台首页</h5>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                            <img class="img-responsive" src="/resources/img/admin/base-info/index1.jpg" alt="顾客点餐平台首页备选图片">
+                            <a class="margin-top-15 btn btn-success" href="#"><i class="fa fa-check"></i>&nbsp;点击设置为首页</a>
+                        </div>
+                        <div class="col-sm-3 text-center">
+                            <img class="img-responsive" src="/resources/img/admin/base-info/index3.jpg" alt="顾客点餐平台首页备选图片">
+                            <a class="margin-top-15 btn btn-success" href="#"><i class="fa fa-check"></i>&nbsp;点击设置为首页</a>
+                        </div>
                     </div>
                 </div>
                 <h4>上传图片</h4>

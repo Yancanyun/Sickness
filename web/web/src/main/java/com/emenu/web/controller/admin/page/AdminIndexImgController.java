@@ -48,7 +48,7 @@ public class AdminIndexImgController extends AbstractController{
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/indexImg/list_home";
+        return "admin/page/indexImg/list_home";
     }
 
     /**
@@ -78,7 +78,7 @@ public class AdminIndexImgController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminBasicInfoIndexImgUpdate)
-    @RequestMapping(value = "ajax/state/update/{imgId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax/{imgId}", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxChangeIndexImg(@PathVariable("imgId") Integer imgId) {
         try {
@@ -99,7 +99,7 @@ public class AdminIndexImgController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminBasicInfoIndexImgDel)
-    @RequestMapping(value = "ajax/del/{imgId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/{imgId}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDeleteImg(@PathVariable("imgId") Integer imgId){
         try {

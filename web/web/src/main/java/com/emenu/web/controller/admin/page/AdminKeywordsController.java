@@ -48,7 +48,7 @@ public class AdminKeywordsController extends AbstractController {
             sendErrMsg(e.getMessage());
             return PUB_SYS_ERR_PAGE;
         }
-        return "admin/keywords/list";
+        return "admin/page/keywords/list_home";
     }
 
     /**
@@ -58,13 +58,13 @@ public class AdminKeywordsController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminBasicInfoKeywordsNew)
-    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewKeywords(Keywords keywords) {
         try {
             Keywords newKeywords = keywordsService.newKeywords(keywords);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("keywordsId", newKeywords.getId());
+            jsonObject.put("id", newKeywords.getId());
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -79,7 +79,7 @@ public class AdminKeywordsController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminBasicInfoKeywordsDel)
-    @RequestMapping(value = "ajax/del/{keywordsId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/{keywordsId}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDeleteKeywords(@PathVariable Integer keywordsId){
         try {

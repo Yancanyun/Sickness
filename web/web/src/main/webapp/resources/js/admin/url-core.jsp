@@ -43,9 +43,12 @@
         // 基本信息管理
         BaseInfoManagement: [
             // 搜索风向标
-            ['addOrder', site.staticWebsite + 'mock/admin/add-order.json', 'get', '添加风向标关键字'],
-            ['delOrder', site.staticWebsite + 'mock/admin/del-order.json', 'get', '删除风向标关键字']
+            ['addOrder', site.website + 'admin/keywords/ajax', 'post', '添加风向标关键字'],
+            ['delOrder', site.website + 'admin/keywords/ajax/&{id}', 'delete', '删除风向标关键字']
 
+            // 首页图片管理
+            ['delImg', site.website + 'admin/index/img/ajax/{imgId}', 'delete', '删除图片'],
+            ['setImg', site.website + 'admin/index/img/ajax/{imgId}', 'put', '设置图片为首页']
         ],
         // 饭店管理
         RestaurantManagement: [
