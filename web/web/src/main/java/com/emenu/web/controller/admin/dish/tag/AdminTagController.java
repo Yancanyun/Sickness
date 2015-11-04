@@ -81,7 +81,7 @@ public class AdminTagController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishTagNew)
-    @RequestMapping(value = "ajax/tag", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewTag(Tag tag){
         try{
@@ -99,7 +99,7 @@ public class AdminTagController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishTagUpdate)
-    @RequestMapping(value = "ajax/tag",method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax",method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateTag(Tag tag){
         try{
@@ -117,7 +117,7 @@ public class AdminTagController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminDishTagDel)
-    @RequestMapping(value = "ajax/tag/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
         try{

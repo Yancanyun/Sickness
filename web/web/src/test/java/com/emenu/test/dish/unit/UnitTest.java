@@ -39,7 +39,7 @@ public class UnitTest extends AbstractTestCase {
     public void updateUnit() throws SSException {
         Unit unit = new Unit();
         unit.setId(15);
-        unit.setName("碗");
+        unit.setName("卷");
         unit.setType(2);
         unitService.updateUnit(unit);
     }

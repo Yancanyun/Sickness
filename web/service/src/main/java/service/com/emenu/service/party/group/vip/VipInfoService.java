@@ -1,6 +1,7 @@
 package com.emenu.service.party.group.vip;
 
 
+import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.pandawork.core.common.exception.SSException;

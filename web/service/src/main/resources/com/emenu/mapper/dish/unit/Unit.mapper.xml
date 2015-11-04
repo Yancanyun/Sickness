@@ -37,6 +37,9 @@
         FROM
             t_unit
         WHERE `name` = #{name}
+        <if test="oldname != null">
+            AND `name` != #{oldname}
+        </if>
     </select>
 
 

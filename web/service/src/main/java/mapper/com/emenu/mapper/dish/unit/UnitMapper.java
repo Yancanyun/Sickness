@@ -50,5 +50,6 @@ public interface UnitMapper {
      * @return
      * @throws SSException
      */
-    public int checkNameIsExist(@Param("name") String name) throws SSException;
+    public int checkNameIsExist(@Param("name") String name,
+                                @Param("oldname") String oldname) throws SSException;
 }
