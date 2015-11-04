@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
                 <div class="col-sm-4 col-sm-offset-4">
-                    <img class="img-responsive" src="/resources/img/admin/base-info/index.jpg" alt="顾客点餐平台首页">
+                    <img class="img-responsive J_currentIndexImg" src="${tinyWebsite}${defaultImg.imgPath}" alt="顾客点餐平台首页">
                 </div>
             </div>
         </div>
@@ -33,18 +33,27 @@
                 <hr>
                 <div class="col-sm-12 margin-bottom-15">
                     <div class="row">
-                        <div class="col-sm-3 text-center">
-                            <img class="img-responsive" src="/resources/img/admin/base-info/index.jpg" alt="顾客点餐平台首页备选图片">
-                            <h5 class="margin-top-15">当前顾客点餐平台首页</h5>
-                        </div>
-                        <div class="col-sm-3 text-center">
-                            <img class="img-responsive" src="/resources/img/admin/base-info/index1.jpg" alt="顾客点餐平台首页备选图片">
-                            <a class="margin-top-15 btn btn-success" href="#"><i class="fa fa-check"></i>&nbsp;点击设置为首页</a>
-                        </div>
-                        <div class="col-sm-3 text-center">
-                            <img class="img-responsive" src="/resources/img/admin/base-info/index3.jpg" alt="顾客点餐平台首页备选图片">
-                            <a class="margin-top-15 btn btn-success" href="#"><i class="fa fa-check"></i>&nbsp;点击设置为首页</a>
-                        </div>
+                        <c:if test="${!empty defaultImg}">
+                            <div class="col-sm-3 text-center">
+                                <div class="img-container J_imgContainer J_indexImg" data-img-id="${defaultImg.id}">
+                                    <img class="img-responsive" src="${tinyWebsite}${defaultImg.imgPath}" alt="顾客点餐平台首页备选图片">
+                                    <h5 class="margin-top-15">当前顾客点餐平台首页</h5>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${!empty indexImgList}">
+                            <c:forEach var="indexImg" items="${indexImgList}">
+                                <c:if test="${indexImg.id ne defaultImg.id}">
+                                    <div class="col-sm-3 text-center">
+                                        <div class="img-container J_imgContainer" data-img-id="${indexImg.id}">
+                                            <img class="img-responsive" src="${tinyWebsite}${indexImg.imgPath}" alt="顾客点餐平台首页备选图片">
+                                            <a href="javascript:;" class="J_del del"><i class="fa fa-times"></i></a>
+                                            <a class="margin-top-15 btn btn-success J_set" href="javascript:;"><i class="fa fa-check"></i>&nbsp;点击设置为首页</a>
+                                        </div>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </c:if>
                     </div>
                 </div>
                 <h4>上传图片</h4>

@@ -10,6 +10,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,7 +84,10 @@ public class AdminIndexImgController extends AbstractController{
     public JSONObject ajaxChangeIndexImg(@PathVariable("imgId") Integer imgId) {
         try {
             IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using.getId());
-            indexImgService.updateStateById(defaultImg.getId(), IndexImgEnum.UnUsing);
+            if (!Assert.isNull(defaultImg)){
+                if (!Assert.lessOrEqualZero(defaultImg.getId()))
+                indexImgService.updateStateById(defaultImg.getId(), IndexImgEnum.UnUsing);
+            }
             indexImgService.updateStateById(imgId, IndexImgEnum.Using);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
