@@ -125,16 +125,23 @@ public class VipInfoController extends AbstractController {
         return "redirect:list";
     }
 
+    /**
+     * 跳修改会员信息页
+     * @param id
+     * @param model
+     * @return
+     */
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateVipInfo(@PathVariable("id") int id,
                                   Model model){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
             VipInfo vipInfo = vipInfoService.queryById(id);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String birthday = sdf.format(vipInfo.getBirthday());
             model.addAttribute("vipInfo",vipInfo);
-            model.addAttribute("birthday",birthday);
+            model.addAttribute("birthday",birthday == null ? "" : birthday);
         }catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -143,8 +150,20 @@ public class VipInfoController extends AbstractController {
         return "admin/party/group/vip/vip_info_update";
     }
 
-    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public String updateVipInfo(@PathVariable("id") Integer id,
+    /**
+     * 修改会员信息
+     * @param id
+     * @param name
+     * @param sex
+     * @param birthday
+     * @param phone
+     * @param qq
+     * @param email
+     * @return
+     */
+    @Module(ModuleEnums.AdminVipInfoUpdate)
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    public String updateVipInfo(@RequestParam("id") Integer id,
                                 @RequestParam("name") String name,
                                 @RequestParam("sex") Integer sex,
                                 @RequestParam("birthday") Date birthday,
@@ -152,9 +171,10 @@ public class VipInfoController extends AbstractController {
                                 @RequestParam("qq") String qq,
                                 @RequestParam("email") String email){
         try{
-            if (vipInfoService.checkPhoneIsExist(phone)) {
+            if (vipInfoService.checkPhoneIsExist(id, phone)){
                 throw SSException.get(EmenuException.VipInfoPhoneExist);
             }
+
             VipInfo vipInfo = new VipInfo();
             vipInfo.setName(name);
             vipInfo.setSex(sex);
@@ -172,15 +192,34 @@ public class VipInfoController extends AbstractController {
     }
 
     /**
+     * ajax删除（更改状态为3，隐藏不显示）
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/ajax/del", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxDel(@RequestParam("id") Integer id){
+        try{
+            Integer ids = id;
+            vipInfoService.updateStateById(id, UserStatusEnums.Deleted);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
      * ajax返回电话号码存在的错误信息
      * @param phone
      * @return
      */
     @RequestMapping(value = "phone/ajax/exist", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject phoneIsExist(@RequestParam("phone") String phone){
+    public JSONObject phoneIsExist(@RequestParam("phone") String phone,
+                                   @RequestParam("id") Integer id){
         try{
-            if (vipInfoService.checkPhoneIsExist(phone)){
+            if (vipInfoService.checkPhoneIsExist(id, phone)){
                 return sendJsonObject(AJAX_FAILURE_CODE);
             }
         } catch (SSException e) {

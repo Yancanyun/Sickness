@@ -16,13 +16,13 @@
         </td>
         <td>
             {@if it.state == 2}
-            <a href="${website}admin/party/group/vip/ajax/state/" class="label-info J_change"><i class="fa fa-check"></i>&nbsp;启用</a>
+            <a href="javascript:;" class="label-info J_change"><i class="fa fa-check"></i>&nbsp;启用</a>
             {@/if}
             {@if it.state == 1}
-            <a href="${website}admin/party/group/vip/ajax/state/" class="label-info J_change"><i class="fa fa-circle"></i>&nbsp;停用</a>
+            <a href="javascript:;" class="label-info J_change"><i class="fa fa-circle"></i>&nbsp;停用</a>
             {@/if}
             <a href="${website}admin/party/group/vip/update/&{it.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-            <a href="${website}admin/party/group/vip/ajax/del" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+            <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
             <a href="${website}admin/party/group/vip/detail/&{it.id}" class="label-info"><i class="fa fa-info-circle"></i>&nbsp;查看详情</a>
             <a href="#" class="label-info"><i class="fa fa-list-ul"></i>&nbsp;消费详情</a>
         </td>

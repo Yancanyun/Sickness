@@ -30,7 +30,7 @@
             <div class="col-sm-6">
               <div class="radio">
                 <label>
-                  <input type="radio" value="0" name="sex">未说明
+                  <input type="radio" value="0" name="sex" checked="checked">未说明
                 </label>
                 <label>
                   <input type="radio" value="1" name="sex">男

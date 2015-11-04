@@ -62,7 +62,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             if (Assert.lessZero(offset)) {
                 return Collections.emptyList();
             }
-            vipInfoList = vipInfoMapper.listByPage(curPage, pageSize);
+            vipInfoList = vipInfoMapper.listByPage(offset, pageSize);
         }catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipInfoFail, e);
@@ -120,7 +120,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
             //首先判断手机号是否存在
             String phone = vipInfo.getPhone();
-            if (this.checkPhoneIsExist(phone)){
+            if (this.checkPhoneIsExist(vipInfo.getId(), phone)){
                 return null;
             }
 
@@ -154,10 +154,20 @@ public class VipInfoServiceImpl implements VipInfoService{
     }
 
     @Override
-    public boolean checkPhoneIsExist(String phone) throws SSException{
+    public boolean checkPhoneIsExist(Integer id, String phone) throws SSException{
         Integer count = 0;
         try{
-            count = vipInfoMapper.countByPhone(phone);
+            //如果id为空，则当前为添加会员
+            //id不为空，则当前为修改会员信息
+            if (id == null){
+                count = vipInfoMapper.countByPhone(phone);
+            }
+            else {
+                String oldPhone = this.queryById(id).getPhone();
+                if (id != null && oldPhone.equals(phone)){
+                    return count < 0;
+                }
+            }
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
@@ -168,6 +178,9 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     public void updateVipInfo(VipInfo vipInfo) throws SSException{
         try{
+            if (!checkBeforeSave(vipInfo)){
+                return ;
+            }
             Assert.isNotNull(vipInfo);
             commonDao.update(vipInfo);
         } catch (Exception e){

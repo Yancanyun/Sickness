@@ -36,12 +36,12 @@ public class VipInfoServiceTest extends AbstractTestCase {
         System.out.println(number);
     }
 
-    @Test
+    /*@Test
     public void checkPhoneIsExist() throws SSException{
         String phone = "18543131024";
         boolean isExist = vipInfoService.checkPhoneIsExist(phone);
         System.out.println(isExist);
-    }
+    }*/
 
     @Test
     public void updateVipInfoStateById() throws SSException{

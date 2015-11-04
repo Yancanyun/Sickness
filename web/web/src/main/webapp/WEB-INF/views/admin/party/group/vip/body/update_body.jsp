@@ -3,6 +3,7 @@
   Time: 2015/11/3 09:54
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row">
   <div class="col-sm-12">
     <ol class="breadcrumb">
@@ -13,12 +14,14 @@
     <h2>会员管理-编辑会员</h2>
   </div>
   <div class="col-sm-12">
-    <form class="form-horizontal J_addForm" action="${website}admin/party/group/vip/update/{id}" method="post">
+    <form class="form-horizontal J_addForm" action="${website}admin/party/group/vip/update" method="POST">
+      <input type="hidden" name="_method" value="put">
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>编辑</h4>
         </div>
         <div class="panel-body">
+          <input class="J_vipId" type="hidden" name="id" value="${vipInfo.id}" />
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>姓名</label>
             <div class="col-sm-6">
@@ -30,13 +33,13 @@
             <div class="col-sm-6">
               <div class="radio">
                 <label>
-                  <input type="radio" value="0" name="sex" checked="${vipInfo.sex==0?'checked':''}">未说明
+                  <input type="radio" value="0" name="sex" <c:if test="${vipInfo.sex==0}">checked="checked"</c:if>>未说明
                 </label>
                 <label>
-                  <input type="radio" value="1" name="sex" checked="${vipInfo.sex==1?'checked':''}">男
+                  <input type="radio" value="1" name="sex" <c:if test="${vipInfo.sex==1}">checked="checked"</c:if>>男
                 </label>
                 <label>
-                  <input type="radio" value="2" name="sex" checked="${vipInfo.sex==2?'checked':''}">女
+                  <input type="radio" value="2" name="sex" <c:if test="${vipInfo.sex==2}">checked="checked"</c:if>>女
                 </label>
               </div>
             </div>

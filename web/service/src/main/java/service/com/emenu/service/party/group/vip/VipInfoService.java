@@ -64,7 +64,7 @@ public interface VipInfoService {
      * @return
      * @throws SSException
      */
-    public boolean checkPhoneIsExist(String phone) throws SSException;
+    public boolean checkPhoneIsExist(Integer id, String phone) throws SSException;
 
     /**
      * 根据当事人id更新会员信息
@@ -88,6 +88,4 @@ public interface VipInfoService {
      * @throws SSException
      */
     public VipInfo queryById(int id) throws SSException;
-
-
 }
