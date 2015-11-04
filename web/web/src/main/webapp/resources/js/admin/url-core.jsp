@@ -57,7 +57,7 @@
             ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
             //餐台管理--添加\编辑
             //table-management-add.html
-            ['sendTableName', site.staticWebsite + 'mock/admin/login.json', 'get', '判断餐台名称是否重复'],
+            ['sendTableName', site.staticWebsite + 'admin/restaurant/table/ajax/exist', 'post', '判断餐台名称是否重复'],
 
             //餐台区域管理
             ['saveNewArea', site.website + 'admin/restaurant/area/ajax', 'post', '保存新添加区域信息'],

@@ -1,11 +1,9 @@
 package com.emenu.common.entity.table;
 
+import com.emenu.common.enums.table.TableStateEnums;
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -68,6 +66,10 @@ public class Table extends AbstractEntity {
     //最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    // 状态字符串
+    @Transient
+    private String stateStr;
 
     public Integer getId() {
         return id;
@@ -139,6 +141,8 @@ public class Table extends AbstractEntity {
 
     public void setState(Integer state) {
         this.state = state;
+        TableStateEnums stateEnums = TableStateEnums.valueOf(state);
+        this.setStateStr(stateEnums == null ? "" : stateEnums.getType());
     }
 
     public Integer getPersonNum() {
@@ -171,5 +175,13 @@ public class Table extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getStateStr() {
+        return stateStr;
+    }
+
+    public void setStateStr(String stateStr) {
+        this.stateStr = stateStr;
     }
 }

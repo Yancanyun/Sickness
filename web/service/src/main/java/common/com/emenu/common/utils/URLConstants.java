@@ -34,13 +34,13 @@ public final class URLConstants {
     public static final String KEYWORDS_URL = "admin/keywords";
 
     //餐台区域管理页面
-    public static final String AREA_URL = "admin/restaurant/area";
+    public static final String ADMIN_AREA_URL = "admin/restaurant/area";
 
     //餐台管理页面
-    public static final String TABLE_URL = "admin/restaurant/table";
+    public static final String ADMIN_TABLE_URL = "admin/restaurant/table";
 
     //餐台二维码管理页面
-    public static final String QRCODE_URL = "admin/restaurant/qrcode";
+    public static final String ADMIN_QRCODE_URL = "admin/restaurant/qrcode";
 
     //点餐平台首页图片管理url
     public static final String INDEX_IMG_URL = "admin/index/img";

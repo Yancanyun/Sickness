@@ -119,8 +119,8 @@ public class TableServiceImpl implements TableService{
 
     @Override
     public List<TableDto> listTableDtoByState(TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于等于0且不大于Deleted)
-        if (Assert.lessOrEqualZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+        //检查State是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
             return null;
         }
         List<TableDto> tableDtoList = new ArrayList<TableDto>();
@@ -144,8 +144,8 @@ public class TableServiceImpl implements TableService{
 
     @Override
     public List<Table> listByState(TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于等于0且不大于Deleted)
-        if (Assert.lessOrEqualZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+        //检查State是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
             return null;
         }
         List<Table> tableList = Collections.emptyList();
@@ -160,8 +160,8 @@ public class TableServiceImpl implements TableService{
 
     @Override
     public List<TableDto> listTableDtoByAreaIdAndState(int areaId, TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于等于0且不大于Deleted)
-        if (Assert.lessOrEqualZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+        //检查State是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
             return null;
         }
         //检查AreaID是否合法
@@ -189,8 +189,8 @@ public class TableServiceImpl implements TableService{
 
     @Override
     public List<Table> listByAreaIdAndState(int areaId, TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于等于0且不大于Deleted)
-        if (Assert.lessOrEqualZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+        //检查State是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
             return null;
         }
         //检查AreaID是否合法
@@ -273,9 +273,10 @@ public class TableServiceImpl implements TableService{
             }
             //将状态设为"可用"
             table.setState(TableStateEnums.Enabled.getId());
-            //设置二维码地址
-            table.setQrCodePath(qrCodeService.newQrCode(table.getId(), null, request));
-            return commonDao.insert(table);
+            commonDao.insert(table);
+            //先插入以得到ID，再设置二维码地址
+            updateQrCode(table.getId(), qrCodeService.newQrCode(table.getId(), null, request));
+            return table;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertTableFail, e);
@@ -342,6 +343,31 @@ public class TableServiceImpl implements TableService{
         }
         try {
             tableMapper.updateQrCode(id, qrCodePath);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void updateState(int id, int state) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
+        //检查state是否合法
+        if (Assert.lessZero(state)) {
+            return ;
+        }
+        try {
+            //获取修改前的State值
+            int nowState = tableMapper.queryStateById(id);
+            //仅当修改前餐台状态为停用及可用时可以修改餐台
+            if((nowState != TableStateEnums.Disabled.getId() && nowState != TableStateEnums.Enabled.getId())) {
+                throw SSException.get(EmenuException.TableHasUsed);
+            }
+            tableMapper.updateState(id, state);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);

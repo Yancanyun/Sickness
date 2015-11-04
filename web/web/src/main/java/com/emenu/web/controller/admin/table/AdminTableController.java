@@ -1,5 +1,6 @@
 package com.emenu.web.controller.admin.table;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.table.TableDto;
@@ -9,6 +10,7 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.DecimalFormat;
 
 /**
  * TableController
@@ -27,85 +31,88 @@ import java.util.List;
  */
 @Controller
 @Module(ModuleEnums.AdminRestaurantTable)
-@RequestMapping(value = URLConstants.TABLE_URL)
+@RequestMapping(value = URLConstants.ADMIN_TABLE_URL)
 public class AdminTableController extends AbstractController {
     /**
      * 去餐台管理页
-     * @param areaId : 根据区域筛选餐台
-     * @param state : 根据状态筛选餐台
-     * @param model
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableList)
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String toTablePage(List<Integer> areaId, Integer state, Model model) {
+    public String toTablePage(Model model) {
         try {
-            //餐台列表
-            List<TableDto> tableDtoList = new ArrayList<TableDto>();
-
-            //若areaId不为空，则根据区域对餐台进行筛选
-            if (areaId != null && state == null) {
-                //可能存在多选区域的情况
-                for (int i : areaId) {
-                    if(i > 0) {
-                        tableDtoList.addAll(tableService.listTableDtoByAreaId(i));
-                    }
-                }
-            }
-            //若state不为空，则根据状态对餐台进行筛选
-            if (state != null && areaId == null) {
-                //不存在多选状态的情况
-                tableDtoList.addAll(tableService.listTableDtoByState(TableStateEnums.valueOf(state)));
-            }
-            //若areaId、state均不为空，则根据区域及状态对餐台进行筛选
-            if (areaId != null && state != null) {
-                //可能存在多选区域的情况
-                for (int i : areaId) {
-                    if (i > 0) {
-                        tableDtoList.addAll(tableService.listTableDtoByAreaIdAndState(i, TableStateEnums.valueOf(state)));
-                    }
-                }
-            }
-            //若areaId、state全部为空，则显示全部餐台
-            else {
-                tableDtoList = tableService.listAllTableDto();
-            }
-            model.addAttribute("tableDtoList", tableDtoList);
-
-            //显示区域选择框
             List<Area> areaList = areaService.listAll();
-            boolean[] flags = new boolean[areaList.size()];
-            if(areaId != null){
-                for(int i = 0 ; i < areaList.size() ; i++){
-                    //初始情况下选择框为未勾选
-                    boolean flag = false;
-                    for(int j : areaId){
-                        if(j == areaList.get(i).getId()) {
-                            //若传来areaId，则将选择框勾选上
-                            flag = true;
-                            break;
-                        }
-                    }
-                    flags[i] = flag;
-                }
-            }
-            //全选框
-            boolean isAll = true;
-            for(boolean flag : flags){
-                if(!flag){
-                    isAll = false;
-                    break;
-                }
-            }
-            model.addAttribute("areaList",areaList);
-            model.addAttribute("flags",flags);
-            model.addAttribute("isAll",isAll);
+            model.addAttribute("areaList", areaList);
+            List<TableDto> tableDtoList = tableService.listAllTableDto();
+            model.addAttribute("tableDtoList", tableDtoList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            return WebConstants.sysErrorCode;
         }
         return "admin/restaurant/table/list_home";
+    }
+
+
+    @Module(ModuleEnums.AdminRestaurantTableList)
+    @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxList(@RequestParam(value = "areaId") Integer[] areaId,
+                               @RequestParam(value = "state") Integer state) {
+        try {
+            List<TableDto> tableDtoList = new ArrayList<TableDto>();
+            //选择区域，未选择状态
+            if (areaId.length > 0 && state == -1) {
+                //全选区域
+                if (areaId[0] == -1){
+                    tableDtoList = tableService.listAllTableDto();
+                } else {
+                    for (int i = 0; i < areaId.length; i++) {
+                        if (i >= 0) {
+                            tableDtoList.addAll(tableService.listTableDtoByAreaId(areaId[i]));
+                        }
+                    }
+                }
+            }
+            //选择区域并选择状态
+            else if (areaId.length > 0 && state != -1) {
+                //全选区域
+                if (areaId[0] == -1){
+                    tableDtoList.addAll(tableService.listTableDtoByState(TableStateEnums.valueOf(state)));
+                } else {
+                    for (int i = 0; i < areaId.length; i++) {
+                        if (i >= 0) {
+                            tableDtoList.addAll(tableService.listTableDtoByAreaIdAndState(areaId[i], TableStateEnums.valueOf(state)));
+                        }
+                    }
+                }
+            }
+
+            JSONArray jsonArray = new JSONArray();
+            if(tableDtoList != null){
+                for(TableDto tableDto: tableDtoList){
+                    //保留小数点两位
+                    DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("areaId", tableDto.getTable().getAreaId());
+                    jsonObject.put("areaName", tableDto.getAreaName());
+                    jsonObject.put("id", tableDto.getTable().getId());
+                    jsonObject.put("name", tableDto.getTable().getName());
+                    jsonObject.put("seatNum", tableDto.getTable().getSeatNum());
+                    jsonObject.put("state", decimalFormat.format(tableDto.getTable().getState()));
+                    jsonObject.put("seatFee", decimalFormat.format(tableDto.getTable().getSeatFee()));
+                    jsonObject.put("tableFee", decimalFormat.format(tableDto.getTable().getTableFee()));
+                    jsonObject.put("minCost", decimalFormat.format(tableDto.getTable().getMinCost()));
+
+                    jsonArray.add(jsonObject);
+                }
+            }
+            //不分页，故dataCount填0
+            return sendJsonArray(jsonArray, 0);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     /**
@@ -115,7 +122,7 @@ public class AdminTableController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantTableNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
-    public String toTableInsertPage(Model model) {
+    public String toTableNewPage(Model model) {
         try {
             //显示区域选择框
             List<Area> areaList = areaService.listAll();
@@ -126,6 +133,24 @@ public class AdminTableController extends AbstractController {
             return ADMIN_SYS_ERR_PAGE;
         }
         return "admin/restaurant/table/new_home";
+    }
+
+    /**
+     * 添加餐台提交
+     * @param table
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantTableNew)
+    @RequestMapping(value = "new", method = RequestMethod.POST)
+    public String tableNew(Table table, HttpServletRequest request) {
+        try {
+            tableService.newTable(table, request);
+            return "redirect:/admin/restaurant/table";
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
     }
 
     /**
@@ -158,11 +183,11 @@ public class AdminTableController extends AbstractController {
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toTableUpdate(@PathVariable("id") Integer id, Model model) {
         try {
-            Table table = tableService.queryById(id);
-            model.addAttribute("table", table);
+            TableDto tableDto = tableService.queryTableDtoById(id);
+            model.addAttribute("tableDto", tableDto);
             //显示区域选择框
             List<Area> areaList = areaService.listAll();
-            model.addAttribute("areaList",areaList);
+            model.addAttribute("areaList", areaList);
 
             return "admin/restaurant/table/update_home";
         } catch (SSException e) {
@@ -179,8 +204,8 @@ public class AdminTableController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableUpdate)
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
-    public String tableEdit(@PathVariable int id, Table table) {
+    @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
+    public String tableUpdate(@PathVariable int id, Table table) {
         try {
             table.setId(id);
             tableService.updateTable(table);
@@ -223,12 +248,9 @@ public class AdminTableController extends AbstractController {
     @RequestMapping(value = "ajax/state", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject updateState(@RequestParam("id") Integer id,
-                                                @RequestParam("state") Integer state) {
+                                  @RequestParam("state") Integer state) {
         try {
-            Table table=new Table();
-            table.setId(id);
-            table.setState(state);
-            tableService.updateTable(table);
+            tableService.updateState(id, state);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -237,12 +259,30 @@ public class AdminTableController extends AbstractController {
     }
 
     /**
-     * Ajax 删除区域(可删除多个区域)
+     * Ajax 删除单个区域
+     * @param id
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantTableDel)
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject delTable(@PathVariable Integer id) {
+        try {
+            tableService.delById(id);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 删除多个区域
      * @param idList
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableDel)
-    @RequestMapping(value = "ajax/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject delTables(@RequestParam("idList") List<Integer> idList) {
         try {
