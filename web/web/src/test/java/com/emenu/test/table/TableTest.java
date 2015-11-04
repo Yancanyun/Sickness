@@ -9,7 +9,6 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -110,7 +109,7 @@ public class TableTest extends AbstractTestCase {
         Table table = new Table();
         table.setId(2);
         table.setName("8号桌");
-        tableService.updateTable(table);
+        tableService.updateTable(2, table);
     }
 
     @Test

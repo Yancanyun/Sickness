@@ -121,10 +121,12 @@ public interface TableService {
 
     /**
      * 修改餐台
+     *
+     * @param id
      * @param table
      * @throws SSException
      */
-    public void updateTable(Table table) throws SSException;
+    public void updateTable(Integer id, Table table) throws SSException;
 
     /**
      * 修改餐台二维码信息

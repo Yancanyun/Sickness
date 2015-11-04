@@ -86,7 +86,7 @@
               </thead>
               <tbody id="J_template">
               <c:forEach var="tableDto" items="${tableDtoList}">
-              <tr data-table-id="${tableDto.areaId}">
+              <tr data-table-id="${tableDto.table.id}">
                 <td><input class="J_table" type="checkbox"/></td>
                 <td>${tableDto.areaName}</td>
                 <td>${tableDto.table.name}</td>

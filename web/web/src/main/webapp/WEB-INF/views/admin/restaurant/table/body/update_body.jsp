@@ -16,8 +16,8 @@
         <h4>添加餐台信息</h4>
       </div>
       <div class="panel-body">
-        <form class="form-horizontal J_tableForm" method="POST" action="${website}admin/restaurant/table/update">
-          <input type="hidden" name='id' value="${tableDto.table.id}"/>
+        <form class="form-horizontal J_tableForm" method="POST" action="${website}admin/restaurant/table/update/${tableDto.table.id}">
+          <input type="hidden" name='id' class="J_tableId" value="${tableDto.table.id}"/>
           <div class="form-group">
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>餐台区域
@@ -26,7 +26,14 @@
               <select class="form-control J_tableArea" name="areaId">
                 <option value="-1">请选择</option>
                 <c:forEach var="area" items="${areaList}">
-                  <option value="${area.id}">${area.name}</option>
+                  <c:choose>
+                    <c:when test="${area.id == tableDto.table.areaId}">
+                      <option value="${area.id}" selected="selected">${area.name}</option>
+                    </c:when>
+                    <c:otherwise>
+                      <option value="${area.id}">${area.name}</option>
+                    </c:otherwise>
+                  </c:choose>
                 </c:forEach>
               </select>
             </div>

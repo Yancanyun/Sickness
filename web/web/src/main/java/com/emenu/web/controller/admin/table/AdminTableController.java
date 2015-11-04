@@ -160,11 +160,18 @@ public class AdminTableController extends AbstractController {
      */
     @RequestMapping(value = "ajax/exist", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject tableExist(@RequestParam("name") String name) {
+    public JSONObject tableExist(@RequestParam("id") Integer id, @RequestParam("name") String name) {
         try {
-            if(tableService.checkNameIsExist(name)){
+            //若未传来ID，则为增加页，直接判断该名称是否在数据库中已存在
+            if(id == null && tableService.checkNameIsExist(name)) {
                 throw SSException.get(EmenuException.TableNameExist);
-            } else {
+            }
+            //若传来ID，则为编辑页
+            //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
+            else if (id != null && !name.equals(tableService.queryById(id).getName())){
+                throw SSException.get(EmenuException.TableNameExist);
+            }
+            else {
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             }
         } catch (SSException e) {
@@ -204,11 +211,11 @@ public class AdminTableController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableUpdate)
-    @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-    public String tableUpdate(@PathVariable int id, Table table) {
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    public String tableUpdate(@PathVariable Integer id, Table table) {
         try {
             table.setId(id);
-            tableService.updateTable(table);
+            tableService.updateTable(id, table);
             return "redirect:/admin/restaurant/table";
         } catch (SSException e) {
             LogClerk.errLog.error(e);

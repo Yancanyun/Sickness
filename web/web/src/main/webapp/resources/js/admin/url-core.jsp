@@ -54,10 +54,10 @@
         RestaurantManagement: [
             //餐台管理--列表
             //table-management-list.html
-            ['changeState', site.staticWebsite + 'mock/admin/login.json', 'get', '改变餐台状态（停用、恢复）'],
-            ['delOneTable', site.staticWebsite + 'mock/admin/login.json', 'get', '删除单个餐台'],
-            ['searchTable', site.staticWebsite + 'mock/admin/table-list.json', 'get', '搜索餐台'],
-            ['batchDelete', site.staticWebsite + 'mock/admin/login.json', 'get', '批量删除'],
+            ['changeState', site.website + 'admin/restaurant/table/ajax/state', 'put', '改变餐台状态（停用、恢复）'],
+            ['delOneTable', site.website + 'admin/restaurant/table/ajax/&{id}', 'delete', '删除单个餐台'],
+            ['searchTable', site.website + 'admin/restaurant/table/ajax/list', 'get', '搜索餐台'],
+            ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
             //餐台管理--添加\编辑
             //table-management-add.html
             ['sendTableName', site.staticWebsite + 'admin/restaurant/table/ajax/exist', 'post', '判断餐台名称是否重复'],

@@ -303,20 +303,24 @@ public class TableServiceImpl implements TableService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateTable(Table table) throws SSException {
+    public void updateTable(Integer id, Table table) throws SSException {
         try {
             int state = queryStateById(table.getId());
             //仅当餐台状态为停用及可用时可以修改餐台
             if((state != TableStateEnums.Disabled.getId() && state != TableStateEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
-            //判断AreaId是否存在
-            //判断是否传来了AreaId值，若未传来则表明未修改AreaId，直接跳过该段
-            if (Assert.isNotNull(table.getAreaId()) && Assert.isNull(areaService.queryById(table.getAreaId()))){
+            //判断AreaId是否合法
+            if (Assert.lessOrEqualZero(table.getAreaId())){
                 throw SSException.get(EmenuException.AreaNotExist);
             }
-            //判断是否重名
-            if (checkNameIsExist(table.getName())) {
+            //若未传来ID，则为增加页，直接判断该名称是否在数据库中已存在
+            if(id == null && checkNameIsExist(table.getName())) {
+                throw SSException.get(EmenuException.TableNameExist);
+            }
+            //若传来ID，则为编辑页
+            //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
+            if (id != null && !table.getName().equals(queryById(id).getName())){
                 throw SSException.get(EmenuException.TableNameExist);
             }
             //判断是否为空
