@@ -57,11 +57,12 @@ public class IndexImgServiceImpl implements IndexImgService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public IndexImg newIndexImg(IndexImg indexImg) throws SSException {
-        if (!checkBeforeSave(indexImg)) {
-            return null;
-        }
 
         try {
+            if (!checkBeforeSave(indexImg)) {
+                return null;
+            }
+
             return commonDao.insert(indexImg);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -72,12 +73,13 @@ public class IndexImgServiceImpl implements IndexImgService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStateById(int id, IndexImgEnum state) throws SSException {
-        if (Assert.lessOrEqualZero(id)) {
-            return;
-        }
-        Assert.isNotNull(state, EmenuException.ImgStateWrong);
 
         try {
+            if (Assert.lessOrEqualZero(id)) {
+                return;
+            }
+            Assert.isNotNull(state, EmenuException.ImgStateWrong);
+
             IndexImg indexImg = new IndexImg();
             indexImg.setId(id);
             indexImg.setState(state.getId());
@@ -102,11 +104,12 @@ public class IndexImgServiceImpl implements IndexImgService {
 
     @Override
     public IndexImg queryByState(int state) throws SSException {
-        if (Assert.isNull(IndexImgEnum.valueOf(state))) {
-            return null;
-        }
 
         try {
+            if (Assert.isNull(IndexImgEnum.valueOf(state))) {
+                return null;
+            }
+
             return indexImgMapper.queryByState(state);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -117,11 +120,12 @@ public class IndexImgServiceImpl implements IndexImgService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delById(int id) throws SSException {
-        if (Assert.lessOrEqualZero(id)) {
-            return;
-        }
 
         try {
+            if (Assert.lessOrEqualZero(id)) {
+                return;
+            }
+
             commonDao.deleteById(IndexImg.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

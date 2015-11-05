@@ -88,4 +88,12 @@ public interface VipInfoService {
      * @throws SSException
      */
     public VipInfo queryById(int id) throws SSException;
+
+    /**
+     * 根据会员id查询securityUserId，用于改变securityUser状态
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Integer querySecurityUserIdById(int id) throws SSException;
 }

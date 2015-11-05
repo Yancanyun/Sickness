@@ -87,13 +87,13 @@
                       &nbsp;
                     </c:forEach>
                   </td>
-                  <td>${employeeDto.status}</td>
+                  <td data-employee-status="${employeeDto.employee.status}" class="J_status">${employeeDto.status}</td>
                   <td>
                     <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-                    <c:if test="${employeeDto.employee.status ==1}">
+                    <c:if test="${employeeDto.employee.status ==2}">
                       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;启用</a>
                     </c:if>
-                    <c:if test="${employeeDto.employee.status ==2}">
+                    <c:if test="${employeeDto.employee.status ==1}">
                       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;禁用</a>
                     </c:if>
                     <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>

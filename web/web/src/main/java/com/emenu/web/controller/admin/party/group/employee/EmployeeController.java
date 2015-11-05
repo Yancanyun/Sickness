@@ -6,7 +6,6 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.party.group.employee.Employee;
-import com.emenu.common.entity.party.security.SecurityPermission;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
@@ -203,14 +202,15 @@ public class EmployeeController  extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
-    @RequestMapping(value = "ajax/status/{partyId}")
+    @RequestMapping(value = "ajax/status/",method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject updateEmployeeStatus(@PathVariable("partyId")Integer partyId,
-                                                         @RequestParam String status){
+    public JSONObject updateEmployeeStatus(@RequestParam("partyId")Integer partyId,
+                                           @RequestParam("status")Integer status){
         try {
-            if(status.equals("true")) {
+            if(status==1) {
                 employeeService.updateStatus(partyId, UserStatusEnums.Enabled.getId());
-            } else {
+            }
+            if(status==2) {
                 employeeService.updateStatus(partyId, UserStatusEnums.Disabled.getId());
             }
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -275,7 +275,12 @@ public class EmployeeController  extends AbstractController {
     }
 
 
-    @RequestMapping(value = "ajax/chkname",method = RequestMethod.POST)
+    /**
+     * 添加员工时登录名是否重复
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "ajax/checkloginname",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject checkLoginName(@RequestParam("loginName")String loginName){
         try {
@@ -287,17 +292,37 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
-    @RequestMapping(value = "ajax/chknum",method = RequestMethod.POST)
+    /**
+     * 判断员工编号是否重复
+     * @param employeeNumber
+     * @return
+     */
+    @RequestMapping(value = "ajax/checknumber",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject checkNumber(@RequestParam("employeeNumber")String employeeNumber){
+    public JSONObject checkNumberIsExist(@RequestParam("employeeNumber")String employeeNumber){
         try {
-            employeeService.checkNumber(employeeNumber);
+            employeeService.checkNumberIsExist(employeeNumber);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
     }
+
+
+    @RequestMapping(value = "ajax/checkphone",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject checkPhoneIsExist(@RequestParam("phone")String phone){
+        try {
+            employeeService.checkPhoneIsExist(phone);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+
 
 
 }

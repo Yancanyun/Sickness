@@ -200,7 +200,6 @@ public class VipInfoController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxDel(@RequestParam("id") Integer id){
         try{
-            Integer ids = id;
             vipInfoService.updateStateById(id, UserStatusEnums.Deleted);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -292,7 +291,7 @@ public class VipInfoController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxListVipInfoByKeyWord(@PathVariable("curPage") Integer curPage,
                                                @RequestParam Integer pageSize,
-                                               @RequestParam("keyword") String keyword){
+                                               @RequestParam("key") String keyword){
         List<VipInfo> vipInfoList = Collections.emptyList();
         try{
             vipInfoService.listByKeyword(keyword, curPage, pageSize);

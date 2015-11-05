@@ -57,4 +57,12 @@ public interface VipInfoMapper {
      */
     public void updateStateById(@Param("id") int id,
                                 @Param("state") int state) throws Exception;
+
+    /**
+     * 根据会员id查询securityUserId，用于改变securityUser状态
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public Integer querySecurityUserIdById(@Param("id")int id) throws Exception;
 }
