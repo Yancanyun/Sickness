@@ -85,11 +85,11 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public Unit queryById(int id) throws SSException {
-        // 检查id是否<=0，如果是，直接返回
-        if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
-            throw SSException.get(EmenuException.UnitIdError);
-        }
         try {
+            // 检查id是否<=0，如果是，直接返回
+            if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.UnitIdError);
+            }
             // 检查id是否<=0，如果是，直接返回
             if (Assert.lessOrEqualZero(id)) {
                 throw SSException.get(EmenuException.UnitIdError);
@@ -135,10 +135,6 @@ public class UnitServiceImpl implements UnitService {
      */
     @Override
     public void delById(int id) throws SSException {
-        // 检查id是否<=0，如果是，直接返回
-        if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
-            throw SSException.get(EmenuException.UnitIdError);
-        }
         try {
             // 检查id是否<=0，如果是，直接返回
             if (Assert.lessOrEqualZero(id)) {
