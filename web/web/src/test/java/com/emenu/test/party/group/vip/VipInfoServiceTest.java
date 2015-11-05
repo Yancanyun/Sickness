@@ -25,10 +25,11 @@ public class VipInfoServiceTest extends AbstractTestCase {
     @Test
     public void newVipInfo() throws SSException{
         VipInfo vipInfo = new VipInfo();
+        Integer userPartyId = 0;
         vipInfo.setName("陈玉婷");
         vipInfo.setPhone("18243003887");
 
-        vipInfoService.newVipInfo(vipInfo);
+        vipInfoService.newVipInfo(userPartyId,vipInfo);
     }
 
     @Test
@@ -78,7 +79,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
 
     @Test
     public void listByKeyword() throws SSException{
-        List<VipInfo> vipInfos = vipInfoService.listByKeyword("9", 1, 10);
+        List<VipInfo> vipInfos = vipInfoService.listByKeyword("姜雪", 1, 10);
         for (VipInfo vipInfo: vipInfos){
             System.out.println(vipInfo.getName());
             System.out.println(vipInfo.getPhone());

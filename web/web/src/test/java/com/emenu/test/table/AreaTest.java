@@ -55,7 +55,7 @@ public class AreaTest extends AbstractTestCase {
         Area area = new Area();
         area.setId(1);
         area.setName("11楼");
-        areaService.updateArea(area);
+        areaService.updateArea(1, area);
     }
 
     @Test

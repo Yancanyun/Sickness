@@ -77,7 +77,7 @@ public class AdminAreaController extends AbstractController {
             Area area = new Area();
             area.setId(id);
             area.setName(name);
-            areaService.updateArea(area);
+            areaService.updateArea(id, area);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             return sendErrMsgAndErrCode(e);

@@ -35,20 +35,20 @@
         WHERE `state` = 1 OR `state` = 2
         <where>
             <if test="keyword != null">
-                vipInfo.name LIKE"%"#{keyword}"%" OR
-                vipInfo.phone like "%"#{keyword}"%"
+                (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
+                AND (`state` = 1 OR `state` = 2)
             </if>
         </where>
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="queryById" parameterType="Integer" resultType="VipInfo">
+    <select id="queryById" resultType="VipInfo">
         SELECT *
         FROM `t_party_vip_info` vipInfo
         WHERE vipInfo.id = #{id}
     </select>
 
-    <select id="countByPhone" parameterType="String" resultType="int">
+    <select id="countByPhone" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info`
         WHERE `phone` = #{phone}
