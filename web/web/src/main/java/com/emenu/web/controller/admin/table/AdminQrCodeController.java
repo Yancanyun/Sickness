@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Controller
 @Module(ModuleEnums.AdminRestaurantQrCode)
-@RequestMapping(value = URLConstants.QRCODE_URL)
+@RequestMapping(value = URLConstants.ADMIN_QRCODE_URL)
 public class AdminQrCodeController extends AbstractController {
     /**
      * 去餐台二维码管理页
@@ -84,8 +84,8 @@ public class AdminQrCodeController extends AbstractController {
     @RequestMapping(value = "download/{areaId}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject downloadQrCodeByAreaId(@PathVariable("areaId") Integer areaId,
-                                                HttpServletRequest request,
-                                                HttpServletResponse response) {
+                                             HttpServletRequest request,
+                                             HttpServletResponse response) {
         try {
             qrCodeService.downloadByAreaId(areaId, request, response);
             return sendJsonObject(AJAX_SUCCESS_CODE);

@@ -16,6 +16,7 @@
             `qrcode_path`
         FROM `t_table`
         WHERE `state` != 6
+        ORDER BY `area_id`, `id`
     </select>
 
     <select id="listByAreaId" resultMap="pw.Table">
@@ -31,6 +32,7 @@
             `qrcode_path`
         FROM `t_table`
         WHERE `area_id` = #{areaId} AND `state` != 6
+        ORDER BY `area_id`, `id`
     </select>
 
     <select id="listByState" resultMap="pw.Table">
@@ -46,6 +48,7 @@
             `qrcode_path`
         FROM `t_table`
         WHERE `state` = #{state}
+        ORDER BY `area_id`, `id`
     </select>
 
     <select id="listByAreaIdAndState" resultMap="pw.Table">
@@ -61,6 +64,7 @@
             `qrcode_path`
         FROM `t_table`
         WHERE `area_id` = #{areaId} AND `state` = #{state}
+        ORDER BY `area_id`, `id`
     </select>
 
     <select id="queryStateById" resultType="int">

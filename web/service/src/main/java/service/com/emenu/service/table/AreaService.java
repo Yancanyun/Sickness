@@ -30,7 +30,7 @@ public interface AreaService {
     /**
      * 根据ID查询区域状态
      * @param id
-     * @return int : 0、可用；1、已删除
+     * @return int : 1、可用；2、已删除
      * @throws SSException
      */
     public int queryStateById(int id) throws SSException;

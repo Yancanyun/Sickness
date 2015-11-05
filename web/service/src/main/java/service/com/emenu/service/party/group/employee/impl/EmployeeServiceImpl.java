@@ -60,25 +60,20 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     /**
      * 获取所有员工信息
-     * @param partyId
      * @return
      * @throws SSException
      */
     @Override
-    public List<EmployeeDto> listAll(int partyId) throws SSException {
+    public List<EmployeeDto> listAll() throws SSException {
 
 
         try {
             List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
 
-            if(Assert.lessOrEqualZero(partyId)) {
-                return employeeDtos;
-            }
-
             //根据取出启用的员工信息t_party_employee
 
             List<Employee> employees = Collections.emptyList();
-            employees = employeeMapper.listAll(partyId);
+            employees = employeeMapper.listAll();
 
            /* //获取所有启用的员工登录名
             List<SecurityUser> securityUsers = Collections.emptyList();
@@ -99,8 +94,12 @@ public class EmployeeServiceImpl implements EmployeeService{
                     //数据存入dto
                 employeeDto.setRole(roles);
                 employeeDto.setRoleName(roleNames);
-                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
-
+                if(employee.getStatus()==1) {
+                    employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                }
+                if(employee.getStatus()==2){
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                }
                 SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
                 employeeDto.setLoginName(securityUser.getLoginName());
 
@@ -117,14 +116,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public List<EmployeeDto> listByRoles(List<Integer> roleList, int partyId) throws SSException {
+    public List<EmployeeDto> listByRoles(List<Integer> roleList) throws SSException {
 
 
         try {
             List<EmployeeDto> employeeDtos = new ArrayList<EmployeeDto>();
-            if(Assert.lessOrEqualZero(partyId)){
-                return employeeDtos;
-            }
             List<Employee> employees = new ArrayList<Employee>();
             //获取所有启用的员工登录名
 
@@ -137,7 +133,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
             for (Integer id : partyIdList) {
                 Employee employee = employeeMapper.queryByPartyId(id);
-                if(employee.getStatus()!=3&&employee.getPartyId()!=partyId) {
+                if(employee.getStatus()!=3) {
                     employees.add(employee);
                 }
             }

@@ -20,6 +20,7 @@ import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;
+import com.emenu.service.table.WaiterTableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -245,5 +246,8 @@ public class AbstractController extends Base {
     @Qualifier("tagService")
     protected static TagService tagService;
 
+    @StaticAutoWire
+    @Qualifier("waiterTableService")
+    protected static WaiterTableService waiterTableService;
 
 }

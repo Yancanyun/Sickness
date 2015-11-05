@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * UnitEnum
- *
+ * 单位类型的枚举
  * @author dujuan
  * @date 2015/11/3
  */

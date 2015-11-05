@@ -20,10 +20,10 @@
         // 用户管理
         UserManagement: [
             // 员工管理--列表
-            ['delEmployee', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '删除员工'],
-            ['convertEmployeeStatus', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '转换员工的状态,即启用\停用互换'],
-            ['sendEmployeeId', site.staticWebsite + 'mock/admin/employee-table.json', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
-            ['searchEmployee', site.staticWebsite + 'mock/admin/employee-list.json', 'get', '搜索当前角色下的员工'],
+            ['delEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/del/&{partyId}', 'delete', '删除员工'],
+            ['convertEmployeeStatus', site.staticWebsite + 'admin/party/group/employee/ajax/status/&{partyId}&{status}', 'put', '转换员工的状态,即启用\停用互换'],
+            ['sendEmployeeId', site.staticWebsite + 'admin/party/group/employee/ajax/tables/&{partyId}', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
+            ['searchEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
             // 员工管理--员工添加\编辑
             ['sendEmployeePhone', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的电话是否重复'],
             ['sendEmployeeUserName', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的用户命是否重复'],
@@ -32,7 +32,7 @@
             // 会员管理
             ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
             // 会员管理--列表--删除
-            ['delVip', site.staticWebsite + 'mock/admin/del-vip.json', 'get', '删除会员时，发送会员id'],
+            ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'get', '删除会员时，发送会员id'],
             //会员管理--添加\编辑
             ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重']
         ],
@@ -43,9 +43,12 @@
         // 基本信息管理
         BaseInfoManagement: [
             // 搜索风向标
-            ['addOrder', site.staticWebsite + 'mock/admin/add-order.json', 'get', '添加风向标关键字'],
-            ['delOrder', site.staticWebsite + 'mock/admin/del-order.json', 'get', '删除风向标关键字']
+            ['addOrder', site.website + 'admin/keywords/ajax', 'post', '添加风向标关键字'],
+            ['delOrder', site.website + 'admin/keywords/ajax/&{id}', 'delete', '删除风向标关键字'],
 
+            // 首页图片管理
+            ['delImg', site.website + 'admin/index/img/ajax/&{id}', 'delete', '删除图片'],
+            ['setImg', site.website + 'admin/index/img/ajax/&{id}', 'put', '设置图片为首页']
         ],
         // 饭店管理
         RestaurantManagement: [
@@ -57,7 +60,7 @@
             ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
             //餐台管理--添加\编辑
             //table-management-add.html
-            ['sendTableName', site.staticWebsite + 'mock/admin/login.json', 'get', '判断餐台名称是否重复'],
+            ['sendTableName', site.staticWebsite + 'admin/restaurant/table/ajax/exist', 'post', '判断餐台名称是否重复'],
 
             //餐台区域管理
             ['saveNewArea', site.website + 'admin/restaurant/area/ajax', 'post', '保存新添加区域信息'],

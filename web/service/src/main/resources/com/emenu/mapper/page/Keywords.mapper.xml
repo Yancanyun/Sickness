@@ -6,10 +6,12 @@
         SELECT *
         FROM `t_keywords`
         WHERE `type` = #{type}
+        ORDER BY `id` DESC
     </select>
     
     <select id="countByKeyAndType" resultType="int">
-        SELECT count(id) FROM `t_keywords`
+        SELECT count(id)
+        FROM `t_keywords`
         WHERE `key` = #{key}
         AND `type` = #{type}
     </select>
