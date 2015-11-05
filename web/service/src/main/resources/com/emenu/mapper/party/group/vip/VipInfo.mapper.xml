@@ -12,7 +12,7 @@
                 vipInfo.phone like "%"#{keyword}"%"
             </if>
         </where>
-        ORDER BY `id` DESC
+        ORDER BY  `state` ASC, `id` DESC
         LIMIT #{pCurrent},#{pSize}
     </select>
 
@@ -20,7 +20,7 @@
         SELECT *
         FROM `t_party_vip_info`
         WHERE `state` = 1 OR `state` = 2
-        ORDER BY `id` DESC
+        ORDER BY  `state` ASC, `id` DESC
         LIMIT #{offset},#{pageSize}
     </select>
     
@@ -60,5 +60,15 @@
         SET `state` = #{state}
         WHERE `id` = #{id}
     </update>
+
+    <select id="querySecurityUserIdById" parameterType="int" resultType="int">
+        SELECT securityUser.`id`
+        FROM `t_party_security_user` AS securityUser,
+        `t_party_vip_info` AS vipInfo,
+        `t_party` AS party
+        WHERE vipInfo.`party_id` = party.`id`
+        AND party.`id` = securityUser.`party_id`
+        AND vipInfo.`id` = #{id}
+    </select>
 
 </mapper>

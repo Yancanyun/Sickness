@@ -61,4 +61,11 @@ public class VipInfoServiceTest extends AbstractTestCase {
         //String status =UserStatusEnums.getDescriptionById(state);
         //System.out.println("id为" + id + "的详细信息为" + "姓名：" + name + "；电话： " + phone + "；生日：" + birthday + "；用户状态：" + status );
     }
+
+    @Test
+    public void querySecurityUserIdById() throws SSException{
+        int id = 1;
+        int securityUserId = vipInfoService.querySecurityUserIdById(id);
+        System.out.println(securityUserId);
+    }
 }

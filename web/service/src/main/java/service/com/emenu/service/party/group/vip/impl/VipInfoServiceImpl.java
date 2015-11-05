@@ -176,6 +176,7 @@ public class VipInfoServiceImpl implements VipInfoService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateVipInfo(VipInfo vipInfo) throws SSException{
         try{
             if (!checkBeforeSave(vipInfo)){
@@ -192,11 +193,27 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStateById(int id, UserStatusEnums state) throws SSException{
+        Integer stateType = 0;
+        Integer securityUserId = 0;
         try {
             CommonUtil.checkId(id, PartyException.UserIdNotNull);
             Assert.isNotNull(state, PartyException.UserStatusIllegal);
 
-            vipInfoMapper.updateStateById(id, state.getId());
+            //获取当前更新的状态
+            stateType = state.getId();
+            //根据会员id获取用户id
+            securityUserId = this.querySecurityUserIdById(id);
+            //1.更新securityUser表的状态
+            //如果当前更新状态为禁用或删除，则更改用户表状态为禁用
+            if (stateType == UserStatusEnums.Disabled.getId() || stateType == UserStatusEnums.Deleted.getId()){
+                securityUserService.updateStatusById(securityUserId, EnableEnums.Disabled);
+            }
+            //如果当前更新状态为启用，则更改用户表状态为启用
+            if (stateType == UserStatusEnums.Enabled.getId()){
+                securityUserService.updateStatusById(securityUserId, EnableEnums.Enabled);
+            }
+            //2.更新vipInfo的状态
+            vipInfoMapper.updateStateById(id, stateType);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
@@ -222,6 +239,19 @@ public class VipInfoServiceImpl implements VipInfoService{
         Assert.isNotNull(vipInfo.getName(), EmenuException.VipNameNotNUll);
         Assert.isNotNull(vipInfo.getPhone(), EmenuException.VipPhoneNotNull);
         return true;
+    }
+
+    public Integer querySecurityUserIdById(int id) throws SSException{
+        Integer securityUserId = 0;
+        try{
+            CommonUtil.checkId(id, PartyException.UserIdNotNull);
+
+            securityUserId = vipInfoMapper.querySecurityUserIdById(id);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+        }
+        return securityUserId;
     }
 
 }
