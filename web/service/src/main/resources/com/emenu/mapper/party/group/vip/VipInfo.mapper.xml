@@ -2,18 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.party.group.vip.VipInfoMapper">
 
-    <select id="listByKeyword">
+    <select id="listByKeyword" resultType="VipInfo">
         SELECT *
         FROM `t_party_vip_info` vipInfo
-        WHERE `state` = 1 OR `state` = 2
         <where>
             <if test="keyword != null">
-                vipInfo.name LIKE"%"#{keyword}"%" OR
-                vipInfo.phone like "%"#{keyword}"%"
+                (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
+                AND (`state` = 1 OR `state` = 2)
             </if>
         </where>
         ORDER BY  `state` ASC, `id` DESC
-        LIMIT #{pCurrent},#{pSize}
+        LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="listByPage" resultType="VipInfo">

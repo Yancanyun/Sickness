@@ -91,7 +91,7 @@ public class VipInfoServiceImpl implements VipInfoService{
                 return Collections.emptyList();
             }
             Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
-            return vipInfoMapper.listByKeyword(keyword, curPage, pageSize);
+            return vipInfoMapper.listByKeyword(keyword, offset, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);

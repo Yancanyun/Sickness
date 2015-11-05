@@ -17,13 +17,13 @@ public interface VipInfoMapper {
     /**
      * 根据关键字查看会员信息列表
      * @param keyword
-     * @param curPage
+     * @param offset
      * @param pageSize
      * @return
      * @throws Exception
      */
     public List<VipInfo> listByKeyword(@Param("keyword") String keyword,
-                                              @Param("curPage") int curPage,
+                                              @Param("offset") int offset,
                                               @Param("pageSize")int pageSize) throws Exception;
 
     /**
