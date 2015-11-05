@@ -36,10 +36,11 @@ public class KeywordsServiceImpl implements KeywordsService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Keywords newKeywords(Keywords keywords) throws SSException {
-        if (!checkBeforeSave(keywords)){
-            return null;
-        }
         try {
+            if (!checkBeforeSave(keywords)){
+                return null;
+            }
+
             return commonDao.insert(keywords);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
