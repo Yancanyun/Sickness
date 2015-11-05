@@ -1,5 +1,6 @@
 package com.emenu.service.party.security.impl;
 
+import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityGroup;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
@@ -78,10 +79,21 @@ public class SecurityGroupServiceImpl implements SecurityGroupService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void update(SecurityGroup securityGroup) throws SSException {
         try {
-            if (!checkBeforeSave(securityGroup)) {
-                return;
+            // 非空检查
+            if (Assert.isNull(securityGroup)) {
+                return ;
             }
             CommonUtil.checkId(securityGroup.getId(), PartyException.SecurityGroupIdNotNull);
+            Assert.isNotNull(securityGroup.getName(), PartyException.SecurityGroupNameNotNull);
+
+            SecurityGroup oldGroup = this.queryById(securityGroup.getId());
+            Assert.isNotNull(oldGroup, PartyException.SecurityGroupNotExist);
+            if (!oldGroup.getName().equals(securityGroup.getName())) {
+                // 判断名称是否已经存在
+                if (this.queryGroupNameIsExist(securityGroup.getName())) {
+                    throw SSException.get(PartyException.SecurityGroupNameIsExist);
+                }
+            }
 
             commonDao.update(securityGroup);
         } catch(Exception e){

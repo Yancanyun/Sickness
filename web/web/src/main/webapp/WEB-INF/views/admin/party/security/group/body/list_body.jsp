@@ -9,24 +9,24 @@
       <li>
         <a href="#">权限管理</a>
       </li>
-      <li class="active">权限组管理</li>
+      <li class="active">安全组管理</li>
     </ol>
-    <h2>权限组管理</h2>
+    <h2>安全组组管理</h2>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4>权限组列表</h4>
+        <h4>安全组列表</h4>
       </div>
       <div class="panel-body">
-        <a class="btn btn-success margin-bottom-15 J_addBtn" href="#"><i class="fa fa-plus"></i>&nbsp;添加权限组</a>
+        <a class="btn btn-success margin-bottom-15 J_addBtn" href="#"><i class="fa fa-plus"></i>&nbsp;添加安全组</a>
         <form class="J_operForm">
           <input type = "hidden" class="J_id" name="id" value=""/>
           <div class="table-responsive">
             <table class="table table-hover table-bordered">
               <thead>
               <tr>
-                <th>权限组名称</th>
+                <th>安全组组名称</th>
                 <th>描述</th>
                 <th>操作</th>
               </tr>

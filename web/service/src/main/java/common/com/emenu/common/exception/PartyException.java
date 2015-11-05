@@ -41,6 +41,7 @@ public enum PartyException implements IBizExceptionMes {
     SecurityGroupIdNotNull("安全组ID不能为空!", 1005),
     SecurityGroupNameNotNull("安全组名称不能为空!", 1006),
     SecurityGroupNameIsExist("安全组名称已存在!", 1007),
+    SecurityGroupNotExist("安全组不存在", 1037),
     QueryNotSelectedPermissionFailed("获取为选择的权限列表失败", 1024),
 
     PartyIdNotNull("当时ID不能为空!", 1008),

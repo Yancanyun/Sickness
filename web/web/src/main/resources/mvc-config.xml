@@ -14,7 +14,7 @@
 
     <mvc:annotation-driven />
     <!-- 解决/无法访问的问题 -->
-    <!--<mvc:view-controller path="/" view-name="/login"/>-->
+    <mvc:view-controller path="/" view-name="/admin" />
 
     <mvc:interceptors>
         <!-- Module拦截器 -->
@@ -24,6 +24,7 @@
     </mvc:interceptors>
 
     <mvc:pandaworkDefault/>
+    <mvc:default-servlet-handler />
 
     <bean id="handlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" />
 

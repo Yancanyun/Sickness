@@ -11,14 +11,14 @@
             <li>
                 <a href="#">权限管理</a>
             </li>
-            <li class="active">权限组管理</li>
+            <li class="active">安全组管理</li>
         </ol>
-        <h2>权限组配置</h2>
+        <h2>安全组配置</h2>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h4>权限组名称：${securityGroup.name}</h4>
+                <h4>安全组名称：${securityGroup.name}</h4>
             </div>
             <div class="panel-body">
                 <form class="form-horizontal J_addForm" action="${website}admin/party/security/group/permission" method="post">

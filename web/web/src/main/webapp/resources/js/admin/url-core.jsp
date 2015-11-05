@@ -96,7 +96,7 @@
             ['deleteAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax/&{id}', 'delete', '删除权限时，发送权限组id'],
 
             //authority-group-config.html
-            ['delAuthorityOfGroup', site.staticWebsite + 'mock/admin/login.json', 'get', '权限组配置页面，删除权限']
+            ['delAuthorityOfGroup', site.website + 'admin/party/security/group/permission/ajax/&{id}', 'delete', '权限组配置页面，删除权限']
         ],
         // 公共模块
         Module: [

@@ -32,12 +32,12 @@
 <!-- 保存模板 -->
 <script type="text/template" id="saveTpl">
   <tr data-authority-id="&{authority.id}">
-    <td class="J_exp">&{authority.exp}</td>
-    <td class="J_desc">&{authority.desc}</td>
+    <td class="J_exp">&{authority.name}</td>
+    <td class="J_desc">&{authority.description}</td>
     <td>
       <a class="label-info J_edit" href="javascript:;"><i class="fa fa-pencil"></i> 编辑</a>
       <a class="label-info J_del" href="javascript:;"><i class="fa fa-times"></i> 删除</a>
-      <a class="label-info J_search" href="#"><i class="fa fa-search"></i> 查看权限</a>
+      <a class="label-info J_search" href="${website}admin/party/security/group/permission/&{authority.id}"><i class="fa fa-search"></i> 查看权限</a>
     </td>
   </tr>
 </script>
