@@ -1,7 +1,6 @@
 package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.AreaDto;
-import com.emenu.common.entity.party.security.SecurityGroup;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.table.AreaStateEnums;
@@ -120,10 +119,15 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateArea(Area area) throws SSException {
+    public void updateArea(Integer id, Area area) throws SSException {
         try {
-            //判断是否重名
-            if (checkNameIsExist(area.getName())) {
+            //若未传来ID，则为增加，直接判断该名称是否在数据库中已存在
+            if(id == null && checkNameIsExist(area.getName())) {
+                throw SSException.get(EmenuException.AreaNameExist);
+            }
+            //若传来ID，则为编辑
+            //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
+            if (id != null && !area.getName().equals(queryById(id).getName())){
                 throw SSException.get(EmenuException.AreaNameExist);
             }
             //判断名称是否为空

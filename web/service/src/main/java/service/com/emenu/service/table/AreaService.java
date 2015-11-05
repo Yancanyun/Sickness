@@ -53,10 +53,12 @@ public interface AreaService {
 
     /**
      * 修改区域
+     *
+     * @param id
      * @param area
      * @throws SSException
      */
-    public void updateArea(Area area) throws SSException;
+    public void updateArea(Integer id, Area area) throws SSException;
 
     /**
      * 删除区域
