@@ -20,25 +20,25 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>用户名</label>
             <div class="col-sm-6">
-              <input class="w180 J_username" type="text" value="" name="" />
+              <input class="w180 J_username" type="text" value="" name="loginName" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>姓名</label>
             <div class="col-sm-6">
-              <input class="w180" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="" name="" />
+              <input class="w180" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="" name="name" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>电话</label>
             <div class="col-sm-6">
-              <input class="w180 J_phone" type="text" value="" name="" />
+              <input class="w180 J_phone" type="text" value="" name="phone" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>密码<!-- 新密码--> </label>
             <div class="col-sm-6">
-              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(7,16)" value="" name="" />
+              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(7,16)" value="" name="password" />
             </div>
           </div>
           <div class="form-group">

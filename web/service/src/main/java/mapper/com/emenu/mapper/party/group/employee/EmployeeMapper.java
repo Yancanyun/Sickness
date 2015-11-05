@@ -90,5 +90,13 @@ public interface EmployeeMapper {
      */
     public Employee queryByNumber(@Param("number")String embployeeNumber) throws Exception;
 
+    /**
+     * 判断员工电话是否重复
+     * @param phone
+     * @return
+     * @throws Exception
+     */
+    public Employee queryByPhone(@Param("number")String phone) throws Exception;
+
 
 }

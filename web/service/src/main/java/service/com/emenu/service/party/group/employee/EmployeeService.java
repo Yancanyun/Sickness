@@ -38,11 +38,13 @@ public interface EmployeeService {
 
     /**
      * 员工编号是否重复
-     * @param checkNumber
+     * @param EmployeeNumber
      * @return
      * @throws SSException
      */
-    public boolean checkNumber(String checkNumber) throws SSException;
+    public boolean checkNumberIsExist(String EmployeeNumber) throws SSException;
+
+    public boolean checkPhoneIsExist(String phone) throws SSException;
 
     /**
      * 添加新员工

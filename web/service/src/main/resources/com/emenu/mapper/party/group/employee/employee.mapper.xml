@@ -80,6 +80,9 @@
         SELECT * FROM `t_party_employee` WHERE `employee_number` = #{employeeNumber}
     </select>
 
+    <select id="queryByPhone" parameterType="String" resultMap="pw.Employee">
+         SELECT * FROM `t_party_employee` WHERE `phone` = #{phone}
+    </select>
     <!-- <select id="checkUsername" parameterType="String" resultType="User">
          select id, username from `t_user` where `username` = #{username}
      </select>

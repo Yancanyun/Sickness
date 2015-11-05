@@ -202,10 +202,10 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public boolean checkNumber(String employeeName) throws SSException {
+    public boolean checkNumberIsExist(String employeeNumber) throws SSException {
 
         try{
-            if(employeeMapper.queryByNumber(employeeName)!= null) {
+            if(employeeMapper.queryByNumber(employeeNumber)!= null) {
                 return true;
             } else {
                 return  false;
@@ -215,6 +215,20 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw SSException.get(EmenuException.SystemException, e);
         }
 
+    }
+
+    @Override
+    public boolean checkPhoneIsExist(String phone) throws SSException {
+        try{
+            if(employeeMapper.queryByPhone(phone) != null) {
+                return true;
+            } else {
+                return  false;
+            }
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
     }
 
     /**
