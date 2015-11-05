@@ -84,11 +84,11 @@ public interface EmployeeMapper {
 
     /**
      * 根据员工编号查询员工
-     * @param embployeeNumber
+     * @param employeeNumber
      * @return
      * @throws Exception
      */
-    public Employee queryByNumber(@Param("number")String embployeeNumber) throws Exception;
+    public Employee queryByNumber(@Param("employeeNumber")String employeeNumber) throws Exception;
 
     /**
      * 判断员工电话是否重复
@@ -96,7 +96,7 @@ public interface EmployeeMapper {
      * @return
      * @throws Exception
      */
-    public Employee queryByPhone(@Param("number")String phone) throws Exception;
+    public Employee queryByPhone(@Param("phone")String phone) throws Exception;
 
 
 }

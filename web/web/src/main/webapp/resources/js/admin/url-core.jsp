@@ -25,9 +25,9 @@
             ['sendEmployeeId', site.staticWebsite + 'admin/party/group/employee/ajax/tables/&{partyId}', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
             ['searchEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
             // 员工管理--员工添加\编辑
-            ['sendEmployeePhone', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的电话是否重复'],
-            ['sendEmployeeUserName', site.staticWebsite + 'admin/party/group/employee/ajax/chkname', 'get', '判断员工的用户命是否重复'],
-            ['sendEmployeeNo', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的编号是否重复'],
+            ['sendEmployeePhone', site.staticWebsite + 'admin/party/group/employee/ajax/checkphone', 'get', '判断员工的电话是否重复'],
+            ['sendEmployeeUserName', site.staticWebsite + 'admin/party/group/employee/ajax/checkloginname', 'get', '判断员工的用户命是否重复'],
+            ['sendEmployeeNo', site.staticWebsite + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
 
             // 会员管理
             ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
