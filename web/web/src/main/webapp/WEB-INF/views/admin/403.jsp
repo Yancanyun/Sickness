@@ -3,18 +3,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>500</title>
-    <jsp:include page="/WEB-INF/views/admin/common/head.jsp" />
+    <title>403</title>
+    <jsp:include page="common/head.jsp"/>
     <link rel="stylesheet" type="text/css" href="${staticWebsite}css/admin/error/error.css">
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/admin/common/header.jsp"/>
+<jsp:include page="common/header.jsp"/>
 <div id="page-content" class="clearfix">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <p class="text-right page-text message">
-                    500!
+                    403!
                 </p>
             </div>
             <div class="col-md-6">
@@ -22,9 +22,9 @@
                     <span class="text-danger" style="font-size:4em;">Oops!</span>
                 </p>
 
-                <p class="text-left"> 您所请求的网页出现了些问题！我们正在努力修复中,请耐心等候。</p>
+                <p class="text-left"> 资源请求失败，服务器未返回您所需要的资源，请重试。</p>
 
-                <p class="text-left">请点击这里返回<a href='#'>首页</a> ，或者继续浏览其他页面。</p>
+                <p class="text-left">请点击这里返回<a href='${website}admin'>首页</a> ，或者继续浏览其他页面。</p>
             </div>
         </div>
     </div> <!-- container -->
@@ -39,12 +39,13 @@
 
 </body>
 </html>
+</html>
 <%
     String url = request.getAttribute("javax.servlet.error.request_uri") +
             (request.getQueryString() == null ? "" : ("?" + request.getQueryString()));
     String referer = request.getHeader("Referer");
     String ip = com.pandawork.core.common.util.IpUtil.getClientIP(request);
     String requestMethod = request.getMethod();
-    String message = "500|" + url + "|" + referer + "|" + ip + "|" + requestMethod;
+    String message = "403|" + url + "|" + referer + "|" + ip + "|" + requestMethod;
     com.pandawork.core.common.log.LogClerk.monitorLog.debug(message);
 %>

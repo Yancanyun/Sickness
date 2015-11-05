@@ -104,4 +104,37 @@ public class AdminController extends AbstractController {
         }
         return "redirect:/admin/login";
     }
+
+    /**
+     * 去404
+     *
+     * @return
+     */
+    @IgnoreLogin
+    @RequestMapping(value = "404", method = RequestMethod.GET)
+    public String to404() {
+        return ADMIN_NOT_FOUND_PAGE;
+    }
+
+    /**
+     * 去403
+     *
+     * @return
+     */
+    @IgnoreLogin
+    @RequestMapping(value = "403", method = RequestMethod.GET)
+    public String to403() {
+        return ADMIN_FORBIDDEN_PAGE;
+    }
+
+    /**
+     * 去500
+     *
+     * @return
+     */
+    @IgnoreLogin
+    @RequestMapping(value = "500", method = RequestMethod.GET)
+    public String to500() {
+        return ADMIN_SYS_ERR_PAGE;
+    }
 }

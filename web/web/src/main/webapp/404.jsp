@@ -1,31 +1,41 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>404</title>
-    <jsp:include page="WEB-INF/views/public/common/head.jsp"/>
-    <link rel="stylesheet" type="text/css" href="${staticWebsite}css/common/error/error.css">
+    <jsp:include page="/WEB-INF/views/admin/common/head.jsp"/>
+    <link rel="stylesheet" type="text/css" href="${staticWebsite}css/admin/error/error.css">
 </head>
 <body>
-<div class="page page-text">
+<jsp:include page="/WEB-INF/views/admin/common/header.jsp"/>
+<div id="page-content" class="clearfix">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 text-center">
-                <h1 class="rotate">404!</h1>
-						<span class="tip">
-							<i class="fa fa-smile-o"></i>&nbsp;我们无法找到您所请求的页面！<br>
-							请点击这里返回 <a href="${website}">首页</a>，或者继续浏览其他页面。</span>
+            <div class="col-md-6">
+                <p class="text-right page-text message">
+                    404!
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-left page-text">
+                    <span class="text-info" style="font-size:4em;">Uh-oh</span>
+                </p>
+
+                <p class="text-left"> 我们无法找到您所请求的页面！</p>
+
+                <p class="text-left">请点击这里返回<a href='#'>首页</a> ，或者继续浏览其他页面。</p>
             </div>
         </div>
+    </div> <!-- container -->
+    <div class="bottom">
+        <div class="col-md-12 foot">
+            <ul class="list-unstyled list-inline pull-left">
+                <li>pandawork © 2015</li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="footer pull-right">
-    <ul class="list-unstyled list-inline pull-left">
-        <li>© &nbsp;2015&nbsp;北京广德腾建博曼科技有限公司 版权所有</li>
-        <li>客服联系方式 电话:010-66886688 010-88668866 QQ:6666666 88888888</li>
-    </ul>
-</div>
+</div> <!-- page-content -->
 </body>
 </html>
 <%

@@ -1,6 +1,6 @@
 package com.emenu.web.controller;
 
-import com.emenu.common.utils.CommonUtil;
+import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.IpUtil;
@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @time: 15/10/14 上午8:56
  */
 @Controller
+@IgnoreLogin
 @RequestMapping(value = "test")
 public class TestController extends AbstractController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String test(@RequestParam String openId,
+                       @RequestParam Integer id,
                        Model model) {
         //LogClerk.bizLog.info("basePath: " + CommonUtil.getBasepath(getRequest()));
         LogClerk.bizLog.info("client ip: " + IpUtil.getClientIP(getRequest()));

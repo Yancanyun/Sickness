@@ -1,32 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>403</title>
-    <jsp:include page="WEB-INF/views/public/common/head.jsp"/>
-    <link rel="stylesheet" type="text/css" href="${staticWebsite}css/common/error/error.css">
+    <jsp:include page="/WEB-INF/views/admin/common/head.jsp"/>
+    <link rel="stylesheet" type="text/css" href="${staticWebsite}css/admin/error/error.css">
 </head>
 <body>
-<div class="page page-text">
+<jsp:include page="/WEB-INF/views/admin/common/header.jsp"/>
+<div id="page-content" class="clearfix">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 text-center">
-                <h1 class="rotate">403!</h1>
-						<span class="tip">
-							<i class="fa fa-clock-o"></i>&nbsp;资源请求失败，服务器未返回您所需要的资源，请重试。<br>
-							请点击这里返回 <a href="${website}">首页</a>，或者继续浏览其他页面。</span>
+            <div class="col-md-6">
+                <p class="text-right page-text message">
+                    403!
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="text-left page-text">
+                    <span class="text-danger" style="font-size:4em;">Oops!</span>
+                </p>
+
+                <p class="text-left"> 资源请求失败，服务器未返回您所需要的资源，请重试。</p>
+
+                <p class="text-left">请点击这里返回<a href='#'>首页</a> ，或者继续浏览其他页面。</p>
             </div>
         </div>
+    </div> <!-- container -->
+    <div class="bottom">
+        <div class="col-md-12 foot">
+            <ul class="list-unstyled list-inline pull-left">
+                <li>pandawork © 2015</li>
+            </ul>
+        </div>
     </div>
-</div>
-<div class="footer pull-right">
-    <ul class="list-unstyled list-inline pull-left">
-        <li>© &nbsp;2015&nbsp;北京广德腾建博曼科技有限公司 版权所有</li>
-        <li>客服联系方式 电话:010-66886688 010-88668866 QQ:6666666 88888888</li>
-    </ul>
-</div>
+</div> <!-- page-content -->
+
 </body>
+</html>
 </html>
 <%
     String url = request.getAttribute("javax.servlet.error.request_uri") +
