@@ -99,7 +99,10 @@ public enum EmenuException implements IBizExceptionMes {
     VipNameNotNUll("用户姓名不能为空", 8004),
     VipPhoneNotNull("电话号码不能为空", 8005),
     VipIdNotNull("用户id不能为空",8006),
-    ListVipInfoFail("获取用户信息列表失败！",8007)
+    ListVipInfoFail("获取用户信息列表失败！",8007),
+    InsertVipInfoFail("添加会员失败！",8008),
+    UpdateVipInfoFail("修改会员信息失败",8009),
+    VipInfoIdError("会员ID为空或者小于0",8010)
 
     ;
 
