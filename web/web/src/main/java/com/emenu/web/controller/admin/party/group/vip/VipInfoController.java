@@ -43,26 +43,32 @@ public class VipInfoController extends AbstractController {
     }
 
     /**
-     * 分页显示会员基本信息列表
+     * 分页获取关键字搜索列表
      * @param curPage
      * @param pageSize
+     * @param keyword
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = "ajax/list/{curPage}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxListVipInfo(@PathVariable("curPage") Integer curPage,
-                         @RequestParam Integer pageSize){
+                                      @RequestParam Integer pageSize,
+                                      @RequestParam("key") String keyword){
         List<VipInfo> vipInfoList = Collections.emptyList();
         try{
-            vipInfoList = vipInfoService.listByPage(curPage, pageSize);
+            if (keyword =="" || keyword == null || keyword.equals("")){
+                vipInfoList = vipInfoService.listByPage(curPage, pageSize);
+            }else {
+                vipInfoList = vipInfoService.listByKeyword(keyword, curPage, pageSize);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
 
         JSONArray jsonArray = new JSONArray();
-        for (VipInfo vipInfo:vipInfoList){
+        for (VipInfo vipInfo: vipInfoList){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", vipInfo.getId());
             jsonObject.put("name", vipInfo.getName());
@@ -70,7 +76,7 @@ public class VipInfoController extends AbstractController {
             jsonObject.put("state", vipInfo.getState());
             jsonArray.add(jsonObject);
         }
-        int dataCount = 0;
+        Integer dataCount = 0;
         try {
             dataCount = vipInfoService.countAll();
         } catch (SSException e) {
@@ -176,6 +182,7 @@ public class VipInfoController extends AbstractController {
             }
 
             VipInfo vipInfo = new VipInfo();
+            vipInfo.setId(id);
             vipInfo.setName(name);
             vipInfo.setSex(sex);
             vipInfo.setBirthday(birthday);
@@ -279,43 +286,5 @@ public class VipInfoController extends AbstractController {
         return "admin/party/group/vip/vip_info_detail";
     }
 
-    /**
-     * 分页获取关键字搜索列表
-     * @param curPage
-     * @param pageSize
-     * @param keyword
-     * @return
-     */
-    @Module(ModuleEnums.AdminVipInfoSearch)
-    @RequestMapping(value = "ajax/search/{curPage}", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject ajaxListVipInfoByKeyWord(@PathVariable("curPage") Integer curPage,
-                                               @RequestParam Integer pageSize,
-                                               @RequestParam("key") String keyword){
-        List<VipInfo> vipInfoList = Collections.emptyList();
-        try{
-            vipInfoService.listByKeyword(keyword, curPage, pageSize);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
 
-        JSONArray jsonArray = new JSONArray();
-        for (VipInfo vipInfo: vipInfoList){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", vipInfo.getId());
-            jsonObject.put("name", vipInfo.getName());
-            jsonObject.put("phone", vipInfo.getPhone());
-            jsonObject.put("state", vipInfo.getState());
-            jsonArray.add(jsonObject);
-        }
-        Integer dataCount = 0;
-        try {
-            dataCount = vipInfoService.countAll();
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-        return sendJsonArray(jsonArray, dataCount);
-    }
 }

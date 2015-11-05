@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 会员基本信息管理测试用例
@@ -62,10 +63,25 @@ public class VipInfoServiceTest extends AbstractTestCase {
         //System.out.println("id为" + id + "的详细信息为" + "姓名：" + name + "；电话： " + phone + "；生日：" + birthday + "；用户状态：" + status );
     }
 
+    /*@Test
+    public void updateVipInfo() throws SSException{
+        VipInfo vipInfo = new VipInfo();
+        vipInfo.setPhone();
+    }*/
+
     @Test
     public void querySecurityUserIdById() throws SSException{
         int id = 1;
         int securityUserId = vipInfoService.querySecurityUserIdById(id);
         System.out.println(securityUserId);
+    }
+
+    @Test
+    public void listByKeyword() throws SSException{
+        List<VipInfo> vipInfos = vipInfoService.listByKeyword("9", 1, 10);
+        for (VipInfo vipInfo: vipInfos){
+            System.out.println(vipInfo.getName());
+            System.out.println(vipInfo.getPhone());
+        }
     }
 }

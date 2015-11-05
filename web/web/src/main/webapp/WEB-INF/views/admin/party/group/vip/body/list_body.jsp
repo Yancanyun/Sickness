@@ -19,7 +19,7 @@
         <h4>搜索</h4>
       </div>
       <div class="panel-body">
-        <form class="form-horizontal J_searchForm" action="${website}admin/party/group/vip/ajax/search/{curPage}" method="post">
+        <form class="form-horizontal J_searchForm">
           <div class="form-group">
             <label class="col-sm-3 control-label">关键字</label>
             <div class="col-sm-3">
