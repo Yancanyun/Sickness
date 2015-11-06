@@ -56,7 +56,7 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException {
-        //获取网站域名
+        //若未传来获取网站域名，则从常量表获取
         if (Assert.isNull(webDomain)) {
             webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
         }
@@ -107,12 +107,16 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void newAllQrCode(String webDomain, HttpServletRequest request) throws SSException {
         List<Table> tableList = Collections.emptyList();
+        //若未传来获取网站域名，则从常量表获取
+        if (Assert.isNull(webDomain)) {
+            webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
+        }
+
         try {
             //首先更新常量表中的webDomain
             constantService.updateValueByKey(ConstantEnum.WebDomain.getKey(), webDomain);
 
             tableList = tableService.listAll();
-
             //为每张餐台生成二维码
             for (Table t : tableList) {
                 String qrCodePath = newQrCode(t.getId(), webDomain, request);

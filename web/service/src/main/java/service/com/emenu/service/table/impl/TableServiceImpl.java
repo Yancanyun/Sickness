@@ -256,6 +256,23 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
+    public void checkStateById(int id) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
+        try {
+            int state = queryStateById(id);
+            if (state != TableStateEnums.Enabled.getId() && state != TableStateEnums.Disabled.getId()) {
+                throw SSException.get(EmenuException.TableHasUsed);
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTableFail, e);
+        }
+    }
+
+    @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public Table newTable(Table table, HttpServletRequest request) throws SSException {
         try {
@@ -393,6 +410,33 @@ public class TableServiceImpl implements TableService{
             }
             //将状态设为"删除"
             tableMapper.updateState(id, TableStateEnums.Deleted.getId());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void delByIds(List<Integer> idList) throws SSException {
+        //检查IDList是否合法
+        if (Assert.isNull(idList)) {
+            return ;
+        }
+        try {
+            if (idList != null) {
+                //先判断是否全部餐台均可以删除，若不能，报错
+                for (int i : idList) {
+                    if ((queryStateById(i) != TableStateEnums.Enabled.getId()) &&
+                        (queryStateById(i) != TableStateEnums.Disabled.getId())) {
+                        throw SSException.get(EmenuException.TableHasUsed);
+                    }
+                }
+                //第二遍循环，逐个删除
+                for (int i : idList) {
+                    delById(i);
+                }
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteTableFail, e);

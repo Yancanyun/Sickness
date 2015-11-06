@@ -59,7 +59,7 @@
             </div>
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">
-                <div class="col-sm-6 col-sm-offset-3 margin-bottom-15">
+                <div class="col-sm-6 col-sm-offset-3 margin-bottom-20">
                   <a href="${website}admin/restaurant/qrcode/download/${areaDto.area.id}" class="btn btn-info J_createBtn" target="_blank">
                     <i class="fa fa-download"></i>&nbsp;下载当前区域二维码
                   </a>

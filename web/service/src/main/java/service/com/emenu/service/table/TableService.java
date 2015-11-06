@@ -98,10 +98,17 @@ public interface TableService {
     /**
      * 根据ID查询餐台状态
      * @param id
-     * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账4、已并桌；5、已预订；6、已删除
+     * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账；4、已并桌；5、已预订；6、已删除
      * @throws SSException
      */
     public int queryStateById(int id) throws SSException;
+
+    /**
+     * 根据ID检查餐台是否可修改
+     * @param id
+     * @throws SSException
+     */
+    public void checkStateById(int id) throws SSException;
 
     /**
      * 添加餐台
@@ -145,11 +152,18 @@ public interface TableService {
     public void updateState(int id, int state) throws SSException;
 
     /**
-     * 删除餐台
+     * 删除单个餐台
      * @param id
      * @throws SSException
      */
     public void delById(int id) throws SSException;
+
+    /**
+     * 删除餐台
+     * @param idList
+     * @throws SSException
+     */
+    public void delByIds(List<Integer> idList) throws SSException;
 
     /**
      * 根据区域ID查询区域内餐台的数量

@@ -230,25 +230,21 @@ public class AdminTableController extends AbstractController {
     }
 
     /**
-     * Ajax 查询餐台状态。若为可编辑状态，返回AJAX_SUCCESS_CODE；否则返回AJAX_FAILURE_CODE
+     * Ajax 查询餐台状态。若为可编辑状态，返回AJAX_SUCCESS_CODE；否则返回AJAX_FAILURE_CODE及错误信息
      * @param id
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableList)
     @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject queryState(@RequestParam("id") Integer id) {
+    public JSONObject checkState(@RequestParam("id") Integer id) {
         try {
-            int state = tableService.queryStateById(id);
-            if (state == TableStateEnums.Enabled.getId() || state == TableStateEnums.Disabled.getId()) {
-                return sendJsonObject(AJAX_SUCCESS_CODE);
-            } else {
-                return sendJsonObject(AJAX_FAILURE_CODE);
-            }
+            tableService.checkStateById(id);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -299,16 +295,11 @@ public class AdminTableController extends AbstractController {
     @ResponseBody
     public JSONObject delTables(@RequestParam("idList") List<Integer> idList) {
         try {
-            //删除多个区域
-            if(idList != null) {
-                for(int i : idList) {
-                    tableService.delById(i);
-                }
-            }
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            tableService.delByIds(idList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }
