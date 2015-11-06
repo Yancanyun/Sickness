@@ -271,7 +271,17 @@ public class EmployeeController  extends AbstractController {
             return WebConstants.sysErrorCode;
         }*/
 
-        EmployeeDto employeeDto = new EmployeeDto();
+        try {
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Table> tableList = Collections.emptyList();
+            tableList = tableService.listAll();
+
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return WebConstants.sysErrorCode;
+        }
+
 
 
         return "admin/party/group/employee/update_home";

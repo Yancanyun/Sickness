@@ -104,4 +104,6 @@ public interface EmployeeService {
      * @throws SSException
      */
     public Employee queryByPartyId(int partyId) throws SSException;
+
+    public EmployeeDto queryEmployeeDtoByPartyId(int partyId) throws SSException;
 }

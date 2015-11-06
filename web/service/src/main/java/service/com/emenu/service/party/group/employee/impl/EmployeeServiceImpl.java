@@ -13,6 +13,7 @@ import com.emenu.common.enums.party.group.employee.EmployeeRoleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
+import com.emenu.common.utils.WebConstants;
 import com.emenu.mapper.party.group.employee.EmployeeMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.group.employee.EmployeeService;
@@ -481,5 +482,41 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employee;
     }
 
+    public EmployeeDto queryEmployeeDtoByPartyId(int partyId) throws SSException{
+        EmployeeDto employeeDto = new EmployeeDto();
+        try{
+            if (Assert.lessOrEqualZero(partyId)) {
+                return null;
+            }
+            Employee employee = queryByPartyId(partyId);
+
+            employeeDto.setEmployee(employee);
+            //获取指定partyId的用户角色
+            List<Integer> roles = Collections.emptyList();
+            roles = employeeMapper.queryRoleByPartyId(employee.getPartyId());//查询每个用户的对应的所有角色
+            List<String> roleNames = new ArrayList<String>();//根据取出的角色标识，赋予角色名
+            //获得用户角色名
+            for (int r : roles) {
+                    roleNames.add(EmployeeRoleEnums.getDescriptionById(r));
+            }
+            //数据存入dto
+            employeeDto.setRole(roles);
+            employeeDto.setRoleName(roleNames);
+            if(employee.getStatus()==1) {
+                employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+            }
+            if(employee.getStatus()==2){
+                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+            }
+
+            SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
+            employeeDto.setLoginName(securityUser.getLoginName());
+
+            return employeeDto;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryEmployeeException, e);
+        }
+    }
 
 }
