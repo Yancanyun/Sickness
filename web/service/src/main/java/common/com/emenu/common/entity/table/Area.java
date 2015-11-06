@@ -27,6 +27,9 @@ public class Area extends AbstractEntity {
     //状态(1-可用, 2-已删除)
     private Integer state;
 
+    //权重
+    private Integer weight;
+
     //创建时间
     @Column(name = "created_time")
     private Date createdTime;
@@ -58,6 +61,14 @@ public class Area extends AbstractEntity {
 
     public void setState(Integer state) {
         this.state = state;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Date getCreatedTime() {

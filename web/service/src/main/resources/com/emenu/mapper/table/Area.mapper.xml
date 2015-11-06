@@ -6,7 +6,8 @@
     <select id="listAll" resultMap="pw.Area">
         SELECT
             `id`,
-            `name`
+            `name`,
+            `weight`
         FROM `t_area`
         WHERE `state` = 1
     </select>

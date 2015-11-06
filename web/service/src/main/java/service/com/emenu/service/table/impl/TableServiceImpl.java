@@ -337,7 +337,7 @@ public class TableServiceImpl implements TableService{
             }
             //若传来ID，则为编辑页
             //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
-            if (id != null && !table.getName().equals(queryById(id).getName())){
+            if (id != null && !table.getName().equals(queryById(id).getName()) && checkNameIsExist(table.getName())){
                 throw SSException.get(EmenuException.TableNameExist);
             }
             //判断是否为空

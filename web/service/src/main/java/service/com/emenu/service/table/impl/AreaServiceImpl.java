@@ -121,13 +121,8 @@ public class AreaServiceImpl implements AreaService{
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateArea(Integer id, Area area) throws SSException {
         try {
-            //若未传来ID，则为增加，直接判断该名称是否在数据库中已存在
-            if(id == null && checkNameIsExist(area.getName())) {
-                throw SSException.get(EmenuException.AreaNameExist);
-            }
-            //若传来ID，则为编辑
-            //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
-            if (id != null && !area.getName().equals(queryById(id).getName())){
+            //若Name与相应ID在数据库中对应的名称不一致，再去判断该名称是否在数据库中已存在
+            if (!area.getName().equals(queryById(id).getName()) && checkNameIsExist(area.getName())){
                 throw SSException.get(EmenuException.AreaNameExist);
             }
             //判断名称是否为空
