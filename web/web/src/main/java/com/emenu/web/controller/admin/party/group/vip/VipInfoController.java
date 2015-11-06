@@ -115,6 +115,7 @@ public class VipInfoController extends AbstractController {
                              @RequestParam("qq") String qq,
                              @RequestParam("email") String email){
         try{
+            int userPartyId = getPartyId();
             VipInfo vipInfo = new VipInfo();
             vipInfo.setName(name);
             vipInfo.setSex(sex);
@@ -122,7 +123,7 @@ public class VipInfoController extends AbstractController {
             vipInfo.setPhone(phone);
             vipInfo.setQq(qq);
             vipInfo.setEmail(email);
-            vipInfoService.newVipInfo(vipInfo);
+            vipInfoService.newVipInfo(userPartyId,vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

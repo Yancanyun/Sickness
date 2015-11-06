@@ -1,11 +1,9 @@
 package com.emenu.service.party.group.vip;
 
 
-import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.pandawork.core.common.exception.SSException;
-import com.pandawork.core.framework.util.Pagination;
 
 import java.util.List;
 
@@ -56,7 +54,7 @@ public interface VipInfoService {
      * @param vipInfo
      * @throws SSException
      */
-    public VipInfo newVipInfo(VipInfo vipInfo) throws SSException;
+    public VipInfo newVipInfo(Integer userPartyId, VipInfo vipInfo) throws SSException;
 
     /**
      * 判断手机号是否存在

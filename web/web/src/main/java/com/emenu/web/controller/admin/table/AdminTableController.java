@@ -53,6 +53,12 @@ public class AdminTableController extends AbstractController {
     }
 
 
+    /**
+     * Ajax 获取数据
+     * @param areaId
+     * @param state
+     * @return
+     */
     @Module(ModuleEnums.AdminRestaurantTableList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
@@ -103,7 +109,6 @@ public class AdminTableController extends AbstractController {
                     jsonObject.put("seatFee", decimalFormat.format(tableDto.getTable().getSeatFee()));
                     jsonObject.put("tableFee", decimalFormat.format(tableDto.getTable().getTableFee()));
                     jsonObject.put("minCost", decimalFormat.format(tableDto.getTable().getMinCost()));
-
                     jsonArray.add(jsonObject);
                 }
             }
@@ -225,7 +230,7 @@ public class AdminTableController extends AbstractController {
     }
 
     /**
-     * Ajax 查询餐台状态
+     * Ajax 查询餐台状态。若为可编辑状态，返回AJAX_SUCCESS_CODE；否则返回AJAX_FAILURE_CODE
      * @param id
      * @return
      */
@@ -235,10 +240,11 @@ public class AdminTableController extends AbstractController {
     public JSONObject queryState(@RequestParam("id") Integer id) {
         try {
             int state = tableService.queryStateById(id);
-            JSONObject jsonObject = new JSONObject();
-            //传递state数值给前端
-            jsonObject.put("state", state);
-            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+            if (state == TableStateEnums.Enabled.getId() || state == TableStateEnums.Disabled.getId()) {
+                return sendJsonObject(AJAX_SUCCESS_CODE);
+            } else {
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

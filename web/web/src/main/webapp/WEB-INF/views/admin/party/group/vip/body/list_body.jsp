@@ -2,7 +2,7 @@
   User: chenyuting
   Time: 2015/11/3 09:54
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="row">
   <div class="col-sm-12">
     <ol class="breadcrumb">

@@ -29,5 +29,18 @@ public interface WaiterTableService {
      */
     public List<Integer> queryByPartyId(int partyId) throws SSException;
 
+    /**
+     * 查询服务员负责的餐桌
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
     public List<AreaDto> queryAreaDtoByPartyId(int partyId) throws SSException;
+
+    /**
+     * 查询所有区域和餐桌
+     * @return
+     * @throws SSException
+     */
+    public List<AreaDto> queryAreaDto() throws SSException;
 }

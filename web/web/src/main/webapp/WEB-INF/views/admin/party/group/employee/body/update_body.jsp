@@ -11,12 +11,13 @@
     <h2>员工管理-添加员工</h2>
   </div>
   <div class="col-sm-12 margin-bottom-30">
-    <form class="form-horizontal J_operForm" action="${website}admin/party/group/employee/new" method="post">
+    <form class="form-horizontal J_operForm" action="${website}admin/party/group/employee/update" method="post">
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>添加员工</h4>
         </div>
         <div class="panel-body">
+          <input type="hidden" name="partyId" value="${employeeDto.employee.partyId}"/>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>用户名</label>
             <div class="col-sm-6">

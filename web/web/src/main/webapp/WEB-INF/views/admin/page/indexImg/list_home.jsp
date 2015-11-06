@@ -9,3 +9,4 @@
                         value="<link rel='stylesheet' type='text/css' href='${staticWebsite}tool/webuploader/css/webuploader.css'>
                         <link rel='stylesheet' type='text/css' href='${staticWebsite}css/admin/base-info-management/base-info-management.css'>" />
 </tiles:insertDefinition>
+

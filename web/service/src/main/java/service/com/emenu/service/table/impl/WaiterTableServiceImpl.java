@@ -115,5 +115,42 @@ public class WaiterTableServiceImpl implements WaiterTableService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryWaiterTableFail, e);
         }
+      /*  */
+    }
+
+    @Override
+    public List<AreaDto> queryAreaDto() throws SSException {
+        try {
+            //获取所有餐桌
+            List<Table> tableList = new ArrayList<Table>();
+            tableList = tableService.listAll();
+
+            // 将餐桌按区域分类
+            List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
+            //返回所有区域
+            List<Area> areaList = areaService.listAll();
+            //获取所有区域和每一区域下的所有餐台
+            for(Area area : areaList) {
+                //areaDto包括已tablelist和一个area
+                AreaDto areaDto = new AreaDto();
+                List<Table> tables = new ArrayList<Table>();
+                for(Table table : tableList) {
+                    if(table.getAreaId().equals(area.getId())) {
+                        tables.add(table);
+                    }
+                }
+                if(tables!=null && tables.size()!=0) {
+                    //把区域和对应的餐台加入到areaDto里面
+                    areaDto.setArea(area);
+                    areaDto.setTableList(tables);
+                    areaDtoList.add(areaDto);
+                }
+            }
+
+            return areaDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryWaiterTableFail, e);
+        }
     }
 }

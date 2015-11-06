@@ -360,7 +360,7 @@ public class TableServiceImpl implements TableService{
         if (Assert.lessOrEqualZero(id)) {
             return ;
         }
-        //检查state是否合法
+        //检查State是否合法
         if (Assert.lessZero(state)) {
             return ;
         }

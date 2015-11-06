@@ -203,7 +203,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public boolean checkNumberIsExist(String employeeNumber) throws SSException {
-
         try{
             if(employeeMapper.queryByNumber(employeeNumber)!= null) {
                 return true;
@@ -214,7 +213,6 @@ public class EmployeeServiceImpl implements EmployeeService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
         }
-
     }
 
     @Override

@@ -13,6 +13,7 @@
   {@each list as it}
   <tr data-employee-id="&{it.id}" data-party-id = "&{it.partyId}">
     <td>&{it.loginName}</td>
+    <td>&{it.employeeNumber}</td>
     <td>&{it.name}</td>
     <td>&{it.phone}</td>
     <td>

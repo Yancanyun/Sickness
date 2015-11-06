@@ -1,6 +1,5 @@
 package com.emenu.service.party.group.vip.impl;
 
-import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.party.group.vip.VipInfo;
@@ -8,7 +7,6 @@ import com.emenu.common.enums.party.*;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.CommonUtil;
-import com.emenu.common.utils.WebConstants;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
@@ -18,16 +16,13 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
-import jxl.format.Format;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,13 +50,13 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     public List<VipInfo> listByPage(int curPage, int pageSize) throws SSException{
+        List<VipInfo> vipInfoList  = Collections.emptyList();
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
-        List<VipInfo> vipInfoList = Collections.<VipInfo>emptyList();
+        if (Assert.lessZero(offset)) {
+            return vipInfoList;
+        }
         try{
-            if (Assert.lessZero(offset)) {
-                return Collections.emptyList();
-            }
             vipInfoList = vipInfoMapper.listByPage(offset, pageSize);
         }catch(Exception e) {
             LogClerk.errLog.error(e);
@@ -84,12 +79,13 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     public List<VipInfo> listByKeyword(String keyword, int curPage, int pageSize) throws SSException{
+        List<VipInfo> vipInfoList  = Collections.emptyList();
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
+        if (Assert.lessZero(offset)) {
+            return vipInfoList;
+        }
         try{
-            if (Assert.lessZero(offset)) {
-                return Collections.emptyList();
-            }
             Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
             return vipInfoMapper.listByKeyword(keyword, offset, pageSize);
         } catch (Exception e){
@@ -112,22 +108,22 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public VipInfo newVipInfo(VipInfo vipInfo) throws SSException{
+    public VipInfo newVipInfo(Integer userPartyId, VipInfo vipInfo) throws SSException{
         try{
             if (!checkBeforeSave(vipInfo)){
-                return null;
+                throw SSException.get(EmenuException.InsertVipInfoFail);
             }
 
             //首先判断手机号是否存在
             String phone = vipInfo.getPhone();
             if (this.checkPhoneIsExist(vipInfo.getId(), phone)){
-                return null;
+                throw SSException.get(EmenuException.VipInfoPhoneExist);
             }
 
             //1.先向t_party表添加一条当事人信息
             Party party = new Party();
             party.setPartyTypeId(PartyTypeEnums.Vip.getId());//会员
-            party.setCreatedUserId(1);//此处应为当前登录者的id
+            party.setCreatedUserId(userPartyId);//此处应为当前登录者的id
             Party newParty = this.partyService.newParty(party);
             int partyId = newParty.getId();//获取刚插入数据的partyId
 
@@ -161,8 +157,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             //id不为空，则当前为修改会员信息
             if (id == null){
                 count = vipInfoMapper.countByPhone(phone);
-            }
-            else {
+            } else {
                 String oldPhone = this.queryById(id).getPhone();
                 if (id != null && oldPhone.equals(phone)){
                     return count < 0;
@@ -179,8 +174,11 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateVipInfo(VipInfo vipInfo) throws SSException{
         try{
+            if (!Assert.isNull(vipInfo.getId()) && Assert.lessOrEqualZero(vipInfo.getId())) {
+                throw SSException.get(EmenuException.VipInfoIdError);
+            }
             if (!checkBeforeSave(vipInfo)){
-                return ;
+                throw SSException.get(EmenuException.UpdateVipInfoFail);
             }
             Assert.isNotNull(vipInfo);
             commonDao.update(vipInfo);
@@ -196,7 +194,9 @@ public class VipInfoServiceImpl implements VipInfoService{
         Integer stateType = 0;
         Integer securityUserId = 0;
         try {
-            CommonUtil.checkId(id, PartyException.UserIdNotNull);
+            if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.VipInfoIdError);
+            }
             Assert.isNotNull(state, PartyException.UserStatusIllegal);
 
             //获取当前更新的状态
@@ -232,6 +232,12 @@ public class VipInfoServiceImpl implements VipInfoService{
         }
     }
 
+    /**
+     * 保存前检查用户名和电话是否为空
+     * @param vipInfo
+     * @return
+     * @throws SSException
+     */
     private boolean checkBeforeSave(VipInfo vipInfo)throws SSException{
         if (Assert.isNull(vipInfo)){
             return false;
@@ -241,6 +247,12 @@ public class VipInfoServiceImpl implements VipInfoService{
         return true;
     }
 
+    /**
+     * 查询用户的securityUserId,用于更新用户状态时，更新securityUser的状态
+     * @param id
+     * @return
+     * @throws SSException
+     */
     public Integer querySecurityUserIdById(int id) throws SSException{
         Integer securityUserId = 0;
         try{

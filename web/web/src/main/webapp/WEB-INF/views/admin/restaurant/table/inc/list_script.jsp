@@ -20,7 +20,7 @@
     <td>&{it.tableFee}元</td>
     <td>&{it.minCost}元</td>
     <td>
-      <a class="label-info J_edit" href="${website}admin/restaurant/table/update/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+      <a class="label-info J_edit" href="javascript:;" src="${website}admin/restaurant/table/update/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
       {@if it.state == 0}
       <a class="label-info J_change" href="javascript:;"><i class="fa fa-check"></i>&nbsp;启用</a>
       {@else}

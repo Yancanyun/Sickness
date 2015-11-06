@@ -25,9 +25,9 @@
             ['sendEmployeeId', site.staticWebsite + 'admin/party/group/employee/ajax/tables/&{partyId}', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
             ['searchEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
             // 员工管理--员工添加\编辑
-            ['sendEmployeePhone', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的电话是否重复'],
-            ['sendEmployeeUserName', site.staticWebsite + 'admin/party/group/employee/ajax/chkname', 'get', '判断员工的用户命是否重复'],
-            ['sendEmployeeNo', site.staticWebsite + 'mock/admin/hasEmployee.json', 'get', '判断员工的编号是否重复'],
+            ['sendEmployeePhone', site.staticWebsite + 'admin/party/group/employee/ajax/checkphone', 'get', '判断员工的电话是否重复'],
+            ['sendEmployeeUserName', site.staticWebsite + 'admin/party/group/employee/ajax/checkloginname', 'get', '判断员工的用户命是否重复'],
+            ['sendEmployeeNo', site.staticWebsite + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
 
             // 会员管理
             ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
@@ -58,14 +58,15 @@
             ['delOneTable', site.website + 'admin/restaurant/table/ajax/&{id}', 'delete', '删除单个餐台'],
             ['searchTable', site.website + 'admin/restaurant/table/ajax/list', 'get', '搜索餐台'],
             ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
+            ['editSendId', site.website + 'admin/restaurant/table/ajax/state', 'get', '编辑时发送餐台ID'],
             //餐台管理--添加\编辑
             //table-management-add.html
             ['sendTableName', site.staticWebsite + 'admin/restaurant/table/ajax/exist', 'post', '判断餐台名称是否重复'],
 
             //餐台区域管理
             ['saveNewArea', site.website + 'admin/restaurant/area/ajax', 'post', '保存新添加区域信息'],
-            ['saveEditArea', site.website + 'admin/restaurant/area/ajax', 'put', '保存编辑原有区域信息结果'],
-            ['delAreaId', site.website + 'admin/restaurant/area/ajax', 'delete', '删除餐台区域时，发送需删除的id']
+            ['saveEditArea', site.website + 'admin/restaurant/area/ajax/&{id}', 'put', '保存编辑原有区域信息结果'],
+            ['delAreaId', site.website + 'admin/restaurant/area/ajax/&{id}', 'delete', '删除餐台区域时，发送需删除的id']
         ],
         // 菜品管理
         DishManagement: [

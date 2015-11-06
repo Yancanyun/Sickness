@@ -8,7 +8,7 @@
       <li><a href="#">用户管理</a></li>
       <li class="active">员工管理</li>
     </ol>
-    <h2>员工管理-员工列表</h2>
+    <h2>员工管理-员工编辑</h2>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">
@@ -89,7 +89,7 @@
                   </td>
                   <td data-employee-status="${employeeDto.employee.status}" class="J_status">${employeeDto.status}</td>
                   <td>
-                    <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                    <a href="${website}admin/party/group/employee/toupdate/${employeeDto.employee.partyId}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
                     <c:if test="${employeeDto.employee.status ==2}">
                       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;启用</a>
                     </c:if>
