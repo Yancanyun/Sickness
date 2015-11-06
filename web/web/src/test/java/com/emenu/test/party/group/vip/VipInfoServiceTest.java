@@ -81,6 +81,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
     public void listByKeyword() throws SSException{
         List<VipInfo> vipInfos = vipInfoService.listByKeyword("姜雪", 1, 10);
         for (VipInfo vipInfo: vipInfos){
+            System.out.println(vipInfo.getPartyId());
             System.out.println(vipInfo.getName());
             System.out.println(vipInfo.getPhone());
         }

@@ -90,7 +90,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfoMapper.listByKeyword(keyword, offset, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
         }
     }
 
@@ -145,7 +145,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.InsertVipInfoFail);
         }
     }
 
@@ -161,11 +161,13 @@ public class VipInfoServiceImpl implements VipInfoService{
                 String oldPhone = this.queryById(id).getPhone();
                 if (id != null && oldPhone.equals(phone)){
                     return count < 0;
+                }else {
+                    count = vipInfoMapper.countByPhone(phone);
                 }
             }
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.VipInfoPhoneExist);
         }
         return count > 0;
     }
@@ -174,17 +176,22 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateVipInfo(VipInfo vipInfo) throws SSException{
         try{
+            //判断id是否合法
             if (!Assert.isNull(vipInfo.getId()) && Assert.lessOrEqualZero(vipInfo.getId())) {
                 throw SSException.get(EmenuException.VipInfoIdError);
             }
-            if (!checkBeforeSave(vipInfo)){
+            //判断姓名和手机号码是否不为空
+            if (!this.checkBeforeSave(vipInfo)){
                 throw SSException.get(EmenuException.UpdateVipInfoFail);
+            }
+            if (this.checkPhoneIsExist(vipInfo.getId(), vipInfo.getPhone())){
+                throw SSException.get(EmenuException.VipInfoPhoneExist);
             }
             Assert.isNotNull(vipInfo);
             commonDao.update(vipInfo);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.UpdateVipInfoFail);
         }
     }
 
@@ -216,7 +223,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             vipInfoMapper.updateStateById(id, stateType);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.UpdateVipInfoFail);
         }
     }
 
@@ -228,7 +235,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
         }
     }
 
@@ -261,7 +268,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             securityUserId = vipInfoMapper.querySecurityUserIdById(id);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
+            throw SSException.get(EmenuException.SearchSecurityUserIdFail);
         }
         return securityUserId;
     }

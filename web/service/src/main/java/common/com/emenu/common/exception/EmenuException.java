@@ -102,7 +102,10 @@ public enum EmenuException implements IBizExceptionMes {
     ListVipInfoFail("获取用户信息列表失败！",8007),
     InsertVipInfoFail("添加会员失败！",8008),
     UpdateVipInfoFail("修改会员信息失败",8009),
-    VipInfoIdError("会员ID为空或者小于0",8010)
+    VipInfoIdError("会员ID为空或者小于0",8010),
+    SearchSecurityUserIdFail("获取用户登录id失败",8011),
+    DeleteVipInfoFail("删除会员失败",8012)
+
 
     ;
 

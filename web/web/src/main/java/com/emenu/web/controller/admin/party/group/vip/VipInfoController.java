@@ -54,7 +54,7 @@ public class VipInfoController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxListVipInfo(@PathVariable("curPage") Integer curPage,
                                       @RequestParam Integer pageSize,
-                                      @RequestParam("key") String keyword){
+                                      @RequestParam("keyword") String keyword){
         List<VipInfo> vipInfoList = Collections.emptyList();
         try{
             if (keyword =="" || keyword == null || keyword.equals("")){
@@ -108,21 +108,9 @@ public class VipInfoController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
-    public String newVipInfo(@RequestParam("name") String name,
-                             @RequestParam("sex") Integer sex,
-                             @RequestParam("birthday") Date birthday,
-                             @RequestParam("phone") String phone,
-                             @RequestParam("qq") String qq,
-                             @RequestParam("email") String email){
+    public String newVipInfo(VipInfo vipInfo){
         try{
             int userPartyId = getPartyId();
-            VipInfo vipInfo = new VipInfo();
-            vipInfo.setName(name);
-            vipInfo.setSex(sex);
-            vipInfo.setBirthday(birthday);
-            vipInfo.setPhone(phone);
-            vipInfo.setQq(qq);
-            vipInfo.setEmail(email);
             vipInfoService.newVipInfo(userPartyId,vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -170,26 +158,8 @@ public class VipInfoController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public String updateVipInfo(@RequestParam("id") Integer id,
-                                @RequestParam("name") String name,
-                                @RequestParam("sex") Integer sex,
-                                @RequestParam("birthday") Date birthday,
-                                @RequestParam("phone") String phone,
-                                @RequestParam("qq") String qq,
-                                @RequestParam("email") String email){
+    public String updateVipInfo(VipInfo vipInfo){
         try{
-            if (vipInfoService.checkPhoneIsExist(id, phone)){
-                throw SSException.get(EmenuException.VipInfoPhoneExist);
-            }
-
-            VipInfo vipInfo = new VipInfo();
-            vipInfo.setId(id);
-            vipInfo.setName(name);
-            vipInfo.setSex(sex);
-            vipInfo.setBirthday(birthday);
-            vipInfo.setPhone(phone);
-            vipInfo.setQq(qq);
-            vipInfo.setEmail(email);
             vipInfoService.updateVipInfo(vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -204,7 +174,7 @@ public class VipInfoController extends AbstractController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/ajax/del", method = RequestMethod.GET)
+    @RequestMapping(value = "/ajax/del", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxDel(@RequestParam("id") Integer id){
         try{

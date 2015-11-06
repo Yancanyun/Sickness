@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.party.group.vip.VipInfoMapper">
 
-    <select id="listByKeyword" resultType="VipInfo">
+    <select id="listByKeyword" resultMap="pw.VipInfo">
         SELECT *
         FROM `t_party_vip_info` vipInfo
         <where>
@@ -15,7 +15,7 @@
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="listByPage" resultType="VipInfo">
+    <select id="listByPage" resultMap="pw.VipInfo">
         SELECT *
         FROM `t_party_vip_info`
         WHERE `state` = 1 OR `state` = 2
@@ -42,7 +42,7 @@
         LIMIT #{offset},#{pageSize}
     </select>
 
-    <select id="queryById" resultType="VipInfo">
+    <select id="queryById" resultMap="pw.VipInfo">
         SELECT *
         FROM `t_party_vip_info` vipInfo
         WHERE vipInfo.id = #{id}
@@ -51,7 +51,12 @@
     <select id="countByPhone" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info`
-        WHERE `phone` = #{phone}
+        <where>
+            <if test="phone != null">
+                `phone` = #{phone} AND
+                (`state` = 1 OR `state` = 2)
+            </if>
+        </where>
     </select>
     
     <update id="updateStateById">
@@ -60,7 +65,7 @@
         WHERE `id` = #{id}
     </update>
 
-    <select id="querySecurityUserIdById" parameterType="int" resultType="int">
+    <select id="querySecurityUserIdById" resultType="int">
         SELECT securityUser.`id`
         FROM `t_party_security_user` AS securityUser,
         `t_party_vip_info` AS vipInfo,

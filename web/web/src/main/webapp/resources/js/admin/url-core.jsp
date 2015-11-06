@@ -32,7 +32,7 @@
             // 会员管理
             ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
             // 会员管理--列表--删除
-            ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'get', '删除会员时，发送会员id'],
+            ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'put', '删除会员时，发送会员id'],
             //会员管理--添加\编辑
             ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重']
         ],
