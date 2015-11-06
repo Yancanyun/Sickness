@@ -82,15 +82,16 @@ public class AdminQrCodeController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantQrCodeDownload)
     @RequestMapping(value = "download/{areaId}", method = RequestMethod.GET)
-    @ResponseBody
-    public JSONObject downloadQrCodeByAreaId(@PathVariable("areaId") Integer areaId,
+    public String downloadQrCodeByAreaId(@PathVariable("areaId") Integer areaId,
                                              HttpServletRequest request,
                                              HttpServletResponse response) {
         try {
             qrCodeService.downloadByAreaId(areaId, request, response);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            return null;
         } catch (SSException e) {
-            return sendErrMsgAndErrCode(e);
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
         }
     }
 
@@ -102,13 +103,14 @@ public class AdminQrCodeController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantQrCodeDownload)
     @RequestMapping(value = "download", method = RequestMethod.GET)
-    @ResponseBody
-    public JSONObject downloadAllQrCode(HttpServletRequest request, HttpServletResponse response) {
+    public String downloadAllQrCode(HttpServletRequest request, HttpServletResponse response) {
         try {
             qrCodeService.downloadAllQrCode(request, response);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            return null;
         } catch (SSException e) {
-            return sendErrMsgAndErrCode(e);
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
         }
     }
 }

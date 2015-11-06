@@ -87,8 +87,7 @@ public class QrCodeServiceImpl implements QrCodeService {
                 throw SSException.get(EmenuException.SystemException, e);
             }
             File outputFile = new File(qrCodeSavePath + qrCodePath);
-
-            //若目录不存在则创建之
+            //若文件不存在则创建之
             if(!outputFile.exists()){
                 outputFile.mkdirs();
             }
@@ -152,10 +151,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载
             downloadFile = new File(zipName);
-            //若目录不存在则创建之
-            if(!downloadFile.exists()){
-                downloadFile.mkdirs();
-            }
+
             long fileLength = downloadFile.length();
             response.setContentType(contentType);
             //使用UTF-8以解决中英文混用时的乱码问题
@@ -215,7 +211,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             zip(resourcesPath, qrCodeDtoList, zipName);
             //下载
             downloadFile = new File(zipName);
-            //若目录不存在则创建之
+            //若文件不存在则创建之
             if(!downloadFile.exists()){
                 downloadFile.mkdirs();
             }
