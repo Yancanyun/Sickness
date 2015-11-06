@@ -5,5 +5,5 @@
   <tiles:putAttribute name="title" value="${webTitle}"/>
   <tiles:putAttribute name="body" value="/WEB-INF/views/admin/page/keywords/body/list_body.jsp"/>
   <tiles:putAttribute name="script" value="/WEB-INF/views/admin/page/keywords/inc/list_script.jsp"/>
-  <tiles:putAttribute name="extendHead" value="<link href='${staticWebsite}css/admin/base-info-management/base-info-management.css' />"/>
+  <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/admin/base-info-management/base-info-management.css' />"/>
 </tiles:insertDefinition>
