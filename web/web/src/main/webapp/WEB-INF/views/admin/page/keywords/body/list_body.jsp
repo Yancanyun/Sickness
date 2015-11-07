@@ -21,7 +21,7 @@
             <div class="col-sm-3">
               <input type="text" class="form-control J_input-key" data-valid-tip="请输入1~15个关键字|关键字有误，请重新输入" data-valid-rule="length(0,16)" name="key" value="">
             </div>
-            <a href="javascript:;" class="btn btn-success J_add"><i class="fa fa-plus"></i>&nbsp;添加</a>
+            <button class="btn btn-success J_add" type="submit"><i class="fa fa-plus"></i>&nbsp;添加</button>
           </div>
         </form>
         <div class="tags J_tags">
@@ -44,7 +44,7 @@
             <div class="col-sm-3">
               <input type="text" class="form-control J_input-key" data-valid-tip="请输入1~15个关键字|关键字有误，请重新输入" data-valid-rule="length(0,16)" name="key" value="">
             </div>
-            <a href="javascript:;" class="btn btn-success J_add"><i class="fa fa-plus"></i>&nbsp;添加</a>
+            <button class="btn btn-success J_add" type="submit"><i class="fa fa-plus"></i>&nbsp;添加</button>
           </div>
         </form>
         <div class="tags J_tags">

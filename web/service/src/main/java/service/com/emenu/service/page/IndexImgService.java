@@ -54,6 +54,7 @@ public interface IndexImgService {
 
     /**
      * 根据状态查询首页图片
+     * 0-未使用 1-正在使用
      *
      * @param state
      * @return

@@ -22,6 +22,8 @@ public interface IndexImgMapper {
     public List<IndexImg> listAll() throws Exception;
 
     /**
+     * 根据状态查询首页图片
+     * 0-未使用 1-正在使用
      *
      * @param state
      * @return
