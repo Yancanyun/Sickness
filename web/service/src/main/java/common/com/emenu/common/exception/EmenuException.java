@@ -16,6 +16,13 @@ public enum EmenuException implements IBizExceptionMes {
     UploadDirCreateFail("上传文件夹创建失败!", 1004),
     UploadFileFail("文件上传失败", 1005),
 
+    SupplierInsertFail("添加供货商失败", 1006),
+    SupplierUpdateFail("更新供货商失败", 1007),
+    SupplierQueryFail("查询供货商失败", 1008),
+    SupplierDeleteFail("删除供货商失败", 1009),
+    SupplierNameNotNull("供货商名称不能为空", 1010),
+    SupplierNameExist("供货商名称已存在", 1011),
+
     //菜品管理模块
     //分类管理
     NewTagFailed("添加分类Tag失败", 3001),
