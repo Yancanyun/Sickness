@@ -10,6 +10,7 @@
             `weight`
         FROM `t_area`
         WHERE `state` = 1
+        ORDER BY `weight` DESC, `id` ASC
     </select>
 
     <select id="queryStateById" resultType="int">

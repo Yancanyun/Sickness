@@ -26,18 +26,20 @@
               <thead>
               <tr>
                 <th>餐台区域</th>
+                <th>权重</th>
                 <th>操作</th>
               </tr>
               </thead>
               <tbody class="data-show-tbody">
               <c:forEach var="area" items="${areaList}">
-              <tr table-area-id = "${area.id}">
-                <td class="J_desc col-sm-8">${area.name}</td>
-                <td class="col-sm-4">
-                  <a class="label-info J_editBtn" href="javascript:;"><i class="fa fa-pencil"></i>&nbsp;编辑</a>&nbsp;
-                  <a class="label-info J_delBtn" href="javascript:;"><i class="fa fa-times"></i>&nbsp;删除</a>&nbsp;
-                </td>
-              </tr>
+                <tr table-area-id = "${area.id}">
+                  <td class="J_desc col-sm-8">${area.name}</td>
+                  <td class="J_weight col-sm-2">${area.weight}</td>
+                  <td class="col-sm-4">
+                    <a class="label-info J_editBtn" href="javascript:;"><i class="fa fa-pencil"></i>&nbsp;编辑</a>&nbsp;
+                    <a class="label-info J_delBtn" href="javascript:;"><i class="fa fa-times"></i>&nbsp;删除</a>&nbsp;
+                  </td>
+                </tr>
               </c:forEach>
               </tbody>
             </table>

@@ -72,12 +72,13 @@ public class AdminAreaController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantAreaUpdate)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateArea(@PathVariable("id") Integer id, @RequestParam String name) {
+    public JSONObject ajaxUpdateArea(@PathVariable("id") Integer id, @RequestParam String name,
+                                     @RequestParam Integer weight) {
         try {
             Area area = new Area();
             area.setId(id);
             area.setName(name);
-//            area.setWeight(weight);
+            area.setWeight(weight);
             areaService.updateArea(id, area);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {

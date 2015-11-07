@@ -3,6 +3,7 @@
 <script type="text/template" id="editTpl">
   <tr table-area-id="&{area.id}" oper-type="&{area.type}">
     <td class="J_desc col-sm-8"><input type="text" class="form-control" data-valid-tip="" data-valid-rule="notNull" name="name" value="&{area.desc}"/></td>
+    <td class="J_weight col-sm-2"><input type="text" class="form-control" data-valid-tip="" data-valid-rule="isNumber" name="weight" value="&{area.weight}"/></td>
     <td class="col-sm-4">
       <a href="javascript:;" class="label-info J_saveBtn">
         <i class="fa fa-save"></i>&nbsp;保存</a>&nbsp;
@@ -14,7 +15,8 @@
 <!--保存模板-->
 <script type="text/template" id="saveTpl">
   <tr table-area-id="&{area.id}">
-    <td  class="J_desc col-sm-8">&{area.desc}</td>
+    <td class="J_desc col-sm-8">&{area.desc}</td>
+    <td class="J_weight col-sm-2">&{area.weight}</td>
     <td class="col-sm-4">
       <a class="label-info J_editBtn" href="javascript:;">
         <i class="fa fa-pencil"></i>&nbsp;编辑</a>&nbsp;
