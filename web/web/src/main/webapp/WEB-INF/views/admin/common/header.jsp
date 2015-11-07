@@ -55,7 +55,6 @@
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/party/group/employee/">用户管理</a></li>
                 <li><a class="J_menu" href="${website}admin/party/group/vip">会员管理</a></li>
-                <li><a class="J_menu" href="javascript:;">用户密码修改</a></li>
             </ul>
         </li>
         <li>

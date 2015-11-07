@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.party.group.employee.Employee;
+import com.emenu.common.entity.party.security.SecurityGroup;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
@@ -20,9 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author xiaozl
@@ -59,12 +58,11 @@ public class EmployeeController  extends AbstractController {
         try {
 
             List<EmployeeDto> employeeDtoList = Collections.emptyList();
-
-
             employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
 
+            List<SecurityGroup> roleList = securityGroupService.listAll();
             model.addAttribute("employeeDtoList", employeeDtoList);
-
+            model.addAttribute("roleList",roleList);
             return "admin/party/group/employee/list_home";
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
@@ -87,9 +85,7 @@ public class EmployeeController  extends AbstractController {
     @RequestMapping(value = "ajax/list",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject listByRoles(@RequestParam("roles")Integer [] roles,Model model,HttpServletRequest request){
-
         List<EmployeeDto> employeeDtoList = Collections.emptyList();
-
         try{
             if(roles == null) {
                 employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
@@ -104,9 +100,7 @@ public class EmployeeController  extends AbstractController {
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-
         }
-
         JSONArray jsonArray = new JSONArray();
         for (EmployeeDto employeeDto : employeeDtoList) {
             JSONObject jsonObject = new JSONObject();
@@ -249,7 +243,9 @@ public class EmployeeController  extends AbstractController {
     public String toNew(Model model){
         try{
             List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
+            List<SecurityGroup> roleList = securityGroupService.listAll();
             model.addAttribute("areaDtoList", areaDtoList);
+            model.addAttribute("roleList",roleList);
             return "admin/party/group/employee/new_home";
         }catch (SSException e){
             LogClerk.errLog.error(e);
@@ -260,7 +256,7 @@ public class EmployeeController  extends AbstractController {
 
     @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "toupdate/{partyId}",method = RequestMethod.GET)
-    public String toUpdate(@PathVariable("partyId")Integer partyId){
+    public String toUpdate(@PathVariable("partyId")Integer partyId,Model model){
         /*try{
             List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
             model.addAttribute("areaDtoList", areaDtoList);
@@ -275,27 +271,76 @@ public class EmployeeController  extends AbstractController {
             EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
             List<Table> tableList = Collections.emptyList();
             tableList = tableService.listAll();
+            List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
+            List<SecurityGroup> roleList = securityGroupService.listAll();
 
+            Map<Integer, Integer> roleMap = new HashMap<Integer, Integer>();
+            Map<Integer, Integer> tableMap = new HashMap<Integer, Integer>();
+            for (Integer roleId : employeeDto.getRole()) {
+                roleMap.put(roleId, 1);
+            }
+            for (Integer tableId: employeeDto.getTables()) {
+                tableMap.put(tableId, 1);
+            }
+
+            model.addAttribute("areaDtoList", areaDtoList);
+            model.addAttribute("employeeDto",employeeDto);
+            model.addAttribute("tableList",tableList);
+            model.addAttribute("roleMap", roleMap);
+            model.addAttribute("tableMap", tableMap);
+            model.addAttribute("roleList", roleList);
+            return "admin/party/group/employee/update_home";
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return WebConstants.sysErrorCode;
         }
 
-
-
-        return "admin/party/group/employee/update_home";
     }
 
-    /**
-     * 添加新员工
-     * @param roles
-     * @param tables
-     * @param loginName
-     * @param password
-     * @param employee
-     * @return
-     */
+    @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public String updateEmployee(@RequestParam("partyId")Integer partyId,
+                                 @RequestParam("roles")Integer [] roles,
+                                 @RequestParam(value = "tables",required = false)Integer [] tables,
+                                 @RequestParam("loginName")String loginName,
+                                 @RequestParam("password")String password,
+                                 Employee employee) {
+        try {
+            EmployeeDto employeeDto = new EmployeeDto();
+            employeeDto.setEmployee(employee);
+
+            List<Integer> roleList = new ArrayList<Integer>();
+            for (int i = 0; i < roles.length; i++) {
+                roleList.add(roles[i]);
+                System.out.println(i);
+            }
+
+            List<Integer> tableList = new ArrayList<Integer>();
+            for (int i = 0; i < tables.length; i++) {
+                tableList.add(tables[i]);
+            }
+            employeeDto.setRole(roleList);
+            employeeDto.setTables(tableList);
+            employeeService.update(employeeDto, partyId, loginName, CommonUtil.md5(password));
+
+            return "redirect:";
+        } catch (SSException e) {
+            sendErrMsg(e.getMessage());
+            LogClerk.errLog.error(e);
+            return WebConstants.sysErrorCode;
+        }
+    }
+
+        /**
+         * 添加新员工
+         * @param roles
+         * @param tables
+         * @param loginName
+         * @param password
+         * @param employee
+         * @return
+         */
     @Module(ModuleEnums.AdminUserManagementEmployeeNew)
     @RequestMapping(value = "new",method = RequestMethod.POST)
     public String newEmployee(@RequestParam("roles")Integer [] roles,

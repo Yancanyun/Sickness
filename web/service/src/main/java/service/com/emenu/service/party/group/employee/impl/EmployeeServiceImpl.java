@@ -495,6 +495,10 @@ public class EmployeeServiceImpl implements EmployeeService{
             List<Integer> roles = Collections.emptyList();
             roles = employeeMapper.queryRoleByPartyId(employee.getPartyId());//查询每个用户的对应的所有角色
             List<String> roleNames = new ArrayList<String>();//根据取出的角色标识，赋予角色名
+
+            //获取服务员服务的餐桌
+            List<Integer> tables = waiterTableService.queryByPartyId(partyId);
+            employeeDto.setTables(tables);
             //获得用户角色名
             for (int r : roles) {
                     roleNames.add(EmployeeRoleEnums.getDescriptionById(r));

@@ -22,6 +22,14 @@
             <div class="col-sm-6">
               <div class="checkbox block">
                 <label>
+                  <input class="J_selectAll"  type="checkbox" value="0" name="roles"> 全部
+                </label>
+                <c:forEach var="role" items="${roleList}">
+                  <label>
+                    <input class="J_roleType" type="checkbox" value="${role.id}" name="roles"> ${role.name}
+                  </label>
+                </c:forEach>
+               <%-- <label>
                   <input class="J_selectAll"  type="checkbox" value="0" name="roles" checked="checked"> 全部
                 </label>
                 <label>
@@ -32,7 +40,7 @@
                 </label>
                 <label>
                   <input class="J_roleType" type="checkbox" value="4" name="roles" checked="checked"> 服务员
-                </label>
+                </label>--%>
               </div>
             </div>
           </div>
@@ -78,7 +86,7 @@
                     <c:forEach var="role" items="${employeeDto.roleName}">
                       <c:choose>
                         <c:when test="${role == '服务员'}">
-                          <a class="tool-tip" href="javascript:;" data-tooltip-toggle="tooltip" data-tooltip-placement="bottom" data-tooltip-text="">服务员</a>
+                          <a class="J_waiter" href="javascript:;" >服务员</a>
                         </c:when>
                         <c:otherwise>
                           ${role}

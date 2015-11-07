@@ -65,11 +65,12 @@
     <li id="firstMenu5" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">用户信息管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li><a class="J_menu" href="javascript:;">用户管理</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:User:Management:Employee:List'}">class="active"</c:if>>
+            <a class="J_menu" href="${website}admin/party/group/employee/">用户管理</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:User:Management:Vip:VipInfo:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/party/group/vip/">会员管理</a>
             </li>
-            <li><a class="J_menu" href="javascript:;">用户密码修改</a></li>
         </ul>
     </li>
     <li id="firstMenu6" class="active hidden">

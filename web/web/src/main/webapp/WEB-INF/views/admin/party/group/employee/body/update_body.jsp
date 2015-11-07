@@ -21,25 +21,25 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>用户名</label>
             <div class="col-sm-6">
-              <input class="w180 J_username" type="text" value="" name="loginName" />
+              <input class="w180 J_username" type="text" value="${employeeDto.loginName}" name="loginName" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>员工编号</label>
             <div class="col-sm-6">
-              <input class="w180 J_employeeNo" type="text" value="" name="employeeNumber" />
+              <input class="w180 J_employeeNo" type="text" value="${employeeDto.employee.employeeNumber}" name="employeeNumber" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>姓名</label>
             <div class="col-sm-6">
-              <input class="w180" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="" name="name" />
+              <input class="w180" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="${employeeDto.employee.name}" name="name" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>电话</label>
             <div class="col-sm-6">
-              <input class="w180 J_phone" type="text" value="" name="phone" />
+              <input class="w180 J_phone" type="text" value="${employeeDto.employee.phone}" name="phone" />
             </div>
           </div>
           <div class="form-group">
@@ -57,33 +57,34 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>角色</label>
             <div class="col-sm-6">
-              <div class="checkbox block">
-                <label>
-                  <input type="checkbox" value="2" name="roles" > 吧台
-                </label>
-              </div>
-              <div class="checkbox block">
-                <label>
-                  <input type="checkbox" value="3" name="roles"> 后厨
-                </label>
-              </div>
-              <div class="checkbox block">
-                <label>
-                  <input class="J_waiter" type="checkbox" value="4" name="roles"> 服务员
-                </label>
-                <div class="waiter-table J_waiterTable hidden">
-                 <c:forEach var="areaDto" items="${areaDtoList}">
-                   <div class="area-table clearfix">
-                      <span>${areaDto.area.name}:</span>
-                   <c:forEach var="tables" items="${areaDto.tableList}">
-                     <label>
-                       <input type="checkbox" value="${tables.id}" name="tables">${tables.name}
-                     </label>
-                   </c:forEach>
-                   </div>
-                 </c:forEach>
-                </div>
-              </div>
+              <c:forEach var="role" items="${roleList}">
+                <c:if test="${role.id != 4}">
+                  <div class="checkbox block">
+                    <label>
+                      <input type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}">checked="checked"</c:if>> ${role.name}
+                    </label>
+                  </div>
+                </c:if>
+                <c:if test="${role.id == 4}">
+                  <div class="checkbox block">
+                    <label>
+                      <input class="J_waiter" type="checkbox" value="${role.id}" name="roles" checked="checked"> 服务员
+                    </label>
+                    <div class="waiter-table J_waiterTable hidden">
+                      <c:forEach var="areaDto" items="${areaDtoList}">
+                        <div class="area-table clearfix">
+                          <span>${areaDto.area.name}:</span>
+                          <c:forEach var="tables" items="${areaDto.tableList}">
+                            <label>
+                              <input type="checkbox" value="${tables.id}" name="tables" <c:if test="${tableMap[tables.id] == 1}">checked="checked"</c:if>>${tables.name}
+                            </label>
+                          </c:forEach>
+                        </div>
+                      </c:forEach>
+                    </div>
+                  </div>
+                </c:if>
+              </c:forEach>
             </div>
           </div>
         </div>

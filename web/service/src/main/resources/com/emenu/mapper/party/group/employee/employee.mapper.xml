@@ -5,18 +5,10 @@
 <mapper namespace="com.emenu.mapper.party.group.employee.EmployeeMapper">
 
     <!-- 查询所有员工 -->
-    <select id="listAll" resultType="Employee" parameterType="Integer">
-
-
-        SELECT `id` AS `id`
-        ,`party_id` AS `partyId`
-        , `name` AS `name`
-        , `phone` AS `phone`
-        , `status` AS `status`
+    <select id="listAll" resultType="Employee" parameterType="Integer" resultMap="pw.Employee">
+        SELECT *
         FROM `t_party_employee`
         WHERE `status` != 3
-
-
     </select>
 
     <select id="queryRoleByPartyId" parameterType="int" resultType="Integer">

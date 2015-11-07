@@ -18,9 +18,11 @@
     <td>&{it.phone}</td>
     <td>
       {@each it.roles as item}
+      {@if item == 1}管理员{@/if}
       {@if item == 2}吧台{@/if}
-      {@if item == 4}<a class="tool-tip" href="javascript:;" data-tooltip-toggle="tooltip" data-tooltip-placement="bottom" data-tooltip-text="123">服务员</a>{@/if}
       {@if item == 3}后厨{@/if}
+      {@if item == 4}<a class="J_waiter" href="javascript:;" >服务员</a>{@/if}
+      {@if item == 5}顾客{@/if}
       {@/each}
     </td>
     <td data-employee-status="&{it.status}" class="J_status">
