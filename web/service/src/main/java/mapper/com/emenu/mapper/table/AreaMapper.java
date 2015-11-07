@@ -12,17 +12,18 @@ import java.util.List;
  * @time: 2015/10/23 9:48
  */
 public interface AreaMapper {
-
     /**
      * 查询全部区域
      * @return List<Area>
+     * @throws Exception
      */
     public List<Area> listAll() throws Exception;
 
     /**
      * 据ID查询区域状态
      * @param id
-     * @return int : 0、可用；1、已删除
+     * @return int : 1、可用；2、已删除
+     * @throws Exception
      */
     public int queryStateById(@Param("id") int id) throws Exception;
 
@@ -30,6 +31,7 @@ public interface AreaMapper {
      * 查询某区域名称的数量
      * @param name
      * @return int
+     * @throws Exception
      */
     public int countByName(@Param("name") String name) throws Exception;
 

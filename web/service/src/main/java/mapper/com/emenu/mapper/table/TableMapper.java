@@ -16,6 +16,7 @@ public interface TableMapper {
     /**
      * 查询全部餐台（仅餐台表本身的信息）
      * @return List<Table>
+     * @throws Exception
      */
     public List<Table> listAll() throws Exception;
 
@@ -23,6 +24,7 @@ public interface TableMapper {
      * 根据区域ID查询餐台（仅餐台表本身的信息）
      * @param areaId
      * @return List<Table>
+     * @throws Exception
      */
     public List<Table> listByAreaId(@Param("areaId") int areaId) throws Exception;
 
@@ -30,6 +32,7 @@ public interface TableMapper {
      * 根据状态查询餐台（仅餐台表本身的信息）
      * @param state
      * @return List<Table>
+     * @throws Exception
      */
     public List<Table> listByState(@Param("state") int state) throws Exception;
 
@@ -38,6 +41,7 @@ public interface TableMapper {
      * @param areaId
      * @param state
      * @return List<Table>
+     * @throws Exception
      */
     public List<Table> listByAreaIdAndState(@Param("areaId") int areaId, @Param("state") int state) throws Exception;
 
@@ -45,6 +49,7 @@ public interface TableMapper {
      * 根据ID查询餐台状态
      * @param id
      * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账4、已并桌；5、已预订；6、已删除
+     * @throws Exception
      */
     public int queryStateById(@Param("id") int id) throws Exception;
 
@@ -52,6 +57,7 @@ public interface TableMapper {
      * 查询某餐台名称的数量
      * @param name
      * @return int
+     * @throws Exception
      */
     public int countByName(@Param("name") String name) throws Exception;
 
@@ -59,6 +65,7 @@ public interface TableMapper {
      * 根据区域ID查询区域内餐台的数量
      * @param areaId
      * @return int
+     * @throws Exception
      */
     public int countByAreaId(@Param("areaId") int areaId) throws Exception;
 

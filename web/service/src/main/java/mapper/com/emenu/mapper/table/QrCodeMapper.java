@@ -16,12 +16,14 @@ public interface QrCodeMapper {
      * 根据区域ID查询二维码
      * @param areaId
      * @return
+     * @throws Exception
      */
     public List<QrCodeDto> listByAreaId(@Param("areaId") int areaId) throws Exception;
 
     /**
      * 查询全部二维码
      * @return
+     * @throws Exception
      */
     public List<QrCodeDto> listAll() throws Exception;
 }

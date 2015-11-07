@@ -22,6 +22,7 @@ public interface AreaService {
 
     /**
      * 根据ID查询区域
+     * @param id
      * @return Area
      * @throws SSException
      */
@@ -57,7 +58,7 @@ public interface AreaService {
      * @param area
      * @throws SSException
      */
-    public void updateArea(Integer id, Area area) throws SSException;
+    public void updateArea(int id, Area area) throws SSException;
 
     /**
      * 删除区域

@@ -128,7 +128,6 @@ public interface TableService {
 
     /**
      * 修改餐台
-     *
      * @param id
      * @param table
      * @throws SSException

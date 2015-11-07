@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.remark.RemarkMapper">
+    <select id="listAll" resultMap="pw.Remark">
+        SELECT
+        `id`,
+        `name`,
+        `remark_tag_id`,
+        `weight`,
+        `is_common`,
+        `related_charges`
+        FROM `t_remark`
+        WHERE `state` = 1
+    </select>
+
+    <select id="listByRemarkTagId" resultMap="pw.Remark">
+        SELECT
+        `id`,
+        `name`,
+        `remark_tag_id`,
+        `weight`,
+        `is_common`,
+        `related_charges`
+        FROM `t_remark`
+        WHERE `remark_tag_id` = #{remarkTagId} AND `state` = 1
+    </select>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_remark`
+        WHERE `name` = #{name} AND `state` = 1
+    </select>
+
+    <select id="countByRemarkTagId" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_remark`
+        WHERE `remark_tag_id` = #{remarkTagId} AND `state` = 1
+    </select>
+
+    <update id="updateState">
+        UPDATE `t_remark`
+        SET `state` = #{state}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

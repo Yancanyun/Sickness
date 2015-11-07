@@ -119,7 +119,7 @@ public class AreaServiceImpl implements AreaService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateArea(Integer id, Area area) throws SSException {
+    public void updateArea(int id, Area area) throws SSException {
         try {
             //若Name与相应ID在数据库中对应的名称不一致，再去判断该名称是否在数据库中已存在
             if (!area.getName().equals(queryById(id).getName()) && checkNameIsExist(area.getName())){

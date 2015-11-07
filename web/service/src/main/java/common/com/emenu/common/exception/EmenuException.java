@@ -40,6 +40,7 @@ public enum EmenuException implements IBizExceptionMes {
     UnitTypeError("单位类型为空或者小于0", 3027),
     UnitNameIsExist("单位名称已存在", 3028),
 
+    //饭店管理
     //餐台区域
     QueryAreaFail("查询区域失败", 4001),
     AreaNameExist("区域名称已存在", 4002),
@@ -57,10 +58,25 @@ public enum EmenuException implements IBizExceptionMes {
     TableHasUsed("餐台正在被使用", 4025),
     AreaNotExist("区域不存在", 4026),
     TableNameIsNull("餐台名称不能为空", 4027),
-    QueryWaiterTableFail("获取服务员-餐台信息失败！", 4028),
+    QueryWaiterTableFail("获取服务员-餐台信息失败", 4028),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4040),
-
+    //备注分类管理
+    QueryRemarkTagFail("查询备注分类失败", 4060),
+    InsertRemarkTagFail("添加备注分类失败", 4061),
+    UpdateRemarkTagFail("编辑备注分类失败", 4062),
+    DeleteRemarkTagFail("删除备注分类失败", 4063),
+    RemarkTagNameExist("备注分类名称已存在", 4064),
+    RemarkTagNameIsNull("备注分类名称不能为空", 4065),
+    RemarkTagNotExist("备注分类不存在", 4066),
+    RemarkTagHasRemarkExist("备注分类中有备注存在，不允许删除", 4067),
+    //备注管理
+    QueryRemarkFail("查询备注失败", 4080),
+    InsertRemarkFail("添加备注失败", 4081),
+    UpdateRemarkFail("编辑备注失败", 4082),
+    DeleteRemarkFail("删除备注失败", 4083),
+    RemarkNameExist("备注名称已存在", 4084),
+    RemarkNameIsNull("备注名称不能为空", 4085),
 
     //搜索风向标
     KeywordsExist("关键字已存在！", 5001),
