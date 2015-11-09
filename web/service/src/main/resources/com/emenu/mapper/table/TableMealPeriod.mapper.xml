@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.table.TableMealPeriodMapper">
+    <select id="listByTableId" parameterType="int" resultType="int">
+        SELECT `meal_period_id` AS mealPeriodId
+        FROM `t_table_meal_period`
+        WHERE `table_id` = #{tableId}
+    </select>
+
+    <delete id="delByTableId">
+        DELETE FROM `t_table_meal_period` WHERE `table_id` = #{tableId}
+    </delete>
+</mapper>

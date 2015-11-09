@@ -13,6 +13,7 @@ public class TableDto {
     private String areaId;
     private String areaName;
     private String state;
+    //TODO: 待餐段实体类写好后添加 List<MealPeriod>
 
     public Table getTable() {
         return table;

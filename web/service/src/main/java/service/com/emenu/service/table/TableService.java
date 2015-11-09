@@ -80,7 +80,7 @@ public interface TableService {
     public List<Table> listByAreaIdAndState(int areaId, TableStateEnums state) throws SSException;
 
     /**
-     * 根据ID查询餐台（包含区域表中的信息）
+     * 根据ID查询餐台（包含区域表、餐段表中的信息）
      * @param id
      * @return TableDto
      * @throws SSException
