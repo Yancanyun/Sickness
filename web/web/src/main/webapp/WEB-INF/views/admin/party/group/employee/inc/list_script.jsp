@@ -3,10 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <script type="text/template" id="tooltipTpl">
   {@each list as it}
-  <p class="text-center">
-    <span>&{it.area}:</span>
-    <span>&{it.tables}</span>
-  </p>
+       <p>
+           <span>&{it.area}</span>:
+           <span>&{it.tables}</span>
+       </p>
   {@/each}
 </script>
 <script type="text/template" id="searchTpl">

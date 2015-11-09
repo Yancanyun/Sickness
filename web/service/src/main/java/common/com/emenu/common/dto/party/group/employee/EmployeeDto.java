@@ -11,15 +11,20 @@ import java.util.List;
  */
 public class EmployeeDto {
 
-    private Employee employee;//用户实体
+    //用户实体
+    private Employee employee;
 
-    private String loginName;//员工登录名
+    //员工登录名
+    private String loginName;
 
-    private List<Integer> role;//用户角色标识：1代表后台，2代表吧台，3代表后厨，4代表服务员，5代表顾客
+    //用户角色标识：1代表后台，2代表吧台，3代表后厨，4代表服务员，5代表顾客
+    private List<Integer> role;
 
-    private List<String> roleName;//用户角色名：服务员、吧台、后厨
+    //用户角色名：服务员、吧台、后厨
+    private List<String> roleName;
 
-    private String status;//标识加锁和解锁
+    //启用与禁用
+    private String status;
 
     //如果是服务员，则tables对应的是服务员负责的餐桌；如果不是服务员此项为空,添加用户的时候回用到
     private List<Integer> tables;

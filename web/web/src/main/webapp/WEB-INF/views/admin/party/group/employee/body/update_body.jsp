@@ -68,7 +68,7 @@
                 <c:if test="${role.id == 4}">
                   <div class="checkbox block">
                     <label>
-                      <input class="J_waiter" type="checkbox" value="${role.id}" name="roles" checked="checked"> 服务员
+                      <input class="J_waiter" type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}"> checked="checked"</c:if>> ${role.name}
                     </label>
                     <div class="waiter-table J_waiterTable hidden">
                       <c:forEach var="areaDto" items="${areaDtoList}">

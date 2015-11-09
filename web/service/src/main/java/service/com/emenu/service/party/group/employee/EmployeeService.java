@@ -7,6 +7,7 @@ import com.pandawork.core.common.exception.SSException;
 import java.util.List;
 
 /**
+ * 用户管理service
  * @author xiaozl
  * @date 2015/10/23
  * @time 10:27
@@ -29,12 +30,12 @@ public interface EmployeeService {
     public List<EmployeeDto> listByRoles(List<Integer> roleList) throws SSException;
 
     /**
-     * 检查注册员工是否用户名重名
+     * 检查注册员工是否姓名重名
      * @param employeeName
      * @return
      * @throws SSException
      */
-    public boolean checkName(String employeeName) throws SSException;
+    public boolean checkNameIsExist(String employeeName) throws SSException;
 
     /**
      * 员工编号是否重复
