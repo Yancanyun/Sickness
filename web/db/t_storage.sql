@@ -81,3 +81,27 @@ CREATE TABLE `t_storage_settlement_item` (
   `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
 	 PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='结算详情';
+
+/* 库存物品 */
+CREATE TABLE `t_storage_item` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`supplier_party_id` INT(11) NOT NULL DEFAULT '0' COMMENT '供货商ID',
+	`tag_id` INT(11) NOT NULL DEFAULT '0' COMMENT '分类ID',
+	`name` VARCHAR(30) NOT NULL DEFAULT '' COMMENT '名称',
+	`item_number` VARCHAR(30) NOT NULL DEFAULT '' COMMENT '物品编号',
+	`assistant_code` VARCHAR(30) NOT NULL  DEFAULT '' COMMENT '助记码',
+	`order_unit_id` INT(11) NOT NULL DEFAULT '0' COMMENT '订货单位',
+	`storage_unit_id` INT(11) NOT NULL DEFAULT '0' COMMENT '库存单位',
+	`cost_card_unit_id` INT(11) NOT NULL DEFAULT '0' COMMENT '成本卡单位',
+	`orderToStorageRatio` DECIMAL(10, 2) NOT NULL DEFAULT '1.00' COMMENT '订货单位到库存单位转换比例',
+	`storageToCostCardRatio` DECIMAL(10, 2) NOT NULL DEFAULT '1.00' COMMENT '库存单位到成本卡单位转换比例',
+	`max_storage_quantity` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '最大库存量',
+	`min_storage_quantity` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '最小库存量',
+	`stock_out_type` TINYINT(11) NOT NULL DEFAULT '1' COMMENT '出库方式(1-加权平均,2-手动)',
+	`total_stock_in_quantity` DECIMAL(11, 2) NOT NULL DEFAULT '0.00' COMMENT '总进货数量',
+	`total_stock_in_money` DECIMAL(11, 2) NOT NULL DEFAULT '0.00' COMMENT '总进货金额',
+	`last_stock_in_price` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '最近入库单价',
+	`created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+	PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='库存物品表'

@@ -9,9 +9,9 @@ import java.util.Map;
  * @author dujuan
  * @date 2015/11/5
  */
-public enum  TagEnum {
+public enum TagEnum {
     DISHES(1 , "菜品"),
-    RAWMATERIAL(2 , "原配料")
+    Storage(2 , "原配料")
     ;
     private Integer id;
     private String name;

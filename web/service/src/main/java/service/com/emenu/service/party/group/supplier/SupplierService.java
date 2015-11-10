@@ -20,8 +20,8 @@ public interface SupplierService {
      * @param optPartyId    操作人的id
      * @throws SSException
      */
-    public void newSupplier(Supplier supplier,
-                            Integer optPartyId) throws SSException;
+    public Supplier newSupplier(Supplier supplier,
+                                Integer optPartyId) throws SSException;
 
     /**
      * 更新
@@ -60,8 +60,9 @@ public interface SupplierService {
      * 查询名称是否存在
      *
      * @param name
+     * @param id
      * @return
      * @throws SSException
      */
-    public boolean queryNameIsExist(String name) throws SSException;
+    public boolean queryNameIsExistById(String name, Integer id) throws SSException;
 }

@@ -11,6 +11,7 @@ import com.emenu.service.page.IndexImgService;
 import com.emenu.service.page.KeywordsService;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.group.employee.EmployeeService;
+import com.emenu.service.party.group.supplier.SupplierService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityGroupPermissionService;
 import com.emenu.service.party.security.SecurityGroupService;
@@ -250,4 +251,7 @@ public class AbstractController extends Base {
     @Qualifier("waiterTableService")
     protected static WaiterTableService waiterTableService;
 
+    @StaticAutoWire
+    @Qualifier("supplierService")
+    protected static SupplierService supplierService;
 }

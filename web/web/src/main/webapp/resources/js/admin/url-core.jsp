@@ -68,6 +68,13 @@
             ['saveEditArea', site.website + 'admin/restaurant/area/ajax/&{id}', 'put', '保存编辑原有区域信息结果'],
             ['delAreaId', site.website + 'admin/restaurant/area/ajax/&{id}', 'delete', '删除餐台区域时，发送需删除的id']
         ],
+        // 库存管理
+        StoreManagement: [
+            // 供货商管理
+            ['addSupplier', site.website + 'admin/store/supplier/ajax', 'post','添加供货商'],
+            ['editSupplier', site.website + 'admin/store/supplier/ajax', 'put','编辑供货商'],
+            ['delSupplier', site.website + 'admin/store/supplier/ajax/&{id}', 'delete','删除供货商']
+        ],
         // 菜品管理
         DishManagement: [
             // 单位管理--列表

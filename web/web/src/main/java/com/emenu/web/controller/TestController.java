@@ -1,5 +1,6 @@
 package com.emenu.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.log.LogClerk;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * TestController
@@ -29,5 +31,13 @@ public class TestController extends AbstractController {
         LogClerk.bizLog.info("client ip: " + IpUtil.getClientIP(getRequest()));
         model.addAttribute("openId", openId);
         return "touch/index";
+    }
+
+    @RequestMapping(value = "ajax", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxTest(@RequestParam Integer id,
+                         Model model) {
+        System.out.println(id);
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }

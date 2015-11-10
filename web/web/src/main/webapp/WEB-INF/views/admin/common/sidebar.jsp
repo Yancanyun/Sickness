@@ -66,7 +66,7 @@
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">用户信息管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
             <li <c:if test="${MethodModule eq 'Admin:User:Management:Employee:List'}">class="active"</c:if>>
-            <a class="J_menu" href="${website}admin/party/group/employee/">用户管理</a>
+                <a class="J_menu" href="${website}admin/party/group/employee/">用户管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:User:Management:Vip:VipInfo:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/party/group/vip/">会员管理</a>
@@ -76,7 +76,9 @@
     <li id="firstMenu6" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li><a class="J_menu" href="javascript:;">入库管理</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:Store:Supplier:List'}">class="active"</c:if>>
+                <a class="J_menu" href="javascript:;">供货商管理</a>
+            </li>
             <li><a class="J_menu" href="javascript:;">库存管理</a></li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
             <li><a class="J_menu" href="javascript:;">预警管理</a></li>

@@ -4,8 +4,11 @@ import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
+import com.pandawork.core.common.exception.SSException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -27,6 +30,16 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     public Tag newTag(Tag tag) throws Exception {
         tag = tagService.newTag(tag);
         return tagCacheService.newTag(tag);
+    }
+
+    @Override
+    public void updateTag(Tag tag) throws SSException {
+
+    }
+
+    @Override
+    public List<Tag> listByPId(int pId) throws SSException {
+        return null;
     }
 
     @Override

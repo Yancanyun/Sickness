@@ -24,6 +24,8 @@
 
                 <p class="text-left"> 您所请求的网页出现了些问题！我们正在努力修复中,请耐心等候。</p>
 
+                <p class="text-left"> ${eMsg}</p>
+
                 <p class="text-left">请点击这里返回<a href='${website}admin'>首页</a> ，或者继续浏览其他页面。</p>
             </div>
         </div>
@@ -53,6 +55,6 @@
     String referer = request.getHeader("Referer");
     String ip = com.pandawork.core.common.util.IpUtil.getClientIP(request);
     String requestMethod = request.getMethod();
-    String message = "500|" + uri + "|" + referer + "|" + ip + "|" + requestMethod;
+    String message = "500|" + url + "|" + referer + "|" + ip + "|" + requestMethod;
     com.pandawork.core.common.log.LogClerk.monitorLog.debug(message);
 %>
