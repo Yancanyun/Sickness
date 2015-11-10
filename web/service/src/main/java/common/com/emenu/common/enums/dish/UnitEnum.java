@@ -9,7 +9,7 @@ import java.util.Map;
  * @author dujuan
  * @date 2015/11/3
  */
-public enum  UnitEnum {
+public enum UnitEnum {
     HUNDREDWEIGHT(1 , "重量单位"),
     QUANTITY(2 , "数量单位")
     ;

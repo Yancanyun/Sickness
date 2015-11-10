@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * UnitServiceImpl
- *
+ * 单位Service的实现
  * @author xubaorong
  * @date 2015/10/23.
  */
