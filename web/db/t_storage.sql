@@ -13,7 +13,7 @@ CREATE TABLE `t_storage_depots` (
 
 /*库存单据*/
 DROP TABLE
-IF EXISTS `t_storage_documents`;
+IF EXISTS `t_storage_document`;
 
 CREATE TABLE `t_storage_documents` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
