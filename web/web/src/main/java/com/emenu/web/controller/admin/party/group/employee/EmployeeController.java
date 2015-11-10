@@ -33,32 +33,17 @@ import java.util.*;
 @RequestMapping(value = URLConstants.EMPLOYEE_MANAGEMENT)
 public class EmployeeController  extends AbstractController {
 
-
     /**
      * 去员工列表页
+     * @param model
      * @return
      */
     @Module(ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String toEmployeePage(Model model){
-        //@RequestParam("roleList")List<Integer> roleList,Model model,HttpServletRequest request
-            //Integer partyId = (Integer)request.getSession().getAttribute(WebConstants.SESSIONUID);//获取当前登录用户id，admin
-
-        /*    List<TableDto> tableDtoList = new ArrayList<TableDto>();
-            if(areaId != null) {
-                for(int id : areaId) {
-                    if(id>0){
-                        tableDtoList.addAll(tableService.queryTableDtoByAreaId(id));
-                    }
-                }
-            } else {
-                tableDtoList = tableService.queryAllTable();
-            }*/
-
         try {
-
             List<EmployeeDto> employeeDtoList = Collections.emptyList();
-            employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
+            employeeDtoList = employeeService.listAll();
 
             List<SecurityGroup> roleList = securityGroupService.listAll();
             model.addAttribute("employeeDtoList", employeeDtoList);
@@ -69,9 +54,6 @@ public class EmployeeController  extends AbstractController {
             LogClerk.errLog.error(e);
             return WebConstants.sysErrorCode;
         }
-
-
-
     }
 
     /**
@@ -127,6 +109,7 @@ public class EmployeeController  extends AbstractController {
      * @param partyId
      * @return
      */
+    @Module(ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "ajax/tables/{partyId}",method = RequestMethod.GET)
     @ResponseBody JSONObject getWaiterTable(@PathVariable("partyId") Integer partyId){
 
@@ -147,47 +130,18 @@ public class EmployeeController  extends AbstractController {
                 for (Table table : tableList){
                     tables += table.getName()+"、";
                 }
-
                 tables = tables.substring(0,tables.length()-1);
-
-
 
                 jsonObject.put("tables",tables);
                 jsonArray.add(jsonObject);
              }
-          /*  try {
-                List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByWaiterId(userId);
-                net.sf.json.JSONArray areaList = new net.sf.json.JSONArray();
-                for(AreaDto areaDto : areaDtoList) {
-                    net.sf.json.JSONObject jsonObject = new net.sf.json.JSONObject();
-                    net.sf.json.JSONArray tableList = new net.sf.json.JSONArray();
-                    for(Table table : areaDto.getTableList()) {
-                        net.sf.json.JSONObject j = new net.sf.json.JSONObject();
-                        j.put("name", table.getName());
-                        tableList.add(j);
-                    }
-                    jsonObject.put("name", areaDto.getArea().getName());
-                    jsonObject.put("tableList", tableList);
-                    areaList.add(jsonObject);
-                }
-                net.sf.json.JSONObject jsonObject = new net.sf.json.JSONObject();
-                jsonObject.put("areaList", areaList);
-                return sendJsonObject(jsonObject);
-            } catch (SSException e) {
-                return sendErrMsgAndErrCode(e);
-            }*/
-
             return sendJsonArray(jsonArray, 0);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-
         }
-
         JSONArray jsonArray = new JSONArray();
-
         return sendJsonArray(jsonArray, 0);
-
     }
 
     /**
@@ -245,7 +199,7 @@ public class EmployeeController  extends AbstractController {
             List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
             List<SecurityGroup> roleList = securityGroupService.listAll();
             model.addAttribute("areaDtoList", areaDtoList);
-            model.addAttribute("roleList",roleList);
+            model.addAttribute("roleList", roleList);
             return "admin/party/group/employee/new_home";
         }catch (SSException e){
             LogClerk.errLog.error(e);
@@ -254,35 +208,33 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
+    /**
+     * 去员工信息编辑页
+     * @param partyId
+     * @param model
+     * @return
+     */
     @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "toupdate/{partyId}",method = RequestMethod.GET)
     public String toUpdate(@PathVariable("partyId")Integer partyId,Model model){
-        /*try{
-            List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
-            model.addAttribute("areaDtoList", areaDtoList);
-            return "admin/party/group/employee/update_home";
-        }catch (SSException e){
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return WebConstants.sysErrorCode;
-        }*/
-
         try {
+            //获取要编辑员工的信息
             EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
             List<Table> tableList = Collections.emptyList();
+            //获取所有的餐桌
             tableList = tableService.listAll();
             List<AreaDto> areaDtoList = waiterTableService.queryAreaDto();
             List<SecurityGroup> roleList = securityGroupService.listAll();
 
             Map<Integer, Integer> roleMap = new HashMap<Integer, Integer>();
             Map<Integer, Integer> tableMap = new HashMap<Integer, Integer>();
+
             for (Integer roleId : employeeDto.getRole()) {
                 roleMap.put(roleId, 1);
             }
             for (Integer tableId: employeeDto.getTables()) {
                 tableMap.put(tableId, 1);
             }
-
             model.addAttribute("areaDtoList", areaDtoList);
             model.addAttribute("employeeDto",employeeDto);
             model.addAttribute("tableList",tableList);
@@ -298,6 +250,16 @@ public class EmployeeController  extends AbstractController {
 
     }
 
+    /**
+     * 员工信息编辑提交处理
+     * @param partyId
+     * @param roles
+     * @param tables
+     * @param loginName
+     * @param password
+     * @param employee
+     * @return
+     */
     @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public String updateEmployee(@RequestParam("partyId")Integer partyId,
@@ -355,17 +317,20 @@ public class EmployeeController  extends AbstractController {
             List<Integer> roleList = new ArrayList<Integer>();
             for (int i = 0; i <roles.length ; i++) {
                 roleList.add(roles[i]);
-                System.out.println(i);
             }
 
-            List<Integer> tableList = new ArrayList<Integer>();
-            for (int i = 0; i <tables.length ; i++) {
-                tableList.add(tables[i]);
+            if(tables!=null){
+                List<Integer> tableList = new ArrayList<Integer>();
+                for (int i = 0; i <tables.length ; i++) {
+                    tableList.add(tables[i]);
+                }
+                employeeDto.setTables(tableList);
             }
             employeeDto.setRole(roleList);
-            employeeDto.setTables(tableList);
-
         employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
+            System.out.println("你好");
+            System.out.println("你好");
+
         return "redirect:";
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
@@ -376,7 +341,7 @@ public class EmployeeController  extends AbstractController {
 
 
     /**
-     * 添加员工时登录名是否重复
+     * 添加、修改员工信息时检查登录名是否重复
      * @param loginName
      * @return
      */
@@ -386,11 +351,9 @@ public class EmployeeController  extends AbstractController {
         try {
             if(securityUserService.checkLoginNameIsExist(loginName)){
                 return sendJsonObject(AJAX_FAILURE_CODE);
-
             }else {
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             }
-
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -418,7 +381,11 @@ public class EmployeeController  extends AbstractController {
         }
     }
 
-
+    /**
+     * 添加和修改员工信息时，检查电话是否重复
+     * @param phone
+     * @return
+     */
     @RequestMapping(value = "ajax/checkphone",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject checkPhoneIsExist(@RequestParam("phone")String phone){
@@ -434,8 +401,4 @@ public class EmployeeController  extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
-
-
-
 }

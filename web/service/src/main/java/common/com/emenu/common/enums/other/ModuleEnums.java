@@ -105,8 +105,8 @@ public enum ModuleEnums {
     AdminUserManagementEmployee("Admin:User:Management:Employee"),
     AdminUserManagementEmployeeList("Admin:User:Management:Employee:List"),
     AdminUserManagementEmployeeUpdate("Admin:User:Management:Employee:Update"),
-    AdminUserManagementEmployeeDelete("Admin:User:Managemetn:Employee:Delete"),
-    AdminUserManagementEmployeeNew("Admin:User:Managemetn:Employee:New"),
+    AdminUserManagementEmployeeDelete("Admin:User:Management:Employee:Delete"),
+    AdminUserManagementEmployeeNew("Admin:User:Management:Employee:New"),
 
 
     ;

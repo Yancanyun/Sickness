@@ -68,22 +68,27 @@ public enum EmenuException implements IBizExceptionMes {
     QueryWaiterTableFail("获取服务员-餐台信息失败", 4028),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4040),
+    //餐台-餐段管理
+    QueryTableMealPeriodFail("查询餐台-区域失败", 4060),
+    InsertTableMealPeriodFail("添加餐台失败", 4061),
+    UpdateTableMealPeriodFail("编辑餐台失败", 4062),
+    DeleteTableMealPeriodFail("删除餐台失败", 4063),
     //备注分类管理
-    QueryRemarkTagFail("查询备注分类失败", 4060),
-    InsertRemarkTagFail("添加备注分类失败", 4061),
-    UpdateRemarkTagFail("编辑备注分类失败", 4062),
-    DeleteRemarkTagFail("删除备注分类失败", 4063),
-    RemarkTagNameExist("备注分类名称已存在", 4064),
-    RemarkTagNameIsNull("备注分类名称不能为空", 4065),
-    RemarkTagNotExist("备注分类不存在", 4066),
-    RemarkTagHasRemarkExist("备注分类中有备注存在，不允许删除", 4067),
+    QueryRemarkTagFail("查询备注分类失败", 4080),
+    InsertRemarkTagFail("添加备注分类失败", 4081),
+    UpdateRemarkTagFail("编辑备注分类失败", 4082),
+    DeleteRemarkTagFail("删除备注分类失败", 4083),
+    RemarkTagNameExist("备注分类名称已存在", 4084),
+    RemarkTagNameIsNull("备注分类名称不能为空", 4085),
+    RemarkTagNotExist("备注分类不存在", 4086),
+    RemarkTagHasRemarkExist("备注分类中有备注存在，不允许删除", 4087),
     //备注管理
-    QueryRemarkFail("查询备注失败", 4080),
-    InsertRemarkFail("添加备注失败", 4081),
-    UpdateRemarkFail("编辑备注失败", 4082),
-    DeleteRemarkFail("删除备注失败", 4083),
-    RemarkNameExist("备注名称已存在", 4084),
-    RemarkNameIsNull("备注名称不能为空", 4085),
+    QueryRemarkFail("查询备注失败", 4100),
+    InsertRemarkFail("添加备注失败", 4101),
+    UpdateRemarkFail("编辑备注失败", 4102),
+    DeleteRemarkFail("删除备注失败", 4103),
+    RemarkNameExist("备注名称已存在", 4104),
+    RemarkNameIsNull("备注名称不能为空", 4105),
 
     //搜索风向标
     KeywordsExist("关键字已存在！", 5001),
@@ -113,7 +118,9 @@ public enum EmenuException implements IBizExceptionMes {
     QueryEmployeeException("查询员工信息失败",6007),
     EmployeeIsActivity("员工处于激活状态，请先将它转为未激活！",6008),
     DeleteEmployeeFail("删除员工信息失败",6009),
-    PartyIdIdError("当事人ID为空或者小于0", 3002),
+    PartyIdIdError("当事人ID为空或者小于0", 6010),
+    EmployeeNameNotNull("员工姓名不能为空",6011),
+    EmployeeNumberNotNull("员工编号不能为空",6012),
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),

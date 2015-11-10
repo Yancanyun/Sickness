@@ -2,11 +2,13 @@ package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.entity.table.TableMealPeriod;
 import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
+import com.emenu.service.table.TableMealPeriodService;
 import com.emenu.service.table.TableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -41,6 +43,9 @@ public class TableServiceImpl implements TableService{
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private TableMealPeriodService tableMealPeriodService;
 
     @Override
     public List<TableDto> listAllTableDto() throws SSException {
@@ -219,6 +224,15 @@ public class TableServiceImpl implements TableService{
 
             tableDto.setTable(table);
             tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+            //查询餐台对应的餐段ID
+            List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+
+            //TODO: 待餐段的queryById写好后写这一块
+//            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+//            for (int mealPeriodId: mealPeriodIdList) {
+//
+//            }
 
             return tableDto;
         } catch (Exception e) {
