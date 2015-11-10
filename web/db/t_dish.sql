@@ -14,7 +14,7 @@ CREATE TABLE `t_tag` (
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='菜品与原料的类别'
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='菜品与原料的类别';
 
 
 /*菜品分类与打印机关联表*/
@@ -29,7 +29,7 @@ CREATE TABLE `t_dish_tag_printer` (
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜品分类与打印机关联表'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜品分类与打印机关联表';
 
 
 /*菜品与原料的单位*/
@@ -43,4 +43,4 @@ CREATE TABLE `t_dish_unit` (
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜品与原料的单位'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='单位';

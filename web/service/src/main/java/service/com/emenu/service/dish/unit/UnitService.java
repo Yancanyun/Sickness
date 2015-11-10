@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * UnitService
- *
+ * 单位Service
  * @author xubaorong
  * @date 2015/10/23
  */

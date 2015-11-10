@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * UnitMapper
- *
+ * 单位Mapper
  * @author xubaorong
  * @date 2015/10/23.
  */
