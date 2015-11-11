@@ -11,6 +11,12 @@ import com.pandawork.core.common.exception.SSException;
  */
 public interface StorageReportService {
 
-    //添加单据
+    /**
+     * 添加单据
+     * @param reportDto
+     * @throws SSException
+     */
     public void newReport(StorageReportDto reportDto) throws SSException;
+
+
 }

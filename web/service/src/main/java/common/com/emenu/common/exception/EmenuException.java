@@ -147,6 +147,8 @@ public enum EmenuException implements IBizExceptionMes {
 
     //库存管理
     InsertReportFail("添加单据失败",7001),
+    NewSerialNumberFali("生成单据编号失败",7002),
+    ReportIsNotNull("单据不能为空",7003),
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
