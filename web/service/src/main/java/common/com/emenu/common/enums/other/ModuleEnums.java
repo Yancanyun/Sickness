@@ -113,13 +113,19 @@ public enum ModuleEnums {
     AdminUserManagementEmployeeNew("Admin:User:Management:Employee:New"),
 
     // 库存管理
-    AdminStore("Admin:Store"),
+    AdminStorage("Admin:Storage"),
     // 供货商管理
-    AdminStoreSupplier("Admin:Store:Supplier"),
-    AdminStoreSupplierList("Admin:Store:Supplier:List"),
-    AdminStoreSupplierNew("Admin:Store:Supplier:New"),
-    AdminStoreSupplierUpdate("Admin:Store:Supplier:Update"),
-    AdminStoreSupplierDelete("Admin:Store:Supplier:Delete"),
+    AdminStorageSupplier("Admin:Storage:Supplier"),
+    AdminStorageSupplierList("Admin:Storage:Supplier:List"),
+    AdminStorageSupplierNew("Admin:Storage:Supplier:New"),
+    AdminStorageSupplierUpdate("Admin:Storage:Supplier:Update"),
+    AdminStorageSupplierDelete("Admin:Storage:Supplier:Delete"),
+    // 库存分类管理
+    AdminStorageTag("Admin:Storage:Tag"),
+    AdminStorageTagList("Admin:Storage:Tag:List"),
+    AdminStorageTagNew("Admin:Storage:Tag:New"),
+    AdminStorageTagUpdate("Admin:Storage:Tag:Update"),
+    AdminStorageTagDelete("Admin:Storage:Tag:Delete")
     ;
 
     private String name;

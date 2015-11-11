@@ -1,9 +1,9 @@
-package com.emenu.web.controller.admin.store;
+package com.emenu.web.controller.admin.storage;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -11,23 +11,20 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * SupplierController
+ * StorageTagController
  *
  * @author: zhangteng
- * @time: 2015/11/9 17:18
+ * @time: 2015/11/11 9:19
  **/
-@Module(ModuleEnums.AdminStore)
+@Module(ModuleEnums.AdminStorage)
 @Controller
-@RequestMapping(value = URLConstants.ADMIN_STORE_SUPPLIER)
-public class SupplierController extends AbstractController {
+@RequestMapping(value = URLConstants.ADMIN_STORAGE_TAG_URL)
+public class StorageTagController extends AbstractController {
 
     /**
      * 去列表页
@@ -35,60 +32,63 @@ public class SupplierController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminStoreSupplierList)
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @Module(ModuleEnums.AdminStorageTagList)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(Model model) {
         try {
-            List<Supplier> supplierList = supplierService.listAll();
-            model.addAttribute("supplierList", supplierList);
+            List<Tag> tagList = storageTagService.listAll();
+            model.addAttribute("tagList", tagList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/store/supplier/list_home";
+
+        return "admin/storage/tag/list_home";
     }
 
     /**
      * ajax添加
      *
-     * @param supplier
+     * @param pId
+     * @param name
      * @return
      */
-    @Module(ModuleEnums.AdminStoreSupplierNew)
+    @Module(ModuleEnums.AdminStorageTagNew)
     @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
-    public JSON ajaxNew(Supplier supplier) {
+    public JSON ajaxNew(@RequestParam("pId") Integer pId,
+                        @RequestParam("name") String name) {
         try {
-            supplier = supplierService.newSupplier(supplier, getPartyId());
+            Tag tag = storageTagService.newStorageTag(pId, name);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", tag.getId());
+
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
         	LogClerk.errLog.error(e);
         	return sendErrMsgAndErrCode(e);
         }
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", supplier.getId());
-        jsonObject.put("partyId", supplier.getPartyId());
-        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
     }
 
     /**
      * ajax更新
      *
-     * @param supplier
+     * @param id
+     * @param name
      * @return
      */
-    @Module(ModuleEnums.AdminStoreSupplierUpdate)
-    @RequestMapping(value = "ajax", method = RequestMethod.PUT)
+    @Module(ModuleEnums.AdminStorageTagUpdate)
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public JSON ajaxUpdate(Supplier supplier) {
+    public JSON ajaxUpdate(@PathVariable("id") Integer id,
+                           @RequestParam("name") String name) {
         try {
-            supplierService.updateSupplier(supplier);
+            storageTagService.updateStorageTag(id, name);
         } catch (SSException e) {
-        	LogClerk.errLog.error(e);
-        	return sendErrMsgAndErrCode(e);
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
         }
-
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
@@ -98,17 +98,16 @@ public class SupplierController extends AbstractController {
      * @param id
      * @return
      */
-    @Module(ModuleEnums.AdminStoreSupplierDelete)
+    @Module(ModuleEnums.AdminStorageTagDelete)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSON ajaxDelete(@PathVariable("id") Integer id) {
         try {
-            supplierService.delById(id);
+            storageTagService.delById(id);
         } catch (SSException e) {
         	LogClerk.errLog.error(e);
         	return sendErrMsgAndErrCode(e);
         }
-
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }

@@ -76,8 +76,8 @@
     <li id="firstMenu6" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理</span><i class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li <c:if test="${MethodModule eq 'Admin:Store:Supplier:List'}">class="active"</c:if>>
-                <a class="J_menu" href="javascript:;">供货商管理</a>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Supplier:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/storage/supplier">供货商管理</a>
             </li>
             <li><a class="J_menu" href="javascript:;">库存管理</a></li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>

@@ -19,6 +19,7 @@ import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
+import com.emenu.service.storage.StorageTagService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;
@@ -255,6 +256,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("supplierService")
     protected static SupplierService supplierService;
+
+    @StaticAutoWire
+    @Qualifier("storageTagService")
+    protected static StorageTagService storageTagService;
 
     @StaticAutoWire
     @Qualifier("mealPeriodService")

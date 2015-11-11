@@ -27,7 +27,7 @@ import java.util.List;
  **/
 @Controller
 @Module(ModuleEnums.AdminSAdmin)
-@RequestMapping(value = URLConstants.ADMIN_PARTY_SECURITY_GROUP)
+@RequestMapping(value = URLConstants.ADMIN_PARTY_SECURITY_GROUP_URL)
 public class SecurityGroupController extends AbstractController {
 
     /**
@@ -217,7 +217,7 @@ public class SecurityGroupController extends AbstractController {
         	return ADMIN_SYS_ERR_PAGE;
         }
 
-        String redirectUrl = URLConstants.ADMIN_PARTY_SECURITY_GROUP + "/permission/" + groupId;
+        String redirectUrl = URLConstants.ADMIN_PARTY_SECURITY_GROUP_URL + "/permission/" + groupId;
         return "redirect:/" + redirectUrl;
     }
 
