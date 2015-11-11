@@ -1,6 +1,9 @@
 package com.emenu.common.dto.table;
 
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Table;
+
+import java.util.List;
 
 /**
  * TableDto
@@ -13,7 +16,7 @@ public class TableDto {
     private String areaId;
     private String areaName;
     private String state;
-    //TODO: 待餐段实体类写好后添加 List<MealPeriod>
+    private List<MealPeriod> mealPeriodList;
 
     public Table getTable() {
         return table;
@@ -45,5 +48,13 @@ public class TableDto {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public List<MealPeriod> getMealPeriodList() {
+        return mealPeriodList;
+    }
+
+    public void setMealPeriodList(List<MealPeriod> mealPeriodList) {
+        this.mealPeriodList = mealPeriodList;
     }
 }

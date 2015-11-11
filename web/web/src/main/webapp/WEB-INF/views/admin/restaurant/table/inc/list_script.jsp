@@ -19,6 +19,7 @@
     <td>&{it.seatFee}元/人</td>
     <td>&{it.tableFee}元</td>
     <td>&{it.minCost}元</td>
+    <td>&{it.mealPeriodName}</td>
     <td>
       <a class="label-info J_edit" href="javascript:;" src="${website}admin/restaurant/table/update/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
       {@if it.state == 0}

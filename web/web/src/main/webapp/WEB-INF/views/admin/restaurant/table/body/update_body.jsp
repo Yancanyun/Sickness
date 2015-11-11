@@ -78,6 +78,21 @@
               <input class="w180" type="text" name="minCost" value="${tableDto.table.minCost}" data-valid-tip="请输入最低消费|最低消费不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
             </div>
           </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">
+              <span class="requires">*</span>餐段
+            </label>
+            <div class="col-sm-6 checkbox">
+              <c:forEach var="mealPeriod" items="${mealPeriodList}">
+                  <label>
+                    <input class="J_mealPeriod" type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList"
+                    <c:forEach var="checkedMealPeriod" items="${checkedMealPeriodList}">
+                     <c:if test="${checkedMealPeriod == mealPeriod.id}">checked="checked"</c:if>
+                    </c:forEach>> ${mealPeriod.name}
+                  </label>
+              </c:forEach>
+            </div>
+          </div>
           <div class="panel-footer">
             <div class="row">
               <div class="col-sm-6 col-sm-offset-3">

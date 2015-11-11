@@ -104,13 +104,13 @@ public class TableTest extends AbstractTestCase {
         System.out.println("state:" + state);
     }
 
-    @Test
-    public void updateTable() throws SSException {
-        Table table = new Table();
-        table.setId(2);
-        table.setName("8号桌");
-        tableService.updateTable(2, table);
-    }
+//    @Test
+//    public void updateTable() throws SSException {
+//        Table table = new Table();
+//        table.setId(2);
+//        table.setName("8号桌");
+//        tableService.updateTable(2, table);
+//    }
 
     @Test
     public void delTableById() throws SSException {

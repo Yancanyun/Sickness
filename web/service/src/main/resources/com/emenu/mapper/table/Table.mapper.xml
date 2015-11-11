@@ -5,18 +5,19 @@
 <mapper namespace="com.emenu.mapper.table.TableMapper">
     <select id="listAll" resultMap="pw.Table">
         SELECT
-            `id`,
-            `area_id`,
-            `name`,
-            `seat_num`,
-            `seat_fee`,
-            `table_fee`,
-            `min_cost`,
-            `state`,
-            `qrcode_path`
+            t_table.`id`,
+            t_table.`area_id`,
+            t_table.`name`,
+            t_table.`seat_num`,
+            t_table.`seat_fee`,
+            t_table.`table_fee`,
+            t_table.`min_cost`,
+            t_table.`state`,
+            t_table.`qrcode_path`
         FROM `t_table`
-        WHERE `state` != 6
-        ORDER BY `area_id`, `id`
+        INNER JOIN `t_area` ON t_area.`id` = `area_id`
+        WHERE t_table.`state` != 6
+        ORDER BY t_area.`weight` DESC, `area_id` ASC, t_table.`id` ASC
     </select>
 
     <select id="listByAreaId" resultMap="pw.Table">

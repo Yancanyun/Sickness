@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.table.TableDto;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.entity.table.TableMealPeriod;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.common.exception.EmenuException;
@@ -109,6 +111,26 @@ public class AdminTableController extends AbstractController {
                     jsonObject.put("seatFee", decimalFormat.format(tableDto.getTable().getSeatFee()));
                     jsonObject.put("tableFee", decimalFormat.format(tableDto.getTable().getTableFee()));
                     jsonObject.put("minCost", decimalFormat.format(tableDto.getTable().getMinCost()));
+
+                    //将餐段名拼成一个String
+                    List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+                    String mealPeriodName = null;
+                    mealPeriodList = tableDto.getMealPeriodList();
+                    for (int i = 0; i < mealPeriodList.size(); i++) {
+                        String name = mealPeriodList.get(i).getName();
+                        //第一个餐段名
+                        if (mealPeriodName == null){
+                            mealPeriodName = name;
+                        } else {
+                            mealPeriodName = mealPeriodName + " " + name;
+                        }
+                    }
+                    //若餐段不存在则显示"无"
+                    if (mealPeriodName == null){
+                        mealPeriodName = "无";
+                    }
+                    jsonObject.put("mealPeriodName", mealPeriodName);
+
                     jsonArray.add(jsonObject);
                 }
             }
@@ -129,9 +151,12 @@ public class AdminTableController extends AbstractController {
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toTableNewPage(Model model) {
         try {
-            //显示区域选择框
+            //显示区域选择下拉列表
             List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
+            //显示餐段选择框
+            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            model.addAttribute("mealPeriodList", mealPeriodList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -147,9 +172,22 @@ public class AdminTableController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantTableNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
-    public String tableNew(Table table, HttpServletRequest request) {
+    public String tableNew(Table table, @RequestParam(required = false) List<Integer> mealPeriodIdList,
+                           HttpServletRequest request) {
         try {
-            tableService.newTable(table, request);
+            TableDto tableDto = new TableDto();
+            //往TableDto中插入Table
+            tableDto.setTable(table);
+            //往TableDto中插入MealPeriodList
+            List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+            for(int i = 0; i < mealPeriodIdList.size(); i++){
+                MealPeriod mealPeriod = new MealPeriod();
+                mealPeriod.setId(mealPeriodIdList.get(i));
+                mealPeriodList.add(mealPeriod);
+            }
+            tableDto.setMealPeriodList(mealPeriodList);
+
+            tableService.newTable(tableDto, request);
             return "redirect:/admin/restaurant/table";
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -197,9 +235,15 @@ public class AdminTableController extends AbstractController {
         try {
             TableDto tableDto = tableService.queryTableDtoById(id);
             model.addAttribute("tableDto", tableDto);
-            //显示区域选择框
+            //显示区域选择下拉列表
             List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
+            //显示餐段选择框
+            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            model.addAttribute("mealPeriodList", mealPeriodList);
+            //显示被选中的餐段ID
+            List<Integer> checkedMealPeriodList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+            model.addAttribute("checkedMealPeriodList", checkedMealPeriodList);
 
             return "admin/restaurant/table/update_home";
         } catch (SSException e) {
@@ -217,10 +261,23 @@ public class AdminTableController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantTableUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public String tableUpdate(@PathVariable Integer id, Table table) {
+    public String tableUpdate(@PathVariable Integer id, Table table,
+                              @RequestParam(required = false) List<Integer> mealPeriodIdList) {
         try {
+            TableDto tableDto = new TableDto();
+            //往TableDto中插入Table
+            tableDto.setTable(table);
             table.setId(id);
-            tableService.updateTable(id, table);
+            //往TableDto中插入MealPeriodList
+            List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+            for(int i = 0; i < mealPeriodIdList.size(); i++){
+                MealPeriod mealPeriod = new MealPeriod();
+                mealPeriod.setId(mealPeriodIdList.get(i));
+                mealPeriodList.add(mealPeriod);
+            }
+            tableDto.setMealPeriodList(mealPeriodList);
+
+            tableService.updateTable(id, tableDto);
             return "redirect:/admin/restaurant/table";
         } catch (SSException e) {
             LogClerk.errLog.error(e);

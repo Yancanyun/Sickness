@@ -1,11 +1,13 @@
 package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.TableDto;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMealPeriod;
 import com.emenu.common.enums.table.TableStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
+import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableMealPeriodService;
@@ -47,6 +49,9 @@ public class TableServiceImpl implements TableService{
     @Autowired
     private TableMealPeriodService tableMealPeriodService;
 
+    @Autowired
+    private MealPeriodService mealPeriodService;
+
     @Override
     public List<TableDto> listAllTableDto() throws SSException {
         List<TableDto> tableDtoList = new ArrayList<TableDto>();
@@ -59,6 +64,18 @@ public class TableServiceImpl implements TableService{
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+                    //查询餐台对应的餐段ID
+                    int id = table.getId();
+                    List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+                    //将餐段List存入TableDto
+                    List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+                    for (int mealPeriodId: mealPeriodIdList) {
+                        MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                        mealPeriodList.add(mealPeriod);
+                    }
+                    tableDto.setMealPeriodList(mealPeriodList);
+
                     tableDtoList.add(tableDto);
                 }
             }
@@ -96,6 +113,18 @@ public class TableServiceImpl implements TableService{
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+                    //查询餐台对应的餐段ID
+                    int id = table.getId();
+                    List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+                    //将餐段List存入TableDto
+                    List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+                    for (int mealPeriodId: mealPeriodIdList) {
+                        MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                        mealPeriodList.add(mealPeriod);
+                    }
+                    tableDto.setMealPeriodList(mealPeriodList);
+
                     tableDtoList.add(tableDto);
                 }
             }
@@ -137,6 +166,18 @@ public class TableServiceImpl implements TableService{
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+                    //查询餐台对应的餐段ID
+                    int id = table.getId();
+                    List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+                    //将餐段List存入TableDto
+                    List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+                    for (int mealPeriodId: mealPeriodIdList) {
+                        MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                        mealPeriodList.add(mealPeriod);
+                    }
+                    tableDto.setMealPeriodList(mealPeriodList);
+
                     tableDtoList.add(tableDto);
                 }
             }
@@ -182,6 +223,18 @@ public class TableServiceImpl implements TableService{
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+                    //查询餐台对应的餐段ID
+                    int id = table.getId();
+                    List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
+                    //将餐段List存入TableDto
+                    List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+                    for (int mealPeriodId: mealPeriodIdList) {
+                        MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                        mealPeriodList.add(mealPeriod);
+                    }
+                    tableDto.setMealPeriodList(mealPeriodList);
+
                     tableDtoList.add(tableDto);
                 }
             }
@@ -227,12 +280,13 @@ public class TableServiceImpl implements TableService{
 
             //查询餐台对应的餐段ID
             List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
-
-            //TODO: 待餐段的queryById写好后写这一块
-//            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
-//            for (int mealPeriodId: mealPeriodIdList) {
-//
-//            }
+            //将餐段List存入TableDto
+            List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+            for (int mealPeriodId: mealPeriodIdList) {
+                MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                mealPeriodList.add(mealPeriod);
+            }
+            tableDto.setMealPeriodList(mealPeriodList);
 
             return tableDto;
         } catch (Exception e) {
@@ -288,8 +342,13 @@ public class TableServiceImpl implements TableService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public Table newTable(Table table, HttpServletRequest request) throws SSException {
+    public Table newTable(TableDto tableDto, HttpServletRequest request) throws SSException {
         try {
+            //从TableDto中获取Table
+            Table table = tableDto.getTable();
+            //从TableDto中获取MealPeriodList
+            List<MealPeriod> mealPeriodList= tableDto.getMealPeriodList();
+
             //判断AreaId是否存在
             if (Assert.isNull(areaService.queryById(table.getAreaId()))) {
                 throw SSException.get(EmenuException.AreaNotExist);
@@ -304,9 +363,24 @@ public class TableServiceImpl implements TableService{
             }
             //将状态设为"可用"
             table.setState(TableStateEnums.Enabled.getId());
+            //先插入餐台表
             commonDao.insert(table);
-            //先插入以得到ID，再设置二维码地址
+            //插入餐台表后，从插入的新餐台中获得ID，设置二维码地址
             updateQrCode(table.getId(), qrCodeService.newQrCode(table.getId(), null, request));
+
+            //设置餐台-餐段信息
+            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+            for (int i = 0; i < mealPeriodList.size(); i++){
+                MealPeriod mealPeriod = mealPeriodList.get(i);
+                TableMealPeriod tableMealPeriod = new TableMealPeriod();
+                //设置TableID
+                tableMealPeriod.setTableId(table.getId());
+                //设置MealPeriodID
+                tableMealPeriod.setMealPeriodId(mealPeriod.getId());
+                tableMealPeriodList.add(tableMealPeriod);
+            }
+            //插入餐台-餐段表
+            tableMealPeriodService.newTableMealPeriod(tableMealPeriodList);
             return table;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -334,8 +408,13 @@ public class TableServiceImpl implements TableService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateTable(Integer id, Table table) throws SSException {
+    public void updateTable(Integer id, TableDto tableDto) throws SSException {
         try {
+            //从TableDto中获取Table
+            Table table = tableDto.getTable();
+            //从TableDto中获取MealPeriodList
+            List<MealPeriod> mealPeriodList= tableDto.getMealPeriodList();
+
             int state = queryStateById(table.getId());
             //仅当餐台状态为停用及可用时可以修改餐台
             if((state != TableStateEnums.Disabled.getId() && state != TableStateEnums.Enabled.getId())) {
@@ -358,7 +437,22 @@ public class TableServiceImpl implements TableService{
             if (Assert.isNull(table.getName())) {
                 throw SSException.get(EmenuException.TableNameIsNull);
             }
+            //更新餐台表
             commonDao.update(table);
+
+            //设置餐台-餐段信息
+            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+            for (int i = 0; i < mealPeriodList.size(); i++){
+                MealPeriod mealPeriod = mealPeriodList.get(i);
+                TableMealPeriod tableMealPeriod = new TableMealPeriod();
+                //设置TableID
+                tableMealPeriod.setTableId(table.getId());
+                //设置MealPeriodID
+                tableMealPeriod.setMealPeriodId(mealPeriod.getId());
+                tableMealPeriodList.add(tableMealPeriod);
+            }
+            //更新餐台-餐段表
+            tableMealPeriodService.updateTableMealPeriod(tableMealPeriodList);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);
@@ -424,6 +518,8 @@ public class TableServiceImpl implements TableService{
             }
             //将状态设为"删除"
             tableMapper.updateState(id, TableStateEnums.Deleted.getId());
+            //删除餐台-餐段表中的内容
+            tableMealPeriodService.delByTableId(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteTableFail, e);

@@ -112,11 +112,11 @@ public interface TableService {
 
     /**
      * 添加餐台
-     * @param table
+     * @param tableDto
      * @return Table
      * @throws SSException
      */
-    public Table newTable(Table table, HttpServletRequest request) throws SSException;
+    public Table newTable(TableDto tableDto, HttpServletRequest request) throws SSException;
 
     /**
      * 检查是否有重复的餐台名称存在
@@ -129,10 +129,10 @@ public interface TableService {
     /**
      * 修改餐台
      * @param id
-     * @param table
+     * @param tableDto
      * @throws SSException
      */
-    public void updateTable(Integer id, Table table) throws SSException;
+    public void updateTable(Integer id, TableDto tableDto) throws SSException;
 
     /**
      * 修改餐台二维码信息

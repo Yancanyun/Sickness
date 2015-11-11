@@ -81,6 +81,7 @@
                 <th>餐位费用</th>
                 <th>餐台费用</th>
                 <th>最低消费</th>
+                <th>餐段</th>
                 <th>操作</th>
               </tr>
               </thead>
@@ -95,6 +96,14 @@
                 <td>${tableDto.table.seatFee}元/人</td>
                 <td>${tableDto.table.tableFee}元</td>
                 <td>${tableDto.table.minCost}元</td>
+                <td>
+                  <c:if test="${!empty tableDto.mealPeriodList}">
+                    <c:forEach var="mealPeriod" items="${tableDto.mealPeriodList}">
+                      ${mealPeriod.name}
+                    </c:forEach>
+                  </c:if>
+                  <c:if test="${empty tableDto.mealPeriodList}">无</c:if>
+                </td>
                 <td>
                   <a class="label-info J_edit" href="javascript:;" src="${website}admin/restaurant/table/update/${tableDto.table.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
                   <c:choose>

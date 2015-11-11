@@ -20,10 +20,7 @@ import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.storage.StorageTagService;
-import com.emenu.service.table.AreaService;
-import com.emenu.service.table.QrCodeService;
-import com.emenu.service.table.TableService;
-import com.emenu.service.table.WaiterTableService;
+import com.emenu.service.table.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -264,4 +261,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("mealPeriodService")
     protected static MealPeriodService mealPeriodService;
+
+    @StaticAutoWire
+    @Qualifier("tableMealPeriodService")
+    protected static TableMealPeriodService tableMealPeriodService;
 }

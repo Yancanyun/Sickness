@@ -1,0 +1,22 @@
+﻿CREATE TABLE `t_remark_tag` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '备注分类ID',
+  `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '备注分类名称',
+  `p_id` INT(11) NOT NULL DEFAULT '1' COMMENT '父分类ID',
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB  DEFAULT CHARSET=utf8 COMMENT='备注分类表';
+
+INSERT INTO `t_remark_tag` (`name`, `p_id`) VALUES("普通备注", 0), ("退菜备注", 0), ("赠送备注", 0), ("免单备注", 0), ("取消结账备注", 0);
+
+CREATE TABLE `t_remark` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '备注ID',
+  `name` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '备注名称',
+  `remark_tag_id` INT(11) NOT NULL DEFAULT '1' COMMENT '备注分类ID',
+  `weight` INT(11) NOT NULL DEFAULT '1' COMMENT '权重',
+  `is_common` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '是否为常用备注: 0-否; 1-是', 
+  `related_charges` DECIMAL(10,2) DEFAULT '0' COMMENT '关联收费', 
+  `created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='备注表'
