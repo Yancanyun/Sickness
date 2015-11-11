@@ -51,7 +51,7 @@ public final class URLConstants {
     public static final String ADMIN_MEAL_PERIOD_URL = "admin/meal/period";
 
     //会员基本信息管理
-    public static final String VIP_VIPINFO_URL = "admin/party/group/vip";
+    public static final String ADMIN_PARTY_VIP_VIPINFO_URL = "admin/party/group/vip";
 
     //员工管理
     public static final String EMPLOYEE_MANAGEMENT = "admin/party/group/employee";

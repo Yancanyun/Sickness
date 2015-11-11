@@ -33,13 +33,13 @@
             <div class="col-sm-6">
               <div class="radio">
                 <label>
-                  <input type="radio" value="0" name="sex" <c:if test="${vipInfo.sex==0}">checked="checked"</c:if>>未说明
-                </label>
-                <label>
                   <input type="radio" value="1" name="sex" <c:if test="${vipInfo.sex==1}">checked="checked"</c:if>>男
                 </label>
                 <label>
                   <input type="radio" value="2" name="sex" <c:if test="${vipInfo.sex==2}">checked="checked"</c:if>>女
+                </label>
+                <label>
+                  <input type="radio" value="0" name="sex" <c:if test="${vipInfo.sex==0}">checked="checked"</c:if>>未说明
                 </label>
               </div>
             </div>
