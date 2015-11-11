@@ -1,4 +1,4 @@
-package com.emenu.common.entity.storage;
+package com.emenu.common.entity.storage.report;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
@@ -27,7 +27,7 @@ public class Item extends AbstractEntity {
     @Column(name = "item_id")
     private Integer itemId;
 
-    //入库数量
+    //入库数量、出库数量、盘盈数量、盘亏数量
     private BigDecimal quantity;
 
     //计数
@@ -36,9 +36,12 @@ public class Item extends AbstractEntity {
     //成本价
     private BigDecimal price;
 
+    //单据详情备注
+    private String comment;
+
     //单据id
-    @Column(name = "document_id")
-    private Integer documentId;
+    @Column(name = "report_id")
+    private Integer reportId;
 
     // 创建时间
     @Column(name = "created_time")
@@ -47,14 +50,6 @@ public class Item extends AbstractEntity {
     // 最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
-
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
-    }
-
-    public void setLastModifiedTime(Date lastModifiedTime) {
-        this.lastModifiedTime = lastModifiedTime;
-    }
 
     public Integer getId() {
         return id;
@@ -97,12 +92,20 @@ public class Item extends AbstractEntity {
         this.price = price;
     }
 
-    public Integer getDocumentId() {
-        return documentId;
+    public String getComment() {
+        return comment;
     }
 
-    public void setDocumentId(Integer documentId) {
-        this.documentId = documentId;
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Integer getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(Integer reportId) {
+        this.reportId = reportId;
     }
 
     public Date getCreatedTime() {
@@ -111,5 +114,13 @@ public class Item extends AbstractEntity {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
     }
 }

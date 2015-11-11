@@ -1,4 +1,4 @@
-package com.emenu.common.entity.storage;
+package com.emenu.common.entity.storage.report;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
@@ -14,28 +14,30 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "t_storage_document")
-public class Document extends AbstractEntity {
+public class Report extends AbstractEntity {
 
     //主键
     @Id
     private Integer id;
 
     //单据编号
-    private String number;
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     //单据备注
     private String comment;
 
     //存放点id
-    @Column(name = "depots_id")
-    private Integer depotsId;
+    @Column(name = "depot_id")
+    private Integer depotId;
 
     //经手人
-    private String handler;
+    @Column(name = "handler_party_id")
+    private String handlerPartyId;
 
-    //当事人id
-    @Column(name = "party_id")
-    private Integer partyId;
+    //当事人id/操作人id
+    @Column(name = "created_party_id")
+    private Integer createdPartyId;
 
     //单据金额
     private BigDecimal money;
@@ -58,16 +60,17 @@ public class Document extends AbstractEntity {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getNumber() {
-        return number;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getComment() {
@@ -78,28 +81,28 @@ public class Document extends AbstractEntity {
         this.comment = comment;
     }
 
-    public Integer getDepotsId() {
-        return depotsId;
+    public Integer getDepotId() {
+        return depotId;
     }
 
-    public void setDepotsId(Integer depotsId) {
-        this.depotsId = depotsId;
+    public void setDepotId(Integer depotId) {
+        this.depotId = depotId;
     }
 
-    public String getHandler() {
-        return handler;
+    public String getHandlerPartyId() {
+        return handlerPartyId;
     }
 
-    public void setHandler(String handler) {
-        this.handler = handler;
+    public void setHandlerPartyId(String handlerPartyId) {
+        this.handlerPartyId = handlerPartyId;
     }
 
-    public Integer getPartyId() {
-        return partyId;
+    public Integer getCreatedPartyId() {
+        return createdPartyId;
     }
 
-    public void setPartyId(Integer partyId) {
-        this.partyId = partyId;
+    public void setCreatedPartyId(Integer createdPartyId) {
+        this.createdPartyId = createdPartyId;
     }
 
     public BigDecimal getMoney() {
