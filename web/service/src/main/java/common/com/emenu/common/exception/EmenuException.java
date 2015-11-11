@@ -15,6 +15,7 @@ public enum EmenuException implements IBizExceptionMes {
     UploadPathNotNull("上传的文件路径不能为空!", 1003),
     UploadDirCreateFail("上传文件夹创建失败!", 1004),
     UploadFileFail("文件上传失败", 1005),
+    SerialNumTemplateNotNull("流水号模板不能为空", 1019),
 
     // 供货商模块
     SupplierInsertFailed("添加供货商失败", 1006),
