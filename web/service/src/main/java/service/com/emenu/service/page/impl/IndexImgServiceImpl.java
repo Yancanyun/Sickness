@@ -103,14 +103,14 @@ public class IndexImgServiceImpl implements IndexImgService {
     }
 
     @Override
-    public IndexImg queryByState(int state) throws SSException {
+    public IndexImg queryByState(IndexImgEnum state) throws SSException {
 
         try {
-            if (Assert.isNull(IndexImgEnum.valueOf(state))) {
+            if (Assert.isNull(state)){
                 return null;
             }
 
-            return indexImgMapper.queryByState(state);
+            return indexImgMapper.queryByState(state.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryIndexImgFail, e);

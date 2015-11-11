@@ -53,14 +53,15 @@ public interface IndexImgService {
     public List<IndexImg> listAll() throws SSException;
 
     /**
-     * 根据状态查询首页图片
+     * 查询当前正在使用图片
      * 0-未使用 1-正在使用
+     * 只能查询当前正在使用图片且正在使用图片只能有一个
      *
      * @param state
      * @return
      * @throws SSException
      */
-    public IndexImg queryByState(int state) throws SSException;
+    public IndexImg queryByState(IndexImgEnum state) throws SSException;
 
     /**
      * 根据id删除首页图片

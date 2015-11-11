@@ -48,4 +48,15 @@ public interface MealPeriodMapper {
      * @throws Exception
      */
     public Integer countById(int id) throws Exception;
+
+    /**
+     * 查询当前餐段
+     * 0-非当前餐段 1-当前餐段
+     * 只能查询当前餐段且当前餐段只能有一个
+     *
+     * @param isCurrent
+     * @return
+     * @throws Exception
+     */
+    public MealPeriod queryByCurrentPeriod(int isCurrent) throws Exception;
 }

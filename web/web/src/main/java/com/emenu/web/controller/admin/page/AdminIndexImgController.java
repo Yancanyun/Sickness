@@ -26,8 +26,8 @@ import java.util.List;
  */
 
 @Controller
-@Module(ModuleEnums.AdminBasicInfo)
-@RequestMapping(value = URLConstants.INDEX_IMG_URL)
+@Module(ModuleEnums.AdminBasicInfoIndexImg)
+@RequestMapping(value = URLConstants.ADMIN_INDEX_IMG_URL)
 public class AdminIndexImgController extends AbstractController{
 
     /**
@@ -40,7 +40,7 @@ public class AdminIndexImgController extends AbstractController{
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toIndexImgPage(Model model){
         try {
-            IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using.getId());
+            IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using);
             List<IndexImg> indexImgList = indexImgService.listAll();
             model.addAttribute("defaultImg", defaultImg);
             model.addAttribute("indexImgList", indexImgList);
@@ -83,7 +83,7 @@ public class AdminIndexImgController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxChangeIndexImg(@PathVariable("imgId") Integer imgId) {
         try {
-            IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using.getId());
+            IndexImg defaultImg = indexImgService.queryByState(IndexImgEnum.Using);
             if (!Assert.isNull(defaultImg)){
                 if (!Assert.lessOrEqualZero(defaultImg.getId()))
                 indexImgService.updateStateById(defaultImg.getId(), IndexImgEnum.UnUsing);

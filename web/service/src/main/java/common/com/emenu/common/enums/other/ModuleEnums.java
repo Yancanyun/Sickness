@@ -72,6 +72,12 @@ public enum ModuleEnums {
     AdminRestaurantQrCodeList("Admin:Restaurant:QrCode:List"),
     AdminRestaurantQrCodeNew("Admin:Restaurant:QrCode:New"),
     AdminRestaurantQrCodeDownload("Admin:Restaurant:QrCode:Download"),
+    //餐段管理
+    AdminRestaurantMealPeriod("Admin:Restaurant:MealPeriod"),
+    AdminRestaurantMealPeriodList("Admin:Restaurant:MealPeriod:List"),
+    AdminRestaurantMealPeriodNew("Admin:Restaurant:MealPeriod:New"),
+    AdminRestaurantMealPeriodUpdate("Admin:Restaurant:MealPeriod:Update"),
+    AdminRestaurantMealPeriodDel("Admin:Restaurant:MealPeriod:Del"),
 
     // 菜品单位管理
     AdminDishUnit("Admin:Dish:Unit"),

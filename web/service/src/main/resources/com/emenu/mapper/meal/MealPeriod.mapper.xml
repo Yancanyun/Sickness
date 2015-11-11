@@ -25,4 +25,10 @@
         FROM `t_table_meal_period`
         WHERE `meal_period_id` = #{id}
     </select>
+
+    <select id="queryByCurrentPeriod" resultMap="pw.MealPeriod">
+        SELECT *
+        FROM `t_meal_period`
+        WHERE `current_period` = #{isCurrent}
+    </select>
 </mapper>

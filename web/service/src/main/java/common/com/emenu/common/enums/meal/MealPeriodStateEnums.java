@@ -7,20 +7,18 @@ import java.util.Map;
  * MealPeriodStateEnums
  *
  * @author Wang Liming
- * @date 2015/11/10 14:21
+ * @date 2015/11/11 10:20
  */
 public enum MealPeriodStateEnums {
-
-    Using(1,"正在使用"),
-    UnUsing(0,"未使用");
+    Disabled(0, "停用"),
+    Enabled(1, "启用");
 
     private Integer id;
-    private String description;
+    private String state;
 
-
-    MealPeriodStateEnums(Integer id, String description){
+    MealPeriodStateEnums(int id, String state) {
         this.id = id;
-        this.description = description;
+        this.state = state;
     }
 
     private static Map<Integer, MealPeriodStateEnums> map = new HashMap<Integer, MealPeriodStateEnums>();
@@ -45,7 +43,7 @@ public enum MealPeriodStateEnums {
         return id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getState() {
+        return state;
     }
 }

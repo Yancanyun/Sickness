@@ -1,6 +1,7 @@
 package com.emenu.service.meal.impl;
 
 import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.meal.MealPeriodStateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.meal.MealPeriodMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -61,7 +63,7 @@ public class MealPeriodServiceImpl implements MealPeriodService{
                 }
             }
             if (!Assert.isNull(mealPeriod.getState())){
-                if (Assert.isNull(MealPeriodStateEnums.valueOf(mealPeriod.getState()))){
+                if (Assert.isNull(MealPeriodIsCurrentEnums.valueOf(mealPeriod.getState()))){
                     throw SSException.get(EmenuException.MealPeriodInfoIllegal);
                 }
             }
@@ -110,12 +112,14 @@ public class MealPeriodServiceImpl implements MealPeriodService{
 
     @Override
     public List<MealPeriod> listAll() throws SSException {
+        List<MealPeriod> list = Collections.emptyList();
         try {
-            return mealPeriodMapper.listAll();
+            list =  mealPeriodMapper.listAll();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMealPeriodFail, e);
         }
+        return list;
     }
 
     @Override
@@ -125,6 +129,19 @@ public class MealPeriodServiceImpl implements MealPeriodService{
                 throw SSException.get(EmenuException.MealPeriodInfoIllegal);
             }
             return commonDao.queryById(MealPeriod.class, id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryMealPeriodFail, e);
+        }
+    }
+
+    @Override
+    public MealPeriod queryByCurrentPeriod(MealPeriodIsCurrentEnums isCurrent) throws SSException {
+        try {
+            if (Assert.isNull(isCurrent)){
+                return null;
+            }
+            return mealPeriodMapper.queryByCurrentPeriod(isCurrent.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMealPeriodFail, e);
@@ -162,7 +179,7 @@ public class MealPeriodServiceImpl implements MealPeriodService{
         }
 
         Assert.isNotNull(mealPeriod.getName(), EmenuException.MealPeriodNameNotNull);
-        Assert.isNotNull(MealPeriodStateEnums.valueOf(mealPeriod.getState()), EmenuException.MealPeriodStateIllegal);
+        Assert.isNotNull(MealPeriodIsCurrentEnums.valueOf(mealPeriod.getState()), EmenuException.MealPeriodStateIllegal);
         if (Assert.isNull(mealPeriod.getWeight()) || Assert.lessOrEqualZero(mealPeriod.getWeight())){
             throw SSException.get(EmenuException.MealPeriodWeightIllegal);
         }

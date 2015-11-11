@@ -1,6 +1,7 @@
 package com.emenu.test.meal;
 
 import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.meal.MealPeriodStateEnums;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.test.AbstractTestCase;
@@ -46,7 +47,7 @@ public class MealPeriodTest extends AbstractTestCase {
 
     @Test
     public void updateStateById() throws SSException{
-        mealPeriodService.updateStateById(8, MealPeriodStateEnums.UnUsing);
+        mealPeriodService.updateStateById(8, MealPeriodStateEnums.Disabled);
     }
 
     @Test

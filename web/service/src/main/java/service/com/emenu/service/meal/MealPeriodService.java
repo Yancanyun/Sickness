@@ -1,6 +1,7 @@
 package com.emenu.service.meal;
 
 import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.meal.MealPeriodStateEnums;
 import com.pandawork.core.common.exception.SSException;
 
@@ -64,4 +65,15 @@ public interface MealPeriodService {
      * @throws SSException
      */
     public MealPeriod queryById(int id) throws SSException;
+
+    /**
+     * 查询当前餐段
+     * 0-非当前餐段 1-当前餐段
+     * 只能查询当前餐段且当前餐段只能有一个
+     *
+     * @param isCurrent
+     * @return
+     * @throws SSException
+     */
+    public MealPeriod queryByCurrentPeriod(MealPeriodIsCurrentEnums isCurrent) throws SSException;
 }
