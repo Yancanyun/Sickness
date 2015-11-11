@@ -188,7 +188,8 @@ public class AdminTableController extends AbstractController {
             tableDto.setMealPeriodList(mealPeriodList);
 
             tableService.newTable(tableDto, request);
-            return "redirect:/admin/restaurant/table";
+            String redirectUrl = "/" + URLConstants.ADMIN_TABLE_URL;
+            return "redirect:" + redirectUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -278,7 +279,8 @@ public class AdminTableController extends AbstractController {
             tableDto.setMealPeriodList(mealPeriodList);
 
             tableService.updateTable(id, tableDto);
-            return "redirect:/admin/restaurant/table";
+            String redirectUrl = "/" + URLConstants.ADMIN_TABLE_URL;
+            return "redirect:" + redirectUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
