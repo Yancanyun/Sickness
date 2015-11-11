@@ -7,7 +7,6 @@ CREATE TABLE `t_tag` (
   `name` varchar(128) NOT NULL DEFAULT '' COMMENT '类别名称',
   `p_id` int(11) NOT NULL DEFAULT '0' COMMENT '父类别ID',
   `weight` int(11) NOT NULL DEFAULT '20' COMMENT '权重',
-  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT 'type为1则为菜品的类别，type为2则为原料的类别等',
   `time_limit` int(11) NOT NULL DEFAULT '0' COMMENT '上菜时限',
   `print_after_confirm_order` tinyint(4) NOT NULL DEFAULT '0' COMMENT '下单之后是否立即打印(0-不立即打印,1-立即打印)(此字段只用于最低级分类)',
   `max_print_num` int(11) NOT NULL DEFAULT '1' COMMENT '分类下的菜同时最多可以做的数量(此字段只用于最低级分类)',
