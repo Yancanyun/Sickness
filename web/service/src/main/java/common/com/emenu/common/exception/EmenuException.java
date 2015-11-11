@@ -145,6 +145,9 @@ public enum EmenuException implements IBizExceptionMes {
     EmployeeNameNotNull("员工姓名不能为空",6011),
     EmployeeNumberNotNull("员工编号不能为空",6012),
 
+    //库存管理
+    InsertReportFail("添加单据失败",7001),
+
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
     VipInfoKeywordNotNull("请输入关键字",8002),
