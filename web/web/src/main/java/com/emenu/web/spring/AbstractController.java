@@ -12,12 +12,14 @@ import com.emenu.service.page.IndexImgService;
 import com.emenu.service.page.KeywordsService;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.group.employee.EmployeeService;
+import com.emenu.service.party.group.supplier.SupplierService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityGroupPermissionService;
 import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
+import com.emenu.service.storage.StorageTagService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableService;
@@ -250,6 +252,14 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("waiterTableService")
     protected static WaiterTableService waiterTableService;
+
+    @StaticAutoWire
+    @Qualifier("supplierService")
+    protected static SupplierService supplierService;
+
+    @StaticAutoWire
+    @Qualifier("storageTagService")
+    protected static StorageTagService storageTagService;
 
     @StaticAutoWire
     @Qualifier("mealPeriodService")

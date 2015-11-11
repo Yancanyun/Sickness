@@ -16,6 +16,23 @@ public enum EmenuException implements IBizExceptionMes {
     UploadDirCreateFail("上传文件夹创建失败!", 1004),
     UploadFileFail("文件上传失败", 1005),
 
+    // 供货商模块
+    SupplierInsertFailed("添加供货商失败", 1006),
+    SupplierUpdateFailed("更新供货商失败", 1007),
+    SupplierQueryFailed("查询供货商失败", 1008),
+    SupplierDeleteFailed("删除供货商失败", 1009),
+    SupplierNameNotNull("供货商名称不能为空", 1010),
+    SupplierNameExist("供货商名称已存在", 1011),
+    SupplierIdNotNull("供货商ID不能为空", 1012),
+
+    // 库存分类
+    StorageTagQueryFailed("查询库存分类失败", 1013),
+    StorageTagInsertFailed("添加库存分类失败", 1014),
+    StorageTagUpdateFailed("更新库存分类失败", 1015),
+    StorageTagDeleteFailed("删除库存分类失败", 1016),
+    StorageTagNameNotNull("库存分类名称不能为空", 1017),
+    StorageTagHasItem("有库存物品属于该分类，请先移除分类下的物品", 1018),
+
     //菜品管理模块
     //分类管理
     NewTagFailed("添加分类Tag失败", 3001),

@@ -38,7 +38,7 @@ public class Party extends AbstractEntity {
     private Date createdTime;
 
     // 最近修改时间
-    @Column(name = "last_moedified_timelili")
+    @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
     public Integer getId() {

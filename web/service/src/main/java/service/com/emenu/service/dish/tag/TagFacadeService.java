@@ -3,6 +3,8 @@ package com.emenu.service.dish.tag;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.List;
+
 
 /**
  * TagFacadeService
@@ -18,6 +20,23 @@ public interface TagFacadeService {
      * @throws SSException
      */
     public Tag newTag(Tag tag) throws Exception;
+
+    /**
+     * 更新tag
+     *
+     * @param tag
+     * @throws SSException
+     */
+    public void updateTag(Tag tag) throws SSException;
+
+    /**
+     * 根据pId获取所有的儿子节点
+     *
+     * @param pId
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listByPId(int pId) throws SSException;
 
     /**
      * 删除一个tag

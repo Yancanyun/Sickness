@@ -36,8 +36,6 @@ public enum ModuleEnums {
     AdminPartySecurityGroupPermissionNew("Admin:SAdmin:Party:Security:Group:Permission:New"),
     AdminPartySecurityGroupPermissionDelete("Admin:SAdmin:Party:Security:Group:Permission:Delete"),
 
-
-
     // 基本信息管理
     AdminBasicInfo("Admin:BasicInfo"),
     // 搜索风向标
@@ -114,7 +112,20 @@ public enum ModuleEnums {
     AdminUserManagementEmployeeDelete("Admin:User:Management:Employee:Delete"),
     AdminUserManagementEmployeeNew("Admin:User:Management:Employee:New"),
 
-
+    // 库存管理
+    AdminStorage("Admin:Storage"),
+    // 供货商管理
+    AdminStorageSupplier("Admin:Storage:Supplier"),
+    AdminStorageSupplierList("Admin:Storage:Supplier:List"),
+    AdminStorageSupplierNew("Admin:Storage:Supplier:New"),
+    AdminStorageSupplierUpdate("Admin:Storage:Supplier:Update"),
+    AdminStorageSupplierDelete("Admin:Storage:Supplier:Delete"),
+    // 库存分类管理
+    AdminStorageTag("Admin:Storage:Tag"),
+    AdminStorageTagList("Admin:Storage:Tag:List"),
+    AdminStorageTagNew("Admin:Storage:Tag:New"),
+    AdminStorageTagUpdate("Admin:Storage:Tag:Update"),
+    AdminStorageTagDelete("Admin:Storage:Tag:Delete")
     ;
 
     private String name;

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.party.group.supplier.SupplierMapper">
+
+    <select id="listAll" resultMap="pw.Supplier">
+        SELECT
+            `id` AS id,
+            `party_id` AS partyId,
+            `name` AS NAME,
+            `short_name` AS shortName,
+            `contact_person` AS contactPerson,
+            `contact_phone` AS contactPhone,
+            `address` AS address,
+            `email` AS email,
+            `website` AS website,
+            `status` AS STATUS,
+            `description` AS description,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+        FROM `t_party_supplier`
+        WHERE `status` != 2
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE `t_party_supplier`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="countByNameAndId" resultType="int">
+        SELECT count(1)
+        FROM `t_party_supplier`
+        <where>
+            `name` = #{name}
+            AND `status` != 2
+            <if test="id > 0">
+                AND `id` = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

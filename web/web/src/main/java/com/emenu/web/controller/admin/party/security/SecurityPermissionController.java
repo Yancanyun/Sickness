@@ -24,7 +24,7 @@ import java.util.List;
  **/
 @Controller
 @Module(ModuleEnums.AdminSAdmin)
-@RequestMapping(value = URLConstants.ADMIN_PARTY_SECURITY_PERMISSION)
+@RequestMapping(value = URLConstants.ADMIN_PARTY_SECURITY_PERMISSION_URL)
 public class SecurityPermissionController extends AbstractController {
 
     /**

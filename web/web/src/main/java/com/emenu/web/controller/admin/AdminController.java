@@ -1,6 +1,7 @@
 package com.emenu.web.controller.admin;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.utils.URLConstants;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  * LoginController
@@ -135,6 +139,30 @@ public class AdminController extends AbstractController {
     @IgnoreLogin
     @RequestMapping(value = "500", method = RequestMethod.GET)
     public String to500() {
+        int statusCode = getResponse().getStatus();
+        if (statusCode == HttpServletResponse.SC_BAD_REQUEST) {
+            String url = (String) getRequest().getAttribute("eUrl");
+
+            // ajax请求
+            if (url.contains("ajax")) {
+                JSONObject json = new JSONObject();
+                json.put("code", AJAX_FAILURE_CODE);
+                json.put("errMsg", "少传了参数!");
+
+                try {
+                    getResponse().setContentType("application/json;charset=UTF-8");
+                    PrintWriter writer = getResponse().getWriter();
+                    writer.write(json.toJSONString());
+                    writer.close();
+                    return "";
+                } catch (Exception e) {
+                    LogClerk.errLog.error(e);
+                }
+            } else {
+                getRequest().setAttribute("eMsg", "少传了参数!");
+                getRequest().setAttribute("javax.servlet.error.request_uri", url);
+            }
+        }
         return ADMIN_SYS_ERR_PAGE;
     }
 }

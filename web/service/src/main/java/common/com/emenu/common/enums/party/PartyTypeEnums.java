@@ -11,7 +11,8 @@ import java.util.Map;
  */
 public enum   PartyTypeEnums {
     Employee(1, "员工"),
-    Vip(2, "会员")
+    Vip(2, "会员"),
+    Supplier(3, "供货商")
     ;
 
     private Integer id;

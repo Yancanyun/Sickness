@@ -21,14 +21,16 @@ public final class URLConstants {
     /**********************后台*************************/
     public static final String ADMIN_URL = "admin";
 
+    public static final String ADMIN_COMMON_URL = "admin/common";
+
     // 后台登录url
     public static final String ADMIN_LOGIN_URL = "admin/login";
 
     // 后台权限管理
-    public static final String ADMIN_PARTY_SECURITY_PERMISSION = "admin/party/security/permission";
+    public static final String ADMIN_PARTY_SECURITY_PERMISSION_URL = "admin/party/security/permission";
 
     // 后台安全组管理
-    public static final String ADMIN_PARTY_SECURITY_GROUP = "admin/party/security/group";
+    public static final String ADMIN_PARTY_SECURITY_GROUP_URL = "admin/party/security/group";
 
     //搜索风向标url
     public static final String ADMIN_KEYWORDS_URL = "admin/keywords";
@@ -59,5 +61,11 @@ public final class URLConstants {
 
     //菜品分类管理
     public static final String ADMIN_DISH_TAG = "admin/dish/tag";
+
+    // 供应商管理
+    public static final String ADMIN_STORAGE_SUPPLIER_URL = "admin/storage/supplier";
+
+    // 库存分类管理
+    public static final String ADMIN_STORAGE_TAG_URL = "admin/storage/tag";
 
 }

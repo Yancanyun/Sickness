@@ -21,20 +21,24 @@ public class ErrorInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        System.out.println("after controller");
         String url = request.getScheme() + "://" +
                         request.getServerName() + request.getContextPath() +
                         request.getServerPort() + request.getServletPath();
         String queryString = request.getQueryString();
         queryString = queryString == null ? "" : queryString;
         url += queryString;
-        System.out.println(url);
         request.setAttribute("javax.servlet.error.request_uri", url);
         super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        super.afterCompletion(request, response, handler, ex);
+        // ((Base) (handler)).sendErrMsg(ex.getMessage());
+        int statusCode = response.getStatus();
+        if (statusCode == HttpServletResponse.SC_BAD_REQUEST) {
+            String url = request.getRequestURL().toString();
+            request.setAttribute("eMsg", "少传了参数!");
+            request.setAttribute("eUrl", url);
+        }
     }
 }
