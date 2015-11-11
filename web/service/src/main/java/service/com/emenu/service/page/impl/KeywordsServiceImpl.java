@@ -44,7 +44,7 @@ public class KeywordsServiceImpl implements KeywordsService{
             return commonDao.insert(keywords);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.SystemException, e);
+            throw SSException.get(EmenuException.InsertKeywordsFail, e);
         }
     }
 

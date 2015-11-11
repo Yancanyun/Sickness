@@ -83,23 +83,36 @@ public enum EmenuException implements IBizExceptionMes {
     RemarkNameExist("备注名称已存在", 4104),
     RemarkNameIsNull("备注名称不能为空", 4105),
 
+    //基本信息管理
     //搜索风向标
-    KeywordsExist("关键字已存在！", 5001),
-    DeleteKeywordsFail("删除关键字失败！", 5002),
-    QueryKeywordsFail("获取关键字列表失败！", 5003),
-    InsertKeywordsFail("添加关键字失败！", 5004),
-    KeyNotNull("关键字不能为空！",5009),
-    KeyTypeNotNull("关键字类型不能为空！",5010),
-    KeyTypeWrong("关键字类型出错！",5011),
+    KeywordsExist("关键字已存在", 5000),
+    DeleteKeywordsFail("删除关键字失败", 5001),
+    QueryKeywordsFail("获取关键字列表失败", 5002),
+    InsertKeywordsFail("添加关键字失败", 5003),
+    KeyNotNull("关键字不能为空", 5004),
+    KeyTypeNotNull("关键字类型不能为空", 5005),
+    KeyTypeWrong("关键字类型非法", 5006),
 
     //点餐平台首页
-    InsertIndexImgFail("添加图片失败！", 5005),
-    UpdateIndexImgFail("更改首页展示图片失败！", 5006),
-    DeleteIndexImgFail("删除图片失败！", 5007),
-    QueryIndexImgFail("获取首页图片失败！", 5008),
-    ImgPathNotNull("图片路径不能为空！",5012),
-    ImgStateNotNull("图片使用状态不能为空！", 5013),
-    ImgStateWrong("图片使用状态异常！", 5014),
+    InsertIndexImgFail("添加图片失败", 5010),
+    UpdateIndexImgFail("更改首页展示图片失败", 5011),
+    DeleteIndexImgFail("删除图片失败", 5012),
+    QueryIndexImgFail("获取首页图片失败", 5013),
+    ImgPathNotNull("图片路径不能为空",5014),
+    ImgStateNotNull("图片使用状态不能为空", 5015),
+    ImgStateWrong("图片使用状态异常", 5016),
+
+    //餐段管理
+    MealPeriodNameNotNull("餐段名称不能为空",5020),
+    MealPeriodStateIllegal("餐段启用状态非法",5021),
+    InsertMealPeriodFail("添加餐段失败",5022),
+    UpdateMealPeriodFail("修改餐段失败",5023),
+    DeleteMealPeriodFail("删除餐段失败",5024),
+    QueryMealPeriodFail("查询餐段失败",5025),
+    MealPeriodNameExist("餐段名称已存在",5026),
+    MealPeriodInfoIllegal("餐段信息非法",5027),
+    MealPeriodIsUsing("该餐段正在使用",5028),
+    MealPeriodWeightIllegal("餐段排序权重非法",5021),
 
 
     //用户管理模块
