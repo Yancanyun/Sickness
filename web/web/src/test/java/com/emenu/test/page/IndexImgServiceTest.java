@@ -31,7 +31,7 @@ public class IndexImgServiceTest extends AbstractTestCase {
 
     @Test
     public void updateIndexImg() throws SSException {
-        IndexImg indexImg = indexImgService.queryByState(1);
+        IndexImg indexImg = indexImgService.queryByState(IndexImgEnum.Using);
         indexImgService.updateStateById(indexImg.getId(), IndexImgEnum.UnUsing);
     }
 

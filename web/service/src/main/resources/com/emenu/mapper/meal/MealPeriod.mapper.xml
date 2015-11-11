@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.meal.MealPeriodMapper">
+
+    <update id="updateStateById">
+        UPDATE `t_meal_period`
+        SET `state` = #{state}
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="listAll" resultMap="pw.MealPeriod">
+        SELECT *
+        FROM `t_meal_period`
+        ORDER BY `weight`, `id`
+    </select>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_meal_period`
+        WHERE `name` = #{name}
+    </select>
+
+    <select id="countById" resultType="int">
+        SELECT COUNT(0)
+        FROM `t_table_meal_period`
+        WHERE `meal_period_id` = #{id}
+    </select>
+
+    <select id="queryByCurrentPeriod" resultMap="pw.MealPeriod">
+        SELECT *
+        FROM `t_meal_period`
+        WHERE `current_period` = #{isCurrent}
+    </select>
+</mapper>

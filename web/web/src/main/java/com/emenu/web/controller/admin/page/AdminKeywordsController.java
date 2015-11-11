@@ -25,8 +25,8 @@ import java.util.List;
  * @date 2015/10/23 11:06
  */
 @Controller
-@Module(ModuleEnums.AdminBasicInfo)
-@RequestMapping(value = URLConstants.KEYWORDS_URL)
+@Module(ModuleEnums.AdminBasicInfoKeywords)
+@RequestMapping(value = URLConstants.ADMIN_KEYWORDS_URL)
 public class AdminKeywordsController extends AbstractController {
 
     /**

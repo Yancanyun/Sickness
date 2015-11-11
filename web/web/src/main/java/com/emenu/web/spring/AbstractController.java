@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.dish.unit.UnitService;
+import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.page.IndexImgService;
 import com.emenu.service.page.KeywordsService;
@@ -254,4 +255,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("supplierService")
     protected static SupplierService supplierService;
+
+    @StaticAutoWire
+    @Qualifier("mealPeriodService")
+    protected static MealPeriodService mealPeriodService;
 }

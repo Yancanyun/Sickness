@@ -31,7 +31,7 @@ public final class URLConstants {
     public static final String ADMIN_PARTY_SECURITY_GROUP = "admin/party/security/group";
 
     //搜索风向标url
-    public static final String KEYWORDS_URL = "admin/keywords";
+    public static final String ADMIN_KEYWORDS_URL = "admin/keywords";
 
     //餐台区域管理页面
     public static final String ADMIN_AREA_URL = "admin/restaurant/area";
@@ -43,7 +43,10 @@ public final class URLConstants {
     public static final String ADMIN_QRCODE_URL = "admin/restaurant/qrcode";
 
     //点餐平台首页图片管理url
-    public static final String INDEX_IMG_URL = "admin/index/img";
+    public static final String ADMIN_INDEX_IMG_URL = "admin/index/img";
+
+    //餐段管理
+    public static final String ADMIN_MEAL_PERIOD_URL = "admin/meal/period";
 
     //会员基本信息管理
     public static final String VIP_VIPINFO_URL = "admin/party/group/vip";
