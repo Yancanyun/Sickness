@@ -100,7 +100,7 @@
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a href="javascript:;"><i class="fa fa-user"></i>&nbsp;修改个人信息</a></li>
                 <li class="divider"></li>
-                <li><a href="javascript:;"><i class="fa fa-sign-out"></i>&nbsp;退出登录</a></li>
+                <li><a href="${website}admin/logout"><i class="fa fa-sign-out"></i>&nbsp;退出登录</a></li>
             </ul>
         </li>
         <li>

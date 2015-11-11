@@ -98,7 +98,12 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 新增会员
-     * @param vipInfo
+     * @param name
+     * @param sex
+     * @param birthday
+     * @param phone
+     * @param qq
+     * @param email
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoNew)
@@ -112,8 +117,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
-        return "redirect:" + redirectUrl;
+        return "redirect:list";
     }
 
     /**
@@ -143,7 +147,13 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 修改会员信息
-     * @param vipInfo
+     * @param id
+     * @param name
+     * @param sex
+     * @param birthday
+     * @param phone
+     * @param qq
+     * @param email
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoUpdate)
@@ -156,8 +166,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
-        return "redirect" + redirectUrl;
+        return "redirect:list";
     }
 
     /**
