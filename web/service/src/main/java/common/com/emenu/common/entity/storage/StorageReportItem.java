@@ -55,6 +55,7 @@ public class StorageReportItem extends AbstractEntity{
         return id;
     }
 
+    /********************getter and setter ********************/
     @Override
     public void setId(Integer id) {
         this.id = id;

@@ -36,7 +36,7 @@ public class StorageReport extends AbstractEntity{
 
         //经手人
         @Column(name = "handler_party_id")
-        private String handlerPartyId;
+        private Integer handlerPartyId;
 
         //当事人id/操作人id
         @Column(name = "created_party_id")
@@ -59,94 +59,94 @@ public class StorageReport extends AbstractEntity{
         @Column(name = "last_modified_time")
         private Date lastModifiedTime;
 
-        public Integer getId() {
-            return id;
-        }
+    /********************getter and setter ********************/
 
-        @Override
-        public void setId(Integer id) {
-            this.id = id;
-        }
+    public Integer getId() {
+        return id;
+    }
 
-        public String getSerialNumber() {
-            return serialNumber;
-        }
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-        public void setSerialNumber(String serialNumber) {
-            this.serialNumber = serialNumber;
-        }
+    public String getSerialNumber() {
+        return serialNumber;
+    }
 
-        public String getComment() {
-            return comment;
-        }
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
+    public String getComment() {
+        return comment;
+    }
 
-        public Integer getDepotId() {
-            return depotId;
-        }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-        public void setDepotId(Integer depotId) {
-            this.depotId = depotId;
-        }
+    public Integer getDepotId() {
+        return depotId;
+    }
 
-        public String getHandlerPartyId() {
-            return handlerPartyId;
-        }
+    public void setDepotId(Integer depotId) {
+        this.depotId = depotId;
+    }
 
-        public void setHandlerPartyId(String handlerPartyId) {
-            this.handlerPartyId = handlerPartyId;
-        }
+    public Integer getHandlerPartyId() {
+        return handlerPartyId;
+    }
 
-        public Integer getCreatedPartyId() {
-            return createdPartyId;
-        }
+    public void setHandlerPartyId(Integer handlerPartyId) {
+        this.handlerPartyId = handlerPartyId;
+    }
 
-        public void setCreatedPartyId(Integer createdPartyId) {
-            this.createdPartyId = createdPartyId;
-        }
+    public Integer getCreatedPartyId() {
+        return createdPartyId;
+    }
 
-        public BigDecimal getMoney() {
-            return money;
-        }
+    public void setCreatedPartyId(Integer createdPartyId) {
+        this.createdPartyId = createdPartyId;
+    }
 
-        public void setMoney(BigDecimal money) {
-            this.money = money;
-        }
+    public BigDecimal getMoney() {
+        return money;
+    }
 
-        public Integer getStatus() {
-            return status;
-        }
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
 
-        public void setStatus(Integer status) {
-            this.status = status;
-        }
+    public Integer getStatus() {
+        return status;
+    }
 
-        public Integer getType() {
-            return type;
-        }
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
-        public void setType(Integer type) {
-            this.type = type;
-        }
+    public Integer getType() {
+        return type;
+    }
 
-        public Date getCreatedTime() {
-            return createdTime;
-        }
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
-        public void setCreatedTime(Date createdTime) {
-            this.createdTime = createdTime;
-        }
+    public Date getCreatedTime() {
+        return createdTime;
+    }
 
-        public Date getLastModifiedTime() {
-            return lastModifiedTime;
-        }
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
 
-        public void setLastModifiedTime(Date lastModifiedTime) {
-            this.lastModifiedTime = lastModifiedTime;
-        }
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
+    }
 
-
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
+    }
 }

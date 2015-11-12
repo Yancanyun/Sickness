@@ -64,7 +64,7 @@ public class WaiterTableServiceImpl implements WaiterTableService {
         try {
             List<Integer> tableIdList = Collections.emptyList();
             if(Assert.lessOrEqualZero(partyId)){
-                throw SSException.get(EmenuException.PartyIdIdError);
+                throw SSException.get(EmenuException.PartyIdError);
             }
 
             tableIdList = waiterTableMapper.queryByPartyId(partyId);

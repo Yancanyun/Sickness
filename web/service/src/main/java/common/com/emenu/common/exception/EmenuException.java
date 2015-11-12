@@ -143,7 +143,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryEmployeeException("查询员工信息失败",6007),
     EmployeeIsActivity("员工处于激活状态，请先将它转为未激活！",6008),
     DeleteEmployeeFail("删除员工信息失败",6009),
-    PartyIdIdError("当事人ID为空或者小于0", 6010),
+    PartyIdError("当事人ID为空或者小于0", 6010),
     EmployeeNameNotNull("员工姓名不能为空",6011),
     EmployeeNumberNotNull("员工编号不能为空",6012),
 
@@ -151,6 +151,24 @@ public enum EmenuException implements IBizExceptionMes {
     InsertReportFail("添加单据失败",7001),
     NewSerialNumberFali("生成单据编号失败",7002),
     ReportIsNotNull("单据不能为空",7003),
+    ReportItemIsNotNull("单据详情不能为空",7004),
+    HandlerPartyId("操作人id不能为空或者小于0",7005),
+    DepotIdError("存储点ID为空或者小于0",7006),
+    ReportStatusError("状态不能为空或小于0",7007),
+    ReportMoneyError("单据金额不能为空或小于0",7008),
+    ReportTypeError("类型不能为空或小于0",7009),
+    CreatedPartyIdError("订单创建者ID不能为空或小于0",7010),
+    SerialNumberError("单据编号不能为空或小于0、生产单据编号失败",7011),
+    DishIdError("菜品ID不能为空或小于0",7012),
+    PriceError("成本不能为空或小于0",7013),
+    QuantityError("数量不能为空或小于0",7014),
+    CountError("计数不能为空或小于0",7015),
+    InsertReportItemFail("添加单据详情失败",7016),
+    ReportIdError("计数不能为空或小于0",7017),
+    ListStorageReportFail("获取单据信息失败",7018),
+    ListStorageReportItemFail("获取单据详情信息l列表失败",7019),
+    QueryStorageReportItemFail("获取单据详情信息失败",7020),
+
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
