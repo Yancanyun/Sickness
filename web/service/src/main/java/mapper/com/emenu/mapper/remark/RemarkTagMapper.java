@@ -34,4 +34,12 @@ public interface RemarkTagMapper {
      * @throws Exception
      */
     public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+
+    /**
+     * 根据父ID查询子分类
+     * @param pId
+     * @return
+     * @throws Exception
+     */
+    public List<RemarkTag> listByParentId(@Param("pId") int pId) throws Exception;
 }

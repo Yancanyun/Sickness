@@ -1,5 +1,6 @@
 package com.emenu.service.remark;
 
+import com.emenu.common.dto.remark.RemarkTagDto;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.pandawork.core.common.exception.SSException;
 
@@ -26,6 +27,14 @@ public interface RemarkTagService {
      * @throws SSException
      */
     public RemarkTag queryById(int id) throws SSException;
+
+    /**
+     * 根据父ID查询子分类
+     * @param pId
+     * @return
+     * @throws SSException
+     */
+    public List<RemarkTag> listByParentId(int pId) throws SSException;
 
     /**
      * 添加备注分类

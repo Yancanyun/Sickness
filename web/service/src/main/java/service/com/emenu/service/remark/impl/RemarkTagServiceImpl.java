@@ -1,5 +1,6 @@
 package com.emenu.service.remark.impl;
 
+import com.emenu.common.dto.remark.RemarkTagDto;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.remark.RemarkTagStateEnums;
 import com.emenu.common.exception.EmenuException;
@@ -59,6 +60,22 @@ public class RemarkTagServiceImpl implements RemarkTagService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryRemarkTagFail, e);
         }
+    }
+
+    @Override
+    public List<RemarkTag> listByParentId(int pId) throws SSException {
+        List<RemarkTag> remarkTagList = Collections.emptyList();
+        //检查ID是否合法
+        if (Assert.lessZero(pId)) {
+            return null;
+        }
+        try {
+            remarkTagList = remarkTagMapper.listByParentId(pId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryRemarkTagFail, e);
+        }
+        return remarkTagList;
     }
     
     @Override

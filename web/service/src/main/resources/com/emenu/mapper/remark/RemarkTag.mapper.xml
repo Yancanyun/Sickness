@@ -23,4 +23,14 @@
         SET `state` = #{state}
         WHERE `id` = #{id}
     </update>
+
+    <select id="listByParentId" resultMap="pw.RemarkTag">
+        SELECT
+        `id`,
+        `name`,
+        `p_id`
+        FROM `t_remark_tag`
+        WHERE `state` = 1
+        AND `p_id` = #{pId}
+    </select>
 </mapper>

@@ -13,6 +13,9 @@
       <li class="active">餐台管理</li>
     </ol>
     <h2>餐台管理-餐台列表</h2>
+    <c:if test="${!empty msg}">
+      <div class="alert alert-success col-sm-12 J_msg" role="alert">${msg}</div>
+    </c:if>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">

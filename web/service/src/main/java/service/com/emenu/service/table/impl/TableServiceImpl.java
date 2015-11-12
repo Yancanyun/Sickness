@@ -368,19 +368,20 @@ public class TableServiceImpl implements TableService{
             //插入餐台表后，从插入的新餐台中获得ID，设置二维码地址
             updateQrCode(table.getId(), qrCodeService.newQrCode(table.getId(), null, request));
 
-            //设置餐台-餐段信息
-            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
-            for (int i = 0; i < mealPeriodList.size(); i++){
-                MealPeriod mealPeriod = mealPeriodList.get(i);
-                TableMealPeriod tableMealPeriod = new TableMealPeriod();
-                //设置TableID
-                tableMealPeriod.setTableId(table.getId());
-                //设置MealPeriodID
-                tableMealPeriod.setMealPeriodId(mealPeriod.getId());
-                tableMealPeriodList.add(tableMealPeriod);
+            //若勾选了餐段，则设置餐台-餐段信息
+            if (mealPeriodList.size() != 0) {
+                List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+                for (int i = 0; i < mealPeriodList.size(); i++) {
+                    MealPeriod mealPeriod = mealPeriodList.get(i);
+                    TableMealPeriod tableMealPeriod = new TableMealPeriod();
+                    //设置TableID
+                    tableMealPeriod.setTableId(table.getId());
+                    //设置MealPeriodID
+                    tableMealPeriod.setMealPeriodId(mealPeriod.getId());
+                    tableMealPeriodList.add(tableMealPeriod);
+                }
+                tableMealPeriodService.newTableMealPeriod(tableMealPeriodList);
             }
-            //插入餐台-餐段表
-            tableMealPeriodService.newTableMealPeriod(tableMealPeriodList);
             return table;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -440,19 +441,24 @@ public class TableServiceImpl implements TableService{
             //更新餐台表
             commonDao.update(table);
 
-            //设置餐台-餐段信息
-            List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
-            for (int i = 0; i < mealPeriodList.size(); i++){
-                MealPeriod mealPeriod = mealPeriodList.get(i);
-                TableMealPeriod tableMealPeriod = new TableMealPeriod();
-                //设置TableID
-                tableMealPeriod.setTableId(table.getId());
-                //设置MealPeriodID
-                tableMealPeriod.setMealPeriodId(mealPeriod.getId());
-                tableMealPeriodList.add(tableMealPeriod);
+            //若勾选了餐段，则设置餐台-餐段信息
+            if (mealPeriodList.size() != 0) {
+                List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+                for (int i = 0; i < mealPeriodList.size(); i++) {
+                    MealPeriod mealPeriod = mealPeriodList.get(i);
+                    TableMealPeriod tableMealPeriod = new TableMealPeriod();
+                    //设置TableID
+                    tableMealPeriod.setTableId(table.getId());
+                    //设置MealPeriodID
+                    tableMealPeriod.setMealPeriodId(mealPeriod.getId());
+                    tableMealPeriodList.add(tableMealPeriod);
+                }
+                //更新餐台-餐段表
+                tableMealPeriodService.updateTableMealPeriod(tableMealPeriodList);
+            } else {
+                //若餐段被修改为空，则删除所有对应的餐台-餐段信息
+                tableMealPeriodService.delByTableId(id);
             }
-            //更新餐台-餐段表
-            tableMealPeriodService.updateTableMealPeriod(tableMealPeriodList);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);

@@ -9,6 +9,9 @@
       <li class="active">餐台管理</li>
     </ol>
     <h2>餐台管理-添加餐台</h2>
+    <c:if test="${!empty msg}">
+      <div class="alert alert-danger col-sm-12 J_msg" role="alert">${msg}</div>
+    </c:if>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">
@@ -21,7 +24,7 @@
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>餐台区域
             </label>
-            <div class="col-sm-2">
+            <div class="col-sm-6">
               <select class="form-control J_tableArea" name="areaId">
                 <option value="-1">请选择</option>
                 <c:forEach var="area" items="${areaList}">

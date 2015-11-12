@@ -29,7 +29,7 @@ public class RemarkTagTest extends AbstractTestCase {
     }
 
     @Test
-    public void queryAllRemarkTag() throws SSException {
+    public void listAllRemarkTag() throws SSException {
         List<RemarkTag> remarkTagList = remarkTagService.listAll();
 
         for (RemarkTag remarkTag:remarkTagList){
@@ -60,5 +60,15 @@ public class RemarkTagTest extends AbstractTestCase {
     @Test
     public void checkNameIsExist() throws SSException{
         System.out.println(remarkTagService.checkNameIsExist("普通备注"));
+    }
+
+    @Test
+    public void listByParentId() throws SSException {
+        int pId = 2;
+        List<RemarkTag> remarkTagList = remarkTagService.listByParentId(pId);
+
+        for (RemarkTag remarkTag:remarkTagList){
+            System.out.println("Name:" + remarkTag.getName() + " pid:" + remarkTag.getpId());
+        }
     }
 }

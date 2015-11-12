@@ -19,6 +19,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -173,27 +174,36 @@ public class AdminTableController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantTableNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String tableNew(Table table, @RequestParam(required = false) List<Integer> mealPeriodIdList,
-                           HttpServletRequest request) {
+                           HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             TableDto tableDto = new TableDto();
             //往TableDto中插入Table
             tableDto.setTable(table);
             //往TableDto中插入MealPeriodList
             List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-            for(int i = 0; i < mealPeriodIdList.size(); i++){
-                MealPeriod mealPeriod = new MealPeriod();
-                mealPeriod.setId(mealPeriodIdList.get(i));
-                mealPeriodList.add(mealPeriod);
+            if (mealPeriodIdList != null) {
+                for (int i = 0; i < mealPeriodIdList.size(); i++) {
+                    MealPeriod mealPeriod = new MealPeriod();
+                    mealPeriod.setId(mealPeriodIdList.get(i));
+                    mealPeriodList.add(mealPeriod);
+                }
             }
             tableDto.setMealPeriodList(mealPeriodList);
-
             tableService.newTable(tableDto, request);
-            String redirectUrl = "/" + URLConstants.ADMIN_TABLE_URL;
-            return "redirect:" + redirectUrl;
+
+            String successUrl = "/" + URLConstants.ADMIN_TABLE_URL;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("msg", "添加成功");
+            //返回列表页
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/new";
+            //返回添加失败信息
+            redirectAttributes.addFlashAttribute("msg", "添加失败");
+            //返回添加页
+            return "redirect:" + failedUrl;
         }
     }
 
@@ -212,7 +222,7 @@ public class AdminTableController extends AbstractController {
             }
             //若传来ID，则为编辑页
             //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
-            else if (id != null && !name.equals(tableService.queryById(id).getName())){
+            else if (id != null && !name.equals(tableService.queryById(id).getName()) && tableService.checkNameIsExist(name)){
                 throw SSException.get(EmenuException.TableNameExist);
             }
             else {
@@ -263,7 +273,8 @@ public class AdminTableController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantTableUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String tableUpdate(@PathVariable Integer id, Table table,
-                              @RequestParam(required = false) List<Integer> mealPeriodIdList) {
+                              @RequestParam(required = false) List<Integer> mealPeriodIdList,
+                              RedirectAttributes redirectAttributes) {
         try {
             TableDto tableDto = new TableDto();
             //往TableDto中插入Table
@@ -271,20 +282,31 @@ public class AdminTableController extends AbstractController {
             table.setId(id);
             //往TableDto中插入MealPeriodList
             List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-            for(int i = 0; i < mealPeriodIdList.size(); i++){
-                MealPeriod mealPeriod = new MealPeriod();
-                mealPeriod.setId(mealPeriodIdList.get(i));
-                mealPeriodList.add(mealPeriod);
+            if (mealPeriodIdList != null) {
+                for (int i = 0; i < mealPeriodIdList.size(); i++) {
+                    MealPeriod mealPeriod = new MealPeriod();
+                    mealPeriod.setId(mealPeriodIdList.get(i));
+                    mealPeriodList.add(mealPeriod);
+                }
             }
             tableDto.setMealPeriodList(mealPeriodList);
-
             tableService.updateTable(id, tableDto);
-            String redirectUrl = "/" + URLConstants.ADMIN_TABLE_URL;
-            return "redirect:" + redirectUrl;
+
+            String successUrl = "/" + URLConstants.ADMIN_TABLE_URL;
+            //返回编辑成功信息
+            redirectAttributes.addFlashAttribute("msg", "编辑成功");
+            //返回列表页
+            return "redirect:" + successUrl;
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+
+            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/update/" + id;
+            //返回编辑失败信息
+            redirectAttributes.addFlashAttribute("msg", "编辑失败");
+            //返回编辑页
+            return "redirect:" + failedUrl;
         }
     }
 
