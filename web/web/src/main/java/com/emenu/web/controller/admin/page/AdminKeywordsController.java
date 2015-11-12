@@ -81,7 +81,7 @@ public class AdminKeywordsController extends AbstractController {
     @Module(ModuleEnums.AdminBasicInfoKeywordsDel)
     @RequestMapping(value = "ajax/{keywordsId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONObject ajaxDeleteKeywords(@PathVariable Integer keywordsId){
+    public JSONObject ajaxDeleteKeywords(@PathVariable("keywordsId") Integer keywordsId){
         try {
             keywordsService.delById(keywordsId);
             return sendJsonObject(AJAX_SUCCESS_CODE);

@@ -89,6 +89,9 @@ public class MealPeriodServiceImpl implements MealPeriodService{
             if (mealPeriodMapper.countById(id) > 0){
                 throw SSException.get(EmenuException.MealPeriodIsUsing);
             }
+            if (queryById(id).getCurrentPeriod().equals(MealPeriodIsCurrentEnums.Using.getId())){
+                throw SSException.get(EmenuException.MealPeriodIsUsing);
+            }
             commonDao.deleteById(MealPeriod.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -103,7 +106,24 @@ public class MealPeriodServiceImpl implements MealPeriodService{
             if (Assert.lessOrEqualZero(id) || Assert.isNull(state)){
                 throw SSException.get(EmenuException.MealPeriodInfoIllegal);
             }
+            MealPeriod mealPeriod = queryById(id);
+            if (mealPeriod.getCurrentPeriod().equals(MealPeriodIsCurrentEnums.Using.getId())){
+                throw SSException.get(EmenuException.MealPeriodIsUsing);
+            }
             mealPeriodMapper.updateStateById(id, state.getId());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateMealPeriodFail, e);
+        }
+    }
+
+    @Override
+    public void updateCurrentMealPeriod(int id, MealPeriodIsCurrentEnums isCurrent) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id) || Assert.isNull(isCurrent)){
+                throw SSException.get(EmenuException.MealPeriodInfoIllegal);
+            }
+            mealPeriodMapper.updateCurrentMealPeriod(id, isCurrent.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateMealPeriodFail, e);

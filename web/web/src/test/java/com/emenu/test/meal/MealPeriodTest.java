@@ -51,6 +51,11 @@ public class MealPeriodTest extends AbstractTestCase {
     }
 
     @Test
+    public void updateCurrentPeriod() throws SSException{
+        mealPeriodService.updateCurrentMealPeriod(1, MealPeriodIsCurrentEnums.Using);
+    }
+
+    @Test
     public void listAll() throws SSException{
         List<MealPeriod> list = mealPeriodService.listAll();
         for (MealPeriod mealPeriod : list){
@@ -61,5 +66,10 @@ public class MealPeriodTest extends AbstractTestCase {
     @Test
     public void queryById() throws SSException{
         System.out.println(mealPeriodService.queryById(1));
+    }
+
+    @Test
+    public void queryByCurrentPeriod() throws SSException{
+        System.out.println(mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.UnUsing));
     }
 }

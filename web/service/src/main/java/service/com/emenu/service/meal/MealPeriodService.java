@@ -50,6 +50,16 @@ public interface MealPeriodService {
     public void updateStateById(int id, MealPeriodStateEnums state) throws SSException;
 
     /**
+     * 根据id修改为当前餐段
+     *
+     * @param currentMealPeriod
+     * @param id
+     * @param isCurrent
+     * @throws SSException
+     */
+    public void updateCurrentMealPeriod(int id, MealPeriodIsCurrentEnums isCurrent) throws SSException;
+
+    /**
      * 查询所有餐段
      *
      * @return

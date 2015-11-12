@@ -8,6 +8,12 @@
         WHERE `id` = #{id}
     </update>
 
+    <update id="updateCurrentMealPeriod">
+        UPDATE `t_meal_period`
+        SET `current_period` = #{currentMealPeriod}
+        WHERE `id` = #{id}
+    </update>
+
     <select id="listAll" resultMap="pw.MealPeriod">
         SELECT *
         FROM `t_meal_period`

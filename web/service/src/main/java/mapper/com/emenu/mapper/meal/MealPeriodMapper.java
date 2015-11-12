@@ -24,6 +24,15 @@ public interface MealPeriodMapper {
     public void updateStateById(@Param("id") int id, @Param("state") int state) throws Exception;
 
     /**
+     * 根据id修改为当前餐段
+     *
+     * @param id
+     * @param currentMealPeriod
+     * @throws Exception
+     */
+    public void updateCurrentMealPeriod(@Param("id") int id, @Param("currentMealPeriod") int currentMealPeriod) throws Exception;
+
+    /**
      * 查询所有餐段
      *
      * @return
