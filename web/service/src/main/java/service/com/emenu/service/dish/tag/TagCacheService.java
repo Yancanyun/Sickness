@@ -1,5 +1,6 @@
 package com.emenu.service.dish.tag;
 
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.pandawork.core.common.exception.SSException;
 
@@ -56,6 +57,7 @@ public interface TagCacheService {
      * @return List<Tag>
      * @throws Exception
      */
+    @Deprecated
     public List<Tag> listAllRootByType(int type) throws Exception;
 
     /**
@@ -72,6 +74,14 @@ public interface TagCacheService {
      * @throws SSException
      */
     public List<Tag> listByCurrentId(int tagId) throws Exception;
+
+    /**
+     * 由当前节点获取展开tag组成嵌套List
+     * @param tagId
+     * @return List<TagDto>
+     * @throws Exception
+     */
+    public List<TagDto> listDtoByCurrentId(int tagId) throws Exception;
 
     /**
      * 根据id查找tag,返回tag的clone对象，防止直接修改内存数据

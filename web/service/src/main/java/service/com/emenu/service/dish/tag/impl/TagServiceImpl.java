@@ -42,12 +42,6 @@ public class TagServiceImpl implements TagService{
             if (Assert.isNull(tag.getpId())&& Assert.lessOrEqualZero(tag.getpId())) {
                 throw SSException.get(EmenuException.TagPIdError);
             }
-            if (Assert.isNull(tag.getType())&& Assert.lessOrEqualZero(tag.getpId())) {
-                throw SSException.get(EmenuException.TagTypeError);
-            }
-            if (Assert.isNull(tag.getWeight())&& Assert.lessOrEqualZero(tag.getWeight())) {
-                throw SSException.get(EmenuException.TagWeightError);
-            }
             return commonDao.insert(tag);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -93,12 +87,6 @@ public class TagServiceImpl implements TagService{
             if (Assert.isNull(tag.getpId())&& Assert.lessOrEqualZero(tag.getpId())) {
                 throw SSException.get(EmenuException.TagPIdError);
             }
-            if (Assert.isNull(tag.getType())&& Assert.lessOrEqualZero(tag.getpId())) {
-                throw SSException.get(EmenuException.TagTypeError);
-            }
-            if (Assert.isNull(tag.getWeight())&& Assert.lessOrEqualZero(tag.getWeight())) {
-                throw SSException.get(EmenuException.TagWeightError);
-            }
             commonDao.update(tag);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -107,13 +95,16 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public void update(Tag tag) throws SSException {
+    public void updateFiled(Tag tag, String filedName) throws SSException {
         try{
             // 检查id是否<=0，如果是，直接返回
             if (Assert.lessOrEqualZero(tag.getId())) {
                 throw SSException.get(EmenuException.TagIdError);
             }
-            commonDao.updateFieldsById(tag);
+            if (Assert.isNull(filedName)) {
+                throw SSException.get(EmenuException.TagFiledIsNull);
+            }
+            commonDao.updateFieldsById(tag,filedName);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTagFailed, e);

@@ -10,9 +10,14 @@ import java.util.Map;
  * @date 2015/11/5
  */
 public enum TagEnum {
-    DISHES(1 , "菜品"),
-    Storage(2 , "原配料")
-    ;
+    DishAndGoods(1,"菜品、商品分类"),
+    Storage(2,"库存分类"),
+    Dishes(3 , "菜品"),
+    Goods(4, "商品"),
+    Drinks(5, "酒水"),
+    Package(6 , "套餐"),
+    Others(7, "其他");
+
     private Integer id;
     private String name;
 

@@ -6,7 +6,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Tag
@@ -30,8 +32,6 @@ public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
     private Integer pId;
     //权重
     private Integer weight;
-    //类别类型，如果为1则为菜品类别，2为原料类别
-    private Integer type;
     //上菜时限
     @Column(name = "time_limit")
     private Integer timeLimit;
@@ -91,14 +91,6 @@ public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
 
     public void setWeight(Integer weight) {
         this.weight = weight;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     public Integer getTimeLimit() {

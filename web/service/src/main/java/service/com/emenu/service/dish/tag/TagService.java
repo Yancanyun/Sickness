@@ -45,9 +45,10 @@ public interface TagService {
     /**
      * 更新数据库某一个字段的值
      * @param tag
+     * @param filedName
      * @throws SSException
      */
-    public void update(Tag tag) throws SSException;
+    public void updateFiled(Tag tag, String filedName) throws SSException;
 
     /**
      * 根据ID查询tag

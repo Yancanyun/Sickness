@@ -46,6 +46,7 @@ public enum EmenuException implements IBizExceptionMes {
     TagNameIsNull("分类名称为空", 3008),
     TagTypeError("分类Tag的type为空或者小于0或者不存在", 3009),
     TagChildrenIsNull("分类的子节点为空", 3010),
+    TagFiledIsNull("分类的更新域为空", 3011),
 
     //单位管理
     ListUnitFailed("单位列表查询失败", 3020),

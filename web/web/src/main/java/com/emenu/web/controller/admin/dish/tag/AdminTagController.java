@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -33,100 +34,100 @@ public class AdminTagController extends AbstractController{
      */
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
     @Module(ModuleEnums.AdminDishTagList)
-    public String toListTag(){
+    public String toListTag() throws Exception {
+//        tagFacadeService.listAllByPId(TagEnum.DishAndGoods.getId());
         return "admin/dish/tag/list_home";
     }
 
-    /**
-     * Ajax分页获取列表
-     * @param curPage
-     * @param pageSize
-     * @return
-     */
-    @RequestMapping(value = {"ajax/list/{curPage}"},method = RequestMethod.GET)
-    @Module(ModuleEnums.AdminDishTagList)
-    @ResponseBody
-    public JSONObject ajaxListTag(@PathVariable("curPage") Integer curPage,
-                                  @RequestParam Integer pageSize){
-        List<Tag> tagList = Collections.emptyList();
-        try {
-            tagList = tagService.listByPage(curPage, pageSize);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-
-        JSONArray jsonArray = new JSONArray();
-        for (Tag tag:tagList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", tag.getId());
-            jsonObject.put("name", tag.getName());
-            jsonObject.put("pid", tag.getpId());
-            jsonObject.put("weight", tag.getWeight());
-            jsonObject.put("type", tag.getType());
-            jsonArray.add(jsonObject);
-        }
-        int dataCount = 0;
-        try {
-            dataCount = tagService.countAll();
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-        return sendJsonArray(jsonArray, dataCount);
-    }
-
-    /**
-     * Ajax添加
-     * @param tag
-     * @return
-     */
-    @Module(ModuleEnums.AdminDishTagNew)
-    @RequestMapping(value = "ajax", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject ajaxNewTag(Tag tag){
-        try{
-            tagService.newTag(tag);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
-        }catch (SSException e){
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax修改
-     * @param tag
-     * @return
-     */
-    @Module(ModuleEnums.AdminDishTagUpdate)
-    @RequestMapping(value = "ajax",method = RequestMethod.PUT)
-    @ResponseBody
-    public JSONObject ajaxUpdateTag(Tag tag){
-        try{
-            tagService.updateTag(tag);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
-        }catch (SSException e){
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax删除
-     * @param id
-     * @return
-     */
-    @Module(ModuleEnums.AdminDishTagDel)
-    @RequestMapping(value = "ajax/{id}",method = RequestMethod.DELETE)
-    @ResponseBody
-    public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
-        try{
-            tagService.delById(id);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
-        }catch (SSException e){
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
+//    /**
+//     * Ajax分页获取列表
+//     * @param curPage
+//     * @param pageSize
+//     * @return
+//     */
+//    @RequestMapping(value = {"ajax/list/{curPage}"},method = RequestMethod.GET)
+//    @Module(ModuleEnums.AdminDishTagList)
+//    @ResponseBody
+//    public JSONObject ajaxListTag(@PathVariable("curPage") Integer curPage,
+//                                  @RequestParam Integer pageSize){
+//        List<Tag> tagList = Collections.emptyList();
+//        try {
+//            tagList = tagService.listByPage(curPage, pageSize);
+//        } catch (SSException e) {
+//            LogClerk.errLog.error(e);
+//            return sendErrMsgAndErrCode(e);
+//        }
+//
+//        JSONArray jsonArray = new JSONArray();
+//        for (Tag tag:tagList) {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("id", tag.getId());
+//            jsonObject.put("name", tag.getName());
+//            jsonObject.put("pid", tag.getpId());
+//            jsonObject.put("weight", tag.getWeight());
+//            jsonArray.add(jsonObject);
+//        }
+//        int dataCount = 0;
+//        try {
+//            dataCount = tagService.countAll();
+//        } catch (SSException e) {
+//            LogClerk.errLog.error(e);
+//            return sendErrMsgAndErrCode(e);
+//        }
+//        return sendJsonArray(jsonArray, dataCount);
+//    }
+//
+//    /**
+//     * Ajax添加
+//     * @param tag
+//     * @return
+//     */
+//    @Module(ModuleEnums.AdminDishTagNew)
+//    @RequestMapping(value = "ajax", method = RequestMethod.POST)
+//    @ResponseBody
+//    public JSONObject ajaxNewTag(Tag tag){
+//        try{
+//            tagService.newTag(tag);
+//            return sendJsonObject(AJAX_SUCCESS_CODE);
+//        }catch (SSException e){
+//            LogClerk.errLog.error(e);
+//            return sendErrMsgAndErrCode(e);
+//        }
+//    }
+//
+//    /**
+//     * Ajax修改
+//     * @param tag
+//     * @return
+//     */
+//    @Module(ModuleEnums.AdminDishTagUpdate)
+//    @RequestMapping(value = "ajax",method = RequestMethod.PUT)
+//    @ResponseBody
+//    public JSONObject ajaxUpdateTag(Tag tag){
+//        try{
+//            tagService.updateTag(tag);
+//            return sendJsonObject(AJAX_SUCCESS_CODE);
+//        }catch (SSException e){
+//            LogClerk.errLog.error(e);
+//            return sendErrMsgAndErrCode(e);
+//        }
+//    }
+//
+//    /**
+//     * Ajax删除
+//     * @param id
+//     * @return
+//     */
+//    @Module(ModuleEnums.AdminDishTagDel)
+//    @RequestMapping(value = "ajax/{id}",method = RequestMethod.DELETE)
+//    @ResponseBody
+//    public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
+//        try{
+//            tagService.delById(id);
+//            return sendJsonObject(AJAX_SUCCESS_CODE);
+//        }catch (SSException e){
+//            LogClerk.errLog.error(e);
+//            return sendErrMsgAndErrCode(e);
+//        }
+//    }
 }

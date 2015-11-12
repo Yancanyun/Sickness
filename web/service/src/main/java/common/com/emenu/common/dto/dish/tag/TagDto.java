@@ -2,6 +2,8 @@ package com.emenu.common.dto.dish.tag;
 
 import com.emenu.common.entity.dish.tag.Tag;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -18,6 +20,11 @@ public class TagDto {
 
     //子类别列表
     SortedMap<TagChildDto, Integer> childrenMap = new ConcurrentSkipListMap<TagChildDto, Integer>();
+
+    //List子类别列表
+    List<TagDto> childTagList = new ArrayList<TagDto>();
+
+    /********************* childrenMap ***********************/
 
     /**
      * 添加一个子类别
@@ -53,5 +60,13 @@ public class TagDto {
 
     public void setChildrenMap(SortedMap<TagChildDto, Integer> childrenTagMap) {
         this.childrenMap = childrenTagMap;
+    }
+
+    public List<TagDto> getChildTagList() {
+        return childTagList;
+    }
+
+    public void setChildTagList(List<TagDto> childTagList) {
+        this.childTagList = childTagList;
     }
 }

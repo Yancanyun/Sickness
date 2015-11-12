@@ -53,6 +53,7 @@ IF EXISTS `t_storage_settlement`;
 
 CREATE TABLE `t_storage_settlement` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `serial_number` varchar(16) NOT NULL DEFAULT '' COMMENT '编号',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
   PRIMARY KEY (`id`)

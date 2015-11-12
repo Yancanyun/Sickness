@@ -1,5 +1,6 @@
 package com.emenu.service.dish.tag;
 
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.pandawork.core.common.exception.SSException;
 
@@ -44,5 +45,13 @@ public interface TagFacadeService {
      * @throws SSException
      */
     public void delById(int tagId) throws Exception;
+
+    /**
+     * 根据ID获取当前ID展开的Tag
+     * @param tagId
+     * @return
+     * @throws Exception
+     */
+    public List<TagDto> listByCurrentId(int tagId) throws Exception;
 
 }

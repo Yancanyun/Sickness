@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * TagCacheServiceImpl
- *
+ * 菜品原料类别缓存管理实现
  * @author dujuan
  * @date 2015/10/22
  */
@@ -149,7 +149,7 @@ public class TagCacheServiceImpl implements TagCacheService {
         }else {
             for (TagDto tagDto : tagCache.values()) {
                 Tag tag = tagDto.getTag();
-                if (tag.getpId() == 0 && tag.getType() == type) {
+                if (tag.getpId() == 0) {
                     rootTagList.add((Tag)tag.clone());
                 }
             }
@@ -177,6 +177,31 @@ public class TagCacheServiceImpl implements TagCacheService {
         }
         List<Tag> tagList = new ArrayList<Tag>();
         return dfsTagById(tagId, tagList);
+    }
+
+    @Override
+    public List<TagDto> listDtoByCurrentId(int tagId) throws Exception{
+        return dfslistById(tagId);
+    }
+    /**
+     * 递归遍历该节点下的子节点组成嵌套List
+     * @param tagId
+     * @return
+     * @throws Exception
+     */
+    private List<TagDto> dfslistById(int tagId) throws Exception{
+        List<Tag> tagList = listChildrenById(tagId);
+        List<TagDto> tagDtoList = new ArrayList<TagDto>();
+        if(tagList != null && tagList.size() > 0) {
+            for (Tag tag : tagList) {
+                TagDto tagDto = new TagDto();
+                tagDto.setTag(tag);
+                List<TagDto> childTagDtoList = dfslistById(tag.getId());
+                tagDto.setChildTagList(childTagDtoList);
+                tagDtoList.add(tagDto);
+            }
+        }
+        return tagDtoList;
     }
 
     @Override
