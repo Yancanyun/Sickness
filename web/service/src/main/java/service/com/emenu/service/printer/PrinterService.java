@@ -71,7 +71,7 @@ public interface PrinterService {
      * @return
      * @throws SSException
      */
-    public Printer queryByDishTagId(int id) throws SSException;
+    public Printer queryByTagId(int id) throws SSException;
 
     /**
      * 根据打印机id查询关联菜品分类
@@ -80,5 +80,5 @@ public interface PrinterService {
      * @return
      * @throws SSException
      */
-    public List<Tag> queryDishTagById(int id) throws SSException;
+    public List<Tag> queryTagById(int id) throws SSException;
 }

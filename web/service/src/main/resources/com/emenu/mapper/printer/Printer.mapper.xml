@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.emenu.mapper.meal.MealPeriodMapper">
+<mapper namespace="com.emenu.mapper.printer.PrinterMapper">
+
+    <select id="listAll" resultMap="pw.Printer">
+        SELECT *
+        FROM `t_printer`
+    </select>
+
+    <select id="queryByTagId" resultMap="pw.Printer">
+        SELECT *
+        FROM `t_printer`,`t_dish_tag_printer`
+        WHERE `t_dish_tag_printer`.`dish_tag_id` = #{id}
+        AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
+    </select>
+
 
 </mapper>

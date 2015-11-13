@@ -138,8 +138,13 @@ public enum EmenuException implements IBizExceptionMes {
     MealPeriodNameExist("餐段名称已存在",5026),
     MealPeriodInfoIllegal("餐段信息非法",5027),
     MealPeriodIsUsing("该餐段正在使用",5028),
-    MealPeriodWeightIllegal("餐段排序权重非法",5021),
+    MealPeriodWeightIllegal("餐段排序权重非法",5029),
 
+    //打印机管理
+    QueryPrinterFail("查询打印机失败",5040),
+    UpdatePrinterFail("查询打印机失败",5041),
+    DeletePrinterFail("查询打印机失败",5042),
+    PrinterInfoIllegal("查询打印机失败",5043),
 
     //用户管理模块
     QueryEmployeeInfoFail("获取员工信息失败",6001),
