@@ -51,12 +51,26 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Override
     public int countBySearchDto(StorageItemSearchDto searchDto) throws SSException {
-        return 0;
+        Integer count = 0;
+        try {
+            count = storageItemMapper.countBySearchDto(searchDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return count == null ? 0 : count;
     }
 
     @Override
     public List<StorageItem> listAll() throws SSException {
-        return null;
+        List<StorageItem> list = Collections.emptyList();
+        try {
+            list = storageItemMapper.listAll();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemQueryFailed, e);
+        }
+        return list;
     }
 
     @Override

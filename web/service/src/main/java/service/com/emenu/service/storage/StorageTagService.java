@@ -37,10 +37,11 @@ public interface StorageTagService {
      * 更新库存分类
      *
      * @param id
-     * @param name
-     * @throws SSException
+     * @param pId
+     *@param name  @throws SSException
      */
     public void updateStorageTag(int id,
+                                 int pId,
                                  String name) throws SSException;
 
     /**

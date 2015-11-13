@@ -63,7 +63,7 @@ public class StorageTagServiceImpl implements StorageTagService {
     }
 
     @Override
-    public void updateStorageTag(int id, String name) throws SSException {
+    public void updateStorageTag(int id, int pId, String name) throws SSException {
         try {
             if (Assert.lessOrEqualZero(id)) {
                 throw SSException.get(EmenuException.TagIdError);
@@ -72,12 +72,13 @@ public class StorageTagServiceImpl implements StorageTagService {
 
             Tag tag = new Tag();
             tag.setId(id);
+            tag.setpId(pId);
             tag.setName(name);
 
             tagFacadeService.updateTag(tag);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.StorageTagNameNotNull, e);
+            throw SSException.get(EmenuException.StorageTagUpdateFailed, e);
         }
     }
 

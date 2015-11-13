@@ -83,9 +83,10 @@ public class StorageTagController extends AbstractController {
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public JSON ajaxUpdate(@PathVariable("id") Integer id,
+                           @RequestParam("pId") Integer pId,
                            @RequestParam("name") String name) {
         try {
-            storageTagService.updateStorageTag(id, name);
+            storageTagService.updateStorageTag(id, pId, name);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

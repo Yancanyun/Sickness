@@ -46,7 +46,7 @@ public class SupplierController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/store/supplier/list_home";
+        return "admin/storage/supplier/list_home";
     }
 
     /**
