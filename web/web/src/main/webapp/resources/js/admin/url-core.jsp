@@ -73,7 +73,7 @@
             // 供货商管理
             ['addSupplier', site.website + 'admin/store/supplier/ajax', 'post','添加供货商'],
             ['editSupplier', site.website + 'admin/store/supplier/ajax', 'put','编辑供货商'],
-            ['delSupplier', site.website + 'admin/store/supplier/ajax/&{id}', 'delete','删除供货商']
+            ['delSupplier', site.website + 'admin/store/supplier/ajax/&{id}', 'delete','删除供货商'],
             ['addSupplier', site.website + 'admin/storage/supplier/ajax', 'post','添加供货商'],
             ['editSupplier', site.website + 'admin/storage/supplier/ajax', 'put','编辑供货商'],
             ['delSupplier', site.website + 'admin/storage/supplier/ajax/&{id}', 'delete','删除供货商'],
@@ -98,7 +98,7 @@
             ['sendClassLinkage', site.staticWebsite + 'mock/admin/big-classify.json', 'get', '发送菜品分类联动id,获取菜品小分类'],
             ['sendUnitLinkage', site.staticWebsite + 'mock/admin/small-classify.json', 'get', '发送计量单位联动id,获取计量单位'],
             ['getIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '获取原材料'],
-            ['delIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '删除原材料']
+            ['delIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '删除原材料'],
 
             //菜品分类管理
             ['addBigClassify', site.website + 'admin/dish/tag/ajax', 'post', '添加菜品大类'],
