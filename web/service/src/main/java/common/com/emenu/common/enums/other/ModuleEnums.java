@@ -114,6 +114,16 @@ public enum ModuleEnums {
 
     // 库存管理
     AdminStorage("Admin:Storage"),
+
+    //库存存放点管理
+    AdminStorageDepot("Admin:Storage:Depot"),
+    AdminStorageDepotList("Admin:Storage:Depot"),
+    AdminStorageDepotNew("Admin:Storage:Depot:New"),
+    AdminStorageDepotDelete("Admin:Storage:Depot:Delete"),
+    AdminStorageDepotUpdate("Admin:Storage:Depot:Update"),
+    AdminStorageDepotSearch("Admin:Storage:Depot:Search"),
+
+
     // 供货商管理
     AdminStorageSupplier("Admin:Storage:Supplier"),
     AdminStorageSupplierList("Admin:Storage:Supplier:List"),

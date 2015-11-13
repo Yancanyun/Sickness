@@ -21,6 +21,7 @@ import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.storage.StorageTagService;
+import com.emenu.service.storage.DepotService;
 import com.emenu.service.table.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
@@ -266,4 +267,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("tableMealPeriodService")
     protected static TableMealPeriodService tableMealPeriodService;
+
+    @StaticAutoWire
+    @Qualifier("depotService")
+    protected static DepotService depotService;
 }

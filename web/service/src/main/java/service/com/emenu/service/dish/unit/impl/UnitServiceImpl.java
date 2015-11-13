@@ -42,7 +42,7 @@ public class UnitServiceImpl implements UnitService {
         List<Unit> list = Collections.emptyList();
         try {
             list = unitMapper.listAll();
-        } catch(Exception e){
+        } catch(SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -187,7 +187,7 @@ public class UnitServiceImpl implements UnitService {
         int count = 0;
         try {
             count = unitMapper.checkNameIsExist(name,oldname);
-        } catch(Exception e){
+        } catch(SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryUnitFailed, e);
         }

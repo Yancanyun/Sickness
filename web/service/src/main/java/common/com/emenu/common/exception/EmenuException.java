@@ -169,6 +169,16 @@ public enum EmenuException implements IBizExceptionMes {
     ListStorageReportItemFail("获取单据详情信息l列表失败",7019),
     QueryStorageReportItemFail("获取单据详情信息失败",7020),
 
+    //存放点管理
+    ListDepotPageFailed("分页存放点列表查询失败", 7021),
+    ListDepotFailed("获取全部存放点列表失败", 7022),
+    NewDepotFailed("增加存放点失败",7023),
+    DelDepotFailed("删除存放点失败", 7024),
+    UpdateDepotFailed("修改存放点失败", 7025),
+    CountDepotFailed("获取存放点总数失败", 7026),
+    DepotNameError("存放点名称不为空", 7027),
+    QueryDepotByNameFailed("根据名称查找存放点失败", 7028),
+
 
     //会员基本信息管理模块
     VipInfoPhoneExist("电话号码已经存在", 8001),
