@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * @author dujuan
  * @date 2015/10/22
  */
-public class TagDto {
+public class TagDto implements Comparable<TagDto> {
 
     //Tag
     private Tag tag;
@@ -68,5 +68,14 @@ public class TagDto {
 
     public void setChildTagList(List<TagDto> childTagList) {
         this.childTagList = childTagList;
+    }
+
+    @Override
+    public int compareTo(TagDto tagDto) {
+        if (!this.tag.getWeight().equals(tagDto.tag.getWeight())) {
+            return this.tag.getWeight() - tagDto.tag.getWeight();
+        }else {
+            return this.tag.getId() - tagDto.tag.getId();
+        }
     }
 }

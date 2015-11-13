@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="row">
     <div class="col-sm-12">
@@ -45,90 +46,86 @@
                 <form class="J_operForm">
                     <a class="btn btn-success margin-bottom-15 J_addBigTag" href="javascript:;"><i class="fa fa-plus"></i>&nbsp;添加菜品大类</a>
                     <ul class="classify J_classify">
-                        <li class="clearfix" data-big-tag-id="9999" data-root-tag-id="3" data-root-tag-name="菜类" data-big-tag-name="意面大类红酒">
+                        <c:forEach var="tagDto" items="${tagDtoMap}">
+                        <li class="clearfix" data-big-tag-id="${tagDto.key.tag.id}" data-root-tag-id="${tagDto.key.tag.pId}"
+                            data-root-tag-name="<c:choose>
+                                    <c:when test="${tagDto.key.tag.pId == 3}">
+                                        菜品
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 4}">
+                                        商品
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 5}">
+                                        酒水
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 6}">
+                                        套餐
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 7}">
+                                        其他
+                                    </c:when>
+                                    <c:otherwise>
+                                        未知
+                                    </c:otherwise>
+                                </c:choose>" data-big-tag-name="${tagDto.key.tag.name}">
                             <div class="J_inputGroup">
-                                <input type="hidden" name="pId" value="3" />
-                                <input type="hidden" name="id" value="9999" />
-                                <input type="hidden" name="name" value="意面大类红酒" />
-                                <input type="hidden" name="weight" value="1" />
-                                <input class="J_printAfterConfirmOrder" type="hidden" name="printAfterConfirmOrder" value="1" />
-                                <input type="hidden" name="maxPrintNum" value="1" />
-                                <input class="J_printId" type="hidden" name="printerId" value="1" />
-                                <input type="hidden" name="timeLimit" value="10" />
-                                <input type="hidden" name="type" value="1" />
+                                <input type="hidden" name="pId" value="${tagDto.key.tag.pId}" />
+                                <input type="hidden" name="id" value="${tagDto.key.tag.id}" />
+                                <input type="hidden" name="name" value="${tagDto.key.tag.name}" />
+                                <input type="hidden" name="weight" value="${tagDto.key.tag.weight}" />
+                                <input class="J_printAfterConfirmOrder" type="hidden" name="printAfterConfirmOrder" value="${tagDto.key.tag.printAfterConfirmOrder}" />
+                                <input type="hidden" name="maxPrintNum" value="${tagDto.key.tag.maxPrintNum}" />
+                                <input class="J_printId" type="hidden" name="printerId" value="${tagDto.value}" />
+                                <input type="hidden" name="timeLimit" value="${tagDto.key.tag.timeLimit}" />
                             </div>
-                            <span class="root-tag">[酒水类]</span>
-                            <span class="big-tag">意面大类红酒</span>
+                            <span class="root-tag">
+                                <c:choose>
+                                    <c:when test="${tagDto.key.tag.pId == 3}">
+                                        [菜品]
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 4}">
+                                        [商品]
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 5}">
+                                        [酒水]
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 6}">
+                                        [套餐]
+                                    </c:when>
+                                    <c:when test="${tagDto.key.tag.pId == 7}">
+                                        [其他]
+                                    </c:when>
+                                    <c:otherwise>
+                                        [未知]
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
+                            <span class="big-tag">${tagDto.key.tag.name}</span>
                             <a class="J_foldToggle" href="javascript:;">展开 <<</a>
                             <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
                             <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
                             <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
-                            <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="9999" data-big-tag-name="意面大类红酒">
-                                <li class="clearfix" data-small-tag-name="name1" data-small-tag-id="xiaolei1">
-                                    <input type="hidden" name="pId" value="9999" />
-                                    <input type="hidden" name="id" value="xiaolei1" />
-                                    <input type="hidden" name="name" value="name1" />
-                                    <input type="hidden" name="weight" value="1" />
-                                    <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="1" />
-                                    <input type="hidden" name="maxPrintNum" value="1" />
-                                    <input class="J_printId" type="hidden" name="printerId" value="1" />
-                                    <input type="hidden" name="timeLimit" value="10" />
-                                    <input type="hidden" name="type" value="1" />
-                                    <span class="small-tag">name1</span>
+                            <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="${tagDto.key.tag.id}" data-big-tag-name="${tagDto.key.tag.name}">
+                                <c:forEach var="childTagDto" items="${childrenTagDtoMap}">
+                                    <c:if test="${childTagDto.key.tag.pId==tagDto.key.tag.id}">
+                                <li class="clearfix" data-small-tag-name="${childTagDto.key.tag.name}" data-small-tag-id="${childTagDto.key.tag.id}">
+                                    <input type="hidden" name="pId" value="${childTagDto.key.tag.pId}" />
+                                    <input type="hidden" name="id" value="${childTagDto.key.tag.id}" />
+                                    <input type="hidden" name="name" value="${childTagDto.key.tag.name}" />
+                                    <input type="hidden" name="weight" value="${childTagDto.key.tag.weight}" />
+                                    <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="${childTagDto.key.tag.printAfterConfirmOrder}" />
+                                    <input type="hidden" name="maxPrintNum" value="${childTagDto.key.tag.maxPrintNum}" />
+                                    <input class="J_printId" type="hidden" name="printerId" value="${childTagDto.value}" />
+                                    <input type="hidden" name="timeLimit" value="${childTagDto.key.tag.timeLimit}" />
+                                    <span class="small-tag">${childTagDto.key.tag.name}</span>
                                     <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
                                     <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
                                 </li>
+                                    </c:if>
+                                </c:forEach>
                             </ul>
                         </li>
-                        <li class="clearfix" data-big-tag-id="99998888" data-root-tag-id="5" data-root-tag-name="菜类" data-big-tag-name="意面">
-                            <div class="J_inputGroup">
-                                <input type="hidden" name="pId" value="5" />
-                                <input type="hidden" name="id" value="99998888" />
-                                <input type="hidden" name="name" value="披萨" />
-                                <input type="hidden" name="weight" value="2" />
-                                <input class="J_printAfterConfirmOrder" type="hidden" name="printAfterConfirmOrder" value="0" />
-                                <input type="hidden" name="maxPrintNum" value="0" />
-                                <input class="J_printId" type="hidden" name="printerId" value="0" />
-                                <input type="hidden" name="timeLimit" value="20" />
-                                <input type="hidden" name="type" value="1" />
-                            </div>
-                            <span class="root-tag">[套餐]</span>
-                            <span class="big-tag">披萨</span>
-                            <a class="J_foldToggle" href="javascript:;">展开 <<</a>
-                            <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
-                            <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
-                            <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
-                            <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="99998888" data-big-tag-name="披萨">
-                                <li class="clearfix" data-small-tag-name="name2" data-small-tag-id="xiaolei2">
-                                    <input type="hidden" name="pId" value="99998888" />
-                                    <input type="hidden" name="id" value="xiaolei2" />
-                                    <input type="hidden" name="name" value="name2" />
-                                    <input type="hidden" name="weight" value="1" />
-                                    <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="1" />
-                                    <input type="hidden" name="maxPrintNum" value="1" />
-                                    <input class="J_printId" type="hidden" name="printerId" value="1" />
-                                    <input type="hidden" name="timeLimit" value="10" />
-                                    <input type="hidden" name="type" value="1" />
-                                    <span class="small-tag">name2</span>
-                                    <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
-                                    <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
-                                </li>
-                                <li class="clearfix" data-small-tag-name="name3" data-small-tag-id="xiaolei3">
-                                    <input type="hidden" name="pId" value="99998888" />
-                                    <input type="hidden" name="id" value="xiaolei3" />
-                                    <input type="hidden" name="name" value="name3" />
-                                    <input type="hidden" name="weight" value="1" />
-                                    <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="1" />
-                                    <input type="hidden" name="maxPrintNum" value="1" />
-                                    <input class="J_printId" type="hidden" name="printerId" value="1" />
-                                    <input type="hidden" name="timeLimit" value="10" />
-                                    <input type="hidden" name="type" value="1" />
-                                    <span class="small-tag">name3</span>
-                                    <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
-                                    <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
-                                </li>
-                            </ul>
-                        </li>
+                        </c:forEach>
                     </ul>
                     <select class="form-control hidden J_bigClassifyHidden" disabled="disabled" name="pId">
                         <option value="2">菜类</option>

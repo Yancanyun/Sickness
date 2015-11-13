@@ -237,7 +237,7 @@ public class TagCacheServiceImpl implements TagCacheService {
         //如果该节点下有子节点不能删除
         TagDto tagDto = tagCache.get(tagId);
         Map<TagChildDto, Integer> childrenMap = tagDto.getChildrenTagMap();
-        if(childrenMap == null || childrenMap.size() == 0 || childrenMap.isEmpty()){
+        if(childrenMap != null && childrenMap.size() != 0 && !childrenMap.isEmpty()){
             throw SSException.get(EmenuException.TagChildrenIsNull);
         }
         Integer pid = tagDto.getTag().getpId();
@@ -251,8 +251,36 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public void updateName(Integer tagId, String name) throws SSException{
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public void updateTag(Tag tag) throws Exception {
+        if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        TagDto tagDto = tagCache.get(tag.getId());
+        if(tagDto != null){
+            if(tag.getName()!=null){
+                tagDto.getTag().setName(tag.getName());
+            }
+            if(tag.getWeight()!=null){
+                updateWeight(tag.getId(), tag.getWeight());
+            }
+            if(tag.getpId()!=null){
+                updatePid(tag.getId(), tag.getpId());
+            }
+            if(tag.getPrintAfterConfirmOrder()!=null){
+                tagDto.getTag().setPrintAfterConfirmOrder(tag.getPrintAfterConfirmOrder());
+            }
+            if(tag.getMaxPrintNum()!=null){
+                tagDto.getTag().setMaxPrintNum(tag.getMaxPrintNum());
+            }
+            if(tag.getTimeLimit()!=null){
+                tagDto.getTag().setTimeLimit(tag.getTimeLimit());
+            }
+        }
+    }
+
+    @Override
+    public void updateName(int tagId, String name) throws SSException{
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -262,8 +290,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public void updateWeight(Integer tagId, Integer weight) throws Exception{
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public void updateWeight(int tagId, int weight) throws Exception{
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -286,8 +314,8 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public void updatePid(Integer tagId, Integer pId) throws Exception{
-        if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
+    public void updatePid(int tagId, int pId) throws Exception{
+        if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tagId);
@@ -298,7 +326,7 @@ public class TagCacheServiceImpl implements TagCacheService {
         if(fatherTagDto == null){
             return ;
         }
-        if(!pId.equals(fatherTagDto.getTag().getId())){
+        if(pId != fatherTagDto.getTag().getId()){
             //改变pid
             tagDto.getTag().setpId(pId);
             //父亲Tag删除key

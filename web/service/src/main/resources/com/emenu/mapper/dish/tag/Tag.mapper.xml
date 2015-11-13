@@ -42,4 +42,13 @@
             </if>
         </where>
     </delete>
+
+    <select id="countChildrenById" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        `t_tag`
+        WHERE pid = #{id}
+    </select>
+
 </mapper>

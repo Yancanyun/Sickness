@@ -55,6 +55,9 @@ public class TagServiceImpl implements TagService{
             if (Assert.lessOrEqualZero(tagId)) {
                 throw SSException.get(EmenuException.TagIdError);
             }
+            if(tagMapper.countChildrenById(tagId)!=0) {
+                throw SSException.get(EmenuException.TagChildrenIsError);
+            }
             commonDao.deleteById(Tag.class, tagId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

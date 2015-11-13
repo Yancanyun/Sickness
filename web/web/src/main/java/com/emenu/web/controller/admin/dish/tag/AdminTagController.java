@@ -3,6 +3,7 @@ package com.emenu.web.controller.admin.dish.tag;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -11,10 +12,13 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * AdminTagController
@@ -34,67 +38,41 @@ public class AdminTagController extends AbstractController{
      */
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
     @Module(ModuleEnums.AdminDishTagList)
-    public String toListTag() throws Exception {
-//        tagFacadeService.listAllByPId(TagEnum.DishAndGoods.getId());
+    public String toListTag(Model model) throws Exception {
+        List<TagDto> tagDtoList = tagFacadeService.listDishByCurrentId();
+        Map<TagDto, Integer> tagDtoMap = new HashMap<TagDto, Integer>();
+        Map<TagDto, Integer> childrenTagDtoMap = new HashMap<TagDto, Integer>();
+        for(TagDto tagDto : tagDtoList){
+            tagDtoMap.put(tagDto, 1);
+            for(TagDto tagDto1 :tagDto.getChildTagList()){
+                childrenTagDtoMap.put(tagDto1, 2);
+            }
+        }
+        model.addAttribute("tagDtoMap", tagDtoMap);
+        model.addAttribute("childrenTagDtoMap", childrenTagDtoMap);
         return "admin/dish/tag/list_home";
     }
 
-//    /**
-//     * Ajax分页获取列表
-//     * @param curPage
-//     * @param pageSize
-//     * @return
-//     */
-//    @RequestMapping(value = {"ajax/list/{curPage}"},method = RequestMethod.GET)
-//    @Module(ModuleEnums.AdminDishTagList)
-//    @ResponseBody
-//    public JSONObject ajaxListTag(@PathVariable("curPage") Integer curPage,
-//                                  @RequestParam Integer pageSize){
-//        List<Tag> tagList = Collections.emptyList();
-//        try {
-//            tagList = tagService.listByPage(curPage, pageSize);
-//        } catch (SSException e) {
-//            LogClerk.errLog.error(e);
-//            return sendErrMsgAndErrCode(e);
-//        }
-//
-//        JSONArray jsonArray = new JSONArray();
-//        for (Tag tag:tagList) {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("id", tag.getId());
-//            jsonObject.put("name", tag.getName());
-//            jsonObject.put("pid", tag.getpId());
-//            jsonObject.put("weight", tag.getWeight());
-//            jsonArray.add(jsonObject);
-//        }
-//        int dataCount = 0;
-//        try {
-//            dataCount = tagService.countAll();
-//        } catch (SSException e) {
-//            LogClerk.errLog.error(e);
-//            return sendErrMsgAndErrCode(e);
-//        }
-//        return sendJsonArray(jsonArray, dataCount);
-//    }
-//
-//    /**
-//     * Ajax添加
-//     * @param tag
-//     * @return
-//     */
-//    @Module(ModuleEnums.AdminDishTagNew)
-//    @RequestMapping(value = "ajax", method = RequestMethod.POST)
-//    @ResponseBody
-//    public JSONObject ajaxNewTag(Tag tag){
-//        try{
-//            tagService.newTag(tag);
-//            return sendJsonObject(AJAX_SUCCESS_CODE);
-//        }catch (SSException e){
-//            LogClerk.errLog.error(e);
-//            return sendErrMsgAndErrCode(e);
-//        }
-//    }
-//
+
+    /**
+     * Ajax添加
+     * @param tag
+     * @return
+     */
+    @Module(ModuleEnums.AdminDishTagNew)
+    @RequestMapping(value = "ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject ajaxNewTag(Tag tag,
+                                 @RequestParam("printreId") Integer printerId){
+        try{
+            tagFacadeService.newTag(tag);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            return sendJsonObject(AJAX_FAILURE_CODE);
+        }
+    }
+
 //    /**
 //     * Ajax修改
 //     * @param tag

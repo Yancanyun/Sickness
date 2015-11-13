@@ -2,6 +2,7 @@ package com.emenu.service.dish.tag.impl;
 
 import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
@@ -37,8 +38,15 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public void updateTag(Tag tag) throws SSException {
+    public void updateTag(Tag tag) throws Exception {
+        tagService.updateTag(tag);
+        tagCacheService.updateTag(tag);
 
+    }
+
+    @Override
+    public Tag queryById(int tagId) throws Exception {
+        return tagCacheService.queryCloneById(tagId);
     }
 
     @Override
@@ -48,8 +56,9 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     public void delById(int tagId) throws Exception {
-        tagService.delById(tagId);
         tagCacheService.delById(tagId);
+        tagService.delById(tagId);
+
     }
 
     @Override
@@ -59,4 +68,16 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         }
         return tagCacheService.listDtoByCurrentId(tagId);
     }
+
+    @Override
+    public List<TagDto> listDishByCurrentId() throws Exception {
+        List<Tag> tagList = tagCacheService.listChildrenById(TagEnum.DishAndGoods.getId());
+        List<TagDto> tagDtoList = new ArrayList<TagDto>();
+        for(Tag tag : tagList){
+            List<TagDto> childTagDtoList = tagCacheService.listDtoByCurrentId(tag.getId());
+            tagDtoList.addAll(childTagDtoList);
+        }
+        return tagDtoList;
+    }
+
 }

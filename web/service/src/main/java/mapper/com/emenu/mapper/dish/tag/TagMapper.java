@@ -44,4 +44,12 @@ public interface TagMapper {
      */
     public void delByIds(@Param("ids") List<Integer> ids) throws SSException;
 
+    /**
+     * 根据ID获取子节点个数
+     * @param ids
+     * @return
+     * @throws SSException
+     */
+    public int countChildrenById(@Param("id") int id) throws SSException;
+
 }

@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="title" uri="http://tiles.apache.org/tags-tiles" %>
 
 <tiles:insertDefinition name="admin">
     <tiles:putAttribute name="title" value="${webTitle}"/>
     <tiles:putAttribute name="body" value="/WEB-INF/views/admin/dish/tag/body/list_body.jsp"/>
     <tiles:putAttribute name="script" value="/WEB-INF/views/admin/dish/tag/inc/list_script.jsp"/>
+    <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/admin/dish-management/dish-classify-management.css'>"/>
 </tiles:insertDefinition>
