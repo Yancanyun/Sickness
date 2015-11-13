@@ -33,6 +33,7 @@ public class Remark extends AbstractEntity {
     private Integer weight;
 
     //是否为常用备注: 0-否; 1-是
+    @Column(name = "is_common")
     private Integer isCommon;
 
     //关联收费

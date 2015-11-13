@@ -51,21 +51,21 @@ public enum ModuleEnums {
     AdminBasicInfoIndexImgUpdate("Admin:BasicInfo:IndexImg:Update"),
 
 
-    // 饭店管理
+    //饭店管理
     AdminRestaurant("Admin:Restaurant"),
-
+    //区域管理
     AdminRestaurantArea("Admin:Restaurant:Area"),
     AdminRestaurantAreaList("Admin:Restaurant:Area:List"),
     AdminRestaurantAreaNew("Admin:Restaurant:Area:New"),
     AdminRestaurantAreaUpdate("Admin:Restaurant:Area:Update"),
     AdminRestaurantAreaDel("Admin:Restaurant:Area:Del"),
-
+    //餐台管理
     AdminRestaurantTable("Admin:Restaurant:Table"),
     AdminRestaurantTableList("Admin:Restaurant:Table:List"),
     AdminRestaurantTableNew("Admin:Restaurant:Table:New"),
     AdminRestaurantTableUpdate("Admin:Restaurant:Table:Update"),
     AdminRestaurantTableDel("Admin:Restaurant:Table:Del"),
-
+    //二维码管理
     AdminRestaurantQrCode("Admin:Restaurant:QrCode"),
     AdminRestaurantQrCodeList("Admin:Restaurant:QrCode:List"),
     AdminRestaurantQrCodeNew("Admin:Restaurant:QrCode:New"),
@@ -76,6 +76,12 @@ public enum ModuleEnums {
     AdminRestaurantMealPeriodNew("Admin:Restaurant:MealPeriod:New"),
     AdminRestaurantMealPeriodUpdate("Admin:Restaurant:MealPeriod:Update"),
     AdminRestaurantMealPeriodDel("Admin:Restaurant:MealPeriod:Del"),
+    //备注管理
+    AdminRestaurantRemark("Admin:Restaurant:Remark"),
+    AdminRestaurantRemarkList("Admin:Restaurant:Remark:List"),
+    AdminRestaurantRemarkNew("Admin:Restaurant:Remark:New"),
+    AdminRestaurantRemarkUpdate("Admin:Restaurant:Remark:Update"),
+    AdminRestaurantRemarkDel("Admin:Restaurant:Remark:Del"),
 
     // 菜品单位管理
     AdminDishUnit("Admin:Dish:Unit"),

@@ -41,7 +41,7 @@ public class AdminTableController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableList)
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toTablePage(Model model) {
         try {
             List<Area> areaList = areaService.listAll();

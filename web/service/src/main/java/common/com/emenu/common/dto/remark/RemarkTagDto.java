@@ -12,22 +12,22 @@ import java.util.List;
  * @time: 2015/11/12 19:56
  */
 public class RemarkTagDto {
-    private List<RemarkTag> remarkTagList;
-    private Remark remark;
+    private RemarkTag remarkTag;
+    private List<RemarkDto> remarkDtoList;
 
-    public List<RemarkTag> getRemarkTagList() {
-        return remarkTagList;
+    public RemarkTag getRemarkTag() {
+        return remarkTag;
     }
 
-    public void setRemarkTagList(List<RemarkTag> remarkTagList) {
-        this.remarkTagList = remarkTagList;
+    public void setRemarkTag(RemarkTag remarkTag) {
+        this.remarkTag = remarkTag;
     }
 
-    public Remark getRemark() {
-        return remark;
+    public List<RemarkDto> getRemarkDtoList() {
+        return remarkDtoList;
     }
 
-    public void setRemark(Remark remark) {
-        this.remark = remark;
+    public void setRemarkDtoList(List<RemarkDto> remarkDtoList) {
+        this.remarkDtoList = remarkDtoList;
     }
 }

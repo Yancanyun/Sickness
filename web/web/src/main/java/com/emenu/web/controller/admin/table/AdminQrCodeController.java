@@ -34,7 +34,7 @@ public class AdminQrCodeController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantQrCodeList)
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toQrCodePage(Model model) {
         try {
             //获取域名信息

@@ -30,7 +30,7 @@ public class AdminAreaController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantAreaList)
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toAreaPage(Model model) {
         try {
             List<Area> areaList = areaService.listAll();

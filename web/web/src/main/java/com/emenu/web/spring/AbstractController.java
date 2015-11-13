@@ -20,6 +20,8 @@ import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
+import com.emenu.service.remark.RemarkService;
+import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.storage.StorageTagService;
 import com.emenu.service.storage.DepotService;
 import com.emenu.service.table.*;
@@ -271,4 +273,12 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("depotService")
     protected static DepotService depotService;
+
+    @StaticAutoWire
+    @Qualifier("remarkService")
+    protected static RemarkService remarkService;
+
+    @StaticAutoWire
+    @Qualifier("remarkTagService")
+    protected static RemarkTagService remarkTagService;
 }
