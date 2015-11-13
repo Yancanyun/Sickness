@@ -129,9 +129,15 @@ public class DepotServiceImpl implements DepotService {
     @Override
     public Depot newDepot(Depot depot) throws SSException {
 
-        if(Assert.isNull(depot)) {
-            return null;
+        //检查存放点名称是否为空
+        if(Assert.isNull(depot.getName())) {
+           throw SSException.get(EmenuException.DepotNameError);
         }
+        //检查存放点名称是否已经存在
+        if(checkNameIsExist(depot.getName())){
+            throw SSException.get(EmenuException.DepotNameIsExist);
+        }
+
 
         try {
             return commonDao.insert(depot);
@@ -172,8 +178,17 @@ public class DepotServiceImpl implements DepotService {
     @Override
     public void updateDepot(Depot depot) throws SSException {
 
-        if(Assert.isNull(depot)) {
-            return;
+        //检查id是否为空或者小于等于0，如果是则直接返回
+        if(!Assert.isNull(depot.getId())&&Assert.lessOrEqualZero(depot.getId())) {
+            throw SSException.get(EmenuException.DepotIdError);
+        }
+        //检查存放点名称是否为空
+        if(Assert.isNull(depot.getName())) {
+            throw SSException.get(EmenuException.DepotNameError);
+        }
+        //检查名称是否与其他存放点名冲突
+        if (checkNameIsConflict(depot.getName(),depot.getId())){
+            throw SSException.get(EmenuException.DepotNameIsConflict);
         }
 
         try {
@@ -182,5 +197,41 @@ public class DepotServiceImpl implements DepotService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateDepotFailed);
         }
+    }
+
+    /**
+     * 检查名字是否已经存在
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public Boolean checkNameIsExist(String name) throws SSException {
+        int count = 0;
+        try {
+            count = depotMapper.checkNameIsExist(name);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckDepotNameFailed);
+        }
+        return count == 0 ? false:true;
+    }
+
+    /**
+     * 查询名字是否与其他存放点名冲突
+     * @param name
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Boolean checkNameIsConflict(String name,int id) throws SSException {
+
+        int count = 0;
+        try {
+            count = depotMapper.checkNameIsConflict(name,id);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckDepotNameConflictFailed);
+        }
+        return count == 0 ? false : true;
     }
 }

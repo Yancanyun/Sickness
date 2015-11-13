@@ -35,12 +35,21 @@ public interface DepotMapper {
                                  @Param("pageSize") int pageSize) throws SSException;
 
     /**
+     * 根据id查找存放点
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Depot queryById(@Param("id") int id) throws SSException;
+
+    /**
      * 根据名称查找存放点
      *
      * @param name
      * @return
      * @throws SSException
      */
+
     public Depot queryByName(@Param("name") String name) throws SSException;
 
     /**
@@ -51,4 +60,20 @@ public interface DepotMapper {
      */
     public int countAll() throws SSException;
 
+    /**
+     * 检查存放点名称是否重名
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public int checkNameIsExist(@Param("name")String name) throws SSException;
+
+    /**
+     * 检查存放点名称是否冲突
+     * @param name
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public int checkNameIsConflict(@Param("name")String name,@Param("id")int id) throws SSException;
 }

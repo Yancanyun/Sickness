@@ -28,8 +28,8 @@ public class DepotTest extends AbstractTestCase {
     public void newDepot() throws SSException {
 
         Depot depot = new Depot();
-        depot.setName("存放点6");
-        depot.setIntroduction("存放点6简介存放点6简介存放点6");
+        depot.setName("存放点9");
+        depot.setIntroduction("存放点9简介存放点9简介存放点9");
         depotService.newDepot(depot);
     }
 
@@ -42,9 +42,9 @@ public class DepotTest extends AbstractTestCase {
     public void updateDepot() throws SSException {
 
         Depot depot = new Depot();
-        depot.setId(1);
-        depot.setName("存放点1");
-        depot.setIntroduction("存放点1简介存放点1简介存放点1简介存放点1简介存放点1简介");
+        depot.setId(10);
+        depot.setName("存放点88");
+        depot.setIntroduction("88简介简介简介简介");
         depotService.updateDepot(depot);
     }
 

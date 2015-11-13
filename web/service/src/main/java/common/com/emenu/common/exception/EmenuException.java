@@ -190,6 +190,11 @@ public enum EmenuException implements IBizExceptionMes {
     CountDepotFailed("获取存放点总数失败", 7026),
     DepotNameError("存放点名称不为空", 7027),
     QueryDepotByNameFailed("根据名称查找存放点失败", 7028),
+    DepotIsNull("存放点为空", 7029),
+    DepotNameIsExist("存放点名已经存在", 7030),
+    DepotNameIsConflict("存放点名称冲突", 7031),
+    CheckDepotNameFailed("检查存放点名称是否重复失败", 7032),
+    CheckDepotNameConflictFailed("检查名称是否与其他存放点冲突失败", 7033),
 
 
     //会员基本信息管理模块

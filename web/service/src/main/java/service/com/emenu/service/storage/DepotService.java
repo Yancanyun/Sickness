@@ -66,4 +66,6 @@ public interface DepotService {
      * @throws SSException
      */
     public void updateDepot(Depot depot) throws SSException;
+
+
 }

@@ -6,6 +6,10 @@
         SELECT * FROM `t_storage_depot` WHERE `name` = #{name}
     </select>
 
+    <select id="queryById" resultMap="pw.Depot">
+        SELECT * FROM `t_storage_depot` WHERE `id` = #{id}
+    </select>
+
     <select id="listAll" resultMap="pw.Depot">
         SELECT * FROM `t_storage_depot`
     </select>
@@ -20,5 +24,21 @@
         SELECT
             COUNT(*)
         FROM `t_storage_depot`
+    </select>
+
+    <select id="checkNameIsExist" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            `t_storage_depot`
+        WHERE `name` = #{name}
+    </select>
+
+    <select id="checkNameIsConflict" resultType="int">
+            SELECT
+               COUNT(*)
+             FROM
+              `t_storage_depot`
+              WHERE `name` = #{name} AND `id` != #{id}
     </select>
 </mapper>
