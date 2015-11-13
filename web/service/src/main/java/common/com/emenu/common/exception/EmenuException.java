@@ -39,6 +39,13 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemInsertFailed("添加库存物品失败", 1021),
     StorageItemUpdateFailed("更新库存物品失败", 1022),
     StorageItemDeleteFailed("删除库存物品失败", 1023),
+    StorageItemNameNotNull("物品名称不能为空", 1024),
+    StorageItemSupplierNotNull("物品的供应商不能为空", 1025),
+    StorageItemTagNotNull("物品所属分类不能为空", 1026),
+    StorageItemUnitNotNull("物品的订货单位、库存单位、成本卡单位不能为空", 1027),
+    StorageItemUnitRatioNotNull("物品的单位换算关系不能为空", 1028),
+    StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
+    StorageItemIdNotNull("物品的ID不能为空", 1030),
 
     //菜品管理模块
     //分类管理

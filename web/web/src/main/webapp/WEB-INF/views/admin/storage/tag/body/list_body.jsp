@@ -25,8 +25,8 @@
                             <li class="clearfix" data-big-tag-id="${dto.tag.id}" data-root-tag-id="2" data-root-tag-name="顶级分类"
                                 data-big-tag-name="${dto.tag.name}">
                                 <div class="J_inputGroup">
-                                    <input type="hidden" name="pId" value="${dto.tag.id}"/>
-                                    <input type="hidden" name="id" value="${dto.tag.pId}"/>
+                                    <input type="hidden" name="pId" value="${dto.tag.pId}"/>
+                                    <input type="hidden" name="id" value="${dto.tag.id}"/>
                                     <input type="hidden" name="name" value="${dto.tag.name}"/>
                                 </div>
                                 <span class="root-tag">[顶级分类]</span>

@@ -75,12 +75,34 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Override
     public void newStorageItem(StorageItem storageItem) throws SSException {
+        try {
+            if (!checkBeforeSave(storageItem)) {
+                return ;
+            }
 
+            commonDao.insert(storageItem);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemInsertFailed, e);
+        }
     }
 
     @Override
     public void updateStorageItem(StorageItem storageItem) throws SSException {
+        try {
+            if (!checkBeforeSave(storageItem)) {
+                return ;
+            }
+            Assert.isNotNull(storageItem.getId(), EmenuException.StorageItemIdNotNull);
+            if (Assert.lessOrEqualZero(storageItem.getId())) {
+                return ;
+            }
 
+            commonDao.update(storageItem);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemUpdateFailed, e);
+        }
     }
 
     @Override
@@ -111,6 +133,24 @@ public class StorageItemServiceImpl implements StorageItemService {
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
         }
         return count == null ? 0 : count;
+    }
 
+    private boolean checkBeforeSave(StorageItem storageItem) throws SSException {
+        if (Assert.isNull(storageItem)) {
+            return false;
+        }
+
+        Assert.isNotNull(storageItem.getName(), EmenuException.StorageItemNameNotNull);
+        Assert.isNotNull(storageItem.getSupplierPartyId(), EmenuException.StorageItemSupplierNotNull);
+        Assert.isNotNull(storageItem.getTagId(), EmenuException.StorageItemTagNotNull);
+        Assert.isNotNull(storageItem.getOrderUnitId(), EmenuException.StorageItemUnitNotNull);
+        Assert.isNotNull(storageItem.getStorageUnitId(), EmenuException.StorageItemUnitNotNull);
+        Assert.isNotNull(storageItem.getCostCardUnitId(), EmenuException.StorageItemUnitNotNull);
+        Assert.isNotNull(storageItem.getOrderToStorageRatio(), EmenuException.StorageItemUnitRatioNotNull);
+        Assert.isNotNull(storageItem.getStorageToCostCardRatio(), EmenuException.StorageItemUnitRatioNotNull);
+        Assert.isNotNull(storageItem.getMaxStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);
+        Assert.isNotNull(storageItem.getMinStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);
+
+        return true;
     }
 }
