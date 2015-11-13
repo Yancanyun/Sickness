@@ -1,5 +1,6 @@
 package com.emenu.service.storage;
 
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.pandawork.core.common.exception.SSException;
 
@@ -19,7 +20,7 @@ public interface StorageTagService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listAll() throws SSException;
+    public List<TagDto> listAll() throws SSException;
 
     /**
      * 添加库存分类

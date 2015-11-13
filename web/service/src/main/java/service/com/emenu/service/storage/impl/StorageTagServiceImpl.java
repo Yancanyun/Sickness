@@ -1,9 +1,11 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.dish.tag.TagFacadeService;
+import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageTagService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -26,11 +28,14 @@ public class StorageTagServiceImpl implements StorageTagService {
     @Autowired
     private TagFacadeService tagFacadeService;
 
+    @Autowired
+    private StorageItemService storageItemService;
+
     @Override
-    public List<Tag> listAll() throws SSException {
-        List<Tag> list = Collections.emptyList();
+    public List<TagDto> listAll() throws SSException {
+        List<TagDto> list = Collections.emptyList();
         try {
-            list = tagFacadeService.listByPId(TagEnum.Storage.getId());
+            list = tagFacadeService.listByCurrentId(TagEnum.Storage.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageTagQueryFailed, e);
@@ -47,6 +52,7 @@ public class StorageTagServiceImpl implements StorageTagService {
             Tag tag = new Tag();
             tag.setpId(pId);
             tag.setName(name);
+            tag.setWeight(20);
 
             tag = tagFacadeService.newTag(tag);
             return tag;
@@ -81,7 +87,9 @@ public class StorageTagServiceImpl implements StorageTagService {
             return ;
         }
         try {
-            // TODO: 2015/11/10  需要先判断分类下是否存在物品
+            if (checkUsingById(id)) {
+                throw SSException.get(EmenuException.StorageTagHasItem);
+            }
 
             // 删除分类
             tagFacadeService.delById(id);
@@ -89,5 +97,21 @@ public class StorageTagServiceImpl implements StorageTagService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageTagDeleteFailed, e);
         }
+    }
+
+    /**
+     * 检查是否有物品正在使用分类
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    private boolean checkUsingById(int id) throws SSException {
+        if (Assert.lessOrEqualZero(id)) {
+            return false;
+        }
+        Integer count = storageItemService.countByTagId(id);
+
+        return count > 1;
     }
 }

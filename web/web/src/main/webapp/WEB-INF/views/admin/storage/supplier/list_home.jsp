@@ -3,6 +3,6 @@
 
 <tiles:insertDefinition name="admin">
     <tiles:putAttribute name="title" value="${webTitle}"/>
-    <tiles:putAttribute name="body" value="/WEB-INF/views/admin/store/supplier/body/list_body.jsp"/>
-    <tiles:putAttribute name="script" value="/WEB-INF/views/admin/store/supplier/inc/list_script.jsp"/>
+    <tiles:putAttribute name="body" value="/WEB-INF/views/admin/storage/supplier/body/list_body.jsp"/>
+    <tiles:putAttribute name="script" value="/WEB-INF/views/admin/storage/supplier/inc/list_script.jsp"/>
 </tiles:insertDefinition>

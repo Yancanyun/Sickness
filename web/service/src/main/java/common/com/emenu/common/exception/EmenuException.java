@@ -34,6 +34,12 @@ public enum EmenuException implements IBizExceptionMes {
     StorageTagNameNotNull("库存分类名称不能为空", 1017),
     StorageTagHasItem("有库存物品属于该分类，请先移除分类下的物品", 1018),
 
+    // 库存物品
+    StorageItemQueryFailed("查询库存物品失败", 1020),
+    StorageItemInsertFailed("添加库存物品失败", 1021),
+    StorageItemUpdateFailed("更新库存物品失败", 1022),
+    StorageItemDeleteFailed("删除库存物品失败", 1023),
+
     //菜品管理模块
     //分类管理
     NewTagFailed("添加分类Tag失败", 3001),

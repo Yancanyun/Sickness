@@ -3,6 +3,7 @@ package com.emenu.web.controller.admin.storage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
@@ -36,8 +37,8 @@ public class StorageTagController extends AbstractController {
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(Model model) {
         try {
-            List<Tag> tagList = storageTagService.listAll();
-            model.addAttribute("tagList", tagList);
+            List<TagDto> tagDtoList = storageTagService.listAll();
+            model.addAttribute("tagDtoList", tagDtoList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

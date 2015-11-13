@@ -2,10 +2,7 @@ package com.emenu.common.entity.storage;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -97,6 +94,14 @@ public class StorageItem extends AbstractEntity {
     // 最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    // 分类名称
+    @Transient
+    private String tagName;
+
+    // 供货商名称
+    @Transient
+    private String supplierName;
 
     public Integer getId() {
         return id;
@@ -257,5 +262,21 @@ public class StorageItem extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }
