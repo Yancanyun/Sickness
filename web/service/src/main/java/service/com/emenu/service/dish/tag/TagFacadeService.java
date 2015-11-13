@@ -3,6 +3,7 @@ package com.emenu.service.dish.tag;
 import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.pandawork.core.common.exception.SSException;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_ADDPeer;
 
 import java.util.List;
 
@@ -28,7 +29,15 @@ public interface TagFacadeService {
      * @param tag
      * @throws SSException
      */
-    public void updateTag(Tag tag) throws SSException;
+    public void updateTag(Tag tag) throws Exception;
+
+    /**
+     * 根据Id查询
+     * @param tagId
+     * @return
+     * @throws SSException
+     */
+    public Tag queryById(int tagId) throws Exception;
 
     /**
      * 根据pId获取所有的儿子节点
@@ -53,5 +62,14 @@ public interface TagFacadeService {
      * @throws Exception
      */
     public List<TagDto> listByCurrentId(int tagId) throws Exception;
+
+    /**
+     * 获取菜品的分类List
+     * 菜品分类后台管理专用方法
+     * @param
+     * @return
+     * @throws Exception
+     */
+    public List<TagDto> listDishByCurrentId() throws Exception;
 
 }

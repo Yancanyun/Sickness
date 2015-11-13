@@ -3,6 +3,7 @@ package com.emenu.test.dish.tag;
 import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.service.dish.tag.TagCacheService;
+import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
 import com.emenu.test.AbstractTestCase;
 import org.junit.Test;
@@ -23,6 +24,9 @@ public class TagCacheTest extends AbstractTestCase{
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    TagFacadeService tagFacadeService;
 
     @Test
     public void testClone() throws CloneNotSupportedException {
@@ -138,10 +142,28 @@ public class TagCacheTest extends AbstractTestCase{
     }
 
     @Test
+    public void delById() throws Exception{
+        listAllTag();
+        tagCacheService.delById(9);
+        listAllTag();
+    }
+
+    @Test
     public void queryPathByTagId() throws Exception {
         List<Tag> tagList = tagCacheService.listPathById(14);
         for(Tag tag : tagList){
             System.out.println(tag.getName()+"  "+tag.getpId());
+        }
+    }
+
+    @Test
+    public void listDishByCurrentId()throws Exception{
+        List<TagDto> tagDtoList = tagFacadeService.listDishByCurrentId();
+        for(TagDto tagDto : tagDtoList){
+            System.out.println(tagDto.getTag().getName()+"      "+tagDto.getTag().getWeight()+"      "+tagDto.getTag().getpId());
+//            for(TagDto tagDto1 : tagDto.getChildTagList()){
+//                System.out.println(tagDto1.getTag().getName()+"      "+tagDto1.getTag().getWeight()+"      "+tagDto1.getTag().getpId());
+//            }
         }
     }
 }

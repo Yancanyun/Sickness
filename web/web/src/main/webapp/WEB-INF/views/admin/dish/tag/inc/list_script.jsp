@@ -79,7 +79,6 @@
             <input type="hidden" name="maxPrintNum" value="&{maxPrintNum}" />
             <input class="J_printId" type="hidden" name="printerId" value="&{printerId}" />
             <input type="hidden" name="timeLimit" value="&{timeLimit}" />
-            <input type="hidden" name="type" value="1" />
         </div>
         <span class="root-tag">[&{rootClassifyName}]</span>
         <span class="big-tag">&{name}</span>
@@ -102,7 +101,6 @@
         <input type="hidden" name="maxPrintNum" value="&{maxPrintNum}" />
         <input class="J_printId" type="hidden" name="printerId" value="&{printerId}" />
         <input type="hidden" name="timeLimit" value="&{timeLimit}" />
-        <input type="hidden" name="type" value="1" />
         <span class="small-tag">&{name}</span>
         <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
         <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
@@ -140,7 +138,6 @@
                 <input type="hidden" name="maxPrintNum" value="&{item.smallTagMaxPrintNum}" />
                 <input class="J_printId" type="hidden" name="printerId" value="&{item.smallTagPrintId}" />
                 <input type="hidden" name="timeLimit" value="&{item.smallTagTimeLimit}" />
-                <input type="hidden" name="type" value="1" />
                 <span class="small-tag">&{item.smallTagName}</span>
                 <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
                 <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>

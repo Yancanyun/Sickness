@@ -108,11 +108,18 @@ public interface TagCacheService {
     public void delById(int tagId) throws Exception;
 
     /**
+     * 根据Id修改Tag
+     * @param tag
+     * @throws Exception
+     */
+    public void updateTag(Tag tag) throws Exception;
+
+    /**
      * 根据ID修改Tag名称
      * @param tagId
      * @param name
      */
-    public void updateName(Integer tagId, String name) throws Exception;
+    public void updateName(int tagId, String name) throws Exception;
 
     /**
      * 更改tag权重
@@ -120,14 +127,14 @@ public interface TagCacheService {
      * @param weight
      * @throws SSException
      */
-    public void updateWeight(Integer tagId, Integer weight) throws Exception;
+    public void updateWeight(int tagId, int weight) throws Exception;
 
     /**
      * 更改tag的父亲节点
      * @param tagId
      * @param pId
      */
-    public void updatePid(Integer tagId, Integer pId) throws Exception;
+    public void updatePid(int tagId, int pId) throws Exception;
 
     /**
      * 根据ID联级删除Tag
