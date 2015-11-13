@@ -18,18 +18,15 @@ public interface PrinterService {
      * 新增打印机
      *
      * @param name
-     * @param brand
-     * @param printerModel
-     * @param type
      * @param deviceNumber
      * @param ipAddress
      * @param state
      * @param isCashierPrinter
+     * @param printer
      * @return
      * @throws SSException
      */
-    public Printer newPrinter(String name, int brand, int printerModel, int type, String deviceNumber,
-                              String ipAddress, int state, int isCashierPrinter) throws SSException;
+    public Printer newPrinter(Printer printer) throws SSException;
 
     /**
      * 修改打印机信息

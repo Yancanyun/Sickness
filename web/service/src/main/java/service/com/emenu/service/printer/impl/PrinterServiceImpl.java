@@ -32,7 +32,7 @@ public class PrinterServiceImpl implements PrinterService {
     PrinterMapper printerMapper;
 
     @Override
-    public Printer newPrinter(String name, int brand, int printerModel, int type, String deviceNumber, String ipAddress, int state, int isCashierPrinter) throws SSException {
+    public Printer newPrinter(Printer printer) throws SSException {
         return null;
     }
 
