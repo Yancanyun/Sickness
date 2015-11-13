@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!--对话框添加模板-->
 <script type="text/template" id="dlgTpl">
@@ -37,8 +38,9 @@
             <label class="col-sm-3 control-label"><span class="requires">*</span>小票打印至</label>
             <div class="col-sm-4">
                 <select class="form-control J_print" name="printerId">
-                    <option value="0">菜品打印机</option>
-                    <option value="1">酒水打印机</option>
+                    <c:forEach var="printer" items="${printerList}">
+                        <option value="${printer.id}">${printer.name}</option>
+                    </c:forEach>
                 </select>
             </div>
             <div class="col-sm-3">
@@ -79,6 +81,7 @@
             <input type="hidden" name="maxPrintNum" value="&{maxPrintNum}" />
             <input class="J_printId" type="hidden" name="printerId" value="&{printerId}" />
             <input type="hidden" name="timeLimit" value="&{timeLimit}" />
+            <input type="hidden" name="type" value="1" />
         </div>
         <span class="root-tag">[&{rootClassifyName}]</span>
         <span class="big-tag">&{name}</span>
@@ -101,6 +104,7 @@
         <input type="hidden" name="maxPrintNum" value="&{maxPrintNum}" />
         <input class="J_printId" type="hidden" name="printerId" value="&{printerId}" />
         <input type="hidden" name="timeLimit" value="&{timeLimit}" />
+        <input type="hidden" name="type" value="1" />
         <span class="small-tag">&{name}</span>
         <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
         <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
@@ -110,35 +114,35 @@
 <!--列表渲染-->
 <script type="text/template" id="listTpl">
     {@each list as it}
-    <li class="clearfix" data-big-tag-id="&{it.bigTagId}" data-root-tag-id="&{it.rootTagId}" data-root-tag-name="&{it.rootTagName}" data-big-tag-name="&{it.bigTagName}">
+    <li class="clearfix" data-big-tag-id="&{it.id}" data-root-tag-id="&{it.pId}" data-root-tag-name="&{it.pName}" data-big-tag-name="&{it.name}">
         <div class="J_inputGroup">
-            <input type="hidden" name="pId" value="&{it.rootTagId}" />
-            <input type="hidden" name="id" value="&{it.bigTagId}" />
-            <input type="hidden" name="name" value="&{it.bigTagName}" />
-            <input type="hidden" name="weight" value="&{it.bigTagWeight}" />
-            <input class="J_printAfterConfirmOrder" type="hidden" name="printAfterConfirmOrder" value="&{it.bigTagPrintAfterConfirmOrder}" />
-            <input type="hidden" name="maxPrintNum" value="&{it.bigTagMaxPrintNum}" />
-            <input class="J_printId" type="hidden" name="printerId" value="&{it.bigTagPrintId}" />
-            <input type="hidden" name="timeLimit" value="&{it.bigTagTimeLimit}" />
-            <input type="hidden" name="type" value="1" />
+            <input type="hidden" name="pId" value="&{it.pId}" />
+            <input type="hidden" name="id" value="&{it.id}" />
+            <input type="hidden" name="name" value="&{it.name}" />
+            <input type="hidden" name="weight" value="&{it.weight}" />
+            <input class="J_printAfterConfirmOrder" type="hidden" name="printAfterConfirmOrder" value="&{it.printAfterConfirmOrder}" />
+            <input type="hidden" name="maxPrintNum" value="&{it.maxPrintNum}" />
+            <input class="J_printId" type="hidden" name="printerId" value="&{it.printerId}" />
+            <input type="hidden" name="timeLimit" value="&{it.timeLimit}" />
         </div>
-        <span class="root-tag">[&{it.rootTagName}]</span>
-        <span class="big-tag">&{it.bigTagName}</span>
+        <span class="root-tag">[&{it.pName}]</span>
+        <span class="big-tag">&{it.name}</span>
+        <a class="J_foldToggle" href="javascript:;"></a>
         <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
-        <ul class="margin-top-20 J_smallClassify" data-big-tag-id="&{it.bigTagId}" data-big-tag-name="&{it.bigTagName}">
+        <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="&{it.bigTagId}" data-big-tag-name="&{it.bigTagName}">
             {@each it.smallTagList as item}
             <li class="clearfix" data-small-tag-name="&{item.smallTagName}" data-small-tag-id="&{item.smallTagId}">
-                <input type="hidden" name="pId" value="&{it.bigTagId}" />
-                <input type="hidden" name="id" value="&{item.smallTagId}" />
-                <input type="hidden" name="name" value="&{item.smallTagName}" />
-                <input type="hidden" name="weight" value="&{item.smallTagWeight}" />
-                <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="&{item.smallTagPrintAfterConfirmOrder}" />
-                <input type="hidden" name="maxPrintNum" value="&{item.smallTagMaxPrintNum}" />
-                <input class="J_printId" type="hidden" name="printerId" value="&{item.smallTagPrintId}" />
-                <input type="hidden" name="timeLimit" value="&{item.smallTagTimeLimit}" />
-                <span class="small-tag">&{item.smallTagName}</span>
+                <input type="hidden" name="pId" value="&{item.pId}" />
+                <input type="hidden" name="id" value="&{item.id}" />
+                <input type="hidden" name="name" value="&{item.name}" />
+                <input type="hidden" name="weight" value="&{item.weight}" />
+                <input class="J_printAfterConfirmOrderSmall" type="hidden" name="printAfterConfirmOrder" value="&{item.printAfterConfirmOrder}" />
+                <input type="hidden" name="maxPrintNum" value="&{item.maxPrintNum}" />
+                <input class="J_printId" type="hidden" name="printerId" value="&{item.printerId}" />
+                <input type="hidden" name="timeLimit" value="&{item.timeLimit}" />
+                <span class="small-tag">&{item.name}</span>
                 <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
                 <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
             </li>

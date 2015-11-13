@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -70,8 +71,14 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<TagDto> listDishByCurrentId() throws Exception {
-        List<Tag> tagList = tagCacheService.listChildrenById(TagEnum.DishAndGoods.getId());
+    public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception {
+        List<Tag> tagList = new ArrayList<Tag>();
+        if(Assert.isNull(tagId) || tagId == 0){
+            tagList = tagCacheService.listChildrenById(TagEnum.DishAndGoods.getId());
+        }else {
+            Tag tag = tagCacheService.queryCloneById(tagId);
+            tagList.add(tag);
+        }
         List<TagDto> tagDtoList = new ArrayList<TagDto>();
         for(Tag tag : tagList){
             List<TagDto> childTagDtoList = tagCacheService.listDtoByCurrentId(tag.getId());

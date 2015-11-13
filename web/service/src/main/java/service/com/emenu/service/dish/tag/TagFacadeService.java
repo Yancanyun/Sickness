@@ -70,6 +70,6 @@ public interface TagFacadeService {
      * @return
      * @throws Exception
      */
-    public List<TagDto> listDishByCurrentId() throws Exception;
+    public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception;
 
 }

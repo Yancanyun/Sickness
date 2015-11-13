@@ -57,7 +57,6 @@ public interface TagCacheService {
      * @return List<Tag>
      * @throws Exception
      */
-    @Deprecated
     public List<Tag> listAllRootByType(int type) throws Exception;
 
     /**

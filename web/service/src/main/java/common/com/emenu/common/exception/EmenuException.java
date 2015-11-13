@@ -51,7 +51,7 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteTagFailed("删除分类Tag失败", 3007),
     TagNameIsNull("分类名称为空", 3008),
     TagTypeError("分类Tag的type为空或者小于0或者不存在", 3009),
-    TagChildrenIsNull("分类的子节点为空", 3010),
+    TagChildrenIsNull("该分类下还有子分类，不能删除！", 3010),
     TagFiledIsNull("分类的更新域为空", 3011),
     TagChildrenIsError("分类的存在子节点，不能删除", 3010),
 

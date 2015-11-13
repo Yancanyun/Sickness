@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <div class="row">
     <div class="col-sm-12">
@@ -21,10 +22,12 @@
                         <label class="col-sm-3 control-label">选择菜品总分类</label>
                         <div class="col-sm-3">
                             <select class="form-control" name="rootId">
-                                <option value="0">商品</option>
-                                <option value="1">菜品</option>
-                                <option value="2">酒水</option>
-                                <option value="3">其他</option>
+                                <option value="0">全部</option>
+                                <option value="3">菜类</option>
+                                <option value="5">酒水类</option>
+                                <option value="4">商品</option>
+                                <option value="6">套餐</option>
+                                <option value="7">其他</option>
                             </select>
                         </div>
                     </div>
@@ -101,7 +104,7 @@
                                 </c:choose>
                             </span>
                             <span class="big-tag">${tagDto.key.tag.name}</span>
-                            <a class="J_foldToggle" href="javascript:;">展开 <<</a>
+                            <a class="J_foldToggle" href="javascript:;"></a>
                             <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
                             <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
                             <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
@@ -128,10 +131,11 @@
                         </c:forEach>
                     </ul>
                     <select class="form-control hidden J_bigClassifyHidden" disabled="disabled" name="pId">
-                        <option value="2">菜类</option>
-                        <option value="3">酒水类</option>
+                        <option value="3">菜类</option>
+                        <option value="5">酒水类</option>
                         <option value="4">商品</option>
-                        <option value="5">套餐</option>
+                        <option value="6">套餐</option>
+                        <option value="7">其他</option>
                     </select>
                 </form>
             </div>

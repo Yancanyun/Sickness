@@ -9,7 +9,9 @@ import com.emenu.test.AbstractTestCase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TagCacheTest
@@ -158,12 +160,13 @@ public class TagCacheTest extends AbstractTestCase{
 
     @Test
     public void listDishByCurrentId()throws Exception{
-        List<TagDto> tagDtoList = tagFacadeService.listDishByCurrentId();
+        List<TagDto> tagDtoList = tagFacadeService.listDishByCurrentId(3);
         for(TagDto tagDto : tagDtoList){
             System.out.println(tagDto.getTag().getName()+"      "+tagDto.getTag().getWeight()+"      "+tagDto.getTag().getpId());
-//            for(TagDto tagDto1 : tagDto.getChildTagList()){
-//                System.out.println(tagDto1.getTag().getName()+"      "+tagDto1.getTag().getWeight()+"      "+tagDto1.getTag().getpId());
-//            }
+            for(TagDto tagDto1 : tagDto.getChildTagList()){
+                System.out.println(tagDto1.getTag().getName()+"      "+tagDto1.getTag().getWeight()+"      "+tagDto1.getTag().getpId());
+            }
         }
     }
+
 }

@@ -96,13 +96,10 @@
             ['delIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '删除原材料'],
 
             //菜品分类管理
-            ['addBigClassify', site.website + 'admin/dish/tag/ajax', 'post', '添加菜品大类'],
-            ['addSmallClassify', site.website + 'admin/dish/tag/ajax', 'post', '添加菜品小类'],
-            ['editBigClassify', site.website + 'admin/dish/tag/ajax', 'put', '编辑菜品大类'],
-            ['editSmallClassify', site.website + 'admin/dish/tag/ajax', 'put', '编辑菜品小类'],
-            ['delBigClassify', site.website + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品大类'],
-            ['delSmallClassify', site.website + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品小类'],
-            ['search', site.website + 'mock/admin/dish-classify-list.json', 'get', '搜索菜品']
+            ['addClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'post', '添加菜品分类'],
+            ['editClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'put', '编辑菜品分类'],
+            ['delClassify', site.staticWebsite + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品分类'],
+            ['search', site.staticWebsite + 'admin/dish/tag/ajax/search', 'get', '搜索菜品']
         ],
         // 权限管理
         AuthorityManagement: [

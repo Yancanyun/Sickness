@@ -48,7 +48,7 @@
         COUNT(*)
         FROM
         `t_tag`
-        WHERE pid = #{id}
+        WHERE p_id = #{id}
     </select>
 
 </mapper>
