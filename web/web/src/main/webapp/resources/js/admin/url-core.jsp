@@ -71,10 +71,8 @@
         // 库存管理
         StoreManagement: [
             // 供货商管理
-            ['addSupplier', site.website + 'admin/storage/supplier/ajax', 'post','添加供货商'],
-            ['editSupplier', site.website + 'admin/storage/supplier/ajax', 'put','编辑供货商'],
-            ['delSupplier', site.website + 'admin/storage/supplier/ajax/&{id}', 'delete','删除供货商'],
-
+            ['addSupplier', site.website + 'admin/store/supplier/ajax', 'post','添加供货商'],
+            ['editSupplier', site.website + 'admin/store/supplier/ajax', 'put','编辑供货商'],
             // 库存分类管理
             ['addStoreClassify', site.website + 'admin/storage/tag/ajax', 'post','添加库存分类'],
             ['editStoreClassify', site.website + 'admin/storage/tag/ajax/&{id}', 'put','编辑库存分类'],
