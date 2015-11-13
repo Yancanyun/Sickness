@@ -64,6 +64,7 @@
             <a class="menu-list J_layer_1_menu" data-menu-id="6" href="javascript:;">库存管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/storage/supplier">供货商管理</a></li>
+                <li><a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a></li>
                 <li><a class="J_menu" href="javascript:;">库存管理</a></li>
                 <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
                 <li><a class="J_menu" href="javascript:;">预警管理</a></li>
