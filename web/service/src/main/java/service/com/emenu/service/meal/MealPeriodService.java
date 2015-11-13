@@ -52,7 +52,6 @@ public interface MealPeriodService {
     /**
      * 根据id修改为当前餐段
      *
-     * @param currentMealPeriod
      * @param id
      * @param isCurrent
      * @throws SSException
