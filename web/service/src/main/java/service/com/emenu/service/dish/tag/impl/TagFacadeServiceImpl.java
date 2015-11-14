@@ -1,16 +1,21 @@
 package com.emenu.service.dish.tag.impl;
 
 import com.emenu.common.dto.dish.tag.TagDto;
+import com.emenu.common.dto.printer.PrinterDishDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.enums.dish.TagEnum;
+import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
+import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +36,9 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Autowired
     private TagCacheService tagCacheService;
+
+    @Autowired
+    private PrinterService printerService;
 
     @Override
     public Tag newTag(Tag tag) throws Exception {
@@ -85,6 +93,40 @@ public class TagFacadeServiceImpl implements TagFacadeService {
             tagDtoList.addAll(childTagDtoList);
         }
         return tagDtoList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
+    public void newTagPrinter(Tag tag, Integer printerId) throws Exception {
+        //添加分类
+        newTag(tag);
+        //添加分类与打印机关联
+        PrinterDishDto printerDishDto = new PrinterDishDto();
+        printerDishDto.setDishId(tag.getId());
+        printerDishDto.setPrinterId(printerId);
+        printerDishDto.setType(PrinterDishEnum.TagPrinter.getId());
+        printerService.newPrinterDish(printerDishDto);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
+    public void updateTagPrinter(Tag tag, Integer printerId) throws Exception {
+        //修改该分类信息
+        updateTag(tag);
+        //修改与打印机关联表
+        PrinterDishDto printerDishDto = new PrinterDishDto();
+        printerDishDto.setDishId(tag.getId());
+        printerDishDto.setPrinterId(printerId);
+        printerService.updatePrinterDish(printerDishDto);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
+    public void delTagPrinter(int tagId) throws Exception {
+        //删除该分类
+        delById(tagId);
+        //删除与打印机关联表
+        printerService.delPrinterDish(tagId);
     }
 
 }

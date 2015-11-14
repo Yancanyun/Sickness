@@ -89,7 +89,7 @@
         <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
-        <ul class="margin-top-20 J_smallClassify open" data-big-tag-id="&{id}" data-big-tag-name="&{name}"></ul>
+        <ul style="display: none" class="margin-top-20 J_smallClassify" data-big-tag-id="&{id}" data-big-tag-name="&{name}"></ul>
     </li>
 </script>
 
@@ -124,6 +124,7 @@
             <input type="hidden" name="maxPrintNum" value="&{it.maxPrintNum}" />
             <input class="J_printId" type="hidden" name="printerId" value="&{it.printerId}" />
             <input type="hidden" name="timeLimit" value="&{it.timeLimit}" />
+            <input type="hidden" name="type" value="1" />
         </div>
         <span class="root-tag">[&{it.pName}]</span>
         <span class="big-tag">&{it.name}</span>
@@ -131,9 +132,9 @@
         <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i class="fa fa-times"></i>&nbsp;删除大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_editBigTag"><i class="fa fa-pencil"></i>&nbsp;编辑大类</a>
         <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i class="fa fa-plus"></i>&nbsp;添加小类</a>
-        <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="&{it.bigTagId}" data-big-tag-name="&{it.bigTagName}">
+        <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="&{it.id}" data-big-tag-name="&{it.name}">
             {@each it.smallTagList as item}
-            <li class="clearfix" data-small-tag-name="&{item.smallTagName}" data-small-tag-id="&{item.smallTagId}">
+            <li class="clearfix" data-small-tag-name="&{item.name}" data-small-tag-id="&{item.id}">
                 <input type="hidden" name="pId" value="&{item.pId}" />
                 <input type="hidden" name="id" value="&{item.id}" />
                 <input type="hidden" name="name" value="&{item.name}" />
@@ -142,6 +143,7 @@
                 <input type="hidden" name="maxPrintNum" value="&{item.maxPrintNum}" />
                 <input class="J_printId" type="hidden" name="printerId" value="&{item.printerId}" />
                 <input type="hidden" name="timeLimit" value="&{item.timeLimit}" />
+                <input type="hidden" name="type" value="1" />
                 <span class="small-tag">&{item.name}</span>
                 <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
                 <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>

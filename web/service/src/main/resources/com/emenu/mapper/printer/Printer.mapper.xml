@@ -8,11 +8,26 @@
     </select>
 
     <select id="queryByTagId" resultMap="pw.Printer">
-        SELECT *
+        SELECT `t_printer`.*
         FROM `t_printer`,`t_dish_tag_printer`
         WHERE `t_dish_tag_printer`.`dish_tag_id` = #{id}
         AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
     </select>
 
+    <insert id="newPrinterDish">
+        INSERT INTO `t_dish_tag_printer` (`dish_tag_id`, `printer_id`,`type`)
+        VALUES (#{printerDishDto.dishId}, #{printerDishDto.printerId}, #{printerDishDto.type} )
+    </insert>
+
+    <update id="updatePrinterDish">
+        UPDATE `t_dish_tag_printer`
+        SET `printer_id`= #{printerDishDto.printerId}
+        WHERE `dish_tag_id` = #{printerDishDto.dishId}
+    </update>
+
+    <delete id="delPrinterDish">
+        DELETE FROM `t_dish_tag_printer`
+        WHERE `dish_tag_id` = #{tagId}
+    </delete>
 
 </mapper>

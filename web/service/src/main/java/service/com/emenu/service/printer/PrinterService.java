@@ -1,5 +1,6 @@
 package com.emenu.service.printer;
 
+import com.emenu.common.dto.printer.PrinterDishDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.pandawork.core.common.exception.SSException;
@@ -16,12 +17,6 @@ public interface PrinterService {
 
     /**
      * 新增打印机
-     *
-     * @param name
-     * @param deviceNumber
-     * @param ipAddress
-     * @param state
-     * @param isCashierPrinter
      * @param printer
      * @return
      * @throws SSException
@@ -78,4 +73,26 @@ public interface PrinterService {
      * @throws SSException
      */
     public List<Tag> queryTagById(int id) throws SSException;
+
+    /**
+     * 新增菜品与打印机关联
+     * @param printerDishDto
+     * @return
+     * @throws SSException
+     */
+    public void newPrinterDish(PrinterDishDto printerDishDto) throws SSException;
+
+    /**
+     * 修改菜品与打印机关联_根据菜品Id修改
+     * @param printerDishDto
+     * @throws SSException
+     */
+    public void updatePrinterDish(PrinterDishDto printerDishDto) throws SSException;
+
+    /**
+     * 删除菜品与打印机关联
+     * @param tagId
+     * @throws SSException
+     */
+    public void delPrinterDish(int tagId) throws SSException;
 }

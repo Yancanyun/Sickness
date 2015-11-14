@@ -49,15 +49,15 @@ public enum EmenuException implements IBizExceptionMes {
 
     //菜品管理模块
     //分类管理
-    NewTagFailed("添加分类Tag失败", 3001),
-    TagIdError("分类Tag的ID为空或者小于0", 3002),
-    UpdateTagFailed("修改分类Tag失败", 3003),
-    TagWeightError("分类Tag的权重为空或者小于0", 3004),
-    TagPIdError("分类Tag的父亲Id为空或者小于0或者不存在", 3005),
-    ListTagFailed("分类Tag列表查询失败", 3006),
-    DeleteTagFailed("删除分类Tag失败", 3007),
+    NewTagFailed("添加分类失败", 3001),
+    TagIdError("分类的ID为空或者小于0", 3002),
+    UpdateTagFailed("修改分类失败", 3003),
+    TagWeightError("分类的权重为空或者小于0", 3004),
+    TagPIdError("分类的父亲Id为空或者小于0或者不存在", 3005),
+    ListTagFailed("分类列表查询失败", 3006),
+    DeleteTagFailed("删除分类失败", 3007),
     TagNameIsNull("分类名称为空", 3008),
-    TagTypeError("分类Tag的type为空或者小于0或者不存在", 3009),
+    TagTypeError("分类的type为空或者小于0或者不存在", 3009),
     TagChildrenIsNull("该分类下还有子分类，不能删除！", 3010),
     TagFiledIsNull("分类的更新域为空", 3011),
     TagChildrenIsError("分类的存在子节点，不能删除", 3010),
@@ -152,6 +152,11 @@ public enum EmenuException implements IBizExceptionMes {
     UpdatePrinterFail("查询打印机失败",5041),
     DeletePrinterFail("查询打印机失败",5042),
     PrinterInfoIllegal("查询打印机失败",5043),
+    PrinterIdError("打印机id为空或者小于0",5044),
+    PrinterTypeError("打印机与菜品关联表类型为空或小于0",5045),
+    NewPrinterDishError("新增打印机与菜品管理关联失败",5046),
+    UpdatePrinterDishError("修改打印机与菜品管理关联失败",5047),
+    DelPrinterDishError("删除打印机与菜品管理关联失败",5048),
 
     //用户管理模块
     QueryEmployeeInfoFail("获取员工信息失败",6001),

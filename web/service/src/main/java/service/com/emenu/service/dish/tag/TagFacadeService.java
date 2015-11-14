@@ -72,4 +72,27 @@ public interface TagFacadeService {
      */
     public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception;
 
+    /**
+     * 新增菜品分类以及打印机关联
+     * @param tag
+     * @param printerId
+     * @throws SSException
+     */
+    public void newTagPrinter(Tag tag, Integer printerId) throws Exception;
+
+    /**
+     * 修改菜品分类以及打印机关联
+     * @param tag
+     * @param printerId
+     * @throws SSException
+     */
+    public void updateTagPrinter(Tag tag, Integer printerId) throws Exception;
+
+    /**
+     * 删除菜品分类以及打印机关联
+     * @param tagId
+     * @throws SSException
+     */
+    public void delTagPrinter(int tagId) throws Exception;
+
 }

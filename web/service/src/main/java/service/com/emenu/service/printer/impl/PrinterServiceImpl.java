@@ -1,5 +1,6 @@
 package com.emenu.service.printer.impl;
 
+import com.emenu.common.dto.printer.PrinterDishDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.exception.EmenuException;
@@ -79,5 +80,54 @@ public class PrinterServiceImpl implements PrinterService {
     @Override
     public List<Tag> queryTagById(int id) throws SSException {
         return null;
+    }
+
+    @Override
+    public void newPrinterDish(PrinterDishDto printerDishDto) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(printerDishDto.getDishId())){
+                throw SSException.get(EmenuException.TagIdError);
+            }
+            if (Assert.lessOrEqualZero(printerDishDto.getPrinterId())){
+                throw SSException.get(EmenuException.PrinterIdError);
+            }
+            if (Assert.lessZero(printerDishDto.getType())){
+                throw SSException.get(EmenuException.PrinterTypeError);
+            }
+            printerMapper.newPrinterDish(printerDishDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.NewPrinterDishError, e);
+        }
+    }
+
+    @Override
+    public void updatePrinterDish(PrinterDishDto printerDishDto) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(printerDishDto.getDishId())){
+                throw SSException.get(EmenuException.TagIdError);
+            }
+            if (Assert.lessOrEqualZero(printerDishDto.getPrinterId())){
+                throw SSException.get(EmenuException.PrinterIdError);
+            }
+            printerMapper.updatePrinterDish(printerDishDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdatePrinterDishError, e);
+        }
+    }
+
+    @Override
+    public void delPrinterDish(int tagId) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(tagId)){
+                throw SSException.get(EmenuException.TagIdError);
+            }
+            printerMapper.delPrinterDish(tagId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelPrinterDishError, e);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.tag.TagDto;
+import com.emenu.common.dto.printer.PrinterDishDto;
 import com.emenu.common.entity.dish.tag.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.dish.TagEnum;
@@ -12,6 +13,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,6 @@ import java.util.*;
  * @author dujuan
  * @date 2015/10/28
  */
-//TODO 等前端页面出来之后再继续写这个COntroller，现在方法不完善
 @Controller
 @Module(ModuleEnums.AdminDishTag)
 @RequestMapping(value = URLConstants.ADMIN_DISH_TAG)
@@ -41,11 +42,24 @@ public class AdminTagController extends AbstractController{
         Map<TagDto, Integer> tagDtoMap = new LinkedHashMap<TagDto, Integer>();
         Map<TagDto, Integer> childrenTagDtoMap = new LinkedHashMap<TagDto, Integer>();
         for(TagDto tagDto : tagDtoList){
-            tagDtoMap.put(tagDto, printerService.queryByTagId(tagDto.getTag().getId()).getId());
+            //获取打印机实体判断是否存在
+            Printer printer = printerService.queryByTagId(tagDto.getTag().getId());
+            Integer printerId = 0;
+            if(Assert.isNotNull(printer)){
+                printerId = printer.getId();
+            }
+            tagDtoMap.put(tagDto, printerId);
             for(TagDto childTagDto :tagDto.getChildTagList()){
-                childrenTagDtoMap.put(childTagDto, printerService.queryByTagId(tagDto.getTag().getId()).getId());
+                //获取打印机实体判断是否存在
+                Printer childPrinter = printerService.queryByTagId(tagDto.getTag().getId());
+                Integer childPrinterId = 0;
+                if(Assert.isNotNull(childPrinter)){
+                    childPrinterId = printer.getId();
+                }
+                childrenTagDtoMap.put(childTagDto, childPrinterId);
             }
         }
+        //获取打印机列表
         List<Printer> printerList = printerService.listAll();
         model.addAttribute("tagDtoMap", tagDtoMap);
         model.addAttribute("childrenTagDtoMap", childrenTagDtoMap);
@@ -70,7 +84,13 @@ public class AdminTagController extends AbstractController{
                 jsonObject.put("printAfterConfirmOrder", tagDto.getTag().getPrintAfterConfirmOrder());
                 jsonObject.put("maxPrintNum", tagDto.getTag().getMaxPrintNum());
                 jsonObject.put("timeLimit", tagDto.getTag().getTimeLimit());
-                jsonObject.put("printerId",printerService.queryByTagId(tagDto.getTag().getId()).getId());
+                //获取打印机实体判断是否存在
+                Printer printer = printerService.queryByTagId(tagDto.getTag().getId());
+                Integer printerId = 0;
+                if(Assert.isNotNull(printer)){
+                    printerId = printer.getId();
+                }
+                jsonObject.put("printerId", printerId);
                 JSONArray childJsonArray = new JSONArray();
                 for(TagDto childTagDto :tagDto.getChildTagList()){
                     JSONObject childJsonObject = new JSONObject();
@@ -81,7 +101,13 @@ public class AdminTagController extends AbstractController{
                     childJsonObject.put("printAfterConfirmOrder", childTagDto.getTag().getPrintAfterConfirmOrder());
                     childJsonObject.put("maxPrintNum", childTagDto.getTag().getMaxPrintNum());
                     childJsonObject.put("timeLimit", childTagDto.getTag().getTimeLimit());
-                    childJsonObject.put("printerId",printerService.queryByTagId(childTagDto.getTag().getId()).getId());
+                    //获取打印机实体判断是否存在
+                    Printer childPrinter = printerService.queryByTagId(tagDto.getTag().getId());
+                    Integer childPrinterId = 0;
+                    if(Assert.isNotNull(childPrinter)){
+                        childPrinterId = printer.getId();
+                    }
+                    childJsonObject.put("printerId", childPrinterId);
                     childJsonArray.add(childJsonObject);
                 }
                 jsonObject.put("smallTagList", childJsonArray);
@@ -108,7 +134,7 @@ public class AdminTagController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxNewTag(Tag tag, Integer printerId){
         try{
-            tagFacadeService.newTag(tag);
+            tagFacadeService.newTagPrinter(tag, printerId);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);
@@ -127,9 +153,9 @@ public class AdminTagController extends AbstractController{
     @Module(ModuleEnums.AdminDishTagUpdate)
     @RequestMapping(value = "ajax",method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateTag(Tag tag){
+    public JSONObject ajaxUpdateTag(Tag tag, Integer printerId){
         try{
-            tagFacadeService.updateTag(tag);
+            tagFacadeService.updateTagPrinter(tag, printerId);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);
@@ -150,7 +176,7 @@ public class AdminTagController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
         try{
-            tagFacadeService.delById(id);
+            tagFacadeService.delTagPrinter(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);

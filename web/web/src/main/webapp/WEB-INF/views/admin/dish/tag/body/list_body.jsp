@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <div class="row">
     <div class="col-sm-12">
@@ -80,6 +79,7 @@
                                 <input type="hidden" name="maxPrintNum" value="${tagDto.key.tag.maxPrintNum}" />
                                 <input class="J_printId" type="hidden" name="printerId" value="${tagDto.value}" />
                                 <input type="hidden" name="timeLimit" value="${tagDto.key.tag.timeLimit}" />
+                                <input type="hidden" name="type" value="1" />
                             </div>
                             <span class="root-tag">
                                 <c:choose>
@@ -120,6 +120,7 @@
                                     <input type="hidden" name="maxPrintNum" value="${childTagDto.key.tag.maxPrintNum}" />
                                     <input class="J_printId" type="hidden" name="printerId" value="${childTagDto.value}" />
                                     <input type="hidden" name="timeLimit" value="${childTagDto.key.tag.timeLimit}" />
+                                    <input type="hidden" name="type" value="1" />
                                     <span class="small-tag">${childTagDto.key.tag.name}</span>
                                     <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i class="fa fa-times"></i>&nbsp;删除小类</a>
                                     <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i class="fa fa-pencil"></i>&nbsp;编辑小类</a>
