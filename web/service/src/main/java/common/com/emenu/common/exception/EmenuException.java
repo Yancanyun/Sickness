@@ -47,6 +47,9 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
     StorageItemIdNotNull("物品的ID不能为空", 1030),
 
+    //库存结算
+    InsertStorageSettlementItemFailed("库存结算保存失败", 1050),
+
     //菜品管理模块
     //分类管理
     NewTagFailed("添加分类失败", 3001),

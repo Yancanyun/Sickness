@@ -97,15 +97,16 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void newTagPrinter(Tag tag, Integer printerId) throws Exception {
+    public Tag newTagPrinter(Tag tag, Integer printerId) throws Exception {
         //添加分类
-        newTag(tag);
+        Tag newTag = newTag(tag);
         //添加分类与打印机关联
         PrinterDishDto printerDishDto = new PrinterDishDto();
-        printerDishDto.setDishId(tag.getId());
+        printerDishDto.setDishId(newTag.getId());
         printerDishDto.setPrinterId(printerId);
         printerDishDto.setType(PrinterDishEnum.TagPrinter.getId());
         printerService.newPrinterDish(printerDishDto);
+        return newTag;
     }
 
     @Override

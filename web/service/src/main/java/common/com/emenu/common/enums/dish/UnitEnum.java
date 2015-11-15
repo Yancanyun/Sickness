@@ -10,8 +10,8 @@ import java.util.Map;
  * @date 2015/11/3
  */
 public enum UnitEnum {
-    HUNDREDWEIGHT(1 , "重量单位"),
-    QUANTITY(2 , "数量单位")
+    HundredWeight(1 , "重量单位"),
+    Quantity(2 , "数量单位")
     ;
     private Integer id;
     private String name;

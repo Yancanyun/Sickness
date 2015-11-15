@@ -134,8 +134,10 @@ public class AdminTagController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxNewTag(Tag tag, Integer printerId){
         try{
-            tagFacadeService.newTagPrinter(tag, printerId);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            Tag newTag = tagFacadeService.newTagPrinter(tag, printerId);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", newTag.getId());
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

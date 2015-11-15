@@ -11,7 +11,11 @@ package com.emenu.common.enums.other;
  **/
 public enum SerialNumTemplateEnums {
 
-    StockInSerialNum("入库单流水号", "RKD-|yyyyMMdd|####")
+    StockInSerialNum("入库单流水号", "RKD-|yyyyMMdd|####"),
+    StockOutSerialNum("出库单流水号", "CKD-|yyyyMMdd|####"),
+    IncomeOnSerialNum("盘盈单流水号", "PYD-|yyyyMMdd|####"),
+    LossOnSerialNum("盘亏单流水号", "PKD-|yyyyMMdd|####"),
+    SettlementSerialNum("结算表流水号", "JSD-|yyyyMMdd|####")
     ;
 
     private String name;

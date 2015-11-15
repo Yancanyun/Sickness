@@ -78,7 +78,7 @@ public interface TagFacadeService {
      * @param printerId
      * @throws SSException
      */
-    public void newTagPrinter(Tag tag, Integer printerId) throws Exception;
+    public Tag newTagPrinter(Tag tag, Integer printerId) throws Exception;
 
     /**
      * 修改菜品分类以及打印机关联
