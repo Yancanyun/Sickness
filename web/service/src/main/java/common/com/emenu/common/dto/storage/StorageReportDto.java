@@ -3,6 +3,8 @@ package com.emenu.common.dto.storage;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 
+import java.util.List;
+
 /**
  * 单据Dto
  * @author xiaozl
@@ -15,7 +17,9 @@ public class StorageReportDto {
     private StorageReport storageReport;
 
     //单据详情
-    private StorageReportItem storageReportItem;
+    private List<StorageReportItem> storageReportItemList;
+
+    /********************getter and setter ********************/
 
     public StorageReport getStorageReport() {
         return storageReport;
@@ -25,11 +29,11 @@ public class StorageReportDto {
         this.storageReport = storageReport;
     }
 
-    public StorageReportItem getStorageReportItem() {
-        return storageReportItem;
+    public List<StorageReportItem> getStorageReportItemList() {
+        return storageReportItemList;
     }
 
-    public void setStorageReportItem(StorageReportItem storageReportItem) {
-        this.storageReportItem = storageReportItem;
+    public void setStorageReportItemList(List<StorageReportItem> storageReportItemList) {
+        this.storageReportItemList = storageReportItemList;
     }
 }
