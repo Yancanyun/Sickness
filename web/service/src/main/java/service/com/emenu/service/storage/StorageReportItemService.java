@@ -1,5 +1,6 @@
 package com.emenu.service.storage;
 
+import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.pandawork.core.common.exception.SSException;
 
@@ -43,6 +44,14 @@ public interface StorageReportItemService {
      * @throws SSException
      */
     public List<StorageReportItem> listByReportId(int reportId) throws SSException;
+
+    /**
+     * 根据id修改单据详情
+     * @param storageReportItem
+     * @return
+     * @throws SSException
+     */
+    boolean updateById(StorageReportItem storageReportItem) throws SSException;
 
 
 }

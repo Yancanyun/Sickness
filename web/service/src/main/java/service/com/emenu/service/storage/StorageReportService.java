@@ -96,4 +96,20 @@ public interface StorageReportService {
                                                                      int page,
                                                                      int pageSize) throws SSException;
 
+    /**
+     * 根据id修改单据
+     * @param storageReport
+     * @return
+     * @throws SSException
+     */
+    boolean updateById(StorageReport storageReport) throws SSException;
+
+    /**
+     * 根据id获取单据信息
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StorageReport queryById(int id) throws SSException;
+
 }

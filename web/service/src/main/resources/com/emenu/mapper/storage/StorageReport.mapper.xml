@@ -61,7 +61,7 @@
     </select>
 
     <select id="ListStorageReportUnsettled" parameterType="date" resultMap="pw.StorageReport">
-        SELECT * FROM t_storage_report WHERE `created_time` &lt;= #{endTime} and status = 0;
+        SELECT * FROM t_storage_report WHERE `created_time` &lt;= #{endTime} and status = 0 ORDER BY `created_time` DESC;
     </select>
 
    <!-- <select id="ListStorageReportDtoUnsettle"  resultMap="pw.StorageReport">

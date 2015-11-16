@@ -329,4 +329,31 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
     }
 
+    @Override
+    public boolean updateById(StorageReport storageReport) throws SSException {
+        try {
+              if(Assert.isNull(storageReport)){
+                  throw SSException.get(EmenuException.ReportIsNotNull);
+              }
+            commonDao.update(storageReport);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public StorageReport queryById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            return commonDao.queryById(StorageReport.class,id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryStorageReportFail, e);
+        }
+    }
+
 }

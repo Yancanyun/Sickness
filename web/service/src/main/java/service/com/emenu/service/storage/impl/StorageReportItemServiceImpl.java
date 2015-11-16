@@ -92,6 +92,20 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         }
     }
 
+    @Override
+    public boolean updateById(StorageReportItem storageReportItem) throws SSException {
+        try {
+            if(Assert.isNull(storageReportItem)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            commonDao.update(storageReportItem);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportItemFail, e);
+        }
+    }
+
     private boolean checkStorageReportItemBeforeSave(StorageReportItem storageReportItem) throws SSException{
 
         if (Assert.isNull(storageReportItem)){

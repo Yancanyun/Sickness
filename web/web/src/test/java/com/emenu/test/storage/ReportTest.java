@@ -201,4 +201,15 @@ public class ReportTest extends AbstractTestCase{
 
         System.out.println("he");
     }
+
+    @Test
+    public void updateStorageReport() throws SSException{
+        StorageReport storageReport = storageReportService.queryById(2);
+        storageReport.setComment("hello");
+
+        storageReportService.updateById(storageReport);
+
+        System.out.println(storageReport.getComment());
+
+    }
 }

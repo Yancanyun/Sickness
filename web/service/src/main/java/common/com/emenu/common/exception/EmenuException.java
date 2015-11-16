@@ -205,6 +205,9 @@ public enum EmenuException implements IBizExceptionMes {
     ListStorageReportFail("获取单据信息失败",7018),
     ListStorageReportItemFail("获取单据详情信息l列表失败",7019),
     QueryStorageReportItemFail("获取单据详情信息失败",7020),
+    QueryStorageReportFail("获取单据信息失败",7021),
+    UpdateStorageReportFail("修改单据信息失败",7022),
+    UpdateStorageReportItemFail("修改单据详情失败",7023),
 
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7021),
@@ -220,6 +223,7 @@ public enum EmenuException implements IBizExceptionMes {
     DepotNameIsConflict("存放点名称冲突", 7031),
     CheckDepotNameFailed("检查存放点名称是否重复失败", 7032),
     CheckDepotNameConflictFailed("检查名称是否与其他存放点冲突失败", 7033),
+
 
 
     //会员基本信息管理模块
