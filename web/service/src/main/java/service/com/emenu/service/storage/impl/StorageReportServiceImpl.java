@@ -158,7 +158,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         int offset = page * pageSize;
         List<StorageReportDto> storageReportDtoList = new ArrayList();
         List<StorageReport> storageReportList = Collections.emptyList();
-        if (Assert.lessOrEqualZero(offset)){
+        if(Assert.lessZero(offset)){
             return storageReportDtoList;
         }
 
@@ -212,7 +212,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         List<StorageReport> storageReportList = Collections.emptyList();
 
         try {
-            if (Assert.lessOrEqualZero(offset)){
+            if(Assert.lessZero(offset)){
                 return storageReportDtoList;
             }
             storageReportList = storageReportMapper.listStorageReportByCondition(startTime,endTime,serialNumber,depotId,handlerPartyId,createdPartyId,offset,pageSize);

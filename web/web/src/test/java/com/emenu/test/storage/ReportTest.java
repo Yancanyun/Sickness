@@ -3,7 +3,9 @@ package com.emenu.test.storage;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
+import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.utils.DateUtils;
+import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
@@ -31,6 +33,8 @@ public class ReportTest extends AbstractTestCase{
     @Autowired
     StorageReportItemService storageReportItemService;
 
+    @Autowired
+    SerialNumService serialNumService;
 
     /**
      * 添加单据测试
@@ -89,6 +93,7 @@ public class ReportTest extends AbstractTestCase{
         BigDecimal price = new BigDecimal("0.00");
         BigDecimal quantity = new BigDecimal("0.00");
 
+        String setSerialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
 
         storageReportItem.setCount(count);
         storageReportItem.setItemId(1);
@@ -100,10 +105,10 @@ public class ReportTest extends AbstractTestCase{
 
         storageReport.setStatus(0);
         storageReport.setComment("来一个");
-        storageReport.setCreatedPartyId(6);
-        storageReport.setDepotId(4);
-        storageReport.setHandlerPartyId(5);
-        storageReport.setSerialNumber("kdl-201510120001");
+        storageReport.setCreatedPartyId(2);
+        storageReport.setDepotId(2);
+        storageReport.setHandlerPartyId(2);
+        storageReport.setSerialNumber(setSerialNumber);
         storageReport.setStatus(1);
 
         BigDecimal money = new BigDecimal("35.55");
@@ -146,8 +151,9 @@ public class ReportTest extends AbstractTestCase{
         startTime = DateUtils.getTodayStartTime();
         endTime = DateUtils.getTodayEndTime();
 
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition(startTime,endTime,"abc-20111015-001",1,1,1,1,10);
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition(startTime, endTime, "RKD-201511160002", 0, 0, 0, 0, 10);
 
+        System.out.println("he");
 
     }
 }
