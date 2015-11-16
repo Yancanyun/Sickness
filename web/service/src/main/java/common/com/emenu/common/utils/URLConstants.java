@@ -50,6 +50,9 @@ public final class URLConstants {
     //餐段管理
     public static final String ADMIN_MEAL_PERIOD_URL = "admin/meal/period";
 
+    //打印机管理
+    public static final String ADMIN_PRINTER_URL = "admin/printer";
+
     //会员基本信息管理
     public static final String ADMIN_PARTY_VIP_VIPINFO_URL = "admin/party/group/vip";
 

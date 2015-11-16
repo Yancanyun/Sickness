@@ -14,6 +14,15 @@
         AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
     </select>
 
+    <select id="listTagById" resultMap="pw.Tag">
+        SELECT `t_tag`.*
+        FROM `t_tag`,`t_dish_tag_printer`
+        WHERE `t_dish_tag_printer`.`printer_id` = #{id}
+        AND `t_dish_tag_printer`.`type` = 1
+        AND `t_dish_tag_printer`.`dish_tag_id` = `t_tag`.`id`
+        ORDER BY `t_tag`.`id`
+    </select>
+
     <insert id="newPrinterDish">
         INSERT INTO `t_dish_tag_printer` (`dish_tag_id`, `printer_id`,`type`)
         VALUES (#{printerDishDto.dishId}, #{printerDishDto.printerId}, #{printerDishDto.type} )
@@ -29,5 +38,11 @@
         DELETE FROM `t_dish_tag_printer`
         WHERE `dish_tag_id` = #{tagId}
     </delete>
+
+    <select id="countByFieldName" resultType="int">
+        SELECT COUNT(0)
+        FROM `t_printer`
+        WHERE `${name}` = #{value}
+    </select>
 
 </mapper>

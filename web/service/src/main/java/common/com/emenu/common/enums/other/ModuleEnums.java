@@ -49,6 +49,12 @@ public enum ModuleEnums {
     AdminBasicInfoIndexImgNew("Admin:BasicInfo:IndexImg:New"),
     AdminBasicInfoIndexImgDel("Admin:BasicInfo:IndexImg:Del"),
     AdminBasicInfoIndexImgUpdate("Admin:BasicInfo:IndexImg:Update"),
+    //打印机管理
+    AdminBasicInfoPrinter("Admin:BasicInfo:Printer"),
+    AdminBasicInfoPrinterList("Admin:BasicInfo:Printer:List"),
+    AdminBasicInfoPrinterNew("Admin:BasicInfo:Printer:New"),
+    AdminBasicInfoPrinterDel("Admin:BasicInfo:Printer:Del"),
+    AdminBasicInfoPrinterUpdate("Admin:BasicInfo:Printer:Update"),
 
 
     //饭店管理
