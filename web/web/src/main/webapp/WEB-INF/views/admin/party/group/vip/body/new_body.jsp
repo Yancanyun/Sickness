@@ -3,6 +3,7 @@
   Time: 2015/11/3 09:54
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row">
   <div class="col-sm-12">
     <ol class="breadcrumb">
@@ -14,6 +15,9 @@
   </div>
   <div class="col-sm-12">
     <form class="form-horizontal J_addForm" action="${website}admin/party/group/vip/new" method="post">
+      <c:if test="{!empty msg}">
+        <div class="alert alert-danger J_tip" role="alert">${msg}</div>
+      </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>添加</h4>

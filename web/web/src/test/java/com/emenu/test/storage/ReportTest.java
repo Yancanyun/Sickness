@@ -85,6 +85,10 @@ public class ReportTest extends AbstractTestCase{
     @Test
     public void newReportAndReportItem() throws SSException{
 
+        List<StorageReportItem> storageReportItemList = new ArrayList();
+
+
+
         StorageReportItem storageReportItem = new StorageReportItem();
 
         storageReportItem.setComment("你好");
@@ -116,10 +120,12 @@ public class ReportTest extends AbstractTestCase{
         storageReport.setMoney(money);
         storageReport.setType(1);
 
+        storageReportItemList.add(storageReportItem);
+
         StorageReportDto storageReportDto = new StorageReportDto();
 
         storageReportDto.setStorageReport(storageReport);
-        storageReportDto.setStorageReportItem(storageReportItem);
+        storageReportDto.setStorageReportItemList(storageReportItemList);
 
         storageReportService.newReportAndReportItem(storageReportDto);
 
@@ -129,6 +135,37 @@ public class ReportTest extends AbstractTestCase{
     public void listReportDto() throws SSException{
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
         StorageReportDtoList = storageReportService.listStorageReportDto();
+
+        for(StorageReportDto storageReportDto : StorageReportDtoList){
+            List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+
+            for (StorageReportItem storageReportItem: storageReportItemList){
+                System.out.println(storageReportItem.getComment());
+            }
+
+        }
+
+    }
+
+    @Test
+    public void listReportDtoUnsettled() throws SSException{
+        List<StorageReportDto> StorageReportDtoList = new ArrayList();
+
+        Date endTime = new Date();
+
+        endTime = DateUtils.getTodayEndTime();
+
+        StorageReportDtoList = storageReportService.ListStorageReportDtoUnsettled(endTime);
+
+        for(StorageReportDto storageReportDto : StorageReportDtoList){
+            List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+
+            for (StorageReportItem storageReportItem: storageReportItemList){
+                System.out.println(storageReportItem.getComment());
+            }
+
+        }
+
     }
 
     @Test
@@ -154,15 +191,25 @@ public class ReportTest extends AbstractTestCase{
         StorageReportDtoList = storageReportService.listStorageReportDtoByCondition(startTime, endTime, "RKD-201511160002", 0, 0, 0, 0, 10);
 
         System.out.println("he");
-
     }
 
     @Test
     public void listStorageReportByCondition1() throws SSException{
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
 
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition1(2,0, 0, 0, 0, 10);
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition1(2, 0, 0, 0, 0, 10);
 
         System.out.println("he");
+    }
+
+    @Test
+    public void updateStorageReport() throws SSException{
+        StorageReport storageReport = storageReportService.queryById(2);
+        storageReport.setComment("hello");
+
+        storageReportService.updateById(storageReport);
+
+        System.out.println(storageReport.getComment());
+
     }
 }

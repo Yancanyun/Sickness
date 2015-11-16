@@ -40,7 +40,18 @@ public interface PrinterMapper {
      * @return
      * @throws Exception
      */
-    public List<Tag> queryTagById(@Param("id") int id) throws Exception;
+    public List<Tag> listTagById(@Param("id") int id) throws Exception;
+
+    /**
+     * 判断某字段中是否存在相同值
+     * 仅支持String类型字段
+     *
+     * @param name
+     * @param value
+     * @return
+     * @throws Exception
+     */
+    public Integer countByFieldName(@Param("name")String name, @Param("value")String value) throws Exception;
 
     /**
      * 新增菜品与打印机关联

@@ -2,6 +2,7 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.pandawork.core.common.exception.SSException;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,8 +13,27 @@ import java.util.List;
  */
 public interface StorageReportItemMapper {
 
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
     public List<StorageReportItem> listAll() throws Exception;
 
-    public StorageReportItem queryByReportId(int reportId) throws Exception;
+    /**
+     *
+     * @param reportId
+     * @return
+     * @throws Exception
+     */
+    public StorageReportItem queryByReportId(@Param("reportId")int reportId) throws Exception;
+
+    /**
+     * 获取所有相同reportId的单据详情
+     * @param reportId
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReportItem> listByReportId(@Param("reportId")int reportId) throws Exception;
 
 }

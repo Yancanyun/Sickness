@@ -9,8 +9,11 @@
         </select>
 
         <select id="queryByReportId" parameterType="int" resultMap="pw.StorageReportItem">
-                SELECT * from t_storage_report_item WHERE report_id = #{reportId}
+                SELECT * from t_storage_report_item WHERE `report_id` = #{reportId}
         </select>
 
+        <select id="listByReportId" parameterType="int" resultMap="pw.StorageReportItem">
+                SELECT * from t_storage_report_item WHERE `report_id` = #{reportId}
+        </select>
 
 </mapper>

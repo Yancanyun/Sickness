@@ -1,6 +1,7 @@
 package com.emenu.test.printer;
 
 import com.emenu.common.dto.printer.PrinterDishDto;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.test.AbstractTestCase;
@@ -55,5 +56,44 @@ public class PrinterServiceTest extends AbstractTestCase{
     @Test
     public void delPrinterdish() throws SSException {
         printerService.delPrinterDish(24);
+    }
+
+    @Test
+    public void newPrinter() throws SSException{
+        Printer printer = new Printer();
+        printer.setName("分类打印机1");
+        printer.setState(1);
+        printer.setBrand(1);
+        printer.setDeviceNumber("1");
+        printer.setIpAddress("192.168.1.4");
+        printer.setPrinterModel(1);
+        printer.setType(1);
+        printer.setIsCashierPrinter(0);
+        printerService.newPrinter(printer);
+    }
+
+    @Test
+    public void updatePrinter() throws SSException{
+        Printer printer = new Printer();
+        printer.setId(1);
+        printerService.updatePrinter(printer);
+    }
+
+    @Test
+    public void delById() throws SSException{
+        printerService.delById(4);
+    }
+
+    @Test
+    public void queryById() throws SSException{
+        System.out.println(printerService.queryById(1));
+    }
+
+    @Test
+    public void listTagById() throws SSException{
+        List<Tag> list = printerService.listTagById(3);
+        for (Tag tag : list){
+            System.out.println(tag);
+        }
     }
 }

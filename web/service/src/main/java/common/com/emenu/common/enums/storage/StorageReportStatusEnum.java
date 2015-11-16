@@ -4,37 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ReportStatusEnum
+ * StorageReportStatusEnum
  * 单据结算状态
  * @author dujuan
  * @date 2015/11/15
  */
-public enum ReportStatusEnum {
+public enum StorageReportStatusEnum {
     NotSettled(0 , "未结算"),
     Settled(1 , "已结算");
 
     private Integer id;
     private String name;
 
-    ReportStatusEnum(Integer id, String name){
+    StorageReportStatusEnum(Integer id, String name){
         this.id = id;
         this.name = name;
     }
 
-    private static Map<Integer, ReportStatusEnum> map = new HashMap<Integer, ReportStatusEnum>();
+    private static Map<Integer, StorageReportStatusEnum> map = new HashMap<Integer, StorageReportStatusEnum>();
 
     static {
-        for(ReportStatusEnum reportStatusEnum : ReportStatusEnum.values()) {
+        for(StorageReportStatusEnum reportStatusEnum : StorageReportStatusEnum.values()) {
             map.put(reportStatusEnum.getId(), reportStatusEnum);
         }
     }
 
-    public static ReportStatusEnum valueOf(int id) {
+    public static StorageReportStatusEnum valueOf(int id) {
         return valueOf(id, null);
     }
 
-    public static ReportStatusEnum valueOf(int id, ReportStatusEnum defaultValue) {
-        ReportStatusEnum reportStatusEnum = map.get(id);
+    public static StorageReportStatusEnum valueOf(int id, StorageReportStatusEnum defaultValue) {
+        StorageReportStatusEnum reportStatusEnum = map.get(id);
         return reportStatusEnum == null ? defaultValue : reportStatusEnum;
     }
 

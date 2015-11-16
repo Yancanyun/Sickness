@@ -22,9 +22,21 @@ public enum ConstantEnum {
     TakeoutEndTime("takeoutEndTime","外卖结束时间"),
     /*************************外卖相关参数*********************************/
 	ImgPath("imgPath","图片路径"),
-	Integral_Rule_Complete_Info("INTEGR_RULE_COMPLETE_INFO", "完善会员信息所得积分"),
-	;
-	
+
+
+	/*************************会员多倍积分相关参数**************************/
+    VipIntegralRuleCashToIntegral("CASH_TO_INTEGRAL","现金兑换积分"),
+    VipIntegralRuleCardToIntegral("CARD_TO_INTEGRAL","刷卡兑换积分"),
+    VipIntegralRuleOnlineToIntegral("ONLINE_TO_INTEGRAL","在线支付兑换积分"),
+    VipIntegralRuleIntegralToMoney("INTEGRAL_TO_MONEY","积分兑换现金"),
+    VipIntegralRuleCompleteInfoIntegral("COMPLETE_INFO_INTEGRAL","完善信息赠送积分"),
+    VipIntegralRuleMeansOfStartIntegral("MEANS_OF_START_INTEGRAL","启动多倍积分方式"),
+
+    /**************************会员等级相关参数*****************************/
+    VipGradeVipAutoUpgradeState("VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级")
+    ;
+
+
     private String key;
     private String description;
 

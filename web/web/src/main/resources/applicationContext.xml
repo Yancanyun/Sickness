@@ -41,6 +41,6 @@
     <import resource="database-config.xml" />
     <import resource="mvc-config.xml" />
     <import resource="shiro-web.xml" />
-    <import resource="spring-quartz.xml" />
+    <!--<import resource="spring-quartz.xml" />-->
 
 </beans>

@@ -8,8 +8,14 @@ import java.math.BigDecimal;
  */
 public class DishPriceDto {
 
+    //会员价id
+    private Integer id;
+
     //商品编号
     private String number;
+
+    //菜品id
+    private Integer dishId;
 
     //商品名称
     private String dishName;
@@ -25,12 +31,29 @@ public class DishPriceDto {
 
 
     //get、set方法
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getNumber() {
         return number;
     }
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public Integer getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(Integer dishId) {
+        this.dishId = dishId;
     }
 
     public String getDishName() {

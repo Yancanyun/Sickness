@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public enum PrinterDishEnum {
 
-    TagPrinter(0, "菜品分类"),
-    DishPrinter(1, "具体菜品");
+    TagPrinter(1, "菜品分类"),
+    DishPrinter(2, "具体菜品");
 
     private Integer id;
     private String name;

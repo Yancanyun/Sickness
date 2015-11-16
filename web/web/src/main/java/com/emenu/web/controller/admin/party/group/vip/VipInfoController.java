@@ -8,7 +8,6 @@ import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
-import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -16,6 +15,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -108,16 +108,20 @@ public class VipInfoController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
-    public String newVipInfo(VipInfo vipInfo){
+    public String newVipInfo(VipInfo vipInfo,
+                             RedirectAttributes redirectAttributes){
         try{
             int userPartyId = getPartyId();
             vipInfoService.newVipInfo(userPartyId,vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            redirectAttributes.addFlashAttribute("msg", "保存失败！");
+            return "admin/party/group/vip/vip_info_new";
         }
-        return "redirect:list";
+        redirectAttributes.addFlashAttribute("msg", "保存成功！");
+        String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
+        return "redirect:" + redirectUrl;
     }
 
     /**
@@ -142,6 +146,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
+
         return "admin/party/group/vip/vip_info_update";
     }
 
@@ -158,7 +163,8 @@ public class VipInfoController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public String updateVipInfo(VipInfo vipInfo){
+    public String updateVipInfo(VipInfo vipInfo,
+                                RedirectAttributes redirectAttributes){
         try{
             vipInfoService.updateVipInfo(vipInfo);
         } catch (SSException e) {
@@ -166,7 +172,9 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "redirect:list";
+        redirectAttributes.addFlashAttribute("msg", "保存成功！");
+        String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
+        return "redirect:" + redirectUrl;
     }
 
     /**
@@ -256,6 +264,5 @@ public class VipInfoController extends AbstractController {
         }
         return "admin/party/group/vip/vip_info_detail";
     }
-
 
 }

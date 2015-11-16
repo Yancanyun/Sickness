@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * TagFacadeServiceImpl
- *
+ * 分类对外提供的方法
  * @author dujuan
  * @date 2015/11/2
  */

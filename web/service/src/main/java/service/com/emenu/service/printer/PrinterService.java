@@ -72,7 +72,7 @@ public interface PrinterService {
      * @return
      * @throws SSException
      */
-    public List<Tag> queryTagById(int id) throws SSException;
+    public List<Tag> listTagById(int id) throws SSException;
 
     /**
      * 新增菜品与打印机关联
