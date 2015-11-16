@@ -3,6 +3,7 @@
   Time: 2015/11/3 09:54
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="row">
   <div class="col-sm-12">
     <ol class="breadcrumb">
@@ -13,6 +14,9 @@
     <h2>会员管理-会员列表</h2>
   </div>
   <div class="col-sm-12">
+    <c:if test="${!empty msg}">
+      <div class="alert alert-success J_tip" role="alert">${msg}</div>
+    </c:if>
     <!-- 查询表单 start-->
     <div class="panel panel-info">
       <div class="panel-heading">
