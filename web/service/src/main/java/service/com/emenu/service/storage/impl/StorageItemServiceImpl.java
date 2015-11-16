@@ -2,6 +2,7 @@ package com.emenu.service.storage.impl;
 
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.storage.StorageItemStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.storage.StorageItemMapper;
 import com.emenu.service.storage.StorageItemService;
@@ -113,7 +114,7 @@ public class StorageItemServiceImpl implements StorageItemService {
         try {
             // TODO: 2015/11/12 查询是否有成本卡使用物品
 
-            commonDao.deleteById(StorageItem.class, id);
+            storageItemMapper.updateStatusById(id, StorageItemStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageTagDeleteFailed, e);

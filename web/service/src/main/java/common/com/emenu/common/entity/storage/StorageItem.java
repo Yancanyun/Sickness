@@ -39,6 +39,9 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "assistant_code")
     private String assistantCode;
 
+    // 状态(1-正常使用,2-已删除)
+    private Integer status;
+
     // 订货单位
     @Column(name = "order_unit_id")
     private Integer orderUnitId;
@@ -150,6 +153,14 @@ public class StorageItem extends AbstractEntity {
 
     public void setAssistantCode(String assistantCode) {
         this.assistantCode = assistantCode;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getOrderUnitId() {

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName" default-lazy-init="false">
+
+    <!-- 定时任务 start -->
+    <!--<bean id="countTimeTask" class="com.rest.service.timetask.CountTimeTaskService"/>-->
+
+    <!--<bean id="statisticsTask" class="com.rest.service.timetask.StatisticsTaskService"/>-->
+
+    <!--&lt;!&ndash; 定时月销量统计 &ndash;&gt;-->
+    <!--<bean id="countTotalSales" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="countTimeTask"/>-->
+        <!--<property name="targetMethod" value="countMonthSales"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="cronTriggerCountTotalSales" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="countTotalSales"/>-->
+        <!--&lt;!&ndash; 测试用的时间，以后要改 每天早晨10点更新月销量&ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 0 10 * * ?"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash; 定时检查预警 &ndash;&gt;-->
+    <!--<bean id="checkAlert" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="countTimeTask"/>-->
+        <!--<property name="targetMethod" value="checkAlert"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+    <!--<bean id="cronTriggerCheckAlert" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="checkAlert"/>-->
+        <!--&lt;!&ndash; 每天下午4点检查预警&ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 0 16 * * ?"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;定时统计每天早晨3点对菜品销量统计&ndash;&gt;-->
+    <!--<bean id="countDishSales" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="statisticsTask"/>-->
+        <!--<property name="targetMethod" value="insertToDishMarketing"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="cronTriggerCountDishSales" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="countDishSales"/>-->
+        <!--<property name="cronExpression" value="0 0 3 * * ?"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;定时统计每天餐桌用量&ndash;&gt;-->
+    <!--<bean id="countTableUse" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="statisticsTask"/>-->
+        <!--<property name="targetMethod" value="insertToTableUse"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="cronTriggerCountTableUse" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="countTableUse"/>-->
+        <!--<property name="cronExpression" value="0 0 2 * * ?"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;定时调用存储过程&ndash;&gt;-->
+    <!--<bean id="updateDay" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="statisticsTask"/>-->
+        <!--<property name="targetMethod" value="updateDay"/>-->
+        <!--<property name="concurrent" value="false"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="cronTriggerUpdateDay" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="updateDay"/>-->
+        <!--<property name="cronExpression" value="0 0 23 * * ?"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="updateYesterDayFinanceList" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="statisticsTask" />-->
+        <!--<property name="targetMethod" value="updateYesterDayFinanceList" />-->
+        <!--<property name="concurrent" value="false" />-->
+    <!--</bean>-->
+    <!--<bean id="cronTriggerUpdateYesterDayFinanceList" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="updateYesterDayFinanceList" />-->
+        <!--<property name="cronExpression" value="0 0 2 * * ?" />-->
+     <!--</bean>-->
+
+    <!--&lt;!&ndash; 定时器队列 &ndash;&gt;-->
+    <!--<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--<ref bean="cronTriggerCountTotalSales"/>-->
+                <!--<ref bean="cronTriggerCheckAlert"/>-->
+                <!--<ref bean="cronTriggerCountDishSales"/>-->
+                <!--<ref bean="cronTriggerCountTableUse"/>-->
+                <!--<ref bean="cronTriggerUpdateDay"/>-->
+                <!--<ref bean="cronTriggerUpdateYesterDayFinanceList" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+    <!-- 定时任务 end -->
+</beans>

@@ -52,4 +52,14 @@ public interface StorageItemMapper {
      * @throws Exception
      */
     public int countByTagId(@Param("tagId") int tagId) throws Exception;
+
+    /**
+     * 根据ID修改状态
+     *
+     * @param id
+     * @param status
+     * @throws Exception
+     */
+    public void updateStatusById(@Param("id") int id,
+                                 @Param("status") int status) throws Exception;
 }

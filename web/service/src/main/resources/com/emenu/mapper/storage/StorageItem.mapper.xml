@@ -31,8 +31,8 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
-        <if test="searchDto != null">
-            <where>
+        <where>
+            <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != ''">
                     storageItem.`name` LIKE '%#{searchDto.keyword}%'
                     OR storageItem.`item_number` LIKE '%#{searchDto.keyword}%'
@@ -47,8 +47,9 @@
                         #{tagId}
                     </foreach>
                 </if>
-            </where>
-        </if>
+                AND `status` != 2
+            </if>
+        </where>
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
         LIMIT #{offset}, #{pageSize}
     </select>
@@ -59,8 +60,8 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
-        <if test="searchDto != null">
-            <where>
+        <where>
+            <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != ''">
                     storageItem.`name` LIKE '%#{searchDto.keyword}%'
                     OR storageItem.`item_number` LIKE '%#{searchDto.keyword}%'
@@ -75,8 +76,9 @@
                         #{tagId}
                     </foreach>
                 </if>
-            </where>
-        </if>
+                AND `status` != 2
+            </if>
+        </where>
     </select>
 
     <select id="listAll" resultMap="pw.StorageItem">
@@ -106,6 +108,7 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
+        WHERE `status` != 2
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
     </select>
 
@@ -114,5 +117,12 @@
             COUNT(1)
         FROM `t_storage_item`
         WHERE `tag_id` = #{tagId}
+              AND `status` != 2
     </select>
+
+    <update id="updateStatusById">
+        UPDATE `t_storage_item`
+            SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
 </mapper>
