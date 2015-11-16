@@ -47,11 +47,11 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
     StorageItemIdNotNull("物品的ID不能为空", 1030),
 
-    //库存结算
-    InsertStorageSettlementItemFailed("库存结算保存失败", 1050),
+    // 库存结算
+    InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
 
-    //菜品管理模块
-    //分类管理
+    // 菜品管理模块
+    // 分类管理
     NewTagFailed("添加分类失败", 3001),
     TagIdError("分类的ID为空或者小于0", 3002),
     UpdateTagFailed("修改分类失败", 3003),
@@ -63,9 +63,9 @@ public enum EmenuException implements IBizExceptionMes {
     TagTypeError("分类的type为空或者小于0或者不存在", 3009),
     TagChildrenIsNull("该分类下还有子分类，不能删除！", 3010),
     TagFiledIsNull("分类的更新域为空", 3011),
-    TagChildrenIsError("分类的存在子节点，不能删除", 3010),
+    TagChildrenIsError("分类的存在子节点，不能删除", 3012),
 
-    //单位管理
+    // 单位管理
     ListUnitFailed("单位列表查询失败", 3020),
     NewUnitFailed("添加单位失败", 3021),
     QueryUnitFailed("查询单位失败", 3022),
@@ -174,7 +174,7 @@ public enum EmenuException implements IBizExceptionMes {
     EmployeeNameNotNull("员工姓名不能为空",6011),
     EmployeeNumberNotNull("员工编号不能为空",6012),
 
-    //库存管理
+    // 库存管理
     InsertReportFail("添加单据失败",7001),
     NewSerialNumberFali("生成单据编号失败",7002),
     ReportIsNotNull("单据不能为空",7003),
@@ -196,7 +196,7 @@ public enum EmenuException implements IBizExceptionMes {
     ListStorageReportItemFail("获取单据详情信息l列表失败",7019),
     QueryStorageReportItemFail("获取单据详情信息失败",7020),
 
-    //存放点管理
+    // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7021),
     ListDepotFailed("获取全部存放点列表失败", 7022),
     NewDepotFailed("增加存放点失败",7023),
