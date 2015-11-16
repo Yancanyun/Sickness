@@ -21,9 +21,9 @@ public enum ConstantEnum {
     TakeoutStartTime("takeoutStartTime","外卖开始时间"),
     TakeoutEndTime("takeoutEndTime","外卖结束时间"),
     /*************************外卖相关参数*********************************/
-	ImgPath("imgPath","图片路径");
-	
-	
+	ImgPath("imgPath","图片路径"),
+	Integral_Rule_Complete_Info("INTEGR_RULE_COMPLETE_INFO", "完善会员信息所得积分"),
+	;
 	
     private String key;
     private String description;

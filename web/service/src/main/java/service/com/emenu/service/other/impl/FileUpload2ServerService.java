@@ -72,7 +72,8 @@ public class FileUpload2ServerService implements FileUploadService {
         if (!tmpPath.endsWith("/")) {
             tmpPath += "/";
         }
-        if (!Assert.isNull(extendPath)) {
+        if (!Assert.isNull(extendPath)
+                && extendPath.length != 0) {
             if (extendPath[0].startsWith("/")) {
                 tmpPath += extendPath[0].substring(1);
             } else {

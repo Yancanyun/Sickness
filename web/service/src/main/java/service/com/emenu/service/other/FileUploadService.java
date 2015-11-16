@@ -15,10 +15,11 @@ public interface FileUploadService {
     /**
      * 上传文件
      *
-     * @param file      待上传的文件
-     * @param pathEnums 上传文件存放的路径
-     * @param extendPath
-     * @return          文件上传完之后的路径
+     * @param file          待上传的文件
+     * @param pathEnums     上传文件存放的路径
+     * @param extendPath    额外的上传路径
+     *                      最后的上传路径=FileUploadPathEnums.path + extendPath
+     * @return              文件上传完之后的路径
      * @throws SSException
      */
     public String uploadFile(PandaworkMultipartFile file,
