@@ -238,4 +238,42 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
     }
 
+    @Override
+    public List<StorageReportDto> listStorageReportDtoByCondition1(int id,
+                                                                     int depotId,
+                                                                     int handlerPartyId,
+                                                                     int createdPartyId,
+                                                                     int page,
+                                                                     int pageSize) throws SSException {
+        int offset = page * pageSize;
+        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReport> storageReportList = Collections.emptyList();
+
+        try {
+            if(Assert.lessZero(offset)){
+                return storageReportDtoList;
+            }
+            storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
+
+            for (StorageReport storageReport : storageReportList) {
+                StorageReportDto storageReportDto = new StorageReportDto();
+                StorageReportItem storageReportItem = new StorageReportItem();
+                //根据单据id获取单据详情信息
+                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItem(storageReportItem);
+
+                storageReportDtoList.add(storageReportDto);
+            }
+
+            return storageReportDtoList;
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageReportFail, e);
+        }
+    }
+
 }

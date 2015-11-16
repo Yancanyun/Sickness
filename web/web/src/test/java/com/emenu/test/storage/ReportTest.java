@@ -156,4 +156,13 @@ public class ReportTest extends AbstractTestCase{
         System.out.println("he");
 
     }
+
+    @Test
+    public void listStorageReportByCondition1() throws SSException{
+        List<StorageReportDto> StorageReportDtoList = new ArrayList();
+
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition1(2,0, 0, 0, 0, 10);
+
+        System.out.println("he");
+    }
 }

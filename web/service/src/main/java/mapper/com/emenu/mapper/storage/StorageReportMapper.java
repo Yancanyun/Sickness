@@ -39,4 +39,11 @@ public interface StorageReportMapper {
                                                             @Param("createdPartyId")int createdPartyId,
                                                             @Param("offset")int offset,
                                                             @Param("pageSize")int pageSize) throws Exception;
+
+    public List<StorageReport> listStorageReportByCondition1(@Param("id")int id,
+                                                             @Param("depotId")int depotId,
+                                                             @Param("handlerPartyId")int handlerPartyId,
+                                                             @Param("createdPartyId")int createdPartyId,
+                                                             @Param("offset")int offset,
+                                                             @Param("pageSize")int pageSize) throws Exception;
 }

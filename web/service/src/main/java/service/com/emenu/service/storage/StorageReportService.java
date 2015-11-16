@@ -67,6 +67,25 @@ public interface StorageReportService {
                                                                   int depotId,
                                                                   int handlerPartyId,
                                                                   int createdPartyId,
-                                                                  int page,int pageSize) throws SSException;
+                                                                  int page,
+                                                                  int pageSize) throws SSException;
+
+    /**
+     * 根据经手人id、操作人id、单据id分页单据详情获取单据和单据详情
+     * @param id
+     * @param depotId
+     * @param handlerPartyId
+     * @param createdPartyId
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listStorageReportDtoByCondition1(int id,
+                                                                     int depotId,
+                                                                     int handlerPartyId,
+                                                                     int createdPartyId,
+                                                                     int page,
+                                                                     int pageSize) throws SSException;
 
 }
