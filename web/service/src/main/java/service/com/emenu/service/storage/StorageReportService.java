@@ -4,6 +4,7 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,5 +53,20 @@ public interface StorageReportService {
      * @throws SSException
      */
     public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException;
+
+    /**
+     * 时间、存放点、经手人、操作人分页单据详情获取单据和单据详情
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listStorageReportDtoByCondition(Date startTime,
+                                                                  Date endTime,
+                                                                  String serialNumber,
+                                                                  int depotId,
+                                                                  int handlerPartyId,
+                                                                  int createdPartyId,
+                                                                  int page,int pageSize) throws SSException;
 
 }

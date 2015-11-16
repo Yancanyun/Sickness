@@ -3,6 +3,8 @@ package com.emenu.mapper.storage;
 import com.emenu.common.entity.storage.StorageReport;
 import org.apache.ibatis.annotations.Param;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,4 +31,12 @@ public interface StorageReportMapper {
      */
     public List<StorageReport> listByPage(@Param("offset")int offset,@Param("pageSize")int pageSize ) throws Exception;
 
+    public List<StorageReport> listStorageReportByCondition(@Param("startTime")Date startTime,
+                                                            @Param("endTime")Date endTime,
+                                                            @Param("serialNumber")String serialNumber,
+                                                            @Param("depotId")int depotId,
+                                                            @Param("handlerPartyId")int handlerPartyId,
+                                                            @Param("createdPartyId")int createdPartyId,
+                                                            @Param("offset")int offset,
+                                                            @Param("pageSize")int pageSize) throws Exception;
 }

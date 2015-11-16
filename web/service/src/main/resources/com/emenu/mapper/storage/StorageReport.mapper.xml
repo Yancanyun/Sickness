@@ -4,14 +4,41 @@
 
 <mapper namespace="com.emenu.mapper.storage.StorageReportMapper">
 
-        <select id="listAll" resultMap="pw.StorageReport">
-                SELECT * from t_storage_report ORDER BY `created_time` DESC
-        </select>
+    <select id="listAll" resultMap="pw.StorageReport">
+            SELECT * from t_storage_report ORDER BY `created_time` DESC
+    </select>
 
-        <select id="listByPage" resultMap="pw.StorageReport">
-                 SELECT * from t_storage_report
-                 ORDER BY `created_time` DESC
-                 LIMIT #{offset}, #{pageSize}
-        </select>
+    <select id="listByPage" resultMap="pw.StorageReport">
+            SELECT * from t_storage_report
+            ORDER BY `created_time` DESC
+            LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="listStorageReportByCondition" resultMap="pw.StorageReport">
+        SELECT * from t_storage_report
+        <where>
+            <if test="startTime != null">
+                `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+            <if test="serialNumber != null">
+                AND `serial_number` = #{serialNumber}
+            </if>
+            <if test="createdPartyId>0">
+                AND `created_party_id` = #{createdPartyId}
+            </if>
+            <if test="depotId>0">
+                AND `depot_id` =#{depotId}
+            </if>
+            <if test="handlerPartyId>0">
+                AND `handler_party_id` = #{handlerPartyId}
+            </if>
+        </where>
+        ORDER BY `created_time` DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
 
 </mapper>

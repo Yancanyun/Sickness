@@ -4,6 +4,8 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.CommonUtil;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.mapper.storage.StorageReportMapper;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -179,6 +182,59 @@ public class StorageReportServiceImpl implements StorageReportService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listStorageReportDtoByCondition(Date startTime,
+                                                                  Date endTime,
+                                                                  String serialNumber,
+                                                                  int depotId,
+                                                                  int handlerPartyId,
+                                                                  int createdPartyId,
+                                                                  int page,
+                                                                  int pageSize) throws SSException {
+
+        int offset = page * pageSize;
+
+        if (startTime == null && endTime == null) {
+            startTime = DateUtils.getTodayStartTime();
+            endTime = DateUtils.getTodayEndTime();
+        }
+
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
+
+        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReport> storageReportList = Collections.emptyList();
+
+        try {
+            if (Assert.lessOrEqualZero(offset)){
+                return storageReportDtoList;
+            }
+            storageReportList = storageReportMapper.listStorageReportByCondition(startTime,endTime,serialNumber,depotId,handlerPartyId,createdPartyId,offset,pageSize);
+
+            for (StorageReport storageReport : storageReportList) {
+                StorageReportDto storageReportDto = new StorageReportDto();
+                StorageReportItem storageReportItem = new StorageReportItem();
+                //根据单据id获取单据详情信息
+                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItem(storageReportItem);
+
+                storageReportDtoList.add(storageReportDto);
+            }
+
+            return storageReportDtoList;
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageReportFail, e);
         }
     }
 

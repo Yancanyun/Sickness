@@ -3,6 +3,7 @@ package com.emenu.test.storage;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -130,7 +132,22 @@ public class ReportTest extends AbstractTestCase{
 
 
 
-        StorageReportDtoList = storageReportService.listStorageReportDtoByPage(2,10);
+        StorageReportDtoList = storageReportService.listStorageReportDtoByPage(2, 10);
+
+    }
+
+    @Test
+    public void listReportDtoByCondition() throws SSException{
+        List<StorageReportDto> StorageReportDtoList = new ArrayList();
+
+        Date startTime = new Date();
+        Date endTime = new Date();
+
+        startTime = DateUtils.getTodayStartTime();
+        endTime = DateUtils.getTodayEndTime();
+
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition(startTime,endTime,"abc-20111015-001",1,1,1,1,10);
+
 
     }
 }
