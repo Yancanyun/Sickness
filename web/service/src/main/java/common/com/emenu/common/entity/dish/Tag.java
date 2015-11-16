@@ -1,4 +1,4 @@
-package com.emenu.common.entity.dish.tag;
+package com.emenu.common.entity.dish;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
@@ -6,9 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Tag

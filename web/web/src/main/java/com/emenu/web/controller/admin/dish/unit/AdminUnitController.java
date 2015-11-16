@@ -3,7 +3,7 @@ package com.emenu.web.controller.admin.dish.unit;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.dish.unit.Unit;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;

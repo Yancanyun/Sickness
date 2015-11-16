@@ -1,8 +1,8 @@
-package com.emenu.service.dish.unit.impl;
-import com.emenu.common.entity.dish.unit.Unit;
+package com.emenu.service.dish.impl;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.mapper.dish.unit.UnitMapper;
-import com.emenu.service.dish.unit.UnitService;
+import com.emenu.mapper.dish.UnitMapper;
+import com.emenu.service.dish.UnitService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;

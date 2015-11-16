@@ -1,6 +1,6 @@
-package com.emenu.mapper.dish.unit;
+package com.emenu.mapper.dish;
 
-import com.emenu.common.entity.dish.unit.Unit;
+import com.emenu.common.entity.dish.Unit;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 

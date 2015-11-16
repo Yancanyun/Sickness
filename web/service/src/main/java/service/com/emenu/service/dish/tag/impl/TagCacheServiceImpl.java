@@ -2,9 +2,9 @@ package com.emenu.service.dish.tag.impl;
 
 import com.emenu.common.dto.dish.tag.TagChildDto;
 import com.emenu.common.dto.dish.tag.TagDto;
-import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.mapper.dish.tag.TagMapper;
+import com.emenu.mapper.dish.TagMapper;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.Assert;

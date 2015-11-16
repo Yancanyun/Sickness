@@ -1,7 +1,7 @@
 package com.emenu.service.printer;
 
 import com.emenu.common.dto.printer.PrinterDishDto;
-import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.pandawork.core.common.exception.SSException;
 

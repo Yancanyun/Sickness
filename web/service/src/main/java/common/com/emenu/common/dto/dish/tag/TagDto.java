@@ -1,6 +1,6 @@
 package com.emenu.common.dto.dish.tag;
 
-import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.entity.dish.Tag;
 
 import java.util.ArrayList;
 import java.util.List;

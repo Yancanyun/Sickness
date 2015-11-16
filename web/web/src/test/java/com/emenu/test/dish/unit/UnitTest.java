@@ -1,7 +1,7 @@
 package com.emenu.test.dish.unit;
 
-import com.emenu.common.entity.dish.unit.Unit;
-import com.emenu.service.dish.unit.UnitService;
+import com.emenu.common.entity.dish.Unit;
+import com.emenu.service.dish.UnitService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;

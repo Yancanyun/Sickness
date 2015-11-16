@@ -1,6 +1,6 @@
 package com.emenu.test.dish.tag;
 
-import com.emenu.common.entity.dish.tag.Tag;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.service.dish.tag.TagService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;

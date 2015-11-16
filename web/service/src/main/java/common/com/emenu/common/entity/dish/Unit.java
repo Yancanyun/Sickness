@@ -1,4 +1,4 @@
-package com.emenu.common.entity.dish.unit;
+package com.emenu.common.entity.dish;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
