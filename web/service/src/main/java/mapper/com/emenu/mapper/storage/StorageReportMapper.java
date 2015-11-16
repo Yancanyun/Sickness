@@ -81,5 +81,5 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReportDto> ListStorageReportDtoUnsettled(@Param("endTime")Date endTime) throws Exception;
+    public List<StorageReport> ListStorageReportUnsettled(@Param("endTime")Date endTime) throws Exception;
 }

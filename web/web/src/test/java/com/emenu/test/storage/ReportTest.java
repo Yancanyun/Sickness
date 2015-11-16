@@ -148,6 +148,27 @@ public class ReportTest extends AbstractTestCase{
     }
 
     @Test
+    public void listReportDtoUnsettled() throws SSException{
+        List<StorageReportDto> StorageReportDtoList = new ArrayList();
+
+        Date endTime = new Date();
+
+        endTime = DateUtils.getTodayEndTime();
+
+        StorageReportDtoList = storageReportService.ListStorageReportDtoUnsettled(endTime);
+
+        for(StorageReportDto storageReportDto : StorageReportDtoList){
+            List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+
+            for (StorageReportItem storageReportItem: storageReportItemList){
+                System.out.println(storageReportItem.getComment());
+            }
+
+        }
+
+    }
+
+    @Test
     public void listReportDtoByPage() throws SSException{
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
 
@@ -170,7 +191,6 @@ public class ReportTest extends AbstractTestCase{
         StorageReportDtoList = storageReportService.listStorageReportDtoByCondition(startTime, endTime, "RKD-201511160002", 0, 0, 0, 0, 10);
 
         System.out.println("he");
-
     }
 
     @Test

@@ -158,10 +158,31 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     public List<StorageReportDto> ListStorageReportDtoUnsettled(Date endTime) throws SSException {
-        List<StorageReportDto> storageReportList = Collections.emptyList();
+        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReport> storageReportList = Collections.emptyList();
         try {
-            storageReportList = storageReportMapper.ListStorageReportDtoUnsettled(endTime);
-            return storageReportList;
+            //获取所有单据信息
+            storageReportList = storageReportMapper.ListStorageReportUnsettled(endTime);
+
+            if (Assert.isNull(storageReportList)){
+                return storageReportDtoList;
+            }
+
+            for (StorageReport storageReport : storageReportList){
+                StorageReportDto storageReportDto = new StorageReportDto();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
+
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
+
+                storageReportDtoList.add(storageReportDto);
+            }
+
+            return storageReportDtoList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListStorageReportFail, e);
