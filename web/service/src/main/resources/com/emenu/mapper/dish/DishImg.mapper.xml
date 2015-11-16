@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.dish.DishImgMapper">
+
+    <select id="listByDishIdAndType" resultMap="pw.DishImg">
+        SELECT
+            `id` AS id,
+            `dish_id` AS dishId,
+            `img_type` AS imgType,
+            `imgPath` AS imgPath,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+        FROM `t_dish_img`
+        WHERE `dish_id` = #{dishId}
+              AND `img_type` = #{type}
+    </select>
+
+    <delete id="delByDishIdAndType">
+        DELETE FROM `t_dish_img`
+        WHERE `dish_id` = #{dishId}
+              AND `img_type` = #{type}
+    </delete>
+</mapper>

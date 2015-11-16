@@ -39,7 +39,7 @@ public class FileUpload2ServerService implements FileUploadService {
     public static final String UPLOAD_URL = "/up/upload/cp";
 
     @Override
-    public String uploadFile(PandaworkMultipartFile file, FileUploadPathEnums pathEnums, int width, int height) throws SSException {
+    public String uploadFile(PandaworkMultipartFile file, FileUploadPathEnums pathEnums, int width, int height, String... extendPath) throws SSException {
         // 非空检查
         Assert.isNotNull(file, EmenuException.UploadFileNotNull);
         Assert.isNotNull(pathEnums, EmenuException.UploadPathNotNull);
@@ -65,7 +65,24 @@ public class FileUpload2ServerService implements FileUploadService {
             }
         }
 
-        String path = pathEnums.getPath() + fileName;
+        String tmpPath = pathEnums.getPath();
+        if (!tmpPath.startsWith("/")) {
+            tmpPath = "/" + tmpPath;
+        }
+        if (!tmpPath.endsWith("/")) {
+            tmpPath += "/";
+        }
+        if (!Assert.isNull(extendPath)) {
+            if (extendPath[0].startsWith("/")) {
+                tmpPath += extendPath[0].substring(1);
+            } else {
+                tmpPath += extendPath[0];
+            }
+        }
+        if (!tmpPath.endsWith("/")) {
+            tmpPath += "/";
+        }
+        String path = tmpPath + fileName;
         try {
             this.upload2Server(srcFile, path);
         } catch (Exception e) {
@@ -76,8 +93,8 @@ public class FileUpload2ServerService implements FileUploadService {
     }
 
     @Override
-    public String uploadFile(PandaworkMultipartFile file, FileUploadPathEnums pathEnums) throws SSException {
-        return this.uploadFile(file, pathEnums, 0, 0);
+    public String uploadFile(PandaworkMultipartFile file, FileUploadPathEnums pathEnums, String... extendPath) throws SSException {
+        return this.uploadFile(file, pathEnums, 0, 0, extendPath);
     }
 
     private void upload2Server(File file,

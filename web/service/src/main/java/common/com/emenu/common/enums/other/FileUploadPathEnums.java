@@ -12,6 +12,7 @@ package com.emenu.common.enums.other;
 public enum FileUploadPathEnums {
 
     IndexImgPath("/index/", "首页图片存放目录"),
+    DishImgPath("/dish/", "菜品图片存放目录"),
 
     ;
 

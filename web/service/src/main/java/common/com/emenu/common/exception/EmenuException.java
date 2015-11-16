@@ -50,8 +50,8 @@ public enum EmenuException implements IBizExceptionMes {
     // 库存结算
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
 
-    // 菜品管理模块
-    // 分类管理
+    //菜品管理模块
+    //分类管理
     NewTagFailed("添加分类失败", 3001),
     TagIdError("分类的ID为空或者小于0", 3002),
     UpdateTagFailed("修改分类失败", 3003),
@@ -75,6 +75,16 @@ public enum EmenuException implements IBizExceptionMes {
     UnitNameError("单位名称为空", 3026),
     UnitTypeError("单位类型为空或者小于0", 3027),
     UnitNameIsExist("单位名称已存在", 3028),
+
+    // 菜品图片
+    DishImgQueryFailed("查询菜品图片失败", 1031),
+    DishImgInsertFailed("添加菜品图片失败", 1032),
+    DishImgDeleteFailed("删除菜品图片失败", 1033),
+    DishImgTypeIllegal("菜品图片类型不合法", 1034),
+    DishImgNotNull("菜品图片不能为空", 1035),
+
+    // 菜品
+    DishIdNotNull("菜品ID不能为空", 1035),
 
     //饭店管理
     //餐台区域

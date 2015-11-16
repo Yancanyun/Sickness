@@ -17,11 +17,13 @@ public interface FileUploadService {
      *
      * @param file      待上传的文件
      * @param pathEnums 上传文件存放的路径
+     * @param extendPath
      * @return          文件上传完之后的路径
      * @throws SSException
      */
     public String uploadFile(PandaworkMultipartFile file,
-                             FileUploadPathEnums pathEnums) throws SSException;
+                             FileUploadPathEnums pathEnums,
+                             String... extendPath) throws SSException;
 
     /**
      * 上传文件
@@ -30,11 +32,13 @@ public interface FileUploadService {
      * @param pathEnums 上传文件存放的路径
      * @param width     压缩之后的宽度
      * @param height    压缩之后的高度
+     * @param extendPath
      * @return          文件上传之后的路径
      * @throws SSException
      */
     public String uploadFile(PandaworkMultipartFile file,
                              FileUploadPathEnums pathEnums,
                              int width,
-                             int height) throws SSException;
+                             int height,
+                             String... extendPath) throws SSException;
 }
