@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.storage.StorageSettlementMapper">
+
+    <select id="listByDate" resultMap="pw.SettlementItem">
+        SELECT * FROM t_storage_settlement_item
+        WHERE t_storage_settlement_item.`settlement_id`=
+        (
+        SELECT id FROM t_storage_settlement
+        WHERE t_storage_settlement.`created_time`<#{settlementDate}
+        ORDER BY t_storage_settlement.`created_time` DESC
+        LIMIT 1
+        )
+    </select>
+
+    <select id="queryByDate" resultMap="pw.SettlementItem">
+        SELECT * FROM t_storage_settlement_item
+        WHERE t_storage_settlement_item.`settlement_id`=
+        (
+        SELECT id FROM t_storage_settlement
+        WHERE t_storage_settlement.`created_time`<#{settlementDate}
+        ORDER BY t_storage_settlement.`created_time` DESC
+        LIMIT 1
+        )
+        AND t_storage_settlement_item.item_id=#{itemId}
+    </select>
+</mapper>
