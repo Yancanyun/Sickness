@@ -46,6 +46,14 @@ public interface StorageReportService {
     public List<StorageReportDto> listStorageReportDto() throws  SSException;
 
     /**
+     * 获取指定时间之前未结算的单据和单据详情
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> ListStorageReportDtoUnsettled(Date endTime) throws SSException;
+
+    /**
      * 分页获取单据和单据详情
      * @param page
      * @param pageSize

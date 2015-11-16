@@ -55,12 +55,14 @@ public class StorageReportServiceImpl implements StorageReportService {
            if(Assert.isNull(storageReportDto.getStorageReport())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
-           if(Assert.isNull(storageReportDto.getStorageReportItem())){
+           if(Assert.isNull(storageReportDto.getStorageReportItemList())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
 
-           storageReportItemService.newStorageReportItem(storageReportDto.getStorageReportItem());
-           newReport(storageReportDto.getStorageReport());
+           this.newReport(storageReportDto.getStorageReport());
+
+           for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList())
+           storageReportItemService.newStorageReportItem(storageReportItem);
 
        } catch (Exception e) {
            LogClerk.errLog.error(e);
@@ -133,13 +135,14 @@ public class StorageReportServiceImpl implements StorageReportService {
 
             for (StorageReport storageReport : storageReportList){
                 StorageReportDto storageReportDto = new StorageReportDto();
-                StorageReportItem storageReportItem = new StorageReportItem();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
 
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItem(storageReportItem);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
@@ -154,6 +157,31 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
+    public List<StorageReportDto> ListStorageReportDtoUnsettled(Date endTime) throws SSException {
+        List<StorageReportDto> storageReportList = Collections.emptyList();
+        try {
+            storageReportList = storageReportMapper.ListStorageReportDtoUnsettled(endTime);
+            return storageReportList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageReportFail, e);
+        }
+    }
+
+  /*  @Override
+    public List<StorageReportDto> ListStorageReportDtoUnsettle(Date endTime) throws SSException {
+        List<StorageReportDto> storageReportList = Collections.emptyList();
+        try {
+            storageReportList = storageReportMapper.ListStorageReportDtoUnsettle(endTime);
+       } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageReportFail, e);
+        }
+
+
+    }*/
+
+    @Override
     public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException {
         int offset = page * pageSize;
         List<StorageReportDto> storageReportDtoList = new ArrayList();
@@ -166,13 +194,14 @@ public class StorageReportServiceImpl implements StorageReportService {
             storageReportList = storageReportMapper.listByPage(offset,pageSize);
             for (StorageReport storageReport : storageReportList){
                 StorageReportDto storageReportDto = new StorageReportDto();
-                StorageReportItem storageReportItem = new StorageReportItem();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
 
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItem(storageReportItem);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
@@ -208,6 +237,7 @@ public class StorageReportServiceImpl implements StorageReportService {
             endTime.setSeconds(59);
         }
 
+
         List<StorageReportDto> storageReportDtoList = new ArrayList();
         List<StorageReport> storageReportList = Collections.emptyList();
 
@@ -219,13 +249,14 @@ public class StorageReportServiceImpl implements StorageReportService {
 
             for (StorageReport storageReport : storageReportList) {
                 StorageReportDto storageReportDto = new StorageReportDto();
-                StorageReportItem storageReportItem = new StorageReportItem();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
 
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItem(storageReportItem);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
@@ -257,13 +288,14 @@ public class StorageReportServiceImpl implements StorageReportService {
 
             for (StorageReport storageReport : storageReportList) {
                 StorageReportDto storageReportDto = new StorageReportDto();
-                StorageReportItem storageReportItem = new StorageReportItem();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-                storageReportItem = storageReportItemService.queryByReportId(storageReport.getId());
+
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
 
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItem(storageReportItem);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }

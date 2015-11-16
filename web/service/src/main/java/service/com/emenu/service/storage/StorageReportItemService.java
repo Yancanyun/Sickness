@@ -29,9 +29,20 @@ public interface StorageReportItemService {
     public List<StorageReportItem> listAll() throws SSException;
 
     /**
-     * 根据单据ID获取单据单据详情
+     * 根据单据ID获取单据详情信息
      * @return
      * @throws SSException
      */
     public StorageReportItem queryByReportId(int reportId) throws SSException;
+
+
+    /**
+     * 获取所有相同reportId的单据详情
+     * @param reportId
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportItem> listByReportId(int reportId) throws SSException;
+
+
 }

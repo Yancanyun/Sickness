@@ -60,4 +60,12 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
+    <select id="ListStorageReportDtoUnsettled" parameterType="date" resultMap="pw.StorageReport">
+        SELECT * FROM t_storage_report WHERE `created_time` &lt;= #{endTime} and status = 1;
+    </select>
+
+   <!-- <select id="ListStorageReportDtoUnsettle"  resultMap="pw.StorageReport">
+        SELECT * from t_storage_report WHERE `created_time` <= #{endTime} and status = 1
+    </select>-->
+
 </mapper>

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,6 +74,18 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         try {
            storageReportItem = storageReportItemMapper.queryByReportId(reportId);
             return storageReportItem;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryStorageReportItemFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportItem> listByReportId(int reportId) throws SSException {
+        List<StorageReportItem> storageReportItemList =  Collections.emptyList();
+        try {
+            storageReportItemList = storageReportItemMapper.listByReportId(reportId);
+            return storageReportItemList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryStorageReportItemFail, e);

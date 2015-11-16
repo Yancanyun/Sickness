@@ -45,7 +45,7 @@ public class StorageReport extends AbstractEntity{
         //单据金额
         private BigDecimal money;
 
-        //单据状态：0-未结算、1-已结算
+        //单据状态：1-未结算、2-已结算
         private Integer status;
 
         //单据类型：1-入库单、2-出库单、3-盘盈单、4-盘亏单
