@@ -76,4 +76,13 @@ public interface StorageItemService {
      * @throws SSException
      */
     public int countByTagId(int tagId) throws SSException;
+
+    /**
+     * 根据ID进行查询
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StorageItem queryById(int id) throws SSException;
 }
