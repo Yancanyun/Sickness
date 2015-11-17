@@ -65,11 +65,19 @@ public interface TagFacadeService {
     /**
      * 获取菜品的分类List
      * 菜品分类后台管理专用方法
-     * @param
-     * @return
+     * @param tagId
+     * @return List<TagDto>
      * @throws Exception
      */
     public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception;
+
+    /**
+     * 给打印机显示菜品分类的列表，不用分层级
+     * 只显示最后两级分类
+     * @return List<Tag>
+     * @throws Exception
+     */
+    public List<Tag> listDishTagForPrinter() throws Exception;
 
     /**
      * 新增菜品分类以及打印机关联
