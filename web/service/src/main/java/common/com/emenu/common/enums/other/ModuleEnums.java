@@ -128,12 +128,12 @@ public enum ModuleEnums {
     AdminStorage("Admin:Storage"),
 
     //库存存放点管理
-    AdminStorageDepot("Admin:Storage:Depot"),
-    AdminStorageDepotList("Admin:Storage:Depot"),
-    AdminStorageDepotNew("Admin:Storage:Depot:New"),
-    AdminStorageDepotDelete("Admin:Storage:Depot:Delete"),
-    AdminStorageDepotUpdate("Admin:Storage:Depot:Update"),
-    AdminStorageDepotSearch("Admin:Storage:Depot:Search"),
+    AdminStorageDepot("Admin:Storage:StorageDepot"),
+    AdminStorageDepotList("Admin:Storage:StorageDepot"),
+    AdminStorageDepotNew("Admin:Storage:StorageDepot:New"),
+    AdminStorageDepotDelete("Admin:Storage:StorageDepot:Delete"),
+    AdminStorageDepotUpdate("Admin:Storage:StorageDepot:Update"),
+    AdminStorageDepotSearch("Admin:Storage:StorageDepot:Search"),
 
 
     // 供货商管理

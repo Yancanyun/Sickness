@@ -3,18 +3,15 @@ package com.emenu.web.controller.admin.storage;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.storage.Depot;
+import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.storage.DepotService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
-import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +24,7 @@ import java.util.List;
 @Module(ModuleEnums.AdminStorageDepot)
 @Controller
 @RequestMapping(value = URLConstants.ADMIN_STORAGE_DEPOT)
-public class DepotController extends AbstractController{
+public class StorageDepotController extends AbstractController{
 
     /**
      * 去列表页
@@ -51,26 +48,26 @@ public class DepotController extends AbstractController{
     public JSONObject ajaxListStorageDepot(@PathVariable("curPage")Integer curPage,
                                            @RequestParam Integer pageSize) {
 
-        List<Depot> depotList = Collections.<Depot>emptyList();
+        List<StorageDepot> depotList = Collections.<StorageDepot>emptyList();
         try {
-            depotList = depotService.listByPage(curPage, pageSize);
+            depotList = storageDepotService.listByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
 
         JSONArray jsonArray = new JSONArray();
-        for (Depot depot : depotList) {
+        for (StorageDepot storageDepot : depotList) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", depot.getId());
-            jsonObject.put("name", depot.getName());
-            jsonObject.put("instruction", depot.getIntroduction());
+            jsonObject.put("id", storageDepot.getId());
+            jsonObject.put("name", storageDepot.getName());
+            jsonObject.put("instruction", storageDepot.getIntroduction());
             jsonArray.add(jsonObject);
         }
 
         int dataCount = 0;
         try {
-            dataCount = depotService.countAll();
+            dataCount = storageDepotService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsgAndErrCode(e);
@@ -80,16 +77,16 @@ public class DepotController extends AbstractController{
 
     /**
      * Ajax添加
-     * @param depot
+     * @param storageDepot
      * @return
      */
     @Module(ModuleEnums.AdminStorageDepotNew)
     @RequestMapping(value = "ajax",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewStorageDepot(Depot depot) {
+    public JSONObject ajaxNewStorageDepot(StorageDepot storageDepot) {
 
         try {
-            depotService.newDepot(depot);
+            storageDepotService.newStorageDepot(storageDepot);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -99,16 +96,16 @@ public class DepotController extends AbstractController{
 
     /**
      * ajax修改
-     * @param depot
+     * @param storageDepot
      * @return
      */
     @Module(ModuleEnums.AdminBasicInfoIndexImgUpdate)
     @RequestMapping(value= "ajax",method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateStorageDepot(Depot depot) {
+    public JSONObject ajaxUpdateStorageDepot(StorageDepot storageDepot) {
 
         try {
-            depotService.updateDepot(depot);
+            storageDepotService.updateStorageDepot(storageDepot);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch(SSException e) {
             LogClerk.errLog.error(e);
@@ -126,7 +123,7 @@ public class DepotController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxDelStorageDepot(@PathVariable("id")Integer id) {
         try {
-            depotService.delById(id);
+            storageDepotService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch(SSException e) {
             LogClerk.errLog.error(e);

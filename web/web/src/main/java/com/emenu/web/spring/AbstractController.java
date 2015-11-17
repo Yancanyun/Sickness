@@ -23,7 +23,7 @@ import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.storage.StorageTagService;
-import com.emenu.service.storage.DepotService;
+import com.emenu.service.storage.StorageDepotService;
 import com.emenu.service.table.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
@@ -271,8 +271,8 @@ public class AbstractController extends Base {
     protected static TableMealPeriodService tableMealPeriodService;
 
     @StaticAutoWire
-    @Qualifier("depotService")
-    protected static DepotService depotService;
+    @Qualifier("storageDepotService")
+    protected static StorageDepotService storageDepotService;
 
     @StaticAutoWire
     @Qualifier("remarkService")
