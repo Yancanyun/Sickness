@@ -45,7 +45,7 @@ public class VipInfo extends AbstractEntity{
     private String email;
 
     //帐号状态(1-启用,2-停用,3-删除)
-    private Integer state;
+    private Integer status;
 
     //创建时间
     @Column(name = "created_time")
@@ -121,12 +121,12 @@ public class VipInfo extends AbstractEntity{
         this.email = email;
     }
 
-    public Integer getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreatedTime() {

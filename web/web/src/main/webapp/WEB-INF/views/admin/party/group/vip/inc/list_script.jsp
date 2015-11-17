@@ -5,20 +5,20 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script type="text/template" id="tpl">
     {@each list as it}
-    <tr data-vip-id="&{it.id}" data-state="&{it.state}">
+    <tr data-vip-id="&{it.id}" data-status="&{it.status}">
         <td>&{it.name}</td>
         <td>&{it.phone}</td>
         <td>&{it.cardNum}</td>
         <td>&{it.money}</td>
         <td>
-            {@if it.state == 2}停用{@/if}
-            {@if it.state == 1}启用{@/if}
+            {@if it.status == 2}停用{@/if}
+            {@if it.status == 1}启用{@/if}
         </td>
         <td>
-            {@if it.state == 2}
+            {@if it.status == 2}
             <a href="javascript:;" class="label-info J_change"><i class="fa fa-check"></i>&nbsp;启用</a>
             {@/if}
-            {@if it.state == 1}
+            {@if it.status == 1}
             <a href="javascript:;" class="label-info J_change"><i class="fa fa-circle"></i>&nbsp;停用</a>
             {@/if}
             <a href="${website}admin/party/group/vip/update/&{it.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>

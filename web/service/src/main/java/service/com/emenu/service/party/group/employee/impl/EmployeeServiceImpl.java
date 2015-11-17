@@ -89,10 +89,10 @@ public class EmployeeServiceImpl implements EmployeeService{
                 employeeDto.setRole(roles);
                 employeeDto.setRoleName(roleNames);
                 if(employee.getStatus()==1) {
-                    employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                    employeeDto.setStatus(UserStatusEnums.Enabled.getStatus());
                 }
                 if(employee.getStatus()==2){
-                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getStatus());
                 }
                 SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
                 employeeDto.setLoginName(securityUser.getLoginName());
@@ -147,9 +147,9 @@ public class EmployeeServiceImpl implements EmployeeService{
                 employeeDto.setRoleName(roleNames);
                 //获取员工状态信息
                 if(employee.getStatus()==1){
-                    employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                    employeeDto.setStatus(UserStatusEnums.Enabled.getStatus());
                 }else if(employee.getStatus()==2){
-                    employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                    employeeDto.setStatus(UserStatusEnums.Disabled.getStatus());
                 }
                 //获取员工登录名
                 SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());
@@ -491,10 +491,10 @@ public class EmployeeServiceImpl implements EmployeeService{
             employeeDto.setRole(roles);
             employeeDto.setRoleName(roleNames);
             if(employee.getStatus()==1) {
-                employeeDto.setStatus(UserStatusEnums.Enabled.getState());
+                employeeDto.setStatus(UserStatusEnums.Enabled.getStatus());
             }
             if(employee.getStatus()==2){
-                employeeDto.setStatus(UserStatusEnums.Disabled.getState());
+                employeeDto.setStatus(UserStatusEnums.Disabled.getStatus());
             }
 
             SecurityUser securityUser = securityUserService.queryByPartyId(employee.getPartyId());

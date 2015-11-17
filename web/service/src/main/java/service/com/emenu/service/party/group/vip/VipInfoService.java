@@ -74,10 +74,10 @@ public interface VipInfoService {
     /**
      * 根据id更新会员状态
      * @param id
-     * @param state
+     * @param status
      * @throws SSException
      */
-    public void updateStateById(int id, UserStatusEnums state) throws SSException;
+    public void updateStatusById(int id, UserStatusEnums status) throws SSException;
 
     /**
      * 根据会员id查询会员信息

@@ -139,7 +139,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
             //3.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
-            vipInfo.setState(UserStatusEnums.Enabled.getId());
+            vipInfo.setStatus(UserStatusEnums.Enabled.getId());
             commonDao.insert(vipInfo);
 
             return vipInfo;
@@ -197,7 +197,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStateById(int id, UserStatusEnums state) throws SSException{
+    public void updateStatusById(int id, UserStatusEnums state) throws SSException{
         Integer stateType = 0;
         Integer securityUserId = 0;
         try {
@@ -220,7 +220,7 @@ public class VipInfoServiceImpl implements VipInfoService{
                 securityUserService.updateStatusById(securityUserId, EnableEnums.Enabled);
             }
             //2.更新vipInfo的状态
-            vipInfoMapper.updateStateById(id, stateType);
+            vipInfoMapper.updateStatusById(id, stateType);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipInfoFail);
