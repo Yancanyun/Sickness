@@ -39,13 +39,12 @@ public interface TagFacadeService {
     public Tag queryById(int tagId) throws Exception;
 
     /**
-     * 根据pId获取所有的儿子节点
-     *
-     * @param pId
+     * 根据tagId获取儿子节点
+     * @param tagId
      * @return
      * @throws SSException
      */
-    public List<Tag> listByPId(int pId) throws SSException;
+    public List<Tag> listByPId(int tagId) throws Exception;
 
     /**
      * 删除一个tag

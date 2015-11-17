@@ -60,8 +60,8 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<Tag> listByPId(int pId) throws SSException {
-        return null;
+    public List<Tag> listByPId(int tagId) throws Exception {
+        return tagCacheService.listChildrenById(tagId);
     }
 
     @Override
