@@ -64,6 +64,10 @@
         SELECT * FROM t_storage_report WHERE `created_time` &lt;= #{endTime} and status = 0 ORDER BY `created_time` DESC;
     </select>
 
+    <update id="updateStatusById" >
+        UPDATE `t_storage_report` SET `status` = #{status} WHERE `id` = #{id}
+    </update>
+
    <!-- <select id="ListStorageReportDtoUnsettle"  resultMap="pw.StorageReport">
         SELECT * from t_storage_report WHERE `created_time` <= #{endTime} and status = 1
     </select>-->

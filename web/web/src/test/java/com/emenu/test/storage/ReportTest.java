@@ -4,6 +4,7 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.StorageReportItemService;
@@ -211,5 +212,10 @@ public class ReportTest extends AbstractTestCase{
 
         System.out.println(storageReport.getComment());
 
+    }
+
+    @Test
+    public void updateStatusById() throws SSException{
+        storageReportService.updateStatusById(2, StorageReportStatusEnum.Settled);
     }
 }

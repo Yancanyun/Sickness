@@ -2,6 +2,7 @@ package com.emenu.service.storage;
 
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
+import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.Date;
@@ -103,6 +104,15 @@ public interface StorageReportService {
      * @throws SSException
      */
     boolean updateById(StorageReport storageReport) throws SSException;
+
+    /**
+     * 根据单据id修改单据状态
+     * @param id
+     * @param storageReportStatusEnum
+     * @return
+     * @throws SSException
+     */
+    boolean updateStatusById(int id,StorageReportStatusEnum storageReportStatusEnum) throws SSException;
 
     /**
      * 根据id获取单据信息
