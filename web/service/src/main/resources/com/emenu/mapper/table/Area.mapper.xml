@@ -9,12 +9,12 @@
             `name`,
             `weight`
         FROM `t_area`
-        WHERE `state` = 1
+        WHERE `status` = 1
         ORDER BY `weight` DESC, `id` ASC
     </select>
 
-    <select id="queryStateById" resultType="int">
-        SELECT `state`
+    <select id="queryStatusById" resultType="int">
+        SELECT `status`
         FROM `t_area`
         WHERE `id` = #{id}
     </select>
@@ -22,12 +22,12 @@
     <select id="countByName" resultType="int">
         SELECT COUNT(1)
         FROM `t_area`
-        WHERE `name` = #{name} AND `state` = 1
+        WHERE `name` = #{name} AND `status` = 1
     </select>
 
-    <update id="updateState">
+    <update id="updateStatus">
         UPDATE `t_area`
-        SET `state` = #{state}
+        SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
 </mapper>

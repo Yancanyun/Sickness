@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.24 (32 bit)
 MySQL - 5.6.24-log : Database - db_emenu
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -23,7 +24,7 @@ DROP TABLE IF EXISTS `t_area`;
 CREATE TABLE `t_area` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '区域名称',
-  `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT '区域状态：0、可用；1、已删除',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '区域状态：0、可用；1、已删除',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
   PRIMARY KEY (`id`)
@@ -31,7 +32,7 @@ CREATE TABLE `t_area` (
 
 /*Data for the table `t_area` */
 
-insert  into `t_area`(`id`,`name`,`state`,`created_time`,`last_modified_time`) values (1,'1楼',0,'2015-10-23 15:19:33','2015-10-23 15:54:43'),(2,'2楼',0,'2015-10-23 15:19:41','2015-10-23 15:19:43'),(3,'3楼',1,'2015-10-23 15:19:50','2015-10-23 15:19:53'),(4,'4楼',0,'2015-10-23 15:41:48','2015-10-23 15:41:48');
+insert  into `t_area`(`id`,`name`,`status`,`created_time`,`last_modified_time`) values (1,'1楼',0,'2015-10-23 15:19:33','2015-10-23 15:54:43'),(2,'2楼',0,'2015-10-23 15:19:41','2015-10-23 15:19:43'),(3,'3楼',1,'2015-10-23 15:19:50','2015-10-23 15:19:53'),(4,'4楼',0,'2015-10-23 15:41:48','2015-10-23 15:41:48');
 
 /*Table structure for table `t_dish_tag` */
 
@@ -59,13 +60,13 @@ insert  into `t_dish_tag`(`id`,`name`,`p_id`,`weight`,`type`,`print_after_confir
 DROP TABLE IF EXISTS `t_dish_unit`;
 
 CREATE TABLE `t_dish_unit` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ψһ��ʶ������ID',
-  `name` varchar(10) NOT NULL DEFAULT '' COMMENT '��λ����',
-  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1����������λ��2����������λ',
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '����ʱ��',
-  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '����޸�ʱ��',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Ψһ��ʶ������ID',
+  `name` varchar(10) NOT NULL DEFAULT '' COMMENT '��λ����',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1����������λ��2����������λ',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '����ʱ��',
+  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '����޸�ʱ��',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='��Ʒ��ԭ�ϵĵ�λ';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='��Ʒ��ԭ�ϵĵ�λ';
 
 /*Data for the table `t_dish_unit` */
 
@@ -78,7 +79,7 @@ DROP TABLE IF EXISTS `t_index_img`;
 CREATE TABLE `t_index_img` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `img_path` varchar(255) NOT NULL DEFAULT '' COMMENT '图片路径',
-  `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0：未使用，1：正在使用',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0：未使用，1：正在使用',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
   PRIMARY KEY (`id`)
@@ -277,7 +278,7 @@ CREATE TABLE `t_party_vip_info` (
   `phone` varchar(15) NOT NULL DEFAULT '' COMMENT '电话号码',
   `qq` varchar(15) DEFAULT '' COMMENT 'qq号码',
   `email` varchar(30) DEFAULT '' COMMENT '邮箱',
-  `state` int(4) NOT NULL DEFAULT '1' COMMENT '帐号状态,1-启用,2-停用,3-删除',
+  `status` int(4) NOT NULL DEFAULT '1' COMMENT '帐号状态,1-启用,2-停用,3-删除',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
   PRIMARY KEY (`id`)
@@ -298,7 +299,7 @@ CREATE TABLE `t_table` (
   `table_fee` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '餐台费用',
   `min_cost` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '最低消费',
   `qrcode_path` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码地址',
-  `state` tinyint(4) NOT NULL DEFAULT '0' COMMENT '餐台状态：0、停用；1、可用；2、占用已结账；3、占用未结账；4、已并桌；5、已预订；6、已删除',
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '餐台状态：0、停用；1、可用；2、占用已结账；3、占用未结账；4、已并桌；5、已预订；6、已删除',
   `person_num` int(11) NOT NULL DEFAULT '0' COMMENT '实际人数',
   `open_time` datetime DEFAULT NULL COMMENT '开台时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -308,7 +309,7 @@ CREATE TABLE `t_table` (
 
 /*Data for the table `t_table` */
 
-insert  into `t_table`(`id`,`area_id`,`name`,`seat_num`,`seat_fee`,`table_fee`,`min_cost`,`qrcode_path`,`state`,`person_num`,`open_time`,`created_time`,`last_modified_time`) values (1,1,'1号桌',10,'0.00','0.00','0.00','',1,0,NULL,'2015-10-23 17:26:04','2015-10-23 17:26:06');
+insert  into `t_table`(`id`,`area_id`,`name`,`seat_num`,`seat_fee`,`table_fee`,`min_cost`,`qrcode_path`,`status`,`person_num`,`open_time`,`created_time`,`last_modified_time`) values (1,1,'1号桌',10,'0.00','0.00','0.00','',1,0,NULL,'2015-10-23 17:26:04','2015-10-23 17:26:06');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

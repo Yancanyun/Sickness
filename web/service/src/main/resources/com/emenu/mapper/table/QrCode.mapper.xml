@@ -9,7 +9,7 @@
             `name` AS tableName,
             `qrcode_path` AS qrCodePath
         FROM `t_table`
-        WHERE `area_id` = #{areaId} AND `state` != 6
+        WHERE `area_id` = #{areaId} AND `status` != 6
     </select>
 
     <select id="listAll" resultType="QrCodeDto">
@@ -20,6 +20,6 @@
             `t_table`.`qrcode_path` AS qrCodePath
         FROM `t_table`
         LEFT JOIN `t_area` ON `t_area`.`id` = `t_table`.`area_id`
-        WHERE `t_table`.`state` != 6
+        WHERE `t_table`.`status` != 6
     </select>
 </mapper>

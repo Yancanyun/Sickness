@@ -38,6 +38,7 @@
             <label class="col-sm-3 control-label"><span class="requires">*</span>小票打印至</label>
             <div class="col-sm-4">
                 <select class="form-control J_print" name="printerId">
+                    <option value="0">不分配打印机</option>
                     <c:forEach var="printer" items="${printerList}">
                         <option value="${printer.id}">${printer.name}</option>
                     </c:forEach>

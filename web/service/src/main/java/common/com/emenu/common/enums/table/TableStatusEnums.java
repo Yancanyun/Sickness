@@ -4,42 +4,42 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TableEnumss
+ * TableStatusEnums
  *
  * @author: yangch
  * @time: 2015/10/23 18:49
  */
-public enum TableStateEnums {
+public enum TableStatusEnums {
     Disabled(0, "停用"),
     Enabled(1, "可用"),
     Checkouted(2, "占用已结账"),
     Unchekouted(3, "占用未结账"),
-    Booked(4, "已预订"),
-    Merged(5, "已并桌"),
+    Merged(4, "已并桌"),
+    Booked(5, "已预订"),
     Deleted(6, "已删除");
 
     private Integer id;
-    private String state;
+    private String status;
 
-    TableStateEnums(Integer id, String type) {
+    TableStatusEnums(Integer id, String type) {
         this.id = id;
-        this.state = type;
+        this.status = type;
     }
 
-    private static Map<Integer, TableStateEnums> map = new HashMap<Integer, TableStateEnums>();
+    private static Map<Integer, TableStatusEnums> map = new HashMap<Integer, TableStatusEnums>();
 
     static {
-        for (TableStateEnums enums : TableStateEnums.values()) {
+        for (TableStatusEnums enums : TableStatusEnums.values()) {
             map.put(enums.getId(), enums);
         }
     }
 
-    public static TableStateEnums valueOf(int id) {
+    public static TableStatusEnums valueOf(int id) {
         return valueOf(id, null);
     }
 
-    public static TableStateEnums valueOf(int id, TableStateEnums defaultValue) {
-        TableStateEnums enums = map.get(id);
+    public static TableStatusEnums valueOf(int id, TableStatusEnums defaultValue) {
+        TableStatusEnums enums = map.get(id);
         return enums == null ? defaultValue : enums;
     }
 
@@ -48,6 +48,6 @@ public enum TableStateEnums {
     }
 
     public String getType() {
-        return state;
+        return status;
     }
 }

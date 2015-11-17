@@ -1,8 +1,7 @@
 package com.emenu.service.remark.impl;
 
-import com.emenu.common.dto.remark.RemarkTagDto;
 import com.emenu.common.entity.remark.RemarkTag;
-import com.emenu.common.enums.remark.RemarkTagStateEnums;
+import com.emenu.common.enums.remark.RemarkTagStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.remark.RemarkTagMapper;
 import com.emenu.service.remark.RemarkService;
@@ -91,7 +90,7 @@ public class RemarkTagServiceImpl implements RemarkTagService{
                 throw SSException.get(EmenuException.RemarkTagNameIsNull);
             }
             //将状态设为"可用"
-            remarkTag.setState(RemarkTagStateEnums.Enabled.getId());
+            remarkTag.setStatus(RemarkTagStatusEnums.Enabled.getId());
             return commonDao.insert(remarkTag);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -131,7 +130,7 @@ public class RemarkTagServiceImpl implements RemarkTagService{
                 throw SSException.get(EmenuException.RemarkTagHasRemarkExist);
             }
             //将状态设为"删除"
-            remarkTagMapper.updateState(id, RemarkTagStateEnums.Deleted.getId());
+            remarkTagMapper.updateStatus(id, RemarkTagStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteRemarkTagFail, e);

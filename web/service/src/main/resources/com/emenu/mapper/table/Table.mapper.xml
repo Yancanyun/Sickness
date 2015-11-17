@@ -12,11 +12,11 @@
             t_table.`seat_fee`,
             t_table.`table_fee`,
             t_table.`min_cost`,
-            t_table.`state`,
+            t_table.`status`,
             t_table.`qrcode_path`
         FROM `t_table`
         INNER JOIN `t_area` ON t_area.`id` = `area_id`
-        WHERE t_table.`state` != 6
+        WHERE t_table.`status` != 6
         ORDER BY t_area.`weight` DESC, `area_id` ASC, t_table.`id` ASC
     </select>
 
@@ -29,14 +29,14 @@
             `seat_fee`,
             `table_fee`,
             `min_cost`,
-            `state`,
+            `status`,
             `qrcode_path`
         FROM `t_table`
-        WHERE `area_id` = #{areaId} AND `state` != 6
+        WHERE `area_id` = #{areaId} AND `status` != 6
         ORDER BY `area_id`, `id`
     </select>
 
-    <select id="listByState" resultMap="pw.Table">
+    <select id="listByStatus" resultMap="pw.Table">
         SELECT
             `id`,
             `area_id`,
@@ -45,14 +45,14 @@
             `seat_fee`,
             `table_fee`,
             `min_cost`,
-            `state`,
+            `status`,
             `qrcode_path`
         FROM `t_table`
-        WHERE `state` = #{state}
+        WHERE `status` = #{status}
         ORDER BY `area_id`, `id`
     </select>
 
-    <select id="listByAreaIdAndState" resultMap="pw.Table">
+    <select id="listByAreaIdAndStatus" resultMap="pw.Table">
         SELECT
             `id`,
             `area_id`,
@@ -61,15 +61,15 @@
             `seat_fee`,
             `table_fee`,
             `min_cost`,
-            `state`,
+            `status`,
             `qrcode_path`
         FROM `t_table`
-        WHERE `area_id` = #{areaId} AND `state` = #{state}
+        WHERE `area_id` = #{areaId} AND `status` = #{status}
         ORDER BY `area_id`, `id`
     </select>
 
-    <select id="queryStateById" resultType="int">
-        SELECT `state`
+    <select id="queryStatusById" resultType="int">
+        SELECT `status`
         FROM `t_table`
         WHERE `id` = #{id}
     </select>
@@ -77,18 +77,18 @@
     <select id="countByName" resultType="int">
         SELECT COUNT(1)
         FROM `t_table`
-        WHERE `name` = #{name} AND `state` != 6
+        WHERE `name` = #{name} AND `status` != 6
     </select>
 
     <select id="countByAreaId" resultType="int">
         SELECT COUNT(1)
         FROM `t_table`
-        WHERE `area_id` = #{areaId} AND `state` != 6
+        WHERE `area_id` = #{areaId} AND `status` != 6
     </select>
 
-    <update id="updateState">
+    <update id="updateStatus">
         UPDATE `t_table`
-        SET `state` = #{state}
+        SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
 

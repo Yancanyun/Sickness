@@ -3,6 +3,7 @@ package com.emenu.service.storage.impl;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
+import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.CommonUtil;
 import com.emenu.common.utils.DateUtils;
@@ -13,6 +14,7 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
+import net.sf.cglib.core.EmitUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -336,6 +338,17 @@ public class StorageReportServiceImpl implements StorageReportService {
                   throw SSException.get(EmenuException.ReportIsNotNull);
               }
             commonDao.update(storageReport);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public boolean updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException {
+        try {
+            storageReportMapper.updateStatusById(id,storageReportStatusEnum.getId());
             return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);

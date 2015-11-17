@@ -4,7 +4,7 @@ import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMealPeriod;
-import com.emenu.common.enums.table.TableStateEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.meal.MealPeriodService;
@@ -152,15 +152,15 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public List<TableDto> listTableDtoByState(TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于0且不大于Deleted)
-        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+    public List<TableDto> listTableDtoByStatus(TableStatusEnums status) throws SSException {
+        //检查Status是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(status.getId()) || status.getId() > TableStatusEnums.Deleted.getId()) {
             return null;
         }
         List<TableDto> tableDtoList = new ArrayList<TableDto>();
         List<Table> tableList = Collections.emptyList();
         try {
-            tableList = tableMapper.listByState(state.getId());
+            tableList = tableMapper.listByStatus(status.getId());
             if(!tableList.isEmpty()) {
                 for(Table table : tableList) {
                     TableDto tableDto = new TableDto();
@@ -189,14 +189,14 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public List<Table> listByState(TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于0且不大于Deleted)
-        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+    public List<Table> listByStatus(TableStatusEnums status) throws SSException {
+        //检查Status是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(status.getId()) || status.getId() > TableStatusEnums.Deleted.getId()) {
             return null;
         }
         List<Table> tableList = Collections.emptyList();
         try {
-            tableList = tableMapper.listByState(state.getId());
+            tableList = tableMapper.listByStatus(status.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryTableFail, e);
@@ -205,9 +205,9 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public List<TableDto> listTableDtoByAreaIdAndState(int areaId, TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于0且不大于Deleted)
-        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+    public List<TableDto> listTableDtoByAreaIdAndStatus(int areaId, TableStatusEnums status) throws SSException {
+        //检查Status是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(status.getId()) || status.getId() > TableStatusEnums.Deleted.getId()) {
             return null;
         }
         //检查AreaID是否合法
@@ -217,7 +217,7 @@ public class TableServiceImpl implements TableService{
         List<TableDto> tableDtoList = new ArrayList<TableDto>();
         List<Table> tableList = Collections.emptyList();
         try {
-            tableList = tableMapper.listByAreaIdAndState(areaId, state.getId());
+            tableList = tableMapper.listByAreaIdAndStatus(areaId, status.getId());
             if(!tableList.isEmpty()) {
                 for(Table table : tableList) {
                     TableDto tableDto = new TableDto();
@@ -246,9 +246,9 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public List<Table> listByAreaIdAndState(int areaId, TableStateEnums state) throws SSException {
-        //检查State是否合法(不小于0且不大于Deleted)
-        if (Assert.lessZero(state.getId()) || state.getId() > TableStateEnums.Deleted.getId()) {
+    public List<Table> listByAreaIdAndStatus(int areaId, TableStatusEnums status) throws SSException {
+        //检查Status是否合法(不小于0且不大于Deleted)
+        if (Assert.lessZero(status.getId()) || status.getId() > TableStatusEnums.Deleted.getId()) {
             return null;
         }
         //检查AreaID是否合法
@@ -257,7 +257,7 @@ public class TableServiceImpl implements TableService{
         }
         List<Table> tableList = Collections.emptyList();
         try {
-            tableList = tableMapper.listByAreaIdAndState(areaId, state.getId());
+            tableList = tableMapper.listByAreaIdAndStatus(areaId, status.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryTableFail, e);
@@ -310,13 +310,13 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public int queryStateById(int id) throws SSException {
+    public int queryStatusById(int id) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
             return 0;
         }
         try {
-            return tableMapper.queryStateById(id);
+            return tableMapper.queryStatusById(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryTableFail, e);
@@ -324,14 +324,14 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public void checkStateById(int id) throws SSException {
+    public void checkStatusById(int id) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
             return ;
         }
         try {
-            int state = queryStateById(id);
-            if (state != TableStateEnums.Enabled.getId() && state != TableStateEnums.Disabled.getId()) {
+            int status = queryStatusById(id);
+            if (status != TableStatusEnums.Enabled.getId() && status != TableStatusEnums.Disabled.getId()) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
         } catch (Exception e) {
@@ -362,7 +362,7 @@ public class TableServiceImpl implements TableService{
                 throw SSException.get(EmenuException.TableNameIsNull);
             }
             //将状态设为"可用"
-            table.setState(TableStateEnums.Enabled.getId());
+            table.setStatus(TableStatusEnums.Enabled.getId());
             //先插入餐台表
             commonDao.insert(table);
             //插入餐台表后，从插入的新餐台中获得ID，设置二维码地址
@@ -416,9 +416,9 @@ public class TableServiceImpl implements TableService{
             //从TableDto中获取MealPeriodList
             List<MealPeriod> mealPeriodList= tableDto.getMealPeriodList();
 
-            int state = queryStateById(table.getId());
+            int status = queryStatusById(table.getId());
             //仅当餐台状态为停用及可用时可以修改餐台
-            if((state != TableStateEnums.Disabled.getId() && state != TableStateEnums.Enabled.getId())) {
+            if((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
             //判断AreaId是否合法
@@ -486,23 +486,23 @@ public class TableServiceImpl implements TableService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateState(int id, int state) throws SSException {
+    public void updateStatus(int id, int status) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
             return ;
         }
-        //检查State是否合法
-        if (Assert.lessZero(state)) {
+        //检查Status是否合法
+        if (Assert.lessZero(status)) {
             return ;
         }
         try {
-            //获取修改前的State值
-            int nowState = tableMapper.queryStateById(id);
+            //获取修改前的Status值
+            int nowStatus = tableMapper.queryStatusById(id);
             //仅当修改前餐台状态为停用及可用时可以修改餐台
-            if((nowState != TableStateEnums.Disabled.getId() && nowState != TableStateEnums.Enabled.getId())) {
+            if((nowStatus != TableStatusEnums.Disabled.getId() && nowStatus != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
-            tableMapper.updateState(id, state);
+            tableMapper.updateStatus(id, status);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);
@@ -517,13 +517,13 @@ public class TableServiceImpl implements TableService{
             return ;
         }
         try {
-            int state = queryStateById(id);
+            int status = queryStatusById(id);
             //仅当餐台状态为停用及可用时可以删除餐台
-            if((state != TableStateEnums.Disabled.getId() && state != TableStateEnums.Enabled.getId())) {
+            if((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
             //将状态设为"删除"
-            tableMapper.updateState(id, TableStateEnums.Deleted.getId());
+            tableMapper.updateStatus(id, TableStatusEnums.Deleted.getId());
             //删除餐台-餐段表中的内容
             tableMealPeriodService.delByTableId(id);
         } catch (Exception e) {
@@ -543,8 +543,8 @@ public class TableServiceImpl implements TableService{
             if (idList != null) {
                 //先判断是否全部餐台均可以删除，若不能，报错
                 for (int i : idList) {
-                    if ((queryStateById(i) != TableStateEnums.Enabled.getId()) &&
-                        (queryStateById(i) != TableStateEnums.Disabled.getId())) {
+                    if ((queryStatusById(i) != TableStatusEnums.Enabled.getId()) &&
+                        (queryStatusById(i) != TableStatusEnums.Disabled.getId())) {
                         throw SSException.get(EmenuException.TableHasUsed);
                     }
                 }

@@ -52,6 +52,9 @@ public class PrinterServiceImpl implements PrinterService {
             if (!checkBeforeUpdate(printer)){
                 return;
             }
+            if (Assert.isEmpty(printerMapper.listTagById(printer.getId()))){
+                throw SSException.get(EmenuException.PrinterIsUsing);
+            }
             commonDao.update(printer);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -65,6 +68,9 @@ public class PrinterServiceImpl implements PrinterService {
             if (Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.PrinterIdError);
             }
+            if (Assert.isEmpty(printerMapper.listTagById(id))){
+                throw SSException.get(EmenuException.PrinterIsUsing);
+            }
             commonDao.deleteById(Printer.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -77,6 +83,18 @@ public class PrinterServiceImpl implements PrinterService {
         List<Printer> list = Collections.emptyList();
         try {
             list = printerMapper.listAll();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryPrinterFail, e);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Printer> listDishTagPrinter() throws SSException {
+        List<Printer> list = Collections.emptyList();
+        try {
+            list = printerMapper.listDishTagPrinter();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryPrinterFail, e);

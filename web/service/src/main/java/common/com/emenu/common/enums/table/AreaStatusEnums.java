@@ -4,37 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * AreaStateEnums
+ * AreaStatusEnums
  *
  * @author: yangch
  * @time: 2015/11/2 15:22
  */
-public enum AreaStateEnums {
+public enum AreaStatusEnums {
     Enabled(1, "可用"),
     Deleted(2, "已删除");
 
     private Integer id;
-    private String state;
+    private String status;
 
-    AreaStateEnums(Integer id, String type) {
+    AreaStatusEnums(Integer id, String type) {
         this.id = id;
-        this.state = type;
+        this.status = type;
     }
 
-    private static Map<Integer, AreaStateEnums> map = new HashMap<Integer, AreaStateEnums>();
+    private static Map<Integer, AreaStatusEnums> map = new HashMap<Integer, AreaStatusEnums>();
 
     static {
-        for (AreaStateEnums enums : AreaStateEnums.values()) {
+        for (AreaStatusEnums enums : AreaStatusEnums.values()) {
             map.put(enums.getId(), enums);
         }
     }
 
-    public static AreaStateEnums valueOf(int id) {
+    public static AreaStatusEnums valueOf(int id) {
         return valueOf(id, null);
     }
 
-    public static AreaStateEnums valueOf(int id, AreaStateEnums defaultValue) {
-        AreaStateEnums enums = map.get(id);
+    public static AreaStatusEnums valueOf(int id, AreaStatusEnums defaultValue) {
+        AreaStatusEnums enums = map.get(id);
         return enums == null ? defaultValue : enums;
     }
 
@@ -43,6 +43,6 @@ public enum AreaStateEnums {
     }
 
     public String getType() {
-        return state;
+        return status;
     }
 }

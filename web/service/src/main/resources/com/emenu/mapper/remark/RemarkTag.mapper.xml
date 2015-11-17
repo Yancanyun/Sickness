@@ -9,18 +9,18 @@
         `name`,
         `p_id`
         FROM `t_remark_tag`
-        WHERE `state` = 1
+        WHERE `status` = 1
     </select>
     
     <select id="countByName" resultType="int">
         SELECT COUNT(1)
         FROM `t_remark_tag`
-        WHERE `name` = #{name} AND `state` = 1
+        WHERE `name` = #{name} AND `status` = 1
     </select>
 
-    <update id="updateState">
+    <update id="updateStatus">
         UPDATE `t_remark_tag`
-        SET `state` = #{state}
+        SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
 
@@ -30,7 +30,7 @@
         `name`,
         `p_id`
         FROM `t_remark_tag`
-        WHERE `state` = 1
+        WHERE `status` = 1
         AND `p_id` = #{pId}
     </select>
 </mapper>

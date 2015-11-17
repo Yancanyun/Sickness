@@ -40,15 +40,14 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">选择状态</label>
             <div class="col-sm-3">
-              <select class="form-control" name="state">
+              <select class="form-control" name="status">
                 <option value="-1">请选择</option>
                 <option value="0">停用</option>
                 <option value="1">可用</option>
                 <option value="2">占用已结账</option>
                 <option value="3">占用未结账</option>
                 <option value="4">已并桌</option>
-                <option value="5">已预定</option>
-                <option value="6">已删除</option>
+                <option value="5">已预订</option>
               </select>
             </div>
           </div>
@@ -95,7 +94,7 @@
                 <td>${tableDto.areaName}</td>
                 <td>${tableDto.table.name}</td>
                 <td>${tableDto.table.seatNum}</td>
-                <td class="J_state">${tableDto.table.stateStr}</td>
+                <td class="J_status">${tableDto.table.statusStr}</td>
                 <td>${tableDto.table.seatFee}元/人</td>
                 <td>${tableDto.table.tableFee}元</td>
                 <td>${tableDto.table.minCost}元</td>
@@ -110,7 +109,7 @@
                 <td>
                   <a class="label-info J_edit" href="javascript:;" src="${website}admin/restaurant/table/update/${tableDto.table.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
                   <c:choose>
-                    <c:when test="${tableDto.table.state == 0}">
+                    <c:when test="${tableDto.table.status == 0}">
                       <a class="label-info J_change" href="javascript:;"><i class="fa fa-check"></i>&nbsp;启用</a>
                     </c:when>
                     <c:otherwise>

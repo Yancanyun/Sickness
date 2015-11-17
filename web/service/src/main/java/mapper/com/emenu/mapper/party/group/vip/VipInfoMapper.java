@@ -70,11 +70,11 @@ public interface VipInfoMapper {
     /**
      * 根据会员id更改会员状态
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateStateById(@Param("id") int id,
-                                @Param("state") int state) throws Exception;
+    public void updateStatusById(@Param("id") int id,
+                                @Param("status") int status) throws Exception;
 
     /**
      * 根据会员id查询securityUserId，用于改变securityUser状态

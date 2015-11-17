@@ -6,14 +6,13 @@
     <td>&{it.areaName}</td>
     <td>&{it.name}</td>
     <td>&{it.seatNum}</td>
-    <td class="J_state">
-      {@if it.state == 0}停用
-      {@else if it.state == 1}可用
-      {@else if it.state == 2}占用已结账
-      {@else if it.state == 3}占用未结账
-      {@else if it.state == 4}已预订
-      {@else if it.state == 5}已并桌
-      {@else if it.state == 6}已删除
+    <td class="J_status">
+      {@if it.status == 0}停用
+      {@else if it.status == 1}可用
+      {@else if it.status == 2}占用已结账
+      {@else if it.status == 3}占用未结账
+      {@else if it.status == 4}已并桌
+      {@else if it.status == 5}已预订
       {@/if}
     </td>
     <td>&{it.seatFee}元/人</td>
@@ -22,7 +21,7 @@
     <td>&{it.mealPeriodName}</td>
     <td>
       <a class="label-info J_edit" href="javascript:;" src="${website}admin/restaurant/table/update/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-      {@if it.state == 0}
+      {@if it.status == 0}
       <a class="label-info J_change" href="javascript:;"><i class="fa fa-check"></i>&nbsp;启用</a>
       {@else}
       <a class="label-info J_change" href="javascript:;"><i class="fa fa-circle"></i>&nbsp;停用</a>

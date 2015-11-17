@@ -1,5 +1,6 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.storage.StorageCheckDto;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
@@ -120,6 +121,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
                         }
                     }
                     //第三步：把结算过的单据状态改为已结算
+                    //TODO
                     storageReportDto.getStorageReport().setStatus(StorageReportStatusEnum.Settled.getId());
                 }
                 //实际
@@ -158,5 +160,14 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertStorageSettlementItemFailed, e);
         }
+    }
+
+    @Override
+    public List<StorageCheckDto> listStorageItemCheck(Date startDate,
+                                                      Date endTime,
+                                                      List<Integer> depotId,
+                                                      List<Integer> tagId,
+                                                      String itemName) throws SSException {
+        return null;
     }
 }

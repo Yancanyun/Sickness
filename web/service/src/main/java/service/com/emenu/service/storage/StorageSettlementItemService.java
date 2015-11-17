@@ -1,6 +1,10 @@
 package com.emenu.service.storage;
 
+import com.emenu.common.dto.storage.StorageCheckDto;
 import com.pandawork.core.common.exception.SSException;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * StorageSettlementItemService
@@ -16,6 +20,16 @@ public interface StorageSettlementItemService {
      * @throws SSException
      */
     public void newSettlementItem() throws SSException;
+
+    /**
+     *
+     * @throws SSException
+     */
+    public List<StorageCheckDto> listStorageItemCheck(Date startDate,
+                                                      Date endDate,
+                                                      List<Integer> depotId,
+                                                      List<Integer> tagId,
+                                                      String itemName) throws SSException;
 
 
 }

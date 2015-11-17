@@ -2,6 +2,7 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
+import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
@@ -82,4 +83,13 @@ public interface StorageReportMapper {
      * @throws Exception
      */
     public List<StorageReport> ListStorageReportUnsettled(@Param("endTime")Date endTime) throws Exception;
+
+    /**
+     * 根据单据id修改单据状态
+     * @param id
+     * @param status
+     * @return
+     * @throws Exception
+     */
+    public boolean updateStatusById(@Param("id")int id, @Param("status")int status) throws Exception;
 }

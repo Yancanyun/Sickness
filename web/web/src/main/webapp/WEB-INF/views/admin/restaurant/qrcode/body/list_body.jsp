@@ -9,6 +9,12 @@
       <li class="active">餐台二维码</li>
     </ol>
     <h2>餐台二维码</h2>
+    <c:if test="${!empty success}">
+      <div class="alert alert-success col-sm-12 J_msg" role="alert">${success}</div>
+    </c:if>
+    <c:if test="${!empty failed}">
+      <div class="alert alert-danger col-sm-12 J_msg" role="alert">${failed}</div>
+    </c:if>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">

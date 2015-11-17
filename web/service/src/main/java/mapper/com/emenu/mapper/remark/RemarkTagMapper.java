@@ -30,10 +30,10 @@ public interface RemarkTagMapper {
     /**
      * 根据ID修改备注分类状态
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+    public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 
     /**
      * 根据父ID查询子分类

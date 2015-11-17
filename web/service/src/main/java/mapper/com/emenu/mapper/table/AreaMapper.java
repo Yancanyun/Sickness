@@ -25,7 +25,7 @@ public interface AreaMapper {
      * @return int : 1、可用；2、已删除
      * @throws Exception
      */
-    public int queryStateById(@Param("id") int id) throws Exception;
+    public int queryStatusById(@Param("id") int id) throws Exception;
 
     /**
      * 查询某区域名称的数量
@@ -38,8 +38,8 @@ public interface AreaMapper {
     /**
      * 根据ID修改区域状态
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+    public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 }

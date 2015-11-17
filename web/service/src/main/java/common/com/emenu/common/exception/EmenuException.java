@@ -179,6 +179,7 @@ public enum EmenuException implements IBizExceptionMes {
     NewPrinterDishError("新增打印机与菜品管理关联失败",5054),
     UpdatePrinterDishError("修改打印机与菜品管理关联失败",5055),
     DelPrinterDishError("删除打印机与菜品管理关联失败",5056),
+    PrinterIsUsing("打印机正在被使用，请取消所有关联菜品分类后重试",5057),
 
     //用户管理模块
     QueryEmployeeInfoFail("获取员工信息失败",6001),

@@ -34,7 +34,7 @@ public interface AreaService {
      * @return int : 1、可用；2、已删除
      * @throws SSException
      */
-    public int queryStateById(int id) throws SSException;
+    public int queryStatusById(int id) throws SSException;
 
     /**
      * 添加区域

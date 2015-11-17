@@ -95,6 +95,20 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
+    public List<Tag> listDishTagForPrinter() throws Exception {
+        List<Tag> tagList = tagCacheService.listByCurrentId(TagEnum.DishAndGoods.getId());
+        List<Tag> newTagList = new ArrayList<Tag>();
+        for(Tag tag : tagList){
+            Integer tagId = tag.getId();
+            if(tagId!=TagEnum.Dishes.getId() && tagId!=TagEnum.Drinks.getId() && tagId!=TagEnum.Others.getId()
+                    && tagId!=TagEnum.Goods.getId() && tagId!=TagEnum.Package.getId() && tagId!=TagEnum.DishAndGoods.getId()){
+                newTagList.add(tag);
+            }
+        }
+        return newTagList;
+    }
+
+    @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public Tag newTagPrinter(Tag tag, Integer printerId) throws Exception {
         //添加分类

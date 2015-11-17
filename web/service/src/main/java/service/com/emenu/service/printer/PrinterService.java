@@ -48,6 +48,14 @@ public interface PrinterService {
     public List<Printer> listAll() throws SSException;
 
     /**
+     * 查询所有分类打印机
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Printer> listDishTagPrinter() throws SSException;
+
+    /**
      * 根据id查询打印机
      *
      * @param id

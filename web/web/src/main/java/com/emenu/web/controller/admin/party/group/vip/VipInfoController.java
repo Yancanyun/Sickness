@@ -73,7 +73,7 @@ public class VipInfoController extends AbstractController {
             jsonObject.put("id", vipInfo.getId());
             jsonObject.put("name", vipInfo.getName());
             jsonObject.put("phone", vipInfo.getPhone());
-            jsonObject.put("state", vipInfo.getState());
+            jsonObject.put("status", vipInfo.getStatus());
             jsonArray.add(jsonObject);
         }
         Integer dataCount = 0;
@@ -98,12 +98,8 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 新增会员
-     * @param name
-     * @param sex
-     * @param birthday
-     * @param phone
-     * @param qq
-     * @param email
+     * @param vipInfo
+     * @param redirectAttributes
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoNew)
@@ -152,13 +148,8 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 修改会员信息
-     * @param id
-     * @param name
-     * @param sex
-     * @param birthday
-     * @param phone
-     * @param qq
-     * @param email
+     * @param vipInfo
+     * @param redirectAttributes
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoUpdate)
@@ -186,7 +177,7 @@ public class VipInfoController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxDel(@RequestParam("id") Integer id){
         try{
-            vipInfoService.updateStateById(id, UserStatusEnums.Deleted);
+            vipInfoService.updateStatusById(id, UserStatusEnums.Deleted);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -217,17 +208,17 @@ public class VipInfoController extends AbstractController {
     /**
      * ajax更改会员状态
      * @param id
-     * @param state
+     * @param status
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoUpdate)
-    @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
+    @RequestMapping(value = "ajax/status", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject updateState(@RequestParam("id") Integer id,
-                                  @RequestParam("state") Integer state){
+    public JSONObject updateStatus(@RequestParam("id") Integer id,
+                                   @RequestParam("status") Integer status){
         try{
-            UserStatusEnums vipInfostate = UserStatusEnums.valueOf(state);
-            vipInfoService.updateStateById(id, vipInfostate);
+            UserStatusEnums vipInfostatus = UserStatusEnums.valueOf(status);
+            vipInfoService.updateStatusById(id, vipInfostatus);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

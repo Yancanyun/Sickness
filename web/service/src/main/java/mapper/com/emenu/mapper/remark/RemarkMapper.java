@@ -46,8 +46,8 @@ public interface RemarkMapper {
     /**
      * 根据ID修改备注状态
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+    public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 }
