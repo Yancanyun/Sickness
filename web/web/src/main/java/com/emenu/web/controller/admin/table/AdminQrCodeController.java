@@ -13,6 +13,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,15 +63,23 @@ public class AdminQrCodeController extends AbstractController {
      */
     @Module(ModuleEnums.AdminRestaurantQrCodeNew)
     @RequestMapping(value = "newAllQrCode", method = RequestMethod.POST)
-    public String newAllQrCode(@RequestParam String webDomain) {
+    public String newAllQrCode(@RequestParam String webDomain, RedirectAttributes redirectAttributes) {
         try {
             qrCodeService.newAllQrCode(webDomain, getRequest());
+            String returnUrl = "/" + URLConstants.ADMIN_QRCODE_URL;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("success", "生成二维码成功");
+            //返回列表页
+            return "redirect:" + returnUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String returnUrl = "/" + URLConstants.ADMIN_QRCODE_URL;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("failed", "生成二维码失败");
+            //返回列表页
+            return "redirect:" + returnUrl;
         }
-        return "redirect:";
     }
 
     /**
