@@ -8,17 +8,17 @@ import com.emenu.common.dto.remark.RemarkTagDto;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.remark.RemarkStatusEnums;
+import com.emenu.common.enums.remark.RemarkTagStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +119,161 @@ public class AdminRemarkController extends AbstractController {
 
             //不分页，故dataCount填0
             return sendJsonArray(jsonArray, 0);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 添加备注分类
+     * @param pId
+     * @param name
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkNew)
+    @RequestMapping(value = "ajax/remark/tag", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject ajaxNewChildRemarkTag(@PathVariable("pId") Integer pId, @RequestParam String name) {
+        try {
+            RemarkTag remarkTag = new RemarkTag();
+            remarkTag.setpId(pId);
+            remarkTag.setName(name);
+            remarkTag.setStatus(RemarkTagStatusEnums.Enabled.getId());
+            remarkTagService.newRemarkTag(remarkTag);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", remarkTag.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 添加备注
+     * @param smallTagId
+     * @param name
+     * @param weight
+     * @param isCommon
+     * @param relatedCharges
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkNew)
+    @RequestMapping(value = "ajax/remark", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject ajaxNewRemark(@PathVariable("smallTagId") Integer smallTagId,
+                                    @RequestParam String name,
+                                    @RequestParam Integer weight,
+                                    @RequestParam Integer isCommon,
+                                    @RequestParam BigDecimal relatedCharges) {
+        try {
+            Remark remark = new Remark();
+            remark.setRemarkTagId(smallTagId);
+            remark.setName(name);
+            remark.setWeight(weight);
+            remark.setIsCommon(isCommon);
+            remark.setRelatedCharges(relatedCharges);
+            remark.setStatus(RemarkStatusEnums.Enabled.getId());
+            remarkService.newRemark(remark);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", remark.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 修改备注分类
+     * @param id
+     * @param name
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkUpdate)
+    @RequestMapping(value = "ajax/remark/tag/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSONObject ajaxUpdateChildRemarkTag(@PathVariable("id") Integer id, @RequestParam String name) {
+        try {
+            RemarkTag remarkTag = new RemarkTag();
+            remarkTag.setId(id);
+            remarkTag.setName(name);
+            remarkTagService.updateRemarkTag(id, remarkTag);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 修改备注
+     * @param id
+     * @param name
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkUpdate)
+    @RequestMapping(value = "ajax/remark/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSONObject ajaxUpdateRemark(@PathVariable("id") Integer id,
+                                       @PathVariable("smallTagId") Integer smallTagId,
+                                       @RequestParam String name,
+                                       @RequestParam Integer weight,
+                                       @RequestParam Integer isCommon,
+                                       @RequestParam BigDecimal relatedCharges) {
+        try {
+            Remark remark = new Remark();
+            remark.setId(id);
+            remark.setRemarkTagId(smallTagId);
+            remark.setName(name);
+            remark.setWeight(weight);
+            remark.setIsCommon(isCommon);
+            remark.setRelatedCharges(relatedCharges);
+            remarkService.updateRemark(id, remark);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 删除备注分类
+     * @param id
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkDel)
+    @RequestMapping(value = "ajax/remark/tag/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject ajaxDelChildRemarkTag(@PathVariable("id") Integer id) {
+        try {
+            remarkTagService.delById(id);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 删除备注
+     * @param id
+     * @return
+     */
+    @Module(ModuleEnums.AdminRestaurantRemarkDel)
+    @RequestMapping(value = "ajax/remark/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject ajaxDelRemark(@PathVariable("id") Integer id) {
+        try {
+            remarkService.delById(id);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
