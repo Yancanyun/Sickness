@@ -22,14 +22,20 @@ public interface StorageSettlementItemService {
     public void newSettlementItem() throws SSException;
 
     /**
-     *
+     * 库存盘点
+     * @param startDate
+     * @param endDate
+     * @param depotIds
+     * @param tagIds
+     * @param itemId
+     * @return List<StorageCheckDto>
      * @throws SSException
      */
     public List<StorageCheckDto> listStorageItemCheck(Date startDate,
                                                       Date endDate,
-                                                      List<Integer> depotId,
-                                                      List<Integer> tagId,
-                                                      String itemName) throws SSException;
+                                                      List<Integer> depotIds,
+                                                      List<Integer> tagIds,
+                                                      Integer itemId) throws Exception;
 
 
 }

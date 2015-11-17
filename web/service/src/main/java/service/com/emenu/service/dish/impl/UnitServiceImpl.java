@@ -10,6 +10,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +27,6 @@ import java.util.List;
 public class UnitServiceImpl implements UnitService {
 
     @Autowired
-    @Qualifier("unitMapper")
     private UnitMapper unitMapper;
 
     @Autowired
@@ -108,6 +109,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public Unit newUnit(Unit unit) throws SSException {
         try {
             if(Assert.isNull(unit.getName())){
@@ -134,6 +136,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delById(int id) throws SSException {
         try {
             // 检查id是否<=0，如果是，直接返回
@@ -154,6 +157,7 @@ public class UnitServiceImpl implements UnitService {
      * @throws SSException
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void updateUnit(Unit unit) throws SSException {
         try {
             // 检查id是否<=0，如果是，直接返回

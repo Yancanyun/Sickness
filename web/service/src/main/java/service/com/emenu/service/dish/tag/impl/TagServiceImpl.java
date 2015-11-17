@@ -11,6 +11,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,10 +31,10 @@ public class TagServiceImpl implements TagService{
     private CommonDao commonDao;
 
     @Autowired
-    @Qualifier("tagMapper")
     private TagMapper tagMapper;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public Tag newTag(Tag tag) throws SSException {
         try{
             // 检查一下是否为空,名称
@@ -50,6 +52,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delById(int tagId) throws SSException {
         try {
             if (Assert.lessOrEqualZero(tagId)) {
@@ -66,6 +69,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delByIds(List<Integer> ids) throws SSException {
         try{
             if(Assert.isEmpty(ids)){
@@ -79,6 +83,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void updateTag(Tag tag) throws SSException {
         try {
             if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
@@ -98,6 +103,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void updateFiled(Tag tag, String filedName) throws SSException {
         try{
             // 检查id是否<=0，如果是，直接返回

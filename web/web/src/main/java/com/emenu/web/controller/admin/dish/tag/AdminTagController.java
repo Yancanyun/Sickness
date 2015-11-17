@@ -58,7 +58,7 @@ public class AdminTagController extends AbstractController{
             }
         }
         //获取打印机列表
-        List<Printer> printerList = printerService.listAll();
+        List<Printer> printerList = printerService.listDishTagPrinter();
         model.addAttribute("tagDtoMap", tagDtoMap);
         model.addAttribute("childrenTagDtoMap", childrenTagDtoMap);
         model.addAttribute("printerList", printerList);

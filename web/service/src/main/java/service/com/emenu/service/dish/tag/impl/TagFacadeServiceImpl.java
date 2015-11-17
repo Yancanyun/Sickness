@@ -40,12 +40,14 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     private PrinterService printerService;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public Tag newTag(Tag tag) throws Exception {
         tag = tagService.newTag(tag);
         return tagCacheService.newTag(tag);
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void updateTag(Tag tag) throws Exception {
         tagService.updateTag(tag);
         tagCacheService.updateTag(tag);
@@ -63,6 +65,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delById(int tagId) throws Exception {
         tagCacheService.delById(tagId);
         tagService.delById(tagId);
