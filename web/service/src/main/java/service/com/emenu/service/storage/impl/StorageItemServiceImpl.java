@@ -13,6 +13,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,6 +77,7 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void newStorageItem(StorageItem storageItem) throws SSException {
         try {
             if (!checkBeforeSave(storageItem)) {
@@ -89,6 +92,7 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStorageItem(StorageItem storageItem) throws SSException {
         try {
             if (!checkBeforeSave(storageItem)) {
@@ -134,6 +138,20 @@ public class StorageItemServiceImpl implements StorageItemService {
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
         }
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public StorageItem queryById(int id) throws SSException {
+        if (Assert.lessOrEqualZero(id)) {
+            return null;
+        }
+        try {
+            commonDao.queryById(StorageItem.class, id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemQueryFailed, e);
+        }
+        return null;
     }
 
     private boolean checkBeforeSave(StorageItem storageItem) throws SSException {

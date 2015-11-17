@@ -65,7 +65,6 @@ CREATE TABLE `t_dish` (
 	`is_vip_price_available` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '是否启用会员价(0-不可用,1-可用)',
 	`is_voucher_available` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '是否可用代金卷(0-不可用,1-可用)',
 	`time_limit` INT(11) NOT NULL DEFAULT '0' COMMENT '上菜时限(0-无限制)',
-	`printer_id` INT(11) NOT NULL DEFAULT '0' COMMENT '打印机ID',
 	`created_party_id` INT(11) NOT NULL DEFAULT '0' COMMENT '创建者partyId',
 	`created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP  COMMENT '创建时间',
 	`last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
