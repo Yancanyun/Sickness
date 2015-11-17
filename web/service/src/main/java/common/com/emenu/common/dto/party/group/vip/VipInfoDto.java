@@ -28,7 +28,7 @@ public class VipInfoDto {
     private String email;
 
     //帐号状态(1-启用,2-停用,3-删除)
-    private String state;
+    private String status;
 
     //get、set方法
     public String getName() {
@@ -79,11 +79,11 @@ public class VipInfoDto {
         this.email = email;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

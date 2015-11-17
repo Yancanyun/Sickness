@@ -30,7 +30,7 @@
             ['sendEmployeeNo', site.staticWebsite + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
 
             // 会员管理
-            ['sendVipId', site.website + 'admin/party/group/vip/ajax/state', 'get', '改变会员状态时，发送会员id'],
+            ['sendVipId', site.website + 'admin/party/group/vip/ajax/status', 'get', '改变会员状态时，发送会员id'],
             // 会员管理--列表--删除
             ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'put', '删除会员时，发送会员id'],
             //会员管理--添加\编辑

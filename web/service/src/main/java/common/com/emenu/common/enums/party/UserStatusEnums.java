@@ -15,11 +15,11 @@ public enum UserStatusEnums {
     Deleted(3, "删除");
 
     private Integer id;
-    private String state;
+    private String status;
 
-    UserStatusEnums(Integer id, String state) {
+    UserStatusEnums(Integer id, String status) {
         this.id = id;
-        this.state = state;
+        this.status = status;
     }
 
     private static Map<Integer, UserStatusEnums> map = new HashMap<Integer, UserStatusEnums>();
@@ -43,8 +43,8 @@ public enum UserStatusEnums {
         return id;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
 }

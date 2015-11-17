@@ -8,35 +8,35 @@
         <where>
             <if test="keyword != null">
                 (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
-                AND (`state` = 1 OR `state` = 2)
+                AND (`status` = 1 OR `status` = 2)
             </if>
         </where>
-        ORDER BY  `state` ASC, `id` DESC
+        ORDER BY  `status` ASC, `id` DESC
         LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="listByPage" resultMap="pw.VipInfo">
         SELECT *
         FROM `t_party_vip_info`
-        WHERE `state` = 1 OR `state` = 2
-        ORDER BY  `state` ASC, `id` DESC
+        WHERE `status` = 1 OR `status` = 2
+        ORDER BY  `status` ASC, `id` DESC
         LIMIT #{offset},#{pageSize}
     </select>
     
     <select id="countAll" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info`
-        WHERE `state` = 1 OR `state` = 2
+        WHERE `status` = 1 OR `status` = 2
     </select>
 
     <select id="countByKeyword" resultType="int">
         SELECT COUNT(*)
         FROM `t_party_vip_info` vipInfo
-        WHERE `state` = 1 OR `state` = 2
+        WHERE `status` = 1 OR `status` = 2
         <where>
             <if test="keyword != null">
                 (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
-                AND (`state` = 1 OR `state` = 2)
+                AND (`status` = 1 OR `status` = 2)
             </if>
         </where>
         LIMIT #{offset},#{pageSize}
@@ -54,14 +54,14 @@
         <where>
             <if test="phone != null">
                 `phone` = #{phone} AND
-                (`state` = 1 OR `state` = 2)
+                (`status` = 1 OR `status` = 2)
             </if>
         </where>
     </select>
     
-    <update id="updateStateById">
+    <update id="updateStatusById">
         UPDATE `t_party_vip_info`
-        SET `state` = #{state}
+        SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
 
