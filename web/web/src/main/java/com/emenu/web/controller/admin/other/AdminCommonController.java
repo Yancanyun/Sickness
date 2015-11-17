@@ -3,6 +3,7 @@ package com.emenu.web.controller.admin.other;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
+import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.utils.StringUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AdminCommonController extends AbstractController {
 
     @IgnoreAuthorization
+    @IgnoreLogin
     @RequestMapping(value = "tool/str2py/ajax", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxStr2Py(@RequestParam("str") String str,
