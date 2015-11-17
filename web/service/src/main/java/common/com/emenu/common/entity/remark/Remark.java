@@ -41,7 +41,7 @@ public class Remark extends AbstractEntity {
     private BigDecimal relatedCharges;
 
     //状态(1-可用, 2-已删除)
-    private Integer state;
+    private Integer status;
 
     //创建时间
     @Column(name = "created_time")
@@ -100,12 +100,12 @@ public class Remark extends AbstractEntity {
         this.relatedCharges = relatedCharges;
     }
 
-    public Integer getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Date getCreatedTime() {

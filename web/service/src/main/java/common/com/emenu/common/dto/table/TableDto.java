@@ -15,7 +15,7 @@ public class TableDto {
     private Table table;
     private String areaId;
     private String areaName;
-    private String state;
+    private String status;
     private List<MealPeriod> mealPeriodList;
 
     public Table getTable() {
@@ -42,12 +42,12 @@ public class TableDto {
         this.areaName = areaName;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<MealPeriod> getMealPeriodList() {

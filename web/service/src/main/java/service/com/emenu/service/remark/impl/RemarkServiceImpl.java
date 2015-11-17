@@ -2,7 +2,7 @@ package com.emenu.service.remark.impl;
 
 import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.remark.Remark;
-import com.emenu.common.enums.remark.RemarkStateEnums;
+import com.emenu.common.enums.remark.RemarkStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.remark.RemarkMapper;
 import com.emenu.service.remark.RemarkService;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -164,7 +163,7 @@ public class RemarkServiceImpl implements RemarkService {
                 throw SSException.get(EmenuException.RemarkNameIsNull);
             }
             //将状态设为"可用"
-            remark.setState(RemarkStateEnums.Enabled.getId());
+            remark.setStatus(RemarkStatusEnums.Enabled.getId());
             return commonDao.insert(remark);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -209,7 +208,7 @@ public class RemarkServiceImpl implements RemarkService {
         }
         try {
             //将状态设为"删除"
-            remarkMapper.updateState(id, RemarkStateEnums.Deleted.getId());
+            remarkMapper.updateStatus(id, RemarkStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteRemarkFail, e);

@@ -30,20 +30,20 @@ public interface TableMapper {
 
     /**
      * 根据状态查询餐台（仅餐台表本身的信息）
-     * @param state
+     * @param status
      * @return List<Table>
      * @throws Exception
      */
-    public List<Table> listByState(@Param("state") int state) throws Exception;
+    public List<Table> listByStatus(@Param("status") int status) throws Exception;
 
     /**
      * 根据区域及状态查询餐台（仅餐台表本身的信息）
      * @param areaId
-     * @param state
+     * @param status
      * @return List<Table>
      * @throws Exception
      */
-    public List<Table> listByAreaIdAndState(@Param("areaId") int areaId, @Param("state") int state) throws Exception;
+    public List<Table> listByAreaIdAndStatus(@Param("areaId") int areaId, @Param("status") int status) throws Exception;
 
     /**
      * 根据ID查询餐台状态
@@ -51,7 +51,7 @@ public interface TableMapper {
      * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账4、已并桌；5、已预订；6、已删除
      * @throws Exception
      */
-    public int queryStateById(@Param("id") int id) throws Exception;
+    public int queryStatusById(@Param("id") int id) throws Exception;
 
     /**
      * 查询某餐台名称的数量
@@ -72,10 +72,10 @@ public interface TableMapper {
     /**
      * 根据ID修改餐台状态
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateState(@Param("id") int id, @Param("state") int state) throws Exception;
+    public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 
     /**
      * 修改餐台二维码信息

@@ -44,10 +44,10 @@ public class AreaTest extends AbstractTestCase {
     }
 
     @Test
-    public void queryAreaStateById() throws SSException {
-        int state = areaService.queryStateById(1);
+    public void queryAreaStatusById() throws SSException {
+        int status = areaService.queryStatusById(1);
 
-        System.out.println(state);
+        System.out.println(status);
     }
 
     @Test

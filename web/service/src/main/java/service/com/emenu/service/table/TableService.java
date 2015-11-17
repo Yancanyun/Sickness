@@ -2,7 +2,7 @@ package com.emenu.service.table;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.enums.table.TableStateEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,37 +47,37 @@ public interface TableService {
 
     /**
      * 根据状态查询餐台（包含区域表中的信息）
-     * @param state
+     * @param status
      * @return List<TableDto>
      * @throws SSException
      */
-    public List<TableDto> listTableDtoByState(TableStateEnums state) throws SSException;
+    public List<TableDto> listTableDtoByStatus(TableStatusEnums status) throws SSException;
 
     /**
      * 根据状态查询餐台（仅餐台表本身的信息）
-     * @param state
+     * @param status
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listByState(TableStateEnums state) throws SSException;
+    public List<Table> listByStatus(TableStatusEnums status) throws SSException;
 
     /**
      * 根据区域及状态查询餐台（包含区域表中的信息）
      * @param areaId
-     * @param state
+     * @param status
      * @return List<TableDto>
      * @throws SSException
      */
-    public List<TableDto> listTableDtoByAreaIdAndState(int areaId, TableStateEnums state) throws SSException;
+    public List<TableDto> listTableDtoByAreaIdAndStatus(int areaId, TableStatusEnums status) throws SSException;
 
     /**
      * 根据区域及状态查询餐台（仅餐台表本身的信息）
      * @param areaId
-     * @param state
+     * @param status
      * @return List<Table>
      * @throws SSException
      */
-    public List<Table> listByAreaIdAndState(int areaId, TableStateEnums state) throws SSException;
+    public List<Table> listByAreaIdAndStatus(int areaId, TableStatusEnums status) throws SSException;
 
     /**
      * 根据ID查询餐台（包含区域表、餐段表中的信息）
@@ -101,14 +101,14 @@ public interface TableService {
      * @return int : 0、停用；1、可用；2、占用已结账；3、占用未结账；4、已并桌；5、已预订；6、已删除
      * @throws SSException
      */
-    public int queryStateById(int id) throws SSException;
+    public int queryStatusById(int id) throws SSException;
 
     /**
      * 根据ID检查餐台是否可修改
      * @param id
      * @throws SSException
      */
-    public void checkStateById(int id) throws SSException;
+    public void checkStatusById(int id) throws SSException;
 
     /**
      * 添加餐台
@@ -145,10 +145,10 @@ public interface TableService {
     /**
      * 修改餐台状态
      * @param id
-     * @param state
+     * @param status
      * @throws SSException
      */
-    public void updateState(int id, int state) throws SSException;
+    public void updateStatus(int id, int status) throws SSException;
 
     /**
      * 删除单个餐台

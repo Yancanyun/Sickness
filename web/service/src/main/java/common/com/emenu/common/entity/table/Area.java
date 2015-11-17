@@ -25,7 +25,7 @@ public class Area extends AbstractEntity {
     private String name;
 
     //状态(1-可用, 2-已删除)
-    private Integer state;
+    private Integer status;
 
     //权重
     private Integer weight;
@@ -55,12 +55,12 @@ public class Area extends AbstractEntity {
         this.name = name;
     }
 
-    public Integer getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getWeight() {

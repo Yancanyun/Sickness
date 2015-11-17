@@ -54,11 +54,11 @@
         RestaurantManagement: [
             //餐台管理--列表
             //table-management-list.html
-            ['changeState', site.website + 'admin/restaurant/table/ajax/state', 'put', '改变餐台状态（停用、恢复）'],
+            ['changeTableStatus', site.website + 'admin/restaurant/table/ajax/status', 'put', '改变餐台状态（停用、恢复）'],
             ['delOneTable', site.website + 'admin/restaurant/table/ajax/&{id}', 'delete', '删除单个餐台'],
             ['searchTable', site.website + 'admin/restaurant/table/ajax/list', 'get', '搜索餐台'],
             ['batchDelete', site.website + 'admin/restaurant/table/ajax', 'post', '批量删除'],
-            ['editSendId', site.website + 'admin/restaurant/table/ajax/state', 'get', '编辑时发送餐台ID'],
+            ['editSendId', site.website + 'admin/restaurant/table/ajax/status', 'get', '编辑时发送餐台ID'],
             //餐台管理--添加\编辑
             //table-management-add.html
             ['sendTableName', site.staticWebsite + 'admin/restaurant/table/ajax/exist', 'post', '判断餐台名称是否重复'],

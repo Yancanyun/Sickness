@@ -3,7 +3,7 @@ package com.emenu.service.table.impl;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.enums.table.AreaStateEnums;
+import com.emenu.common.enums.table.AreaStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.AreaMapper;
 import com.emenu.service.table.AreaService;
@@ -65,13 +65,13 @@ public class AreaServiceImpl implements AreaService{
     }
 
     @Override
-    public int queryStateById(int id) throws SSException {
+    public int queryStatusById(int id) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
             return 0;
         }
         try {
-            return areaMapper.queryStateById(id);
+            return areaMapper.queryStatusById(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryAreaFail, e);
@@ -91,7 +91,7 @@ public class AreaServiceImpl implements AreaService{
                 throw SSException.get(EmenuException.AreaNameIsNull);
             }
             //将状态设为"可用"
-            area.setState(AreaStateEnums.Enabled.getId());
+            area.setStatus(AreaStatusEnums.Enabled.getId());
             return commonDao.insert(area);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -149,7 +149,7 @@ public class AreaServiceImpl implements AreaService{
                 throw SSException.get(EmenuException.AreaHasTableExist);
             }
             //将状态设为"删除"
-            areaMapper.updateState(id, AreaStateEnums.Deleted.getId());
+            areaMapper.updateStatus(id, AreaStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteAreaFail, e);

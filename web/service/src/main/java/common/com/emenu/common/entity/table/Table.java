@@ -1,6 +1,6 @@
 package com.emenu.common.entity.table;
 
-import com.emenu.common.enums.table.TableStateEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.pandawork.core.common.entity.AbstractEntity;
 
 import javax.persistence.*;
@@ -49,7 +49,7 @@ public class Table extends AbstractEntity {
     private String qrCodePath;
 
     //状态(0-停用, 1-可用, 2-占用已结账, 3-占用未结账, 4-已并桌, 5-已预订, 6-已删除)
-    private Integer state;
+    private Integer status;
 
     //实际人数
     @Column(name = "person_num")
@@ -67,9 +67,9 @@ public class Table extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
-    // 状态字符串
+    //状态字符串
     @Transient
-    private String stateStr;
+    private String statusStr;
 
     public Integer getId() {
         return id;
@@ -135,14 +135,14 @@ public class Table extends AbstractEntity {
         this.qrCodePath = qrCodePath;
     }
 
-    public Integer getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
-        TableStateEnums stateEnums = TableStateEnums.valueOf(state);
-        this.setStateStr(stateEnums == null ? "" : stateEnums.getType());
+    public void setStatus(Integer status) {
+        this.status = status;
+        TableStatusEnums statusEnums = TableStatusEnums.valueOf(status);
+        this.setStatusStr(statusEnums == null ? "" : statusEnums.getType());
     }
 
     public Integer getPersonNum() {
@@ -177,11 +177,11 @@ public class Table extends AbstractEntity {
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public String getStateStr() {
-        return stateStr;
+    public String getStatusStr() {
+        return statusStr;
     }
 
-    public void setStateStr(String stateStr) {
-        this.stateStr = stateStr;
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 }

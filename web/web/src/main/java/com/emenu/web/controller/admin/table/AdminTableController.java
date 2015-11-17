@@ -7,9 +7,8 @@ import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.entity.table.TableMealPeriod;
 import com.emenu.common.enums.other.ModuleEnums;
-import com.emenu.common.enums.table.TableStateEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
@@ -59,18 +58,18 @@ public class AdminTableController extends AbstractController {
     /**
      * Ajax 获取数据
      * @param areaId
-     * @param state
+     * @param status
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxList(@RequestParam(value = "areaId") Integer[] areaId,
-                               @RequestParam(value = "state") Integer state) {
+                               @RequestParam(value = "status") Integer status) {
         try {
             List<TableDto> tableDtoList = new ArrayList<TableDto>();
             //选择区域，未选择状态
-            if (areaId.length > 0 && state == -1) {
+            if (areaId.length > 0 && status == -1) {
                 //全选区域
                 if (areaId[0] == -1){
                     tableDtoList = tableService.listAllTableDto();
@@ -83,14 +82,14 @@ public class AdminTableController extends AbstractController {
                 }
             }
             //选择区域并选择状态
-            else if (areaId.length > 0 && state != -1) {
+            else if (areaId.length > 0 && status != -1) {
                 //全选区域
                 if (areaId[0] == -1){
-                    tableDtoList.addAll(tableService.listTableDtoByState(TableStateEnums.valueOf(state)));
+                    tableDtoList.addAll(tableService.listTableDtoByStatus(TableStatusEnums.valueOf(status)));
                 } else {
                     for (int i = 0; i < areaId.length; i++) {
                         if (i >= 0) {
-                            tableDtoList.addAll(tableService.listTableDtoByAreaIdAndState(areaId[i], TableStateEnums.valueOf(state)));
+                            tableDtoList.addAll(tableService.listTableDtoByAreaIdAndStatus(areaId[i], TableStatusEnums.valueOf(status)));
                         }
                     }
                 }
@@ -108,7 +107,7 @@ public class AdminTableController extends AbstractController {
                     jsonObject.put("id", tableDto.getTable().getId());
                     jsonObject.put("name", tableDto.getTable().getName());
                     jsonObject.put("seatNum", tableDto.getTable().getSeatNum());
-                    jsonObject.put("state", decimalFormat.format(tableDto.getTable().getState()));
+                    jsonObject.put("status", decimalFormat.format(tableDto.getTable().getStatus()));
                     jsonObject.put("seatFee", decimalFormat.format(tableDto.getTable().getSeatFee()));
                     jsonObject.put("tableFee", decimalFormat.format(tableDto.getTable().getTableFee()));
                     jsonObject.put("minCost", decimalFormat.format(tableDto.getTable().getMinCost()));
@@ -316,11 +315,11 @@ public class AdminTableController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableList)
-    @RequestMapping(value = "ajax/state", method = RequestMethod.GET)
+    @RequestMapping(value = "ajax/status", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject checkState(@RequestParam("id") Integer id) {
+    public JSONObject checkStatus(@RequestParam("id") Integer id) {
         try {
-            tableService.checkStateById(id);
+            tableService.checkStatusById(id);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -331,16 +330,16 @@ public class AdminTableController extends AbstractController {
     /**
      * Ajax 修改餐台状态
      * @param id
-     * @param state
+     * @param status
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantTableUpdate)
-    @RequestMapping(value = "ajax/state", method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax/status", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject updateState(@RequestParam("id") Integer id,
-                                  @RequestParam("state") Integer state) {
+    public JSONObject updateStatus(@RequestParam("id") Integer id,
+                                  @RequestParam("status") Integer status) {
         try {
-            tableService.updateState(id, state);
+            tableService.updateStatus(id, status);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

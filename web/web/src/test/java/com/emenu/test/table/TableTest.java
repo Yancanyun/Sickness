@@ -2,7 +2,7 @@ package com.emenu.test.table;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.enums.table.TableStateEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.service.table.TableService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -98,10 +98,10 @@ public class TableTest extends AbstractTestCase {
     }
 
     @Test
-    public void queryTableStateById() throws SSException {
-        int state = tableService.queryStateById(1);
+    public void queryTableStatusById() throws SSException {
+        int status = tableService.queryStatusById(1);
 
-        System.out.println("state:" + state);
+        System.out.println("status:" + status);
     }
 
 //    @Test
@@ -124,8 +124,8 @@ public class TableTest extends AbstractTestCase {
     }
 
     @Test
-    public void queryTableDtoByAreaIdAndState() throws SSException {
-        List<TableDto> tableDtoList = tableService.listTableDtoByAreaIdAndState(1, TableStateEnums.Enabled);
+    public void queryTableDtoByAreaIdAndStatus() throws SSException {
+        List<TableDto> tableDtoList = tableService.listTableDtoByAreaIdAndStatus(1, TableStatusEnums.Enabled);
         for (TableDto tableDto:tableDtoList){
             System.out.println("area_name:" + tableDto.getAreaName() +
                     "   name:" + tableDto.getTable().getName() + "  seat_num:" + tableDto.getTable().getSeatNum()

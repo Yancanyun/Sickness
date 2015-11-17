@@ -12,7 +12,7 @@
         `is_common`,
         `related_charges`
         FROM `t_remark`
-        WHERE `state` = 1
+        WHERE `status` = 1
     </select>
 
     <select id="listByRemarkTagId" resultMap="pw.Remark">
@@ -24,24 +24,24 @@
         `is_common`,
         `related_charges`
         FROM `t_remark`
-        WHERE `remark_tag_id` = #{remarkTagId} AND `state` = 1
+        WHERE `remark_tag_id` = #{remarkTagId} AND `status` = 1
     </select>
 
     <select id="countByName" resultType="int">
         SELECT COUNT(1)
         FROM `t_remark`
-        WHERE `name` = #{name} AND `state` = 1
+        WHERE `name` = #{name} AND `status` = 1
     </select>
 
     <select id="countByRemarkTagId" resultType="int">
         SELECT COUNT(1)
         FROM `t_remark`
-        WHERE `remark_tag_id` = #{remarkTagId} AND `state` = 1
+        WHERE `remark_tag_id` = #{remarkTagId} AND `status` = 1
     </select>
 
-    <update id="updateState">
+    <update id="updateStatus">
         UPDATE `t_remark`
-        SET `state` = #{state}
+        SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
 </mapper>
