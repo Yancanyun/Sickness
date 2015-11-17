@@ -31,6 +31,14 @@ public class PrinterServiceTest extends AbstractTestCase{
     }
 
     @Test
+    public void listDishTagPrinter() throws SSException{
+        List<Printer> list = printerService.listDishTagPrinter();
+        for (Printer printer : list){
+            System.out.println(printer);
+        }
+    }
+
+    @Test
     public void queryByTagId() throws SSException{
         System.out.println(printerService.queryByTagId(17));
     }

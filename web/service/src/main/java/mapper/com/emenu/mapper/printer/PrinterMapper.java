@@ -25,6 +25,14 @@ public interface PrinterMapper {
     public List<Printer> listAll() throws Exception;
 
     /**
+     * 查询所有分类打印机
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<Printer> listDishTagPrinter() throws Exception;
+
+    /**
      * 根据菜品分类id查询关联打印机
      *
      * @param id

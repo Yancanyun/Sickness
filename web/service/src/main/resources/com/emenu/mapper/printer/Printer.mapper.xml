@@ -7,6 +7,12 @@
         FROM `t_printer`
     </select>
 
+    <select id="listDishTagPrinter" resultMap="pw.Printer">
+        SELECT *
+        FROM `t_printer`
+        WHERE `type` = 3
+    </select>
+
     <select id="queryByTagId" resultMap="pw.Printer">
         SELECT `t_printer`.*
         FROM `t_printer`,`t_dish_tag_printer`
