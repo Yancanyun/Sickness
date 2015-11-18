@@ -39,6 +39,14 @@ public class PrinterServiceTest extends AbstractTestCase{
     }
 
     @Test
+    public void listAvailableDishTag() throws SSException{
+        List<Tag> list = printerService.listAvailableDishTag();
+        for (Tag tag : list){
+            System.out.println(tag);
+        }
+    }
+
+    @Test
     public void queryByTagId() throws SSException{
         System.out.println(printerService.queryByTagId(17));
     }
@@ -53,7 +61,7 @@ public class PrinterServiceTest extends AbstractTestCase{
     }
 
     @Test
-    public void updatePrinterIdish() throws SSException {
+    public void updatePrinterDish() throws SSException {
         PrinterDishDto printerDishDto  = new PrinterDishDto();
         printerDishDto.setDishId(24);
         printerDishDto.setPrinterId(2);
@@ -62,7 +70,7 @@ public class PrinterServiceTest extends AbstractTestCase{
     }
 
     @Test
-    public void delPrinterdish() throws SSException {
+    public void delPrinterDish() throws SSException {
         printerService.delPrinterDish(24);
     }
 
@@ -103,5 +111,15 @@ public class PrinterServiceTest extends AbstractTestCase{
         for (Tag tag : list){
             System.out.println(tag);
         }
+    }
+
+    @Test
+    public void bindDishTag() throws SSException{
+        printerService.bindDishTag(3, 9);
+    }
+
+    @Test
+    public void unBindAllDishTag() throws SSException{
+        printerService.unBindAllDishTag(1);
     }
 }

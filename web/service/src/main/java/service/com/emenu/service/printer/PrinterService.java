@@ -83,6 +83,14 @@ public interface PrinterService {
     public List<Tag> listTagById(int id) throws SSException;
 
     /**
+     * 查询没有关联打印机的菜品分类
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listAvailableDishTag() throws SSException;
+
+    /**
      * 新增菜品与打印机关联
      * @param printerDishDto
      * @return
@@ -103,4 +111,21 @@ public interface PrinterService {
      * @throws SSException
      */
     public void delPrinterDish(int tagId) throws SSException;
+
+    /**
+     * 打印机关联菜品分类
+     *
+     * @param printerId
+     * @param dishTagId
+     * @throws SSException
+     */
+    public void bindDishTag(int printerId, int dishTagId) throws SSException;
+
+    /**
+     * 打印机取消所有关联菜品分类
+     *
+     * @param printerId
+     * @throws SSException
+     */
+    public void unBindAllDishTag(int printerId) throws SSException;
 }

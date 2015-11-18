@@ -29,6 +29,14 @@
         ORDER BY `t_tag`.`id`
     </select>
 
+    <select id="listAvailableDishTag" resultMap="pw.Tag">
+        SELECT `t_tag`.*
+        FROM `t_tag`,`t_dish_tag_printer`
+        WHERE `t_dish_tag_printer`.`printer_id` = 0
+        AND `t_dish_tag_printer`.`dish_tag_id` = `t_tag`.`id`
+        ORDER BY `t_tag`.`id`
+    </select>
+
     <insert id="newPrinterDish">
         INSERT INTO `t_dish_tag_printer` (`dish_tag_id`, `printer_id`,`type`)
         VALUES (#{printerDishDto.dishId}, #{printerDishDto.printerId}, #{printerDishDto.type} )
@@ -51,4 +59,15 @@
         WHERE `${name}` = #{value}
     </select>
 
+    <update id="bindDishTag">
+        UPDATE `t_dish_tag_printer`
+        SET `printer_id` = #{printerId}
+        WHERE `dish_tag_id` = #{dishTagId}
+    </update>
+
+    <update id="unBindAllDishTag">
+        UPDATE `t_dish_tag_printer`
+        SET `printer_id` = 0
+        WHERE `printer_id` = #{printerId}
+    </update>
 </mapper>

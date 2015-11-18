@@ -51,6 +51,14 @@ public interface PrinterMapper {
     public List<Tag> listTagById(@Param("id") int id) throws Exception;
 
     /**
+     * 查询没有关联打印机的菜品分类
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<Tag> listAvailableDishTag() throws Exception;
+
+    /**
      * 判断某字段中是否存在相同值
      * 仅支持String类型字段
      *
@@ -67,19 +75,36 @@ public interface PrinterMapper {
      * @return
      * @throws SSException
      */
-    public void newPrinterDish(@Param("printerDishDto") PrinterDishDto printerDishDto) throws SSException;
+    public void newPrinterDish(@Param("printerDishDto") PrinterDishDto printerDishDto) throws Exception;
 
     /**
      * 修改菜品与打印机关联
      * @param printerDishDto
      * @throws SSException
      */
-    public void updatePrinterDish(@Param("printerDishDto") PrinterDishDto printerDishDto) throws SSException;
+    public void updatePrinterDish(@Param("printerDishDto") PrinterDishDto printerDishDto) throws Exception;
 
     /**
      * 删除菜品与打印机关联
      * @param tagId
      * @throws SSException
      */
-    public void delPrinterDish(@Param("tagId") int tagId) throws SSException;
+    public void delPrinterDish(@Param("tagId") int tagId) throws Exception;
+
+    /**
+     * 打印机关联菜品分类
+     *
+     * @param printerId
+     * @param dishTagId
+     * @throws SSException
+     */
+    public void bindDishTag(@Param("printerId") int printerId, @Param("dishTagId") int dishTagId) throws Exception;
+
+    /**
+     * 打印机取消所有关联菜品分类
+     *
+     * @param printerId
+     * @throws SSException
+     */
+    public void unBindAllDishTag(@Param("printerId") int printerId) throws Exception;
 }
