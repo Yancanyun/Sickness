@@ -76,6 +76,9 @@ public class AbstractController extends Base {
     // 添加成功
     protected final static String NEW_SUCCESS_MSG = "添加成功!";
 
+    // 修改成功
+    protected final static String UPDATE_SUCCESS_MSG = "修改成功!";
+
     /**
      * 当前用户ID
      */
