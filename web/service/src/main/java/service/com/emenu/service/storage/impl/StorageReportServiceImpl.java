@@ -261,7 +261,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
 
 
-        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
 
         try {
