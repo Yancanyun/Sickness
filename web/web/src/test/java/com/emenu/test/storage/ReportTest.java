@@ -218,4 +218,26 @@ public class ReportTest extends AbstractTestCase{
     public void updateStatusById() throws SSException{
         storageReportService.updateStatusById(2, StorageReportStatusEnum.Settled);
     }
+
+    @Test
+    public void listStorageReportDtoByCondition2() throws SSException{
+
+        List<StorageReportDto> StorageReportDtoList = new ArrayList();
+
+        Date startTime = new Date("2015/01/01");
+
+        Date endTime = new Date("2015/12/31");
+
+        List<Integer> deportIdList = new ArrayList<Integer>();
+        deportIdList.add(2);
+        deportIdList.add(3);
+
+        List<Integer> tagIdList = new ArrayList<Integer>();
+        tagIdList.add(33);
+
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startTime, endTime, deportIdList, tagIdList);
+
+        System.out.println("nihao");
+    }
+
 }

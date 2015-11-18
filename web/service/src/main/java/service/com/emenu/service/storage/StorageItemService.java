@@ -81,4 +81,6 @@ public interface StorageItemService {
      * @throws SSException
      */
     public StorageItem queryById(int id) throws SSException;
+
+
 }

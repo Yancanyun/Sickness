@@ -16,4 +16,16 @@
                 SELECT * from t_storage_report_item WHERE `report_id` = #{reportId}
         </select>
 
+        <select id="listByReportIdAndItemIdList" resultMap="pw.StorageReportItem">
+                SELECT * FROM t_storage_report_item
+                 <where>
+                         `item_id` IN
+                         <foreach collection="itemIdList" index="index" item="itemId" open="(" separator="," close=")">
+                                 #{itemId}
+                         </foreach>
+                         and `report_id` = #{reportId}
+                 </where>
+                ORDER BY `created_time` DESC
+        </select>
+
 </mapper>

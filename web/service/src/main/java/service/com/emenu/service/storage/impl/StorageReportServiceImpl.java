@@ -1,20 +1,21 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.dto.storage.StorageReportDto;
+import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.common.utils.CommonUtil;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.mapper.storage.StorageReportMapper;
+import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
-import net.sf.cglib.core.EmitUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -43,9 +44,11 @@ public class StorageReportServiceImpl implements StorageReportService {
     @Autowired
     private StorageReportItemService storageReportItemService;
 
-
     @Autowired
     private StorageReportMapper storageReportMapper;
+
+    @Autowired
+    private StorageItemService storageItemService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -207,12 +210,12 @@ public class StorageReportServiceImpl implements StorageReportService {
     @Override
     public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException {
         int offset = page * pageSize;
-        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
         if(Assert.lessZero(offset)){
             return storageReportDtoList;
         }
-
+        storageReportDtoList = new ArrayList<StorageReportDto>();
         try {
             storageReportList = storageReportMapper.listByPage(offset,pageSize);
             for (StorageReport storageReport : storageReportList){
@@ -260,14 +263,16 @@ public class StorageReportServiceImpl implements StorageReportService {
             endTime.setSeconds(59);
         }
 
-
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
 
+        if(Assert.lessZero(offset)){
+            return storageReportDtoList;
+        }
+
+        storageReportDtoList = new ArrayList<StorageReportDto>();
+
         try {
-            if(Assert.lessZero(offset)){
-                return storageReportDtoList;
-            }
             storageReportList = storageReportMapper.listStorageReportByCondition(startTime,endTime,serialNumber,depotId,handlerPartyId,createdPartyId,offset,pageSize);
 
             for (StorageReport storageReport : storageReportList) {
@@ -283,9 +288,7 @@ public class StorageReportServiceImpl implements StorageReportService {
 
                 storageReportDtoList.add(storageReportDto);
             }
-
             return storageReportDtoList;
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListStorageReportFail, e);
@@ -300,13 +303,17 @@ public class StorageReportServiceImpl implements StorageReportService {
                                                                      int page,
                                                                      int pageSize) throws SSException {
         int offset = page * pageSize;
-        List<StorageReportDto> storageReportDtoList = new ArrayList();
+        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
 
+        if(Assert.lessZero(offset)){
+            return storageReportDtoList;
+        }
+
+        storageReportDtoList = new ArrayList();
+
         try {
-            if(Assert.lessZero(offset)){
-                return storageReportDtoList;
-            }
+
             storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
 
             for (StorageReport storageReport : storageReportList) {
@@ -322,9 +329,7 @@ public class StorageReportServiceImpl implements StorageReportService {
 
                 storageReportDtoList.add(storageReportDto);
             }
-
             return storageReportDtoList;
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListStorageReportFail, e);
@@ -366,6 +371,69 @@ public class StorageReportServiceImpl implements StorageReportService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime, Date endTime, List<Integer> depotIdList, List<Integer> tagIdList) throws SSException {
+
+        if (startTime == null && endTime == null) {
+            startTime = DateUtils.getTodayStartTime();
+            endTime = DateUtils.getTodayEndTime();
+        }
+
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
+
+        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
+        List<StorageReport> storageReportList = Collections.emptyList();
+
+        if(Assert.isNull(depotIdList)||Assert.isNull(tagIdList)){
+            return storageReportDtoList;
+        }
+
+        try {
+            StorageItemSearchDto searchDto = new StorageItemSearchDto();
+            searchDto.setTagIdList(tagIdList);
+
+            List<StorageItem> storageItemList = Collections.emptyList();
+            storageItemList = storageItemService.listBySearchDto(searchDto);
+
+            if(Assert.isNull(storageItemList)){
+                return storageReportDtoList;
+            }
+
+            storageReportDtoList = new ArrayList();
+
+            //获取原料idList
+            List<Integer> itemIdList = new ArrayList<Integer>();
+            for(StorageItem storageItem : storageItemList){
+                itemIdList.add(storageItem.getId());
+            }
+
+            storageReportList = storageReportMapper.listByDepotIdList(startTime,endTime,depotIdList);
+
+            for (StorageReport storageReport : storageReportList) {
+                StorageReportDto storageReportDto = new StorageReportDto();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+
+                storageReportItemList = storageReportItemService.listByReportIdAndItemIdList(storageReport.getId(), itemIdList);
+
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
+
+                storageReportDtoList.add(storageReportDto);
+            }
+
+            return storageReportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageReportFail, e);
         }
     }
 

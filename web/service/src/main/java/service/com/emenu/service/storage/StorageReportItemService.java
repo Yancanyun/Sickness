@@ -53,5 +53,14 @@ public interface StorageReportItemService {
      */
     boolean updateById(StorageReportItem storageReportItem) throws SSException;
 
+    /**
+     * 根据reportId和itemIdList获取单据详情信息
+     * @param reportId
+     * @param itemIdList
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportItem> listByReportIdAndItemIdList(int reportId,List<Integer> itemIdList) throws SSException;
+
 
 }

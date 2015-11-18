@@ -14,26 +14,36 @@ import java.util.List;
 public interface StorageReportItemMapper {
 
     /**
-     *
      * @return
      * @throws Exception
      */
     public List<StorageReportItem> listAll() throws Exception;
 
     /**
+     * @param reportId
+     * @return
+     * @throws Exception
+     */
+    public StorageReportItem queryByReportId(@Param("reportId") int reportId) throws Exception;
+
+    /**
+     * 获取所有相同reportId的单据详情
      *
      * @param reportId
      * @return
      * @throws Exception
      */
-    public StorageReportItem queryByReportId(@Param("reportId")int reportId) throws Exception;
+    public List<StorageReportItem> listByReportId(@Param("reportId") int reportId) throws Exception;
 
     /**
-     * 获取所有相同reportId的单据详情
+     * 根据reportId和itemIdList获取单据详情信息
      * @param reportId
+     * @param itemIdList
      * @return
-     * @throws Exception
+     * @throws SSException
      */
-    public List<StorageReportItem> listByReportId(@Param("reportId")int reportId) throws Exception;
+    public List<StorageReportItem> listByReportIdAndItemIdList(@Param("reportId")int reportId, @Param("itemIdList")List<Integer> itemIdList) throws Exception;
 
 }
+
+

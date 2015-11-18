@@ -30,7 +30,7 @@
       {@if it.status == 2}禁用{@/if}
     </td>
     <td>
-      <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+      <a href="${website}admin/party/group/employee/toupdate/&{it.partyId}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
       {@if it.status == 1}
       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;启用</a>
       {@/if}

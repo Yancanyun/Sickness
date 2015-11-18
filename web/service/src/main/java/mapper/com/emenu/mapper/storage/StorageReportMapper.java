@@ -92,4 +92,15 @@ public interface StorageReportMapper {
      * @throws Exception
      */
     public boolean updateStatusById(@Param("id")int id, @Param("status")int status) throws Exception;
+
+    /**
+     * 根据存放点IdList获取单据信息
+     * @param deportIdList
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listByDepotIdList(@Param("startTime")Date startTime,
+                                                 @Param("endTime")Date endTime,
+                                                 @Param("depotIdList")List<Integer> depotIdList) throws Exception;
+
 }

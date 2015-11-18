@@ -122,4 +122,18 @@ public interface StorageReportService {
      */
     public StorageReport queryById(int id) throws SSException;
 
+    /**
+     * 根据时间、存放点idlist，分类idlist获取单据和单据详情信息
+     * @param depotIdList
+     * @param startTime
+     * @param endTime
+     * @param depotIdList
+     *@param tagIdList  @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
+                                                                Date endTime,
+                                                                List<Integer> depotIdList,
+                                                                List<Integer> tagIdList) throws SSException;
+
 }

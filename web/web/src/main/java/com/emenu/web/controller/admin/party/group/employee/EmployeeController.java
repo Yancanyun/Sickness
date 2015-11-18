@@ -19,6 +19,7 @@ import com.pandawork.core.common.util.CommonUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -267,7 +268,8 @@ public class EmployeeController  extends AbstractController {
                                  @RequestParam(value = "tables",required = false)Integer [] tables,
                                  @RequestParam("loginName")String loginName,
                                  @RequestParam("password")String password,
-                                 Employee employee) {
+                                 Employee employee,
+                                 RedirectAttributes redirectAttributes) {
         try {
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setEmployee(employee);
@@ -286,11 +288,19 @@ public class EmployeeController  extends AbstractController {
             employeeDto.setTables(tableList);
             employeeService.update(employeeDto, partyId, loginName, CommonUtil.md5(password));
 
-            return "redirect:";
+            String successUrl = "/" + URLConstants.EMPLOYEE_MANAGEMENT;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("msg", "编辑成功");
+            //返回列表页
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
-            return WebConstants.sysErrorCode;
+            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/toupdate/"+"{"+String .valueOf(partyId)+"}";
+            //返回添加失败信息
+            redirectAttributes.addFlashAttribute("msg", "编辑失败");
+            //返回添加页
+            return "redirect:" + failedUrl;
         }
     }
 
@@ -309,7 +319,8 @@ public class EmployeeController  extends AbstractController {
                               @RequestParam(value = "tables",required = false)Integer [] tables,
                               @RequestParam("loginName")String loginName,
                               @RequestParam("password")String password,
-                              Employee employee){
+                              Employee employee,
+                              RedirectAttributes redirectAttributes){
         try {
             EmployeeDto employeeDto = new EmployeeDto();
             employeeDto.setEmployee(employee);
@@ -327,15 +338,22 @@ public class EmployeeController  extends AbstractController {
                 employeeDto.setTables(tableList);
             }
             employeeDto.setRole(roleList);
-        employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
-            System.out.println("你好");
-            System.out.println("你好");
+            employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
 
-        return "redirect:";
+            String successUrl = "/" + URLConstants.EMPLOYEE_MANAGEMENT;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("msg", "添加成功");
+            //返回列表页
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
-            return WebConstants.sysErrorCode;
+
+            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/add";
+            //返回添加失败信息
+            redirectAttributes.addFlashAttribute("msg", "添加失败");
+            //返回添加页
+            return "redirect:" + failedUrl;
         }
     }
 

@@ -12,6 +12,9 @@
   </div>
   <div class="col-sm-12 margin-bottom-30">
     <form class="form-horizontal J_operForm" action="${website}admin/party/group/employee/new" method="post">
+      <c:if test="${!empty msg}">
+        <div class="alert alert-danger J_tip" role="alert">${msg}</div>
+      </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>添加员工</h4>

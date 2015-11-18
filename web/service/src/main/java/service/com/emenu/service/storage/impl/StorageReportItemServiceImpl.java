@@ -106,6 +106,18 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         }
     }
 
+    @Override
+    public List<StorageReportItem> listByReportIdAndItemIdList(int reportId, List<Integer> itemIdList) throws SSException {
+        List<StorageReportItem> storageReportItemList =  Collections.emptyList();
+        try {
+            storageReportItemList = storageReportItemMapper.listByReportIdAndItemIdList(reportId,itemIdList);
+            return storageReportItemList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryStorageReportItemFail, e);
+        }
+    }
+
     private boolean checkStorageReportItemBeforeSave(StorageReportItem storageReportItem) throws SSException{
 
         if (Assert.isNull(storageReportItem)){

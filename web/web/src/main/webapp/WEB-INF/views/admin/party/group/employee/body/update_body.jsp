@@ -8,13 +8,16 @@
       <li><a href="#">用户管理</a></li>
       <li class="active">员工管理</li>
     </ol>
-    <h2>员工管理-添加员工</h2>
+    <h2>员工管理-员工信息编辑</h2>
+    <c:if test="${!empty msg}">
+      <div class="alert alert-danger J_tip" role="alert">${msg}</div>
+    </c:if>
   </div>
   <div class="col-sm-12 margin-bottom-30">
     <form class="form-horizontal J_operForm" action="${website}admin/party/group/employee/update" method="post">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <h4>添加员工</h4>
+          <h4>员工信息编辑</h4>
         </div>
         <div class="panel-body">
           <input type="hidden" name="partyId" value="${employeeDto.employee.partyId}"/>

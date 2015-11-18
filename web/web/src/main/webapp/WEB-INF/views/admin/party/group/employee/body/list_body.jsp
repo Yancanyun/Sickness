@@ -8,7 +8,10 @@
       <li><a href="#">用户管理</a></li>
       <li class="active">员工管理</li>
     </ol>
-    <h2>员工管理-员工编辑</h2>
+    <h2>员工管理-员工列表</h2>
+    <c:if test="${!empty msg}">
+      <div class="alert alert-success J_tip" role="alert">${msg}</div>
+    </c:if>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">
@@ -29,18 +32,6 @@
                     <input class="J_roleType" type="checkbox" value="${role.id}" name="roles"> ${role.name}
                   </label>
                 </c:forEach>
-               <%-- <label>
-                  <input class="J_selectAll"  type="checkbox" value="0" name="roles" checked="checked"> 全部
-                </label>
-                <label>
-                  <input class="J_roleType" type="checkbox" value="2" name="roles"  checked="checked"> 吧台
-                </label>
-                <label>
-                  <input class="J_roleType" type="checkbox" value="3" name="roles" checked="checked"> 后厨
-                </label>
-                <label>
-                  <input class="J_roleType" type="checkbox" value="4" name="roles" checked="checked"> 服务员
-                </label>--%>
               </div>
             </div>
           </div>
