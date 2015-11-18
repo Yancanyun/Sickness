@@ -4,7 +4,7 @@
 
 <mapper namespace="com.emenu.mapper.storage.StorageItemMapper">
 
-    <select id="listByPageAndSearchDto" resultMap="pw.StorageItem">
+    <select id="listBySearchDto" resultMap="pw.StorageItem">
           SELECT
             storageItem.`id` AS id,
             storageItem.`supplier_party_id` AS supplierPartyId,
@@ -38,8 +38,8 @@
                     OR storageItem.`item_number` LIKE '%#{searchDto.keyword}%'
                     OR storageItem.`assistant_code` LIKE '%#{searchDto.keyword}%'
                 </if>
-                <if test="searchDto.supplierId != null and searchDto.supplierId > 0">
-                    AND storageItem.`supplier_id` = #{searchDto.supplierId}
+                <if test="searchDto.supplierPartyId != null and searchDto.supplierPartyId > 0">
+                    AND storageItem.`supplier_party_id` = #{searchDto.supplierPartyId}
                 </if>
                 <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
                     storageItem.`tag_id` IN
@@ -47,11 +47,13 @@
                         #{tagId}
                     </foreach>
                 </if>
-                AND `status` != 2
+                AND storageItem.`status` != 2
             </if>
         </where>
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
-        LIMIT #{offset}, #{pageSize}
+        <if test="offset >= 0 and searchDto.pageSize > 0">
+            LIMIT #{offset}, #{searchDto.pageSize}
+        </if>
     </select>
 
     <select id="countBySearchDto" resultType="int">
@@ -67,8 +69,8 @@
                     OR storageItem.`item_number` LIKE '%#{searchDto.keyword}%'
                     OR storageItem.`assistant_code` LIKE '%#{searchDto.keyword}%'
                 </if>
-                <if test="searchDto.supplierId != null and searchDto.supplierId > 0">
-                    AND storageItem.`supplier_id` = #{searchDto.supplierId}
+                <if test="searchDto.supplierPartyId != null and searchDto.supplierPartyId > 0">
+                    AND storageItem.`supplier_party_id` = #{searchDto.supplierPartyId}
                 </if>
                 <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
                     storageItem.`tag_id` IN
@@ -76,7 +78,7 @@
                         #{tagId}
                     </foreach>
                 </if>
-                AND `status` != 2
+                AND storageItem.`status` != 2
             </if>
         </where>
     </select>

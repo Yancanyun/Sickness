@@ -1,63 +1,48 @@
-package com.emenu.common.entity.dish;
+package com.emenu.common.dto.dish.tag;
 
-import com.pandawork.core.common.entity.AbstractEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 菜品实体
+ * DishDto
  *
  * @author: zhangteng
- * @time: 2015/11/16 10:16
+ * @time: 2015/11/17 16:38
  **/
-@Entity
-@Table(name = "t_dish")
-public class Dish extends AbstractEntity {
+public class DishDto {
 
     // 主键
-    @Id
     private Integer id;
 
     // 名称
     private String name;
 
     // 菜品编号
-    @Column(name = "dish_number")
     private String dishNumber;
 
     // 助记码
-    @Column(name = "assistant_code")
     private String assistantCode;
 
     // 单位ID
-    @Column(name = "unit_id")
     private Integer unitId;
 
     // 定价
     private BigDecimal price;
 
     // 促销方式(1-无促销,2-折扣,3-促销价格)
-    @Column(name = "sale_type")
     private Integer saleType;
 
     // 折扣
     private Integer discount;
 
     // 售价
-    @Column(name = "sale_price")
     private BigDecimal salePrice;
 
     // 总分类ID
-    @Column(name = "category_id")
     private Integer categoryId;
 
     // 菜品小类ID
-    @Column(name = "tag_id")
     private Integer tagId;
 
     // 简介
@@ -67,42 +52,42 @@ public class Dish extends AbstractEntity {
     private Integer status;
 
     // 点赞人数
-    @Column(name = "like_nums")
     private Integer likeNums;
 
     // 是否网络可点(0-不可用,1-可用)
-    @Column(name = "is_network_avaliable")
     private Integer isNetworkAvailable;
 
     // 是否启用会员价(0-不可用,1-可用)
-    @Column(name = "is_vip_price_available")
     private Integer isVipPriceAvailable;
 
     // 是否可用代金卷(0-不可用,1-可用)
-    @Column(name = "is_voucher_available")
     private Integer isVoucherAvailable;
 
     // 上菜时限(0-无限制)
-    @Column(name = "time_limit")
     private Integer timeLimit;
 
     // 创建者partyId
-    @Column(name = "created_party_id")
     private Integer createdPartyId;
 
     // 创建时间
-    @Column(name = "created_time")
     private Date createdTime;
 
     // 最近修改时间
-    @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    // 可点餐段
+    private List<Integer> mealPeriodIdList;
+
+    // 打印机
+    private Integer printerId;
+
+    // 口味
+    private List<Integer> tasteIdList;
 
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
@@ -265,5 +250,29 @@ public class Dish extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public List<Integer> getMealPeriodIdList() {
+        return mealPeriodIdList;
+    }
+
+    public void setMealPeriodIdList(List<Integer> mealPeriodIdList) {
+        this.mealPeriodIdList = mealPeriodIdList;
+    }
+
+    public Integer getPrinterId() {
+        return printerId;
+    }
+
+    public void setPrinterId(Integer printerId) {
+        this.printerId = printerId;
+    }
+
+    public List<Integer> getTasteIdList() {
+        return tasteIdList;
+    }
+
+    public void setTasteIdList(List<Integer> tasteIdList) {
+        this.tasteIdList = tasteIdList;
     }
 }

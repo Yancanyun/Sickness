@@ -23,6 +23,14 @@ public interface StorageTagService {
     public List<TagDto> listAll() throws SSException;
 
     /**
+     * 获取所有的小类
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listAllSmallTag() throws SSException;
+
+    /**
      * 添加库存分类
      *
      * @param pId

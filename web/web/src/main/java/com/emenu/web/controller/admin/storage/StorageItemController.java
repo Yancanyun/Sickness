@@ -1,0 +1,259 @@
+package com.emenu.web.controller.admin.storage;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.storage.StorageItemSearchDto;
+import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.dish.UnitEnum;
+import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.utils.URLConstants;
+import com.emenu.web.spring.AbstractController;
+import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * 库存物品Controller
+ *
+ * @author: zhangteng
+ * @time: 2015/11/17 19:44
+ **/
+@Module(ModuleEnums.AdminStorage)
+@Controller
+@RequestMapping(value = URLConstants.ADMIN_STORAGE_ITEM)
+public class StorageItemController extends AbstractController {
+
+    /**
+     * 去列表
+     *
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemList)
+    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    public String toList(Model model) {
+        try {
+            List<Supplier> supplierList = supplierService.listAll();
+            List<Tag> tagList = storageTagService.listAllSmallTag();
+
+            model.addAttribute("supplierList", supplierList);
+            model.addAttribute("tagList", tagList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/storage/item/list_home";
+    }
+
+    /**
+     * ajax获取列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param searchDto
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemList)
+    @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxList(@PathVariable("pageNo") Integer pageNo,
+                         @RequestParam("pageSize") Integer pageSize,
+                         StorageItemSearchDto searchDto) {
+        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        searchDto.setPageNo(pageNo);
+        List<StorageItem> list = Collections.emptyList();
+        try {
+            list = storageItemService.listBySearchDto(searchDto);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (StorageItem storageItem : list) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", storageItem.getId());
+            jsonObject.put("itemNumber", storageItem.getItemNumber());
+            jsonObject.put("assistantCode", storageItem.getAssistantCode());
+            jsonObject.put("name", storageItem.getName());
+            jsonObject.put("tagName", storageItem.getTagName());
+            jsonObject.put("maxStorageQuantity", storageItem.getMaxStorageQuantity());
+            jsonObject.put("minStorageQuantity", storageItem.getMinStorageQuantity());
+            jsonObject.put("stockOutTypeStr", storageItem.getStockOutTypeStr());
+
+            jsonArray.add(jsonObject);
+        }
+
+        int dataCount = 0;
+        try {
+            dataCount = storageItemService.countBySearchDto(searchDto);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonArray(jsonArray, dataCount);
+    }
+
+    /**
+     * 去添加页
+     *
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem ,extModule = ModuleEnums.AdminStorageItemNew)
+    @RequestMapping(value = "new", method = RequestMethod.GET)
+    public String toNew(Model model) {
+        try {
+            List<Supplier> supplierList = supplierService.listAll();
+            List<Tag> tagList = storageTagService.listAllSmallTag();
+            List<Unit> unitList = unitService.listAll();
+
+            List<Unit> weightUnit = new ArrayList<Unit>();
+            List<Unit> quantityUnit = new ArrayList<Unit>();
+            for (Unit unit : unitList) {
+                if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
+                    weightUnit.add(unit);
+                } else {
+                    quantityUnit.add(unit);
+                }
+            }
+
+            model.addAttribute("weightUnit", weightUnit);
+            model.addAttribute("quantityUnit", quantityUnit);
+            model.addAttribute("supplierList", supplierList);
+            model.addAttribute("tagList", tagList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        return "admin/storage/item/new_home";
+    }
+
+    /**
+     * 添加提交
+     *
+     * @param storageItem
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemNew)
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public String newStorageItem(StorageItem storageItem,
+                                 Model model,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            storageItemService.newStorageItem(storageItem);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return "admin/storage/item/new_home";
+        }
+
+        redirectAttributes.addAttribute("msg", NEW_SUCCESS_MSG);
+        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/list";
+        return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * 去修改页
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemUpdate)
+    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    public String toUpdate(@PathVariable("id") Integer id,
+                           Model model) {
+        try {
+            StorageItem storageItem = storageItemService.queryById(id);
+            List<Supplier> supplierList = supplierService.listAll();
+            List<Tag> tagList = storageTagService.listAllSmallTag();
+            List<Unit> unitList = unitService.listAll();
+
+            List<Unit> weightUnit = new ArrayList<Unit>();
+            List<Unit> quantityUnit = new ArrayList<Unit>();
+            for (Unit unit : unitList) {
+                if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
+                    weightUnit.add(unit);
+                } else {
+                    quantityUnit.add(unit);
+                }
+            }
+
+            model.addAttribute("storageItem", storageItem);
+            model.addAttribute("weightUnit", weightUnit);
+            model.addAttribute("quantityUnit", quantityUnit);
+            model.addAttribute("supplierList", supplierList);
+            model.addAttribute("tagList", tagList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        return "admin/storage/item/update_home";
+    }
+
+    /**
+     * 修改提交
+     *
+     * @param storageItem
+     * @param redirectAttributes
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule= ModuleEnums.AdminStorageItemUpdate)
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    public String updateStorageItem(StorageItem storageItem,
+                                    RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("code", 0);
+        redirectAttributes.addAttribute("msg", UPDATE_SUCCESS_MSG);
+
+        try {
+            storageItemService.updateStorageItem(storageItem);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            redirectAttributes.addAttribute("code", 0);
+            redirectAttributes.addAttribute("msg", UPDATE_SUCCESS_MSG);
+        }
+
+        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/update" + storageItem.getId();
+        return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * ajax删除
+     *
+     * @param id
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemDelete)
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSON ajaxDel(@PathVariable("id") Integer id) {
+        try {
+            storageItemService.delById(id);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+}

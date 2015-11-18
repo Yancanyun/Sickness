@@ -18,14 +18,12 @@ public interface StorageItemMapper {
      * 根据分页和搜索查询
      *
      * @param offset
-     * @param pageSize
      * @param searchDto
      * @return
      * @throws Exception
      */
-    public List<StorageItem> listByPageAndSearchDto(@Param("offset") int offset,
-                                                    @Param("pageSize") int pageSize,
-                                                    @Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
+    public List<StorageItem> listBySearchDto(@Param("offset") int offset,
+                                             @Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
 
     /**
      * 根据搜索条件查询数量
@@ -34,7 +32,7 @@ public interface StorageItemMapper {
      * @return
      * @throws Exception
      */
-    public int countBySearchDto(StorageItemSearchDto searchDto) throws Exception;
+    public int countBySearchDto(@Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
 
     /**
      * 查询全部

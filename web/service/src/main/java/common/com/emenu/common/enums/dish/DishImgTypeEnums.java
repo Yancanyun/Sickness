@@ -11,6 +11,10 @@ import java.util.Map;
  **/
 public enum DishImgTypeEnums {
 
+    UnSale(0, "停售"),
+    OnSale(1, "销售中"),
+    Lack(2, "标缺"),
+    Deleted(3, "已删除")
     ;
 
     private Integer id;
@@ -42,15 +46,7 @@ public enum DishImgTypeEnums {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

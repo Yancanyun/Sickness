@@ -88,6 +88,24 @@
             <li <c:if test="${MethodModule eq 'Admin:Storage:Tag:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Item:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/storage/item">
+                    库存物品管理
+                    <c:if test="${ExtModule eq 'Admin:Storage:Item:New' or ExtModule eq 'Admin:Storage:Item:Update'}"><i class="fa fa-angle-right angle-right"></i></c:if>
+                </a>
+                <c:if test="${ExtModule eq 'Admin:Storage:Item:New' or ExtModule eq 'Admin:Storage:Item:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:Storage:Item:New'}">class="active" </c:if>>
+                            <a href="${website}admin/party/security/permission">添加库存物品</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:Storaget:Item:Update'}">
+                            <li class="active">
+                                <a href="#">修改库存物品</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </c:if>
+            </li>
             <li><a class="J_menu" href="javascript:;">库存管理</a></li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
             <li><a class="J_menu" href="javascript:;">预警管理</a></li>
@@ -116,8 +134,7 @@
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">超级管理</span><i
                 class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li
-                    <c:if test="${MethodModule eq 'Admin:SAdmin:Party:Security'}">class="active"</c:if> >
+            <li <c:if test="${MethodModule eq 'Admin:SAdmin:Party:Security'}">class="active"</c:if> >
                 <a class="J_menu" href="javascript:;">权限管理<i class="fa fa-angle-right angle-right"></i></a>
                 <ul <c:if test="${MethodModule != 'Admin:SAdmin:Party:Security'}">class="hidden"</c:if>>
                     <li

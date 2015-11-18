@@ -15,6 +15,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
@@ -205,7 +206,10 @@ public class SecurityGroupController extends AbstractController {
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupPermissionNew)
     @RequestMapping(value = "permission", method = RequestMethod.POST)
     public String newPermission(@RequestParam("groupId") Integer groupId,
-                                @RequestParam("permissionId") Integer permissionId) {
+                                @RequestParam("permissionId") Integer permissionId,
+                                RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("code", 0);
+        redirectAttributes.addFlashAttribute("msg", "添加成功!");
         SecurityGroupPermission securityGroupPermission = new SecurityGroupPermission();
         securityGroupPermission.setGroupId(groupId);
         securityGroupPermission.setPermissionId(permissionId);
@@ -213,8 +217,8 @@ public class SecurityGroupController extends AbstractController {
             securityGroupPermissionService.newSecurityGroupPermission(securityGroupPermission);
         } catch (SSException e) {
         	LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-        	return ADMIN_SYS_ERR_PAGE;
+            redirectAttributes.addFlashAttribute("code", 1);
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
 
         String redirectUrl = URLConstants.ADMIN_PARTY_SECURITY_GROUP_URL + "/permission/" + groupId;

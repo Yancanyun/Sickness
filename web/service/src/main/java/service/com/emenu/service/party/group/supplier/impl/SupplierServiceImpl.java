@@ -15,6 +15,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,7 @@ public class SupplierServiceImpl implements SupplierService {
     private PartyService partyService;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Supplier newSupplier(Supplier supplier, Integer optPartyId) throws SSException {
         try {
             if (!checkBeforeSave(supplier)) {
@@ -63,6 +66,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateSupplier(Supplier supplier) throws SSException {
         try {
             if (!checkBeforeSave(supplier)) {
@@ -103,6 +107,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delById(int id) throws SSException {
         if (Assert.lessOrEqualZero(id)) {
             return ;

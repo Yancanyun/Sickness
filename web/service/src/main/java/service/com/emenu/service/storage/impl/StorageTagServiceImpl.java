@@ -12,7 +12,10 @@ import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +47,23 @@ public class StorageTagServiceImpl implements StorageTagService {
     }
 
     @Override
+    public List<Tag> listAllSmallTag() throws SSException {
+        List<Tag> smallTagList = Collections.emptyList();
+        try {
+            List<Tag> bigTagList = tagFacadeService.listByPId(TagEnum.Storage.getId());
+            smallTagList = new ArrayList<Tag>();
+            for (Tag tag : bigTagList) {
+                smallTagList.addAll(tagFacadeService.listByPId(tag.getId()));
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return smallTagList;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Tag newStorageTag(int pId, String name) throws SSException {
         try {
             Assert.isNotNull(pId, EmenuException.TagPIdError);
@@ -63,6 +83,7 @@ public class StorageTagServiceImpl implements StorageTagService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStorageTag(int id, int pId, String name) throws SSException {
         try {
             if (Assert.lessOrEqualZero(id)) {
@@ -83,6 +104,7 @@ public class StorageTagServiceImpl implements StorageTagService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delById(int id) throws SSException {
         if (Assert.lessOrEqualZero(id)) {
             return ;

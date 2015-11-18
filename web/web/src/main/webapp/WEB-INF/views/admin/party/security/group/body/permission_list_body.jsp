@@ -14,6 +14,13 @@
             <li class="active">安全组管理</li>
         </ol>
         <h2>安全组配置</h2>
+
+        <c:if test="${code == 0}">
+            <div class="alert alert-success col-sm-12 J_msg" role="alert">添加成功！</div>
+        </c:if>
+        <c:if test="${code == 1}">
+            <div class="alert alert-danger col-sm-12 J_msg" role="alert">${msg}</div>
+        </c:if>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">

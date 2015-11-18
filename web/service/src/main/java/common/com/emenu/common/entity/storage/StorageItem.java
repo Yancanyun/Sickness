@@ -1,5 +1,6 @@
 package com.emenu.common.entity.storage;
 
+import com.emenu.common.enums.storage.StockOutTypeEnums;
 import com.pandawork.core.common.entity.AbstractEntity;
 
 import javax.persistence.*;
@@ -74,7 +75,7 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "min_storage_quantity")
     private BigDecimal minStorageQuantity;
 
-    // 出库方式
+    // 出库方式(1-加权平均，2-手动)
     @Column(name = "stock_out_type")
     private Integer stockOutType;
 
@@ -105,6 +106,10 @@ public class StorageItem extends AbstractEntity {
     // 供货商名称
     @Transient
     private String supplierName;
+
+    // 出库方式
+    @Transient
+    private String stockOutTypeStr;
 
     public Integer getId() {
         return id;
@@ -233,6 +238,8 @@ public class StorageItem extends AbstractEntity {
 
     public void setStockOutType(Integer stockOutType) {
         this.stockOutType = stockOutType;
+        StockOutTypeEnums typeEnums = StockOutTypeEnums.valueOf(stockOutType);
+        this.stockOutTypeStr = typeEnums == null ? "" : typeEnums.getType();
     }
 
     public BigDecimal getTotalStockInQuantity() {
@@ -289,5 +296,13 @@ public class StorageItem extends AbstractEntity {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getStockOutTypeStr() {
+        return stockOutTypeStr;
+    }
+
+    public void setStockOutTypeStr(String stockOutTypeStr) {
+        this.stockOutTypeStr = stockOutTypeStr;
     }
 }

@@ -10,14 +10,41 @@ import java.util.List;
  **/
 public class StorageItemSearchDto {
 
+    // 页码
+    private Integer pageNo;
+
+    // 分页size
+    private Integer pageSize;
+
     // 关键词（名称、编号、助记码）
     private String keyword;
 
     // 供货商ID
-    private Integer supplierId;
+    private Integer supplierPartyId;
 
     // 分类ID
     private List<Integer> tagIdList;
+
+    public StorageItemSearchDto() {
+        this.pageNo = -1;
+        this.pageSize = -1;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public String getKeyword() {
         return keyword;
@@ -27,19 +54,19 @@ public class StorageItemSearchDto {
         this.keyword = keyword;
     }
 
-    public Integer getSupplierId() {
-        return supplierId;
+    public Integer getSupplierPartyId() {
+        return supplierPartyId;
     }
 
-    public void setSupplierId(Integer supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplierPartyId(Integer supplierPartyId) {
+        this.supplierPartyId = supplierPartyId;
     }
 
-    public List<Integer> getTagId() {
+    public List<Integer> getTagIdList() {
         return tagIdList;
     }
 
-    public void setTagId(List<Integer> tagId) {
-        this.tagIdList = tagId;
+    public void setTagIdList(List<Integer> tagIdList) {
+        this.tagIdList = tagIdList;
     }
 }

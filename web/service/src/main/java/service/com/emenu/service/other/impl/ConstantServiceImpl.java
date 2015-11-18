@@ -8,6 +8,8 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -53,6 +55,7 @@ public class ConstantServiceImpl implements ConstantService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateValueByKey(String key, String value) throws SSException {
         try {
             constantMapper.updateValueByKey(key,value);

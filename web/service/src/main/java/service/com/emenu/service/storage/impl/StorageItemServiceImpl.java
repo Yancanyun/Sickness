@@ -36,15 +36,13 @@ public class StorageItemServiceImpl implements StorageItemService {
     private CommonDao commonDao;
 
     @Override
-    public List<StorageItem> listByPageAndSearchDto(int pageNo, int pageSize, StorageItemSearchDto searchDto) throws SSException {
+    public List<StorageItem> listBySearchDto(StorageItemSearchDto searchDto) throws SSException {
         List<StorageItem> list = Collections.emptyList();
-        pageNo = pageNo <= 0 ? 0 : pageNo - 1;
-        int offset = pageNo * pageSize;
-        if (Assert.lessOrEqualZero(offset)) {
-            return list;
-        }
+        int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
+        int offset = pageNo * searchDto.getPageSize();
+
         try {
-            list = storageItemMapper.listByPageAndSearchDto(offset, pageSize, searchDto);
+            list = storageItemMapper.listBySearchDto(offset, searchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);

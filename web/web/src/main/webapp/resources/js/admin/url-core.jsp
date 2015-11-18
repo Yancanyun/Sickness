@@ -123,7 +123,8 @@
         ],
         // 公共模块
         Module: [
-            ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选']
+            ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],
+            ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码']
         ]
     };
 })();

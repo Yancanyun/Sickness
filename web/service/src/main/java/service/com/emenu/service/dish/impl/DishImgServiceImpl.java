@@ -15,6 +15,8 @@ import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,6 +58,7 @@ public class DishImgServiceImpl implements DishImgService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public DishImg newDishImg(DishImg dishImg, PandaworkMultipartFile image) throws SSException {
         try {
             if (!checkBeforeSave(dishImg, image)) {
@@ -77,6 +80,7 @@ public class DishImgServiceImpl implements DishImgService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delById(int id) throws SSException {
         if (Assert.lessOrEqualZero(id)) {
             return ;
@@ -90,6 +94,7 @@ public class DishImgServiceImpl implements DishImgService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delByDishIdAndType(int dishId, DishImgTypeEnums typeEnums) throws SSException {
         if (Assert.lessOrEqualZero(dishId)
                 || Assert.isNull(typeEnums)) {

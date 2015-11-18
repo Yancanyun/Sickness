@@ -147,7 +147,13 @@ public enum ModuleEnums {
     AdminStorageTagList("Admin:Storage:Tag:List"),
     AdminStorageTagNew("Admin:Storage:Tag:New"),
     AdminStorageTagUpdate("Admin:Storage:Tag:Update"),
-    AdminStorageTagDelete("Admin:Storage:Tag:Delete")
+    AdminStorageTagDelete("Admin:Storage:Tag:Delete"),
+    // 库存物品管理
+    AdminStorageItem("Admin:Storage:Item"),
+    AdminStorageItemList("Admin:Storage:Item:List"),
+    AdminStorageItemNew("Admin:Storage:Item:New"),
+    AdminStorageItemUpdate("Admin:Storage:Item:Update"),
+    AdminStorageItemDelete("Admmin:Storage:Item:Delete")
     ;
 
     private String name;

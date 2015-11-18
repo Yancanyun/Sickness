@@ -17,15 +17,11 @@ public interface StorageItemService {
     /**
      * 根据分页和搜索查询
      *
-     * @param pageNo
-     * @param pageSize
      * @param searchDto
      * @return
      * @throws SSException
      */
-    public List<StorageItem> listByPageAndSearchDto(int pageNo,
-                                                    int pageSize,
-                                                    StorageItemSearchDto searchDto) throws SSException;
+    public List<StorageItem> listBySearchDto(StorageItemSearchDto searchDto) throws SSException;
 
     /**
      * 根据搜索查询数量
