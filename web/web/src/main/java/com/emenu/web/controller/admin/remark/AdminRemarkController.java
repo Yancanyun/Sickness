@@ -41,7 +41,7 @@ public class AdminRemarkController extends AbstractController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toAreaPage(Model model) {
         try {
-            //先显示上级分类列表, 上级分类为pId=0的分类
+            //显示上级分类列表（上级分类为pId=0的分类）
             List<RemarkTag> bigTagList = remarkTagService.listByParentId(0);
             model.addAttribute("bigTagList", bigTagList);
 
@@ -52,9 +52,9 @@ public class AdminRemarkController extends AbstractController {
             List<RemarkTagDto> firstChildTagDtoList = new ArrayList<RemarkTagDto>();
             for (int i = 0; i < firstChildTagList.size(); i++) {
                 RemarkTagDto remarkTagDto = new RemarkTagDto();
-                //设置该子分类
+                //向Dto插入该子分类
                 remarkTagDto.setRemarkTag(firstChildTagList.get(i));
-                //获取并设置该子分类下的所有备注
+                //获取并向Dto插入该子分类下的所有备注
                 List<RemarkDto> remarkDtoList = remarkService.listRemarkDtoByRemarkTagId(firstChildTagList.get(i).getId());
                 remarkTagDto.setRemarkDtoList(remarkDtoList);
 
@@ -139,6 +139,7 @@ public class AdminRemarkController extends AbstractController {
             RemarkTag remarkTag = new RemarkTag();
             remarkTag.setpId(pId);
             remarkTag.setName(name);
+            //设置状态为可用
             remarkTag.setStatus(RemarkTagStatusEnums.Enabled.getId());
             remarkTagService.newRemarkTag(remarkTag);
 
@@ -167,14 +168,17 @@ public class AdminRemarkController extends AbstractController {
                                     @RequestParam String name,
                                     @RequestParam Integer weight,
                                     @RequestParam Integer isCommon,
-                                    @RequestParam BigDecimal relatedCharges) {
+                                    @RequestParam(required = false) BigDecimal relatedCharges) {
         try {
             Remark remark = new Remark();
             remark.setRemarkTagId(smallTagId);
             remark.setName(name);
             remark.setWeight(weight);
             remark.setIsCommon(isCommon);
-            remark.setRelatedCharges(relatedCharges);
+            if (relatedCharges != null) {
+                remark.setRelatedCharges(relatedCharges);
+            }
+            //设置状态为可用
             remark.setStatus(RemarkStatusEnums.Enabled.getId());
             remarkService.newRemark(remark);
 
@@ -214,25 +218,28 @@ public class AdminRemarkController extends AbstractController {
      * Ajax 修改备注
      * @param id
      * @param name
+     * @param weight
+     * @param isCommon
+     * @param relatedCharges
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantRemarkUpdate)
     @RequestMapping(value = "ajax/remark/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateRemark(@PathVariable("id") Integer id,
-                                       @PathVariable("smallTagId") Integer smallTagId,
                                        @RequestParam String name,
                                        @RequestParam Integer weight,
                                        @RequestParam Integer isCommon,
-                                       @RequestParam BigDecimal relatedCharges) {
+                                       @RequestParam(required = false) BigDecimal relatedCharges) {
         try {
             Remark remark = new Remark();
             remark.setId(id);
-            remark.setRemarkTagId(smallTagId);
             remark.setName(name);
             remark.setWeight(weight);
             remark.setIsCommon(isCommon);
-            remark.setRelatedCharges(relatedCharges);
+            if (relatedCharges != null) {
+                remark.setRelatedCharges(relatedCharges);
+            }
             remarkService.updateRemark(id, remark);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);

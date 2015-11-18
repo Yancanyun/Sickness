@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-6 control-label">
+            <label class="col-sm-3 control-label">
               <span class="requires">*</span>餐台名称
             </label>
             <div class="col-sm-6">

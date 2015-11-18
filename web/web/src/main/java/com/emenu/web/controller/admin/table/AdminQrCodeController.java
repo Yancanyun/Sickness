@@ -69,15 +69,15 @@ public class AdminQrCodeController extends AbstractController {
             String returnUrl = "/" + URLConstants.ADMIN_QRCODE_URL;
             //返回添加成功信息
             redirectAttributes.addFlashAttribute("success", "生成二维码成功");
-            //返回列表页
+            //返回二维码页
             return "redirect:" + returnUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             String returnUrl = "/" + URLConstants.ADMIN_QRCODE_URL;
             //返回添加成功信息
-            redirectAttributes.addFlashAttribute("failed", "生成二维码失败");
-            //返回列表页
+            redirectAttributes.addFlashAttribute("failed", e.getMessage());
+            //返回二维码页
             return "redirect:" + returnUrl;
         }
     }

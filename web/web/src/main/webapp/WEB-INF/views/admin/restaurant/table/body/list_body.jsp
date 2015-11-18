@@ -26,7 +26,7 @@
         <form class="form-horizontal J_searchForm">
           <div class="form-group">
             <label class="col-sm-3 control-label">选择区域</label>
-            <div class="checkbox block col-sm-9">
+            <div class="checkbox block col-sm-6">
               <label>
                 <input class="J_selectAll"  type="checkbox" value="-1" name="areaId"> 全部区域
               </label>

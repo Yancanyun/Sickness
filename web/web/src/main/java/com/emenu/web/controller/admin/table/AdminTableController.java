@@ -192,7 +192,7 @@ public class AdminTableController extends AbstractController {
 
             String successUrl = "/" + URLConstants.ADMIN_TABLE_URL;
             //返回添加成功信息
-            redirectAttributes.addFlashAttribute("msg", "添加成功");
+            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
             //返回列表页
             return "redirect:" + successUrl;
         } catch (SSException e) {
@@ -200,7 +200,7 @@ public class AdminTableController extends AbstractController {
             sendErrMsg(e.getMessage());
             String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/new";
             //返回添加失败信息
-            redirectAttributes.addFlashAttribute("msg", "添加失败");
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
             //返回添加页
             return "redirect:" + failedUrl;
         }
@@ -293,7 +293,7 @@ public class AdminTableController extends AbstractController {
 
             String successUrl = "/" + URLConstants.ADMIN_TABLE_URL;
             //返回编辑成功信息
-            redirectAttributes.addFlashAttribute("msg", "编辑成功");
+            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
             //返回列表页
             return "redirect:" + successUrl;
 
@@ -303,7 +303,7 @@ public class AdminTableController extends AbstractController {
 
             String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/update/" + id;
             //返回编辑失败信息
-            redirectAttributes.addFlashAttribute("msg", "编辑失败");
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
             //返回编辑页
             return "redirect:" + failedUrl;
         }
@@ -337,7 +337,7 @@ public class AdminTableController extends AbstractController {
     @RequestMapping(value = "ajax/status", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject updateStatus(@RequestParam("id") Integer id,
-                                  @RequestParam("status") Integer status) {
+                                   @RequestParam("status") Integer status) {
         try {
             tableService.updateStatus(id, status);
             return sendJsonObject(AJAX_SUCCESS_CODE);
