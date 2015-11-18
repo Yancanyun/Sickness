@@ -22,6 +22,7 @@ import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
+import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageTagService;
 import com.emenu.service.storage.StorageDepotService;
 import com.emenu.service.table.*;
@@ -71,6 +72,9 @@ public class AbstractController extends Base {
     protected final static String PUB_NOT_FOUND_PAGE = "forward:/404.jsp";
     //公共页面禁止访问返回页
     protected final static String PUB_FORBIDDEN_PAGE = "forward:/403.jsp";
+
+    // 添加成功
+    protected final static String NEW_SUCCESS_MSG = "添加成功!";
 
     /**
      * 当前用户ID
@@ -285,4 +289,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("printerService")
     protected static PrinterService printerService;
+
+    @StaticAutoWire
+    @Qualifier("storageItemService")
+    protected static StorageItemService storageItemService;
 }
