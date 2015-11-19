@@ -153,7 +153,10 @@ public enum ModuleEnums {
     AdminStorageItemList("Admin:Storage:Item:List"),
     AdminStorageItemNew("Admin:Storage:Item:New"),
     AdminStorageItemUpdate("Admin:Storage:Item:Update"),
-    AdminStorageItemDelete("Admmin:Storage:Item:Delete")
+    AdminStorageItemDelete("Admin:Storage:Item:Delete"),
+    AdminStorageItemUnitConversion("Admin:Storage:Item:UnitConversion"),
+    AdminStorageItemUnitConversionList("Admin:Storage:Item:UnitConversion:List"),
+    AdminStorageItemUnitConversionUpdate("Admin:Storage:Item:UnitConversion:Update"),
     ;
 
     private String name;

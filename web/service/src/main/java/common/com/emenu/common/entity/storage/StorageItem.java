@@ -111,6 +111,18 @@ public class StorageItem extends AbstractEntity {
     @Transient
     private String stockOutTypeStr;
 
+    @Transient
+    private String orderUnitName;
+
+    @Transient
+    private String storageUnitName;
+
+    @Transient
+    private String costCardUnitName;
+
+    @Transient
+    private String countUnitName;
+
     public Integer getId() {
         return id;
     }
@@ -304,5 +316,37 @@ public class StorageItem extends AbstractEntity {
 
     public void setStockOutTypeStr(String stockOutTypeStr) {
         this.stockOutTypeStr = stockOutTypeStr;
+    }
+
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
+    public String getStorageUnitName() {
+        return storageUnitName;
+    }
+
+    public void setStorageUnitName(String storageUnitName) {
+        this.storageUnitName = storageUnitName;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
+    }
+
+    public String getCountUnitName() {
+        return countUnitName;
+    }
+
+    public void setCountUnitName(String countUnitName) {
+        this.countUnitName = countUnitName;
     }
 }

@@ -74,6 +74,7 @@ public class StorageItemController extends AbstractController {
                          StorageItemSearchDto searchDto) {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
+        searchDto.setPageSize(pageSize);
         List<StorageItem> list = Collections.emptyList();
         try {
             list = storageItemService.listBySearchDto(searchDto);
@@ -86,13 +87,13 @@ public class StorageItemController extends AbstractController {
         for (StorageItem storageItem : list) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", storageItem.getId());
-            jsonObject.put("itemNumber", storageItem.getItemNumber());
-            jsonObject.put("assistantCode", storageItem.getAssistantCode());
             jsonObject.put("name", storageItem.getName());
+            jsonObject.put("orderUnit", storageItem.getOrderUnitId());
             jsonObject.put("tagName", storageItem.getTagName());
+            jsonObject.put("supplierName", storageItem.getSupplierName());
             jsonObject.put("maxStorageQuantity", storageItem.getMaxStorageQuantity());
             jsonObject.put("minStorageQuantity", storageItem.getMinStorageQuantity());
-            jsonObject.put("stockOutTypeStr", storageItem.getStockOutTypeStr());
+            jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
 
             jsonArray.add(jsonObject);
         }
@@ -162,10 +163,10 @@ public class StorageItemController extends AbstractController {
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return "admin/storage/item/new_home";
+            return toNew(model);
         }
 
-        redirectAttributes.addAttribute("msg", NEW_SUCCESS_MSG);
+        redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
         String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/list";
         return "redirect:" + redirectUrl;
     }
@@ -189,7 +190,20 @@ public class StorageItemController extends AbstractController {
 
             List<Unit> weightUnit = new ArrayList<Unit>();
             List<Unit> quantityUnit = new ArrayList<Unit>();
+            int orderUnitType = 1, storageUnitType = 1, costCardUnitType = 1, countOrderType = 1;
             for (Unit unit : unitList) {
+                if (unit.getId().equals(storageItem.getOrderUnitId())) {
+                    orderUnitType = unit.getType();
+                }
+                if (unit.getId().equals(storageItem.getStorageUnitId())) {
+                    storageUnitType = unit.getType();
+                }
+                if (unit.getId().equals(storageItem.getCostCardUnitId())) {
+                    costCardUnitType = unit.getType();
+                }
+                if (unit.getId().equals(storageItem.getCountUnitId())) {
+                    countOrderType = unit.getType();
+                }
                 if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
                     weightUnit.add(unit);
                 } else {
@@ -198,6 +212,10 @@ public class StorageItemController extends AbstractController {
             }
 
             model.addAttribute("storageItem", storageItem);
+            model.addAttribute("orderUnitType", orderUnitType);
+            model.addAttribute("storageUnitType", storageUnitType);
+            model.addAttribute("storageUnitType", costCardUnitType);
+            model.addAttribute("storageUnitType", countOrderType);
             model.addAttribute("weightUnit", weightUnit);
             model.addAttribute("quantityUnit", quantityUnit);
             model.addAttribute("supplierList", supplierList);
@@ -222,18 +240,18 @@ public class StorageItemController extends AbstractController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public String updateStorageItem(StorageItem storageItem,
                                     RedirectAttributes redirectAttributes) {
-        redirectAttributes.addAttribute("code", 0);
-        redirectAttributes.addAttribute("msg", UPDATE_SUCCESS_MSG);
+        redirectAttributes.addFlashAttribute("code", 0);
+        redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
 
         try {
             storageItemService.updateStorageItem(storageItem);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            redirectAttributes.addAttribute("code", 0);
-            redirectAttributes.addAttribute("msg", UPDATE_SUCCESS_MSG);
+            redirectAttributes.addFlashAttribute("code", 1);
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
 
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/update" + storageItem.getId();
+        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/update/" + storageItem.getId();
         return "redirect:" + redirectUrl;
     }
 
@@ -255,5 +273,91 @@ public class StorageItemController extends AbstractController {
         }
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 去还算比例列表页
+     *
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemUnitConversion)
+    @RequestMapping(value = "unit/conversion/list", method = RequestMethod.GET)
+    public String toConversionList(Model model) {
+        try {
+            List<Unit> unitList = unitService.listAll();
+
+            List<Unit> weightUnit = new ArrayList<Unit>();
+            List<Unit> quantityUnit = new ArrayList<Unit>();
+            for (Unit unit : unitList) {
+                if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
+                    weightUnit.add(unit);
+                } else {
+                    quantityUnit.add(unit);
+                }
+            }
+
+            model.addAttribute("weightUnit", weightUnit);
+            model.addAttribute("quantityUnit", quantityUnit);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/storage/item/unit_conversion_list_home";
+    }
+
+    /**
+     * ajax获取换算比例列表
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param searchDto
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItemUnitConversion, extModule = ModuleEnums.AdminStorageItemUnitConversionList)
+    @RequestMapping(value = "unit/conversion/ajax/list/{pageNo}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxConversionList(@PathVariable("pageNo") Integer pageNo,
+                                   @RequestParam("pageSize") Integer pageSize,
+                                   StorageItemSearchDto searchDto) {
+        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        searchDto.setPageNo(pageNo);
+        searchDto.setPageSize(pageSize);
+        List<StorageItem> list = Collections.emptyList();
+        try {
+            list = storageItemService.listBySearchDto(searchDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (StorageItem storageItem : list) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", storageItem.getId());
+            jsonObject.put("name", storageItem.getName());
+            jsonObject.put("orderUnitId", storageItem.getOrderUnitId());
+            jsonObject.put("orderUnitName", storageItem.getOrderUnitName());
+            jsonObject.put("orderToStorageRatio", storageItem.getOrderToStorageRatio());
+            jsonObject.put("storageUnitId", storageItem.getStorageUnitId());
+            jsonObject.put("storageUnitName", storageItem.getStorageUnitName());
+            jsonObject.put("storageToCostCardRatio", storageItem.getStorageToCostCardRatio());
+            jsonObject.put("costCardUnitId", storageItem.getCostCardUnitId());
+            jsonObject.put("costCardUnitName", storageItem.getCostCardUnitName());
+            jsonObject.put("countUnitId", storageItem.getCountUnitId());
+            jsonObject.put("countUnitName", storageItem.getCountUnitName());
+
+            jsonArray.add(jsonObject);
+        }
+
+        int dataCount = 0;
+        try {
+            dataCount = storageItemService.countBySearchDto(searchDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonArray(jsonArray, dataCount);
     }
 }

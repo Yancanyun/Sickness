@@ -34,6 +34,7 @@
 
                         <div class="col-sm-3">
                             <select class="form-control" name="supplierPartyId">
+                                <option value="0">请选择</option>
                                 <c:forEach var="supplier" items="${supplierList}">
                                     <option value="${supplier.partyId}">${supplier.name}</option>
                                 </c:forEach>

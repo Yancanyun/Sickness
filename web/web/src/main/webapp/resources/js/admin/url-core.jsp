@@ -79,7 +79,8 @@
             ['delStoreClassify', site.website + 'admin/storage/tag/ajax/&{id}', 'delete','删除库存分类'],
 
             // 库存物品管理
-            ['delStoreItem', site.website + 'mock/admin/login.json', 'get','删除库存物品']
+            ['delStoreItem', site.website + 'admin/storage/item/ajax/&{id}', 'delete','删除库存物品'],
+            ['editStoreItemConversionRatio', site.staticWebsite + 'mock/admin/login.json', 'get','编辑换算比例']
         ],
         // 菜品管理
         DishManagement: [

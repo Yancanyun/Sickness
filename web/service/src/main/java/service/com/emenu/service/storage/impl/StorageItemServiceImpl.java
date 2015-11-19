@@ -1,10 +1,12 @@
 package com.emenu.service.storage.impl;
 
 import com.emenu.common.dto.storage.StorageItemSearchDto;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.storage.StorageItemStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.storage.StorageItemMapper;
+import com.emenu.service.dish.UnitService;
 import com.emenu.service.storage.StorageItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -17,7 +19,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 库存物品Service实现
@@ -32,6 +36,9 @@ public class StorageItemServiceImpl implements StorageItemService {
     private StorageItemMapper storageItemMapper;
 
     @Autowired
+    private UnitService unitService;
+
+    @Autowired
     @Qualifier("commonDao")
     private CommonDao commonDao;
 
@@ -43,6 +50,7 @@ public class StorageItemServiceImpl implements StorageItemService {
 
         try {
             list = storageItemMapper.listBySearchDto(offset, searchDto);
+            setUnitName(list);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
@@ -67,6 +75,7 @@ public class StorageItemServiceImpl implements StorageItemService {
         List<StorageItem> list = Collections.emptyList();
         try {
             list = storageItemMapper.listAll();
+            setUnitName(list);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
@@ -144,12 +153,11 @@ public class StorageItemServiceImpl implements StorageItemService {
             return null;
         }
         try {
-            commonDao.queryById(StorageItem.class, id);
+            return commonDao.queryById(StorageItem.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
         }
-        return null;
     }
 
     private boolean checkBeforeSave(StorageItem storageItem) throws SSException {
@@ -169,5 +177,20 @@ public class StorageItemServiceImpl implements StorageItemService {
         Assert.isNotNull(storageItem.getMinStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);
 
         return true;
+    }
+
+    private void setUnitName(List<StorageItem> storageItemList) throws SSException {
+        List<Unit> unitList = unitService.listAll();
+        Map<Integer, String> unitMap = new HashMap<Integer, String>();
+        for (Unit unit : unitList) {
+            unitMap.put(unit.getId(), unit.getName());
+        }
+        unitMap.put(0, "");
+        for (StorageItem storageItem : storageItemList) {
+            storageItem.setOrderUnitName(unitMap.get(storageItem.getOrderUnitId()));
+            storageItem.setStorageUnitName(unitMap.get(storageItem.getStorageUnitId()));
+            storageItem.setCostCardUnitName(unitMap.get(storageItem.getCostCardUnitId()));
+            storageItem.setCountUnitName(unitMap.get(storageItem.getCountUnitId()));
+        }
     }
 }

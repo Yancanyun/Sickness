@@ -88,19 +88,28 @@
             <li <c:if test="${MethodModule eq 'Admin:Storage:Tag:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:Storage:Item:List'}">class="active"</c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Item'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/storage/item">
                     库存物品管理
-                    <c:if test="${ExtModule eq 'Admin:Storage:Item:New' or ExtModule eq 'Admin:Storage:Item:Update'}"><i class="fa fa-angle-right angle-right"></i></c:if>
+                    <c:if test="${ExtModule eq 'Admin:Storage:Item:New'
+                                    or ExtModule eq 'Admin:Storage:Item:Update'
+                                    or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}"><i class="fa fa-angle-right angle-right"></i></c:if>
                 </a>
-                <c:if test="${ExtModule eq 'Admin:Storage:Item:New' or ExtModule eq 'Admin:Storage:Item:Update'}">
+                <c:if test="${ExtModule eq 'Admin:Storage:Item:New'
+                                or ExtModule eq 'Admin:Storage:Item:Update'
+                                or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">
                     <ul>
                         <li <c:if test="${ExtModule eq 'Admin:Storage:Item:New'}">class="active" </c:if>>
                             <a href="${website}admin/party/security/permission">添加库存物品</a>
                         </li>
-                        <c:if test="${ExtModule eq 'Admin:Storaget:Item:Update'}">
+                        <c:if test="${ExtModule eq 'Admin:Storage:Item:Update'}">
                             <li class="active">
-                                <a href="#">修改库存物品</a>
+                                <a href="#">编辑库存物品</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">
+                            <li class="active">
+                                <a href="${website}admin/storage/item/unit/converison/list">换算比例</a>
                             </li>
                         </c:if>
                     </ul>
