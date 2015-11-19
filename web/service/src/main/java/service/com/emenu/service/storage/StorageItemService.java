@@ -82,5 +82,16 @@ public interface StorageItemService {
      */
     public StorageItem queryById(int id) throws SSException;
 
+    /**
+     * 根据关键字进行查询
+     * 此方法只用于根据助记码或名字查询
+     * 返回的实体中只有id、name、assistantCode三个字段有值
+     * 其余查询请使用{@link #listBySearchDto(StorageItemSearchDto)}
+     *
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public List<StorageItem> listByKeyword(String keyword) throws SSException;
 
 }

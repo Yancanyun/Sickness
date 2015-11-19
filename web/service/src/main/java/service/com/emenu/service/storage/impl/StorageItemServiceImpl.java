@@ -160,6 +160,21 @@ public class StorageItemServiceImpl implements StorageItemService {
         }
     }
 
+    @Override
+    public List<StorageItem> listByKeyword(String keyword) throws SSException {
+        List<StorageItem> list = Collections.emptyList();
+        if (Assert.isNull(keyword)) {
+            return list;
+        }
+        try {
+            list = storageItemMapper.listByKeyword(keyword);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return list;
+    }
+
     private boolean checkBeforeSave(StorageItem storageItem) throws SSException {
         if (Assert.isNull(storageItem)) {
             return false;

@@ -184,11 +184,13 @@ public class AbstractController extends Base {
 
     // 默认按照默认的pagesize返回数据
     protected JSONObject sendJsonArray(JSONArray jsonArray, int dataCount) {
+        return sendJsonArray(jsonArray, dataCount, DEFAULT_PAGE_SIZE);
+    }
+
+    protected JSONObject sendJsonArray(JSONArray jsonArray) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", AJAX_SUCCESS_CODE);
         jsonObject.put("list", jsonArray);
-        jsonObject.put("dataCount", dataCount);
-        jsonObject.put("pageSize", DEFAULT_PAGE_SIZE);
         return jsonObject;
     }
 

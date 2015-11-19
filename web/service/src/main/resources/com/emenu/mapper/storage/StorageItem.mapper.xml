@@ -127,4 +127,14 @@
             SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
+
+    <select id="listByKeyword" resultMap="pw.StorageItem">
+        SELECT
+            `id` AS id,
+            `name` AS name,
+            `assistant_code` AS assistantCode
+        FROM `t_storage_item`
+        WHERE
+            `name` LIKE "%"#{keyword}"%" OR `assistant_code` LIKE "%"#{keyword}"%"
+    </select>
 </mapper>
