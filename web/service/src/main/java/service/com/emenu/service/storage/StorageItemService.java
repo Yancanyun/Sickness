@@ -57,6 +57,14 @@ public interface StorageItemService {
     public void updateStorageItem(StorageItem storageItem) throws SSException;
 
     /**
+     * 更新各个单位
+     *
+     * @param storageItem
+     * @throws SSException
+     */
+    public void updateUnit(StorageItem storageItem) throws SSException;
+
+    /**
      * 根据id删除
      *
      * @param id

@@ -73,6 +73,7 @@
             </div>
             <div class="panel-body">
                 <a class="btn btn-success margin-bottom-15" href="${website}admin/storage/item/new"><i class="fa fa-plus"></i>&nbsp;添加库存物品</a>
+                <a class="btn btn-success margin-bottom-15" href="${website}admin/storage/item/unit/conversion/list"><i class="fa fa-exchange"></i>&nbsp;换算比例</a>
 
                 <form class="J_operForm">
                     <div class="table-responsive">

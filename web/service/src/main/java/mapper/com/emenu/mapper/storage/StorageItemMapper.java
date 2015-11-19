@@ -2,6 +2,7 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.storage.StorageItem;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,6 +34,15 @@ public interface StorageItemMapper {
      * @throws Exception
      */
     public int countBySearchDto(@Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
+
+    /**
+     * 根据id进行查询
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StorageItem queryById(@Param("id") int id) throws SSException;
 
     /**
      * 查询全部

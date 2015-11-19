@@ -118,6 +118,22 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     @Override
+    public void updateUnit(StorageItem storageItem) throws SSException {
+        try {
+            Assert.isNotNull(storageItem.getOrderUnitId(), EmenuException.StorageItemUnitNotNull);
+            Assert.isNotNull(storageItem.getStorageUnitId(), EmenuException.StorageItemUnitNotNull);
+            Assert.isNotNull(storageItem.getCostCardUnitId(), EmenuException.StorageItemUnitNotNull);
+            Assert.isNotNull(storageItem.getOrderToStorageRatio(), EmenuException.StorageItemUnitRatioNotNull);
+            Assert.isNotNull(storageItem.getStorageToCostCardRatio(), EmenuException.StorageItemUnitRatioNotNull);
+
+            commonDao.update(storageItem);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
     public void delById(int id) throws SSException {
         if (Assert.lessOrEqualZero(id)) {
             return ;
@@ -153,7 +169,7 @@ public class StorageItemServiceImpl implements StorageItemService {
             return null;
         }
         try {
-            return commonDao.queryById(StorageItem.class, id);
+            return storageItemMapper.queryById(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);

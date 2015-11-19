@@ -34,9 +34,11 @@
         <where>
             <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != ''">
-                    storageItem.`name` LIKE "%"#{searchDto.keyword}"%"
-                    OR storageItem.`item_number` LIKE "%"#{searchDto.keyword}"%"
-                    OR storageItem.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    (
+                      storageItem.`name` LIKE "%"#{searchDto.keyword}"%"
+                      OR storageItem.`item_number` LIKE "%"#{searchDto.keyword}"%"
+                      OR storageItem.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    )
                 </if>
                 <if test="searchDto.supplierPartyId != null and searchDto.supplierPartyId > 0">
                     AND storageItem.`supplier_party_id` = #{searchDto.supplierPartyId}
@@ -60,14 +62,14 @@
         SELECT
             COUNT(storageItem.`id`)
         FROM `t_storage_item` storageItem
-        LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
-        LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
         <where>
             <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != ''">
-                    storageItem.`name` LIKE "%"#{searchDto.keyword}"%"
-                    OR storageItem.`item_number` LIKE "%"#{searchDto.keyword}"%"
-                    OR storageItem.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    (
+                      storageItem.`name` LIKE "%"#{searchDto.keyword}"%"
+                      OR storageItem.`item_number` LIKE "%"#{searchDto.keyword}"%"
+                      OR storageItem.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    )
                 </if>
                 <if test="searchDto.supplierPartyId != null and searchDto.supplierPartyId > 0">
                     AND storageItem.`supplier_party_id` = #{searchDto.supplierPartyId}
@@ -81,6 +83,36 @@
                 AND storageItem.`status` != 2
             </if>
         </where>
+    </select>
+
+    <select id="queryById" resultMap="pw.StorageItem">
+        SELECT
+            storageItem.`id` AS id,
+            storageItem.`supplier_party_id` AS supplierPartyId,
+            storageItem.`tag_id` AS tagId,
+            supplier.`name` AS supplierName,
+            tag.`name` AS tagName,
+            storageItem.`name` AS NAME,
+            storageItem.`item_number` AS itemNumber,
+            storageItem.`assistant_code` AS assistantCode,
+            storageItem.`order_unit_id` AS orderUnitId,
+            storageItem.`storage_unit_id` AS storageUnitId,
+            storageItem.`cost_card_unit_id` AS costCardUnitId,
+            storageItem.`count_unit_id` AS countUnitId,
+            storageItem.`order_to_storage_ratio` AS orderToStorageRatio,
+            storageItem.`storage_to_cost_card_ratio` AS storageToCostCardRatio,
+            storageItem.`max_storage_quantity` AS maxStorageQuantity,
+            storageItem.`min_storage_quantity` AS minStorageQuantity,
+            storageItem.`stock_out_type` AS stockOutType,
+            storageItem.`total_stock_in_quantity` AS totalStockInQuantity,
+            storageItem.`total_stock_in_money` AS totalStockInMoney,
+            storageItem.`last_stock_in_price` AS lastStockInPrice,
+            storageItem.`created_time` AS createdTime,
+            storageItem.`last_modified_time` AS lastModifiedTime
+        FROM `t_storage_item` storageItem
+        LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
+        LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
+        WHERE storageItem.`id` = #{id}
     </select>
 
     <select id="listAll" resultMap="pw.StorageItem">

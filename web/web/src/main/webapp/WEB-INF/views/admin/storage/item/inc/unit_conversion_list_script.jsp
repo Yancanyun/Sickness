@@ -43,11 +43,12 @@
             <label class="col-sm-4 control-label"><span class="requires">*</span>订货单位</label>
 
             <div class="col-sm-6">
-                <select class="form-control" name="orderUnitId" data-valid-rule="notNull"
+                <select class="form-control w180" name="orderUnitId" data-valid-rule="notNull"
                         data-valid-tip="请选择订货单位|订货单位不能为空,请重新选择">
-                    <option value="">请选择</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="0">请选择</option>
+                    <c:forEach var="unit" items="${unitList}">
+                        <option value="${unit.id}">${unit.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
@@ -63,11 +64,12 @@
             <label class="col-sm-4 control-label"><span class="requires">*</span>库存单位</label>
 
             <div class="col-sm-6">
-                <select class="form-control" name="storageUnitId" data-valid-rule="notNull"
+                <select class="form-control w180" name="storageUnitId" data-valid-rule="notNull"
                         data-valid-tip="请选择库存单位|库存单位不能为空,请重新选择">
-                    <option value="">请选择</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="0">请选择</option>
+                    <c:forEach var="unit" items="${unitList}">
+                        <option value="${unit.id}">${unit.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
@@ -83,23 +85,24 @@
             <label class="col-sm-4 control-label"><span class="requires">*</span>成本卡单位</label>
 
             <div class="col-sm-6">
-                <select class="form-control" name="costCardUnitId" data-valid-rule="notNull"
+                <select class="form-control w180" name="costCardUnitId" data-valid-rule="notNull"
                         data-valid-tip="请选择成本卡单位|单位不能为空,请重新选择">
-                    <option value="">请选择</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                    <option value="0">请选择</option>
+                    <c:forEach var="unit" items="${unitList}">
+                        <option value="${unit.id}">${unit.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-4 control-label"><span class="requires">*</span>计数单位</label>
+            <label class="col-sm-4 control-label">计数单位</label>
 
             <div class="col-sm-6">
-                <select class="form-control" name="countUnitId" data-valid-rule="notNull"
-                        data-valid-tip="请选择计数单位|单位不能为空,请重新选择">
-                    <option value="">请选择</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
+                <select class="form-control w180" name="countUnitId">
+                    <option value="0">请选择</option>
+                    <c:forEach var="unit" items="${unitList}">
+                        <option value="${unit.id}">${unit.name}</option>
+                    </c:forEach>
                 </select>
             </div>
         </div>

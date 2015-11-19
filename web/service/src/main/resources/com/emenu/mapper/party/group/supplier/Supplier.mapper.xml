@@ -21,6 +21,7 @@
             `last_modified_time` AS lastModifiedTime
         FROM `t_party_supplier`
         WHERE `status` != 2
+        ORDER BY `id` DESC
     </select>
 
     <update id="updateStatusById">

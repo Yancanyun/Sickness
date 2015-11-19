@@ -135,6 +135,6 @@ public class StorageTagServiceImpl implements StorageTagService {
         }
         Integer count = storageItemService.countByTagId(id);
 
-        return count > 1;
+        return count > 0;
     }
 }

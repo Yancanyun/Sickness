@@ -55,10 +55,13 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>供货商</label>
 
                         <div class="col-sm-6">
-                            <select class="form-control" data-valid-rule="notNull" data-valid-tip="请选择供货商|供货商不能为空,请重新选择"
+                            <select class="form-control w180" data-valid-rule="notNull" data-valid-tip="请选择供货商|供货商不能为空,请重新选择"
                                     name="supplierPartyId">
+                                <option value="${storageItem.supplierPartyId}" selected="selected">${storageItem.supplierName}</option>
                                 <c:forEach var="supplier" items="${supplierList}">
-                                    <option value="${supplier.partyId}" <c:if test="${supplier.partyId == storageItem.supplierPartyId}">selected="selected"</c:if> >${supplier.name}</option>
+                                    <c:if test="${supplier.partyId != storageItem.supplierPartyId}">
+                                        <option value="${supplier.partyId}">${supplier.name}</option>
+                                    </c:if>
                                 </c:forEach>
                             </select>
                         </div>
@@ -67,7 +70,7 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
 
                         <div class="col-sm-6">
-                            <select class="form-control" data-valid-rule="notNull" data-valid-tip="请选择所属分类|分类不能为空,请重新选择"
+                            <select class="form-control w180" data-valid-rule="notNull" data-valid-tip="请选择所属分类|分类不能为空,请重新选择"
                                     name="tagId">
                                 <c:forEach var="tag" items="${tagList}">
                                     <option value="${tag.id}" <c:if test="${tag.id == storageItem.tagId}">selected="selected"</c:if> >${tag.name}</option>
@@ -79,16 +82,16 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位</label>
 
                         <div class="col-sm-9">
-                            <select class="form-control J_orderUnitType">
+                            <select class="form-control J_orderUnitType w180">
                                 <option value="1" <c:if test="${orderUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${orderUnitType == 2}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="form-control" name="orderUnitId">
+                            <select class="form-control w180" name="orderUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.orderUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden" name="orderUnitId" disabled="disabled">
+                            <select class="form-control hidden w180" name="orderUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.orderUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
@@ -107,16 +110,16 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位</label>
 
                         <div class="col-sm-9">
-                            <select class="form-control J_storeUnitType">
+                            <select class="form-control J_storeUnitType w180">
                                 <option value="1" <c:if test="${storageUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${storageUnitType == 2}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="form-control" name="storageUnitId">
+                            <select class="form-control w180" name="storageUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.storageUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden" name="storageUnitId" disabled="disabled">
+                            <select class="form-control hidden w180" name="storageUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.storageUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
@@ -135,16 +138,16 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>成本卡单位</label>
 
                         <div class="col-sm-9">
-                            <select class="form-control J_costCardUnitType">
+                            <select class="form-control J_costCardUnitType w180">
                                 <option value="1" <c:if test="${costCardUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${costCardUnitType == 1}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="form-control" name="costCardUnitId">
+                            <select class="form-control w180" name="costCardUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.costCardUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden" name="costCardUnitId" disabled="disabled">
+                            <select class="form-control hidden w180" name="costCardUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.costCardUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
@@ -155,17 +158,17 @@
                         <label class="col-sm-3 control-label">计数单位</label>
 
                         <div class="col-sm-9">
-                            <select class="form-control J_countUnitType">
+                            <select class="form-control J_countUnitType w180">
                                 <option value="1" <c:if test="${countUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${countUnitType == 1}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="form-control" name="countUnitId">
+                            <select class="form-control w180" name="countUnitId">
                                 <option value="0">请选择</option>
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.countUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden" name="countUnitId" disabled="disabled">
+                            <select class="form-control hidden w180" name="countUnitId" disabled="disabled">
                                 <option value="0">请选择</option>
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.countUnitId}">selected="selected"</c:if>>${unit.name}</option>
@@ -193,7 +196,7 @@
                         <label class="col-sm-3 control-label">出库方式</label>
 
                         <div class="col-sm-6">
-                            <select class="form-control" name="stockOutType">
+                            <select class="form-control w180" name="stockOutType">
                                 <option value="1" <c:if test="${storageItem.stockOutType == 1}">selected="selected"</c:if>>加权平均(自动)</option>
                                 <option value="2" <c:if test="${storageItem.stockOutType == 2}">selected="selected"</c:if>>手动</option>
                             </select>

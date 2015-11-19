@@ -88,6 +88,7 @@ public class StorageItemController extends AbstractController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", storageItem.getId());
             jsonObject.put("name", storageItem.getName());
+            jsonObject.put("assistantCode", storageItem.getAssistantCode());
             jsonObject.put("orderUnit", storageItem.getOrderUnitId());
             jsonObject.put("tagName", storageItem.getTagName());
             jsonObject.put("supplierName", storageItem.getSupplierName());
@@ -276,28 +277,17 @@ public class StorageItemController extends AbstractController {
     }
 
     /**
-     * 去还算比例列表页
+     * 去换算比例列表页
      *
      * @return
      */
-    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemUnitConversion)
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemUnitConversionList)
     @RequestMapping(value = "unit/conversion/list", method = RequestMethod.GET)
     public String toConversionList(Model model) {
         try {
             List<Unit> unitList = unitService.listAll();
 
-            List<Unit> weightUnit = new ArrayList<Unit>();
-            List<Unit> quantityUnit = new ArrayList<Unit>();
-            for (Unit unit : unitList) {
-                if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
-                    weightUnit.add(unit);
-                } else {
-                    quantityUnit.add(unit);
-                }
-            }
-
-            model.addAttribute("weightUnit", weightUnit);
-            model.addAttribute("quantityUnit", quantityUnit);
+            model.addAttribute("unitList", unitList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -359,5 +349,19 @@ public class StorageItemController extends AbstractController {
         }
 
         return sendJsonArray(jsonArray, dataCount);
+    }
+
+    @Module(value = ModuleEnums.AdminStorageItemUnitConversion, extModule = ModuleEnums.AdminStorageItemUnitConversionUpdate)
+    @RequestMapping(value = "unit/conversion/ajax", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSON updateUnitConversion(StorageItem storageItem) {
+        try {
+            storageItemService.updateUnit(storageItem);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }
