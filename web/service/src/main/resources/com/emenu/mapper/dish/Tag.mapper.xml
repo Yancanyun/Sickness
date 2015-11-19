@@ -4,7 +4,7 @@
 
     <select id="listAll" resultMap="pw.Tag">
         SELECT
-            *
+            `id`,`name`,`p_id`,`weight`,`type`,`time_limit`,`print_after_confirm_order`,`max_print_num`
         FROM
             `t_tag`
         ORDER BY
@@ -13,7 +13,7 @@
 
     <select id="listByPage" resultMap="pw.Tag">
         SELECT
-            *
+            `id`,`name`,`p_id`,`weight`,`type`,`time_limit`,`print_after_confirm_order`,`max_print_num`
         FROM
             `t_tag`
         ORDER BY

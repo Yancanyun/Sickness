@@ -48,17 +48,4 @@ public interface StorageSettlementMapper {
     public List<StorageItemDto> listItemByDateAndSupplierId(@Param("supplierId") Integer supplierId,
                                                             @Param("startDate")Date startDate,
                                                             @Param("endDate")Date endDate) throws SSException;
-
-    /**
-     * 根据供货商ID和时间段取出这个时间段入库的供货商
-     * @param supplierId
-     * @param startDate
-     * @param endDate
-     * @return
-     * @throws SSException
-     */
-    @Deprecated
-    public List<Supplier> listSupplierByDate(@Param("supplierId") Integer supplierId,
-                                             @Param("startDate")Date startDate,
-                                             @Param("endDate")Date endDate) throws SSException;
 }
