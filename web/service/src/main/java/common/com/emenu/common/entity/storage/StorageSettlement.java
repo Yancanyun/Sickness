@@ -9,25 +9,24 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * Depot
- * 存放点
- *
- * @author xubr
- * @date 2015/11/10.
+ * StorageSettlement
+ * 结算总表
+ * @author dujuan
+ * @date 2015/11/11
  */
 @Entity
-@Table(name = "t_storage_depot")
-public class Depot extends AbstractEntity {
+@Table(name = "t_storage_settlement")
+public class StorageSettlement extends AbstractEntity{
+
+    private static final long serialVersionUID = -1429067854524059412L;
 
     //主键id
     @Id
     private Integer id;
 
-    //存放点名称
-    private String name;
-
-    //存放点简介
-    private String introduction;
+    //编号
+    @Column(name = "serial_number")
+    private String serialNumber;
 
     //创建时间
     @Column(name = "created_time")
@@ -37,9 +36,7 @@ public class Depot extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
-    /**
-     * ************getter and setter***********************
-     */
+    /********************getter and setter ********************/
 
     public Integer getId() {
         return id;
@@ -50,20 +47,12 @@ public class Depot extends AbstractEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getSerialNumber() {
+        return serialNumber;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public void setIntroduction(String introduction) {
-        this.introduction = introduction;
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public Date getCreatedTime() {
@@ -81,5 +70,4 @@ public class Depot extends AbstractEntity {
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
     }
-
 }

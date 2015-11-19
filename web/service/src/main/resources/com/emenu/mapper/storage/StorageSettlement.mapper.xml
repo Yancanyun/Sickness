@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.storage.StorageSettlementMapper">
 
-    <select id="listByDate" resultMap="pw.SettlementItem">
+    <select id="listByDate" resultMap="pw.StorageSettlementItem">
         SELECT * FROM t_storage_settlement_item
         WHERE t_storage_settlement_item.`settlement_id`=
         (
@@ -13,7 +13,7 @@
         )
     </select>
 
-    <select id="queryByDate" resultMap="pw.SettlementItem">
+    <select id="queryByDateAndItemId" resultMap="pw.StorageSettlementItem">
         SELECT * FROM t_storage_settlement_item
         WHERE t_storage_settlement_item.`settlement_id`=
         (
@@ -23,6 +23,49 @@
         LIMIT 1
         )
         AND t_storage_settlement_item.item_id=#{itemId}
+    </select>
+
+    <select id="listItemByDateAndSupplierId" resultType="com.emenu.common.dto.storage.StorageItemDto">
+        SELECT t_storage_item.`id`,t_storage_item.`name` AS itemName,
+        SUM(t_storage_report_item.`quantity`) AS itemQuantity,
+        SUM(t_storage_report_item.`price`*t_storage_report_item.`quantity`)AS itemMoney,
+        t_party_supplier.`party_id` AS supplierpartyId,
+        (SELECT t_party_employee.`name` FROM t_party_employee WHERE t_party_employee.party_id=t_storage_report.`handler_party_id`) AS handlerName,
+        (SELECT t_party_employee.`name` FROM t_party_employee WHERE t_party_employee.party_id=t_storage_report.`created_party_id`) AS createdName
+        FROM t_storage_item,t_storage_report,t_storage_report_item,t_party_supplier
+        WHERE t_storage_item.`id` = t_storage_report_item.`item_id`
+        AND t_storage_report_item.`report_id` = t_storage_report.`id`
+        AND t_storage_report.`type`=1
+        AND t_party_supplier.`party_id` = t_storage_item.`supplier_party_id`
+        <if test="supplierId != 0 and supplierId != null">
+            AND t_storage_item.`supplier_party_id`=#{supplierId}
+        </if>
+        <if test="startDate != null">
+            <![CDATA[AND t_storage_report.`created_time`>=#{startDate}]]>
+        </if>
+        <if test="endDate != null">
+            <![CDATA[AND t_storage_report.`created_time`<=#{endDate} ]]>
+        </if>
+        GROUP BY t_storage_item.`id`
+    </select>
+
+    <select id="listSupplierByDate" resultMap="pw.Supplier">
+        SELECT t_party_supplier.id,t_party_supplier.party_id,t_party_supplier.name
+        FROM t_storage_item,t_storage_report,t_storage_report_item,t_party_supplier
+        WHERE t_storage_item.`id` = t_storage_report_item.`item_id`
+        AND t_storage_report_item.`report_id` = t_storage_report.`id`
+        AND t_storage_report.`type`=1
+        AND t_party_supplier.`party_id` = t_storage_item.`supplier_party_id`
+        <if test="supplierId != 0 and supplierId != null">
+            AND t_storage_item.`supplier_party_id`=#{supplierId}
+        </if>
+        <if test="startDate!=null">
+            <![CDATA[AND t_storage_report.`created_time`>=#{startDate}]]>
+        </if>
+        <if test="endDate!=null">
+            <![CDATA[AND t_storage_report.`created_time`<=#{endDate} ]]>
+        </if>
+        GROUP BY t_party_supplier.`party_id`
     </select>
 
 </mapper>

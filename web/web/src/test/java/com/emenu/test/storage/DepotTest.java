@@ -1,7 +1,7 @@
 package com.emenu.test.storage;
 
-import com.emenu.common.entity.storage.Depot;
-import com.emenu.service.storage.DepotService;
+import com.emenu.common.entity.storage.StorageDepot;
+import com.emenu.service.storage.StorageDepotService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
@@ -21,56 +21,53 @@ import java.util.List;
 public class DepotTest extends AbstractTestCase {
 
     @Autowired
-    @Qualifier("depotService")
-    private DepotService depotService;
+    @Qualifier("storageDepotService")
+    private StorageDepotService storageDepotService;
 
     @Test
     public void newDepot() throws SSException {
 
-        Depot depot = new Depot();
+        StorageDepot depot = new StorageDepot();
         depot.setName("存放点9");
         depot.setIntroduction("存放点9简介存放点9简介存放点9");
-        depotService.newDepot(depot);
+        storageDepotService.newStorageDepot(depot);
     }
 
     @Test
     public void delById() throws SSException {
-        depotService.delById(7);
+        storageDepotService.delById(7);
     }
 
     @Test
     public void updateDepot() throws SSException {
-
-        Depot depot = new Depot();
+        StorageDepot depot = new StorageDepot();
         depot.setId(10);
         depot.setName("存放点88");
         depot.setIntroduction("88简介简介简介简介");
-        depotService.updateDepot(depot);
+        storageDepotService.updateStorageDepot(depot);
     }
 
     @Test
     public void queryByName() throws SSException {
-        System.out.print(depotService.queryByName("存放点点点").getIntroduction());
+        System.out.print(storageDepotService.queryByName("存放点点点").getIntroduction());
     }
 
     @Test
     public void listByPage() throws SSException {
-        List<Depot> list = Collections.<Depot>emptyList();
+        List<StorageDepot> list = Collections.<StorageDepot>emptyList();
 
-        list = depotService.listByPage(2, 2);
-        System.out.print(depotService.countAll());
-        for (Depot depot : list) {
+        list = storageDepotService.listByPage(2, 2);
+        System.out.print(storageDepotService.countAll());
+        for (StorageDepot depot : list) {
             System.out.print(depot.getIntroduction());
         }
     }
 
     @Test
     public void listAll() throws SSException {
-        List<Depot> list1 = Collections.<Depot>emptyList();
-
-        list1 = depotService.listAll();
-
-        for (Depot depot : list1) {
+        List<StorageDepot> list1 = Collections.<StorageDepot>emptyList();
+        list1 = storageDepotService.listAll();
+        for (StorageDepot depot : list1) {
             System.out.print(depot.getIntroduction());
         }
     }

@@ -1,7 +1,10 @@
 package com.emenu.service.storage.impl;
 
 import com.emenu.common.dto.storage.StorageCheckDto;
+import com.emenu.common.dto.storage.StorageItemDto;
 import com.emenu.common.dto.storage.StorageReportDto;
+import com.emenu.common.dto.storage.StorageSupplierDto;
+import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
@@ -12,7 +15,8 @@ import com.emenu.mapper.storage.StorageSettlementMapper;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.other.SerialNumService;
-import com.emenu.service.storage.StorageSettlementItemService;
+import com.emenu.service.party.group.supplier.SupplierService;
+import com.emenu.service.storage.StorageSettlementService;
 import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.pandawork.core.common.exception.SSException;
@@ -25,17 +29,18 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 /**
- * StorageSettlementItemServiceImpl
+ * StorageSettlementServiceImpl
  * 库存结算
  * @author dujuan
- * @date 2015/11/15
+ * @Date 2015/11/15
  */
-@Service("storageSettlementItemService")
-public class StorageSettlementItemServiceImpl implements StorageSettlementItemService {
+@Service("storageSettlementService")
+public class StorageSettlementServiceImpl implements StorageSettlementService {
 
     @Autowired
     @Qualifier("commonDao")
@@ -59,11 +64,14 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
     @Autowired
     private TagFacadeService tagFacadeService;
 
+    @Autowired
+    private SupplierService supplierService;
+
     @Override
-    public void newSettlementItem() throws SSException {
+    public void newSettlement() throws SSException {
         try {
             //第一步：添加一条结算数据:t_storage_settlement
-            Settlement settlement = new Settlement();
+            StorageSettlement settlement = new StorageSettlement();
             settlement.setSerialNumber(serialNumService.generateSerialNum(SerialNumTemplateEnums.SettlementSerialNum));
             Integer settlementId = commonDao.insert(settlement).getId();
             //第二步：把当前时间之前未结算的单据全部结算:t_storage_settlement_item
@@ -108,22 +116,22 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
                     for(StorageReportItem storageReportItem : storageReportItemList){
                         if(storageItem.getId()==storageReportItem.getItemId()){
                             //入库单
-                            if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockInReport.getId()){
+                            if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId()) ){
                                 stockInQuantity = stockInQuantity.add(storageReportItem.getQuantity());
                                 stockInMoney = stockInMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                             }
                             //出库单
-                            if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockOutReport.getId()){
+                            if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockOutReport.getId())){
                                 stockOutQuantity = stockOutQuantity.add(storageReportItem.getQuantity());
                                 stockOutMoney = stockOutMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                             }
                             //盘盈单
-                            if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.IncomeOnReport.getId()){
+                            if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockOutReport.getId())){
                                 incomeOnQuantity = incomeOnQuantity.add(storageReportItem.getQuantity());
                                 incomeOnMoney = incomeOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                             }
                             //盘亏单
-                            if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.LossOnReport.getId()){
+                            if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.LossOnReport.getId()) ){
                                 lossOnQuantity = lossOnQuantity.add(storageReportItem.getQuantity());
                                 lossOnMoney = lossOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                             }
@@ -137,7 +145,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
                 realMoney = stockInMoney.subtract(stockOutMoney).add(incomeOnMoney.subtract(lossOnMoney));
 
                 //取出之前该库存物品的总数
-                SettlementItem beforeSettlementItem = storageSettlementMapper.queryByDate(nowDate, storageItem.getId());
+                StorageSettlementItem beforeSettlementItem = storageSettlementMapper.queryByDateAndItemId(nowDate, storageItem.getId());
                 if(Assert.isNotNull(beforeSettlementItem)){
                     totalQuantity = beforeSettlementItem.getTotalQuantity();
                     totalMoney = beforeSettlementItem.getTotalMoney();
@@ -148,7 +156,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
                 totalMoney = totalMoney.add(realMoney);
 
                 //将库存的每个物品的结算情况存到数据库
-                SettlementItem settlementItem = new SettlementItem();
+                StorageSettlementItem settlementItem = new StorageSettlementItem();
                 settlementItem.setItemId(storageItem.getId());
                 settlementItem.setStockInQuantity(stockInQuantity);
                 settlementItem.setStockInMoney(stockInMoney);
@@ -171,11 +179,11 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
     }
 
     @Override
-    public List<StorageCheckDto> listStorageItemCheck(Date startDate,
-                                                      Date endDate,
-                                                      List<Integer> depotIds,
-                                                      List<Integer> tagIds,
-                                                      Integer itemId) throws Exception {
+    public List<StorageCheckDto> listSettlementCheck(Date startDate,
+                                                     Date endDate,
+                                                     List<Integer> depotIds,
+                                                     List<Integer> tagIds,
+                                                     Integer itemId) throws Exception {
         //期初数量
         BigDecimal beginQuantity = new BigDecimal(0.00);
         //期初金额
@@ -207,12 +215,11 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
         List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
 
         //取出时间段之间的所有单据,根据条件
-        //TODO
-        List<StorageReportDto> storageReportList = new ArrayList<StorageReportDto>();
+        List<StorageReportDto> storageReportList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
 
         //取出开始时间之前的所有单据详情以及结算结果
-        List<SettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, storageReportList);
-        for(SettlementItem settlementItem : beforeSettlementList){
+        List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, storageReportList);
+        for(StorageSettlementItem settlementItem : beforeSettlementList){
             //循环单据
             for (StorageReportDto storageReportDto : storageReportList) {
                 //循环单据详情
@@ -266,7 +273,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
             storageCheckDto.setBeginQuantity(beginQuantity);
             storageCheckDto.setBeginMoney(beginMoney);
 
-            SettlementItem newSettlementItem = new SettlementItem();
+            StorageSettlementItem newSettlementItem = new StorageSettlementItem();
             newSettlementItem.setItemId(storageItem.getId());
             newSettlementItem.setStockInQuantity(stockInQuantity);
             newSettlementItem.setStockInMoney(stockInMoney);
@@ -295,16 +302,75 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
         return storageCheckDtoList;
     }
 
+    @Override
+    public List<StorageSupplierDto> listSettlementSupplier(Integer supplierId,
+                                                           Date startDate,
+                                                           Date endDate) throws SSException {
+        List<StorageSupplierDto> storageSupplierDtoList = new ArrayList<StorageSupplierDto>();
+        try {
+            //供货商partyId
+            Integer supplierPartyId = 0;
+            if(supplierId != null && supplierId != 0){
+                Supplier supplier = supplierService.queryById(supplierId);
+                if(supplier!=null){
+                    //获取供货商partyId
+                    supplierPartyId = supplier.getPartyId();
+                }
+                //获取物品列表
+                List<StorageItemDto> storageItemDtoList = storageSettlementMapper.listItemByDateAndSupplierId(supplierPartyId, startDate, endDate);
+                StorageSupplierDto storageSupplierDto = new StorageSupplierDto();
+                storageSupplierDto.setSupplierName(supplier.getName());
+                List<StorageItemDto> childItemDtoList = new ArrayList<StorageItemDto>();
+                //总金额
+                BigDecimal totalMoeny = new BigDecimal(0.00);
+                for (StorageItemDto storageItemDto : storageItemDtoList) {
+                    if (storageItemDto.getSupplierPartyId().equals(supplier.getPartyId())) {
+                        childItemDtoList.add(storageItemDto);
+                        totalMoeny = totalMoeny.add(storageItemDto.getItemMoney());
+                    }
+                }
+                storageSupplierDto.setStorageItemDtoList(childItemDtoList);
+                storageSupplierDto.setTotalMoney(totalMoeny);
+                storageSupplierDtoList.add(storageSupplierDto);
+            }else {
+                //获取物品列表
+                List<StorageItemDto> storageItemDtoList = storageSettlementMapper.listItemByDateAndSupplierId(supplierPartyId, startDate, endDate);
+                //取出所有供货商
+                List<Supplier> supplierList = supplierService.listAll();
+                for (Supplier supplier1 : supplierList) {
+                    StorageSupplierDto storageSupplierDto = new StorageSupplierDto();
+                    storageSupplierDto.setSupplierName(supplier1.getName());
+                    List<StorageItemDto> childItemDtoList = new ArrayList<StorageItemDto>();
+                    //总金额
+                    BigDecimal totalMoney = new BigDecimal(0.00);
+                    for (StorageItemDto storageItemDto : storageItemDtoList) {
+                        if (storageItemDto.getSupplierPartyId() == supplier1.getPartyId()) {
+                            childItemDtoList.add(storageItemDto);
+                            totalMoney = totalMoney.add(storageItemDto.getItemMoney());
+                        }
+                    }
+                    storageSupplierDto.setStorageItemDtoList(childItemDtoList);
+                    storageSupplierDto.setTotalMoney(totalMoney);
+                    storageSupplierDtoList.add(storageSupplierDto);
+                }
+            }
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelPrinterDishError, e);
+        }
+        return storageSupplierDtoList;
+    }
+
 
     /**
      * 根据某个时间段的单据详情并结算出每个库存物品的结果
      * @param startDate
      * @param storageReportDtoList
-     * @return List<SettlementItem>
+     * @return List<StorageSettlementItem>
      * @throws SSException
      */
-    private List<SettlementItem> listSettlementItemByDate(Date startDate,
-                                                          List<StorageReportDto> storageReportDtoList) throws SSException{
+    private List<StorageSettlementItem> listSettlementItemByDate(Date startDate,
+                                                                 List<StorageReportDto> storageReportDtoList) throws SSException{
         //入库数量
         BigDecimal stockInQuantity = new BigDecimal(0.00);
         //入库金额
@@ -329,7 +395,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
         BigDecimal totalQuantity = new BigDecimal(0.00);
         BigDecimal totalMoney = new BigDecimal(0.00);
 
-        List<SettlementItem> settlementItemList = new ArrayList<SettlementItem>();
+        List<StorageSettlementItem> settlementItemList = new ArrayList<StorageSettlementItem>();
 
         //获得所有库存原料
         List<StorageItem> storageItemList = storageItemService.listAll();
@@ -342,22 +408,22 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
                 for (StorageReportItem storageReportItem : storageReportItemList) {
                     if(storageItem.getId()==storageReportItem.getItemId()){
                         //入库单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockInReport.getId()){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId()) ){
                             stockInQuantity = stockInQuantity.add(storageReportItem.getQuantity());
                             stockInMoney = stockInMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //出库单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockOutReport.getId()){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
                             stockOutQuantity = stockOutQuantity.add(storageReportItem.getQuantity());
                             stockOutMoney = stockOutMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //盘盈单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.IncomeOnReport.getId()){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
                             incomeOnQuantity = incomeOnQuantity.add(storageReportItem.getQuantity());
                             incomeOnMoney = incomeOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //盘亏单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.LossOnReport.getId()){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
                             lossOnQuantity = lossOnQuantity.add(storageReportItem.getQuantity());
                             lossOnMoney = lossOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
@@ -369,7 +435,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
             realMoney = stockInMoney.subtract(stockOutMoney).add(incomeOnMoney.subtract(lossOnMoney));
 
             //取出之前该库存物品的总数
-            SettlementItem beforeSettlementItem = storageSettlementMapper.queryByDate(startDate, storageItem.getId());
+            StorageSettlementItem beforeSettlementItem = storageSettlementMapper.queryByDateAndItemId(startDate, storageItem.getId());
             if(Assert.isNotNull(beforeSettlementItem)){
                 totalQuantity = beforeSettlementItem.getTotalQuantity();
                 totalMoney = beforeSettlementItem.getTotalMoney();
@@ -379,7 +445,7 @@ public class StorageSettlementItemServiceImpl implements StorageSettlementItemSe
             totalQuantity = totalQuantity.add(realQuantity);
             totalMoney = totalMoney.add(realMoney);
 
-            SettlementItem settlementItem = new SettlementItem();
+            StorageSettlementItem settlementItem = new StorageSettlementItem();
             settlementItem.setItemId(storageItem.getId());
             settlementItem.setStockInQuantity(stockInQuantity);
             settlementItem.setStockInMoney(stockInMoney);

@@ -49,9 +49,11 @@ public enum EmenuException implements IBizExceptionMes {
 
     // 库存结算
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
+    ListStorageSettlementSupplierFailed("库存结算中心结算失败", 3031),
+    ListStorageSettlementCheckFailed("库存盘点失败", 3032),
 
-    //菜品管理模块
-    //分类管理
+    // 菜品管理模块
+    // 分类管理
     NewTagFailed("添加分类失败", 3001),
     TagIdError("分类的ID为空或者小于0", 3002),
     UpdateTagFailed("修改分类失败", 3003),

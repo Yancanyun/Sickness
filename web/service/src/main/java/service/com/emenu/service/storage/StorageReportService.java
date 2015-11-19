@@ -91,11 +91,11 @@ public interface StorageReportService {
      * @throws SSException
      */
     public List<StorageReportDto> listStorageReportDtoByCondition1(int id,
-                                                                     int depotId,
-                                                                     int handlerPartyId,
-                                                                     int createdPartyId,
-                                                                     int page,
-                                                                     int pageSize) throws SSException;
+                                                                   int depotId,
+                                                                   int handlerPartyId,
+                                                                   int createdPartyId,
+                                                                   int page,
+                                                                   int pageSize) throws SSException;
 
     /**
      * 根据id修改单据
@@ -132,8 +132,8 @@ public interface StorageReportService {
      * @throws SSException
      */
     public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
-                                                                Date endTime,
-                                                                List<Integer> depotIdList,
-                                                                List<Integer> tagIdList) throws SSException;
+                                                                   Date endTime,
+                                                                   List<Integer> depotIdList,
+                                                                   List<Integer> tagIdList) throws SSException;
 
 }

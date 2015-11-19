@@ -1,7 +1,6 @@
 package com.emenu.common.dto.storage;
 
-import com.emenu.common.entity.storage.SettlementItem;
-import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.entity.storage.StorageSettlementItem;
 
 import java.math.BigDecimal;
 
@@ -37,7 +36,7 @@ public class StorageCheckDto {
     //期初金额
     private BigDecimal beginMoney;
 
-    private SettlementItem settlementItem;
+    private StorageSettlementItem settlementItem;
 
     public String getName() {
         return name;
@@ -103,11 +102,11 @@ public class StorageCheckDto {
         this.beginMoney = beginMoney;
     }
 
-    public SettlementItem getSettlementItem() {
+    public StorageSettlementItem getSettlementItem() {
         return settlementItem;
     }
 
-    public void setSettlementItem(SettlementItem settlementItem) {
+    public void setSettlementItem(StorageSettlementItem settlementItem) {
         this.settlementItem = settlementItem;
     }
 }

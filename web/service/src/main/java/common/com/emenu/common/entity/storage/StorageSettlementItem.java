@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * SettlementItem
+ * StorageSettlementItem
  * 结算原料详细表
  * @author dujuan
  * @date 2015/11/11
  */
 @Entity
 @Table(name = "t_storage_settlement_item")
-public class SettlementItem extends AbstractEntity{
+public class StorageSettlementItem extends AbstractEntity{
 
     private static final long serialVersionUID = 4562512793101730984L;
 

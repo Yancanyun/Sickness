@@ -14,7 +14,7 @@
     <!--<bean id="statisticsTask" class="com.rest.service.timetask.StatisticsTaskService"/>-->
 
     <!--库存结算类-->
-    <bean id="countSettlementTask" class="com.emenu.service.storage.impl.StorageSettlementItemServiceImpl"/>
+    <bean id="countSettlementTask" class="com.emenu.service.storage.impl.StorageSettlementServiceImpl"/>
 
     <!-- 库存定时结算统计 -->
     <bean id="countSettlement" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
