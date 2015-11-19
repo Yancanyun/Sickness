@@ -45,6 +45,12 @@ public interface EmployeeService {
      */
     public boolean checkNumberIsExist(String EmployeeNumber) throws SSException;
 
+    /**
+     * 检查电话是否重复
+     * @param phone
+     * @return
+     * @throws SSException
+     */
     public boolean checkPhoneIsExist(String phone) throws SSException;
 
     /**
@@ -106,5 +112,27 @@ public interface EmployeeService {
      */
     public Employee queryByPartyId(int partyId) throws SSException;
 
+    /**
+     * 根据partyId查询EmployeeDto
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
     public EmployeeDto queryEmployeeDtoByPartyId(int partyId) throws SSException;
+
+    /**
+     * 根据员工编号查询员工信息
+     * @param employeeNumber
+     * @return
+     * @throws SSException
+     */
+    public Employee queryByNumber(String employeeNumber) throws SSException;
+
+    /**
+     * 根据员工电话查询员工信息
+     * @param phone
+     * @return
+     * @throws SSException
+     */
+    public Employee queryByPhone(String phone) throws SSException;
 }

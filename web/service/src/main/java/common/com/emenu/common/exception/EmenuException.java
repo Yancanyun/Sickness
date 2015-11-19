@@ -193,6 +193,9 @@ public enum EmenuException implements IBizExceptionMes {
     PartyIdError("当事人ID为空或者小于0", 6010),
     EmployeeNameNotNull("员工姓名不能为空",6011),
     EmployeeNumberNotNull("员工编号不能为空",6012),
+    CheckEmployeeNumberFail("检查员工编号重名失败",6013),
+    CheckEmployeePhoneFail("检查员工电话重名失败",6014),
+    CheckLoginNameFail("检查登录名重名失败",6015),
 
     // 库存管理
     InsertReportFail("添加单据失败",7001),

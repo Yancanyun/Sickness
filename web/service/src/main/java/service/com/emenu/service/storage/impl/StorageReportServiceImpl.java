@@ -250,6 +250,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                                                                   int page,
                                                                   int pageSize) throws SSException {
 
+        page = page <= 0 ? 0 : page - 1;
         int offset = page * pageSize;
 
         if (startTime == null && endTime == null) {
@@ -302,6 +303,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                                                                      int createdPartyId,
                                                                      int page,
                                                                      int pageSize) throws SSException {
+        page = page <= 0 ? 0 : page - 1;
         int offset = page * pageSize;
         List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();

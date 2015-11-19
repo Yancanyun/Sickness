@@ -507,4 +507,30 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
     }
 
+    @Override
+    public Employee queryByNumber(String employeeNumber) throws SSException {
+        try {
+              if (Assert.isNull(employeeNumber)){
+                  throw SSException.get(EmenuException.EmployeeNumberNotNull);
+              }
+            return employeeMapper.queryByNumber(employeeNumber);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryEmployeeException, e);
+        }
+    }
+
+    @Override
+    public Employee queryByPhone(String phone) throws SSException {
+        try {
+            if (Assert.isNull(phone)){
+                throw SSException.get(EmenuException.CheckEmployeePhoneFail);
+            }
+            return employeeMapper.queryByPhone(phone);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryEmployeeException, e);
+        }
+    }
+
 }

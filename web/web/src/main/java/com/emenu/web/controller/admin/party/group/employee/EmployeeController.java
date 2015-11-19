@@ -7,14 +7,17 @@ import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.security.SecurityGroup;
+import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.CommonUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -365,13 +368,26 @@ public class EmployeeController  extends AbstractController {
      */
     @RequestMapping(value = "ajax/checkloginname",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject checkLoginName(@RequestParam("loginName")String loginName){
+    public JSONObject checkLoginName(@RequestParam("partyId")Integer partyId,@RequestParam("loginName")String loginName){
         try {
-            if(securityUserService.checkLoginNameIsExist(loginName)){
-                return sendJsonObject(AJAX_FAILURE_CODE);
-            }else {
-                return sendJsonObject(AJAX_SUCCESS_CODE);
+            if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
+                if(securityUserService.checkLoginNameIsExist(loginName)){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }else {
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
             }
+            if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
+                SecurityUser securityUser = securityUserService.queryByLoginName(loginName);
+                if (partyId == securityUser.getPartyId()){
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
+                if (partyId != securityUser.getPartyId()){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }
+            }
+            throw SSException.get(EmenuException.CheckLoginNameFail);
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -385,14 +401,25 @@ public class EmployeeController  extends AbstractController {
      */
     @RequestMapping(value = "ajax/checknumber",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject checkNumberIsExist(@RequestParam("employeeNumber")String employeeNumber){
+    public JSONObject checkNumberIsExist(@RequestParam("partyId")Integer partyId,@RequestParam("employeeNumber")String employeeNumber){
         try {
-            boolean a = employeeService.checkNumberIsExist(employeeNumber);
-            if(employeeService.checkNumberIsExist(employeeNumber)){
-                return sendJsonObject(AJAX_FAILURE_CODE);
-            }else {
-                return sendJsonObject(AJAX_SUCCESS_CODE);
+            if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
+                if (employeeService.checkNumberIsExist(employeeNumber)){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }else {
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
             }
+            if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
+                Employee employee = employeeService.queryByNumber(employeeNumber);
+                if (partyId == employee.getPartyId()){
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
+                if (partyId != employee.getPartyId()){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }
+            }
+            throw SSException.get(EmenuException.CheckEmployeeNumberFail);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -406,14 +433,25 @@ public class EmployeeController  extends AbstractController {
      */
     @RequestMapping(value = "ajax/checkphone",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject checkPhoneIsExist(@RequestParam("phone")String phone){
+    public JSONObject checkPhoneIsExist(@RequestParam("partyId")Integer partyId,@RequestParam("phone")String phone){
         try {
-
-            if(employeeService.checkPhoneIsExist(phone)){
-                return sendJsonObject(AJAX_FAILURE_CODE);
-            }else {
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
+                if(employeeService.checkPhoneIsExist(phone)){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }else {
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
             }
+            if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
+                Employee employee = employeeService.queryByPhone(phone);
+                if (partyId == employee.getPartyId()){
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
+                if (partyId != employee.getPartyId()){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                }
+            }
+            throw SSException.get(EmenuException.CheckEmployeePhoneFail);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
