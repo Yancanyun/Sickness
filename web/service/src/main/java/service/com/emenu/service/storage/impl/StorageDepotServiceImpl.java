@@ -121,6 +121,23 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         }
     }
 
+    @Override
+    public StorageDepot queryById(int id) throws SSException {
+
+        //检查id是否为空或者小于等于0，如果是，直接返回
+        if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
+            throw SSException.get(EmenuException.DepotIdError);
+        }
+
+        try {
+            return storageDepotMapper.queryById(id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDepotByIdFailed);
+        }
+
+    }
+
     /**
      * 添加一个存放点
      *

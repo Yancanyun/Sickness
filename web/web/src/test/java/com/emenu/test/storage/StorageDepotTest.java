@@ -42,9 +42,9 @@ public class StorageDepotTest extends AbstractTestCase {
     public void updateStorageDepot() throws SSException {
 
         StorageDepot storageDepot = new StorageDepot();
-        storageDepot.setId(10);
-        storageDepot.setName("存放点88");
-        storageDepot.setIntroduction("88简介简介简介简介");
+        storageDepot.setId(9);
+        storageDepot.setName("存放点77");
+        storageDepot.setIntroduction("77简介简介简介简介");
         storageDepotService.updateStorageDepot(storageDepot);
     }
 
@@ -53,6 +53,10 @@ public class StorageDepotTest extends AbstractTestCase {
         System.out.print(storageDepotService.queryByName("存放点点点").getIntroduction());
     }
 
+    @Test
+    public void queryById() throws SSException {
+        System.out.print(storageDepotService.queryById(3).getIntroduction());
+    }
     @Test
     public void listByPage() throws SSException {
         List<StorageDepot> list = Collections.<StorageDepot>emptyList();

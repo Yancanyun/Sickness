@@ -3,32 +3,35 @@
 <mapper namespace="com.emenu.mapper.storage.StorageDepotMapper">
 
     <select id="queryByName" resultMap="pw.StorageDepot">
-        SELECT * FROM `t_storage_depot` WHERE `name` = #{name}
+        SELECT `id`,`name`,`introduction`,`created_time`,`last_modified_time`
+        FROM `t_storage_depot` WHERE `name` = #{name}
     </select>
 
     <select id="queryById" resultMap="pw.StorageDepot">
-        SELECT * FROM `t_storage_depot` WHERE `id` = #{id}
+        SELECT `id`,`name`,`introduction`,`created_time`,`last_modified_time`
+        FROM `t_storage_depot` WHERE `id` = #{id}
     </select>
 
     <select id="listAll" resultMap="pw.StorageDepot">
-        SELECT * FROM `t_storage_depot`
+        SELECT `id`,`name`,`introduction`,`created_time`,`last_modified_time`
+        FROM `t_storage_depot`
     </select>
 
     <select id="listByPage" resultMap="pw.StorageDepot">
-        SELECT *
+        SELECT `id`,`name`,`introduction`,`created_time`,`last_modified_time`
         FROM `t_storage_depot`
         LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="countAll" resultType="int">
         SELECT
-            COUNT(*)
+            COUNT(1)
         FROM `t_storage_depot`
     </select>
 
     <select id="checkNameIsExist" resultType="int">
         SELECT
-            COUNT(*)
+            COUNT(1)
         FROM
             `t_storage_depot`
         WHERE `name` = #{name}
@@ -36,7 +39,7 @@
 
     <select id="checkNameIsConflict" resultType="int">
             SELECT
-               COUNT(*)
+               COUNT(1)
              FROM
               `t_storage_depot`
               WHERE `name` = #{name} AND `id` != #{id}

@@ -220,19 +220,20 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateStorageReportItemFail("修改单据详情失败",7023),
 
     // 存放点管理
-    ListDepotPageFailed("分页存放点列表查询失败", 7021),
-    ListDepotFailed("获取全部存放点列表失败", 7022),
-    NewDepotFailed("增加存放点失败",7023),
-    DelDepotFailed("删除存放点失败", 7024),
-    UpdateDepotFailed("修改存放点失败", 7025),
-    CountDepotFailed("获取存放点总数失败", 7026),
-    DepotNameError("存放点名称不为空", 7027),
-    QueryDepotByNameFailed("根据名称查找存放点失败", 7028),
-    DepotIsNull("存放点为空", 7029),
-    DepotNameIsExist("存放点名已经存在", 7030),
-    DepotNameIsConflict("存放点名称冲突", 7031),
-    CheckDepotNameFailed("检查存放点名称是否重复失败", 7032),
-    CheckDepotNameConflictFailed("检查名称是否与其他存放点冲突失败", 7033),
+    ListDepotPageFailed("分页存放点列表查询失败", 7024),
+    ListDepotFailed("获取全部存放点列表失败", 7025),
+    NewDepotFailed("增加存放点失败",7026),
+    DelDepotFailed("删除存放点失败", 7027),
+    UpdateDepotFailed("修改存放点失败", 7028),
+    CountDepotFailed("获取存放点总数失败", 7029),
+    DepotNameError("存放点名称不为空", 7030),
+    QueryDepotByNameFailed("根据名称查找存放点失败", 7031),
+    QueryDepotByIdFailed("根据id查找存放点",7032),
+    DepotIsNull("存放点为空", 7033),
+    DepotNameIsExist("存放点名已经存在", 7034),
+    DepotNameIsConflict("存放点名称冲突", 7035),
+    CheckDepotNameFailed("检查存放点名称是否重复失败", 7036),
+    CheckDepotNameConflictFailed("检查名称是否与其他存放点冲突失败", 7037),
 
 
 

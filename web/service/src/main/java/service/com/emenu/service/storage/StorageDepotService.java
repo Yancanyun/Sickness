@@ -45,6 +45,13 @@ public interface StorageDepotService {
     public StorageDepot queryByName(String name) throws SSException;
 
     /**
+     * 根据id查找存放点
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StorageDepot queryById(int id) throws SSException;
+    /**
      * 添加一个storageDepot
      *
      * @param storageDepot

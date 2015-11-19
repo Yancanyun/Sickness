@@ -3,14 +3,12 @@
 <mapper namespace="com.emenu.mapper.dish.UnitMapper">
 
     <select id ="listAll" resultMap="pw.Unit">
-        SELECT
-            *
+        SELECT `id`,`name`,`type` ,`created_time`,`last_modified_time`
         FROM `t_unit`
     </select>
 
     <select id="listByPage" resultMap="pw.Unit">
-        SELECT
-            *
+        SELECT `id`,`name`,`type`,`created_time`,`last_modified_time`
         FROM
             `t_unit`
         LIMIT #{offset},#{pageSize}
@@ -18,24 +16,22 @@
 
     <select id="countAll" resultType="int">
         SELECT
-            COUNT(*)
+            COUNT(1)
         FROM
             `t_unit`
     </select>
 
     <select id ="queryById" resultMap="pw.Unit">
-        SELECT
-            *
-        FROM
-            `t_unit`
+        SELECT `id`,`name`,`type`,`created_time`,`last_modified_time`
+        FROM `t_unit`
         WHERE `id`=#{id}
     </select>
 
     <select id="checkNameIsExist" resultType="int">
         SELECT
-            COUNT(*)
+            COUNT(1)
         FROM
-            t_unit
+            `t_unit`
         WHERE `name` = #{name}
         <if test="oldname != null">
             AND `name` != #{oldname}
