@@ -15,6 +15,7 @@
       <c:if test="${!empty msg}">
         <div class="alert alert-danger J_tip" role="alert">${msg}</div>
       </c:if>
+      <input class="J_partyId" type="hidden" name="partyId" value="123" data-oper-type="1"/>
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>添加员工</h4>

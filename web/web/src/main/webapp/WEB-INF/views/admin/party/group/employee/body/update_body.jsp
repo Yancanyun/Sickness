@@ -12,6 +12,7 @@
     <c:if test="${!empty msg}">
       <div class="alert alert-danger J_tip" role="alert">${msg}</div>
     </c:if>
+
   </div>
   <div class="col-sm-12 margin-bottom-30">
     <form class="form-horizontal J_operForm" action="${website}admin/party/group/employee/update" method="post">
@@ -20,7 +21,7 @@
           <h4>员工信息编辑</h4>
         </div>
         <div class="panel-body">
-          <input type="hidden" name="partyId" value="${employeeDto.employee.partyId}"/>
+          <input class="J_partyId" type="hidden" name="partyId" value="${employeeDto.employee.partyId}"  data-oper-type="0"/>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>用户名</label>
             <div class="col-sm-6">
