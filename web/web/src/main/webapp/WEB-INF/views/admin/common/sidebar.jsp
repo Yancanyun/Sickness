@@ -95,25 +95,25 @@
                                     or ExtModule eq 'Admin:Storage:Item:Update'
                                     or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}"><i class="fa fa-angle-right angle-right"></i></c:if>
                 </a>
-                <%--<c:if test="${ExtModule eq 'Admin:Storage:Item:New'--%>
-                                <%--or ExtModule eq 'Admin:Storage:Item:Update'--%>
-                                <%--or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">--%>
-                    <%--<ul>--%>
-                        <%--<li <c:if test="${ExtModule eq 'Admin:Storage:Item:New'}">class="active" </c:if>>--%>
-                            <%--<a href="${website}admin/party/security/permission">添加库存物品</a>--%>
-                        <%--</li>--%>
-                        <%--<c:if test="${ExtModule eq 'Admin:Storage:Item:Update'}">--%>
-                            <%--<li class="active">--%>
-                                <%--<a href="#">编辑库存物品</a>--%>
-                            <%--</li>--%>
-                        <%--</c:if>--%>
-                        <%--<c:if test="${ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">--%>
-                            <%--<li class="active">--%>
-                                <%--<a href="${website}admin/storage/item/unit/conversion/list">换算比例</a>--%>
-                            <%--</li>--%>
-                        <%--</c:if>--%>
-                    <%--</ul>--%>
-                <%--</c:if>--%>
+                <c:if test="${ExtModule eq 'Admin:Storage:Item:New'
+                                or ExtModule eq 'Admin:Storage:Item:Update'
+                                or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:Storage:Item:New'}">class="active" </c:if>>
+                            <a href="${website}admin/storage/item/new">添加库存物品</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:Storage:Item:Update'}">
+                            <li class="active">
+                                <a href="#">编辑库存物品</a>
+                            </li>
+                        </c:if>
+                        <c:if test="${ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">
+                            <li class="active">
+                                <a href="${website}admin/storage/item/unit/conversion/list">换算比例</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </c:if>
             </li>
             <li><a class="J_menu" href="javascript:;">库存管理</a></li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>

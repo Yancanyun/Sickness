@@ -4,7 +4,7 @@
 <script type="text/template" id="tpl">
     {@each list as it}
     <tr data-store-item-id="&{it.id}">
-        <td>&{it.id}</td>
+        <td>&{it.itemNumber}</td>
         <td>&{it.assistantCode}</td>
         <td>&{it.name}</td>
         <td>&{it.tagName}</td>
