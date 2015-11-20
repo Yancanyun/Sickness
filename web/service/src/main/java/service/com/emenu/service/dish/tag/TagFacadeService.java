@@ -44,7 +44,7 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listByPId(int tagId) throws Exception;
+    public List<Tag> listChildrenByTagId(int tagId) throws Exception;
 
     /**
      * 删除一个tag
@@ -55,11 +55,20 @@ public interface TagFacadeService {
 
     /**
      * 根据ID获取当前ID展开的Tag
+     * 嵌套List
      * @param tagId
      * @return
      * @throws Exception
      */
     public List<TagDto> listByCurrentId(int tagId) throws Exception;
+
+    /**
+     * 根据tagId获取所有子节点一直到叶子节点
+     * @param tagId
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listByTagId(int tagId) throws Exception;
 
     /**
      * 获取菜品的分类List

@@ -50,10 +50,10 @@ public class StorageTagServiceImpl implements StorageTagService {
     public List<Tag> listAllSmallTag() throws SSException {
         List<Tag> smallTagList = Collections.emptyList();
         try {
-            List<Tag> bigTagList = tagFacadeService.listByPId(TagEnum.Storage.getId());
+            List<Tag> bigTagList = tagFacadeService.listChildrenByTagId(TagEnum.Storage.getId());
             smallTagList = new ArrayList<Tag>();
             for (Tag tag : bigTagList) {
-                smallTagList.addAll(tagFacadeService.listByPId(tag.getId()));
+                smallTagList.addAll(tagFacadeService.listChildrenByTagId(tag.getId()));
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -186,7 +186,9 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                                      Date endDate,
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
-                                                     String keyword) throws Exception {
+                                                     String keyword,
+                                                     int curPage,
+                                                     int pageSize) throws Exception {
 
         List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
 
@@ -270,7 +272,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             StorageCheckDto storageCheckDto = new StorageCheckDto();
             //获取该物品的属性
             StorageItem storageItem = storageItemService.queryById(settlementItem.getItemId());
-            storageCheckDto.setName(storageItem.getName());
+            storageCheckDto.setItemName(storageItem.getName());
             storageCheckDto.setItemNumber(storageItem.getItemNumber());
             storageCheckDto.setOrderUnitName(unitService.queryById(storageItem.getOrderUnitId()).getName());
             storageCheckDto.setStorageUnitName(unitService.queryById(storageItem.getStorageUnitId()).getName());
@@ -278,22 +280,34 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             storageCheckDto.setLastStockInPrice(storageItem.getLastStockInPrice());
             storageCheckDto.setBeginQuantity(beginQuantity);
             storageCheckDto.setBeginMoney(beginMoney);
+            storageCheckDto.setStockInQuantity(stockInQuantity);
+            storageCheckDto.setStockInMoney(stockInMoney);
+            storageCheckDto.setStockOutQuantity(stockOutQuantity);
+            storageCheckDto.setStockOutMoney(stockOutMoney);
+            storageCheckDto.setIncomeLossQuantity(incomeOnQuantity.subtract(lossOnQuantity));
+            storageCheckDto.setIncomeLossMoney(incomeOnMoney.subtract(lossOnMoney));
+            storageCheckDto.setTotalQuantity(totalQuantity);
+            storageCheckDto.setTotalMoney(totalMoney);
+            storageCheckDto.setTotalAveragePrice(totalMoney.divide(totalQuantity));
+            storageCheckDto.setMaxStorageQuantity(storageItem.getMaxStorageQuantity());
+            storageCheckDto.setMinStorageQuantity(storageItem.getMinStorageQuantity());
 
-            StorageSettlementItem newSettlementItem = new StorageSettlementItem();
-            newSettlementItem.setItemId(storageItem.getId());
-            newSettlementItem.setStockInQuantity(stockInQuantity);
-            newSettlementItem.setStockInMoney(stockInMoney);
-            newSettlementItem.setStockOutQuantity(stockOutMoney);
-            newSettlementItem.setIncomeOnQuantity(incomeOnQuantity);
-            newSettlementItem.setIncomeOnMoney(incomeOnMoney);
-            newSettlementItem.setLossOnQuantity(lossOnQuantity);
-            newSettlementItem.setLossOnMoney(lossOnMoney);
-            newSettlementItem.setRealQuantity(realQuantity);
-            newSettlementItem.setRealMoney(realMoney);
-            newSettlementItem.setTotalQuantity(totalQuantity);
-            newSettlementItem.setTotalMoney(totalMoney);
 
-            storageCheckDto.setSettlementItem(newSettlementItem);
+//            StorageSettlementItem newSettlementItem = new StorageSettlementItem();
+//            newSettlementItem.setItemId(storageItem.getId());
+//            newSettlementItem.setStockInQuantity(stockInQuantity);
+//            newSettlementItem.setStockInMoney(stockInMoney);
+//            newSettlementItem.setStockOutQuantity(stockOutMoney);
+//            newSettlementItem.setIncomeOnQuantity(incomeOnQuantity);
+//            newSettlementItem.setIncomeOnMoney(incomeOnMoney);
+//            newSettlementItem.setLossOnQuantity(lossOnQuantity);
+//            newSettlementItem.setLossOnMoney(lossOnMoney);
+//            newSettlementItem.setRealQuantity(realQuantity);
+//            newSettlementItem.setRealMoney(realMoney);
+//            newSettlementItem.setTotalQuantity(totalQuantity);
+//            newSettlementItem.setTotalMoney(totalMoney);
+
+//            storageCheckDto.setSettlementItem(newSettlementItem);
 
 //            if(itemId == null || itemId == 0){
 //                //加到List里面

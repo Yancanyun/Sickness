@@ -37,7 +37,9 @@ public interface StorageSettlementService {
                                                      Date endDate,
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
-                                                     String keyword) throws Exception;
+                                                     String keyword,
+                                                     int curPage,
+                                                     int pageSize) throws Exception;
     /**
      * 结算中心
      * @param supplierId

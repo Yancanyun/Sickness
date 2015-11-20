@@ -2,6 +2,7 @@ package com.emenu.test.dish.tag;
 
 import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
@@ -173,7 +174,13 @@ public class TagCacheTest extends AbstractTestCase{
         for(Tag tag : tagList){
             System.out.println(tag.getName());
         }
-
     }
 
+    @Test
+    public void listByTagId() throws Exception {
+        List<Tag> tagList =tagFacadeService.listByTagId(TagEnum.Dishes.getId());
+        for(Tag tag: tagList){
+            System.out.println(tag.getName());
+        }
+    }
 }

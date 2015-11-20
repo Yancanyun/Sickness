@@ -12,6 +12,7 @@ import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +65,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<Tag> listByPId(int tagId) throws Exception {
+    public List<Tag> listChildrenByTagId(int tagId) throws Exception {
         return tagCacheService.listChildrenById(tagId);
     }
 
@@ -82,6 +83,11 @@ public class TagFacadeServiceImpl implements TagFacadeService {
             throw SSException.get(EmenuException.TagPIdError);
         }
         return tagCacheService.listDtoByCurrentId(tagId);
+    }
+
+    @Override
+    public List<Tag> listByTagId(int tagId) throws Exception {
+        return tagCacheService.listByCurrentId(tagId);
     }
 
     @Override

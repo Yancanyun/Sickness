@@ -1,7 +1,5 @@
 package com.emenu.common.dto.storage;
 
-import com.emenu.common.entity.storage.StorageSettlementItem;
-
 import java.math.BigDecimal;
 
 /**
@@ -13,19 +11,19 @@ import java.math.BigDecimal;
 public class StorageCheckDto {
 
     //名称
-    private String name;
+    private String itemName;
 
     // 物品编号
     private String itemNumber;
+
+    // 分类名称
+    private String tagName;
 
     // 订货单位
     private String orderUnitName;
 
     // 库存单位
     private String storageUnitName;
-
-    // 分类名称
-    private String tagName;
 
     // 最近入库单价
     private BigDecimal lastStockInPrice;
@@ -36,14 +34,45 @@ public class StorageCheckDto {
     //期初金额
     private BigDecimal beginMoney;
 
-    private StorageSettlementItem settlementItem;
+    //入库数量
+    private BigDecimal stockInQuantity;
 
-    public String getName() {
-        return name;
+    //入库金额
+    private BigDecimal stockInMoney;
+
+    //出库数量
+    private BigDecimal stockOutQuantity;
+
+    //出库金额
+    private BigDecimal stockOutMoney;
+
+    //盈亏数量
+    private BigDecimal incomeLossQuantity;
+
+    //盈亏金额
+    private BigDecimal incomeLossMoney;
+
+    //结存数量
+    private BigDecimal totalQuantity;
+
+    //结存均价
+    private BigDecimal totalAveragePrice;
+
+    //结存金额
+    private BigDecimal totalMoney;
+
+    //库存报警值上限
+    private BigDecimal maxStorageQuantity;
+
+    //库存报警值下限
+    private BigDecimal minStorageQuantity;
+
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public String getItemNumber() {
@@ -52,6 +81,14 @@ public class StorageCheckDto {
 
     public void setItemNumber(String itemNumber) {
         this.itemNumber = itemNumber;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     public String getOrderUnitName() {
@@ -68,14 +105,6 @@ public class StorageCheckDto {
 
     public void setStorageUnitName(String storageUnitName) {
         this.storageUnitName = storageUnitName;
-    }
-
-    public String getTagName() {
-        return tagName;
-    }
-
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
     }
 
     public BigDecimal getLastStockInPrice() {
@@ -102,11 +131,91 @@ public class StorageCheckDto {
         this.beginMoney = beginMoney;
     }
 
-    public StorageSettlementItem getSettlementItem() {
-        return settlementItem;
+    public BigDecimal getStockInQuantity() {
+        return stockInQuantity;
     }
 
-    public void setSettlementItem(StorageSettlementItem settlementItem) {
-        this.settlementItem = settlementItem;
+    public void setStockInQuantity(BigDecimal stockInQuantity) {
+        this.stockInQuantity = stockInQuantity;
+    }
+
+    public BigDecimal getStockInMoney() {
+        return stockInMoney;
+    }
+
+    public void setStockInMoney(BigDecimal stockInMoney) {
+        this.stockInMoney = stockInMoney;
+    }
+
+    public BigDecimal getStockOutQuantity() {
+        return stockOutQuantity;
+    }
+
+    public void setStockOutQuantity(BigDecimal stockOutQuantity) {
+        this.stockOutQuantity = stockOutQuantity;
+    }
+
+    public BigDecimal getStockOutMoney() {
+        return stockOutMoney;
+    }
+
+    public void setStockOutMoney(BigDecimal stockOutMoney) {
+        this.stockOutMoney = stockOutMoney;
+    }
+
+    public BigDecimal getIncomeLossQuantity() {
+        return incomeLossQuantity;
+    }
+
+    public void setIncomeLossQuantity(BigDecimal incomeLossQuantity) {
+        this.incomeLossQuantity = incomeLossQuantity;
+    }
+
+    public BigDecimal getIncomeLossMoney() {
+        return incomeLossMoney;
+    }
+
+    public void setIncomeLossMoney(BigDecimal incomeLossMoney) {
+        this.incomeLossMoney = incomeLossMoney;
+    }
+
+    public BigDecimal getTotalQuantity() {
+        return totalQuantity;
+    }
+
+    public void setTotalQuantity(BigDecimal totalQuantity) {
+        this.totalQuantity = totalQuantity;
+    }
+
+    public BigDecimal getTotalAveragePrice() {
+        return totalAveragePrice;
+    }
+
+    public void setTotalAveragePrice(BigDecimal totalAveragePrice) {
+        this.totalAveragePrice = totalAveragePrice;
+    }
+
+    public BigDecimal getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(BigDecimal totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
+    public BigDecimal getMaxStorageQuantity() {
+        return maxStorageQuantity;
+    }
+
+    public void setMaxStorageQuantity(BigDecimal maxStorageQuantity) {
+        this.maxStorageQuantity = maxStorageQuantity;
+    }
+
+    public BigDecimal getMinStorageQuantity() {
+        return minStorageQuantity;
+    }
+
+    public void setMinStorageQuantity(BigDecimal minStorageQuantity) {
+        this.minStorageQuantity = minStorageQuantity;
     }
 }

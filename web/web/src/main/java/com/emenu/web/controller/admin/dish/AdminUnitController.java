@@ -1,4 +1,4 @@
-package com.emenu.web.controller.admin.dish.unit;
+package com.emenu.web.controller.admin.dish;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
