@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.dish.DishMapper">
+
+    <select id="listAll" resultMap="pw.Dish">
+        SELECT
+            `id` AS id,
+            `name` AS NAME,
+            `dish_number` AS dishNumber,
+            `assistant_code` AS assistantCode,
+            `unit_id` AS unitId,
+            `price` AS price,
+            `sale_type` AS saleType,
+            `discount` AS discount,
+            `sale_price` AS salePrice,
+            `category_id` AS categoryId,
+            `tag_id` AS tagId,
+            `description` AS description,
+            `like_nums` AS likeNums,
+            `is_network_available` AS isNetworkAvailable,
+            `is_vip_price_available` AS isVipPriceAvailable,
+            `is_voucher_available` AS isVoucherAvailable,
+            `time_limit` AS timeLimit,
+            `created_party_id` AS createdPartyId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+        FROM `t_dish`
+    </select>
+    
+    <select id="listBySearchDto" resultMap="pw.Dish">
+        SELECT
+            `id` AS id,
+            `name` AS NAME,
+            `dish_number` AS dishNumber,
+            `assistant_code` AS assistantCode,
+            `unit_id` AS unitId,
+            `price` AS price,
+            `sale_type` AS saleType,
+            `discount` AS discount,
+            `sale_price` AS salePrice,
+            `category_id` AS categoryId,
+            `tag_id` AS tagId,
+            `description` AS description,
+            `like_nums` AS likeNums,
+            `is_network_available` AS isNetworkAvailable,
+            `is_vip_price_available` AS isVipPriceAvailable,
+            `is_voucher_available` AS isVoucherAvailable,
+            `time_limit` AS timeLimit,
+            `created_party_id` AS createdPartyId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+        FROM `t_dish`
+        <where>
+            <if test="searchDto.keyword != null and searchDto.keyword != ''">
+                (
+                  `name` LIKE "%"#{searchDto.keyword}"%"
+                  OR `dish_number` LIKE "%"#{searchDto.keyword}"%"
+                  OR `assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                )
+            </if>
+            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                AND `tag_id` IN
+                <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
+                    #{tagid}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY `id` DESC
+        <if test="offset >= 0 and searchDto.pageSize > 0">
+            LIMIT #{offset}, #{searchDto.pageSize}
+        </if>
+    </select>
+
+    <select id="countBySearchDto" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_dish`
+        <where>
+            <if test="searchDto.keyword != null and searchDto.keyword != ''">
+                (
+                `name` LIKE "%"#{searchDto.keyword}"%"
+                OR `dish_number` LIKE "%"#{searchDto.keyword}"%"
+                OR `assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                )
+            </if>
+            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                AND `tag_id` IN
+                <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
+                    #{tagid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE `t_dish`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

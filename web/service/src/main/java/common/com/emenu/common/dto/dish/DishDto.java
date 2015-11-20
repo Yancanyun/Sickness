@@ -1,4 +1,4 @@
-package com.emenu.common.dto.dish.tag;
+package com.emenu.common.dto.dish;
 
 import java.math.BigDecimal;
 import java.util.Date;

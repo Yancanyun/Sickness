@@ -11,6 +11,10 @@ import java.util.Map;
  **/
 public enum DishStatusEnums {
 
+    UnSale(0, "停售"),
+    OnSale(1, "销售中"),
+    Lack(2, "标缺"),
+    Deleted(3, "已删除")
     ;
 
     private Integer id;

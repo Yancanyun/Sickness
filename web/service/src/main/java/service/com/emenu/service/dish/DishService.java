@@ -1,7 +1,7 @@
 package com.emenu.service.dish;
 
 import com.emenu.common.dto.dish.DishSearchDto;
-import com.emenu.common.dto.dish.tag.DishDto;
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
@@ -27,15 +27,11 @@ public interface DishService {
     /**
      * 根据分页和搜索条件查询
      *
-     * @param pageNo
-     * @param pageSize
      * @param searchDto
      * @return
      * @throws SSException
      */
-    public List<Dish> listByPageAndSearchDto(int pageNo,
-                                             int pageSize,
-                                             DishSearchDto searchDto) throws SSException;
+    public List<Dish> listBySearchDto(DishSearchDto searchDto) throws SSException;
 
     /**
      * 根据搜索条件计算数量
@@ -44,7 +40,7 @@ public interface DishService {
      * @return
      * @throws SSException
      */
-    public List<Dish> countBySearchDto(DishSearchDto searchDto) throws SSException;
+    public int countBySearchDto(DishSearchDto searchDto) throws SSException;
 
     /**
      * 添加菜品

@@ -1,11 +1,12 @@
 package com.emenu.common.entity.dish;
 
+import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.entity.AbstractEntity;
+import com.pandawork.core.common.log.LogClerk;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -97,6 +98,10 @@ public class Dish extends AbstractEntity {
     // 最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    // 状态
+    @Transient
+    private String statusStr;
 
     public Integer getId() {
         return id;
@@ -201,6 +206,8 @@ public class Dish extends AbstractEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+        DishStatusEnums statusEnums = DishStatusEnums.valueOf(status);
+        this.statusStr = statusEnums == null ? "" : statusEnums.getStatus();
     }
 
     public Integer getLikeNums() {
@@ -265,5 +272,55 @@ public class Dish extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    /**
+     * 从dto构造
+     *
+     * @param dishDto
+     * @return
+     */
+    public Dish constructFromDto(DishDto dishDto) {
+        Class thisClass = this.getClass();
+        Class dtoClass = dishDto.getClass();
+        Field[] thisFields = thisClass.getDeclaredFields();
+        for (Field field : thisFields) {
+            try {
+                Field dtoField;
+                try {
+                    dtoField = dtoClass.getDeclaredField(field.getName());
+                } catch (NoSuchFieldException e) {
+                    dtoField = null;
+                }
+                Object value = null;
+                if (dtoField != null) {
+                    boolean needToRest = !dtoField.isAccessible();
+                    dtoField.setAccessible(true);
+                    value = dtoField.get(dishDto);
+                    if (needToRest) {
+                        dtoField.setAccessible(false);
+                    }
+                }
+                if (value != null) {
+                    boolean needToRest = !field.isAccessible();
+                    field.setAccessible(true);
+                    field.set(this, value);
+                    if (needToRest) {
+                        field.setAccessible(false);
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                LogClerk.errLog.error(e);
+            }
+        }
+        return this;
     }
 }

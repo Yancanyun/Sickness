@@ -11,10 +11,8 @@ import java.util.Map;
  **/
 public enum DishImgTypeEnums {
 
-    UnSale(0, "停售"),
-    OnSale(1, "销售中"),
-    Lack(2, "标缺"),
-    Deleted(3, "已删除")
+    SmallImg(1, "小图"),
+    BigImg(2, "大图")
     ;
 
     private Integer id;
