@@ -49,7 +49,7 @@ public class AdminPrinterController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return null;
+        return "admin/printer/list_home";
     }
 
     @Module(ModuleEnums.AdminBasicInfoPrinterNew)
@@ -60,15 +60,20 @@ public class AdminPrinterController extends AbstractController {
             Printer printer1 = printerService.newPrinter(printer);
             if (printer.getType().equals(PrinterTypeEnums.DishTagPrinter.getId())){
                 for (int dishTagId : dishTagList){
-                    printerService.bindDishTag(printer1.getId(), dishTagId);
+                    dishTagPrinterService.bindDishTag(printer1.getId(), dishTagId);
                 }
             }
+
+            String successUrl = "/" + URLConstants.ADMIN_PRINTER_URL;
+            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String failedUrl = "/" + URLConstants.ADMIN_MEAL_PERIOD_URL;
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            return "redirect:" + failedUrl;
         }
-        return null;
     }
 
     @Module(ModuleEnums.AdminBasicInfoPrinterUpdate)
@@ -77,7 +82,7 @@ public class AdminPrinterController extends AbstractController {
                                 HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
             try {
                 if (!printer.getType().equals(PrinterTypeEnums.DishTagPrinter.getId())) {
-                    printerService.unBindAllDishTag(printer.getId());
+                    dishTagPrinterService.unBindAllDishTag(printer.getId());
                 }
                 printerService.updatePrinter(printer);
             } catch (SSException e) {
@@ -106,7 +111,7 @@ public class AdminPrinterController extends AbstractController {
     public JSONObject checkBinding(@RequestParam("id") int id, @RequestParam("type") int type){
             try {
                 if (type != PrinterTypeEnums.DishTagPrinter.getId()) {
-                    List<Tag> list = printerService.listTagById(id);
+                    List<Tag> list = dishTagPrinterService.listTagById(id);
                     if (!Assert.isEmpty(list)){
                         JSONArray jsonArray = new JSONArray();
                         for (Tag tag : list){

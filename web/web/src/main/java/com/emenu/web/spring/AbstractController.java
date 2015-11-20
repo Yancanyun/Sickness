@@ -19,6 +19,7 @@ import com.emenu.service.party.security.SecurityGroupService;
 import com.emenu.service.party.security.SecurityPermissionService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
+import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
@@ -294,6 +295,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("printerService")
     protected static PrinterService printerService;
+
+    @StaticAutoWire
+    @Qualifier("dishTagPrinterService")
+    protected static DishTagPrinterService dishTagPrinterService;
 
     @StaticAutoWire
     @Qualifier("storageItemService")

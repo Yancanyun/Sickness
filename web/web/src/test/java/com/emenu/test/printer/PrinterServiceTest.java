@@ -1,8 +1,9 @@
 package com.emenu.test.printer;
 
-import com.emenu.common.dto.printer.PrinterDishDto;
+import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -22,6 +23,9 @@ public class PrinterServiceTest extends AbstractTestCase{
     @Autowired
     PrinterService printerService;
 
+    @Autowired
+    DishTagPrinterService dishTagPrinterService;
+
     @Test
     public void listAll() throws SSException{
         List<Printer> list = printerService.listAll();
@@ -40,7 +44,7 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void listAvailableDishTag() throws SSException{
-        List<Tag> list = printerService.listAvailableDishTag();
+        List<Tag> list = dishTagPrinterService.listAvailableDishTag();
         for (Tag tag : list){
             System.out.println(tag);
         }
@@ -48,30 +52,30 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void queryByTagId() throws SSException{
-        System.out.println(printerService.queryByTagId(17));
+        System.out.println(dishTagPrinterService.queryByTagId(17));
     }
 
     @Test
     public void newPrinterDish() throws SSException {
-        PrinterDishDto printerDishDto = new PrinterDishDto();
-        printerDishDto.setDishId(24);
-        printerDishDto.setPrinterId(1);
-        printerDishDto.setType(1);
-        printerService.newPrinterDish(printerDishDto);
+        DishTagPrinter dishTagPrinter = new DishTagPrinter();
+        dishTagPrinter.setDishId(24);
+        dishTagPrinter.setPrinterId(1);
+        dishTagPrinter.setType(1);
+        dishTagPrinterService.newPrinterDish(dishTagPrinter);
     }
 
     @Test
     public void updatePrinterDish() throws SSException {
-        PrinterDishDto printerDishDto  = new PrinterDishDto();
-        printerDishDto.setDishId(24);
-        printerDishDto.setPrinterId(2);
-        printerDishDto.setType(0);
-        printerService.updatePrinterDish(printerDishDto);
+        DishTagPrinter dishTagPrinter = new DishTagPrinter();
+        dishTagPrinter.setDishId(24);
+        dishTagPrinter.setPrinterId(2);
+        dishTagPrinter.setType(0);
+        dishTagPrinterService.updatePrinterDish(dishTagPrinter);
     }
 
     @Test
     public void delPrinterDish() throws SSException {
-        printerService.delPrinterDish(24);
+        dishTagPrinterService.delPrinterDish(24);
     }
 
     @Test
@@ -107,7 +111,7 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void listTagById() throws SSException{
-        List<Tag> list = printerService.listTagById(3);
+        List<Tag> list = dishTagPrinterService.listTagById(3);
         for (Tag tag : list){
             System.out.println(tag);
         }
@@ -115,11 +119,11 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void bindDishTag() throws SSException{
-        printerService.bindDishTag(3, 9);
+        dishTagPrinterService.bindDishTag(3, 9);
     }
 
     @Test
     public void unBindAllDishTag() throws SSException{
-        printerService.unBindAllDishTag(1);
+        dishTagPrinterService.unBindAllDishTag(1);
     }
 }

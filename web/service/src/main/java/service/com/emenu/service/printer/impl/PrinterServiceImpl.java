@@ -1,17 +1,19 @@
 package com.emenu.service.printer.impl;
 
-import com.emenu.common.dto.printer.PrinterDishDto;
+import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.printer.*;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.printer.PrinterMapper;
+import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,10 @@ public class PrinterServiceImpl implements PrinterService {
     @Autowired
     PrinterMapper printerMapper;
 
+    @Autowired
+    @Qualifier("dishTagPrinterService")
+    DishTagPrinterService dishTagPrinterService;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Printer newPrinter(Printer printer) throws SSException {
@@ -56,7 +62,7 @@ public class PrinterServiceImpl implements PrinterService {
             if (!checkBeforeUpdate(printer)){
                 return;
             }
-            if (Assert.isEmpty(printerMapper.listTagById(printer.getId()))){
+            if (Assert.isEmpty(dishTagPrinterService.listTagById(printer.getId()))){
                 throw SSException.get(EmenuException.PrinterIsUsing);
             }
             commonDao.update(printer);
@@ -73,7 +79,7 @@ public class PrinterServiceImpl implements PrinterService {
             if (Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.PrinterIdError);
             }
-            if (Assert.isEmpty(printerMapper.listTagById(id))){
+            if (Assert.isEmpty(dishTagPrinterService.listTagById(id))){
                 throw SSException.get(EmenuException.PrinterIsUsing);
             }
             commonDao.deleteById(Printer.class, id);
@@ -117,125 +123,6 @@ public class PrinterServiceImpl implements PrinterService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryPrinterFail, e);
-        }
-    }
-
-    @Override
-    public Printer queryByTagId(int id) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(id)){
-                throw SSException.get(EmenuException.PrinterInfoIllegal);
-            }
-            return printerMapper.queryByTagId(id);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryPrinterFail, e);
-        }
-    }
-
-    @Override
-    public List<Tag> listTagById(int id) throws SSException {
-        List<Tag> list = Collections.emptyList();
-        try {
-            if (Assert.lessOrEqualZero(id)){
-                throw SSException.get(EmenuException.PrinterInfoIllegal);
-            }
-            list =  printerMapper.listTagById(id);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListTagFailed, e);
-        }
-        return list;
-    }
-
-    @Override
-    public List<Tag> listAvailableDishTag() throws SSException {
-        List<Tag> list = Collections.emptyList();
-        try {
-            list = printerMapper.listAvailableDishTag();
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListTagFailed, e);
-        }
-        return list;
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void newPrinterDish(PrinterDishDto printerDishDto) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(printerDishDto.getDishId())){
-                throw SSException.get(EmenuException.TagIdError);
-            }
-            if (Assert.lessOrEqualZero(printerDishDto.getPrinterId())){
-                throw SSException.get(EmenuException.PrinterIdError);
-            }
-            if (Assert.lessZero(printerDishDto.getType())){
-                throw SSException.get(EmenuException.PrinterDishTypeError);
-            }
-            printerMapper.newPrinterDish(printerDishDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewPrinterDishError, e);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updatePrinterDish(PrinterDishDto printerDishDto) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(printerDishDto.getDishId())){
-                throw SSException.get(EmenuException.TagIdError);
-            }
-            if (Assert.lessOrEqualZero(printerDishDto.getPrinterId())){
-                throw SSException.get(EmenuException.PrinterIdError);
-            }
-            printerMapper.updatePrinterDish(printerDishDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdatePrinterDishError, e);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void delPrinterDish(int tagId) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(tagId)){
-                throw SSException.get(EmenuException.TagIdError);
-            }
-            printerMapper.delPrinterDish(tagId);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DelPrinterDishError, e);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void bindDishTag(int printerId, int dishTagId) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(printerId) || Assert.lessOrEqualZero(dishTagId)){
-                throw SSException.get(EmenuException.PrinterInfoIllegal);
-            }
-            printerMapper.bindDishTag(printerId, dishTagId);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewPrinterDishError, e);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void unBindAllDishTag(int printerId) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(printerId)){
-                throw SSException.get(EmenuException.PrinterInfoIllegal);
-            }
-            printerMapper.unBindAllDishTag(printerId);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DelPrinterDishError, e);
         }
     }
 

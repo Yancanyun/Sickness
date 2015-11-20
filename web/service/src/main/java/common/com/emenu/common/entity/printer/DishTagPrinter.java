@@ -1,12 +1,12 @@
-package com.emenu.common.dto.printer;
+package com.emenu.common.entity.printer;
 
 /**
- * PrinterDishDto
- * 菜品与打印机关联表DTO
+ * DishTagPrinter
+ * 菜品与打印机关联表
  * @author dujuan
  * @date 2015/11/14
  */
-public class PrinterDishDto {
+public class DishTagPrinter {
     //关联表ID
     private Integer id;
 

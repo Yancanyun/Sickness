@@ -1,7 +1,7 @@
 package com.emenu.service.dish.tag.impl;
 
 import com.emenu.common.dto.dish.tag.TagDto;
-import com.emenu.common.dto.printer.PrinterDishDto;
+import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.printer.PrinterDishEnum;
@@ -117,11 +117,11 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         //添加分类
         Tag newTag = newTag(tag);
         //添加分类与打印机关联
-        PrinterDishDto printerDishDto = new PrinterDishDto();
-        printerDishDto.setDishId(newTag.getId());
-        printerDishDto.setPrinterId(printerId);
-        printerDishDto.setType(PrinterDishEnum.TagPrinter.getId());
-        printerService.newPrinterDish(printerDishDto);
+        DishTagPrinter dishTagPrinter = new DishTagPrinter();
+        dishTagPrinter.setDishId(newTag.getId());
+        dishTagPrinter.setPrinterId(printerId);
+        dishTagPrinter.setType(PrinterDishEnum.TagPrinter.getId());
+        printerService.newPrinterDish(dishTagPrinter);
         return newTag;
     }
 
@@ -131,10 +131,10 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         //修改该分类信息
         updateTag(tag);
         //修改与打印机关联表
-        PrinterDishDto printerDishDto = new PrinterDishDto();
-        printerDishDto.setDishId(tag.getId());
-        printerDishDto.setPrinterId(printerId);
-        printerService.updatePrinterDish(printerDishDto);
+        DishTagPrinter dishTagPrinter = new DishTagPrinter();
+        dishTagPrinter.setDishId(tag.getId());
+        dishTagPrinter.setPrinterId(printerId);
+        printerService.updatePrinterDish(dishTagPrinter);
     }
 
     @Override
