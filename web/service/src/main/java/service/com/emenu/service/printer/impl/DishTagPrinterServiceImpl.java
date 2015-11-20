@@ -63,6 +63,21 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
     }
 
     @Override
+    public List<String> listDishNameById(int id) throws SSException {
+        List<String> list = Collections.emptyList();
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.PrinterInfoIllegal);
+            }
+            list = dishTagPrinterMapper.listDishNameById(id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTagFailed, e);
+        }
+        return list;
+    }
+
+    @Override
     public List<Tag> listAvailableDishTag() throws SSException {
         List<Tag> list = Collections.emptyList();
         try {
@@ -132,7 +147,7 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
             if (Assert.lessOrEqualZero(printerId) || Assert.lessOrEqualZero(dishTagId)){
                 throw SSException.get(EmenuException.PrinterInfoIllegal);
             }
-            dishTagPrinterMapper.bindDishTag(printerId, dishTagId);
+            dishTagPrinterMapper.updatePrinterIdByDishTagId(printerId, dishTagId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.NewPrinterDishError, e);
@@ -146,7 +161,7 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
             if (Assert.lessOrEqualZero(printerId)){
                 throw SSException.get(EmenuException.PrinterInfoIllegal);
             }
-            dishTagPrinterMapper.unBindAllDishTag(printerId);
+            dishTagPrinterMapper.updatePrinterIdByPrinterId(printerId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelPrinterDishError, e);

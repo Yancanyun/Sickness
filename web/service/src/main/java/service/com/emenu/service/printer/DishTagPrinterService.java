@@ -1,5 +1,6 @@
 package com.emenu.service.printer;
 
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.printer.Printer;
@@ -32,6 +33,15 @@ public interface DishTagPrinterService {
      * @throws SSException
      */
     public List<Tag> listTagById(int id) throws SSException;
+
+    /**
+     * 根据打印机id查询关联菜品
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public List<String> listDishNameById(int id) throws SSException;
 
     /**
      * 查询没有关联打印机的菜品分类

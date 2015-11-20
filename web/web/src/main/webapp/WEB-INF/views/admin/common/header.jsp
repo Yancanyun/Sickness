@@ -17,9 +17,7 @@
                 <li><a class="J_menu" href="javascript:;">后台欢迎页</a></li>
                 <li><a class="J_menu" href="${website}admin/keywords">搜索风向标</a></li>
                 <li><a class="J_menu" href="${website}admin/index/img">点餐平台首页</a></li>
-                <li><a class="J_menu" href="javascript:;">菜品打印机管理</a></li>
-                <li><a class="J_menu" href="javascript:;">吧台打印机管理</a></li>
-                <li><a class="J_menu" href="javascript:;">退菜打印机管理</a></li>
+                <li><a class="J_menu" href="${website}admin/printer">打印机管理</a></li>
                 <li><a class="J_menu" href="javascript:;">外卖参数设置</a></li>
                 <li><a class="J_menu" href="javascript:;">全局设置</a></li>
             </ul>

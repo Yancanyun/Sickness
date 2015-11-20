@@ -1,5 +1,6 @@
 package com.emenu.mapper.printer;
 
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.printer.Printer;
@@ -33,6 +34,15 @@ public interface DishTagPrinterMapper {
      * @throws Exception
      */
     public List<Tag> listTagById(@Param("id") int id) throws Exception;
+
+    /**
+     * 根据打印机id查询关联菜品
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public List<String> listDishNameById(@Param("id") int id) throws Exception;
 
     /**
      * 查询没有关联打印机的菜品分类
@@ -71,7 +81,7 @@ public interface DishTagPrinterMapper {
      * @param dishTagId
      * @throws SSException
      */
-    public void bindDishTag(@Param("printerId") int printerId, @Param("dishTagId") int dishTagId) throws Exception;
+    public void updatePrinterIdByDishTagId(@Param("printerId") int printerId, @Param("dishTagId") int dishTagId) throws Exception;
 
     /**
      * 打印机取消所有关联菜品分类
@@ -79,5 +89,5 @@ public interface DishTagPrinterMapper {
      * @param printerId
      * @throws SSException
      */
-    public void unBindAllDishTag(@Param("printerId") int printerId) throws Exception;
+    public void updatePrinterIdByPrinterId(@Param("printerId") int printerId) throws Exception;
 }

@@ -1,9 +1,11 @@
 package com.emenu.service.printer.impl;
 
-import com.emenu.common.entity.printer.DishTagPrinter;
-import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
-import com.emenu.common.enums.printer.*;
+import com.emenu.common.enums.TrueEnums;
+import com.emenu.common.enums.printer.PrinterBrandEnums;
+import com.emenu.common.enums.printer.PrinterModelEnums;
+import com.emenu.common.enums.printer.PrinterStateEnums;
+import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.printer.PrinterMapper;
 import com.emenu.service.printer.DishTagPrinterService;
@@ -62,7 +64,8 @@ public class PrinterServiceImpl implements PrinterService {
             if (!checkBeforeUpdate(printer)){
                 return;
             }
-            if (Assert.isEmpty(dishTagPrinterService.listTagById(printer.getId()))){
+            if (!Assert.isEmpty(dishTagPrinterService.listTagById(printer.getId())) ||
+                    !Assert.isEmpty(dishTagPrinterService.listDishNameById(printer.getId()))){
                 throw SSException.get(EmenuException.PrinterIsUsing);
             }
             commonDao.update(printer);
@@ -79,7 +82,8 @@ public class PrinterServiceImpl implements PrinterService {
             if (Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.PrinterIdError);
             }
-            if (Assert.isEmpty(dishTagPrinterService.listTagById(id))){
+            if (!Assert.isEmpty(dishTagPrinterService.listTagById(id)) ||
+                    !Assert.isEmpty(dishTagPrinterService.listDishNameById(id))){
                 throw SSException.get(EmenuException.PrinterIsUsing);
             }
             commonDao.deleteById(Printer.class, id);
@@ -154,7 +158,7 @@ public class PrinterServiceImpl implements PrinterService {
         Assert.isNotNull(printer.getIpAddress(), EmenuException.PrinterIpAddressNotNull);
         Assert.isNotNull(PrinterTypeEnums.valueOf(printer.getType()), EmenuException.PrinterTypeIllegal);
         Assert.isNotNull(PrinterStateEnums.valueOf(printer.getState()), EmenuException.PrinterStateIllegal);
-        Assert.isNotNull(IsCashierPrinterEnums.valueOf(printer.getIsCashierPrinter()), EmenuException.PrinterInfoIllegal);
+        Assert.isNotNull(TrueEnums.valueOf(printer.getIsCashierPrinter()), EmenuException.PrinterInfoIllegal);
 
         if (checkValueExist("name", printer.getName())){
             throw SSException.get(EmenuException.PrinterNameExist);
@@ -197,7 +201,7 @@ public class PrinterServiceImpl implements PrinterService {
             }
         }
         if (!Assert.isNull(printer.getIsCashierPrinter())){
-            if (Assert.isNull(IsCashierPrinterEnums.valueOf(printer.getIsCashierPrinter()))){
+            if (Assert.isNull(TrueEnums.valueOf(printer.getIsCashierPrinter()))){
                 throw SSException.get(EmenuException.PrinterInfoIllegal);
             }
         }

@@ -52,6 +52,15 @@ public class AdminPrinterController extends AbstractController {
         return "admin/printer/list_home";
     }
 
+    /**
+     * 添加打印机
+     *
+     * @param printer
+     * @param dishTagList
+     * @param httpServletRequest
+     * @param redirectAttributes
+     * @return
+     */
     @Module(ModuleEnums.AdminBasicInfoPrinterNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newPrinter(Printer printer, @RequestParam(value = "dishTagList", required = false) List<Integer> dishTagList,
@@ -76,6 +85,15 @@ public class AdminPrinterController extends AbstractController {
         }
     }
 
+    /**
+     * 编辑打印机
+     *
+     * @param printer
+     * @param dishTagList
+     * @param httpServletRequest
+     * @param redirectAttributes
+     * @return
+     */
     @Module(ModuleEnums.AdminBasicInfoPrinterUpdate)
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public String updatePrinter(Printer printer, @RequestParam(value = "dishTagList", required = false) List<Integer> dishTagList,
@@ -85,14 +103,25 @@ public class AdminPrinterController extends AbstractController {
                     dishTagPrinterService.unBindAllDishTag(printer.getId());
                 }
                 printerService.updatePrinter(printer);
+
+                String successUrl = "/" + URLConstants.ADMIN_PRINTER_URL;
+                redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+                return "redirect:" + successUrl;
             } catch (SSException e) {
                 LogClerk.errLog.error(e);
                 sendErrMsg(e.getMessage());
-                return ADMIN_SYS_ERR_PAGE;
+                String failedUrl = "/" + URLConstants.ADMIN_MEAL_PERIOD_URL;
+                redirectAttributes.addFlashAttribute("msg", e.getMessage());
+                return "redirect:" + failedUrl;
             }
-        return null;
     }
 
+    /**
+     * ajax删除打印机
+     *
+     * @param printerId
+     * @return
+     */
     @Module(ModuleEnums.AdminBasicInfoPrinterDel)
     @RequestMapping(value = "ajax/{printerId}", method = RequestMethod.DELETE)
     @ResponseBody
@@ -106,21 +135,34 @@ public class AdminPrinterController extends AbstractController {
         }
     }
 
+    /**
+     *
+     *
+     * @param id
+     * @param type
+     * @return
+     */
     @RequestMapping(value = "ajax/check", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject checkBinding(@RequestParam("id") int id, @RequestParam("type") int type){
             try {
                 if (type != PrinterTypeEnums.DishTagPrinter.getId()) {
-                    List<Tag> list = dishTagPrinterService.listTagById(id);
-                    if (!Assert.isEmpty(list)){
-                        JSONArray jsonArray = new JSONArray();
-                        for (Tag tag : list){
-                            jsonArray.add(tag.getName());
+                    List<Tag> tagList = dishTagPrinterService.listTagById(id);
+                    List<String> dishNameList = dishTagPrinterService.listDishNameById(id);
+                    JSONArray tagNameArray = new JSONArray();
+                    JSONObject dishTagNameList = new JSONObject();
+                    if (!Assert.isEmpty(tagList)){
+                        for (Tag tag : tagList){
+                            tagNameArray.add(tag.getName());
                         }
-                        JSONObject dishTagNameList = new JSONObject();
-                        dishTagNameList.put("dishTag", jsonArray);
-                        return sendJsonObject(dishTagNameList, AJAX_SUCCESS_CODE);
                     }
+                    if (!Assert.isEmpty(dishNameList)){
+                        for (String s : dishNameList){
+                            tagNameArray.add(s);
+                        }
+                    }
+                    dishTagNameList.put("dishTag", tagNameArray);
+                    return sendJsonObject(dishTagNameList, AJAX_SUCCESS_CODE);
                 }
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             } catch (SSException e) {

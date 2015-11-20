@@ -48,7 +48,11 @@
 
             // 首页图片管理
             ['delImg', site.website + 'admin/index/img/ajax/&{id}', 'delete', '删除图片'],
-            ['setImg', site.website + 'admin/index/img/ajax/&{id}', 'put', '设置图片为首页']
+            ['setImg', site.website + 'admin/index/img/ajax/&{id}', 'put', '设置图片为首页'],
+
+            //打印机管理
+            ['delPrinter',site.staticWebsite + 'mock/admin/del-printer.json', 'get', '删除打印机'],
+            ['changePrinterType',site.staticWebsite + 'mock/admin/change-printer-type.json', 'get', '改变打印机类型']
         ],
         // 饭店管理
         RestaurantManagement: [

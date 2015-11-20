@@ -13,9 +13,9 @@
             <li <c:if test="${MethodModule eq 'Admin:BasicInfo:IndexImg:List'}">class="active"</c:if>>
                 <a href="${website}admin/index/img">点餐平台首页</a>
             </li>
-            <li><a href="#">菜品打印机管理</a></li>
-            <li><a href="#">吧台打印机管理</a></li>
-            <li><a href="#">退菜打印机管理</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer'}">class="active"</c:if>>
+                <a href="${website}admin/printer">打印机管理</a>
+            </li>
             <li><a href="#">外卖参数设置</a></li>
             <li><a href="#">全局设置</a></li>
         </ul>

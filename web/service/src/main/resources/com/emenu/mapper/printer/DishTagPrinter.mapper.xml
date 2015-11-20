@@ -17,11 +17,21 @@
         ORDER BY `t_tag`.`id`
     </select>
 
+    <select id="listDishNameById" resultType="string">
+        SELECT `t_dish`.`name`
+        FROM `t_dish`,`t_dish_tag_printer`
+        WHERE `t_dish_tag_printer`.`printer_id` = #{id}
+        AND `t_dish_tag_printer`.`type` = 2
+        AND `t_dish_tag_printer`.`dish_tag_id` = `t_dish`.`id`
+        ORDER BY `t_dish`.`id`
+    </select>
+
     <select id="listAvailableDishTag" resultMap="pw.Tag">
         SELECT `t_tag`.*
         FROM `t_tag`,`t_dish_tag_printer`
         WHERE `t_dish_tag_printer`.`printer_id` = 0
         AND `t_dish_tag_printer`.`dish_tag_id` = `t_tag`.`id`
+        AND `t_dish_tag_printer`.`type` = 1
         ORDER BY `t_tag`.`id`
     </select>
 
@@ -41,13 +51,14 @@
         WHERE `dish_tag_id` = #{tagId}
     </delete>
 
-    <update id="bindDishTag">
+    <update id="updatePrinterIdByDishTagId">
         UPDATE `t_dish_tag_printer`
         SET `printer_id` = #{printerId}
         WHERE `dish_tag_id` = #{dishTagId}
+        AND `type` = 1
     </update>
 
-    <update id="unBindAllDishTag">
+    <update id="updatePrinterIdByPrinterId">
         UPDATE `t_dish_tag_printer`
         SET `printer_id` = 0
         WHERE `printer_id` = #{printerId}
