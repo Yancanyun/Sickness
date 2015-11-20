@@ -86,7 +86,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<Tag> listByTagId(int tagId) throws Exception {
+    public List<Tag> listAllByTagId(int tagId) throws Exception {
         return tagCacheService.listByCurrentId(tagId);
     }
 

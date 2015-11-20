@@ -178,7 +178,7 @@ public class TagCacheTest extends AbstractTestCase{
 
     @Test
     public void listByTagId() throws Exception {
-        List<Tag> tagList =tagFacadeService.listByTagId(TagEnum.Dishes.getId());
+        List<Tag> tagList =tagFacadeService.listAllByTagId(TagEnum.Dishes.getId());
         for(Tag tag: tagList){
             System.out.println(tag.getName());
         }
