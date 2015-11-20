@@ -41,7 +41,7 @@ public class AdminTagController extends AbstractController{
         Map<TagDto, Integer> childrenTagDtoMap = new LinkedHashMap<TagDto, Integer>();
         for(TagDto tagDto : tagDtoList){
             //获取打印机实体判断是否存在
-            Printer printer = printerService.queryByTagId(tagDto.getTag().getId());
+            Printer printer = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
             Integer printerId = 0;
             if(Assert.isNotNull(printer)){
                 printerId = printer.getId();
@@ -49,7 +49,7 @@ public class AdminTagController extends AbstractController{
             tagDtoMap.put(tagDto, printerId);
             for(TagDto childTagDto :tagDto.getChildTagList()){
                 //获取打印机实体判断是否存在
-                Printer childPrinter = printerService.queryByTagId(tagDto.getTag().getId());
+                Printer childPrinter = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
                 Integer childPrinterId = 0;
                 if(Assert.isNotNull(childPrinter)){
                     childPrinterId = printer.getId();
@@ -83,7 +83,7 @@ public class AdminTagController extends AbstractController{
                 jsonObject.put("maxPrintNum", tagDto.getTag().getMaxPrintNum());
                 jsonObject.put("timeLimit", tagDto.getTag().getTimeLimit());
                 //获取打印机实体判断是否存在
-                Printer printer = printerService.queryByTagId(tagDto.getTag().getId());
+                Printer printer = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
                 Integer printerId = 0;
                 if(Assert.isNotNull(printer)){
                     printerId = printer.getId();
@@ -100,7 +100,7 @@ public class AdminTagController extends AbstractController{
                     childJsonObject.put("maxPrintNum", childTagDto.getTag().getMaxPrintNum());
                     childJsonObject.put("timeLimit", childTagDto.getTag().getTimeLimit());
                     //获取打印机实体判断是否存在
-                    Printer childPrinter = printerService.queryByTagId(tagDto.getTag().getId());
+                    Printer childPrinter = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
                     Integer childPrinterId = 0;
                     if(Assert.isNotNull(childPrinter)){
                         childPrinterId = printer.getId();

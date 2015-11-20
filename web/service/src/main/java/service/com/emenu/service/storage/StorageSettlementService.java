@@ -28,7 +28,7 @@ public interface StorageSettlementService {
      * @param endDate
      * @param depotIds
      * @param tagIds
-     * @param itemId
+     * @param keyword
      * @return List<StorageCheckDto>
      * @throws SSException
      */
@@ -37,7 +37,7 @@ public interface StorageSettlementService {
                                                      Date endDate,
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
-                                                     Integer itemId) throws Exception;
+                                                     String keyword) throws Exception;
     /**
      * 结算中心
      * @param supplierId

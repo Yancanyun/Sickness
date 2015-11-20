@@ -26,6 +26,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     private SupplierService supplierService;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void newSettlement() throws SSException {
         try {
             //第一步：添加一条结算数据:t_storage_settlement
@@ -79,36 +82,36 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             Date nowDate = DateUtils.now();
             //获得所有库存原料
             List<StorageItem> storageItemList = storageItemService.listAll();
-            //获取当前时间之前所有未结算单据
+            //获取当前时间之前所有未结算单据（包括当前时间）
             List<StorageReportDto> storageReportDtoList = storageReportService.ListStorageReportDtoUnsettled(nowDate);
-            //入库数量
-            BigDecimal stockInQuantity = new BigDecimal(0.00);
-            //入库金额
-            BigDecimal stockInMoney = new BigDecimal(0.00);
-            //出库数量
-            BigDecimal stockOutQuantity = new BigDecimal(0.00);
-            //出库金额
-            BigDecimal stockOutMoney = new BigDecimal(0.00);
-            //盘盈数量
-            BigDecimal incomeOnQuantity = new BigDecimal(0.00);
-            //盘盈金额
-            BigDecimal incomeOnMoney = new BigDecimal(0.00);
-            //盘亏数量
-            BigDecimal lossOnQuantity = new BigDecimal(0.00);
-            //盘亏金额
-            BigDecimal lossOnMoney = new BigDecimal(0.00);
-            //实际库存数量
-            BigDecimal realQuantity = new BigDecimal(0.00);
-            //实际金额
-            BigDecimal realMoney = new BigDecimal(0.00);
-
-            //获取之前的总数量和总金额
-            BigDecimal totalQuantity = new BigDecimal(0.00);
-            BigDecimal totalMoney = new BigDecimal(0.00);
 
             //循环库存物品
             for (StorageItem storageItem : storageItemList){
-                //循环订单
+                //入库数量
+                BigDecimal stockInQuantity = new BigDecimal(0.00);
+                //入库金额
+                BigDecimal stockInMoney = new BigDecimal(0.00);
+                //出库数量
+                BigDecimal stockOutQuantity = new BigDecimal(0.00);
+                //出库金额
+                BigDecimal stockOutMoney = new BigDecimal(0.00);
+                //盘盈数量
+                BigDecimal incomeOnQuantity = new BigDecimal(0.00);
+                //盘盈金额
+                BigDecimal incomeOnMoney = new BigDecimal(0.00);
+                //盘亏数量
+                BigDecimal lossOnQuantity = new BigDecimal(0.00);
+                //盘亏金额
+                BigDecimal lossOnMoney = new BigDecimal(0.00);
+                //实际库存数量
+                BigDecimal realQuantity = new BigDecimal(0.00);
+                //实际金额
+                BigDecimal realMoney = new BigDecimal(0.00);
+                //获取之前的总数量和总金额
+                BigDecimal totalQuantity = new BigDecimal(0.00);
+                BigDecimal totalMoney = new BigDecimal(0.00);
+
+                //循环单据
                 for (StorageReportDto storageReportDto : storageReportDtoList){
                     //获取该单据下物品详情
                     List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
@@ -183,43 +186,46 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                                      Date endDate,
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
-                                                     Integer itemId) throws Exception {
-        //期初数量
-        BigDecimal beginQuantity = new BigDecimal(0.00);
-        //期初金额
-        BigDecimal beginMoney = new BigDecimal(0.00);
-        //入库数量
-        BigDecimal stockInQuantity = new BigDecimal(0.00);
-        //入库金额
-        BigDecimal stockInMoney = new BigDecimal(0.00);
-        //出库数量
-        BigDecimal stockOutQuantity = new BigDecimal(0.00);
-        //出库金额
-        BigDecimal stockOutMoney = new BigDecimal(0.00);
-        //盘盈数量
-        BigDecimal incomeOnQuantity = new BigDecimal(0.00);
-        //盘盈金额
-        BigDecimal incomeOnMoney = new BigDecimal(0.00);
-        //盘亏数量
-        BigDecimal lossOnQuantity = new BigDecimal(0.00);
-        //盘亏金额
-        BigDecimal lossOnMoney = new BigDecimal(0.00);
-        //实际数量
-        BigDecimal realQuantity = new BigDecimal(0.00);
-        //实际金额
-        BigDecimal realMoney = new BigDecimal(0.00);
-        //结存
-        BigDecimal totalQuantity = new BigDecimal(0.00);
-        BigDecimal totalMoney = new BigDecimal(0.00);
+                                                     String keyword) throws Exception {
 
         List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
 
         //取出时间段之间的所有单据,根据条件
         List<StorageReportDto> storageReportList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
 
-        //取出开始时间之前的所有单据详情以及结算结果
-        List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, storageReportList);
+        //取出开始时间之前的所有库存物品计算结果（不包括开始时间）
+        List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate,depotIds,tagIds,keyword);
+
         for(StorageSettlementItem settlementItem : beforeSettlementList){
+
+            //期初数量
+            BigDecimal beginQuantity = new BigDecimal(0.00);
+            //期初金额
+            BigDecimal beginMoney = new BigDecimal(0.00);
+            //入库数量
+            BigDecimal stockInQuantity = new BigDecimal(0.00);
+            //入库金额
+            BigDecimal stockInMoney = new BigDecimal(0.00);
+            //出库数量
+            BigDecimal stockOutQuantity = new BigDecimal(0.00);
+            //出库金额
+            BigDecimal stockOutMoney = new BigDecimal(0.00);
+            //盘盈数量
+            BigDecimal incomeOnQuantity = new BigDecimal(0.00);
+            //盘盈金额
+            BigDecimal incomeOnMoney = new BigDecimal(0.00);
+            //盘亏数量
+            BigDecimal lossOnQuantity = new BigDecimal(0.00);
+            //盘亏金额
+            BigDecimal lossOnMoney = new BigDecimal(0.00);
+            //实际数量
+            BigDecimal realQuantity = new BigDecimal(0.00);
+            //实际金额
+            BigDecimal realMoney = new BigDecimal(0.00);
+            //结存
+            BigDecimal totalQuantity = new BigDecimal(0.00);
+            BigDecimal totalMoney = new BigDecimal(0.00);
+
             //循环单据
             for (StorageReportDto storageReportDto : storageReportList) {
                 //循环单据详情
@@ -289,15 +295,15 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
 
             storageCheckDto.setSettlementItem(newSettlementItem);
 
-            if(itemId == null || itemId == 0){
-                //加到List里面
-                storageCheckDtoList.add(storageCheckDto);
-            }else {
-                if(newSettlementItem.getItemId()==itemId){
-                    //加到List里面
-                    storageCheckDtoList.add(storageCheckDto);
-                }
-            }
+//            if(itemId == null || itemId == 0){
+//                //加到List里面
+//                storageCheckDtoList.add(storageCheckDto);
+//            }else {
+//                if(newSettlementItem.getItemId()==itemId){
+//                    //加到List里面
+//                    storageCheckDtoList.add(storageCheckDto);
+//                }
+//            }
         }
         return storageCheckDtoList;
     }
@@ -363,44 +369,63 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
 
 
     /**
-     * 根据某个时间段的单据详情并结算出每个库存物品的结果
+     * 根据某个时间之前每个库存物品的库存结果
+     * 主要是为了计算期初
      * @param startDate
-     * @param storageReportDtoList
      * @return List<StorageSettlementItem>
      * @throws SSException
      */
     private List<StorageSettlementItem> listSettlementItemByDate(Date startDate,
-                                                                 List<StorageReportDto> storageReportDtoList) throws SSException{
-        //入库数量
-        BigDecimal stockInQuantity = new BigDecimal(0.00);
-        //入库金额
-        BigDecimal stockInMoney = new BigDecimal(0.00);
-        //出库数量
-        BigDecimal stockOutQuantity = new BigDecimal(0.00);
-        //出库金额
-        BigDecimal stockOutMoney = new BigDecimal(0.00);
-        //盘盈数量
-        BigDecimal incomeOnQuantity = new BigDecimal(0.00);
-        //盘盈金额
-        BigDecimal incomeOnMoney = new BigDecimal(0.00);
-        //盘亏数量
-        BigDecimal lossOnQuantity = new BigDecimal(0.00);
-        //盘亏金额
-        BigDecimal lossOnMoney = new BigDecimal(0.00);
-        //实际数量
-        BigDecimal realQuantity = new BigDecimal(0.00);
-        //实际金额
-        BigDecimal realMoney = new BigDecimal(0.00);
-        //结存
-        BigDecimal totalQuantity = new BigDecimal(0.00);
-        BigDecimal totalMoney = new BigDecimal(0.00);
-
+                                                                 List<Integer> depotIds,
+                                                                 List<Integer> tagIds,
+                                                                 String keyword) throws SSException{
         List<StorageSettlementItem> settlementItemList = new ArrayList<StorageSettlementItem>();
+        //库存物品列表
+        List<StorageItem> storageItemList = Collections.emptyList();
+        if((depotIds==null&&depotIds.size()==0) && (tagIds==null && tagIds.size()==0) && (keyword==null)){
+            //获得所有库存原料列表
+            storageItemList = storageItemService.listAll();
+        }else {
+            //根据存放点Id和库存分类Id获取库存物品列表
+            storageItemList = storageSettlementMapper.listStorageItemByDepotAndTag(depotIds, tagIds, keyword);
+        }
 
-        //获得所有库存原料
-        List<StorageItem> storageItemList = storageItemService.listAll();
+        //获取该时间之前最后一次结算时间(包括当前时间)
+        StorageSettlement storageSettlement = storageSettlementMapper.queryLastSettlement(startDate);
+        Date settlementDate = null;
+        if(storageSettlement!=null) {
+            settlementDate =storageSettlement.getCreatedTime();
+        }
+        //TODO 参数：开始时间settlementDate，结束时间startDate
+        //单据列表——从上一次结算到开始时间之间的单据（不包括开始时间，不包括结束时间）
+        List<StorageReportDto> storageReportDtoList = new ArrayList<StorageReportDto>();
+
         //循环库存物品
         for (StorageItem storageItem : storageItemList) {
+            //入库数量
+            BigDecimal stockInQuantity = new BigDecimal(0.00);
+            //入库金额
+            BigDecimal stockInMoney = new BigDecimal(0.00);
+            //出库数量
+            BigDecimal stockOutQuantity = new BigDecimal(0.00);
+            //出库金额
+            BigDecimal stockOutMoney = new BigDecimal(0.00);
+            //盘盈数量
+            BigDecimal incomeOnQuantity = new BigDecimal(0.00);
+            //盘盈金额
+            BigDecimal incomeOnMoney = new BigDecimal(0.00);
+            //盘亏数量
+            BigDecimal lossOnQuantity = new BigDecimal(0.00);
+            //盘亏金额
+            BigDecimal lossOnMoney = new BigDecimal(0.00);
+            //实际数量
+            BigDecimal realQuantity = new BigDecimal(0.00);
+            //实际金额
+            BigDecimal realMoney = new BigDecimal(0.00);
+            //结存
+            BigDecimal totalQuantity = new BigDecimal(0.00);
+            BigDecimal totalMoney = new BigDecimal(0.00);
+
             //循环单据
             for (StorageReportDto storageReportDto : storageReportDtoList) {
                 //循环单据详情

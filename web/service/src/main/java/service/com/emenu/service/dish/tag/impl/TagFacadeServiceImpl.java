@@ -9,6 +9,7 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
+import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.Assert;
@@ -38,6 +39,9 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Autowired
     private PrinterService printerService;
+
+    @Autowired
+    private DishTagPrinterService dishTagPrinterService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
@@ -121,7 +125,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         dishTagPrinter.setDishId(newTag.getId());
         dishTagPrinter.setPrinterId(printerId);
         dishTagPrinter.setType(PrinterDishEnum.TagPrinter.getId());
-        printerService.newPrinterDish(dishTagPrinter);
+        dishTagPrinterService.newPrinterDish(dishTagPrinter);
         return newTag;
     }
 
@@ -134,7 +138,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         DishTagPrinter dishTagPrinter = new DishTagPrinter();
         dishTagPrinter.setDishId(tag.getId());
         dishTagPrinter.setPrinterId(printerId);
-        printerService.updatePrinterDish(dishTagPrinter);
+        dishTagPrinterService.updatePrinterDish(dishTagPrinter);
     }
 
     @Override
@@ -143,7 +147,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         //删除该分类
         delById(tagId);
         //删除与打印机关联表
-        printerService.delPrinterDish(tagId);
+        dishTagPrinterService.delPrinterDish(tagId);
     }
 
 }

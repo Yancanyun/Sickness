@@ -18,7 +18,7 @@
         SELECT `id`,`item_id`,`stock_in_quantity`,`stock_in_money`,`stock_out_quantity`,
         `stock_out_money`,`income_on_quantity`,`income_on_money`,`loss_on_quantity`,
         `loss_on_money`,`real_quantity`,`real_money`,`total_quantity`,`total_money`,
-        `settlement_id`,`created_time`,`last_modified_time `
+        `settlement_id`,`created_time`,`last_modified_time`
         FROM t_storage_settlement_item
         WHERE t_storage_settlement_item.`settlement_id`=
         (
@@ -54,4 +54,35 @@
         GROUP BY t_storage_item.`id`
     </select>
 
+    <select id="queryLastSettlement" resultMap="pw.StorageSettlement">
+        SELECT `id`,`serial_number`,`created_time`,`last_modified_time`
+        FROM `t_storage_settlement`
+        WHERE <![CDATA[`created_time`<=#{settlementDate}]]>
+        ORDER BY `created_time` DESC
+        LIMIT 1
+    </select>
+
+    <select id="listStorageItemByDepotAndTag" resultMap="pw.StorageItem">
+        SELECT DISTINCT t_storage_item.*
+        FROM t_storage_report_item,t_storage_report,t_storage_item
+        WHERE t_storage_report.`id` = t_storage_report_item.`report_id`
+        AND t_storage_report_item.`item_id`=t_storage_item.`id`
+        <if test="depotIds!= null">
+        AND t_storage_report.`depot_id` IN
+        <foreach collection="depotIds" item="depotId" index="index"
+                 open="(" separator="," close=")">#{depotId}
+        </foreach>
+        </if>
+        <if test="tagIds!=null">
+        AND t_storage_item.`tag_id` IN
+        <foreach collection="tagIds" item="tagId" index="index"
+                 open="(" separator="," close=")">#{tagId}
+        </foreach>
+        </if>
+        <if test="keyword!=null">
+        AND (t_storage_item.`name` LIKE '%#{keyword}%'
+            OR t_storage_item.`assistant_code` LIKE '%#{keyword}%'
+            OR t_storage_item.`item_number` LIKE '%#{keyword}%')
+        </if>
+    </select>
 </mapper>

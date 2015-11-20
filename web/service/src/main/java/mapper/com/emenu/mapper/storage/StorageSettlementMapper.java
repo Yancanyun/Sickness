@@ -2,6 +2,8 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.StorageItemDto;
 import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.entity.storage.StorageSettlement;
 import com.emenu.common.entity.storage.StorageSettlementItem;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -48,4 +50,23 @@ public interface StorageSettlementMapper {
     public List<StorageItemDto> listItemByDateAndSupplierId(@Param("supplierId") Integer supplierId,
                                                             @Param("startDate")Date startDate,
                                                             @Param("endDate")Date endDate) throws SSException;
+
+
+    /**
+     * 获取某个时间之前最后一次结算
+     * @return
+     * @throws SSException
+     */
+    public StorageSettlement queryLastSettlement(@Param("settlementDate") Date settlementDate) throws SSException;
+
+    /**
+     * 根据存放点和分类ID获取库存物品列表
+     * @param depotIds
+     * @param tagIds
+     * @return
+     * @throws SSException
+     */
+    public List<StorageItem> listStorageItemByDepotAndTag(@Param("depotIds") List<Integer> depotIds,
+                                                          @Param("tagIds") List<Integer> tagIds,
+                                                          @Param("keyword") String keyword)throws SSException;
 }
