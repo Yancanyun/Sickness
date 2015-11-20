@@ -68,7 +68,7 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listByTagId(int tagId) throws Exception;
+    public List<Tag> listAllByTagId(int tagId) throws Exception;
 
     /**
      * 获取菜品的分类List
