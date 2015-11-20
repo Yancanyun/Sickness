@@ -84,7 +84,7 @@
      </delete>
 
      <select id="checkUserLogin" resultType="User">
-         SELECT u.id,u.state
+         SELECT u.id,u.status
          FROM t_user AS u,
          t_user_role AS ur
          WHERE u.username=#{username} AND u.password=#{password} AND u.id=ur.user_id AND ur.role=#{role}

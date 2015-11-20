@@ -2,7 +2,7 @@ package com.emenu.test.meal;
 
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
-import com.emenu.common.enums.meal.MealPeriodStateEnums;
+import com.emenu.common.enums.meal.MealPeriodStatusEnums;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -26,7 +26,7 @@ public class MealPeriodTest extends AbstractTestCase {
     public void newMealPeriod() throws SSException{
         MealPeriod mealPeriod = new MealPeriod();
         mealPeriod.setName("早上");
-        mealPeriod.setState(1);
+        mealPeriod.setStatus(1);
         mealPeriod.setWeight(1);
         mealPeriodService.newMealPeriod(mealPeriod);
     }
@@ -47,7 +47,7 @@ public class MealPeriodTest extends AbstractTestCase {
 
     @Test
     public void updateStateById() throws SSException{
-        mealPeriodService.updateStateById(8, MealPeriodStateEnums.Disabled);
+        mealPeriodService.updateStatusById(8, MealPeriodStatusEnums.Disabled);
     }
 
     @Test

@@ -29,7 +29,7 @@ public class MealPeriod extends AbstractEntity{
     private Integer weight;
 
     //是否启用，0-停用，1-启用
-    private Integer state;
+    private Integer status;
 
     //是否当前餐段，0-非当前餐段，1-当前餐段
     @Column(name = "current_period")
@@ -68,12 +68,12 @@ public class MealPeriod extends AbstractEntity{
         this.weight = weight;
     }
 
-    public Integer getState() {
-        return state;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getCurrentPeriod() {

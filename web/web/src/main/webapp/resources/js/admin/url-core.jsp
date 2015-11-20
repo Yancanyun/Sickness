@@ -66,7 +66,14 @@
             //餐台区域管理
             ['saveNewArea', site.website + 'admin/restaurant/area/ajax', 'post', '保存新添加区域信息'],
             ['saveEditArea', site.website + 'admin/restaurant/area/ajax/&{id}', 'put', '保存编辑原有区域信息结果'],
-            ['delAreaId', site.website + 'admin/restaurant/area/ajax/&{id}', 'delete', '删除餐台区域时，发送需删除的id']
+            ['delAreaId', site.website + 'admin/restaurant/area/ajax/&{id}', 'delete', '删除餐台区域时，发送需删除的id'],
+
+            //餐段管理
+            ['setCurrentPeriod', site.website + 'admin/restaurant/meal/period/ajax/current/&{id}', 'put','设置当前餐段'],
+            ['delPeriod', site.website + 'admin/restaurant/meal/period/ajax/&{id}', 'delete', '删除餐段'],
+            ['getWeight', site.website + 'admin/restaurant/meal/period/ajax/weight', 'get', '添加餐段时获取默认排序'],
+            ['changeStatus', site.website + 'admin/restaurant/meal/period/ajax/status/&{id}', 'put', '改变状态'],
+            ['saveEditItem', site.website + 'admin/restaurant/meal/period/ajax', 'put', '保存编辑项']
         ],
         // 库存管理
         StoreManagement: [

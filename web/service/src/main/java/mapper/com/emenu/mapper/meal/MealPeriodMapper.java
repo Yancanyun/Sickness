@@ -18,10 +18,10 @@ public interface MealPeriodMapper {
      * 0-未启用 1-启用
      *
      * @param id
-     * @param state
+     * @param status
      * @throws Exception
      */
-    public void updateStateById(@Param("id") int id, @Param("state") int state) throws Exception;
+    public void updateStatusById(@Param("id") int id, @Param("status") int status) throws Exception;
 
     /**
      * 根据id修改为当前餐段

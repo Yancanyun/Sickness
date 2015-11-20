@@ -2,7 +2,7 @@ package com.emenu.service.meal;
 
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
-import com.emenu.common.enums.meal.MealPeriodStateEnums;
+import com.emenu.common.enums.meal.MealPeriodStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;
@@ -44,10 +44,10 @@ public interface MealPeriodService {
      * 根据id修改启用状态
      *
      * @param id
-     * @param state
+     * @param status
      * @throws SSException
      */
-    public void updateStateById(int id, MealPeriodStateEnums state) throws SSException;
+    public void updateStatusById(int id, MealPeriodStatusEnums status) throws SSException;
 
     /**
      * 根据id修改为当前餐段

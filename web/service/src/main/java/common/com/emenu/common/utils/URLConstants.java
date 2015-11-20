@@ -48,7 +48,7 @@ public final class URLConstants {
     public static final String ADMIN_INDEX_IMG_URL = "admin/index/img";
 
     //餐段管理
-    public static final String ADMIN_MEAL_PERIOD_URL = "admin/meal/period";
+    public static final String ADMIN_MEAL_PERIOD_URL = "admin/restaurant/meal/period";
 
     //打印机管理
     public static final String ADMIN_PRINTER_URL = "admin/printer";

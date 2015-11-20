@@ -165,7 +165,7 @@ public enum EmenuException implements IBizExceptionMes {
 
     //餐段管理
     MealPeriodNameNotNull("餐段名称不能为空",5020),
-    MealPeriodStateIllegal("餐段启用状态非法",5021),
+    MealPeriodStatusIllegal("餐段启用状态非法",5021),
     InsertMealPeriodFail("添加餐段失败",5022),
     UpdateMealPeriodFail("修改餐段失败",5023),
     DeleteMealPeriodFail("删除餐段失败",5024),
@@ -174,6 +174,8 @@ public enum EmenuException implements IBizExceptionMes {
     MealPeriodInfoIllegal("餐段信息非法",5027),
     MealPeriodIsUsing("该餐段正在使用",5028),
     MealPeriodWeightIllegal("餐段排序权重非法",5029),
+    MealPeriodDisabled("餐段已被停用",5030),
+    MealPeriodDeleted("餐段已被删除",5031),
 
     //打印机管理
     QueryPrinterFail("查询打印机失败",5040),
