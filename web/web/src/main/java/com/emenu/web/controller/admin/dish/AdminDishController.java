@@ -4,18 +4,26 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.dish.TagEnum;
+import com.emenu.common.enums.dish.UnitEnum;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,14 +40,20 @@ import java.util.List;
 @RequestMapping(value = URLConstants.ADMIN_DISH_URL)
 public class AdminDishController extends AbstractController {
 
+    /**
+     * 去列表页
+     *
+     * @param model
+     * @return
+     */
     @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
+            // tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
+            // tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -49,14 +63,22 @@ public class AdminDishController extends AbstractController {
         return "admin/dish/dish/list_home";
     }
 
+    /**
+     * ajax获取分页数据
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param searchDto
+     * @return
+     */
     @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishList)
     @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxList(@PathVariable("pageNo") Integer pageNo,
                          @RequestParam("pageSize") Integer pageSize,
                          DishSearchDto searchDto) {
-        pageNo = pageNo == null ? 0 : pageSize;
-        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageNo;
+        pageNo = pageNo == null ? 0 : pageNo;
+        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
         List<Dish> dishList = Collections.emptyList();
@@ -91,5 +113,129 @@ public class AdminDishController extends AbstractController {
         }
 
         return sendJsonArray(jsonArray, dataCount);
+    }
+
+    /**
+     * 去添加页
+     *
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishNew)
+    @RequestMapping(value = "new", method = RequestMethod.GET)
+    public String toNew(Model model) {
+        try {
+            addAttributesToModel(model);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        return "admin/dish/dish/new_home";
+    }
+
+    /**
+     * 添加提交
+     *
+     * @param dishDto
+     * @param redirectAttributes
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishNew)
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public String newDish(DishDto dishDto,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            dishService.newDish(dishDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        redirectAttributes.addAttribute("msg", NEW_SUCCESS_MSG);
+        String redirectUrl = "/" + URLConstants.ADMIN_DISH_URL + "/list";
+        return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * 去修改页
+     *
+     * @param id
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
+    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
+    public String toUpdate(@PathVariable("id") Integer id,
+                           Model model) {
+        try {
+            DishDto dishDto = dishService.queryById(id);
+
+            addAttributesToModel(model);
+            model.addAttribute("dishDto", dishDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        return "admin/dish/dish/update_home";
+    }
+
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    public String updateDish(DishDto dishDto) {
+        try {
+            dishService.updateDish(dishDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+
+        String redirectUrl = "/" + URLConstants.ADMIN_DISH_URL + "/update/" + dishDto.getId();
+        return "redirect:" + redirectUrl;
+    }
+
+
+    /**
+     * 进入添加页和编辑页之前，添加一些数据到model里
+     *
+     * @param model
+     * @throws SSException
+     */
+    private void addAttributesToModel(Model model) throws SSException {
+        // 获取分类
+        String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+        int categoryLayer = 2;
+        if (Assert.isNotNull(categoryLayerStr)) {
+            categoryLayer = Integer.parseInt(categoryLayerStr);
+        }
+
+        // 获取单位
+        List<Unit> unitList = unitService.listAll();
+        List<Unit> weightUnitList = new ArrayList<Unit>();
+        List<Unit> quantityUnitList = new ArrayList<Unit>();
+        for (Unit unit : unitList) {
+            if (UnitEnum.HundredWeight.equals(unit.getType())) {
+                weightUnitList.add(unit);
+            } else {
+                quantityUnitList.add(unit);
+            }
+        }
+
+        // 获取餐段
+        List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+
+        // 获取打印机
+        List<Printer> printerList = printerService.listDishTagPrinter();
+
+        model.addAttribute("categoryLayer", categoryLayer);
+        model.addAttribute("weightUnitList", weightUnitList);
+        model.addAttribute("quantityUnitList", quantityUnitList);
+        model.addAttribute("mealPeriodList", mealPeriodList);
+        model.addAttribute("printerList", printerList);
     }
 }

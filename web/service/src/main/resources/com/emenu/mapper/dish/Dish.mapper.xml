@@ -55,7 +55,7 @@
             dish.`created_party_id` AS createdPartyId,
             dish.`created_time` AS createdTime,
             dish.`last_modified_time` AS lastModifiedTime
-        FROM `t_dish`
+        FROM `t_dish` dish
         LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
         <where>
             <if test="searchDto.keyword != null and searchDto.keyword != ''">
@@ -103,4 +103,32 @@
         SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
+
+    <select id="queryById" resultType="DishDto">
+        SELECT
+            dish.`id` AS id,
+            dish.`name` AS NAME,
+            dish.`dish_number` AS dishNumber,
+            dish.`assistant_code` AS assistantCode,
+            dish.`unit_id` AS unitId,
+            unit.`name` AS unitName,
+            dish.`price` AS price,
+            dish.`sale_type` AS saleType,
+            dish.`discount` AS discount,
+            dish.`sale_price` AS salePrice,
+            dish.`category_id` AS categoryId,
+            dish.`tag_id` AS tagId,
+            dish.`description` AS description,
+            dish.`like_nums` AS likeNums,
+            dish.`is_network_available` AS isNetworkAvailable,
+            dish.`is_vip_price_available` AS isVipPriceAvailable,
+            dish.`is_voucher_available` AS isVoucherAvailable,
+            dish.`time_limit` AS timeLimit,
+            dish.`created_party_id` AS createdPartyId,
+            dish.`created_time` AS createdTime,
+            dish.`last_modified_time` AS lastModifiedTime
+        FROM `t_dish` dish
+        LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
+        WHERE dish.`id` = #{id}
+    </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.emenu.mapper.dish;
 
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
 import org.apache.ibatis.annotations.Param;
@@ -50,4 +51,13 @@ public interface DishMapper {
      */
     public void updateStatusById(@Param("id") int id,
                                  @Param("status") int status) throws Exception;
+
+    /**
+     * 根据ID进行查询
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public DishDto queryById(@Param("id") int id) throws Exception;
 }
