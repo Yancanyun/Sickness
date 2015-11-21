@@ -1,15 +1,17 @@
 package com.emenu.service.vip.impl;
 
-import com.emenu.common.entity.vip.DishPricePlan;
+import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.mapper.vip.DishPricePlanMapper;
-import com.emenu.service.vip.DishPricePlanService;
+import com.emenu.mapper.vip.VipDishPricePlanMapper;
+import com.emenu.service.vip.VipDishPricePlanService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,34 +22,34 @@ import java.util.List;
  * @author chenyuting
  * @date 2015/11/11 9:32
  */
-@Service("dishPricePlanService")
-public class DishPricePlanServiceImpl implements DishPricePlanService{
+@Service("vipDishPricePlanService")
+public class VipDishPricePlanServiceImpl implements VipDishPricePlanService {
 
     @Autowired
-    private DishPricePlanMapper dishPricePlanMapper;
+    private VipDishPricePlanMapper vipDishPricePlanMapper;
 
     @Autowired
     private CommonDao commonDao;
 
     @Override
-    public List<DishPricePlan> listAll() throws SSException{
-        List<DishPricePlan> dishPricePlanList = Collections.emptyList();
+    public List<VipDishPricePlan> listAll() throws SSException{
+        List<VipDishPricePlan> vipDishPricePlanList = Collections.emptyList();
         try{
-            dishPricePlanList = dishPricePlanMapper.listAll();
+            vipDishPricePlanList = vipDishPricePlanMapper.listAll();
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPricePlanFail);
         }
-        return dishPricePlanList;
+        return vipDishPricePlanList;
     }
 
     @Override
-    public DishPricePlan queryById(int id) throws SSException{
+    public VipDishPricePlan queryById(int id) throws SSException{
         if (Assert.lessOrEqualZero(id)) {
             return null;
         }
         try {
-            return dishPricePlanMapper.queryById(id);
+            return vipDishPricePlanMapper.queryById(id);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryVipDishPricePlanFail);
@@ -55,13 +57,14 @@ public class DishPricePlanServiceImpl implements DishPricePlanService{
     }
 
     @Override
-    public DishPricePlan newPlan(DishPricePlan dishPricePlan) throws SSException{
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public VipDishPricePlan newPlan(VipDishPricePlan vipDishPricePlan) throws SSException{
         try{
             //判断会员方案名称是否为空
-            if (!checkBeforeSave(dishPricePlan)){
+            if (!checkBeforeSave(vipDishPricePlan)){
                 return null;
             }
-            return commonDao.insert(dishPricePlan);
+            return commonDao.insert(vipDishPricePlan);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.InsertVipDishPricePlanFail);
@@ -69,18 +72,19 @@ public class DishPricePlanServiceImpl implements DishPricePlanService{
     }
 
     @Override
-    public void updatePlan(DishPricePlan dishPricePlan) throws SSException{
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updatePlan(VipDishPricePlan vipDishPricePlan) throws SSException{
         try{
             //判断id是否合法
-            if (!Assert.isNull(dishPricePlan.getId()) && Assert.lessOrEqualZero(dishPricePlan.getId())){
+            if (!Assert.isNull(vipDishPricePlan.getId()) && Assert.lessOrEqualZero(vipDishPricePlan.getId())){
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             //判断会员方案名称是否为空
-            if (!this.checkBeforeSave(dishPricePlan)){
+            if (!this.checkBeforeSave(vipDishPricePlan)){
                 throw SSException.get(EmenuException.UpdateVipDishPricePlanFail);
             }
-            Assert.isNotNull(dishPricePlan);
-            commonDao.update(dishPricePlan);
+            Assert.isNotNull(vipDishPricePlan);
+            commonDao.update(vipDishPricePlan);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.UpdateVipDishPricePlanFail);
@@ -88,13 +92,14 @@ public class DishPricePlanServiceImpl implements DishPricePlanService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delPlanById(int id) throws SSException{
         try {
             //判断id是否合法
             if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
-            commonDao.deleteById(DishPricePlan.class, id);
+            commonDao.deleteById(VipDishPricePlan.class, id);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.DeleteVipDishPricePlanFail);
@@ -102,11 +107,11 @@ public class DishPricePlanServiceImpl implements DishPricePlanService{
     }
 
     @Override
-    public boolean checkBeforeSave(DishPricePlan dishPricePlan) throws SSException{
-        if (Assert.isNull(dishPricePlan)){
+    public boolean checkBeforeSave(VipDishPricePlan vipDishPricePlan) throws SSException{
+        if (Assert.isNull(vipDishPricePlan)){
             return false;
         }
-        Assert.isNotNull(dishPricePlan.getName(),EmenuException.VipDishPricePlanNameNotNull);
+        Assert.isNotNull(vipDishPricePlan.getName(),EmenuException.VipDishPricePlanNameNotNull);
         return true;
     }
 }

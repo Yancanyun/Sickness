@@ -15,25 +15,26 @@ import java.math.BigDecimal;
  * @date 2015/11/11 9:19
  */
 @Entity
-@Table(name = "t_vip_dish_price_plan")
-public class DishPrice extends AbstractEntity {
+@Table(name = "t_vip_dish_price")
+public class VipDishPrice extends AbstractEntity {
 
     //会员价id
     @Id
     private Integer id;
 
+    //会员价方案id
+    @Column(name = "vip_dish_price_plan_id")
+    private Integer vipDishPricePlanId;
+
     //菜品id
     @Column(name = "dish_id")
     private Integer dishId;
 
-    //会员价方案id
-    @Column(name = "plan_id")
-    private Integer planId;
-
     // 会员价
-    @Column(name = "vip_price")
-    private BigDecimal vipPrice;
+    @Column(name = "vip_dish_price")
+    private BigDecimal vipDishPrice;
 
+    //set、get方法
     public Integer getId() {
         return id;
     }
@@ -41,6 +42,14 @@ public class DishPrice extends AbstractEntity {
     @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getVipDishPricePlanId() {
+        return vipDishPricePlanId;
+    }
+
+    public void setVipDishPricePlanId(Integer vipDishPricePlanId) {
+        this.vipDishPricePlanId = vipDishPricePlanId;
     }
 
     public Integer getDishId() {
@@ -51,19 +60,12 @@ public class DishPrice extends AbstractEntity {
         this.dishId = dishId;
     }
 
-    public Integer getPlanId() {
-        return planId;
+    public BigDecimal getVipDishPrice() {
+        return vipDishPrice;
     }
 
-    public void setPlanId(Integer planId) {
-        this.planId = planId;
+    public void setVipDishPrice(BigDecimal vipDishPrice) {
+        this.vipDishPrice = vipDishPrice;
     }
 
-    public BigDecimal getVipPrice() {
-        return vipPrice;
-    }
-
-    public void setVipPrice(BigDecimal vipPrice) {
-        this.vipPrice = vipPrice;
-    }
 }

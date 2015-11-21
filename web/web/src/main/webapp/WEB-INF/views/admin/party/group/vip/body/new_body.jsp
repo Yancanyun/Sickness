@@ -26,7 +26,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>姓名</label>
             <div class="col-sm-6">
-              <input class="w180" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="" name="name" />
+              <input class="w190" type="text" data-valid-tip="请输入姓名|姓名不能为空，请重新输入" data-valid-rule="notNull" value="" name="name" />
             </div>
           </div>
           <div class="form-group">
@@ -48,25 +48,25 @@
           <div class="form-group">
             <label class="control-label">生日</label>
             <div class="col-sm-2">
-              <input class="w180 date" readonly value="" name="birthday" />
+              <input class="w190 date" readonly value="" name="birthday" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>手机号</label>
             <div class="col-sm-6">
-              <input class="w180 J_phone" type="text" data-valid-tip="请输入员工电话|电话输入有误，请重新输入" data-valid-rule="notNull&isMobile" value="" name="phone" />
+              <input class="w190 J_phone" type="text" data-valid-tip="请输入员工电话|电话输入有误，请重新输入" data-valid-rule="notNull&isMobile" value="" name="phone" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">qq</label>
             <div class="col-sm-6">
-              <input class="w180" type="text" data-valid-tip="请输入QQ号|填写有误，请重新输入" data-valid-rule="isNull|isQQ" value="" name="qq" />
+              <input class="w190" type="text" data-valid-tip="请输入QQ号|填写有误，请重新输入" data-valid-rule="isNull|isQQ" value="" name="qq" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">邮箱</label>
             <div class="col-sm-6">
-              <input class="w180" type="text" data-valid-tip="请输入邮箱|填写有误，请重新输入" data-valid-rule="isNull|isEmail" value="" name="email" />
+              <input class="w190" type="text" data-valid-tip="请输入邮箱|填写有误，请重新输入" data-valid-rule="isNull|isEmail" value="" name="email" />
             </div>
           </div>
         </div>

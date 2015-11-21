@@ -32,6 +32,8 @@ import java.util.List;
 @RequestMapping(value = URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL)
 public class VipInfoController extends AbstractController {
 
+    protected final static String NEW_SUCCESS_MSG = "添加成功";
+
     /**
      * 去会员基本信息列表页面
      * @return
@@ -115,7 +117,7 @@ public class VipInfoController extends AbstractController {
             redirectAttributes.addFlashAttribute("msg", "保存失败！");
             return "admin/party/group/vip/vip_info_new";
         }
-        redirectAttributes.addFlashAttribute("msg", "保存成功！");
+        redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
         String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
         return "redirect:" + redirectUrl;
     }
@@ -163,7 +165,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        redirectAttributes.addFlashAttribute("msg", "保存成功！");
+        redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
         String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
         return "redirect:" + redirectUrl;
     }
