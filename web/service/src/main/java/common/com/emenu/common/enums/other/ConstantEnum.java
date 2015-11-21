@@ -33,7 +33,9 @@ public enum ConstantEnum {
     VipIntegralRuleMeansOfStartIntegral("MEANS_OF_START_INTEGRAL","启动多倍积分方式"),
 
     /**************************会员等级相关参数*****************************/
-    VipGradeVipAutoUpgradeState("VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级")
+    VipGradeVipAutoUpgradeState("VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级"),
+
+    DishCategoryLayers("DISH_CATEGORY_LAYERS", "菜品分类等级数"),
     ;
 
 

@@ -59,6 +59,8 @@ public final class URLConstants {
     //员工管理
     public static final String EMPLOYEE_MANAGEMENT = "admin/party/group/employee";
 
+    public static final String ADMIN_DISH_URL = "admin/dish";
+
     //菜品单位管理
     public static final String ADMIN_DISH_UNIT = "admin/dish/unit";
 
@@ -74,7 +76,7 @@ public final class URLConstants {
     //存放点管理
     public static final String ADMIN_STORAGE_DEPOT = "admin/storage/depot";
 
-    public static final String ADMIN_STORAGE_ITEM = "admin/storage/item";
+    public static final String ADMIN_STORAGE_ITEM_URL = "admin/storage/item";
 
     //备注管理
     public static final String ADMIN_REMARK_URL = "admin/restaurant/remark";

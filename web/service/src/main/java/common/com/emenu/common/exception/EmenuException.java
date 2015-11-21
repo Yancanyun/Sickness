@@ -92,13 +92,22 @@ public enum EmenuException implements IBizExceptionMes {
     DishUpdateFailed("菜品更新失败", 1039),
     DishDeleteFailed("菜品删除失败", 1040),
     DishStatusIllegal("菜品状态不合法", 1041),
-    DishCategoryNotNull("菜品总分类不能为空", 1042),
+    DishCategoryNotNull("总分类不能为空", 1042),
+    DishTagNotNull("小类不能为空", 1049),
     DishNameNotNull("菜品名称不能为空", 1043),
     DishUnitNotNull("菜品单位不能为空", 1044),
     DishPriceNotNUll("菜品定价不能为空", 1045),
     DishSaleTypeNotNull("菜品促销方式不能为空", 1046),
     DishDiscountNotNull("菜品折扣不能为空", 1047),
     DishSalePriceNotNull("菜品售价不能为空", 1048),
+    DishCreatedPartyIdNotNull("创建者不能为空", 1054),
+
+    // 菜品口味
+    DishTasteQueryFailed("菜品口味查询失败", 1049),
+    DishTasteInsertFailed("菜品口味添加失败", 1050),
+    DishTasteUpdateFailed("菜品口味更新失败", 1051),
+    DishTasteDeleteFailed("菜品口味删除失败", 1052),
+    DishTasteIdError("菜品口味的ID为空或小于等于0", 1053),
 
 
     //饭店管理

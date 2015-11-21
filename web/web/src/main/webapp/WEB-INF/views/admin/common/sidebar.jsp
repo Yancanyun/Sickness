@@ -45,14 +45,14 @@
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">菜品管理</span><i
                 class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li <c:if test="${MethodModule eq 'Admin:Dish:Unit:List'}">class="active" </c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:Unit:List'}">class="active" </c:if>>
                 <a class="J_menu" href="javascript:;">菜品单位管理</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:Dish:Tag:List'}">class="active" </c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:Tag:List'}">class="active" </c:if>>
                 <a class="J_menu" href="javascript:;">菜品分类管理</a>
             </li>
-            <li>
-                <a class="J_menu" href="javascript:;">菜品管理<i class="fa fa-angle-right angle-right"></i></a>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:Dish'}">class="active"</c:if> >
+                <a class="J_menu" href="${website}admin/dish">菜品管理<i class="fa fa-angle-right angle-right"></i></a>
                 <ul>
                     <li><a href="#">三级菜单</a></li>
                     <li class="active"><a href="#">三级菜单</a></li>

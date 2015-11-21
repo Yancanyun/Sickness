@@ -32,7 +32,7 @@ import java.util.List;
  **/
 @Module(ModuleEnums.AdminStorage)
 @Controller
-@RequestMapping(value = URLConstants.ADMIN_STORAGE_ITEM)
+@RequestMapping(value = URLConstants.ADMIN_STORAGE_ITEM_URL)
 public class StorageItemController extends AbstractController {
 
     /**
@@ -168,7 +168,7 @@ public class StorageItemController extends AbstractController {
         }
 
         redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/list";
+        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/list";
         return "redirect:" + redirectUrl;
     }
 
@@ -252,7 +252,7 @@ public class StorageItemController extends AbstractController {
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
 
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM + "/update/" + storageItem.getId();
+        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/update/" + storageItem.getId();
         return "redirect:" + redirectUrl;
     }
 

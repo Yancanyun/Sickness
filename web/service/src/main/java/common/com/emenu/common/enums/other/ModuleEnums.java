@@ -89,19 +89,26 @@ public enum ModuleEnums {
     AdminRestaurantRemarkUpdate("Admin:Restaurant:Remark:Update"),
     AdminRestaurantRemarkDel("Admin:Restaurant:Remark:Del"),
 
+    // 菜品管理
+    AdminDishManagement("Admin:DishManagement"),
+    // 菜品
+    AdminDish("Admin:DishManagement:Dish"),
+    AdminDishList("Admin:DishManagement:Dish:List"),
+    AdminDishNew("Admin:DishManagement:Dish:New"),
+    AdminDishUpdate("Admin:DishManagement:Dish:Update"),
+    AdminDishDelete("Admin:DishManagement:Dish:Delete"),
     // 菜品单位管理
-    AdminDishUnit("Admin:Dish:Unit"),
-    AdminDishUnitList("Admin:Dish:Unit:List"),
-    AdminDishUnitNew("Admin:Dish:Unit:New"),
-    AdminDishUnitUpdate("Admin:Dish:Unit:Update"),
-    AdminDishUnitDel("Admin:Dish:Unit:Del"),
-
+    AdminDishUnit("Admin:DishManagement:Unit"),
+    AdminDishUnitList("Admin:DishManagement:Unit:List"),
+    AdminDishUnitNew("Admin:DishManagement:Unit:New"),
+    AdminDishUnitUpdate("Admin:DishManagement:Unit:Update"),
+    AdminDishUnitDel("Admin:DishManagement:Unit:Del"),
     // 菜品分类管理
-    AdminDishTag("Admin:Dish:Tag"),
-    AdminDishTagList("Admin:Dish:Tag:List"),
-    AdminDishTagNew("Admin:Dish:Tag:New"),
-    AdminDishTagUpdate("Admin:Dish:Tag:Update"),
-    AdminDishTagDel("Admin:Dish:Tag:Del"),
+    AdminDishTag("Admin:DishManagement:Tag"),
+    AdminDishTagList("Admin:DishManagement:Tag:List"),
+    AdminDishTagNew("Admin:DishManagement:Tag:New"),
+    AdminDishTagUpdate("Admin:DishManagement:Tag:Update"),
+    AdminDishTagDel("Admin:DishManagement:Tag:Del"),
 
 
     //用户管理

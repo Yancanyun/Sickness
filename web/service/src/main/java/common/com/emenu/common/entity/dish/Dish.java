@@ -99,6 +99,9 @@ public class Dish extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+    // 单位名称
+    @Transient
+    private String unitName;
     // 状态
     @Transient
     private String statusStr;
@@ -272,6 +275,14 @@ public class Dish extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     public String getStatusStr() {
