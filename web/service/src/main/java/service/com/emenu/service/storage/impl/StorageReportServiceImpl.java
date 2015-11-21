@@ -380,9 +380,9 @@ public class StorageReportServiceImpl implements StorageReportService {
         List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
 
-        if(Assert.isNull(depotIdList)||Assert.isNull(tagIdList)){
+       /* if(Assert.isNull(depotIdList)||Assert.isNull(tagIdList)){
             return storageReportDtoList;
-        }
+        }*/
 
         try {
             //根据tagId获取分类下的物品
