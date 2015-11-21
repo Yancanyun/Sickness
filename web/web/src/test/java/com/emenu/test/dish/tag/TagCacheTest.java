@@ -62,7 +62,7 @@ public class TagCacheTest extends AbstractTestCase{
 
     @Test
     public void listAllRootTag() throws Exception {
-        List<Tag> tagList = tagCacheService.listAllRootByType(1);
+        List<Tag> tagList = tagCacheService.listAll();
         for (Tag tag : tagList){
             System.out.println(tag.getName() + "     "+ tag.getWeight());
         }
@@ -114,14 +114,14 @@ public class TagCacheTest extends AbstractTestCase{
     @Test
     public void updateTagName() throws Exception {
         listAllTag();
-        tagCacheService.updateName(14, "匪类3");
+        //tagCacheService.updateName(14, "匪类3");
         listAllTag();
     }
 
     @Test
     public void updateTagWeight() throws Exception {
         listAllTag();
-        tagCacheService.updateWeight(14, 400);
+        //tagCacheService.updateWeight(14, 400);
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
         listAllTag();
     }
@@ -129,7 +129,7 @@ public class TagCacheTest extends AbstractTestCase{
     @Test
     public void updateTagPid() throws Exception {
         listAllTag();
-        tagCacheService.updatePid(14, 9);
+        //tagCacheService.updatePid(14, 9);
         System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
         listAllTag();
     }
