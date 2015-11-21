@@ -13,7 +13,13 @@
             <li <c:if test="${MethodModule eq 'Admin:BasicInfo:IndexImg:List'}">class="active"</c:if>>
                 <a href="${website}admin/index/img">点餐平台首页</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer'}">class="active"</c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer:List'}">class="active"</c:if>>
+                <a href="${website}admin/printer">打印机管理</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer:New'}">class="active"</c:if>>
+                <a href="${website}admin/printer">打印机管理</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer:Update'}">class="active"</c:if>>
                 <a href="${website}admin/printer">打印机管理</a>
             </li>
             <li><a href="#">外卖参数设置</a></li>

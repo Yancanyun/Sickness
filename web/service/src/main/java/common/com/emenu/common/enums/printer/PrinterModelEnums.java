@@ -1,6 +1,8 @@
 package com.emenu.common.enums.printer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +41,14 @@ public enum  PrinterModelEnums {
     public static PrinterModelEnums valueOf(int id, PrinterModelEnums defaultValue){
         PrinterModelEnums enums = map.get(id);
         return enums == null ? defaultValue : enums;
+    }
+
+    public static List<PrinterModelEnums> getModelList(){
+        List<PrinterModelEnums> modelList = new ArrayList<PrinterModelEnums>();
+        for (PrinterModelEnums enums : PrinterModelEnums.values()){
+            modelList.add(enums);
+        }
+        return modelList;
     }
 
     public Integer getId() {

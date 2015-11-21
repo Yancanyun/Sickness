@@ -19,35 +19,19 @@
         <h4>打印机列表</h4>
       </div>
       <div class="panel-body clearfix">
-        <a href="#" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;添加打印机</a>
+        <a href="${website}admin/printer/new" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;添加打印机</a>
         <div class="margin-top-20">
-          <div class="printer-classify" id="1">
-            <span>吧台打印机</span>
-            <span>192.168.1.21</span>
-            <em>1</em>
-            <div class="text-right">
-              <a href="#" class="padding-right-10"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-              <a href="javascript:;" class="J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+          <c:forEach var="printer" items="${printerList}">
+            <div class="printer-classify" id="${printer.id}">
+              <span>${printer.name}</span>
+              <span>${printer.ipAddress}</span>
+              <em>${printer.deviceNumber}</em>
+              <div class="text-right">
+                <a href="${website}admin/printer/update/${printer.id}" class="padding-right-10"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                <a href="javascript:;" class="J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+              </div>
             </div>
-          </div>
-          <div class="printer-classify" id="2">
-            <span>吧台打印机</span>
-            <span>192.168.1.22</span>
-            <em>2</em>
-            <div class="text-right">
-              <a href="#" class="padding-right-10"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-              <a href="javascript:;" class="J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-            </div>
-          </div>
-          <div class="printer-classify" id="3">
-            <span>吧台打印机</span>
-            <span>192.168.1.23</span>
-            <em>3</em>
-            <div class="text-right">
-              <a href="#" class="padding-right-10"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-              <a href="javascript:;" class="J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-            </div>
-          </div>
+          </c:forEach>
         </div>
       </div>
     </div>

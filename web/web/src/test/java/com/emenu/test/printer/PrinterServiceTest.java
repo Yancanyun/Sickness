@@ -3,6 +3,7 @@ package com.emenu.test.printer;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.enums.printer.PrinterBrandEnums;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.test.AbstractTestCase;
@@ -124,6 +125,14 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void unBindAllDishTag() throws SSException{
-        dishTagPrinterService.unBindAllDishTag(1);
+        dishTagPrinterService.unBindAllDishTag(2);
+    }
+
+    @Test
+    public void listBrand() throws SSException{
+        List<PrinterBrandEnums> brandEnumsList = PrinterBrandEnums.getBrandList();
+        for (PrinterBrandEnums enums : brandEnumsList){
+            System.out.println(enums.getId() + ":    " + enums.getDescription());
+        }
     }
 }

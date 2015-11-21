@@ -160,50 +160,41 @@ public class PrinterServiceImpl implements PrinterService {
         Assert.isNotNull(PrinterStateEnums.valueOf(printer.getState()), EmenuException.PrinterStateIllegal);
         Assert.isNotNull(TrueEnums.valueOf(printer.getIsCashierPrinter()), EmenuException.PrinterInfoIllegal);
 
-        if (checkValueExist("name", printer.getName())){
-            throw SSException.get(EmenuException.PrinterNameExist);
+        //判断是否重名
+        //如果是编辑，忽略与其本身重名的情况
+        Printer printer1 = new Printer();
+        if (!Assert.isNull(printer.getId())){
+            printer1 = queryById(printer.getId());
         }
 
-        if (checkValueExist("ip_address", printer.getIpAddress())){
-            throw SSException.get(EmenuException.PrinterIpAddressExist);
+        if (!printer.getName().equals(printer1.getName())) {
+            if (checkValueExist("name", printer.getName())){
+                throw SSException.get(EmenuException.PrinterNameExist);
+            }
+        }
+
+        //判断ip是否相同
+        //如果是编辑，忽略与其本身相同的情况
+        if (!printer.getIpAddress().equals(printer1.getIpAddress())) {
+            if (checkValueExist("ip_address", printer.getIpAddress())){
+                throw SSException.get(EmenuException.PrinterIpAddressExist);
+            }
         }
 
         return true;
     }
 
     private boolean checkBeforeUpdate(Printer printer) throws SSException{
-        if (Assert.isNull(printer)){
+        if (!checkBeforeSave(printer)){
             return false;
         }
+
         if (!Assert.isNull(printer.getId())){
             if (Assert.lessOrEqualZero(printer.getId())){
                 throw SSException.get(EmenuException.PrinterIdError);
             }
-        }
-        if (!Assert.isNull(printer.getBrand())){
-            if (Assert.isNull(PrinterBrandEnums.valueOf(printer.getBrand()))){
-                throw SSException.get(EmenuException.PrinterBrandIllegal);
-            }
-        }
-        if (!Assert.isNull(printer.getPrinterModel())){
-            if (Assert.isNull(PrinterModelEnums.valueOf(printer.getPrinterModel()))){
-                throw SSException.get(EmenuException.PrinterModelIllegal);
-            }
-        }
-        if (!Assert.isNull(printer.getType())){
-            if (Assert.isNull(PrinterTypeEnums.valueOf(printer.getType()))){
-                throw SSException.get(EmenuException.PrinterTypeIllegal);
-            }
-        }
-        if (!Assert.isNull(printer.getState())){
-            if (Assert.isNull(PrinterStateEnums.valueOf(printer.getState()))){
-                throw SSException.get(EmenuException.PrinterStateIllegal);
-            }
-        }
-        if (!Assert.isNull(printer.getIsCashierPrinter())){
-            if (Assert.isNull(TrueEnums.valueOf(printer.getIsCashierPrinter()))){
-                throw SSException.get(EmenuException.PrinterInfoIllegal);
-            }
+        } else {
+            throw SSException.get(EmenuException.PrinterIdError);
         }
 
         return true;
