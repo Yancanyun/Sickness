@@ -68,5 +68,7 @@ public interface StorageSettlementMapper {
      */
     public List<StorageItem> listStorageItemByDepotAndTag(@Param("depotIds") List<Integer> depotIds,
                                                           @Param("tagIds") List<Integer> tagIds,
-                                                          @Param("keyword") String keyword)throws SSException;
+                                                          @Param("keyword") String keyword,
+                                                          @Param("offset") Integer offset,
+                                                          @Param("pageSize") Integer pageSize)throws SSException;
 }

@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -82,9 +83,14 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             Date nowDate = DateUtils.now();
             //获得所有库存原料
             List<StorageItem> storageItemList = storageItemService.listAll();
+            if(Assert.isEmpty(storageItemList)){
+                storageItemList = Collections.emptyList();
+            }
             //获取当前时间之前所有未结算单据（包括当前时间）
             List<StorageReportDto> storageReportDtoList = storageReportService.ListStorageReportDtoUnsettled(nowDate);
-
+            if(Assert.isEmpty(storageReportDtoList)){
+                storageReportDtoList = Collections.emptyList();
+            }
             //循环库存物品
             for (StorageItem storageItem : storageItemList){
                 //入库数量
@@ -187,139 +193,128 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
                                                      String keyword,
-                                                     int curPage,
-                                                     int pageSize) throws Exception {
-
+                                                     Integer curPage,
+                                                     Integer pageSize) throws Exception {
         List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
+        try {
 
-        //取出时间段之间的所有单据,根据条件
-        List<StorageReportDto> storageReportList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
+            //取出时间段之间的所有单据,根据条件
+            List<StorageReportDto> storageReportList = storageReportService.listStorageReportDtoByCondition2(startDate, endDate, depotIds, tagIds);
+            if (Assert.isEmpty(storageReportList)) {
+                storageReportList = Collections.emptyList();
+            }
+            //取出开始时间之前的所有库存物品计算结果（不包括开始时间）
+            List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, depotIds, tagIds, keyword, curPage, pageSize);
+            if (Assert.isEmpty(beforeSettlementList)) {
+                beforeSettlementList = Collections.emptyList();
+            }
 
-        //取出开始时间之前的所有库存物品计算结果（不包括开始时间）
-        List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate,depotIds,tagIds,keyword);
+            for (StorageSettlementItem settlementItem : beforeSettlementList) {
+                //期初数量
+                BigDecimal beginQuantity = new BigDecimal(0.00);
+                //期初金额
+                BigDecimal beginMoney = new BigDecimal(0.00);
+                //入库数量
+                BigDecimal stockInQuantity = new BigDecimal(0.00);
+                //入库金额
+                BigDecimal stockInMoney = new BigDecimal(0.00);
+                //出库数量
+                BigDecimal stockOutQuantity = new BigDecimal(0.00);
+                //出库金额
+                BigDecimal stockOutMoney = new BigDecimal(0.00);
+                //盘盈数量
+                BigDecimal incomeOnQuantity = new BigDecimal(0.00);
+                //盘盈金额
+                BigDecimal incomeOnMoney = new BigDecimal(0.00);
+                //盘亏数量
+                BigDecimal lossOnQuantity = new BigDecimal(0.00);
+                //盘亏金额
+                BigDecimal lossOnMoney = new BigDecimal(0.00);
+                //实际数量
+                BigDecimal realQuantity = new BigDecimal(0.00);
+                //实际金额
+                BigDecimal realMoney = new BigDecimal(0.00);
+                //结存
+                BigDecimal totalQuantity = new BigDecimal(0.00);
+                BigDecimal totalMoney = new BigDecimal(0.00);
 
-        for(StorageSettlementItem settlementItem : beforeSettlementList){
-
-            //期初数量
-            BigDecimal beginQuantity = new BigDecimal(0.00);
-            //期初金额
-            BigDecimal beginMoney = new BigDecimal(0.00);
-            //入库数量
-            BigDecimal stockInQuantity = new BigDecimal(0.00);
-            //入库金额
-            BigDecimal stockInMoney = new BigDecimal(0.00);
-            //出库数量
-            BigDecimal stockOutQuantity = new BigDecimal(0.00);
-            //出库金额
-            BigDecimal stockOutMoney = new BigDecimal(0.00);
-            //盘盈数量
-            BigDecimal incomeOnQuantity = new BigDecimal(0.00);
-            //盘盈金额
-            BigDecimal incomeOnMoney = new BigDecimal(0.00);
-            //盘亏数量
-            BigDecimal lossOnQuantity = new BigDecimal(0.00);
-            //盘亏金额
-            BigDecimal lossOnMoney = new BigDecimal(0.00);
-            //实际数量
-            BigDecimal realQuantity = new BigDecimal(0.00);
-            //实际金额
-            BigDecimal realMoney = new BigDecimal(0.00);
-            //结存
-            BigDecimal totalQuantity = new BigDecimal(0.00);
-            BigDecimal totalMoney = new BigDecimal(0.00);
-
-            //循环单据
-            for (StorageReportDto storageReportDto : storageReportList) {
-                //循环单据详情
-                List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
-                for (StorageReportItem storageReportItem : storageReportItemList) {
-                    if(settlementItem.getItemId()==storageReportItem.getItemId()){
-                        //入库单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockInReport.getId()){
-                            stockInQuantity = stockInQuantity.add(storageReportItem.getQuantity());
-                            stockInMoney = stockInMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
-                        }
-                        //出库单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.StockOutReport.getId()){
-                            stockOutQuantity = stockOutQuantity.add(storageReportItem.getQuantity());
-                            stockOutMoney = stockOutMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
-                        }
-                        //盘盈单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.IncomeOnReport.getId()){
-                            incomeOnQuantity = incomeOnQuantity.add(storageReportItem.getQuantity());
-                            incomeOnMoney = incomeOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
-                        }
-                        //盘亏单
-                        if(storageReportDto.getStorageReport().getType()== StorageReportTypeEnum.LossOnReport.getId()){
-                            lossOnQuantity = lossOnQuantity.add(storageReportItem.getQuantity());
-                            lossOnMoney = lossOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
+                //循环单据
+                for (StorageReportDto storageReportDto : storageReportList) {
+                    //循环单据详情
+                    List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+                    for (StorageReportItem storageReportItem : storageReportItemList) {
+                        if (settlementItem.getItemId() == storageReportItem.getItemId()) {
+                            //入库单
+                            if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()) {
+                                stockInQuantity = stockInQuantity.add(storageReportItem.getQuantity());
+                                stockInMoney = stockInMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
+                            }
+                            //出库单
+                            if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.StockOutReport.getId()) {
+                                stockOutQuantity = stockOutQuantity.add(storageReportItem.getQuantity());
+                                stockOutMoney = stockOutMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
+                            }
+                            //盘盈单
+                            if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.IncomeOnReport.getId()) {
+                                incomeOnQuantity = incomeOnQuantity.add(storageReportItem.getQuantity());
+                                incomeOnMoney = incomeOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
+                            }
+                            //盘亏单
+                            if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.LossOnReport.getId()) {
+                                lossOnQuantity = lossOnQuantity.add(storageReportItem.getQuantity());
+                                lossOnMoney = lossOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
+                            }
                         }
                     }
                 }
+                //实际数量
+                realQuantity = stockInQuantity.subtract(stockOutQuantity).add(incomeOnQuantity.subtract(lossOnQuantity));
+                realMoney = stockInMoney.subtract(stockOutMoney).add(incomeOnMoney.subtract(lossOnMoney));
+                //期初
+                beginQuantity = settlementItem.getTotalQuantity();
+                beginMoney = settlementItem.getTotalMoney();
+
+                //结存
+                totalQuantity = totalQuantity.add(realQuantity);
+                totalMoney = totalMoney.add(realMoney);
+
+                //将库存的每个物品的结算情况存到数据库
+                StorageCheckDto storageCheckDto = new StorageCheckDto();
+                //获取该物品的属性
+                StorageItem storageItem = storageItemService.queryById(settlementItem.getItemId());
+                if (Assert.isNull(storageItem)) {
+                    throw SSException.get(EmenuException.StorageItemQueryFailed);
+                }
+                storageCheckDto.setItemName(storageItem.getName());
+                storageCheckDto.setItemNumber(storageItem.getItemNumber());
+                storageCheckDto.setOrderUnitName(unitService.queryById(storageItem.getOrderUnitId()).getName());
+                storageCheckDto.setStorageUnitName(unitService.queryById(storageItem.getStorageUnitId()).getName());
+                storageCheckDto.setTagName(tagFacadeService.queryById(storageItem.getTagId()).getName());
+                storageCheckDto.setLastStockInPrice(storageItem.getLastStockInPrice());
+                storageCheckDto.setBeginQuantity(beginQuantity);
+                storageCheckDto.setBeginMoney(beginMoney);
+                storageCheckDto.setStockInQuantity(stockInQuantity);
+                storageCheckDto.setStockInMoney(stockInMoney);
+                storageCheckDto.setStockOutQuantity(stockOutQuantity);
+                storageCheckDto.setStockOutMoney(stockOutMoney);
+                storageCheckDto.setIncomeLossQuantity(incomeOnQuantity.subtract(lossOnQuantity));
+                storageCheckDto.setIncomeLossMoney(incomeOnMoney.subtract(lossOnMoney));
+                storageCheckDto.setTotalQuantity(totalQuantity);
+                storageCheckDto.setTotalMoney(totalMoney);
+                if(totalQuantity.compareTo(BigDecimal.ZERO)==0){
+                    storageCheckDto.setTotalAveragePrice(BigDecimal.ZERO);
+                }else {
+                    storageCheckDto.setTotalAveragePrice(totalMoney.divide(totalQuantity));
+                }
+                storageCheckDto.setMaxStorageQuantity(storageItem.getMaxStorageQuantity());
+                storageCheckDto.setMinStorageQuantity(storageItem.getMinStorageQuantity());
+                storageCheckDtoList.add(storageCheckDto);
             }
-            //实际数量
-            realQuantity = stockInQuantity.subtract(stockOutQuantity).add(incomeOnQuantity.subtract(lossOnQuantity));
-            realMoney = stockInMoney.subtract(stockOutMoney).add(incomeOnMoney.subtract(lossOnMoney));
-            //期初
-            beginQuantity = settlementItem.getTotalQuantity();
-            beginMoney = settlementItem.getTotalMoney();
-
-            //结存
-            totalQuantity = totalQuantity.add(realQuantity);
-            totalMoney = totalMoney.add(realMoney);
-
-            //将库存的每个物品的结算情况存到数据库
-            StorageCheckDto storageCheckDto = new StorageCheckDto();
-            //获取该物品的属性
-            StorageItem storageItem = storageItemService.queryById(settlementItem.getItemId());
-            storageCheckDto.setItemName(storageItem.getName());
-            storageCheckDto.setItemNumber(storageItem.getItemNumber());
-            storageCheckDto.setOrderUnitName(unitService.queryById(storageItem.getOrderUnitId()).getName());
-            storageCheckDto.setStorageUnitName(unitService.queryById(storageItem.getStorageUnitId()).getName());
-            storageCheckDto.setTagName(tagFacadeService.queryById(storageItem.getTagId()).getName());
-            storageCheckDto.setLastStockInPrice(storageItem.getLastStockInPrice());
-            storageCheckDto.setBeginQuantity(beginQuantity);
-            storageCheckDto.setBeginMoney(beginMoney);
-            storageCheckDto.setStockInQuantity(stockInQuantity);
-            storageCheckDto.setStockInMoney(stockInMoney);
-            storageCheckDto.setStockOutQuantity(stockOutQuantity);
-            storageCheckDto.setStockOutMoney(stockOutMoney);
-            storageCheckDto.setIncomeLossQuantity(incomeOnQuantity.subtract(lossOnQuantity));
-            storageCheckDto.setIncomeLossMoney(incomeOnMoney.subtract(lossOnMoney));
-            storageCheckDto.setTotalQuantity(totalQuantity);
-            storageCheckDto.setTotalMoney(totalMoney);
-            storageCheckDto.setTotalAveragePrice(totalMoney.divide(totalQuantity));
-            storageCheckDto.setMaxStorageQuantity(storageItem.getMaxStorageQuantity());
-            storageCheckDto.setMinStorageQuantity(storageItem.getMinStorageQuantity());
-
-
-//            StorageSettlementItem newSettlementItem = new StorageSettlementItem();
-//            newSettlementItem.setItemId(storageItem.getId());
-//            newSettlementItem.setStockInQuantity(stockInQuantity);
-//            newSettlementItem.setStockInMoney(stockInMoney);
-//            newSettlementItem.setStockOutQuantity(stockOutMoney);
-//            newSettlementItem.setIncomeOnQuantity(incomeOnQuantity);
-//            newSettlementItem.setIncomeOnMoney(incomeOnMoney);
-//            newSettlementItem.setLossOnQuantity(lossOnQuantity);
-//            newSettlementItem.setLossOnMoney(lossOnMoney);
-//            newSettlementItem.setRealQuantity(realQuantity);
-//            newSettlementItem.setRealMoney(realMoney);
-//            newSettlementItem.setTotalQuantity(totalQuantity);
-//            newSettlementItem.setTotalMoney(totalMoney);
-
-//            storageCheckDto.setSettlementItem(newSettlementItem);
-
-//            if(itemId == null || itemId == 0){
-//                //加到List里面
-//                storageCheckDtoList.add(storageCheckDto);
-//            }else {
-//                if(newSettlementItem.getItemId()==itemId){
-//                    //加到List里面
-//                    storageCheckDtoList.add(storageCheckDto);
-//                }
-//            }
+            return storageCheckDtoList;
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStorageSettlementCheckFailed, e);
         }
-        return storageCheckDtoList;
     }
 
     @Override
@@ -330,7 +325,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         try {
             //供货商partyId
             Integer supplierPartyId = 0;
-            if(supplierId != null && supplierId != 0){
+            if(Assert.isNotNull(supplierId) && !Assert.lessOrEqualZero(supplierId)){
                 Supplier supplier = supplierService.queryById(supplierId);
                 if(supplier!=null){
                     //获取供货商partyId
@@ -374,11 +369,11 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                     storageSupplierDtoList.add(storageSupplierDto);
                 }
             }
+            return storageSupplierDtoList;
         }catch (SSException e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DelPrinterDishError, e);
+            throw SSException.get(EmenuException.ListStorageSettlementSupplierFailed, e);
         }
-        return storageSupplierDtoList;
     }
 
 
@@ -386,34 +381,48 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
      * 根据某个时间之前每个库存物品的库存结果
      * 主要是为了计算期初
      * @param startDate
+     * @param depotIds
+     * @param tagIds
+     * @param keyword
+     * @param curPage
+     * @param pageSize
      * @return List<StorageSettlementItem>
      * @throws SSException
      */
     private List<StorageSettlementItem> listSettlementItemByDate(Date startDate,
                                                                  List<Integer> depotIds,
                                                                  List<Integer> tagIds,
-                                                                 String keyword) throws SSException{
+                                                                 String keyword,
+                                                                 Integer curPage,
+                                                                 Integer pageSize) throws SSException{
         List<StorageSettlementItem> settlementItemList = new ArrayList<StorageSettlementItem>();
-        //库存物品列表
-        List<StorageItem> storageItemList = Collections.emptyList();
-        if((depotIds==null&&depotIds.size()==0) && (tagIds==null && tagIds.size()==0) && (keyword==null)){
-            //获得所有库存原料列表
-            storageItemList = storageItemService.listAll();
-        }else {
-            //根据存放点Id和库存分类Id获取库存物品列表
-            storageItemList = storageSettlementMapper.listStorageItemByDepotAndTag(depotIds, tagIds, keyword);
+        Integer offset = null;
+        //判断分页参数是否为空
+        if(curPage!=null && pageSize!=null) {
+            //处理分页参数
+            curPage = curPage <= 0 ? 0 : curPage - 1;
+            offset = curPage * pageSize;
+            if (Assert.lessZero(offset)) {
+                return settlementItemList;
+            }
         }
-
+        //库存物品列表
+        List<StorageItem> storageItemList = storageSettlementMapper.listStorageItemByDepotAndTag(depotIds, tagIds, keyword, offset, pageSize);
+        if(Assert.isEmpty(storageItemList)){
+            storageItemList = Collections.emptyList();
+        }
         //获取该时间之前最后一次结算时间(包括当前时间)
         StorageSettlement storageSettlement = storageSettlementMapper.queryLastSettlement(startDate);
         Date settlementDate = null;
-        if(storageSettlement!=null) {
+        if(Assert.isNull(storageSettlement)) {
             settlementDate =storageSettlement.getCreatedTime();
         }
         //TODO 参数：开始时间settlementDate，结束时间startDate
         //单据列表——从上一次结算到开始时间之间的单据（不包括开始时间，不包括结束时间）
-        List<StorageReportDto> storageReportDtoList = new ArrayList<StorageReportDto>();
-
+        List<StorageReportDto> storageReportDtoList = storageReportService.listStorageReportDtoByCondition2(settlementDate,startDate,depotIds,tagIds);
+        if (Assert.isEmpty(storageReportDtoList)){
+            storageReportDtoList = Collections.emptyList();
+        }
         //循环库存物品
         for (StorageItem storageItem : storageItemList) {
             //入库数量
@@ -452,17 +461,17 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                             stockInMoney = stockInMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //出库单
-                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockOutReport.getId())){
                             stockOutQuantity = stockOutQuantity.add(storageReportItem.getQuantity());
                             stockOutMoney = stockOutMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //盘盈单
-                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.IncomeOnReport.getId())){
                             incomeOnQuantity = incomeOnQuantity.add(storageReportItem.getQuantity());
                             incomeOnMoney = incomeOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
                         //盘亏单
-                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.StockInReport.getId())){
+                        if(storageReportDto.getStorageReport().getType().equals(StorageReportTypeEnum.LossOnReport.getId())){
                             lossOnQuantity = lossOnQuantity.add(storageReportItem.getQuantity());
                             lossOnMoney = lossOnMoney.add(storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                         }
