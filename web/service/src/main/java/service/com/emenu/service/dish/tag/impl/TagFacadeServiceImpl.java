@@ -12,9 +12,7 @@ import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.printer.DishTagPrinterService;
-import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
-import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,9 +40,6 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     private TagCacheService tagCacheService;
 
     @Autowired
-    private PrinterService printerService;
-
-    @Autowired
     private DishTagPrinterService dishTagPrinterService;
 
     @Autowired
@@ -52,39 +47,39 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public Tag newTag(Tag tag) throws Exception {
+    public Tag newTag(Tag tag) throws SSException {
         tag = tagService.newTag(tag);
         return tagCacheService.newTag(tag);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void updateTag(Tag tag) throws Exception {
+    public void updateTag(Tag tag) throws SSException {
         tagService.updateTag(tag);
         tagCacheService.updateTag(tag);
 
     }
 
     @Override
-    public Tag queryById(int tagId) throws Exception {
+    public Tag queryById(int tagId) throws SSException {
         return tagCacheService.queryCloneById(tagId);
     }
 
     @Override
-    public List<Tag> listChildrenByTagId(int tagId) throws Exception {
+    public List<Tag> listChildrenByTagId(int tagId) throws SSException {
         return tagCacheService.listChildrenById(tagId);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void delById(int tagId) throws Exception {
+    public void delById(int tagId) throws SSException {
         tagCacheService.delById(tagId);
         tagService.delById(tagId);
 
     }
 
     @Override
-    public List<TagDto> listByCurrentId(int tagId) throws Exception {
+    public List<TagDto> listByCurrentId(int tagId) throws SSException {
         if(Assert.lessOrEqualZero(tagId)){
             throw SSException.get(EmenuException.TagPIdError);
         }
@@ -92,7 +87,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<Tag> listAllByTagId(int tagId) throws Exception {
+    public List<Tag> listAllByTagId(int tagId) throws SSException {
         List<Tag> tagList = Collections.emptyList();
         String categoryLayer = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
         if(categoryLayer.equals("2")){
@@ -104,7 +99,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception {
+    public List<TagDto> listDishByCurrentId(Integer tagId) throws SSException {
         List<Tag> tagList = new ArrayList<Tag>();
         if(Assert.isNull(tagId) || tagId == 0){
             tagList = tagCacheService.listChildrenById(TagEnum.DishAndGoods.getId());
@@ -121,7 +116,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
     }
 
     @Override
-    public List<Tag> listDishTagForPrinter() throws Exception {
+    public List<Tag> listDishTagForPrinter() throws SSException {
         List<Tag> tagList = tagCacheService.listByCurrentId(TagEnum.DishAndGoods.getId());
         List<Tag> newTagList = new ArrayList<Tag>();
         for(Tag tag : tagList){
@@ -136,7 +131,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public Tag newTagPrinter(Tag tag, Integer printerId) throws Exception {
+    public Tag newTagPrinter(Tag tag, Integer printerId) throws SSException {
         //添加分类
         Tag newTag = newTag(tag);
         //添加分类与打印机关联
@@ -150,7 +145,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void updateTagPrinter(Tag tag, Integer printerId) throws Exception {
+    public void updateTagPrinter(Tag tag, Integer printerId) throws SSException {
         //修改该分类信息
         updateTag(tag);
         //修改与打印机关联表
@@ -162,7 +157,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void delTagPrinter(int tagId) throws Exception {
+    public void delTagPrinter(int tagId) throws SSException {
         //删除该分类
         delById(tagId);
         //删除与打印机关联表

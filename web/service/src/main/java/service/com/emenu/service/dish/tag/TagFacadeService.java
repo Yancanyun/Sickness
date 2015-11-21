@@ -70,7 +70,7 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listAllByTagId(int tagId) throws Exception;
+    public List<Tag> listAllByTagId(int tagId) throws SSException;
 
     /**
      * 获取菜品的分类List
@@ -79,7 +79,7 @@ public interface TagFacadeService {
      * @return List<TagDto>
      * @throws Exception
      */
-    public List<TagDto> listDishByCurrentId(Integer tagId) throws Exception;
+    public List<TagDto> listDishByCurrentId(Integer tagId) throws SSException;
 
     /**
      * 给打印机显示菜品分类的列表，不用分层级
@@ -87,7 +87,7 @@ public interface TagFacadeService {
      * @return List<Tag>
      * @throws Exception
      */
-    public List<Tag> listDishTagForPrinter() throws Exception;
+    public List<Tag> listDishTagForPrinter() throws SSException;
 
     /**
      * 新增菜品分类以及打印机关联
@@ -95,7 +95,7 @@ public interface TagFacadeService {
      * @param printerId
      * @throws SSException
      */
-    public Tag newTagPrinter(Tag tag, Integer printerId) throws Exception;
+    public Tag newTagPrinter(Tag tag, Integer printerId) throws SSException;
 
     /**
      * 修改菜品分类以及打印机关联
@@ -103,13 +103,13 @@ public interface TagFacadeService {
      * @param printerId
      * @throws SSException
      */
-    public void updateTagPrinter(Tag tag, Integer printerId) throws Exception;
+    public void updateTagPrinter(Tag tag, Integer printerId) throws SSException;
 
     /**
      * 删除菜品分类以及打印机关联
      * @param tagId
      * @throws SSException
      */
-    public void delTagPrinter(int tagId) throws Exception;
+    public void delTagPrinter(int tagId) throws SSException;
 
 }

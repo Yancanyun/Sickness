@@ -7,6 +7,7 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.TagMapper;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,39 +42,49 @@ public class TagCacheServiceImpl implements TagCacheService {
      */
     @Override
     @PostConstruct
-    public void initCache() throws Exception {
-        //获取所有的类别
-        List<Tag> tagList = tagMapper.listAll();
-        //第一次遍历，初始化所有DTO
-        for (Tag tag : tagList){
-            TagDto tagDto = new TagDto();
-            tagDto.setTag(tag);
-            tagCache.put(tag.getId(), tagDto);
-        }
-        // 第二次遍历，设置儿子属性
-        for (Tag tag : tagList){
-            //如果pid为0则表示无父亲节点
-            if (tag.getpId() == 0 || tag.getpId() < 0) {
-                continue;
+    public void initCache() throws SSException {
+        try {
+            //获取所有的类别
+            List<Tag> tagList = tagMapper.listAll();
+            //第一次遍历，初始化所有DTO
+            for (Tag tag : tagList) {
+                TagDto tagDto = new TagDto();
+                tagDto.setTag(tag);
+                tagCache.put(tag.getId(), tagDto);
             }
-            //否则获取该节点父亲节点的DTO，把该节点放到父亲节点的childrenTagMap中
-            TagDto tagDto = tagCache.get(tag.getpId());
-            if(tagDto !=null){
-                tagDto.addChildMap(tag);
-            }else {
-                throw SSException.get(EmenuException.TagIdError);
+            // 第二次遍历，设置儿子属性
+            for (Tag tag : tagList) {
+                //如果pid为0则表示无父亲节点
+                if (tag.getpId() == 0 || tag.getpId() < 0) {
+                    continue;
+                }
+                //否则获取该节点父亲节点的DTO，把该节点放到父亲节点的childrenTagMap中
+                TagDto tagDto = tagCache.get(tag.getpId());
+                if (tagDto != null) {
+                    tagDto.addChildMap(tag);
+                } else {
+                    throw SSException.get(EmenuException.TagIdError);
+                }
             }
+        } catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InitTagCacheFailed,e);
         }
     }
 
     @Override
-    public void refreshCache() throws Exception {
+    public void refreshCache() throws SSException {
         //刷新缓存即重新调用初始化缓存
-        initCache();
+        try {
+            initCache();
+        } catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.RefreshTagCacheFailed,e);
+        }
     }
 
     @Override
-    public Tag queryParentById(int tagId) throws Exception {
+    public Tag queryParentById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -93,59 +104,74 @@ public class TagCacheServiceImpl implements TagCacheService {
             return null;
         }
         //返回父亲节点Tag的克隆对象，防止内存数据被修改
-        return (Tag) parentTagDto.getTag().clone();
+        try {
+            return (Tag) parentTagDto.getTag().clone();
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelPrinterDishError, e);
+        }
     }
 
     @Override
-    public List<Tag> listChildrenById(int tagId) throws Exception {
+    public List<Tag> listChildrenById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         //如果该节点不存在则返回空
         TagDto tagDto = tagCache.get(tagId);
         if(tagDto == null) {
-            return null;
+            return Collections.emptyList();
         }
-        //获取儿子节点的Map
-        Map<TagChildDto,Integer> tagChildDtoMap = tagDto.getChildrenTagMap();
-        //非空判断
-        if(tagChildDtoMap == null || tagChildDtoMap.isEmpty()){
-            return null;
+        try {
+            //获取儿子节点的Map
+            Map<TagChildDto, Integer> tagChildDtoMap = tagDto.getChildrenTagMap();
+            //非空判断
+            if (tagChildDtoMap == null || tagChildDtoMap.isEmpty()) {
+                return Collections.emptyList();
+            }
+            List<Tag> childTagList = new ArrayList<Tag>();
+            for (Integer childTagId : tagChildDtoMap.values()) {
+                Tag tag = tagCache.get(childTagId).getTag();
+                childTagList.add((Tag) tag.clone());
+            }
+            return childTagList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListChildrenTagFailed, e);
         }
-        List<Tag> childTagList = new ArrayList<Tag>();
-        for(Integer childTagId : tagChildDtoMap.values()){
-            Tag tag = tagCache.get(childTagId).getTag();
-            childTagList.add((Tag) tag.clone());
-        }
-        return childTagList;
     }
 
     @Override
-    public List<Tag> listGrandsonById(int tagId) throws Exception {
+    public List<Tag> listGrandsonById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         //如果该节点不存在则返回空
         TagDto tagDto = tagCache.get(tagId);
         if(tagDto == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<Tag> tagList = new ArrayList<Tag>();
         //获取儿子节点
-        List<Tag> childrenTagList = listChildrenById(tagId);
-        for(Tag childrenTag : childrenTagList){
-            List<Tag> grandsonTagList = listChildrenById(childrenTag.getId());
-            if(grandsonTagList!=null) {
-                for (Tag grandsonTag : grandsonTagList) {
-                    tagList.add((Tag) grandsonTag.clone());
+        try {
+            List<Tag> childrenTagList = listChildrenById(tagId);
+            for (Tag childrenTag : childrenTagList) {
+                List<Tag> grandsonTagList = listChildrenById(childrenTag.getId());
+                if (grandsonTagList != null) {
+                    for (Tag grandsonTag : grandsonTagList) {
+                        tagList.add((Tag) grandsonTag.clone());
+                    }
                 }
             }
+            return tagList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListGrandsonTagFailed, e);
         }
-        return tagList;
     }
 
     @Override
-    public Tag queryRootById(int tagId) throws Exception {
+    public Tag queryRootById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -154,66 +180,84 @@ public class TagCacheServiceImpl implements TagCacheService {
             return null;
         }
         //获取根节点的Tag
-        while(tagCache.get(tagId).getTag().getpId() != 0){
-            tagId = tagCache.get(tagId).getTag().getpId();
+        try {
+            while(tagCache.get(tagId).getTag().getpId() != 0){
+                tagId = tagCache.get(tagId).getTag().getpId();
+            }
+            return (Tag) tagCache.get(tagId).getTag().clone();
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagRootFailed, e);
         }
-        return (Tag) tagCache.get(tagId).getTag().clone();
     }
 
     @Override
-    public List<Tag> listAllRootByType(int type) throws Exception {
+    public List<Tag> listAllRoot() throws SSException {
         List<Tag> rootTagList = new ArrayList<Tag>();
-        if(type == 0 ) {
+        try {
             for (TagDto tagDto : tagCache.values()) {
                 Tag tag = tagDto.getTag();
                 if (tag.getpId() == 0) {
-                    rootTagList.add((Tag)tag.clone());
+                    rootTagList.add((Tag) tag.clone());
                 }
             }
-        }else {
-            for (TagDto tagDto : tagCache.values()) {
-                Tag tag = tagDto.getTag();
-                if (tag.getpId() == 0) {
-                    rootTagList.add((Tag)tag.clone());
-                }
-            }
+            //按权重进行排序
+            Collections.sort(rootTagList);
+            return rootTagList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTagRootFailed, e);
         }
-        //按权重进行排序
-        Collections.sort(rootTagList);
-        return rootTagList;
     }
 
     @Override
-    public List<Tag> listAll() throws Exception {
+    public List<Tag> listAll() throws SSException {
         //获取所有根节点
-        List<Tag> tagRootList = listAllRootByType(0);
+        List<Tag> tagRootList = listAll();
         List<Tag> tagList = new ArrayList<Tag>();
-        for (Tag tag : tagRootList){
-            tagList = dfsTagById(tag.getId(), tagList);
+        try {
+            for (Tag tag : tagRootList) {
+                tagList = dfsTagById(tag.getId(), tagList);
+            }
+            return tagList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTagFailed,e);
         }
-        return tagList;
     }
 
     @Override
-    public List<Tag> listByCurrentId(int tagId) throws Exception {
+    public List<Tag> listByCurrentId(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         List<Tag> tagList = new ArrayList<Tag>();
-        return dfsTagById(tagId, tagList);
+        try {
+            return dfsTagById(tagId, tagList);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTagFailed,e);
+        }
     }
 
     @Override
-    public List<TagDto> listDtoByCurrentId(int tagId) throws Exception{
-        return dfslistById(tagId);
+    public List<TagDto> listDtoByCurrentId(int tagId) throws SSException{
+        try {
+            return dfslistById(tagId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTagFailed,e);
+        }
     }
+
+
     /**
      * 递归遍历该节点下的子节点组成嵌套List
      * @param tagId
      * @return
      * @throws Exception
      */
-    private List<TagDto> dfslistById(int tagId) throws Exception{
+    private List<TagDto> dfslistById(int tagId) throws SSException{
         List<Tag> tagList = listChildrenById(tagId);
         List<TagDto> tagDtoList = new ArrayList<TagDto>();
         if(tagList != null && tagList.size() > 0) {
@@ -229,32 +273,42 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
-    public Tag queryCloneById(int tagId) throws Exception {
+    public Tag queryCloneById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
-        TagDto tagDto = tagCache.get(tagId);
-        return tagDto == null ? null : (Tag) tagDto.getTag().clone();
+        try {
+            TagDto tagDto = tagCache.get(tagId);
+            return tagDto == null ? null : (Tag) tagDto.getTag().clone();
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed,e);
+        }
     }
 
     @Override
-    public Tag newTag(Tag tag) throws Exception {
+    public Tag newTag(Tag tag) throws SSException {
         if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
             throw SSException.get(EmenuException.TagIdError);
         }
-        //获取父亲节点
-        TagDto parentTagDto = tagCache.get(tag.getpId());
-        TagDto tagDto = new TagDto();
-        tagDto.setTag(tag);
-        //把添加的Tag放到缓存中
-        tagCache.put(tag.getId(), tagDto);
-        //把新的Tag放到父Tag的儿子列表中
-        parentTagDto.addChildMap(tag);
-        return (Tag) tag.clone();
+        try {
+            //获取父亲节点
+            TagDto parentTagDto = tagCache.get(tag.getpId());
+            TagDto tagDto = new TagDto();
+            tagDto.setTag(tag);
+            //把添加的Tag放到缓存中
+            tagCache.put(tag.getId(), tagDto);
+            //把新的Tag放到父Tag的儿子列表中
+            parentTagDto.addChildMap(tag);
+            return (Tag) tag.clone();
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.NewTagFailed,e);
+        }
     }
 
     @Override
-    public void delById(int tagId) throws Exception {
+    public void delById(int tagId) throws SSException {
         if (!Assert.isNull(tagId) && Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -264,125 +318,81 @@ public class TagCacheServiceImpl implements TagCacheService {
         if(childrenMap != null && childrenMap.size() != 0 && !childrenMap.isEmpty()){
             throw SSException.get(EmenuException.TagChildrenIsNull);
         }
-        Integer pid = tagDto.getTag().getpId();
-        if(pid != 0){
-            TagDto fatherTagDto = tagCache.get(pid);
-            //删除父亲的key
-            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
+        try {
+            Integer pid = tagDto.getTag().getpId();
+            if (pid != 0) {
+                TagDto fatherTagDto = tagCache.get(pid);
+                //删除父亲的key
+                fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
+            }
+            //删除Tag
+            tagCache.remove(tagDto.getTag().getId());
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteTagFailed,e);
         }
-        //删除Tag
-        tagCache.remove(tagDto.getTag().getId());
     }
 
     @Override
-    public void updateTag(Tag tag) throws Exception {
+    public void updateTag(Tag tag) throws SSException {
         if (!Assert.isNull(tag.getId()) && Assert.lessOrEqualZero(tag.getId())) {
             throw SSException.get(EmenuException.TagIdError);
         }
         TagDto tagDto = tagCache.get(tag.getId());
-        if(tagDto != null){
-            if(tag.getName()!=null){
-                tagDto.getTag().setName(tag.getName());
+        try {
+            if (tagDto != null) {
+                if (tag.getName() != null) {
+                    updateName(tag.getId(), tag.getName());
+                }
+                if (tag.getWeight() != null) {
+                    updateWeight(tag.getId(), tag.getWeight());
+                }
+                if (tag.getpId() != null) {
+                    updatePid(tag.getId(), tag.getpId());
+                }
+                if (tag.getPrintAfterConfirmOrder() != null) {
+                    tagDto.getTag().setPrintAfterConfirmOrder(tag.getPrintAfterConfirmOrder());
+                }
+                if (tag.getMaxPrintNum() != null) {
+                    tagDto.getTag().setMaxPrintNum(tag.getMaxPrintNum());
+                }
+                if (tag.getTimeLimit() != null) {
+                    tagDto.getTag().setTimeLimit(tag.getTimeLimit());
+                }
             }
-            if(tag.getWeight()!=null){
-                updateWeight(tag.getId(), tag.getWeight());
-            }
-            if(tag.getpId()!=null){
-                updatePid(tag.getId(), tag.getpId());
-            }
-            if(tag.getPrintAfterConfirmOrder()!=null){
-                tagDto.getTag().setPrintAfterConfirmOrder(tag.getPrintAfterConfirmOrder());
-            }
-            if(tag.getMaxPrintNum()!=null){
-                tagDto.getTag().setMaxPrintNum(tag.getMaxPrintNum());
-            }
-            if(tag.getTimeLimit()!=null){
-                tagDto.getTag().setTimeLimit(tag.getTimeLimit());
-            }
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTagFailed,e);
         }
     }
 
     @Override
-    public void updateName(int tagId, String name) throws SSException{
-        if (Assert.lessOrEqualZero(tagId)) {
-            throw SSException.get(EmenuException.TagIdError);
-        }
-        TagDto tagDto = tagCache.get(tagId);
-        if(tagDto != null){
-            tagDto.getTag().setName(name);
-        }
-    }
-
-    @Override
-    public void updateWeight(int tagId, int weight) throws Exception{
-        if (Assert.lessOrEqualZero(tagId)) {
-            throw SSException.get(EmenuException.TagIdError);
-        }
-        TagDto tagDto = tagCache.get(tagId);
-        if(tagDto == null){
-            return ;
-        }
-        Integer pid = tagDto.getTag().getpId();
-        if(pid == 0){
-            tagDto.getTag().setWeight(weight);
-        }else {
-            Integer oldWeight = tagDto.getTag().getWeight();
-            TagDto pTagDto = tagCache.get(pid);
-            if(!oldWeight.equals(weight)){
-                //先删除以前的成员，再添加新的成员
-                pTagDto.removeChildMap(tagId, oldWeight);
-                tagDto.getTag().setWeight(weight);
-                pTagDto.addChildMap(tagDto.getTag());
-            }
-        }
-    }
-
-    @Override
-    public void updatePid(int tagId, int pId) throws Exception{
-        if (Assert.lessOrEqualZero(tagId)) {
-            throw SSException.get(EmenuException.TagIdError);
-        }
-        TagDto tagDto = tagCache.get(tagId);
-        if(tagDto == null){
-            return ;
-        }
-        TagDto fatherTagDto = tagCache.get(tagDto.getTag().getpId());
-        if(fatherTagDto == null){
-            return ;
-        }
-        if(pId != fatherTagDto.getTag().getId()){
-            //改变pid
-            tagDto.getTag().setpId(pId);
-            //父亲Tag删除key
-            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
-            //新父亲Tag添加key
-            TagDto newFatherTagDto = tagCache.get(pId);
-            newFatherTagDto.addChildMap(tagDto.getTag());
-        }
-    }
-
-    @Override
-    public void delCascadeById(int tagId) throws Exception {
+    public void delCascadeById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
         List<Tag> tagList = Collections.emptyList();
-        tagList = dfsTagById(tagId, tagList);
-        TagDto tagDto = tagCache.get(tagId);
-        Integer pid = tagDto.getTag().getpId();
-        if(pid != 0){
-            TagDto fatherTagDto = tagCache.get(pid);
-            //删除父亲的key
-            fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
-        }
-        //删除Tag
-        for(Tag tag : tagList){
-            tagCache.remove(tag.getId());
+        try {
+            tagList = dfsTagById(tagId, tagList);
+            TagDto tagDto = tagCache.get(tagId);
+            Integer pid = tagDto.getTag().getpId();
+            if (pid != 0) {
+                TagDto fatherTagDto = tagCache.get(pid);
+                //删除父亲的key
+                fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
+            }
+            //删除Tag
+            for (Tag tag : tagList) {
+                tagCache.remove(tag.getId());
+            }
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteTagFailed,e);
         }
     }
 
     @Override
-    public List<Tag> listPathById(int tagId) throws Exception {
+    public List<Tag> listPathById(int tagId) throws SSException {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);
         }
@@ -391,20 +401,25 @@ public class TagCacheServiceImpl implements TagCacheService {
         if(tagDto == null){
             return tagList;
         }
-        tagList.add((Tag) (tagDto.getTag().clone()));
-        if(tagCache.get(tagId).getTag().getpId() >= 0){
-            while (tagId != 0){
-                Tag tag = queryParentById(tagId);
-                if(tag != null){
-                    tagList.add(tag);
-                    tagId = tag.getId();
-                }else {
-                    tagId = 0;
+        try {
+            tagList.add((Tag) (tagDto.getTag().clone()));
+            if (tagCache.get(tagId).getTag().getpId() >= 0) {
+                while (tagId != 0) {
+                    Tag tag = queryParentById(tagId);
+                    if (tag != null) {
+                        tagList.add(tag);
+                        tagId = tag.getId();
+                    } else {
+                        tagId = 0;
+                    }
                 }
+                Collections.reverse(tagList);
             }
-            Collections.reverse(tagList);
+            return tagList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.listPathTagFailed,e);
         }
-        return tagList;
     }
 
     /**
@@ -424,4 +439,92 @@ public class TagCacheServiceImpl implements TagCacheService {
         return tagList;
     }
 
+    /**
+     * 根据ID修改分类名称
+     * @param tagId
+     * @param name
+     * @throws SSException
+     */
+    private void updateName(int tagId, String name) throws SSException{
+        if (Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        try {
+            TagDto tagDto = tagCache.get(tagId);
+            if (tagDto != null) {
+                tagDto.getTag().setName(name);
+            }
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTagFailed,e);
+        }
+    }
+
+    /**
+     * 根据ID修改分类权重
+     * @param tagId
+     * @param weight
+     * @throws SSException
+     */
+    private void updateWeight(int tagId, int weight) throws SSException{
+        if (Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        TagDto tagDto = tagCache.get(tagId);
+        if(tagDto == null){
+            return ;
+        }
+        try {
+            Integer pid = tagDto.getTag().getpId();
+            if (pid == 0) {
+                tagDto.getTag().setWeight(weight);
+            } else {
+                Integer oldWeight = tagDto.getTag().getWeight();
+                TagDto pTagDto = tagCache.get(pid);
+                if (!oldWeight.equals(weight)) {
+                    //先删除以前的成员，再添加新的成员
+                    pTagDto.removeChildMap(tagId, oldWeight);
+                    tagDto.getTag().setWeight(weight);
+                    pTagDto.addChildMap(tagDto.getTag());
+                }
+            }
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTagFailed,e);
+        }
+    }
+
+    /**
+     * 根据ID修改分类父亲节点
+     * @param tagId
+     * @param pId
+     * @throws SSException
+     */
+    private void updatePid(int tagId, int pId) throws SSException{
+        if (Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        TagDto tagDto = tagCache.get(tagId);
+        if(tagDto == null){
+            return ;
+        }
+        TagDto fatherTagDto = tagCache.get(tagDto.getTag().getpId());
+        if(fatherTagDto == null){
+            return ;
+        }
+        try {
+            if (pId != fatherTagDto.getTag().getId()) {
+                //改变pid
+                tagDto.getTag().setpId(pId);
+                //父亲Tag删除key
+                fatherTagDto.removeChildMap(tagId, tagDto.getTag().getWeight());
+                //新父亲Tag添加key
+                TagDto newFatherTagDto = tagCache.get(pId);
+                newFatherTagDto.addChildMap(tagDto.getTag());
+            }
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTagFailed,e);
+        }
+    }
 }
