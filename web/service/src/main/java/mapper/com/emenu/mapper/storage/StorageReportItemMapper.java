@@ -44,6 +44,13 @@ public interface StorageReportItemMapper {
      */
     public List<StorageReportItem> listByReportIdAndItemIdList(@Param("reportId")int reportId, @Param("itemIdList")List<Integer> itemIdList) throws Exception;
 
+    /**
+     * 根据reportId删除单据详情
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public boolean delByReportId(@Param("id")int id) throws Exception;
 }
 
 

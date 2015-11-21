@@ -81,10 +81,12 @@
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime FROM t_storage_report
         <where>
+            <if test="depotIdList != null and depotIdList.size()>0">
             `depot_id` IN
             <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
                 #{depotId}
             </foreach>
+            </if>
             <if test="startTime != null">
                 AND `created_time` &gt;= #{startTime}
             </if>
@@ -95,7 +97,36 @@
         ORDER BY `created_time` DESC;
     </select>
 
+    <delete id="delById" parameterType="int" >
+        DELETE FROM `t_storage_report` WHERE `id` = #{id}
+    </delete>
 
+    <select id="countReport" resultType="int">
+        SELECT count(1) FROM `t_storage_report`
+    </select>
+
+<!--    <select id="listByTime" resultMap="pw.StorageReport">
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime FROM t_storage_report
+        <where>
+            <if test="startTime != null">
+                AND `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY `created_time` DESC;
+    </select>-->
    <!-- <select id="ListStorageReportDtoUnsettle"  resultMap="pw.StorageReport">
         SELECT * from t_storage_report WHERE `created_time` <= #{endTime} and status = 1
     </select>-->

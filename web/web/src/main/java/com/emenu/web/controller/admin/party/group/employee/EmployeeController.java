@@ -370,6 +370,7 @@ public class EmployeeController  extends AbstractController {
     @ResponseBody
     public JSONObject checkLoginName(@RequestParam("partyId")Integer partyId,@RequestParam("loginName")String loginName){
         try {
+            //添加页重名检查
             if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
                 if(securityUserService.checkLoginNameIsExist(loginName)){
                     return sendJsonObject(AJAX_FAILURE_CODE);
@@ -377,6 +378,7 @@ public class EmployeeController  extends AbstractController {
                     return sendJsonObject(AJAX_SUCCESS_CODE);
                 }
             }
+            //编辑页重名检查
             if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
                 SecurityUser securityUser = securityUserService.queryByLoginName(loginName);
                 if (partyId == securityUser.getPartyId()){

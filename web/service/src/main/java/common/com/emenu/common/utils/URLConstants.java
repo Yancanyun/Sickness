@@ -73,6 +73,8 @@ public final class URLConstants {
     // 库存分类管理
     public static final String ADMIN_STORAGE_TAG_URL = "admin/storage/tag";
 
+    public static final String ADMIN_STORAGE_REPORT_URL = "admin/storage/report";
+
     //存放点管理
     public static final String ADMIN_STORAGE_DEPOT = "admin/storage/depot";
 

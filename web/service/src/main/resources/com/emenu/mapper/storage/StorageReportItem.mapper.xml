@@ -28,4 +28,8 @@
                 ORDER BY `created_time` DESC
         </select>
 
+        <delete id="delByReportId" parameterType="int">
+                DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
+        </delete>
+
 </mapper>

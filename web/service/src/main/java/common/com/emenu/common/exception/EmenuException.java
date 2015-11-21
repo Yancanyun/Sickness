@@ -258,6 +258,8 @@ public enum EmenuException implements IBizExceptionMes {
     QueryStorageReportFail("获取单据信息失败",7021),
     UpdateStorageReportFail("修改单据信息失败",7022),
     UpdateStorageReportItemFail("修改单据详情失败",7023),
+    DelReportOrItemFail("删除单据或单据详情失败",7024),
+    CountReportFail("统计单据失败",7025),
 
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7024),

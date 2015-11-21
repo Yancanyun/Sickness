@@ -11,6 +11,7 @@ import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -224,20 +225,34 @@ public class ReportTest extends AbstractTestCase{
 
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
 
-        Date startTime = new Date("2015/01/01");
+       /* Date startTime = new Date("2015/01/01");
 
-        Date endTime = new Date("2015/12/31");
+        Date endTime = new Date("2015/12/31");*/
 
         List<Integer> deportIdList = new ArrayList<Integer>();
-        deportIdList.add(2);
-        deportIdList.add(3);
+        //deportIdList.add(2);
+        //deportIdList.add(3);
 
         List<Integer> tagIdList = new ArrayList<Integer>();
-        tagIdList.add(33);
+        //tagIdList.add(33);
 
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startTime, endTime, deportIdList, tagIdList);
+        if(Assert.isNull(StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(null, null, deportIdList, tagIdList))){
+            System.out.println("nihao");
+        }
 
-        System.out.println("nihao");
+
+    }
+
+    @Test
+    public void count() throws SSException{
+
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+
+        if(idList.size()==0){
+            System.out.println("hello");
+        }
+
+        //System.out.println(storageReportService.countReport());
     }
 
 }

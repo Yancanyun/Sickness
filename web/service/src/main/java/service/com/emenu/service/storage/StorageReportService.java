@@ -136,4 +136,35 @@ public interface StorageReportService {
                                                                    List<Integer> depotIdList,
                                                                    List<Integer> tagIdList) throws SSException;
 
+    /**
+     * 根据reportId删除单据和单据详情
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public boolean delReportDtoById(int id) throws SSException;
+
+    /**
+     * 根据单据id删除单据
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public boolean delById(int id) throws SSException;
+
+    /**
+     * 修改单据和单据详情
+     * @param storageReportDto
+     * @return
+     */
+    public boolean updateStorageReportDto(StorageReportDto storageReportDto) throws SSException;
+
+    /**
+     * 统计单据数量
+     * @return
+     * @throws SSException
+     */
+    public int countReport() throws SSException;
+
+
 }

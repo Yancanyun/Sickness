@@ -103,4 +103,22 @@ public interface StorageReportMapper {
                                                  @Param("endTime")Date endTime,
                                                  @Param("depotIdList")List<Integer> depotIdList) throws Exception;
 
+    /**
+     * 根据单据id删除单据
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public boolean delById(@Param("id")int id) throws Exception;
+
+    /**
+     * 统计单据数量
+     * @return
+     * @throws Exception
+     */
+    public int countReport() throws Exception;
+
+    public List<StorageReport> listByTime(@Param("startTime")Date startTime,
+                                                 @Param("endTime")Date endTime) throws Exception;
+
 }

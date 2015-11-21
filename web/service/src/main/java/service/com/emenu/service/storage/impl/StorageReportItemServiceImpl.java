@@ -118,6 +118,21 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         }
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean delByReportId(int id) throws SSException {
+        try {
+              if (Assert.lessOrEqualZero(id)){
+                  return false;
+              }
+            storageReportItemMapper.delByReportId(id);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelReportOrItemFail, e);
+        }
+    }
+
     private boolean checkStorageReportItemBeforeSave(StorageReportItem storageReportItem) throws SSException{
 
         if (Assert.isNull(storageReportItem)){

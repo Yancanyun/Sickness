@@ -62,5 +62,11 @@ public interface StorageReportItemService {
      */
     public List<StorageReportItem> listByReportIdAndItemIdList(int reportId,List<Integer> itemIdList) throws SSException;
 
-
+    /**
+     * 根据单据id删除单据详情
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public boolean delByReportId(int id) throws SSException;
 }

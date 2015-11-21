@@ -194,19 +194,6 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
     }
 
-  /*  @Override
-    public List<StorageReportDto> ListStorageReportDtoUnsettle(Date endTime) throws SSException {
-        List<StorageReportDto> storageReportList = Collections.emptyList();
-        try {
-            storageReportList = storageReportMapper.ListStorageReportDtoUnsettle(endTime);
-       } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListStorageReportFail, e);
-        }
-
-
-    }*/
-
     @Override
     public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException {
         int offset = page * pageSize;
@@ -398,6 +385,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
 
         try {
+            //根据tagId获取分类下的物品
             StorageItemSearchDto searchDto = new StorageItemSearchDto();
             searchDto.setTagIdList(tagIdList);
 
@@ -437,6 +425,65 @@ public class StorageReportServiceImpl implements StorageReportService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListStorageReportFail, e);
         }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean delReportDtoById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                return false;
+            }
+            this.delById(id);
+            storageReportItemService.delByReportId(id);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelReportOrItemFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean delById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                return false;
+            }
+            storageReportMapper.delById(id);
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelReportOrItemFail, e);
+        }
+
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean updateStorageReportDto(StorageReportDto storageReportDto) throws SSException {
+        try {
+            if (Assert.isNull(storageReportDto)){
+                return false;
+            }
+            delReportDtoById(storageReportDto.getStorageReport().getId());
+            this.newReportAndReportItem(storageReportDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+        return false;
+    }
+
+    @Override
+    public int countReport() throws SSException {
+        try {
+            storageReportMapper.countReport();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountReportFail, e);
+        }
+        return 0;
     }
 
 }
