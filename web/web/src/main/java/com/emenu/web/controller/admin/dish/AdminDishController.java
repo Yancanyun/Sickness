@@ -11,6 +11,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ConstantEnum;
@@ -100,6 +101,7 @@ public class AdminDishController extends AbstractController {
             jsonObject.put("price", dish.getPrice());
             jsonObject.put("salePrice", dish.getSalePrice());
             jsonObject.put("status", dish.getStatus());
+            jsonObject.put("likeNums", dish.getLikeNums());
 
             jsonArray.add(jsonObject);
         }
@@ -199,6 +201,40 @@ public class AdminDishController extends AbstractController {
         return "redirect:" + redirectUrl;
     }
 
+    /**
+     * ajax删除
+     *
+     * @param id
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishDelete)
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSON ajaxDelete(@PathVariable("id") Integer id) {
+        try {
+            dishService.delById(id);
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
+    @RequestMapping(value = "ajax/status/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSON ajaxUpdateStatus(@PathVariable("id") Integer id,
+                                 @RequestParam("status") Integer status) {
+        try {
+            dishService.updateStatusById(id, DishStatusEnums.valueOf(status));
+        } catch (SSException e) {
+        	LogClerk.errLog.error(e);
+        	return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
 
     /**
      * 进入添加页和编辑页之前，添加一些数据到model里

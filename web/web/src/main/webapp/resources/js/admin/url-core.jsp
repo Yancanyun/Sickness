@@ -103,7 +103,8 @@
             ['delUnit', site.staticWebsite + 'admin/dish/unit/ajax/&{id}', 'delete', '删除单位'],
 
             //菜品管理--列表
-            ['delDish', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除菜品'],
+            ['delDish', site.website + 'admin/dish/ajax/&{id}', 'delete', '删除菜品'],
+            ['changeDishStatus', site.website + 'admin/dish/ajax/status/&{id}', 'put', '编辑菜品状态'],
             ['sendClassLinkage', site.staticWebsite + 'mock/admin/big-classify.json', 'get', '发送菜品分类联动id,获取菜品小分类'],
             ['sendUnitLinkage', site.staticWebsite + 'mock/admin/small-classify.json', 'get', '发送计量单位联动id,获取计量单位'],
             ['getIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '获取原材料'],

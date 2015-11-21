@@ -19,6 +19,7 @@
             dish.`category_id` AS categoryId,
             dish.`tag_id` AS tagId,
             dish.`description` AS description,
+            dish.`status` AS status,
             dish.`like_nums` AS likeNums,
             dish.`is_network_available` AS isNetworkAvailable,
             dish.`is_vip_price_available` AS isVipPriceAvailable,
@@ -29,6 +30,7 @@
             dish.`last_modified_time` AS lastModifiedTime
         FROM `t_dish` dish
         LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
+        WHERE dish.`status` != 3
         ORDER BY dish.`id` DESC
     </select>
     
@@ -47,6 +49,7 @@
             dish.`category_id` AS categoryId,
             dish.`tag_id` AS tagId,
             dish.`description` AS description,
+            dish.`status` AS status,
             dish.`like_nums` AS likeNums,
             dish.`is_network_available` AS isNetworkAvailable,
             dish.`is_vip_price_available` AS isVipPriceAvailable,
@@ -68,9 +71,10 @@
             <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
                 AND dish.`tag_id` IN
                 <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
-                    #{tagid}
+                    #{tagId}
                 </foreach>
             </if>
+            AND dish.`status` != 3
         </where>
         ORDER BY dish.`id` DESC
         <if test="offset >= 0 and searchDto.pageSize > 0">
@@ -92,9 +96,10 @@
             <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
                 AND `tag_id` IN
                 <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
-                    #{tagid}
+                    #{tagId}
                 </foreach>
             </if>
+            AND `status` != 3
         </where>
     </select>
 
@@ -119,6 +124,7 @@
             dish.`category_id` AS categoryId,
             dish.`tag_id` AS tagId,
             dish.`description` AS description,
+            dish.`status` AS status,
             dish.`like_nums` AS likeNums,
             dish.`is_network_available` AS isNetworkAvailable,
             dish.`is_vip_price_available` AS isVipPriceAvailable,

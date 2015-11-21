@@ -7,7 +7,7 @@
     <a class="left-toggle pull-left" href="javascript:;">
         <i class="fa fa-bars"></i>
     </a>
-    <a class="pull-left logo-text menu-list-logo" href="javascript:;"><i class="fa fa-cutlery"></i>&nbsp;餐饮后台管理</a>
+    <a class="pull-left logo-text menu-list-logo" href="${website}admin"><i class="fa fa-cutlery"></i>&nbsp;餐饮后台管理</a>
     <a class="pull-right header-menu" href="javascript:;"><i class="fa fa-bars"></i>&nbsp;</a>
     <ul class="nav navbar-nav">
         <li

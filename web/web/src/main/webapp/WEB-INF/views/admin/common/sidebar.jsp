@@ -52,10 +52,10 @@
                 class="fa fa-angle-right angle-right"></i></a>
         <ul>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Unit:List'}">class="active" </c:if>>
-                <a class="J_menu" href="javascript:;">菜品单位管理</a>
+                <a class="J_menu" href="${website}admin/dish/unit">菜品单位管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Tag:List'}">class="active" </c:if>>
-                <a class="J_menu" href="javascript:;">菜品分类管理</a>
+                <a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Dish'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish">菜品管理<i class="fa fa-angle-right angle-right"></i></a>
