@@ -64,25 +64,35 @@
 
     <select id="listStorageItemByDepotAndTag" resultMap="pw.StorageItem">
         SELECT DISTINCT t_storage_item.*
-        FROM t_storage_report_item,t_storage_report,t_storage_item
-        WHERE t_storage_report.`id` = t_storage_report_item.`report_id`
-        AND t_storage_report_item.`item_id`=t_storage_item.`id`
-        <if test="depotIds!= null">
-        AND t_storage_report.`depot_id` IN
-        <foreach collection="depotIds" item="depotId" index="index"
-                 open="(" separator="," close=")">#{depotId}
-        </foreach>
+        FROM t_storage_item
+        <if test="depotIds!=null and depotIds.size()!=0 and tagIds!=null and tagIds.size()!=0">
+        ,t_storage_report,t_storage_report_item
         </if>
-        <if test="tagIds!=null">
-        AND t_storage_item.`tag_id` IN
-        <foreach collection="tagIds" item="tagId" index="index"
-                 open="(" separator="," close=")">#{tagId}
-        </foreach>
-        </if>
-        <if test="keyword!=null">
-        AND (t_storage_item.`name` LIKE '%#{keyword}%'
-            OR t_storage_item.`assistant_code` LIKE '%#{keyword}%'
-            OR t_storage_item.`item_number` LIKE '%#{keyword}%')
-        </if>
+        <where>
+            <if test="depotIds!=null and depotIds.size()!=0 and tagIds!=null and tagIds.size()!=0">
+            t_storage_report.`id` = t_storage_report_item.`report_id`
+            AND t_storage_report_item.`item_id`=t_storage_item.`id`
+            </if>
+            <if test="depotIds!=null and depotIds.size()!=0">
+            AND t_storage_report.`depot_id` IN
+                <foreach collection="depotIds" item="depotId"  open="(" separator="," close=")">
+                #{depotId}
+                </foreach>
+            </if>
+            <if test="tagIds!=null and tagIds.size()!=0">
+            AND t_storage_item.`tag_id` IN
+                <foreach collection="tagIds" item="tagId" index="index" open="(" separator="," close=")">
+                #{tagId}
+                </foreach>
+            </if>
+            <if test="keyword != null">
+            AND (t_storage_item.`name` LIKE '%#{keyword}%'
+                OR t_storage_item.`assistant_code` LIKE '%#{keyword}%'
+                OR t_storage_item.`item_number` LIKE '%#{keyword}%')
+            </if>
+            <if test="offset!=null and offset!=0 and pageSize!=null and pageSize!=0">
+            LIMIT #{offset},#{pageSize}
+            </if>
+        </where>
     </select>
 </mapper>

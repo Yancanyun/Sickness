@@ -2,6 +2,7 @@ package com.emenu.service.storage;
 
 import com.emenu.common.dto.storage.StorageCheckDto;
 import com.emenu.common.dto.storage.StorageSupplierDto;
+import com.emenu.common.entity.storage.StorageSettlementItem;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.Date;
@@ -38,8 +39,8 @@ public interface StorageSettlementService {
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
                                                      String keyword,
-                                                     int curPage,
-                                                     int pageSize) throws Exception;
+                                                     Integer curPage,
+                                                     Integer pageSize) throws Exception;
     /**
      * 结算中心
      * @param supplierId

@@ -111,25 +111,44 @@ public class SettlementTest extends AbstractTestCase{
 
     @Test
     public void listSettlementCheck() throws Exception {
-        String startDateStr = "2015/11/01";
-        String endDateStr = "2015/11/20";
+        String startDateStr = "2015/11/23";
+        String endDateStr = "2015/11/30";
         //注意format的格式要与日期String的格式相匹配
         DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date startDate = sdf.parse(startDateStr);
         Date endDate = sdf.parse(endDateStr);
         List<Integer> depotIds = new ArrayList<Integer>();
         List<Integer> tagIds = new ArrayList<Integer>();
-//        Integer itemId = 0;
-//        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,itemId);
-//        for(StorageCheckDto storageCheckDto : storageCheckDtoList){
-//            System.out.println(storageCheckDto.getName());
-//        }
-        List<StorageReportDto> storageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
-        for(StorageReportDto storageReportDto : storageReportDtoList){
-            for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
-                System.out.println(storageReportItem.getComment());
-            }
+        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,null,1,20);
+        for(StorageCheckDto storageCheckDto : storageCheckDtoList){
+            System.out.println(storageCheckDto.getItemName());
         }
 
+//        List<StorageSettlementItem> storageSettlementItemList = storageSettlementService.listSettlementItemByDate(startDate,depotIds,tagIds,null,null,null);
+//        for (StorageSettlementItem storageSettlementItem : storageSettlementItemList){
+//            System.out.println(storageSettlementItem.getItemId());
+//        }
+    }
+
+
+    @Test
+    public void listStorageReportDtoByCondition2() throws ParseException, SSException {
+        String startDateStr = "2015/11/01";
+        String endDateStr = "2015/11/30";
+        //注意format的格式要与日期String的格式相匹配
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Date startDate = sdf.parse(startDateStr);
+        Date endDate = sdf.parse(endDateStr);
+        List<Integer> depotIds = new ArrayList<Integer>();
+        List<Integer> tagIds = new ArrayList<Integer>();
+        List<StorageReportDto> storageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
+        if(storageReportDtoList!=null) {
+            for (StorageReportDto storageReportDto : storageReportDtoList) {
+                System.out.println(storageReportDto.getStorageReport().getComment());
+                for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
+                    System.out.println(storageReportItem.getItemId());
+                }
+            }
+        }
     }
 }
