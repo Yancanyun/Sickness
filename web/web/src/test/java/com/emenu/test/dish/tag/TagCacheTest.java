@@ -183,4 +183,12 @@ public class TagCacheTest extends AbstractTestCase{
             System.out.println(tag.getName());
         }
     }
+
+    @Test
+    public void listGrandsonById() throws Exception {
+        List<Tag> tagList = tagFacadeService.listAllByTagId(TagEnum.DishAndGoods.getId());
+        for(Tag tag :tagList){
+            System.out.println(tag.getName()+"   "+tag.getWeight());
+        }
+    }
 }

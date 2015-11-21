@@ -43,6 +43,14 @@ public interface TagCacheService {
     public List<Tag> listChildrenById(int tagId) throws Exception;
 
     /**
+     * 根据TagId得到所有孙子节点——按权重排序
+     * @param tagId
+     * @return
+     * @throws Exception
+     */
+    public List<Tag> listGrandsonById(int tagId) throws Exception;
+
+    /**
      * 根据tagId查询根节点
      * @param tagId
      * @return Tag

@@ -121,6 +121,30 @@ public class TagCacheServiceImpl implements TagCacheService {
     }
 
     @Override
+    public List<Tag> listGrandsonById(int tagId) throws Exception {
+        if (Assert.lessOrEqualZero(tagId)) {
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        //如果该节点不存在则返回空
+        TagDto tagDto = tagCache.get(tagId);
+        if(tagDto == null) {
+            return null;
+        }
+        List<Tag> tagList = new ArrayList<Tag>();
+        //获取儿子节点
+        List<Tag> childrenTagList = listChildrenById(tagId);
+        for(Tag childrenTag : childrenTagList){
+            List<Tag> grandsonTagList = listChildrenById(childrenTag.getId());
+            if(grandsonTagList!=null) {
+                for (Tag grandsonTag : grandsonTagList) {
+                    tagList.add((Tag) grandsonTag.clone());
+                }
+            }
+        }
+        return tagList;
+    }
+
+    @Override
     public Tag queryRootById(int tagId) throws Exception {
         if (Assert.lessOrEqualZero(tagId)) {
             throw SSException.get(EmenuException.TagIdError);

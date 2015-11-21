@@ -4,11 +4,13 @@ import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.dish.tag.TagCacheService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
+import com.emenu.service.other.ConstantService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.pandawork.core.common.exception.SSException;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -43,6 +46,9 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Autowired
     private DishTagPrinterService dishTagPrinterService;
+
+    @Autowired
+    private ConstantService constantService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
@@ -87,7 +93,14 @@ public class TagFacadeServiceImpl implements TagFacadeService {
 
     @Override
     public List<Tag> listAllByTagId(int tagId) throws Exception {
-        return tagCacheService.listByCurrentId(tagId);
+        List<Tag> tagList = Collections.emptyList();
+        String categoryLayer = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+        if(categoryLayer.equals("2")){
+            tagList = tagCacheService.listChildrenById(tagId);
+        }else if (categoryLayer.equals("3")){
+            tagList = tagCacheService.listGrandsonById(tagId);
+        }
+        return tagList;
     }
 
     @Override

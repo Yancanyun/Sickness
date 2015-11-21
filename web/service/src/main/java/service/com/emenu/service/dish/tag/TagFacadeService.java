@@ -63,7 +63,9 @@ public interface TagFacadeService {
     public List<TagDto> listByCurrentId(int tagId) throws Exception;
 
     /**
-     * 根据tagId获取所有子节点一直到叶子节点
+     * 根据tagId和常量参数获取所有子节点
+     * 如果常量级数为2只获取二级菜单
+     * 如果常量级数为3只获取三级菜单
      * @param tagId
      * @return
      * @throws SSException
