@@ -209,7 +209,15 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public DishDto queryById(int id) throws SSException {
-        return null;
+        if (Assert.lessOrEqualZero(id)) {
+            return null;
+        }
+        try {
+            return dishMapper.queryById(id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishQueryFailed, e);
+        }
     }
 
     private boolean checkBeforeSave(DishDto dishDto) throws SSException {
