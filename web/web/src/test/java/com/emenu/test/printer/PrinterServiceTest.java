@@ -76,7 +76,7 @@ public class PrinterServiceTest extends AbstractTestCase{
 
     @Test
     public void delPrinterDish() throws SSException {
-        dishTagPrinterService.delPrinterDish(24);
+        dishTagPrinterService.delPrinterDish(9, 1);
     }
 
     @Test
@@ -97,7 +97,7 @@ public class PrinterServiceTest extends AbstractTestCase{
     public void updatePrinter() throws SSException{
         Printer printer = new Printer();
         printer.setId(1);
-        printerService.updatePrinter(printer);
+        printerService.updatePrinter(printer, null);
     }
 
     @Test
@@ -134,5 +134,14 @@ public class PrinterServiceTest extends AbstractTestCase{
         for (PrinterBrandEnums enums : brandEnumsList){
             System.out.println(enums.getId() + ":    " + enums.getDescription());
         }
+    }
+
+    @Test
+    public void newDishTagPrinter() throws SSException{
+        DishTagPrinter dishTagPrinter = new DishTagPrinter();
+        dishTagPrinter.setDishId(9);
+        dishTagPrinter.setPrinterId(3);
+        dishTagPrinter.setType(1);
+        dishTagPrinterService.newPrinterDish(dishTagPrinter);
     }
 }

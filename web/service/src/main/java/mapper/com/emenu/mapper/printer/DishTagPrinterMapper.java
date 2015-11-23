@@ -70,9 +70,10 @@ public interface DishTagPrinterMapper {
     /**
      * 删除菜品与打印机关联
      * @param tagId
+     * @param type
      * @throws SSException
      */
-    public void delPrinterDish(@Param("tagId") int tagId) throws Exception;
+    public void delPrinterDish(@Param("tagId") int tagId, int type) throws Exception;
 
     /**
      * 打印机关联菜品分类
@@ -90,4 +91,12 @@ public interface DishTagPrinterMapper {
      * @throws SSException
      */
     public void updatePrinterIdByPrinterId(@Param("printerId") int printerId) throws Exception;
+
+    /**
+     * 查询关联是否已存在
+     *
+     * @param dishTagPrinter
+     * @throws Exception
+     */
+    public DishTagPrinter queryPrinterDish(@Param("dishTagPrinter") DishTagPrinter dishTagPrinter) throws Exception;
 }

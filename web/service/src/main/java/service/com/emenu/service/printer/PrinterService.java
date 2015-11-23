@@ -27,9 +27,10 @@ public interface PrinterService {
      * 修改打印机信息
      *
      * @param printer
+     * @param dishTagList
      * @throws SSException
      */
-    public void updatePrinter(Printer printer) throws SSException;
+    public void updatePrinter(Printer printer, List<Integer> dishTagList) throws SSException;
 
     /**
      * 根据id删除打印机

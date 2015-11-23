@@ -59,14 +59,21 @@ public class PrinterServiceImpl implements PrinterService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updatePrinter(Printer printer) throws SSException {
+    public void updatePrinter(Printer printer, List<Integer> dishTagList) throws SSException {
         try {
             if (!checkBeforeUpdate(printer)){
                 return;
             }
-            if (!Assert.isEmpty(dishTagPrinterService.listTagById(printer.getId())) ||
-                    !Assert.isEmpty(dishTagPrinterService.listDishNameById(printer.getId()))){
-                throw SSException.get(EmenuException.PrinterIsUsing);
+
+            //修改菜品关联
+            //解除所有关联菜品后将选择的菜品重新关联
+            dishTagPrinterService.unBindAllDishTag(printer.getId());
+            if (printer.getType().equals(PrinterTypeEnums.DishTagPrinter.getId())) {
+                if (!Assert.isEmpty(dishTagList)){
+                    for (int id : dishTagList){
+                        dishTagPrinterService.bindDishTag(printer.getId(), id);
+                    }
+                }
             }
             commonDao.update(printer);
         } catch (Exception e) {
@@ -163,7 +170,7 @@ public class PrinterServiceImpl implements PrinterService {
         //判断是否重名
         //如果是编辑，忽略与其本身重名的情况
         Printer printer1 = new Printer();
-        if (!Assert.isNull(printer.getId())){
+        if (!Assert.isNull(printer.getId()) && !Assert.lessOrEqualZero(printer.getId())){
             printer1 = queryById(printer.getId());
         }
 

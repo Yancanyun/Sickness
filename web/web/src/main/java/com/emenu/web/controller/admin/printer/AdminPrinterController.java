@@ -162,23 +162,15 @@ public class AdminPrinterController extends AbstractController {
     public String updatePrinter(Printer printer, @RequestParam(value = "dishTagList", required = false) List<Integer> dishTagList,
                                 HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
             try {
-                dishTagPrinterService.unBindAllDishTag(printer.getId());
-                if (printer.getType().equals(PrinterTypeEnums.DishTagPrinter.getId())) {
-                    if (!Assert.isEmpty(dishTagList)){
-                        for (int id : dishTagList){
-                            dishTagPrinterService.bindDishTag(printer.getId(), id);
-                        }
-                    }
-                }
-                printerService.updatePrinter(printer);
+                printerService.updatePrinter(printer, dishTagList);
 
                 String successUrl = "/" + URLConstants.ADMIN_PRINTER_URL;
-                redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+                redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
                 return "redirect:" + successUrl;
             } catch (SSException e) {
                 LogClerk.errLog.error(e);
                 sendErrMsg(e.getMessage());
-                String failedUrl = "/" + URLConstants.ADMIN_PRINTER_URL + "/update" + printer.getId();
+                String failedUrl = "/" + URLConstants.ADMIN_PRINTER_URL + "/update/" + printer.getId();
                 redirectAttributes.addFlashAttribute("msg", e.getMessage());
                 return "redirect:" + failedUrl;
             }
@@ -230,7 +222,7 @@ public class AdminPrinterController extends AbstractController {
                         }
                     }
                     dishTagNameList.put("dishTag", tagNameArray);
-                    return sendJsonObject(dishTagNameList, AJAX_SUCCESS_CODE);
+                    return sendJsonObject(dishTagNameList, AJAX_FAILURE_CODE);
                 }
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             } catch (SSException e) {

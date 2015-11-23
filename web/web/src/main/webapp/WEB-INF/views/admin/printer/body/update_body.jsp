@@ -11,9 +11,10 @@
     <h2>打印机管理</h2>
   </div>
   <div class="col-sm-12">
-    <form class="form-horizontal J_addForm" action="${website}admin/printer" method="put">
+    <form class="form-horizontal J_addForm" action="${website}admin/printer" method="post">
+      <input type="hidden" name="_method" value="PUT"/>
       <c:if test="${!empty msg}">
-        <div class="alert alert-danger J_tip" role="alert">编辑失败!</div>
+        <div class="alert alert-danger J_tip" role="alert">${msg}</div>
       </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">

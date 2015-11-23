@@ -161,7 +161,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         //删除该分类
         delById(tagId);
         //删除与打印机关联表
-        dishTagPrinterService.delPrinterDish(tagId);
+        dishTagPrinterService.delPrinterDish(tagId, );
     }
 
 }

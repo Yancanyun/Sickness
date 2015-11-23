@@ -6,6 +6,7 @@
         FROM `t_printer`,`t_dish_tag_printer`
         WHERE `t_dish_tag_printer`.`dish_tag_id` = #{id}
         AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
+        AND `type` = 1
     </select>
 
     <select id="listTagById" resultMap="pw.Tag">
@@ -42,13 +43,15 @@
 
     <update id="updatePrinterDish">
         UPDATE `t_dish_tag_printer`
-        SET `printer_id`= #{dishTagPrinter.printerId}
+        SET `printer_id` = #{dishTagPrinter.printerId}
         WHERE `dish_tag_id` = #{dishTagPrinter.dishId}
+        AND `type` = #{dishTagPrinter.type}
     </update>
 
     <delete id="delPrinterDish">
         DELETE FROM `t_dish_tag_printer`
         WHERE `dish_tag_id` = #{tagId}
+        AND `type` = #{type}
     </delete>
 
     <update id="updatePrinterIdByDishTagId">
@@ -63,4 +66,12 @@
         SET `printer_id` = 0
         WHERE `printer_id` = #{printerId}
     </update>
+
+    <select id="countPrinterDish" resultType="pw.DishTagPrinter">
+        SELECT *
+        FROM `t_dish_tag_printer`
+        WHERE `dish_tag_id` = #{dishTagPrinter.dishId}
+        AND `printer_id` = #{dishTagPrinter.printerId}
+        AND `type` = #{dishTagPrinter.type}
+    </select>
 </mapper>

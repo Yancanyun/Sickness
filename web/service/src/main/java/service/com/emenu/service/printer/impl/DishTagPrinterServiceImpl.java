@@ -3,6 +3,7 @@ package com.emenu.service.printer.impl;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.printer.DishTagPrinterMapper;
 import com.emenu.service.printer.DishTagPrinterService;
@@ -93,15 +94,15 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void newPrinterDish(DishTagPrinter dishTagPrinter) throws SSException {
         try {
-            if (Assert.lessOrEqualZero(dishTagPrinter.getDishId())){
-                throw SSException.get(EmenuException.TagIdError);
+            if (!checkBeforeSave(dishTagPrinter)){
+                return;
             }
-            if (Assert.lessOrEqualZero(dishTagPrinter.getPrinterId())){
-                throw SSException.get(EmenuException.PrinterIdError);
+            //查询关联是否已存在
+            DishTagPrinter dishTagPrinter1 = dishTagPrinterMapper.queryPrinterDish(dishTagPrinter);
+            if (!Assert.isNull(dishTagPrinter1)){
+                throw SSException.get(EmenuException.PrinterDishExist);
             }
-            if (Assert.lessZero(dishTagPrinter.getType())){
-                throw SSException.get(EmenuException.PrinterDishTypeError);
-            }
+
             dishTagPrinterMapper.newPrinterDish(dishTagPrinter);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -113,12 +114,10 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updatePrinterDish(DishTagPrinter dishTagPrinter) throws SSException {
         try {
-            if (Assert.lessOrEqualZero(dishTagPrinter.getDishId())){
-                throw SSException.get(EmenuException.TagIdError);
+            if (!checkBeforeSave(dishTagPrinter)){
+                return;
             }
-            if (Assert.lessOrEqualZero(dishTagPrinter.getPrinterId())){
-                throw SSException.get(EmenuException.PrinterIdError);
-            }
+
             dishTagPrinterMapper.updatePrinterDish(dishTagPrinter);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -128,12 +127,12 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void delPrinterDish(int tagId) throws SSException {
+    public void delPrinterDish(int tagId, int type) throws SSException {
         try {
             if (Assert.lessOrEqualZero(tagId)){
                 throw SSException.get(EmenuException.TagIdError);
             }
-            dishTagPrinterMapper.delPrinterDish(tagId);
+            dishTagPrinterMapper.delPrinterDish(tagId, type);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelPrinterDishError, e);
@@ -168,4 +167,28 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
         }
     }
 
+    /**
+     * 检查实体及其关键字段是否为空
+     *
+     * @param dishTagPrinter
+     * @return
+     * @throws SSException
+     */
+    private boolean checkBeforeSave(DishTagPrinter dishTagPrinter) throws SSException{
+        if (Assert.isNull(dishTagPrinter)){
+            return false;
+        }
+
+        if (Assert.isNull(dishTagPrinter.getDishId()) || Assert.lessOrEqualZero(dishTagPrinter.getDishId())){
+            throw SSException.get(EmenuException.TagIdError);
+        }
+        if (Assert.isNull(dishTagPrinter.getPrinterId()) || Assert.lessZero(dishTagPrinter.getPrinterId())){
+            throw SSException.get(EmenuException.PrinterIdError);
+        }
+        if (Assert.isNull(PrinterDishEnum.valueOf(dishTagPrinter.getType()))){
+            throw SSException.get(EmenuException.PrinterDishTypeError);
+        }
+
+        return true;
+    }
 }

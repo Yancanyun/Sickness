@@ -10,6 +10,6 @@
     <select id="queryByState" resultMap="pw.IndexImg">
         SELECT *
         FROM `t_index_img`
-        WHERE `status` = #{status}
+        WHERE `state` = #{state}
     </select>
 </mapper>

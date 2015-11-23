@@ -69,9 +69,10 @@ public interface DishTagPrinterService {
     /**
      * 删除菜品与打印机关联
      * @param tagId
+     * @param type
      * @throws SSException
      */
-    public void delPrinterDish(int tagId) throws SSException;
+    public void delPrinterDish(int tagId, int type) throws SSException;
 
     /**
      * 打印机关联菜品分类
