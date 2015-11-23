@@ -1,5 +1,6 @@
 package com.emenu.test.vip;
 
+import com.emenu.common.dto.vip.VipDishPriceDto;
 import com.emenu.common.entity.vip.VipDishPrice;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.service.vip.VipDishPriceService;
@@ -34,6 +35,32 @@ public class VipVipDishPriceTest extends AbstractTestCase{
     }
 
     @Test
+    public void listAll() throws SSException{
+        List<VipDishPrice> vipDishPriceList = vipDishPriceService.listAll();
+        for (VipDishPrice vipDishPrice: vipDishPriceList){
+            System.out.print("会员价方案id:" + vipDishPrice.getVipDishPricePlanId());
+            System.out.print("会员价id" + vipDishPrice.getId());
+            System.out.print("菜品id" + vipDishPrice.getDishId());
+            System.out.println("菜品会员价：" + vipDishPrice.getVipDishPrice());
+        }
+    }
+
+    @Test
+    public void listByVipDishPricePlanId() throws SSException{
+        Integer vipDishPricePlanId  = 1;
+        Integer count = 0;
+        List<VipDishPrice> vipDishPriceList = vipDishPriceService.listByVipDishPricePlanId(vipDishPricePlanId);
+        for (VipDishPrice vipDishPrice: vipDishPriceList){
+            System.out.print("会员价方案id:" + vipDishPrice.getVipDishPricePlanId());
+            System.out.print("会员价id" + vipDishPrice.getId());
+            System.out.print("菜品id" + vipDishPrice.getDishId());
+            System.out.println("菜品会员价：" + vipDishPrice.getVipDishPrice());
+        }
+        count = vipDishPriceService.countAllByVipDishPricePlanId(vipDishPricePlanId);
+        System.out.println(count);
+    }
+
+    @Test
     public void queryByDishIdAndVipDishPricePlanId() throws SSException{
         Integer dishId = 1;
         Integer vipDishPlanId = 1;
@@ -43,6 +70,28 @@ public class VipVipDishPriceTest extends AbstractTestCase{
         System.out.println(vipDishPrice.getId());
         System.out.println(vipDishPrice);
 
+    }
+
+    @Test
+    public void listDishPriceDtosByKeyword() throws SSException{
+        Integer vipDishPricePlanId = 1;
+        String keyword = "0003";
+        Integer curPage = 1;
+        Integer pageSize = 20;
+        BigDecimal difference = new BigDecimal("0.00");
+        List<VipDishPriceDto> vipDishPriceDtoList = vipDishPriceService.listDishPriceDtosByKeyword(vipDishPricePlanId, keyword, curPage, pageSize);
+        for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
+            difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
+            vipDishPriceDto.setPriceDifference(difference);
+            System.out.print("菜品id:" + vipDishPriceDto.getDishId() + ";");
+            System.out.print("菜品名称：" + vipDishPriceDto.getDishName() + ";");
+            System.out.print("编号：" + vipDishPriceDto.getDishNumber() + ";");
+            System.out.print("助记码：" + vipDishPriceDto.getAssistantCode() + ";");
+            System.out.print("原价：" + vipDishPriceDto.getPrice() + ";");
+            System.out.print("售价：" + vipDishPriceDto.getSalePrice() + ";");
+            System.out.print("会员价：" + vipDishPriceDto.getVipDishPrice() + ";");
+            System.out.println("差价" + vipDishPriceDto.getPriceDifference() + ";");
+        }
     }
 
     @Test

@@ -25,15 +25,15 @@ public enum ConstantEnum {
 
 
 	/*************************会员多倍积分相关参数**************************/
-    VipIntegralRuleCashToIntegral("CASH_TO_INTEGRAL","现金兑换积分"),
-    VipIntegralRuleCardToIntegral("CARD_TO_INTEGRAL","刷卡兑换积分"),
-    VipIntegralRuleOnlineToIntegral("ONLINE_TO_INTEGRAL","在线支付兑换积分"),
-    VipIntegralRuleIntegralToMoney("INTEGRAL_TO_MONEY","积分兑换现金"),
-    VipIntegralRuleCompleteInfoIntegral("COMPLETE_INFO_INTEGRAL","完善信息赠送积分"),
-    VipIntegralRuleMeansOfStartIntegral("MEANS_OF_START_INTEGRAL","启动多倍积分方式"),
+    VipIntegralRuleCashToIntegral("VIP_INTEGRAL_RULE_CASH_TO_INTEGRAL","现金兑换积分"),
+    VipIntegralRuleCardToIntegral("VIP_INTEGRAL_RULE_CARD_TO_INTEGRAL","刷卡兑换积分"),
+    VipIntegralRuleOnlineToIntegral("VIP_INTEGRAL_RULE_ONLINE_TO_INTEGRAL","在线支付兑换积分"),
+    VipIntegralRuleIntegralToMoney("VIP_INTEGRAL_RULE_INTEGRAL_TO_MONEY","积分兑换现金"),
+    VipIntegralRuleCompleteInfoIntegral("VIP_INTEGRAL_RULE_COMPLETE_INFO_INTEGRAL","完善信息赠送积分"),
+    VipIntegralRuleMeansOfStartIntegral("VIP_INTEGRAL_RULE_MEANS_OF_START_INTEGRAL","启动多倍积分方式"),
 
     /**************************会员等级相关参数*****************************/
-    VipGradeVipAutoUpgradeState("VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级"),
+    VipGradeVipAutoUpgradeState("VIP_GRADE_VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级"),
 
     DishCategoryLayers("DISH_CATEGORY_LAYERS", "菜品分类等级数"),
     ;

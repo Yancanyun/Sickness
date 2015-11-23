@@ -46,17 +46,18 @@ public interface VipDishPriceService {
      * @return
      * @throws SSException
      */
-    public int countAll() throws SSException;
+    public int countAllByVipDishPricePlanId(int vipDishPricePlanId) throws SSException;
 
     /**
      * 根据关键字查询会员价记录Dto
+     * @param vipDishPricePlanId
      * @param keyword
      * @param curPage
      * @param pageSize
      * @return
      * @throws SSException
      */
-    public List<VipDishPriceDto> listDishPriceDtosByKeyword(String keyword, int curPage, int pageSize) throws SSException;
+    public List<VipDishPriceDto> listDishPriceDtosByKeyword(int vipDishPricePlanId, String keyword, int curPage, int pageSize) throws SSException;
 
     /**
      * 添加会员价记录
@@ -82,6 +83,8 @@ public interface VipDishPriceService {
 
     /**
      * 根据dishId判断是否存在id为dishId的菜品
+     * 暂时没有用到
+     *
      * @param dishId
      * @return
      * @throws SSException
@@ -116,41 +119,5 @@ public interface VipDishPriceService {
                                      TrueEnums includeDrinks,
                                      TrueEnums cover,
                                      int vipDishPricePlanId) throws SSException;
-
-    /**
-     * 根据折扣自动生成全部会员价记录
-     * @param ids
-     * @param discount
-     * @param lowPrice
-     * @param includeDrinks
-     * @param cover
-     * @param vipDishPricePlanId
-     * @throws SSException
-     *//*
-    public void generateAllByDiscount(List<Integer> ids, int discount, BigDecimal lowPrice, TrueEnums includeDrinks, TrueEnums cover,int vipDishPricePlanId) throws SSException;
-
-
-    *//**
-     * 根据固定减少金额生成全部会员价记录
-     * @param ids
-     * @param difference
-     * @param lowPrice
-     * @param includeDrinks
-     * @param cover
-     * @param vipDishPricePlanId
-     * @throws SSException
-     *//*
-    public void generateAllByDifference(List<Integer> ids, BigDecimal difference, BigDecimal lowPrice, TrueEnums includeDrinks, TrueEnums cover,int vipDishPricePlanId) throws SSException;
-
-    *//**
-     * 单选或多选根据差价生成会员价记录
-     * @param ids
-     * @param difference
-     * @throws SSException
-     *//*
-    public void generateByDifference(List<Integer> ids, BigDecimal difference) throws SSException;*/
-
-
-    //public void generateAllByDifference(List<Integer> ids, int discount, int includeWine, BigDecimal lowPrice) throws SSException;
 
 }

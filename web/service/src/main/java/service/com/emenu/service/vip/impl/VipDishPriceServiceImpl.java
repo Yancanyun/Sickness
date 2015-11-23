@@ -80,6 +80,9 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
             return vipDishPriceDtoList;
         }
         try{
+            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
+                throw SSException.get(EmenuException.VipDishPricePlanIdError);
+            }
             vipDishPriceDtoList = vipDishPriceMapper.listDishPriceDtosByPage(offset, pageSize, vipDishPricePlanId);
         } catch(Exception e) {
             LogClerk.errLog.error(e);
@@ -89,10 +92,13 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     }
 
     @Override
-    public int countAll() throws SSException{
+    public int countAllByVipDishPricePlanId(int vipDishPricePlanId) throws SSException{
         Integer count = 0;
         try{
-            count = vipDishPriceMapper.countAll();
+            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
+                throw SSException.get(EmenuException.VipDishPricePlanIdError);
+            }
+            count = vipDishPriceMapper.countAllByVipDishPricePlanId(vipDishPricePlanId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
@@ -101,7 +107,7 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     }
 
     @Override
-    public List<VipDishPriceDto> listDishPriceDtosByKeyword(String keyword, int curPage, int pageSize) throws SSException{
+    public List<VipDishPriceDto> listDishPriceDtosByKeyword(int vipDishPricePlanId, String keyword, int curPage, int pageSize) throws SSException{
         List<VipDishPriceDto> vipDishPriceDtoList = Collections.emptyList();
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
@@ -109,8 +115,11 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
             return vipDishPriceDtoList;
         }
         try{
+            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
+                throw SSException.get(EmenuException.VipDishPricePlanIdError);
+            }
             Assert.isNotNull(keyword, EmenuException.VipDishPriceKeywordNotNull);
-            return vipDishPriceMapper.listDishPriceDtosByKeyword(keyword, offset, pageSize);
+            return vipDishPriceMapper.listDishPriceDtosByKeyword(keyword, vipDishPricePlanId, offset, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPriceFail);

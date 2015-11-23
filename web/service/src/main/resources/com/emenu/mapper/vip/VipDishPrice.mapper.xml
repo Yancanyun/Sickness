@@ -4,7 +4,7 @@
 
     <select id="listAll" resultMap="pw.VipDishPrice">
         SELECT `id`,
-        `vip_dish_price_plan_id` AS vipDishPriceId,
+        `vip_dish_price_plan_id` AS vipDishPricePlanId,
         `dish_id` AS dishId,
         `vip_dish_price` AS vipDishPrice
         FROM `t_vip_dish_price`
@@ -38,9 +38,10 @@
         LIMIT #{offset},#{pageSize}
     </select>
     
-    <select id="countAll">
+    <select id="countAllByVipDishPricePlanId" resultType="int">
         SELECT COUNT(1)
         FROM `t_vip_dish_price`
+        WHERE `t_vip_dish_price`.vip_dish_price_plan_id = #{vipDishPricePlanId}
     </select>
     
     <select id="listDishPriceDtosByKeyword" resultType="com.emenu.common.dto.vip.VipDishPriceDto">
@@ -59,7 +60,8 @@
                 (dish.`dish_number` LIKE "%"#{keyword}"%"
                 OR dish.`assistant_code` like "%"#{keyword}"%"
                 OR dish.`name` like "%"#{keyword}"%")
-                AND (dish.`id` = tableVipDishPrice.`dish_id`)
+                AND dish.`id` = tableVipDishPrice.`dish_id`
+                AND tableVipDishPrice.vip_dish_price_plan_id = #{vipDishPricePlanId}
             </if>
         </where>
         ORDER BY  tableVipDishPrice.`id` ASC

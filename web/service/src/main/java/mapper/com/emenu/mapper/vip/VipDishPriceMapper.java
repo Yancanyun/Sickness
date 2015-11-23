@@ -44,7 +44,7 @@ public interface VipDishPriceMapper {
      * @return
      * @throws Exception
      */
-    public int countAll() throws Exception;
+    public int countAllByVipDishPricePlanId(@Param("vipDishPricePlanId") int vipDishPricePlanId) throws Exception;
 
     /**
      * 根据关键词查找菜品会员价
@@ -55,6 +55,7 @@ public interface VipDishPriceMapper {
      * @throws Exception
      */
     public List<VipDishPriceDto> listDishPriceDtosByKeyword(@Param("keyword") String keyword,
+                                                            @Param("vipDishPricePlanId") int vipDishPricePlanId,
                                                             @Param("offset") int offset,
                                                             @Param("pageSize") int pageSize) throws Exception;
 
