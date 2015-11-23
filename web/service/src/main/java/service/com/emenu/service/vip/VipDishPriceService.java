@@ -36,6 +36,7 @@ public interface VipDishPriceService {
      * 分页显示会员价记录Dto
      * @param curPage
      * @param pageSize
+     * @param vipDishPricePlanId
      * @return
      * @throws SSException
      */
@@ -43,6 +44,7 @@ public interface VipDishPriceService {
 
     /**
      * 查询数据总量
+     * @param vipDishPricePlanId
      * @return
      * @throws SSException
      */
@@ -83,8 +85,6 @@ public interface VipDishPriceService {
 
     /**
      * 根据dishId判断是否存在id为dishId的菜品
-     * 暂时没有用到
-     *
      * @param dishId
      * @return
      * @throws SSException

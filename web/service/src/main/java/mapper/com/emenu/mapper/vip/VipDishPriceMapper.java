@@ -32,6 +32,9 @@ public interface VipDishPriceMapper {
 
     /**
      * 查询会员价Dto列表
+     * @param offset
+     * @param pageSize
+     * @param vipDishPricePlanId
      * @return
      * @throws Exception
      */
@@ -41,6 +44,7 @@ public interface VipDishPriceMapper {
 
     /**
      * 查询数据总量
+     * @param vipDishPricePlanId
      * @return
      * @throws Exception
      */
@@ -49,6 +53,7 @@ public interface VipDishPriceMapper {
     /**
      * 根据关键词查找菜品会员价
      * @param keyword
+     * @param vipDishPricePlanId
      * @param offset
      * @param pageSize
      * @return

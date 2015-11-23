@@ -13,8 +13,19 @@ import java.util.List;
  */
 public interface VipDishPricePlanMapper {
 
+    /**
+     * 获取所有会员价方案
+     * @return
+     * @throws Exception
+     */
     public List<VipDishPricePlan> listAll() throws Exception;
 
+    /**
+     * 根据id查询会员价方案
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public VipDishPricePlan queryById(@Param("id") int id) throws Exception;
 
 }
