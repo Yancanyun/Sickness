@@ -73,7 +73,7 @@ public interface DishTagPrinterMapper {
      * @param type
      * @throws SSException
      */
-    public void delPrinterDish(@Param("tagId") int tagId, int type) throws Exception;
+    public void delPrinterDish(@Param("tagId") int tagId, @Param("type") int type) throws Exception;
 
     /**
      * 打印机关联菜品分类

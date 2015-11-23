@@ -144,4 +144,9 @@ public class PrinterServiceTest extends AbstractTestCase{
         dishTagPrinter.setType(1);
         dishTagPrinterService.newPrinterDish(dishTagPrinter);
     }
+
+    @Test
+    public void delDishTagPrinter() throws SSException{
+        dishTagPrinterService.delPrinterDish(1,1);
+    }
 }
