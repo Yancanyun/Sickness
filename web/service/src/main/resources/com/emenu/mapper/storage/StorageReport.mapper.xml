@@ -101,7 +101,7 @@
         DELETE FROM `t_storage_report` WHERE `id` = #{id}
     </delete>
 
-    <select id="countReport" resultType="int">
+    <select id="count" resultType="int">
         SELECT count(1) FROM `t_storage_report`
     </select>
 

@@ -60,7 +60,7 @@ public class ReportTest extends AbstractTestCase{
         storageReport.setMoney(money);
         storageReport.setType(1);
 
-        storageReportService.newReport(storageReport);
+       // storageReportService.newReport(storageReport);
 
     }
 
@@ -235,7 +235,7 @@ public class ReportTest extends AbstractTestCase{
 
         List<Integer> tagIdList = new ArrayList<Integer>();
         //tagIdList.add(33);
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startTime, endTime, null, tagIdList);
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(null, null, deportIdList, tagIdList);
         /*if(Assert.isNull(StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(null, null, deportIdList, tagIdList))){
         }*/
 
@@ -251,13 +251,13 @@ public class ReportTest extends AbstractTestCase{
     @Test
     public void count() throws SSException{
 
-        ArrayList<Integer> idList = new ArrayList<Integer>();
+       /* ArrayList<Integer> idList = new ArrayList<Integer>();
 
         if(idList.size()==0){
             System.out.println("hello");
         }
-
-        //System.out.println(storageReportService.countReport());
+*/
+        System.out.println(storageReportService.count());
     }
 
 }

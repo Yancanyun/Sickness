@@ -116,8 +116,15 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public int countReport() throws Exception;
+    public int count() throws Exception;
 
+    /**
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws Exception
+     */
     public List<StorageReport> listByTime(@Param("startTime")Date startTime,
                                                  @Param("endTime")Date endTime) throws Exception;
 

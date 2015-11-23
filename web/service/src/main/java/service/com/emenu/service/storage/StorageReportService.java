@@ -21,16 +21,7 @@ public interface StorageReportService {
      * @param reportDto
      * @throws SSException
      */
-    public boolean newReportAndReportItem(StorageReportDto reportDto) throws SSException;
-
-
-    /**
-     * 添加单据
-     * @param storageReport
-     * @return
-     * @throws SSException
-     */
-    public StorageReport newReport(StorageReport storageReport) throws SSException;
+    public void newReportAndReportItem(StorageReportDto reportDto) throws SSException;
 
     /**
      * 获取所有单据信息
@@ -164,7 +155,7 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public int countReport() throws SSException;
+    public int count() throws SSException;
 
 
 }

@@ -52,7 +52,7 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean newReportAndReportItem(StorageReportDto storageReportDto) throws SSException {
+    public void newReportAndReportItem(StorageReportDto storageReportDto) throws SSException {
        try {
            if(Assert.isNull(storageReportDto)){
                throw SSException.get(EmenuException.ReportIsNotNull);
@@ -61,35 +61,35 @@ public class StorageReportServiceImpl implements StorageReportService {
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
            if(Assert.isNull(storageReportDto.getStorageReportItemList())){
-               throw SSException.get(EmenuException.ReportIsNotNull);
+               throw SSException.get(EmenuException.ReportItemIsNotNull);
            }
-
            this.newReport(storageReportDto.getStorageReport());
-
-           for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList())
+           for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
            storageReportItemService.newStorageReportItem(storageReportItem);
-
+           }
        } catch (Exception e) {
            LogClerk.errLog.error(e);
            throw SSException.get(EmenuException.InsertReportFail, e);
        }
-
-        return false;
     }
 
-    @Override
+    /**
+     * 添加单据
+     * @param storageReport
+     * @return
+     * @throws SSException
+     */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public StorageReport newReport(StorageReport storageReport) throws SSException {
+    private StorageReport newReport(StorageReport storageReport) throws SSException {
 
         try {
             if(Assert.isNull(storageReport)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
-
+            //关键字段不为空的情况下添加单据
             if(checkStorageReportBeforeSave(storageReport)){
                 return commonDao.insert(storageReport);
             }
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertReportFail, e);
@@ -98,20 +98,39 @@ public class StorageReportServiceImpl implements StorageReportService {
         return null;
     }
 
+    /**
+     * 检查StorageReport中关键属性是否合法
+     * @param storageReport
+     * @return
+     * @throws SSException
+     */
     private boolean checkStorageReportBeforeSave(StorageReport storageReport) throws SSException{
 
         if (Assert.isNull(storageReport)) {
             return false;
         }
-
-        Assert.lessOrEqualZero(storageReport.getCreatedPartyId(), EmenuException.CreatedPartyIdError);
-        Assert.lessOrEqualZero(storageReport.getHandlerPartyId(), EmenuException.HandlerPartyId);
-        Assert.lessOrEqualZero(storageReport.getDepotId(), EmenuException.DepotIdError);
+        if (Assert.isNull(storageReport.getCreatedPartyId())&& Assert.lessOrEqualZero(storageReport.getCreatedPartyId())){
+            throw SSException.get(EmenuException.CreatedPartyIdError);
+        }
+        if (Assert.isNull(storageReport.getHandlerPartyId())&&Assert.lessOrEqualZero(storageReport.getHandlerPartyId())){
+            throw SSException.get(EmenuException.HandlerPartyId);
+        }
+        if (Assert.isNull(storageReport.getDepotId())&&Assert.lessOrEqualZero(storageReport.getDepotId())){
+            throw SSException.get(EmenuException.DepotIdError);
+        }
+        if (Assert.isNull(storageReport.getStatus())&&Assert.lessOrEqualZero(storageReport.getStatus())){
+            throw SSException.get(EmenuException.ReportStatusError);
+        }
+        if (Assert.isNull(storageReport.getType())&&Assert.lessOrEqualZero(storageReport.getType())){
+            throw SSException.get(EmenuException.ReportTypeError);
+        }
+        //Assert.lessOrEqualZero(storageReport.getCreatedPartyId(), EmenuException.CreatedPartyIdError);
+        //Assert.lessOrEqualZero(storageReport.getHandlerPartyId(), EmenuException.HandlerPartyId);
+        //Assert.lessOrEqualZero(storageReport.getDepotId(), EmenuException.DepotIdError);
         Assert.isNotNull(storageReport.getSerialNumber(), EmenuException.SerialNumberError);
-        Assert.lessOrEqualZero(storageReport.getStatus(), EmenuException.ReportStatusError);
+        //Assert.lessOrEqualZero(storageReport.getStatus(), EmenuException.ReportStatusError);
         Assert.isNotNull(storageReport.getMoney(), EmenuException.ReportMoneyError);
         Assert.lessOrEqualZero(storageReport.getType(), EmenuException.ReportTypeError);
-
         return true;
     }
 
@@ -476,14 +495,15 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public int countReport() throws SSException {
+    public int count() throws SSException {
+        Integer count = 0;
         try {
-            storageReportMapper.countReport();
+            count = storageReportMapper.count();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountReportFail, e);
         }
-        return 0;
+        return count == null ? 0 : count;
     }
 
 }

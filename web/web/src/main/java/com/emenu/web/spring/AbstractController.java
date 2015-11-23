@@ -28,8 +28,6 @@ import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageTagService;
 import com.emenu.service.storage.StorageDepotService;
 import com.emenu.service.table.*;
-import com.emenu.service.vip.VipDishPricePlanService;
-import com.emenu.service.vip.VipDishPriceService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -319,3 +317,16 @@ public class AbstractController extends Base {
     @Qualifier("vipDishPriceService")
     protected static VipDishPriceService vipDishPriceService;
 }
+
+    @StaticAutoWire
+    @Qualifier("storageReportService")
+    protected static StorageReportService storageReportService;
+
+    @StaticAutoWire
+    @Qualifier("storageReportItemService")
+    protected static StorageReportItemService storageReportItemService;
+
+    @StaticAutoWire
+    @Qualifier("serialNumService")
+    protected static SerialNumService serialNumService;
+ }
