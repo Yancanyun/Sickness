@@ -15,14 +15,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "t_vip_dish_price_plan")
-public class DishPricePlan extends AbstractEntity {
+public class VipDishPricePlan extends AbstractEntity {
 
     //会员价管理方案id
     @Id
     private Integer id;
 
     //方案名称
-    @Column(name = "name")
     private String name;
 
     // 方案描述

@@ -3,25 +3,33 @@ package com.emenu.common.dto.vip;
 import java.math.BigDecimal;
 
 /**
+ * 会员价dto
+ *
  * @author chenyuting
  * @date 2015/11/11 10:49
  */
-public class DishPriceDto {
+public class VipDishPriceDto {
 
     //会员价id
     private Integer id;
 
-    //商品编号
-    private String number;
-
     //菜品id
     private Integer dishId;
+
+    //菜品编号
+    private String dishNumber;
+
+    //助记码
+    private String assistantCode;
 
     //商品名称
     private String dishName;
 
     //原价
-    private BigDecimal dishPrice;
+    private BigDecimal price;
+
+    //售价
+    private BigDecimal salePrice;
 
     //会员价
     private BigDecimal vipDishPrice;
@@ -32,20 +40,13 @@ public class DishPriceDto {
 
     //get、set方法
 
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public Integer getDishId() {
@@ -56,6 +57,22 @@ public class DishPriceDto {
         this.dishId = dishId;
     }
 
+    public String getDishNumber() {
+        return dishNumber;
+    }
+
+    public void setDishNumber(String dishNumber) {
+        this.dishNumber = dishNumber;
+    }
+
+    public String getAssistantCode() {
+        return assistantCode;
+    }
+
+    public void setAssistantCode(String assistantCode) {
+        this.assistantCode = assistantCode;
+    }
+
     public String getDishName() {
         return dishName;
     }
@@ -64,12 +81,20 @@ public class DishPriceDto {
         this.dishName = dishName;
     }
 
-    public BigDecimal getDishPrice() {
-        return dishPrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setDishPrice(BigDecimal dishPrice) {
-        this.dishPrice = dishPrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
     }
 
     public BigDecimal getVipDishPrice() {

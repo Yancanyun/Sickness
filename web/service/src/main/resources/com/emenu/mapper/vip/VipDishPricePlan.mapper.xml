@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.emenu.mapper.vip.DishPricePlanMapper">
+<mapper namespace="com.emenu.mapper.vip.VipDishPricePlanMapper">
 
-    <select id="listAll" resultMap="pw.DishPricePlan">
+    <select id="listAll" resultMap="pw.VipDishPricePlan">
         SELECT *
         FROM `t_vip_dish_price_plan`
         ORDER BY  `id` ASC
     </select>
 
-    <select id="queryById" resultMap="pw.DishPricePlan">
+    <select id="queryById" resultMap="pw.VipDishPricePlan">
         SELECT *
         FROM `t_vip_dish_price_plan`
         WHERE `id` = #{id}

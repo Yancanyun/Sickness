@@ -299,8 +299,22 @@ public enum EmenuException implements IBizExceptionMes {
     InsertVipDishPricePlanFail("插入会员价方案失败",8016),
     VipDishPricePlanIdError("会员价方案ID为空或者小于0",8017),
     UpdateVipDishPricePlanFail("更新会员价方案失败",8018),
-    DeleteVipDishPricePlanFail("删除会员价方案失败",8019)
+    DeleteVipDishPricePlanFail("删除会员价方案失败",8019),
 
+    ListVipDishPriceFail("获取会员价列表失败",8020),
+    VipDishPriceKeywordNotNull("请输入关键字",8021),
+    VipDishPriceNotNull("会员价不能为空",8022),
+    InsertVipDishPriceFail("插入会员价失败",8023),
+    UpdateVipDishPriceFail("更新会员价失败",8024),
+    InputDiscountOrDifferenceNotNull("折扣或差价为空",8025),
+    InputDiscountOrDifferenceError("输入折扣或差价不合法",8026),
+    VipDishPriceIdError("会员价ID为空或者小于0",8027),
+    //QueryVipDishPriceFail("获取会员价失败",8021),
+    //VipDishPriceNameNotNull("会员价名称不能为空",8022),
+    //
+    //
+    //
+    //DeleteVipDishPriceFail("删除会员价失败",8026)
     ;
 
 

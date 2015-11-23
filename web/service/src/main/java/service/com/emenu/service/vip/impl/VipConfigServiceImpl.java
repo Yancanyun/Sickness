@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 会员基本配置ServiceImpl
+ *
  * @author chenyuting
  * @date 2015/11/16 16:20
  */

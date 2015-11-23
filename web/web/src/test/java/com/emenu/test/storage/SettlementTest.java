@@ -109,6 +109,10 @@ public class SettlementTest extends AbstractTestCase{
         }
     }
 
+    /**
+     * 库存盘点
+     * @throws Exception
+     */
     @Test
     public void listSettlementCheck() throws Exception {
         String startDateStr = "2015/11/23";
@@ -118,7 +122,12 @@ public class SettlementTest extends AbstractTestCase{
         Date startDate = sdf.parse(startDateStr);
         Date endDate = sdf.parse(endDateStr);
         List<Integer> depotIds = new ArrayList<Integer>();
+        depotIds.add(2);
+        depotIds.add(3);
         List<Integer> tagIds = new ArrayList<Integer>();
+        tagIds.add(33);
+        tagIds.add(34);
+        tagIds.add(70);
         List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,null,1,20);
         for(StorageCheckDto storageCheckDto : storageCheckDtoList){
             System.out.println(storageCheckDto.getItemName());
