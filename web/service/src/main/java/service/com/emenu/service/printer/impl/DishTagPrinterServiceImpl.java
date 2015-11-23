@@ -128,7 +128,7 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delPrinterDish(int tagId, int type) throws SSException {
         try {
-            if (Assert.lessOrEqualZero(tagId)){
+            if (Assert.lessOrEqualZero(tagId) || Assert.isNull(PrinterDishEnum.valueOf(type))){
                 throw SSException.get(EmenuException.TagIdError);
             }
             dishTagPrinterMapper.delPrinterDish(tagId, type);

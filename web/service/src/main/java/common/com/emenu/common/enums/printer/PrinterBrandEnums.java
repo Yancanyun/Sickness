@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * PrinterBrandEnums
+ * 打印机品牌
  *
  * @author Wang Liming
  * @date 2015/11/12 16:07

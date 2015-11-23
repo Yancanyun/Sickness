@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * PrinterModelEnums
+ * 打印机型号
  *
  * @author Wang Liming
  * @date 2015/11/12 17:04

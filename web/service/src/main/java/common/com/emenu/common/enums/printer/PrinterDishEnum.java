@@ -6,6 +6,7 @@ import java.util.Map;
 /**
  * PrinterDishEnum
  * 打印机与菜品关联表类型
+ *
  * @author dujuan
  * @date 2015/11/14
  */
