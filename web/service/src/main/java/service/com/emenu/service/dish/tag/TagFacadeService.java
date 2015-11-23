@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * TagFacadeService
- *
+ * 对外提供的分类管理
  * @author dujuan
  * @date 2015/11/2
  */
@@ -20,7 +20,7 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public Tag newTag(Tag tag) throws Exception;
+    public Tag newTag(Tag tag) throws SSException;
 
     /**
      * 更新tag
@@ -28,7 +28,7 @@ public interface TagFacadeService {
      * @param tag
      * @throws SSException
      */
-    public void updateTag(Tag tag) throws Exception;
+    public void updateTag(Tag tag) throws SSException;
 
     /**
      * 根据Id查询
@@ -36,7 +36,7 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public Tag queryById(int tagId) throws Exception;
+    public Tag queryById(int tagId) throws SSException;
 
     /**
      * 根据tagId获取儿子节点
@@ -44,14 +44,14 @@ public interface TagFacadeService {
      * @return
      * @throws SSException
      */
-    public List<Tag> listChildrenByTagId(int tagId) throws Exception;
+    public List<Tag> listChildrenByTagId(int tagId) throws SSException;
 
     /**
      * 删除一个tag
      * @param tagId
      * @throws SSException
      */
-    public void delById(int tagId) throws Exception;
+    public void delById(int tagId) throws SSException;
 
     /**
      * 根据ID获取当前ID展开的Tag
@@ -60,7 +60,7 @@ public interface TagFacadeService {
      * @return
      * @throws Exception
      */
-    public List<TagDto> listByCurrentId(int tagId) throws Exception;
+    public List<TagDto> listByCurrentId(int tagId) throws SSException;
 
     /**
      * 根据tagId和常量参数获取所有子节点
