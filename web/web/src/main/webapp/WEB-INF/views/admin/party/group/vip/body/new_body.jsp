@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="control-label">生日</label>
+            <label class="col-sm-3 control-label">生日</label>
             <div class="col-sm-2">
               <input class="w190 date" readonly value="" name="birthday" />
             </div>
