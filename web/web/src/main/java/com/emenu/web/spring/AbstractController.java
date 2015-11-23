@@ -9,6 +9,7 @@ import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.other.ConstantService;
+import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
 import com.emenu.service.page.KeywordsService;
 import com.emenu.service.party.group.PartyService;
@@ -24,10 +25,10 @@ import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
-import com.emenu.service.storage.StorageItemService;
-import com.emenu.service.storage.StorageTagService;
-import com.emenu.service.storage.StorageDepotService;
+import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
+import com.emenu.service.vip.VipDishPricePlanService;
+import com.emenu.service.vip.VipDishPriceService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -316,7 +317,7 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("vipDishPriceService")
     protected static VipDishPriceService vipDishPriceService;
-}
+
 
     @StaticAutoWire
     @Qualifier("storageReportService")
