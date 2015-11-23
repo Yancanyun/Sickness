@@ -98,8 +98,7 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
                 return;
             }
             //查询关联是否已存在
-            DishTagPrinter dishTagPrinter1 = dishTagPrinterMapper.queryPrinterDish(dishTagPrinter);
-            if (!Assert.isNull(dishTagPrinter1)){
+            if (dishTagPrinterMapper.countPrinterDish(dishTagPrinter) > 0){
                 throw SSException.get(EmenuException.PrinterDishExist);
             }
 

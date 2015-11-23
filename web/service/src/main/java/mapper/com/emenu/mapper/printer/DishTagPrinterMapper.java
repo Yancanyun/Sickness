@@ -98,5 +98,5 @@ public interface DishTagPrinterMapper {
      * @param dishTagPrinter
      * @throws Exception
      */
-    public DishTagPrinter queryPrinterDish(@Param("dishTagPrinter") DishTagPrinter dishTagPrinter) throws Exception;
+    public int countPrinterDish(@Param("dishTagPrinter") DishTagPrinter dishTagPrinter) throws Exception;
 }
