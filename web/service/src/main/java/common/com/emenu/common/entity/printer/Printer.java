@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * printer
+ * 打印机实体
  *
  * @author Wang Liming
  * @date 2015/11/12 14:55
