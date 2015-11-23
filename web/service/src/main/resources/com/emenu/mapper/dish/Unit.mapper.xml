@@ -21,12 +21,6 @@
             `t_unit`
     </select>
 
-    <select id ="queryById" resultMap="pw.Unit">
-        SELECT `id`,`name`,`type`,`created_time`,`last_modified_time`
-        FROM `t_unit`
-        WHERE `id`=#{id}
-    </select>
-
     <select id="checkNameIsExist" resultType="int">
         SELECT
             COUNT(1)

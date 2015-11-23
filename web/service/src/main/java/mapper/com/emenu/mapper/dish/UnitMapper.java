@@ -38,13 +38,6 @@ public interface UnitMapper {
     public int countAll() throws SSException;
 
     /**
-     * 根据id查询一条单位信息
-     * @param id
-     * @throws SSException
-     */
-    public Unit queryById(@Param("id")int id)throws SSException;
-
-    /**
      * 检查是否有重名
      * @param name
      * @return

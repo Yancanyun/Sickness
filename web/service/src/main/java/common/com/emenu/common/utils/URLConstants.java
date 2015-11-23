@@ -64,6 +64,9 @@ public final class URLConstants {
     //菜品单位管理
     public static final String ADMIN_DISH_UNIT = "admin/dish/unit";
 
+    //菜品口味管理
+    public static final String ADMIN_DISH_TASTE = "admin/dish/taste";
+
     //菜品分类管理
     public static final String ADMIN_DISH_TAG = "admin/dish/tag";
 

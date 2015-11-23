@@ -33,11 +33,6 @@ public class UnitServiceImpl implements UnitService {
     @Qualifier("commonDao")
     private CommonDao commonDao;
 
-    /**
-     * 获取所有单位
-     *
-     * @throws SSException
-     */
     @Override
     public List<Unit> listAll() throws SSException {
         List<Unit> list = Collections.emptyList();
@@ -89,10 +84,6 @@ public class UnitServiceImpl implements UnitService {
         try {
             // 检查id是否<=0，如果是，直接返回
             if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
-                throw SSException.get(EmenuException.UnitIdError);
-            }
-            // 检查id是否<=0，如果是，直接返回
-            if (Assert.lessOrEqualZero(id)) {
                 throw SSException.get(EmenuException.UnitIdError);
             }
             return commonDao.queryById(Unit.class, id);
@@ -168,7 +159,7 @@ public class UnitServiceImpl implements UnitService {
                 throw SSException.get(EmenuException.UnitNameError);
             }
             //检查用户名是否存在,排除原来的用户名
-            if(checkNameIsExist(unit.getName(), unitMapper.queryById(unit.getId()).getName())){
+            if(checkNameIsExist(unit.getName(), queryById(unit.getId()).getName())){
                 throw SSException.get(EmenuException.UnitNameIsExist);
             }
             if(!Assert.isNull(unit.getType()) && Assert.lessOrEqualZero(unit.getType())){

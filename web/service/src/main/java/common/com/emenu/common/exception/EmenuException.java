@@ -77,6 +77,17 @@ public enum EmenuException implements IBizExceptionMes {
     listPathTagFailed("查询分类祖先路径失败！", 3021),
 
 
+    //菜品口味
+    ListTasteFailed("口味列表查询失败", 3040),
+    NewTasteFailed("添加口味失败", 3041),
+    QueryTasteFailed("查询口味失败", 3042),
+    TasteIdError("口味的ID为空或者小于0", 3043),
+    DeleteTasteFailed("删除口味失败", 3044),
+    UpdateTasteFailed("查询口味失败", 3045),
+    TasteNameError("口味名称为空", 3046),
+    TasteNameIsExist("口味名称已存在", 3048),
+
+
 
     // 单位管理
     ListUnitFailed("单位列表查询失败", 3050),

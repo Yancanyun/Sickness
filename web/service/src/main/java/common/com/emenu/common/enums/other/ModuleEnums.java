@@ -103,6 +103,12 @@ public enum ModuleEnums {
     AdminDishUnitNew("Admin:DishManagement:Unit:New"),
     AdminDishUnitUpdate("Admin:DishManagement:Unit:Update"),
     AdminDishUnitDel("Admin:DishManagement:Unit:Del"),
+    // 菜品口味管理
+    AdminDishTaste("Admin:DishManagement:Taste"),
+    AdminDishTasteList("Admin:DishManagement:Taste:List"),
+    AdminDishTasteNew("Admin:DishManagement:Taste:New"),
+    AdminDishTasteUpdate("Admin:DishManagement:Taste:Update"),
+    AdminDishTasteDel("Admin:DishManagement:Taste:Del"),
     // 菜品分类管理
     AdminDishTag("Admin:DishManagement:Tag"),
     AdminDishTagList("Admin:DishManagement:Tag:List"),

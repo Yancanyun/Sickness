@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.dish.TasteMapper">
+
+    <select id ="listAll" resultMap="pw.Taste">
+        SELECT `id`,`name`,`charge` ,`created_time`,`last_modified_time`
+        FROM `t_taste`
+    </select>
+
+    <select id="checkNameIsExist" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            `t_taste`
+        WHERE `name` = #{name}
+        <if test="oldname != null">
+            AND `name` != #{oldname}
+        </if>
+    </select>
+
+
+</mapper>
