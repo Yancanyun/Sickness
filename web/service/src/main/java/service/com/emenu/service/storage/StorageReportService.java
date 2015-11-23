@@ -21,7 +21,7 @@ public interface StorageReportService {
      * @param reportDto
      * @throws SSException
      */
-    public void newReportAndReportItem(StorageReportDto reportDto) throws SSException;
+    public void newReportDto(StorageReportDto reportDto) throws SSException;
 
     /**
      * 获取所有单据信息
@@ -72,19 +72,13 @@ public interface StorageReportService {
 
     /**
      * 根据经手人id、操作人id、单据id分页单据详情获取单据和单据详情
-     * @param id
-     * @param depotId
-     * @param handlerPartyId
-     * @param createdPartyId
+     * @param storageReport
      * @param page
      * @param pageSize
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDtoByCondition1(int id,
-                                                                   int depotId,
-                                                                   int handlerPartyId,
-                                                                   int createdPartyId,
+    public List<StorageReportDto> listStorageReportDtoByCondition1(StorageReport storageReport,
                                                                    int page,
                                                                    int pageSize) throws SSException;
 
@@ -94,7 +88,7 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    boolean updateById(StorageReport storageReport) throws SSException;
+    public void updateById(StorageReport storageReport) throws SSException;
 
     /**
      * 根据单据id修改单据状态
@@ -103,7 +97,7 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    boolean updateStatusById(int id,StorageReportStatusEnum storageReportStatusEnum) throws SSException;
+    public void updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException;
 
     /**
      * 根据id获取单据信息

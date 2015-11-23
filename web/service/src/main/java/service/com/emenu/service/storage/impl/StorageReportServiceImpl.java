@@ -52,7 +52,7 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void newReportAndReportItem(StorageReportDto storageReportDto) throws SSException {
+    public void newReportDto(StorageReportDto storageReportDto) throws SSException {
        try {
            if(Assert.isNull(storageReportDto)){
                throw SSException.get(EmenuException.ReportIsNotNull);
@@ -60,7 +60,7 @@ public class StorageReportServiceImpl implements StorageReportService {
            if(Assert.isNull(storageReportDto.getStorageReport())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
-           if(Assert.isNull(storageReportDto.getStorageReportItemList())){
+           if(Assert.isEmpty(storageReportDto.getStorageReportItemList())){
                throw SSException.get(EmenuException.ReportItemIsNotNull);
            }
            this.newReport(storageReportDto.getStorageReport());
@@ -124,13 +124,8 @@ public class StorageReportServiceImpl implements StorageReportService {
         if (Assert.isNull(storageReport.getType())&&Assert.lessOrEqualZero(storageReport.getType())){
             throw SSException.get(EmenuException.ReportTypeError);
         }
-        //Assert.lessOrEqualZero(storageReport.getCreatedPartyId(), EmenuException.CreatedPartyIdError);
-        //Assert.lessOrEqualZero(storageReport.getHandlerPartyId(), EmenuException.HandlerPartyId);
-        //Assert.lessOrEqualZero(storageReport.getDepotId(), EmenuException.DepotIdError);
         Assert.isNotNull(storageReport.getSerialNumber(), EmenuException.SerialNumberError);
-        //Assert.lessOrEqualZero(storageReport.getStatus(), EmenuException.ReportStatusError);
         Assert.isNotNull(storageReport.getMoney(), EmenuException.ReportMoneyError);
-        Assert.lessOrEqualZero(storageReport.getType(), EmenuException.ReportTypeError);
         return true;
     }
 
@@ -161,18 +156,14 @@ public class StorageReportServiceImpl implements StorageReportService {
                 StorageReportDto storageReportDto = new StorageReportDto();
                 List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-
                 storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
                 storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
-
             return storageReportDtoList;
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
@@ -187,25 +178,20 @@ public class StorageReportServiceImpl implements StorageReportService {
         try {
             //获取所有单据信息
             storageReportList = storageReportMapper.ListStorageReportUnsettled(endTime);
-
-            if (Assert.isNull(storageReportList)){
+            if (Assert.isEmpty(storageReportList)){
                 return storageReportDtoList;
             }
-
             for (StorageReport storageReport : storageReportList){
                 StorageReportDto storageReportDto = new StorageReportDto();
                 List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-
                 storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
                 storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
-
             return storageReportDtoList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -228,18 +214,14 @@ public class StorageReportServiceImpl implements StorageReportService {
                 StorageReportDto storageReportDto = new StorageReportDto();
                 List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-
                 storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
                 storageReportDto.setStorageReportItemList(storageReportItemList);
 
                 storageReportDtoList.add(storageReportDto);
             }
-
             return storageReportDtoList;
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
@@ -258,27 +240,21 @@ public class StorageReportServiceImpl implements StorageReportService {
 
         page = page <= 0 ? 0 : page - 1;
         int offset = page * pageSize;
-
         if (startTime == null && endTime == null) {
             startTime = DateUtils.getTodayStartTime();
             endTime = DateUtils.getTodayEndTime();
         }
-
         if (endTime != null) {
             endTime.setHours(23);
             endTime.setMinutes(59);
             endTime.setSeconds(59);
         }
-
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
-
         if(Assert.lessZero(offset)){
             return storageReportDtoList;
         }
-
         storageReportDtoList = new ArrayList<StorageReportDto>();
-
         try {
             storageReportList = storageReportMapper.listStorageReportByCondition(startTime,endTime,serialNumber,depotId,handlerPartyId,createdPartyId,offset,pageSize);
 
@@ -288,11 +264,9 @@ public class StorageReportServiceImpl implements StorageReportService {
                 //根据单据id获取单据详情信息
 
                 storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
                 storageReportDto.setStorageReportItemList(storageReportItemList);
-
                 storageReportDtoList.add(storageReportDto);
             }
             return storageReportDtoList;
@@ -303,38 +277,31 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public List<StorageReportDto> listStorageReportDtoByCondition1(int id,
-                                                                     int depotId,
-                                                                     int handlerPartyId,
-                                                                     int createdPartyId,
+    public List<StorageReportDto> listStorageReportDtoByCondition1(StorageReport storageReport,
                                                                      int page,
                                                                      int pageSize) throws SSException {
         page = page <= 0 ? 0 : page - 1;
         int offset = page * pageSize;
         List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
-
         if(Assert.lessZero(offset)){
             return storageReportDtoList;
         }
-
+        if(Assert.lessZero(pageSize)){
+            return storageReportDtoList;
+        }
         storageReportDtoList = new ArrayList();
-
         try {
-
-            storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
-
-            for (StorageReport storageReport : storageReportList) {
+            //storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
+            storageReportList = storageReportMapper.listStorageReportByCondition1(storageReport,offset,pageSize);
+            for (StorageReport storageReport1 : storageReportList) {
                 StorageReportDto storageReportDto = new StorageReportDto();
                 List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-
-                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-
+                storageReportItemList = storageReportItemService.listByReportId(storageReport1.getId());
                 //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReport(storageReport1);
                 storageReportDto.setStorageReportItemList(storageReportItemList);
-
                 storageReportDtoList.add(storageReportDto);
             }
             return storageReportDtoList;
@@ -345,13 +312,15 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public boolean updateById(StorageReport storageReport) throws SSException {
+    public void updateById(StorageReport storageReport) throws SSException {
         try {
-              if(Assert.isNull(storageReport)){
-                  throw SSException.get(EmenuException.ReportIsNotNull);
+            if(Assert.isNull(storageReport)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
               }
+            if (Assert.isNull(storageReport.getId())&&Assert.lessOrEqualZero(storageReport.getId())){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
             commonDao.update(storageReport);
-            return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -359,10 +328,9 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public boolean updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException {
+    public void updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException {
         try {
             storageReportMapper.updateStatusById(id,storageReportStatusEnum.getId());
-            return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -398,10 +366,6 @@ public class StorageReportServiceImpl implements StorageReportService {
 
         List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
         List<StorageReport> storageReportList = Collections.emptyList();
-
-       /* if(Assert.isNull(depotIdList)||Assert.isNull(tagIdList)){
-            return storageReportDtoList;
-        }*/
 
         try {
             //根据tagId获取分类下的物品
@@ -486,7 +450,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 return false;
             }
             delReportDtoById(storageReportDto.getStorageReport().getId());
-            this.newReportAndReportItem(storageReportDto);
+            this.newReportDto(storageReportDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);

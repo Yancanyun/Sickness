@@ -31,7 +31,7 @@ import java.util.List;
 @Module(ModuleEnums.AdminStorage)
 @Controller
 @RequestMapping(URLConstants.ADMIN_STORAGE_REPORT_URL)
-public class StorageReportAndReportItemController extends AbstractController {
+public class AdminStorageReportController extends AbstractController {
     /**
      * 单据信息list
      * @return
@@ -95,7 +95,7 @@ public class StorageReportAndReportItemController extends AbstractController {
             storageReportDto.setStorageReport(storageReport);
             storageReportDto.setStorageReportItemList(storageReportItemList);
 
-            storageReportService.newReportAndReportItem(storageReportDto);
+            storageReportService.newReportDto(storageReportDto);
 
             String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
             redirectAttributes.addFlashAttribute("msg","编辑成功");

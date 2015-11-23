@@ -68,13 +68,15 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listStorageReportByCondition1(@Param("id")int id,
+/*    public List<StorageReport> listStorageReportByCondition1(@Param("id")int id,
                                                              @Param("depotId")int depotId,
                                                              @Param("handlerPartyId")int handlerPartyId,
                                                              @Param("createdPartyId")int createdPartyId,
                                                              @Param("offset")int offset,
+                                                             @Param("pageSize")int pageSize) throws Exception;*/
+    public List<StorageReport> listStorageReportByCondition1(@Param("storageReport")StorageReport storageReport,
+                                                             @Param("offset")int offset,
                                                              @Param("pageSize")int pageSize) throws Exception;
-
 
     /**
      * 获取指定时间之前未结算的订单

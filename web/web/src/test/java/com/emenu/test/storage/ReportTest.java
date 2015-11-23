@@ -11,10 +11,8 @@ import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
-import com.pandawork.core.common.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -129,7 +127,7 @@ public class ReportTest extends AbstractTestCase{
         storageReportDto.setStorageReport(storageReport);
         storageReportDto.setStorageReportItemList(storageReportItemList);
 
-        storageReportService.newReportAndReportItem(storageReportDto);
+        storageReportService.newReportDto(storageReportDto);
 
     }
 
@@ -195,12 +193,24 @@ public class ReportTest extends AbstractTestCase{
         System.out.println("he");
     }
 
+    /**
+     * 根据经手人id、操作人id、单据id分页单据详情获取单据和单据详情
+     * @throws SSException
+     */
     @Test
     public void listStorageReportByCondition1() throws SSException{
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
 
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition1(2, 0, 0, 0, 0, 10);
+        StorageReport storageReport = new StorageReport();
+        storageReport.setId(2);
+        storageReport.setCreatedPartyId(33);
+        storageReport.setDepotId(2);
+        storageReport.setHandlerPartyId(34);
+        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition1(storageReport, 0, 10);
 
+        for (StorageReportDto storageReportDto : StorageReportDtoList){
+            System.out.println(storageReportDto.getStorageReport().getComment());
+        }
         System.out.println("he");
     }
 
