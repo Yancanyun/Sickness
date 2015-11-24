@@ -1,7 +1,7 @@
 package com.emenu.test.print;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.emenu.common.utils.PrintUtils;
+
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -14,11 +14,11 @@ import java.net.Socket;
  */
 public class PrintTest {
     public static void main(String[] args) {
-        Socket socket = new Socket();
-        OutputStream os = null;
-        String ip = "192.168.1.200";
 
         try {
+            Socket socket = new Socket();
+            OutputStream os = null;
+            String ip = "192.168.1.200";
             //设置打印机IP、端口
             socket.connect(new InetSocketAddress(ip, 9100), 1000);
 
@@ -26,83 +26,55 @@ public class PrintTest {
                 os = socket.getOutputStream();
 
                 //初始化打印机参数，防止上次打印的参数影响本次打印
-                os.write(0x1B);
-                os.write(0x40);
+                os.write(PrintUtils.initPrinter());
 
-                //设置显示位置
-                os.write(0x1B);
-                os.write(0x61);
-                os.write(1);    //0-左对齐;1-居中;2-右对齐
+                //设置为居中
+                os.write(PrintUtils.setLocation(1));
+                os.write(PrintUtils.printText("居中显示测试！\n"));
 
-                os.write("居中显示测试！\n".getBytes("GBK"));
+                //设置为右对齐
+                os.write(PrintUtils.setLocation(2));
+                os.write(PrintUtils.printText("右对齐测试！\n"));
 
-                //设置显示位置
-                os.write(0x1B);
-                os.write(0x61);
-                os.write(2);    //0-左对齐;1-居中;2-右对齐
+                //设置为左对齐
+                os.write(PrintUtils.setLocation(0));
 
-                os.write("右对齐测试！\n".getBytes("GBK"));
-
-                //设置显示位置
-                os.write(0x1B);
-                os.write(0x61);
-                os.write(0);    //0-左对齐;1-居中;2-右对齐
-
-                //选择打印字体
-                os.write(0x1D);
-                os.write(0x21);
-                os.write(0x22);    //字体大小选择，16进制数第一位为宽度，第二位为高度
-
-                os.write("放大！\n".getBytes("GBK"));
+                //选择打印字体，第一位为宽度，第二位为高度，0为正常字体，最大值为7
+                os.write(PrintUtils.setSize(2, 2));
+                os.write(PrintUtils.printText("放大！\n"));
 
                 //恢复正常字体
-                os.write(0x1D);
-                os.write(0x21);
-                os.write(0x00);
+                os.write(PrintUtils.setSize(0, 0));
 
-                //一行最多16个中文字
+                //58毫米一行最多16个中文字，80毫米一行最多24个中文字
                 for(int i = 1; i <= 16; i++){
-                    os.write("哈".getBytes("GBK"));
+                    os.write(PrintUtils.printText("哈"));
                 }
-                os.write("\n".getBytes("GBK"));
+                os.write(PrintUtils.printText("\n"));
 
-                //一行最多32个英文字or数字
+                //58毫米一行最多32个英文字or数字，80毫米一行最多48个英文字or数字
                 for(int i = 1; i <= 16; i++){
-                    os.write("1".getBytes("GBK"));
+                    os.write(PrintUtils.printText("1"));
                 }
                 for(int i = 1; i <= 16; i++){
-                    os.write("H".getBytes("GBK"));
+                    os.write(PrintUtils.printText("H"));
                 }
-                os.write("\n".getBytes("GBK"));
+                os.write(PrintUtils.printText("\n"));
 
-                //设置条码高度
-                os.write(0x1D);
-                os.write(0x68);
-                os.write(162);    //条码高度数值，默认是162
+                //设置条码高度，不设置则为162
+                os.write(PrintUtils.setBarCodeHeight(100));
 
-                //设置条码宽度
-                os.write(0x1D);
-                os.write(0x77);
-                os.write(3);    //条码宽度数值，默认是3
+                //设置条码宽度，不设置则为3
+                os.write(PrintUtils.setBarCodeWeight(3));
 
-                //打印条形码测试
-                os.write(0x1D);
-                os.write(0x6B);
-                os.write(4);    //条码类型
-                os.write("1993123".getBytes("GBK"));    //宽度为3时最多7位，宽度为2时最多12位
-
-                os.write(0x00);    //条码打印结束符
-
+                //打印条码
+                os.write(PrintUtils.printBarCode("1234567"));
 
                 //走纸
-                os.write(0x1B);
-                os.write(0x64);
-                os.write(5);    //走纸行数
+                os.write(PrintUtils.println(5));
 
                 //切纸
-                os.write(0x1D);
-                os.write(0x56);
-                os.write(0);    //设置切纸格式，0-全切;1-半切
+                os.write(PrintUtils.cutPaper());
             }
         } catch (Exception e) {
             e.printStackTrace();
