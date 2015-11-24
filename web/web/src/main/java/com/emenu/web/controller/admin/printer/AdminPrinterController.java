@@ -40,7 +40,7 @@ public class AdminPrinterController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterList)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterList)
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toPrinterPage(Model model){
         try {
@@ -60,7 +60,7 @@ public class AdminPrinterController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterNew)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewPrinter(Model model){
         try {
@@ -89,7 +89,7 @@ public class AdminPrinterController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterNew)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterNew)
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String newPrinter(Printer printer, @RequestParam(value = "dishTagList", required = false) List<Integer> dishTagList,
                              HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
@@ -124,7 +124,7 @@ public class AdminPrinterController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterUpdate)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterUpdate)
     @RequestMapping(value = "update/{printerId}", method = RequestMethod.GET)
     public String toUpdatePrinter(@PathVariable("printerId") int printerId, Model model){
         try {
@@ -157,7 +157,7 @@ public class AdminPrinterController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterUpdate)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterUpdate)
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public String updatePrinter(Printer printer, @RequestParam(value = "dishTagList", required = false) List<Integer> dishTagList,
                                 HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes){
@@ -182,7 +182,7 @@ public class AdminPrinterController extends AbstractController {
      * @param printerId
      * @return
      */
-    @Module(ModuleEnums.AdminBasicInfoPrinterDel)
+    @Module(value = ModuleEnums.AdminBasicInfoPrinter, extModule = ModuleEnums.AdminBasicInfoPrinterDel)
     @RequestMapping(value = "ajax/{printerId}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject delPrinter(@PathVariable("printerId") int printerId){

@@ -13,8 +13,25 @@
             <li <c:if test="${MethodModule eq 'Admin:BasicInfo:IndexImg:List'}">class="active"</c:if>>
                 <a href="${website}admin/index/img">点餐平台首页</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer:List'}">class="active"</c:if>>
-                <a href="${website}admin/printer">打印机管理</a>
+            <li <c:if test="${MethodModule eq 'Admin:BasicInfo:Printer'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/printer">
+                    打印机管理
+                    <c:if test="${ExtModule eq 'Admin:BasicInfo:Printer:New'
+                                    or ExtModule eq 'Admin:BasicInfo:Printer:Update'}"><i class="fa fa-angle-right angle-right"></i></c:if>
+                </a>
+                <c:if test="${ExtModule eq 'Admin:BasicInfo:Printer:New'
+                                or ExtModule eq 'Admin:BasicInfo:Printer:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:BasicInfo:Printer:New'}">class="active" </c:if>>
+                            <a href="${website}admin/printer/new">添加打印机</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:BasicInfo:Printer:Update'}">
+                            <li class="active">
+                                <a href="#">编辑打印机</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </c:if>
             </li>
             <li><a href="#">外卖参数设置</a></li>
             <li><a href="#">全局设置</a></li>
