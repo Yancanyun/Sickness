@@ -224,9 +224,9 @@ public enum EmenuException implements IBizExceptionMes {
     PrinterIpAddressExist("打印机ip地址已存在",5051),
     PrinterIdError("打印机id为空或者小于0",5052),
     PrinterDishTypeError("打印机与菜品关联表类型数据非法",5053),
-    NewPrinterDishError("新增打印机与菜品管理关联失败",5054),
-    UpdatePrinterDishError("修改打印机与菜品管理关联失败",5055),
-    DelPrinterDishError("删除打印机与菜品管理关联失败",5056),
+    NewPrinterDishError("新增打印机与菜品关联失败",5054),
+    UpdatePrinterDishError("修改打印机与菜品关联失败",5055),
+    DelPrinterDishError("删除打印机与菜品关联失败",5056),
     PrinterIsUsing("打印机正在被使用，请取消所有关联菜品分类后重试",5057),
     PrinterDishExist("关联信息已存在",5058),
 

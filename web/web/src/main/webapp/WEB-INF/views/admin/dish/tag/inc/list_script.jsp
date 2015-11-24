@@ -45,7 +45,7 @@
                 </select>
             </div>
             <div class="col-sm-3">
-                <a class="form-control-static" href="#">前往>>打印机管理</a>
+                <a class="form-control-static" href="${website}admin/printer">前往>>打印机管理</a>
             </div>
         </div>
         <div class="form-group">

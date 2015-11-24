@@ -33,7 +33,7 @@ public interface TasteService {
      * @param taste
      * @throws SSException
      */
-    public void updateById(Taste taste) throws SSException;
+    public void update(Taste taste) throws SSException;
 
     /**
      * 根据ID查询
@@ -48,6 +48,13 @@ public interface TasteService {
      * @return
      * @throws SSException
      */
-    public List<Taste> listAll() throws SSException;
+    public List<Taste> listAll(int curPage, int pageSize) throws SSException;
+
+    /**
+     * 获取所有口味数量
+     * @return
+     * @throws SSException
+     */
+    public int countAll() throws SSException;
 
 }

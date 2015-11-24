@@ -1,4 +1,4 @@
-package com.emenu.test.dish.unit;
+package com.emenu.test.dish;
 
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.service.dish.UnitService;

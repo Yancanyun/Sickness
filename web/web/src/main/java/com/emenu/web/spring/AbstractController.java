@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.dish.DishService;
+import com.emenu.service.dish.TasteService;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.meal.MealPeriodService;
@@ -258,6 +259,7 @@ public class AbstractController extends Base {
     @Qualifier("securityUserService")
     protected static SecurityUserService securityUserService;
 
+    //分类
     @StaticAutoWire
     @Qualifier("tagFacadeService")
     protected static TagFacadeService tagFacadeService;
@@ -282,6 +284,7 @@ public class AbstractController extends Base {
     @Qualifier("tableMealPeriodService")
     protected static TableMealPeriodService tableMealPeriodService;
 
+    //库存存放点
     @StaticAutoWire
     @Qualifier("storageDepotService")
     protected static StorageDepotService storageDepotService;
@@ -318,11 +321,12 @@ public class AbstractController extends Base {
     @Qualifier("vipDishPriceService")
     protected static VipDishPriceService vipDishPriceService;
 
-
+    //库存单据
     @StaticAutoWire
     @Qualifier("storageReportService")
     protected static StorageReportService storageReportService;
 
+    //库存单据详情
     @StaticAutoWire
     @Qualifier("storageReportItemService")
     protected static StorageReportItemService storageReportItemService;
@@ -330,4 +334,9 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("serialNumService")
     protected static SerialNumService serialNumService;
+
+    //菜品口味
+    @StaticAutoWire
+    @Qualifier("tasteService")
+    protected static TasteService tasteService;
  }

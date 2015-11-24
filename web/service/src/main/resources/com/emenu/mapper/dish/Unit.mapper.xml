@@ -9,8 +9,7 @@
 
     <select id="listByPage" resultMap="pw.Unit">
         SELECT `id`,`name`,`type`,`created_time`,`last_modified_time`
-        FROM
-            `t_unit`
+        FROM `t_unit`
         LIMIT #{offset},#{pageSize}
     </select>
 

@@ -20,7 +20,15 @@ public interface TasteMapper {
      * @return
      * @throws SSException
      */
-    public List<Taste> listAll() throws SSException;
+    public List<Taste> listAll(@Param("offset") int offset,
+                               @Param("pageSize") int pageSize) throws SSException;
+
+    /**
+     * 计算口味总数
+     * @return
+     * @throws SSException
+     */
+    public int countAll() throws SSException;
 
     /**
      * 检查是否有重名

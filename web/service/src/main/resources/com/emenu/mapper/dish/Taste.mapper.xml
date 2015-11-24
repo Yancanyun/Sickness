@@ -5,6 +5,14 @@
     <select id ="listAll" resultMap="pw.Taste">
         SELECT `id`,`name`,`charge` ,`created_time`,`last_modified_time`
         FROM `t_taste`
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            `t_taste`
     </select>
 
     <select id="checkNameIsExist" resultType="int">

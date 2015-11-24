@@ -1,6 +1,7 @@
 package com.emenu.service.dish.impl;
 
 import com.emenu.common.entity.dish.Taste;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.TasteMapper;
 import com.emenu.service.dish.TasteService;
@@ -61,7 +62,7 @@ public class TasteServiceImpl implements TasteService{
     }
 
     @Override
-    public void updateById(Taste taste) throws SSException {
+    public void update(Taste taste) throws SSException {
         try {
             if(!Assert.isNotNull(taste.getId()) && Assert.lessOrEqualZero(taste.getId())){
                 throw SSException.get(EmenuException.TasteIdError);
@@ -93,15 +94,22 @@ public class TasteServiceImpl implements TasteService{
     }
 
     @Override
-    public List<Taste> listAll() throws SSException {
+    public List<Taste> listAll(int curPage, int pageSize) throws SSException {
         List<Taste> tasteList = Collections.emptyList();
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        int offset = curPage * pageSize;
         try {
-            tasteList = tasteMapper.listAll();
+            tasteList = tasteMapper.listAll(offset, pageSize);
             return tasteList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryTasteFailed,e);
         }
+    }
+
+    @Override
+    public int countAll() throws SSException {
+        return 0;
     }
 
     /**

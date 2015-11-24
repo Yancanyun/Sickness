@@ -1,7 +1,8 @@
-package com.emenu.test.dish.tag;
+package com.emenu.test.dish;
 
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.service.dish.tag.TagService;
+import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
@@ -20,6 +21,9 @@ public class TagTest extends AbstractTestCase{
 
     @Autowired
     TagService tagService;
+
+    @Autowired
+    private DishTagPrinterService dishTagPrinterService;
 
     @Test
     public void addTag() throws SSException {
@@ -68,5 +72,10 @@ public class TagTest extends AbstractTestCase{
         tag.setId(8);
         tag.setpId(6);
         tagService.updateFiled(tag,"pId");
+    }
+
+    @Test
+    public void delTagPrinter() throws SSException {
+        dishTagPrinterService.delPrinterDish(18,1);
     }
 }
