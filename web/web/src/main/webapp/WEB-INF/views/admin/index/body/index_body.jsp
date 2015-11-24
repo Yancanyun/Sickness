@@ -11,7 +11,7 @@
             </a>
         </div>
         <div class="col-sm-2 small-module second-module margin-bottom-distance">
-            <a class="text-center welcome-icon" href="#">
+            <a class="text-center welcome-icon" href="${website}admin/dish">
                 <i class="fa fa-delicious fa-3x"></i>
                 <br>菜品管理
             </a>

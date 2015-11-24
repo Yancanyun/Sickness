@@ -4,12 +4,12 @@ import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.printer.DishTagPrinter;
-import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.SaleTypeEnums;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishMapper;
+import com.emenu.service.dish.DishMealPeriodService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTasteService;
 import com.emenu.service.printer.DishTagPrinterService;
@@ -42,6 +42,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishTasteService dishTasteService;
+
+    @Autowired
+    private DishMealPeriodService dishMealPeriodService;
 
     @Autowired
     private DishMapper dishMapper;
@@ -91,10 +94,10 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void newDish(DishDto dishDto) throws SSException {
+    public DishDto newDish(DishDto dishDto) throws SSException {
         try {
             if (!checkBeforeSave(dishDto)) {
-                return;
+                return null;
             }
             if (Assert.isNull(dishDto.getCreatedPartyId())
                     || Assert.lessOrEqualZero(dishDto.getCreatedPartyId())) {
@@ -122,14 +125,20 @@ public class DishServiceImpl implements DishService {
             dishTasteService.newDishTaste(dish.getId(), dishDto.getTasteIdList());
 
             // 3. 添加餐段
-            // TODO: 2015/11/20 添加餐段
+            dishMealPeriodService.newDishMealPeriod(dish.getId(), dishDto.getMealPeriodIdList());
 
             // 4. 添加打印机
-            DishTagPrinter dishTagPrinter = new DishTagPrinter();
-            dishTagPrinter.setDishId(dish.getId());
-            dishTagPrinter.setPrinterId(dishDto.getPrinterId());
-            dishTagPrinter.setType(PrinterDishEnum.DishPrinter.getId());
-            dishTagPrinterService.newPrinterDish(dishTagPrinter);
+            if (Assert.isNotNull(dishDto.getPrinterId())
+                    && !Assert.lessOrEqualZero(dishDto.getPrinterId())) {
+                DishTagPrinter dishTagPrinter = new DishTagPrinter();
+                dishTagPrinter.setDishId(dish.getId());
+                dishTagPrinter.setPrinterId(dishDto.getPrinterId());
+                dishTagPrinter.setType(PrinterDishEnum.DishPrinter.getId());
+                dishTagPrinterService.newPrinterDish(dishTagPrinter);
+            }
+
+            dishDto.setId(dish.getId());
+            return dishDto;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishInsertFailed, e);
@@ -167,10 +176,14 @@ public class DishServiceImpl implements DishService {
             dishTasteService.updateDishTaste(dish.getId(), dishDto.getTasteIdList());
 
             // 3. 更新餐段
-            // TODO: 2015/11/20 更新餐段
+            dishMealPeriodService.updateDishMealPeriod(dish.getId(), dishDto.getMealPeriodIdList());
 
             // 4. 更新打印机
-            // dishTagPrinterService.updatePrinterDish();
+            DishTagPrinter dishTagPrinter = new DishTagPrinter();
+            dishTagPrinter.setDishId(dish.getId());
+            dishTagPrinter.setPrinterId(dishDto.getPrinterId());
+            dishTagPrinter.setType(PrinterDishEnum.DishPrinter.getId());
+            dishTagPrinterService.updatePrinterDish(dishTagPrinter);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishUpdateFailed, e);

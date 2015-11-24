@@ -11,7 +11,6 @@
         </ol>
         <h2>菜品管理-菜品列表</h2>
 
-        <div class="alert alert-success J_tip">提示信息!</div>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">

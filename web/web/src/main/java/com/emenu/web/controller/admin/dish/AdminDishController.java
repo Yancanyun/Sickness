@@ -7,10 +7,12 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.dish.UnitEnum;
@@ -21,6 +23,8 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
+import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +57,8 @@ public class AdminDishController extends AbstractController {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            // tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            // tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
+            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
+            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -149,16 +153,81 @@ public class AdminDishController extends AbstractController {
     public String newDish(DishDto dishDto,
                           RedirectAttributes redirectAttributes) {
         try {
-            dishService.newDish(dishDto);
+            // 设置创建者
+            dishDto.setCreatedPartyId(getPartyId());
+            dishDto = dishService.newDish(dishDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            redirectAttributes.addAttribute("msg", e.getMessage());
+            return "admin/dish/dish/new_home";
+
         }
 
-        redirectAttributes.addAttribute("msg", NEW_SUCCESS_MSG);
-        String redirectUrl = "/" + URLConstants.ADMIN_DISH_URL + "/list";
+        String redirectUrl = "/" + URLConstants.ADMIN_DISH_URL + "/img/upload/" + dishDto.getId();
         return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * 去添加图片页
+     *
+     * @param dishId
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishNew)
+    @RequestMapping(value = "img/upload/{dishId}", method = RequestMethod.GET)
+    public String toUploadDishImg(@PathVariable("dishId") Integer dishId,
+                                  Model model) {
+        model.addAttribute("dishId", dishId);
+        return "admin/dish/dish/img_upload_home";
+    }
+
+    /**
+     * 菜品图片上传
+     *
+     * @param dishId
+     * @param imgType
+     * @param image
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishNew)
+    @RequestMapping(value = "img/upload/ajax", method = RequestMethod.POST)
+    @ResponseBody
+    public JSON ajaxUploadImg(@RequestParam("dishId") Integer dishId,
+                              @RequestParam("imgType") Integer imgType,
+                              @RequestParam("image") PandaworkMultipartFile image) {
+        try {
+            DishImg dishImg = new DishImg();
+            dishImg.setDishId(dishId);
+            dishImg.setImgType(DishImgTypeEnums.valueOf(imgType).getId());
+
+            dishImgService.newDishImg(dishImg, image);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * ajax删除图片
+     *
+     * @param id
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
+    @RequestMapping(value = "img/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSON ajaxDeleteDishImg(@PathVariable("id") Integer id) {
+        try {
+            dishImgService.delById(id);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -186,6 +255,12 @@ public class AdminDishController extends AbstractController {
         return "admin/dish/dish/update_home";
     }
 
+    /**
+     * 更新提交
+     *
+     * @param dishDto
+     * @return
+     */
     @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
     @RequestMapping(value = "", method = RequestMethod.PUT)
     public String updateDish(DishDto dishDto) {
@@ -221,6 +296,13 @@ public class AdminDishController extends AbstractController {
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
+    /**
+     * ajax更改状态(停用、启用)
+     *
+     * @param id
+     * @param status
+     * @return
+     */
     @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
     @RequestMapping(value = "ajax/status/{id}", method = RequestMethod.PUT)
     @ResponseBody
@@ -235,6 +317,36 @@ public class AdminDishController extends AbstractController {
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
+
+    /**
+     * 根据父分类id获取子分类
+     *
+     * @param pId
+     * @return
+     */
+    @RequestMapping(value = "ajax/tag/children", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxGetChildrenTag(@RequestParam("pId") Integer pId) {
+        List<Tag> childList = Collections.emptyList();
+        try {
+            childList = tagFacadeService.listChildrenByTagId(pId);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+
+        JSONArray jsonArray = new JSONArray();
+        for (Tag tag : childList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", tag.getId());
+            jsonObject.put("name", tag.getName());
+
+            jsonArray.add(jsonObject);
+        }
+
+        return sendJsonArray(jsonArray);
+    }
+
 
     /**
      * 进入添加页和编辑页之前，添加一些数据到model里
@@ -255,7 +367,7 @@ public class AdminDishController extends AbstractController {
         List<Unit> weightUnitList = new ArrayList<Unit>();
         List<Unit> quantityUnitList = new ArrayList<Unit>();
         for (Unit unit : unitList) {
-            if (UnitEnum.HundredWeight.equals(unit.getType())) {
+            if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
                 weightUnitList.add(unit);
             } else {
                 quantityUnitList.add(unit);

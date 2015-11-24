@@ -48,7 +48,7 @@ public interface DishService {
      * @param dishDto
      * @throws SSException
      */
-    public void newDish(DishDto dishDto) throws SSException;
+    public DishDto newDish(DishDto dishDto) throws SSException;
 
     /**
      * 更新菜品

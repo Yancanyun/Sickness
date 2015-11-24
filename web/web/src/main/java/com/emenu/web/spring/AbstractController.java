@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.dish.DishImgService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.TasteService;
 import com.emenu.service.dish.tag.TagFacadeService;
@@ -339,4 +340,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("tasteService")
     protected static TasteService tasteService;
+
+    @StaticAutoWire
+    @Qualifier("dishImgService")
+    protected static DishImgService dishImgService;
  }

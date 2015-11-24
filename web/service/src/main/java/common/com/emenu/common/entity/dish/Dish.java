@@ -72,7 +72,7 @@ public class Dish extends AbstractEntity {
     private Integer likeNums;
 
     // 是否网络可点(0-不可用,1-可用)
-    @Column(name = "is_network_avaliable")
+    @Column(name = "is_network_available")
     private Integer isNetworkAvailable;
 
     // 是否启用会员价(0-不可用,1-可用)

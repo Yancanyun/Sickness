@@ -11,11 +11,11 @@
     <tiles:insertAttribute name="header"/>
     <div id="page clearfix">
         <tiles:insertAttribute name="sidebar"/>
-            <div class="holder">
-                <div class="container">
-                    <tiles:insertAttribute name="body"/>
-                </div>
+        <div class="holder">
+            <div class="container">
+                <tiles:insertAttribute name="body"/>
             </div>
+        </div>
     </div>
     <tiles:insertAttribute name="footer"/>
     <tiles:insertAttribute name="script"/>

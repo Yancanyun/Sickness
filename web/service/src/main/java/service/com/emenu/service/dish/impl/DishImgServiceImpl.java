@@ -71,7 +71,8 @@ public class DishImgServiceImpl implements DishImgService {
             // TODO: 2015/11/16 需要添加上传图片的大小
             String path = fileUploadService.uploadFile(image, FileUploadPathEnums.DishImgPath, dishImg.getDishId().toString());
             // 更新图片地址
-            commonDao.updateFieldsById(image, "imgPath");
+            dishImg.setImgPath(path);
+            commonDao.updateFieldsById(dishImg, "imgPath");
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishImgInsertFailed, e);
@@ -119,7 +120,7 @@ public class DishImgServiceImpl implements DishImgService {
                 || Assert.lessOrEqualZero(dishImg.getDishId())) {
             throw SSException.get(EmenuException.DishIdError);
         }
-        DishImgTypeEnums typeEnums = DishImgTypeEnums.valueOf(dishImg.getId());
+        DishImgTypeEnums typeEnums = DishImgTypeEnums.valueOf(dishImg.getImgType());
         Assert.isNotNull(typeEnums, EmenuException.DishImgTypeIllegal);
 
         if (Assert.isNull(image)

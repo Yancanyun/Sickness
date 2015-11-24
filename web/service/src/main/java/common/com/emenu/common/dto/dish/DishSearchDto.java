@@ -27,6 +27,9 @@ public class DishSearchDto {
     // 关键词
     private String keyword;
 
+    // 菜品id
+    private List<Integer> dishIdList;
+
     // 分类id
     private List<Integer> tagIdList;
 
@@ -81,6 +84,14 @@ public class DishSearchDto {
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public List<Integer> getDishIdList() {
+        return dishIdList;
+    }
+
+    public void setDishIdList(List<Integer> dishIdList) {
+        this.dishIdList = dishIdList;
     }
 
     public List<Integer> getTagIdList() {

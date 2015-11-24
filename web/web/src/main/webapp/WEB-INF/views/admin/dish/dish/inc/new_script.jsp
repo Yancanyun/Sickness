@@ -1,13 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Insert title here</title>
-</head>
-<body>
 
-</body>
-</html>
+<script type="text/javascript">
+    KISSY.ready(function(S){
+        S.use('page/dish-management/dish-management-add, widget/tab', function(S){
+            PW.page.DishManagement.Add();
+        });
+    });
+</script>
