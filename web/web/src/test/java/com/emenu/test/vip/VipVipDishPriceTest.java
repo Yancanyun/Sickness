@@ -3,6 +3,7 @@ package com.emenu.test.vip;
 import com.emenu.common.dto.vip.VipDishPriceDto;
 import com.emenu.common.entity.vip.VipDishPrice;
 import com.emenu.common.enums.TrueEnums;
+import com.emenu.mapper.vip.VipDishPriceMapper;
 import com.emenu.service.vip.VipDishPriceService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -20,6 +21,9 @@ import java.util.List;
  * @date 2015/11/21 9:58
  */
 public class VipVipDishPriceTest extends AbstractTestCase{
+
+    @Autowired
+    private VipDishPriceMapper vipDishPriceMapper;
 
     @Autowired
     private VipDishPriceService vipDishPriceService;
@@ -181,5 +185,25 @@ public class VipVipDishPriceTest extends AbstractTestCase{
         // 测试4：选择菜品-差价
         // ids为1234567；差价-6；最低价5.00；不包含酒水；覆盖原有会员价；会员价方案id为1；
         vipDishPriceService.generateVipDishPrice(ids, discount, difference2, lowPrice, includeDrinksFalse, coverTrue, vipDishPricePlanId2);
+    }
+
+    @Test
+    public void insertAll() throws Exception {
+        final VipDishPrice vipDishPrice = new VipDishPrice();
+        vipDishPrice.setDishId(2);
+        vipDishPrice.setVipDishPricePlanId(20);
+        vipDishPrice.setVipDishPrice(new BigDecimal("200.00"));
+
+        final VipDishPrice vipDishPrice1 = new VipDishPrice();
+        vipDishPrice1.setDishId(3);
+        vipDishPrice1.setVipDishPricePlanId(30);
+        vipDishPrice1.setVipDishPrice(new BigDecimal("300.00"));
+
+        List<VipDishPrice> vipDishPriceList = new ArrayList<VipDishPrice>(){{
+            add(vipDishPrice);
+            add(vipDishPrice1);
+        }};
+
+        vipDishPriceMapper.insertAll(vipDishPriceList);
     }
 }

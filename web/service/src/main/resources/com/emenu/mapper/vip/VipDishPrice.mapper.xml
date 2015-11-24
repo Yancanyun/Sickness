@@ -97,4 +97,13 @@
         AND `vip_dish_price_plan_id` = #{vipDishPricePlanId}
         ORDER BY `id` ASC
     </select>
+
+    <insert id="insertAll">
+        INSERT INTO `t_vip_dish_price`(`vip_dish_price_plan_id`, `dish_id`, `vip_dish_price`)
+        VALUES
+        <foreach collection="vipDishPriceList" item="vipDishPrice" separator=",">
+            (#{vipDishPrice.vipDishPricePlanId}, #{vipDishPrice.dishId}, #{vipDishPrice.vipDishPrice})
+        </foreach>
+        ON DUPLICATE KEY UPDATE `vip_dish_price` = VALUES(`vip_dish_price`)
+    </insert>
 </mapper>

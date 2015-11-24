@@ -90,4 +90,11 @@ public interface VipDishPriceMapper {
     public VipDishPrice queryByDishIdAndVipDishPricePlanId(@Param("dishId")int dishId,
                                                            @Param("vipDishPricePlanId")int vipDishPricePlanId) throws Exception;
 
+    /**
+     * 批量添加会员价
+     *
+     * @param vipDishPriceList
+     * @throws Exception
+     */
+    public void insertAll(@Param("vipDishPriceList") List<VipDishPrice> vipDishPriceList) throws Exception;
 }
