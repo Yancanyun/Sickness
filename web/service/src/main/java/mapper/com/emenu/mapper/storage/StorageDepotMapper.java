@@ -32,7 +32,7 @@ public interface StorageDepotMapper {
      * @throws SSException
      */
     public List<StorageDepot> listByPage(@Param("offset") int offset,
-                                 @Param("pageSize") int pageSize) throws SSException;
+                                         @Param("pageSize") int pageSize) throws SSException;
 
     /**
      * 根据id查找存放点

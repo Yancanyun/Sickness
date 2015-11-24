@@ -214,7 +214,7 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      * @return
      * @throws SSException
      */
-    public Boolean checkNameIsExist(String name) throws SSException {
+    private Boolean checkNameIsExist(String name) throws SSException {
         int count = 0;
         try {
             count = storageDepotMapper.checkNameIsExist(name);
@@ -232,7 +232,7 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      * @return
      * @throws SSException
      */
-    public Boolean checkNameIsConflict(String name,int id) throws SSException {
+    private Boolean checkNameIsConflict(String name,int id) throws SSException {
         int count = 0;
         try {
             count = storageDepotMapper.checkNameIsConflict(name,id);
