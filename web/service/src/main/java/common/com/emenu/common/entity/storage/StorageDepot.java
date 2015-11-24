@@ -9,8 +9,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * StorageDepot
- * 存放点
+ * 存放点实体
  *
  * @author xubr
  * @date 2015/11/10.
@@ -37,9 +36,7 @@ public class StorageDepot extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
-    /**
-     * ************getter and setter***********************
-     */
+    /**************getter and setter********************/
 
     public Integer getId() {
         return id;

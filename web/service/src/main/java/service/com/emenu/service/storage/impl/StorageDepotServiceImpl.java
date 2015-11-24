@@ -18,8 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * DopotServiceImpl
- * 存放点service层实现
+ * 存放点Service实现
+ *
  * @author xubr
  * @date 2015/11/10.
  */
@@ -69,7 +69,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      */
     @Override
     public List<StorageDepot> listAll() throws SSException {
-
         List<StorageDepot> list = Collections.<StorageDepot>emptyList();
 
         try {
@@ -89,7 +88,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      */
     @Override
     public int countAll() throws SSException {
-
         try {
             return storageDepotMapper.countAll();
         } catch (Exception e) {
@@ -107,12 +105,10 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      */
     @Override
     public StorageDepot queryByName(String name) throws SSException {
-
         //检查name是否为空
         if(Assert.isNull(name)) {
             throw SSException.get(EmenuException.DepotNameError);
         }
-
         try {
             return storageDepotMapper.queryByName(name);
         } catch (Exception e) {
@@ -123,12 +119,10 @@ public class StorageDepotServiceImpl implements StorageDepotService {
 
     @Override
     public StorageDepot queryById(int id) throws SSException {
-
         //检查id是否为空或者小于等于0，如果是，直接返回
         if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.DepotIdError);
         }
-
         try {
             return storageDepotMapper.queryById(id);
         } catch (Exception e) {
@@ -148,7 +142,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED ,rollbackFor = {SSException.class,Exception.class,RuntimeException.class})
     public StorageDepot newStorageDepot(StorageDepot storageDepot) throws SSException {
-
         //检查存放点名称是否为空
         if(Assert.isNull(storageDepot.getName())) {
            throw SSException.get(EmenuException.DepotNameError);
@@ -157,8 +150,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         if(checkNameIsExist(storageDepot.getName())){
             throw SSException.get(EmenuException.DepotNameIsExist);
         }
-
-
         try {
             return commonDao.insert(storageDepot);
         }catch (Exception e) {
@@ -176,12 +167,10 @@ public class StorageDepotServiceImpl implements StorageDepotService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delById(int id) throws SSException {
-
         //检查id是否为空或者小于等于0，如果是，直接返回
         if(!Assert.isNull(id)&&Assert.lessOrEqualZero(id)) {
             throw SSException.get(EmenuException.DepotIdError);
         }
-
         try {
             commonDao.deleteById(StorageDepot.class,id);
         } catch (Exception e) {
@@ -199,7 +188,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStorageDepot(StorageDepot storageDepot) throws SSException {
-
         //检查id是否为空或者小于等于0，如果是则直接返回
         if(!Assert.isNull(storageDepot.getId())&&Assert.lessOrEqualZero(storageDepot.getId())) {
             throw SSException.get(EmenuException.DepotIdError);
@@ -212,7 +200,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         if (checkNameIsConflict(storageDepot.getName(), storageDepot.getId())){
             throw SSException.get(EmenuException.DepotNameIsConflict);
         }
-
         try {
             commonDao.update(storageDepot);
         } catch (Exception e) {
@@ -246,7 +233,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
      * @throws SSException
      */
     public Boolean checkNameIsConflict(String name,int id) throws SSException {
-
         int count = 0;
         try {
             count = storageDepotMapper.checkNameIsConflict(name,id);

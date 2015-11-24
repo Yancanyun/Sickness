@@ -6,8 +6,8 @@ import com.pandawork.core.common.exception.SSException;
 import java.util.List;
 
 /**
- * DopotService
- * 存放点service层
+ * 存放点Service
+ *
  * @author xubr
  * @date 2015/11/10.
  */
@@ -15,6 +15,7 @@ public interface StorageDepotService {
 
     /**
      * 分页获取存放点
+     *
      * @param curPage
      * @param pageSize
      * @return
@@ -24,6 +25,7 @@ public interface StorageDepotService {
 
     /**
      * 获取全部存放点
+     *
      * @return
      * @throws SSException
      */
@@ -31,6 +33,7 @@ public interface StorageDepotService {
 
     /**
      * 计算存放点总数
+     *
      * @return
      * @throws SSException
      */
@@ -38,6 +41,7 @@ public interface StorageDepotService {
 
     /**
      * 根据名称查找存放点
+     *
      * @param name
      * @return
      * @throws SSException
@@ -46,6 +50,7 @@ public interface StorageDepotService {
 
     /**
      * 根据id查找存放点
+     *
      * @param id
      * @return
      * @throws SSException
@@ -62,6 +67,7 @@ public interface StorageDepotService {
 
     /**
      * 根据id删除存放点
+     *
      * @param id
      * @throws SSException
      */
@@ -69,10 +75,10 @@ public interface StorageDepotService {
 
     /**
      * 修改存放点
+     *
      * @param storageDepot
      * @throws SSException
      */
     public void updateStorageDepot(StorageDepot storageDepot) throws SSException;
-
 
 }

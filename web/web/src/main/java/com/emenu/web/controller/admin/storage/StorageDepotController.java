@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * DepotController
+ * 存放点Controller
  *
  * @author xubr
  * @date 2015/11/12.
@@ -47,7 +47,6 @@ public class StorageDepotController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxListStorageDepot(@PathVariable("curPage")Integer curPage,
                                            @RequestParam Integer pageSize) {
-
         List<StorageDepot> depotList = Collections.<StorageDepot>emptyList();
         try {
             depotList = storageDepotService.listByPage(curPage, pageSize);
@@ -62,9 +61,9 @@ public class StorageDepotController extends AbstractController{
             jsonObject.put("id", storageDepot.getId());
             jsonObject.put("name", storageDepot.getName());
             jsonObject.put("instruction", storageDepot.getIntroduction());
+
             jsonArray.add(jsonObject);
         }
-
         int dataCount = 0;
         try {
             dataCount = storageDepotService.countAll();
@@ -77,6 +76,7 @@ public class StorageDepotController extends AbstractController{
 
     /**
      * Ajax添加
+     *
      * @param storageDepot
      * @return
      */
@@ -84,7 +84,6 @@ public class StorageDepotController extends AbstractController{
     @RequestMapping(value = "ajax",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewStorageDepot(StorageDepot storageDepot) {
-
         try {
             storageDepotService.newStorageDepot(storageDepot);
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -96,6 +95,7 @@ public class StorageDepotController extends AbstractController{
 
     /**
      * ajax修改
+     *
      * @param storageDepot
      * @return
      */
@@ -103,7 +103,6 @@ public class StorageDepotController extends AbstractController{
     @RequestMapping(value= "ajax",method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateStorageDepot(StorageDepot storageDepot) {
-
         try {
             storageDepotService.updateStorageDepot(storageDepot);
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -115,6 +114,7 @@ public class StorageDepotController extends AbstractController{
 
     /**
      * ajax删除
+     *
      * @param id
      * @return
      */
