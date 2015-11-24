@@ -133,18 +133,21 @@ public class VipInfoController extends AbstractController {
     public String toUpdateVipInfo(@PathVariable("id") int id,
                                   Model model){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
+        String birthday = null;
         try {
             VipInfo vipInfo = vipInfoService.queryById(id);
-            String birthday = sdf.format(vipInfo.getBirthday());
+            if (vipInfo.getBirthday() == null){
+                birthday = "";
+            }else{
+                birthday = sdf.format(vipInfo.getBirthday());
+            }
             model.addAttribute("vipInfo",vipInfo);
-            model.addAttribute("birthday",birthday == null ? "" : birthday);
-        }catch (SSException e) {
+            model.addAttribute("birthday",birthday);
+        } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-
         return "admin/party/group/vip/vip_info_update";
     }
 
@@ -238,14 +241,20 @@ public class VipInfoController extends AbstractController {
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
     public String detailVipInfo(@PathVariable("id") Integer id,
                                 Model model){
+        String birthdayStr = null;
         try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             VipInfo vipInfo = vipInfoService.queryById(id);
             Date birthday = vipInfo.getBirthday();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            if (birthday == null){
+                birthdayStr = "";
+            }else{
+                birthdayStr = sdf.format(birthday);
+            }
             VipInfoDto vipInfoDto = new VipInfoDto();
             vipInfoDto.setName(vipInfo.getName());
             vipInfoDto.setSex(SexEnums.valueOf(vipInfo.getSex()).getSex());
-            vipInfoDto.setBirthday(sdf.format(birthday));
+            vipInfoDto.setBirthday(birthdayStr);
             vipInfoDto.setPhone(vipInfo.getPhone());
             vipInfoDto.setQq(vipInfo.getQq());
             vipInfoDto.setEmail(vipInfo.getEmail());

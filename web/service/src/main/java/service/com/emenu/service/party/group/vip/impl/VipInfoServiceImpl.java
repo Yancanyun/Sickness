@@ -232,6 +232,9 @@ public class VipInfoServiceImpl implements VipInfoService{
         try {
             CommonUtil.checkId(id, EmenuException.VipIdNotNull);
             VipInfo vipInfo = vipInfoMapper.queryById(id);
+            /*if (vipInfo.getBirthday() == null){
+                vipInfo.setBirthday();
+            }*/
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
