@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.vip.VipDishPriceMapper">
-
-    <select id="listAll" resultMap="pw.VipDishPrice">
-        SELECT `id`,
-        `vip_dish_price_plan_id` AS vipDishPricePlanId,
-        `dish_id` AS dishId,
-        `vip_dish_price` AS vipDishPrice
-        FROM `t_vip_dish_price`
-        ORDER BY  `id` ASC
-    </select>
     
     <select id="listByVipDishPricePlanId" resultMap="pw.VipDishPrice">
         SELECT `id`,
@@ -21,7 +12,7 @@
         ORDER BY `id` ASC
     </select>
 
-    <select id="listDishPriceDtosByPage" resultType="com.emenu.common.dto.vip.VipDishPriceDto">
+    <select id="listDishPriceDtos" resultType="com.emenu.common.dto.vip.VipDishPriceDto">
         SELECT tableVipDishPrice.`id` AS `id`,
         dish.`dish_number` AS dishNumber,
         dish.`assistant_code` AS assistantCode,
@@ -35,15 +26,8 @@
         WHERE dish.`id` = tableVipDishPrice.`dish_id`
         AND tableVipDishPrice.`vip_dish_price_plan_id` = #{vipDishPricePlanId}
         ORDER BY  tableVipDishPrice.`id` ASC
-        LIMIT #{offset},#{pageSize}
     </select>
-    
-    <select id="countAllByVipDishPricePlanId" resultType="int">
-        SELECT COUNT(1)
-        FROM `t_vip_dish_price`
-        WHERE `t_vip_dish_price`.vip_dish_price_plan_id = #{vipDishPricePlanId}
-    </select>
-    
+
     <select id="listDishPriceDtosByKeyword" resultType="com.emenu.common.dto.vip.VipDishPriceDto">
         SELECT tableVipDishPrice.`id` AS `id`,
         dish.`dish_number` AS dishNumber,
@@ -65,7 +49,6 @@
             </if>
         </where>
         ORDER BY  tableVipDishPrice.`id` ASC
-        LIMIT #{offset},#{pageSize}
     </select>
     
     <select id="queryById" resultMap="pw.VipDishPrice">
@@ -79,12 +62,6 @@
                 id = #{id}
             </if>
         </where>
-    </select>
-    
-    <select id="countByDishId" resultType="int">
-        SELECT count(1)
-        FROM `t_vip_dish_price`
-        WHERE `dish_id` = #{dishId}
     </select>
 
     <select id="queryByDishIdAndVipDishPricePlanId" resultMap="pw.VipDishPrice">

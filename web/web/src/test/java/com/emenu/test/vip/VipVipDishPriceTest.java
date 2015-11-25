@@ -29,27 +29,6 @@ public class VipVipDishPriceTest extends AbstractTestCase{
     private VipDishPriceService vipDishPriceService;
 
     @Test
-    public void newVipDishPrice() throws SSException{
-        VipDishPrice vipDishPriceRecord = new VipDishPrice();
-        BigDecimal price = new BigDecimal("30.00");
-        vipDishPriceRecord.setDishId(1);
-        vipDishPriceRecord.setVipDishPricePlanId(1);
-        vipDishPriceRecord.setVipDishPrice(price);
-        vipDishPriceService.newVipDishPrice(vipDishPriceRecord);
-    }
-
-    @Test
-    public void listAll() throws SSException{
-        List<VipDishPrice> vipDishPriceList = vipDishPriceService.listAll();
-        for (VipDishPrice vipDishPrice: vipDishPriceList){
-            System.out.print("会员价方案id:" + vipDishPrice.getVipDishPricePlanId());
-            System.out.print("会员价id" + vipDishPrice.getId());
-            System.out.print("菜品id" + vipDishPrice.getDishId());
-            System.out.println("菜品会员价：" + vipDishPrice.getVipDishPrice());
-        }
-    }
-
-    @Test
     public void listByVipDishPricePlanId() throws SSException{
         Integer vipDishPricePlanId  = 1;
         Integer count = 0;
@@ -60,7 +39,6 @@ public class VipVipDishPriceTest extends AbstractTestCase{
             System.out.print("菜品id" + vipDishPrice.getDishId());
             System.out.println("菜品会员价：" + vipDishPrice.getVipDishPrice());
         }
-        count = vipDishPriceService.countAllByVipDishPricePlanId(vipDishPricePlanId);
         System.out.println(count);
     }
 
@@ -77,13 +55,13 @@ public class VipVipDishPriceTest extends AbstractTestCase{
     }
 
     @Test
-    public void listDishPriceDtosByKeyword() throws SSException{
+    public void listVipDishPriceDtosByKeyword() throws SSException{
         Integer vipDishPricePlanId = 1;
         String keyword = "0003";
         Integer curPage = 1;
         Integer pageSize = 20;
         BigDecimal difference = new BigDecimal("0.00");
-        List<VipDishPriceDto> vipDishPriceDtoList = vipDishPriceService.listDishPriceDtosByKeyword(vipDishPricePlanId, keyword, curPage, pageSize);
+        List<VipDishPriceDto> vipDishPriceDtoList = vipDishPriceService.listVipDishPriceDtosByKeyword(vipDishPricePlanId, keyword);
         for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
             difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
             vipDishPriceDto.setPriceDifference(difference);
@@ -101,47 +79,33 @@ public class VipVipDishPriceTest extends AbstractTestCase{
     @Test
     public void generateVipDishPrice()throws SSException{
 
-        List<Integer> ids = new ArrayList<Integer>();
-        Integer id1 = 1;
-        Integer id2 = 2;
-        Integer id3 = 3;
-        Integer id4 = 4;
-        Integer id5 = 5;
-        Integer id6 = 6;
-        Integer id7 = 7;
+        List<Integer> dishIds = new ArrayList<Integer>();
+        Integer dishId1 = 1;
+        Integer dishId2 = 2;
+        Integer dishId3 = 3;
+        Integer dishId4 = 4;
+        Integer dishId5 = 5;
+        Integer dishId6 = 6;
+        Integer dishId7 = 7;
 
-        Integer id11 = 11;
-        Integer id12 = 12;
-        Integer id13 = 13;
-        Integer id14 = 14;
-        Integer id15 = 15;
-        Integer id16 = 16;
-        Integer id17 = 17;
+        Integer dishId17 = 17;
 
-        //ids
-        /*ids.add(id1);
-        ids.add(id2);
-        ids.add(id3);
-        ids.add(id4);
-        ids.add(id5);
-        ids.add(id6);
-        ids.add(id7);*/
-
-        ids.add(id11);
-        ids.add(id12);
-        ids.add(id13);
-        ids.add(id14);
-        ids.add(id15);
-        ids.add(id16);
-        ids.add(id17);
+        //dishIds
+        /*dishIds.add(dishId1);
+        dishIds.add(dishId2);
+        dishIds.add(dishId3);
+        dishIds.add(dishId4);
+        dishIds.add(dishId5);
+        dishIds.add(dishId6);
+        dishIds.add(dishId17);*/
 
         //折扣
-        Integer discount = null;
-        Integer discount1 = 95;
-        Integer discount2 = 92;
-        Integer discount3 = 90;
-        Integer discount4 = 88;
-        Integer discount5 = 85;
+        BigDecimal discount = null;
+        BigDecimal discount1 = new BigDecimal("9.5");
+        BigDecimal discount2 = new BigDecimal("9.2");
+        BigDecimal discount3 = new BigDecimal("9.0");
+        BigDecimal discount4 = new BigDecimal("8.8");
+        BigDecimal discount5 = new BigDecimal("8.5");
 
         //差价
         BigDecimal difference = null;
@@ -168,23 +132,23 @@ public class VipVipDishPriceTest extends AbstractTestCase{
         Integer vipDishPricePlanId4 = 4;
         Integer vipDishPricePlanId5 = 5;
 
-        // 调用通用接口
-
-        // 测试1: 自动生成-全部-折扣
+        // 测试1:按照折扣生成会员价
+        //生成所有会员价
         // ids为空；折扣95；最低价5.00；包含酒水；覆盖原有会员价；会员价方案id为1；
-        //vipDishPriceService.generateVipDishPrice(ids, discount1, difference, lowPrice, includeDrinksTrue, coverTrue, vipDishPricePlanId1);
+        //vipDishPriceService.generateVipDishPrice(dishIds, discount1, difference, lowPrice, includeDrinksTrue, coverTrue, vipDishPricePlanId1);
 
-        // 测试2：选择菜品-折扣
-        // ids为12346；折扣90；最低价5.00；不包含酒水；覆盖原有会员价；会员价方案id为1；
-        //vipDishPriceService.generateVipDishPrice(ids, discount3, difference, lowPrice, includeDrinksFalse, coverTrue, vipDishPricePlanId1);
+        // 测试2:按照差价生成会员价
+        //生成所有会员价
+        //vipDishPriceService.generateVipDishPrice(dishIds, discount, difference1, lowPrice, includeDrinksTrue, coverTrue, vipDishPricePlanId2);
 
-        // 测试3：自动生成-全部-差价
-        // ids为空；差价-2；最低价5.00；包含酒水；覆盖原有会员价；会员价方案id为1；
-        //vipDishPriceService.generateVipDishPrice(ids, discount, difference3, lowPrice, includeDrinksTrue, coverTrue, vipDishPricePlanId2);
+        // 测试3:按照折扣生成会员价
+        // 选择性更改
+        // ids为空；折扣95；最低价5.00；包含酒水；覆盖原有会员价；会员价方案id为1；
+        //vipDishPriceService.generateVipDishPrice(dishIds, discount3, difference, lowPrice, includeDrinksFalse, coverTrue, vipDishPricePlanId1);
 
-        // 测试4：选择菜品-差价
-        // ids为1234567；差价-6；最低价5.00；不包含酒水；覆盖原有会员价；会员价方案id为1；
-        vipDishPriceService.generateVipDishPrice(ids, discount, difference2, lowPrice, includeDrinksFalse, coverTrue, vipDishPricePlanId2);
+        // 测试2:按照差价生成会员价
+        // 选择性更改
+        vipDishPriceService.generateVipDishPrice(dishIds, discount, difference1, lowPrice, includeDrinksTrue, coverFalse, vipDishPricePlanId3);
     }
 
     @Test

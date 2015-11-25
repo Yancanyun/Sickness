@@ -16,13 +16,6 @@ import java.util.List;
 public interface VipDishPriceMapper {
 
     /**
-     * 获取所有会员价记录
-     * @return
-     * @throws Exception
-     */
-    public List<VipDishPrice> listAll() throws Exception;
-
-    /**
      * 根据会员价方案id查询会员价记录
      * @param vipDishPlanId
      * @return
@@ -32,55 +25,31 @@ public interface VipDishPriceMapper {
 
     /**
      * 查询会员价Dto列表
-     * @param offset
-     * @param pageSize
      * @param vipDishPricePlanId
      * @return
      * @throws Exception
      */
-    public List<VipDishPriceDto> listDishPriceDtosByPage(@Param("offset") int offset,
-                                                         @Param("pageSize") int pageSize,
-                                                         @Param("vipDishPricePlanId") int vipDishPricePlanId) throws Exception;
-
-    /**
-     * 查询数据总量
-     * @param vipDishPricePlanId
-     * @return
-     * @throws Exception
-     */
-    public int countAllByVipDishPricePlanId(@Param("vipDishPricePlanId") int vipDishPricePlanId) throws Exception;
+    public List<VipDishPriceDto> listDishPriceDtos(@Param("vipDishPricePlanId") int vipDishPricePlanId) throws Exception;
 
     /**
      * 根据关键词查找菜品会员价
      * @param keyword
      * @param vipDishPricePlanId
-     * @param offset
-     * @param pageSize
      * @return
      * @throws Exception
      */
     public List<VipDishPriceDto> listDishPriceDtosByKeyword(@Param("keyword") String keyword,
-                                                            @Param("vipDishPricePlanId") int vipDishPricePlanId,
-                                                            @Param("offset") int offset,
-                                                            @Param("pageSize") int pageSize) throws Exception;
+                                                            @Param("vipDishPricePlanId") int vipDishPricePlanId) throws Exception;
 
     /**
      * 根据id查询菜品会员价
      * @param id
      * @return
      * @throws Exception
-     */
+     *//*
     public VipDishPrice queryById(@Param("id") int id) throws Exception;
 
-    /**
-     * 根据dishId判断是否存在id为dishId的菜品
-     * @param dishId
-     * @return
-     * @throws Exception
-     */
-    public int countByDishId(int dishId) throws Exception;
-
-    /**
+    *//**
      * 根据菜品id和会员价方案id获取会员价记录
      * @param dishId
      * @param vipDishPricePlanId
@@ -89,7 +58,6 @@ public interface VipDishPriceMapper {
      */
     public VipDishPrice queryByDishIdAndVipDishPricePlanId(@Param("dishId")int dishId,
                                                            @Param("vipDishPricePlanId")int vipDishPricePlanId) throws Exception;
-
     /**
      * 批量添加会员价
      *

@@ -5,7 +5,6 @@ import com.emenu.common.dto.vip.VipDishPriceDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.vip.VipDishPrice;
 import com.emenu.common.enums.TrueEnums;
-import com.emenu.common.enums.vip.AutoGeneratePlanEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipDishPriceMapper;
 import com.emenu.service.dish.DishService;
@@ -21,10 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 会员价Service实现类
@@ -44,17 +40,27 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     @Autowired
     private CommonDao commonDao;
 
-    @Override
-    public List<VipDishPrice> listAll() throws SSException{
-        List<VipDishPrice> vipDishPriceList = Collections.emptyList();
+    /*@Override
+    public List<VipDishPriceDto> listByDishIdAndVipDishPricePlanId(List<Integer> dishIds, int vipDishPricePlanId) throws SSException{
+        List<VipDishPriceDto> vipDishPriceDtoList = Collections.emptyList();
         try{
-            vipDishPriceList = vipDishPriceMapper.listAll();
+            //判断会员价方案id是否合法
+            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
+                throw SSException.get(EmenuException.VipDishPricePlanIdError);
+            }
+            for (Integer dishId: dishIds){
+                //判断菜品id是否合法
+                if (!Assert.isNull(dishId) && Assert.lessOrEqualZero(dishId)) {
+                    throw SSException.get(EmenuException.DishIdNotNull);
+                }
+                DishDto dishDto = dishService.queryById(dishId);
+            }
+            return vipDishPriceDtoList;
         } catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPriceFail, e);
         }
-        return vipDishPriceList;
-    }
+    }*/
 
     @Override
     public List<VipDishPrice> listByVipDishPricePlanId(int vipDishPricePlanId) throws SSException{
@@ -72,18 +78,13 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     }
 
     @Override
-    public List<VipDishPriceDto> listVipDishPriceDtosByPage(int curPage, int pageSize, int vipDishPricePlanId) throws SSException{
+    public List<VipDishPriceDto> listVipDishPriceDtos(int vipDishPricePlanId) throws SSException{
         List<VipDishPriceDto> vipDishPriceDtoList  = Collections.emptyList();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
-        if (Assert.lessZero(offset)){
-            return vipDishPriceDtoList;
-        }
         try{
             if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
-            vipDishPriceDtoList = vipDishPriceMapper.listDishPriceDtosByPage(offset, pageSize, vipDishPricePlanId);
+            vipDishPriceDtoList = vipDishPriceMapper.listDishPriceDtos(vipDishPricePlanId);
         } catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPriceFail, e);
@@ -92,67 +93,21 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     }
 
     @Override
-    public int countAllByVipDishPricePlanId(int vipDishPricePlanId) throws SSException{
-        Integer count = 0;
-        try{
-            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
-                throw SSException.get(EmenuException.VipDishPricePlanIdError);
-            }
-            count = vipDishPriceMapper.countAllByVipDishPricePlanId(vipDishPricePlanId);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(ExceptionMes.SYSEXCEPTION, e);
-        }
-        return count == null ? 0 : count;
-    }
-
-    @Override
-    public List<VipDishPriceDto> listDishPriceDtosByKeyword(int vipDishPricePlanId, String keyword, int curPage, int pageSize) throws SSException{
+    public List<VipDishPriceDto> listVipDishPriceDtosByKeyword(int vipDishPricePlanId, String keyword) throws SSException{
         List<VipDishPriceDto> vipDishPriceDtoList = Collections.emptyList();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
-        if (Assert.lessZero(offset)){
-            return vipDishPriceDtoList;
-        }
         try{
             if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             Assert.isNotNull(keyword, EmenuException.VipDishPriceKeywordNotNull);
-            return vipDishPriceMapper.listDishPriceDtosByKeyword(keyword, vipDishPricePlanId, offset, pageSize);
+            return vipDishPriceMapper.listDishPriceDtosByKeyword(keyword, vipDishPricePlanId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPriceFail);
         }
     }
 
-    @Override
-    public void newVipDishPrice(VipDishPrice vipDishPrice) throws SSException{
-        try{
-            if (!checkBeforeSave(vipDishPrice)){
-                throw SSException.get(EmenuException.InsertVipDishPriceFail);
-            }
-            commonDao.insert(vipDishPrice);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertVipDishPriceFail);
-        }
-    }
-
-    @Override
-    public void updateVipDishPrice(VipDishPrice vipDishPrice) throws SSException{
-        try{
-            if (!checkBeforeSave(vipDishPrice)){
-                throw SSException.get(EmenuException.InsertVipDishPriceFail);
-            }
-            commonDao.update(vipDishPrice);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipDishPriceFail);
-        }
-    }
-
-    @Override
+    /*@Override
     public VipDishPrice queryById(int id) throws SSException{
         try{
             if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)){
@@ -163,22 +118,7 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipDishPriceFail);
         }
-    }
-
-    @Override
-    public int countByDishId(int dishId) throws SSException{
-        Integer count = 0;
-        try{
-            if (!Assert.isNull(dishId) && Assert.lessOrEqualZero(dishId)){
-                throw SSException.get(EmenuException.DishIdNotNull);
-            }
-            count = vipDishPriceMapper.countByDishId(dishId);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipDishPriceFail);
-        }
-        return count == null ? 0 : count;
-    }
+    }*/
 
     @Override
     public VipDishPrice queryByDishIdAndVipDishPricePlanId(int dishId, int vipDishPricePlanId) throws SSException{
@@ -200,22 +140,29 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void generateVipDishPrice(List<Integer> ids,
-                                     Integer discount,
+    public void generateVipDishPrice(List<Integer> dishIds,
+                                     BigDecimal discount,
                                      BigDecimal difference,
                                      BigDecimal lowPrice,
                                      TrueEnums includeDrinks,
                                      TrueEnums cover,
                                      int vipDishPricePlanId) throws SSException{
+        List<Dish> dishList = Collections.emptyList();
         try{
-            if (ids.size() == 0 && difference == null){
-                generateAllByDiscount(discount, lowPrice, includeDrinks, cover, vipDishPricePlanId);
-            }else if (difference == null){
-                generateByDiscount(ids, discount, lowPrice, includeDrinks);
-            }else if (ids.size() == 0 && discount == null){
-                generateAllByDifference(difference, lowPrice, includeDrinks, cover, vipDishPricePlanId);
-            }else if (discount == null){
-                generateByDifference(ids, difference, lowPrice, includeDrinks);
+            //判断dishIds是否为空，则选中所有菜品
+            if (dishIds.size() == 0){
+                dishList = dishService.listAll();//这里为0
+                for (Dish dish: dishList){
+                    Integer dishId = dish.getId();
+                    dishIds.add(dishId);
+                }
+            }
+            if (difference == null && discount != null){
+                generateByDiscount(dishIds, discount, lowPrice, includeDrinks, cover, vipDishPricePlanId);
+            }else if (discount == null && difference != null){
+                generateByDifference(dishIds, difference, lowPrice, includeDrinks, cover, vipDishPricePlanId);
+            }else {
+                throw SSException.get(EmenuException.UpdateVipDishPriceFail);
             }
         } catch (Exception e){
             LogClerk.errLog.error(e);
@@ -224,11 +171,9 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
 
     }
 
-
     /**
-     * 私有方法 1
-     * 根据折扣生成所有会员价记录
-     *
+     * 私有方法1：根据折扣生成会员价
+     * @param dishIds
      * @param discount
      * @param lowPrice
      * @param includeDrinks
@@ -237,24 +182,24 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
      * @throws SSException
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    private void generateAllByDiscount(Integer discount,
-                                       BigDecimal lowPrice,
-                                       TrueEnums includeDrinks,
-                                       TrueEnums cover,
-                                       int vipDishPricePlanId) throws SSException{
-        //将discount转为BigDecimal类型，方便计算
-        BigDecimal bigDecimalDiscount = new BigDecimal(discount);
+    private void generateByDiscount(List<Integer> dishIds,
+                                    BigDecimal discount,
+                                    BigDecimal lowPrice,
+                                    TrueEnums includeDrinks,
+                                    TrueEnums cover,
+                                    int vipDishPricePlanId) throws SSException{
         BigDecimal zero = new BigDecimal("0.00");
-        BigDecimal divisor = new BigDecimal("100.00");
+        BigDecimal divisor = new BigDecimal("10.00");
         //定义map用于循环判断
         Map<Integer,BigDecimal> map = new HashMap<Integer, BigDecimal>();
-        try{
+        List<VipDishPrice> vipDishPriceList = new ArrayList<VipDishPrice>();
+        try {
             //判断折扣是否为空
-            if( Assert.isNull(discount) ){
+            if (Assert.isNull(discount)) {
                 throw SSException.get(EmenuException.InputDiscountOrDifferenceNotNull);
             }
-            //判断折扣是否合法
-            if ( discount < 0 && discount > 100 ){
+            //判断折扣是否合法(折扣小于0或大于10不合法)
+            if (discount.compareTo(zero) < 0 && discount.compareTo(divisor) > 0) {
                 throw SSException.get(EmenuException.InputDiscountOrDifferenceError);
             }
             //判断会员价方案id是否合法
@@ -262,128 +207,47 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             //如果最低价格为空，则设为0
-            if (lowPrice == null){
+            if (lowPrice == null) {
                 lowPrice = zero;
             }
-
-            List<VipDishPrice> vipDishPriceList = this.listByVipDishPricePlanId(vipDishPricePlanId);
-            List<Dish> dishList = dishService.listAll();
-            //将会员价记录放入map中
-            for (VipDishPrice vipDishPrice: vipDishPriceList){
-                map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
+            //如果不覆盖原有会员价，则map中加入已有的会员价信息；如果覆盖，则map为空
+            if (cover.getId() == 0){
+                vipDishPriceList = vipDishPriceMapper.listByVipDishPricePlanId(vipDishPricePlanId);
+                for (VipDishPrice vipDishPrice: vipDishPriceList){
+                    map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
+                }
             }
 
-            //循环菜品id，判断map中是否含有dishId为id的菜品
-            //含有则更新，不含有则添加
-            for (Dish dish: dishList){
+            //根据菜品id更新/添加会员价
+            for (Integer dishId : dishIds) {
+                DishDto dishDto = dishService.queryById(dishId);
                 //不包含酒水时，是酒水（categoryId == 5）则跳出本次循环
-                if (includeDrinks.getId() == 0 && dish.getCategoryId() == 5){
+                if (includeDrinks.getId() == 0 && dishDto.getCategoryId() == 5){
                     continue;
                 }
-
-                //计算会员价，菜品售价*折扣/100.00；如果会员价小于最低价，则将会员价设为最低价
-                BigDecimal vipDishPrice = dishService.queryById(dish.getId()).getPrice().multiply(bigDecimalDiscount).divide(divisor);
-                Integer i = vipDishPrice.compareTo(lowPrice);
-                if (i < 0) {
-                    vipDishPrice = lowPrice;
-                }
-                //覆盖已有会员价项目，则更新所有的；map中含有的菜品进行更新，不含有的菜品进行添加;
-                //否则只插入会员价记录
-                if (cover.getId() == 1){
-                    if (map.containsKey(dish.getId())){
-                        VipDishPrice vipDishPriceRecord = queryById(this.queryByDishIdAndVipDishPricePlanId(dish.getId(), vipDishPricePlanId).getId());
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);//写入会员价
-                        this.updateVipDishPrice(vipDishPriceRecord);
-                    } else {
-                        VipDishPrice vipDishPriceRecord = new VipDishPrice();
-                        vipDishPriceRecord.setDishId(dish.getId());
-                        vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                        this.newVipDishPrice(vipDishPriceRecord);
-                    }
-                }else{
-                    if (!map.containsKey(dish.getId())){
-                        VipDishPrice vipDishPriceRecord = new VipDishPrice();
-                        vipDishPriceRecord.setDishId(dish.getId());
-                        vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                        this.newVipDishPrice(vipDishPriceRecord);
-                    }else {
-                        continue;
-                    }
-                }
-            }
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipDishPriceFail);
-        }
-    }
-
-    /**
-     * 私有方法 2
-     * 根据折扣更新所选菜品会员价
-     *
-     * @param ids
-     * @param discount
-     * @param lowPrice
-     * @param includeDrinks
-     * @throws SSException
-     */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    private void generateByDiscount(List<Integer> ids,
-                                    Integer discount,
-                                    BigDecimal lowPrice,
-                                    TrueEnums includeDrinks) throws SSException{
-        //将discount转为BigDecimal类型，方便计算
-        BigDecimal bigDecimalDiscount = new BigDecimal(discount);
-        BigDecimal zero = new BigDecimal("0.00");
-        BigDecimal divisor = new BigDecimal("100.00");
-        try{
-            //判断折扣是否为空
-            if( Assert.isNull(discount) ){
-                throw SSException.get(EmenuException.InputDiscountOrDifferenceNotNull);
-            }
-            //判断折扣是否合法
-            if ( discount < 0 && discount > 100 ){
-                throw SSException.get(EmenuException.InputDiscountOrDifferenceError);
-            }
-            //如果最低价格为空，则设为0
-            if (lowPrice == null){
-                lowPrice = zero;
-            }
-
-            //根据id和折扣更新会员价
-            for (int id: ids) {
-                //判断ids是否合法
-                if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
-                    throw SSException.get(EmenuException.VipDishPriceIdError);
-                }
-
-                VipDishPrice vipDishPriceRecord = this.queryById(id);
-                //不包含酒水且当前菜品为酒水则跳出当前循环
-                if (includeDrinks.getId() == 0 && dishService.queryById(vipDishPriceRecord.getDishId()).getCategoryId() == 5){
+                //如果map中包含dishId，跳出循环
+                if (map.containsKey(dishId)){
                     continue;
                 }
-                BigDecimal vipDishPrice = dishService.queryById(vipDishPriceRecord.getDishId()).getPrice().multiply(bigDecimalDiscount).divide(divisor);
-                //判断是否低于最低价
-                Integer i = vipDishPrice.compareTo(lowPrice);
-                if (i < 0) {
-                    vipDishPrice = lowPrice;
-                }
+                VipDishPrice vipDishPriceRecord = new VipDishPrice();
+                BigDecimal vipDishPrice = dishDto.getPrice().multiply(discount).divide(divisor);
+                //如果会员价小于最低价，则将会员价设为最低价
+                vipDishPrice = vipDishPrice.compareTo(lowPrice) < 0 ? lowPrice :vipDishPrice;
+                vipDishPriceRecord.setDishId(dishId);
+                vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
                 vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                this.updateVipDishPrice(vipDishPriceRecord);
+                vipDishPriceList.add(vipDishPriceRecord);
             }
+            vipDishPriceMapper.insertAll(vipDishPriceList);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipDishPriceFail);
         }
     }
 
-
     /**
-     * 私有方法 3
-     * 根据差价生成所有会员价记录
-     *
+     * 私有方法2：根据差价生成会员价
+     * @param dishIds
      * @param difference
      * @param lowPrice
      * @param includeDrinks
@@ -392,16 +256,18 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
      * @throws SSException
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    private void generateAllByDifference(BigDecimal difference,
-                                         BigDecimal lowPrice,
-                                         TrueEnums includeDrinks,
-                                         TrueEnums cover,
-                                         int vipDishPricePlanId) throws SSException{
+    private void generateByDifference(List<Integer> dishIds,
+                                      BigDecimal difference,
+                                      BigDecimal lowPrice,
+                                      TrueEnums includeDrinks,
+                                      TrueEnums cover,
+                                      int vipDishPricePlanId) throws SSException{
+        BigDecimal zero = new BigDecimal("0.00");
         //定义map用于循环判断
         Map<Integer,BigDecimal> map = new HashMap<Integer, BigDecimal>();
-        BigDecimal zero = new BigDecimal("0.00");
+        List<VipDishPrice> vipDishPriceList = new ArrayList<VipDishPrice>();
         try {
-            //判断差价是否为空
+            //判断差价否为空
             if (Assert.isNull(difference)) {
                 throw SSException.get(EmenuException.InputDiscountOrDifferenceNotNull);
             }
@@ -413,114 +279,40 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
             if (lowPrice == null) {
                 lowPrice = zero;
             }
-
-            List<VipDishPrice> vipDishPriceList = this.listByVipDishPricePlanId(vipDishPricePlanId);
-            List<Dish> dishList = dishService.listAll();
-            //将会员价记录放入map中
-            for (VipDishPrice vipDishPrice: vipDishPriceList){
-                map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
+            //如果不覆盖原有会员价，则map中加入已有的会员价信息；如果覆盖，则map为空
+            if (cover.getId() == 0){
+                vipDishPriceList = vipDishPriceMapper.listByVipDishPricePlanId(vipDishPricePlanId);
+                for (VipDishPrice vipDishPrice: vipDishPriceList){
+                    map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
+                }
             }
 
-            //循环菜品id，判断map中是否含有dishId为id的菜品
-            //含有则更新，不含有则添加
-            for (Dish dish: dishList){
+            //根据菜品id更新/添加会员价
+            for (Integer dishId : dishIds) {
+                DishDto dishDto = dishService.queryById(dishId);
                 //不包含酒水时，是酒水（categoryId == 5）则跳出本次循环
-                if (includeDrinks.getId() == 0 && dish.getCategoryId() == 5){
+                if (includeDrinks.getId() == 0 && dishDto.getCategoryId() == 5){
                     continue;
                 }
-
-                //计算会员价，菜品售价-差价；如果会员价小于最低价，则将最低价设为会员价
-                BigDecimal vipDishPrice = dishService.queryById(dish.getId()).getPrice().subtract(difference);
-                Integer i = vipDishPrice.compareTo(lowPrice);
-                if (i < 0) {
-                    vipDishPrice = lowPrice;
-                }
-                //覆盖已有会员价项目，则更新所有的；map中含有的菜品进行更新，不含有的菜品进行添加;
-                //否则只插入会员价记录
-                if (cover.getId() == 1){
-                    if (map.containsKey(dish.getId())){
-                        VipDishPrice vipDishPriceRecord = queryById(this.queryByDishIdAndVipDishPricePlanId(dish.getId(),vipDishPricePlanId).getId());
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);//写入会员价
-                        this.updateVipDishPrice(vipDishPriceRecord);
-                    } else {
-                        VipDishPrice vipDishPriceRecord = new VipDishPrice();
-                        vipDishPriceRecord.setDishId(dish.getId());
-                        vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                        this.newVipDishPrice(vipDishPriceRecord);
-                    }
-                }else{
-                    if (!map.containsKey(dish.getId())){
-                        VipDishPrice vipDishPriceRecord = new VipDishPrice();
-                        vipDishPriceRecord.setDishId(dish.getId());
-                        vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
-                        vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                        this.newVipDishPrice(vipDishPriceRecord);
-                    }else {
-                        continue;
-                    }
-                }
-            }
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipDishPriceFail);
-        }
-    }
-
-    /**
-     * 私有方法 4
-     * 根据差价更新所选会员价记录
-     *
-     * @param ids
-     * @param difference
-     * @param lowPrice
-     * @param includeDrinks
-     * @throws SSException
-     */
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    private void generateByDifference(List<Integer> ids,
-                                      BigDecimal difference,
-                                      BigDecimal lowPrice,
-                                      TrueEnums includeDrinks) throws SSException{
-        BigDecimal zero = new BigDecimal("0.00");
-        try{
-            //判断折扣是否为空
-            if( Assert.isNull(difference) ){
-                throw SSException.get(EmenuException.InputDiscountOrDifferenceNotNull);
-            }
-
-            //如果最低价格为空，则设为0
-            if (lowPrice == null){
-                lowPrice = zero;
-            }
-
-            //根据id和差价更新会员价
-            for (int id: ids) {
-                //判断ids是否合法
-                if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)) {
-                    throw SSException.get(EmenuException.VipDishPriceIdError);
-                }
-
-                VipDishPrice vipDishPriceRecord = this.queryById(id);
-                //不包含酒水且当前菜品为酒水则跳出当前循环
-                if (includeDrinks.getId() == 0 && dishService.queryById(vipDishPriceRecord.getDishId()).getCategoryId() == 5){
+                //如果map中包含dishId，跳出循环
+                if (map.containsKey(dishId)){
                     continue;
                 }
-                BigDecimal vipDishPrice = dishService.queryById(vipDishPriceRecord.getDishId()).getPrice().subtract(difference);
-                //判断是否低于最低价
-                Integer i = vipDishPrice.compareTo(lowPrice);
-                if (i < 0) {
-                    vipDishPrice = lowPrice;
-                }
+                VipDishPrice vipDishPriceRecord = new VipDishPrice();
+                BigDecimal vipDishPrice = dishDto.getPrice().subtract(difference);
+                //如果会员价小于最低价，则将会员价设为最低价
+                vipDishPrice = vipDishPrice.compareTo(lowPrice) < 0 ? lowPrice :vipDishPrice;
+                vipDishPriceRecord.setDishId(dishId);
+                vipDishPriceRecord.setVipDishPricePlanId(vipDishPricePlanId);
                 vipDishPriceRecord.setVipDishPrice(vipDishPrice);
-                this.updateVipDishPrice(vipDishPriceRecord);
+                vipDishPriceList.add(vipDishPriceRecord);
             }
+            vipDishPriceMapper.insertAll(vipDishPriceList);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipDishPriceFail);
         }
     }
-
 
     /**
      * 保存前检查菜品id、会员价方案id、会员价是否为空
