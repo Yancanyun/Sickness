@@ -37,8 +37,8 @@ public class Remark extends AbstractEntity {
     private Integer isCommon;
 
     //关联收费
-    @Column(name = "related_charges")
-    private BigDecimal relatedCharges;
+    @Column(name = "related_charge")
+    private BigDecimal relatedCharge;
 
     //状态(1-可用, 2-已删除)
     private Integer status;
@@ -92,12 +92,12 @@ public class Remark extends AbstractEntity {
         this.isCommon = isCommon;
     }
 
-    public BigDecimal getRelatedCharges() {
-        return relatedCharges;
+    public BigDecimal getRelatedCharge() {
+        return relatedCharge;
     }
 
-    public void setRelatedCharges(BigDecimal relatedCharges) {
-        this.relatedCharges = relatedCharges;
+    public void setRelatedCharge(BigDecimal relatedCharge) {
+        this.relatedCharge = relatedCharge;
     }
 
     public Integer getStatus() {

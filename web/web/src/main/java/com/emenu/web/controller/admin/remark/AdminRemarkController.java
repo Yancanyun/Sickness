@@ -103,7 +103,7 @@ public class AdminRemarkController extends AbstractController {
                     childJsonObject.put("contentId", remarkDto.getRemark().getId());
                     childJsonObject.put("weight", remarkDto.getRemark().getWeight());
                     childJsonObject.put("content", remarkDto.getRemark().getName());
-                    childJsonObject.put("relatedCharges", remarkDto.getRemark().getRelatedCharges());
+                    childJsonObject.put("relatedCharge", remarkDto.getRemark().getRelatedCharge());
                     if (remarkDto.getRemark().getIsCommon() == 0) {
                         childJsonObject.put("isCommon", "否");
                     }
@@ -158,7 +158,7 @@ public class AdminRemarkController extends AbstractController {
      * @param name
      * @param weight
      * @param isCommon
-     * @param relatedCharges
+     * @param relatedCharge
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantRemarkNew)
@@ -168,15 +168,15 @@ public class AdminRemarkController extends AbstractController {
                                     @RequestParam String name,
                                     @RequestParam Integer weight,
                                     @RequestParam Integer isCommon,
-                                    @RequestParam(required = false) BigDecimal relatedCharges) {
+                                    @RequestParam(required = false) BigDecimal relatedCharge) {
         try {
             Remark remark = new Remark();
             remark.setRemarkTagId(smallTagId);
             remark.setName(name);
             remark.setWeight(weight);
             remark.setIsCommon(isCommon);
-            if (relatedCharges != null) {
-                remark.setRelatedCharges(relatedCharges);
+            if (relatedCharge != null) {
+                remark.setRelatedCharge(relatedCharge);
             }
             //设置状态为可用
             remark.setStatus(RemarkStatusEnums.Enabled.getId());
@@ -220,7 +220,7 @@ public class AdminRemarkController extends AbstractController {
      * @param name
      * @param weight
      * @param isCommon
-     * @param relatedCharges
+     * @param relatedCharge
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantRemarkUpdate)
@@ -230,15 +230,15 @@ public class AdminRemarkController extends AbstractController {
                                        @RequestParam String name,
                                        @RequestParam Integer weight,
                                        @RequestParam Integer isCommon,
-                                       @RequestParam(required = false) BigDecimal relatedCharges) {
+                                       @RequestParam(required = false) BigDecimal relatedCharge) {
         try {
             Remark remark = new Remark();
             remark.setId(id);
             remark.setName(name);
             remark.setWeight(weight);
             remark.setIsCommon(isCommon);
-            if (relatedCharges != null) {
-                remark.setRelatedCharges(relatedCharges);
+            if (relatedCharge != null) {
+                remark.setRelatedCharge(relatedCharge);
             }
             remarkService.updateRemark(id, remark);
 

@@ -128,7 +128,7 @@ public class RemarkTagTest extends AbstractTestCase {
                 childJsonObject.put("contentId", remarkDto.getRemark().getId());
                 childJsonObject.put("weight", remarkDto.getRemark().getWeight());
                 childJsonObject.put("content", remarkDto.getRemark().getName());
-                childJsonObject.put("relatedCharges", remarkDto.getRemark().getRelatedCharges());
+                childJsonObject.put("relatedCharge", remarkDto.getRemark().getRelatedCharge());
                 if (remarkDto.getRemark().getIsCommon() == 0) {
                     childJsonObject.put("isCommon", "否");
                 }

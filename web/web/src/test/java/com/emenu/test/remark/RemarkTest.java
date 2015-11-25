@@ -36,7 +36,7 @@ public class RemarkTest extends AbstractTestCase {
         for (Remark remark:remarkList){
             System.out.println("Name:" + remark.getName() + " remarkTagId:" + remark.getRemarkTagId()
                     + " weight:" + remark.getWeight() + " isCommon:" + remark.getIsCommon()
-                    + " relatedCharges:" + remark.getRelatedCharges());
+                    + " relatedCharge:" + remark.getRelatedCharge());
         }
     }
 
@@ -47,7 +47,7 @@ public class RemarkTest extends AbstractTestCase {
         for (RemarkDto remarkDto:remarkDtoList){
             System.out.println("Name:" + remarkDto.getRemark().getName() + " remarkTagId:" + remarkDto.getRemarkTagId()
                     + " weight:" + remarkDto.getRemark().getWeight() + " isCommon:" + remarkDto.getRemark().getIsCommon()
-                    + " relatedCharges:" + remarkDto.getRemark().getRelatedCharges()
+                    + " relatedCharge:" + remarkDto.getRemark().getRelatedCharge()
                     + " remarkTag:" + remarkDto.getRemarkTagName());
         }
     }
@@ -60,7 +60,7 @@ public class RemarkTest extends AbstractTestCase {
         for (Remark remark:remarkList){
             System.out.println("Name:" + remark.getName() + " remarkTagId:" + remark.getRemarkTagId()
                     + " weight:" + remark.getWeight() + " isCommon:" + remark.getIsCommon()
-                    + " relatedCharges:" + remark.getRelatedCharges());
+                    + " relatedCharge:" + remark.getRelatedCharge());
         }
     }
 
@@ -71,7 +71,7 @@ public class RemarkTest extends AbstractTestCase {
         for (RemarkDto remarkDto:remarkDtoList){
             System.out.println("Name:" + remarkDto.getRemark().getName() + " remarkTagId:" + remarkDto.getRemarkTagId()
                     + " weight:" + remarkDto.getRemark().getWeight() + " isCommon:" + remarkDto.getRemark().getIsCommon()
-                    + " relatedCharges:" + remarkDto.getRemark().getRelatedCharges()
+                    + " relatedCharge:" + remarkDto.getRemark().getRelatedCharge()
                     + " remarkTag:" + remarkDto.getRemarkTagName());
         }
     }
@@ -82,7 +82,7 @@ public class RemarkTest extends AbstractTestCase {
 
         System.out.println("Name:" + remark.getName() + " remarkTagId:" + remark.getRemarkTagId()
                 + " weight:" + remark.getWeight() + " isCommon:" + remark.getIsCommon()
-                + " relatedCharges:" + remark.getRelatedCharges());
+                + " relatedCharge:" + remark.getRelatedCharge());
     }
 
 
@@ -92,7 +92,7 @@ public class RemarkTest extends AbstractTestCase {
 
         System.out.println("Name:" + remarkDto.getRemark().getName() + " remarkTagId:" + remarkDto.getRemarkTagId()
                 + " weight:" + remarkDto.getRemark().getWeight() + " isCommon:" + remarkDto.getRemark().getIsCommon()
-                + " relatedCharges:" + remarkDto.getRemark().getRelatedCharges()
+                + " relatedCharge:" + remarkDto.getRemark().getRelatedCharge()
                 + " remarkTag:" + remarkDto.getRemarkTagName());
     }
 

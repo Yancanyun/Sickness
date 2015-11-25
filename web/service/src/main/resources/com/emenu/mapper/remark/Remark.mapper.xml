@@ -10,7 +10,7 @@
         `remark_tag_id`,
         `weight`,
         `is_common`,
-        `related_charges`
+        `related_charge`
         FROM `t_remark`
         WHERE `status` = 1
     </select>
@@ -22,7 +22,7 @@
         `remark_tag_id`,
         `weight`,
         `is_common`,
-        `related_charges`
+        `related_charge`
         FROM `t_remark`
         WHERE `remark_tag_id` = #{remarkTagId} AND `status` = 1
     </select>

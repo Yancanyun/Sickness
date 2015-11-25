@@ -66,6 +66,21 @@ public class PrintUtils {
     }
 
     /**
+     * 移动到横向第n个位置
+     * @param n
+     * @return
+     */
+    public static byte[] move(int n) {
+        byte[] bytes = new byte[4];
+        bytes[0] = 0x1B;
+        bytes[1] = 0x24;
+        bytes[2] = (byte)(770 + n * 10);//770页面最左侧，以后每一个位置加10。不要问为什么，这TM是试出来的...
+        bytes[3] = 0;
+
+        return bytes;
+    }
+
+    /**
      * 走纸
      * @param n
      * @return
