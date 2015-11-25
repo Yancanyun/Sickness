@@ -49,4 +49,13 @@ public interface DishMealPeriodService {
      * @throws SSException
      */
     public List<DishMealPeriod> listByDishId(int dishId) throws SSException;
+
+    /**
+     * 根据菜品ID获取餐段ID列表
+     *
+     * @param dishId
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> listMealPeriodIdByDishId(int dishId) throws SSException;
 }

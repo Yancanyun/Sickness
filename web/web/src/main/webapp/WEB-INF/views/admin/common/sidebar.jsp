@@ -69,12 +69,24 @@
                 <a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Dish'}">class="active"</c:if> >
-                <a class="J_menu" href="${website}admin/dish">菜品管理<i class="fa fa-angle-right angle-right"></i></a>
-                <ul>
-                    <li><a href="#">三级菜单</a></li>
-                    <li class="active"><a href="#">三级菜单</a></li>
-                    <li><a href="#">三级菜单</a></li>
-                </ul>
+                <a class="J_menu" href="${website}admin/dish">菜品管理
+                    <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:New'
+                                or ExtModule eq 'Admin:DishManagement:Dish:Update'}">
+                        <i class="fa fa-angle-right angle-right"></i>
+                    </c:if>
+                </a>
+                <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:New'
+                                or ExtModule eq 'Admin:DishManagement:Dish:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:New'}">class="active"</c:if> >
+                            <a href="${website}admin/dish/new" >添加菜品</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:Update'}">
+                            <li class="active"><a href="#">编辑菜品</a></li>
+                        </c:if>
+                    </ul>
+                </c:if>
+
             </li>
         </ul>
     </li>
@@ -113,7 +125,9 @@
                     库存物品管理
                     <c:if test="${ExtModule eq 'Admin:Storage:Item:New'
                                     or ExtModule eq 'Admin:Storage:Item:Update'
-                                    or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}"><i class="fa fa-angle-right angle-right"></i></c:if>
+                                    or ExtModule eq 'Admin:Storage:Item:UnitConversion:List'}">
+                        <i class="fa fa-angle-right angle-right"></i>
+                    </c:if>
                 </a>
                 <c:if test="${ExtModule eq 'Admin:Storage:Item:New'
                                 or ExtModule eq 'Admin:Storage:Item:Update'

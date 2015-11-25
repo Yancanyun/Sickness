@@ -3,12 +3,15 @@ package com.emenu.service.dish.impl;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.printer.DishTagPrinter;
+import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.SaleTypeEnums;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishMapper;
+import com.emenu.service.dish.DishImgService;
 import com.emenu.service.dish.DishMealPeriodService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTasteService;
@@ -45,6 +48,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishMealPeriodService dishMealPeriodService;
+
+    @Autowired
+    private DishImgService dishImgService;
 
     @Autowired
     private DishMapper dishMapper;
@@ -226,7 +232,16 @@ public class DishServiceImpl implements DishService {
             return null;
         }
         try {
-            return dishMapper.queryById(id);
+            DishDto dishDto = dishMapper.queryById(id);
+            // 查询餐段
+            // 查询菜品退片
+            List<DishImg> smallImgList = dishImgService.listByDishIdAndType(id, DishImgTypeEnums.SmallImg);
+            if (Assert.isNotEmpty(smallImgList)) {
+                dishDto.setSmallImg(smallImgList.get(0));
+            }
+            List<DishImg> bigImgList = dishImgService.listByDishIdAndType(id, DishImgTypeEnums.BigImg);
+            dishDto.setBigImgList(bigImgList);
+            return dishDto;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishQueryFailed, e);

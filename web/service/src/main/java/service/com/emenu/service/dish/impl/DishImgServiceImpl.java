@@ -65,7 +65,17 @@ public class DishImgServiceImpl implements DishImgService {
                 return null;
             }
             // 先添加到数据库
-            dishImg = commonDao.insert(dishImg);
+            // 如果是小图,并且存在,则不添加新纪录
+            if (DishImgTypeEnums.SmallImg.getId().equals(dishImg.getImgType())) {
+                List<DishImg> list = this.listByDishIdAndType(dishImg.getDishId(), DishImgTypeEnums.SmallImg);
+                if (Assert.isNotEmpty(list)) {
+                    dishImg = list.get(0);
+                }
+            }
+            // 如果id为空,说明不存在记录,需要添加
+            if (Assert.isNull(dishImg.getId())) {
+                dishImg = commonDao.insert(dishImg);
+            }
 
             // 再上传图片
             // TODO: 2015/11/16 需要添加上传图片的大小

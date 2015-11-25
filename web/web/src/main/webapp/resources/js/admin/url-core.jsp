@@ -107,8 +107,8 @@
             ['changeDishStatus', site.website + 'admin/dish/ajax/status/&{id}', 'put', '编辑菜品状态'],
             ['sendClassLinkage', site.website + 'admin/dish/ajax/tag/children', 'get', '发送菜品分类联动id,获取菜品小分类'],
             ['sendUnitLinkage', site.staticWebsite + 'mock/admin/small-classify.json', 'get', '发送计量单位联动id,获取计量单位'],
-            ['getIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '获取原材料'],
-            ['delIngredient', site.staticWebsite + 'mock/admin/ingredient-list.json', 'get', '删除原材料'],
+            //菜品管理--编辑菜品图片
+            ['delPic', site.website + 'admin/dish/img/&{id}', 'delete', '删除菜品图片'],
 
             //菜品分类管理
             ['addClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'post', '添加菜品分类'],

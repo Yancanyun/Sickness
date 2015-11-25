@@ -1,5 +1,9 @@
 package com.emenu.common.dto.dish;
 
+import com.emenu.common.entity.dish.DishImg;
+import com.emenu.common.entity.dish.DishMealPeriod;
+import com.emenu.common.entity.dish.Taste;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +30,12 @@ public class DishDto {
 
     // 单位ID
     private Integer unitId;
+
+    // 单位名称
+    private String unitName;
+
+    // 单位类型
+    private Integer unitType;
 
     // 定价
     private BigDecimal price;
@@ -75,14 +85,26 @@ public class DishDto {
     // 最近修改时间
     private Date lastModifiedTime;
 
-    // 可点餐段
+    // 可点餐段ID
     private List<Integer> mealPeriodIdList;
+
+    // 可点餐段
+    private List<DishMealPeriod> mealPeriodList;
 
     // 打印机
     private Integer printerId;
 
-    // 口味
+    // 口味ID
     private List<Integer> tasteIdList;
+
+    // 口味
+    private List<Taste> tasteList;
+
+    // 小图
+    private DishImg smallImg;
+
+    // 大图
+    private List<DishImg> bigImgList;
 
     public Integer getId() {
         return id;
@@ -260,6 +282,14 @@ public class DishDto {
         this.mealPeriodIdList = mealPeriodIdList;
     }
 
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
     public Integer getPrinterId() {
         return printerId;
     }
@@ -274,5 +304,45 @@ public class DishDto {
 
     public void setTasteIdList(List<Integer> tasteIdList) {
         this.tasteIdList = tasteIdList;
+    }
+
+    public Integer getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(Integer unitType) {
+        this.unitType = unitType;
+    }
+
+    public List<DishMealPeriod> getMealPeriodList() {
+        return mealPeriodList;
+    }
+
+    public void setMealPeriodList(List<DishMealPeriod> mealPeriodList) {
+        this.mealPeriodList = mealPeriodList;
+    }
+
+    public List<Taste> getTasteList() {
+        return tasteList;
+    }
+
+    public void setTasteList(List<Taste> tasteList) {
+        this.tasteList = tasteList;
+    }
+
+    public DishImg getSmallImg() {
+        return smallImg;
+    }
+
+    public void setSmallImg(DishImg smallImg) {
+        this.smallImg = smallImg;
+    }
+
+    public List<DishImg> getBigImgList() {
+        return bigImgList;
+    }
+
+    public void setBigImgList(List<DishImg> bigImgList) {
+        this.bigImgList = bigImgList;
     }
 }

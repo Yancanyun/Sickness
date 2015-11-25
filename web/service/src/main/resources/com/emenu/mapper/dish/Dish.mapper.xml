@@ -59,7 +59,7 @@
             dish.`created_time` AS createdTime,
             dish.`last_modified_time` AS lastModifiedTime
         FROM `t_dish` dish
-        LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
         <where>
             <if test="searchDto.keyword != null and searchDto.keyword != ''">
                 (
@@ -121,14 +121,15 @@
         WHERE `id` = #{id}
     </update>
 
-    <select id="queryById" resultType="DishDto">
+    <select id="queryById" resultMap="dishDtoResultMap">
         SELECT
             dish.`id` AS id,
-            dish.`name` AS NAME,
+            dish.`name` AS name,
             dish.`dish_number` AS dishNumber,
             dish.`assistant_code` AS assistantCode,
             dish.`unit_id` AS unitId,
             unit.`name` AS unitName,
+            unit.`type` AS unitType,
             dish.`price` AS price,
             dish.`sale_type` AS saleType,
             dish.`discount` AS discount,
@@ -144,9 +145,49 @@
             dish.`time_limit` AS timeLimit,
             dish.`created_party_id` AS createdPartyId,
             dish.`created_time` AS createdTime,
-            dish.`last_modified_time` AS lastModifiedTime
+            dish.`last_modified_time` AS lastModifiedTime,
+            dishMealPeriod.`id` AS dishMealPeriodId,
+            dishMealPeriod.`meal_period_id` AS mealPeriodId,
+            dishTagPrinter.`printer_id` AS printerId,
+            taste.`id` AS tasteId,
+            taste.`name` AS tasteName
         FROM `t_dish` dish
-        LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        LEFT JOIN `t_dish_meal_period` dishMealPeriod ON dish.`id` = dishMealPeriod.`dish_id`
+        LEFT JOIN `t_dish_tag_printer` dishTagPrinter ON dish.`id` = dishTagPrinter.`dish_tag_id` AND dishTagPrinter.type = 2
+        LEFT JOIN `t_dish_taste` dishTaste ON dish.`id` = dishTaste.`dish_id`
+        LEFT JOIN `t_taste` taste ON taste.`id` = dishTaste.`taste_id`
         WHERE dish.`id` = #{id}
     </select>
+    
+    <resultMap id="dishDtoResultMap" type="DishDto">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="dishNumber" column="dishNumber" />
+        <result property="assistantCode" column="assistantCode" />
+        <result property="unitId" column="unitId" />
+        <result property="unitType" column="unitType" />
+        <result property="unitName" column="unitName" />
+        <result property="price" column="price" />
+        <result property="saleType" column="saleType" />
+        <result property="salePrice" column="salePrice" />
+        <result property="categoryId" column="categoryId" />
+        <result property="tagId" column="tagId" />
+        <result property="description" column="description" />
+        <result property="status" column="status" />
+        <result property="likeNums" column="likeNums" />
+        <result property="isNetworkAvailable" column="isNetworkAvailable" />
+        <result property="isVipPriceAvailable" column="isVipPriceAvailable" />
+        <result property="isVoucherAvailable" column="isVoucherAvailable" />
+        <result property="timeLimit" column="timeLimit" />
+        <result property="printerId" column="printerId" />
+        <collection property="mealPeriodList" ofType="DishMealPeriod">
+            <id property="id" column="dishMealPeriodId" />
+            <result property="mealPeriodId" column="mealPeriodId" />
+        </collection>
+        <collection property="tasteList" ofType="Taste">
+            <id property="id" column="tasteId" />
+            <result property="name" column="tasteName" />
+        </collection>
+    </resultMap>
 </mapper>

@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
-import com.emenu.common.entity.dish.Dish;
-import com.emenu.common.entity.dish.DishImg;
-import com.emenu.common.entity.dish.Tag;
-import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.dish.*;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.dish.DishImgTypeEnums;
@@ -30,9 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 菜品管理Controller
@@ -243,9 +238,27 @@ public class AdminDishController extends AbstractController {
                            Model model) {
         try {
             DishDto dishDto = dishService.queryById(id);
+            // 分类
+            List<Tag> tagList = tagFacadeService.listAllByTagId(dishDto.getCategoryId());
+            int tagPid = dishDto.getCategoryId();
+            for (Tag tag : tagList) {
+                if (tag.getId().equals(dishDto.getTagId())) {
+                    tagPid = tag.getpId();
+                }
+            }
 
-            addAttributesToModel(model);
+            // 餐段
+            Map<Integer, Integer> selectedMealPeriod = new HashMap<Integer, Integer>();
+            if (Assert.isNotEmpty(dishDto.getMealPeriodList())) {
+                for (DishMealPeriod mealPeriod : dishDto.getMealPeriodList()) {
+                    selectedMealPeriod.put(mealPeriod.getMealPeriodId(), 1);
+                }
+            }
+            model.addAttribute("selectedMealPeriod", selectedMealPeriod);
+            model.addAttribute("tagPid", tagPid);
+            model.addAttribute("tagList", tagList);
             model.addAttribute("dishDto", dishDto);
+            addAttributesToModel(model);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -263,13 +276,16 @@ public class AdminDishController extends AbstractController {
      */
     @Module(value = ModuleEnums.AdminDish, extModule = ModuleEnums.AdminDishUpdate)
     @RequestMapping(value = "", method = RequestMethod.PUT)
-    public String updateDish(DishDto dishDto) {
+    public String updateDish(DishDto dishDto,
+                             RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("code", 0);
+        redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
         try {
             dishService.updateDish(dishDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            redirectAttributes.addFlashAttribute("code", 0);
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
 
         String redirectUrl = "/" + URLConstants.ADMIN_DISH_URL + "/update/" + dishDto.getId();

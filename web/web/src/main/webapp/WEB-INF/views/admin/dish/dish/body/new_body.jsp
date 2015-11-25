@@ -90,15 +90,15 @@
                                     </div>
                                     <div class="col-sm-2 no-padding-right J_unitNumber">
                                         <select class="form-control J_unitNumberSelect w180" name="unitId">
-                                            <c:forEach var="weight" items="${quantityUnitList}">
-                                                <option value="${weight.id}">${weight.name}</option>
+                                            <c:forEach var="unit" items="${quantityUnitList}">
+                                                <option value="${unit.id}">${unit.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
                                     <div class="col-sm-2 no-padding-right J_unitWeight hidden">
                                         <select class="form-control J_unitWeightSelect w180" name="unitId" disabled="disabled">
-                                            <c:forEach var="weight" items="${weightUnitList}">
-                                                <option value="${weight.id}">${weight.name}</option>
+                                            <c:forEach var="unit" items="${weightUnitList}">
+                                                <option value="${unit.id}">${unit.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -118,8 +118,8 @@
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_promotionType J_select w180" name="saleType">
                                             <option value="1">无促销</option>
-                                            <option value="2" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
-                                            <option value="3" data-valid-rule="isFloat" data-valid-tip="请输入售价|售价不能为空，请重新输入">售价</option>
+                                            <option value="2" data-name="discount" data-value="3.5" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
+                                            <option value="3" data-name="salePrice" data-value="100" data-valid-rule="isFloat" data-valid-tip="请输入售价|售价不能为空，请重新输入">售价</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6">

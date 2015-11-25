@@ -15,6 +15,13 @@
                 `meal_period_id` AS mealPeriodId,
                 `created_time` AS  createdTime,
                 `last_modified_time` AS lastModifiedTime
+        FROM `t_dish_meal_period`
+        WHERE `dish_id` = #{dishId}
+    </select>
+
+    <select id="listMealPeriodIdByDishId" resultType="int">
+        SELECT `meal_period_id`
+        FROM `t_dish_meal_period`
         WHERE `dish_id` = #{dishId}
     </select>
 </mapper>

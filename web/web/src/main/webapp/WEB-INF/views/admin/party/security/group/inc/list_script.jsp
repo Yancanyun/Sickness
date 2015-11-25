@@ -20,12 +20,8 @@
     <td><input type="text" class="form-control" data-valid-tip="" data-valid-rule="notNull" name="name" value="&{authority.exp}"/></td>
     <td><input type="text" class="form-control" data-valid-tip="" data-valid-rule="notNull" name="description" value="&{authority.desc}"/></td>
     <td>
-      <a href="javascript:;" class="label-info J_save">
-        <i class="fa fa-save"></i>&nbsp;保存
-      </a>&nbsp;
-      <a href="javascript:;" class="label-info J_cancel">
-        <i class="fa fa-undo"></i>&nbsp;取消
-      </a>&nbsp;
+      <a href="javascript:;" class="label-info J_save"><i class="fa fa-save"></i>&nbsp;保存</a>
+      <a href="javascript:;" class="label-info J_cancel"><i class="fa fa-undo"></i>&nbsp;取消</a>
     </td>
   </tr>
 </script>

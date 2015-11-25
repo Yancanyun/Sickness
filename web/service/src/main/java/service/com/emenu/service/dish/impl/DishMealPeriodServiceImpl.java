@@ -100,4 +100,20 @@ public class DishMealPeriodServiceImpl implements DishMealPeriodService {
         }
         return list;
     }
+
+    @Override
+    public List<Integer> listMealPeriodIdByDishId(int dishId) throws SSException {
+        List<Integer> list = Collections.emptyList();
+        if (Assert.lessOrEqualZero(dishId)) {
+            return list;
+        }
+        try {
+            list = dishMealPeriodMapper.listMealPeriodIdByDishId(dishId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishMealPeriodQueryFailed, e);
+        }
+
+        return list;
+    }
 }

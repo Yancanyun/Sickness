@@ -9,7 +9,7 @@
             `id` AS id,
             `dish_id` AS dishId,
             `img_type` AS imgType,
-            `imgPath` AS imgPath,
+            `img_path` AS imgPath,
             `created_time` AS createdTime,
             `last_modified_time` AS lastModifiedTime
         FROM `t_dish_img`

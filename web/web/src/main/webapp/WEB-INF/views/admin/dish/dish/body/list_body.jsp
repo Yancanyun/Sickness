@@ -66,7 +66,7 @@
                         <table class="table table-hover table-bordered">
                             <thead>
                             <tr>
-                                <th class="order pagination-reorder" data-order-key="no">编号</th>
+                                <th data-order-key="no">编号</th>
                                 <th>助记码</th>
                                 <th>名称</th>
                                 <th>单位</th>

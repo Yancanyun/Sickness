@@ -29,4 +29,13 @@ public interface DishMealPeriodMapper {
      * @throws Exception
      */
     public List<DishMealPeriod> listByDishId(@Param("dishId") int dishId) throws Exception;
+
+    /**
+     * 根据菜品ID获取餐段ID列表
+     *
+     * @param dishId
+     * @return
+     * @throws Exception
+     */
+    public List<Integer> listMealPeriodIdByDishId(@Param("dishId") int dishId) throws Exception;
 }
