@@ -68,6 +68,9 @@
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Tag:List'}">class="active" </c:if>>
                 <a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:Taste:List'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/dish/taste">菜品口味管理</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Dish'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish">菜品管理
                     <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:New'

@@ -40,6 +40,7 @@
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/dish/unit">菜品单位管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/taste">菜品口味管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish">菜品管理</a></li>
             </ul>
         </li>
