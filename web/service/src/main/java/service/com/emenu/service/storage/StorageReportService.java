@@ -35,7 +35,7 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDto() throws  SSException;
+    public List<StorageReportDto> listReportDto() throws  SSException;
 
     /**
      * 获取指定时间之前未结算的单据和单据详情
@@ -43,7 +43,7 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> ListStorageReportDtoUnsettled(Date endTime) throws SSException;
+    public List<StorageReportDto> ListReportDtoUnsettledByEndTime(Date endTime) throws SSException;
 
     /**
      * 分页获取单据和单据详情
@@ -52,35 +52,36 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException;
+    public List<StorageReportDto> listReportDtoByPage(int page, int pageSize) throws SSException;
 
     /**
-     * 时间、存放点、经手人、操作人分页单据详情获取单据和单据详情
+     * 根据时间、存放点、经手人、操作人分页单据详情获取单据和单据详情
+     * @param report
+     * @param page
+     * @param pageSize
      * @param startTime
      * @param endTime
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDtoByCondition(Date startTime,
-                                                                  Date endTime,
-                                                                  String serialNumber,
-                                                                  int depotId,
-                                                                  int handlerPartyId,
-                                                                  int createdPartyId,
-                                                                  int page,
-                                                                  int pageSize) throws SSException;
+    public List<StorageReportDto> listReportDtoByCondition(StorageReport report,
+                                                           int page,
+                                                           int pageSize,
+                                                           Date startTime,
+                                                           Date endTime) throws SSException;
 
     /**
      * 根据经手人id、操作人id、单据id分页单据详情获取单据和单据详情
-     * @param storageReport
+     * @param report
+     * @param report
      * @param page
      * @param pageSize
-     * @return
+     * @return List<StorageReportDto>
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDtoByCondition1(StorageReport storageReport,
-                                                                   int page,
-                                                                   int pageSize) throws SSException;
+    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
+                                                            int page,
+                                                            int pageSize) throws SSException;
 
     /**
      * 根据id修改单据
@@ -109,11 +110,11 @@ public interface StorageReportService {
 
     /**
      * 根据时间、存放点idlist，分类idlist获取单据和单据详情信息
-     * @param depotIdList
      * @param startTime
      * @param endTime
      * @param depotIdList
-     *@param tagIdList  @return
+     * @param tagIdList
+     * @return
      * @throws SSException
      */
     public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
@@ -124,32 +125,22 @@ public interface StorageReportService {
     /**
      * 根据reportId删除单据和单据详情
      * @param id
-     * @return
      * @throws SSException
      */
-    public boolean delReportDtoById(int id) throws SSException;
-
-    /**
-     * 根据单据id删除单据
-     * @param id
-     * @return
-     * @throws SSException
-     */
-    public boolean delById(int id) throws SSException;
+    public void delReportDtoById(int id) throws SSException;
 
     /**
      * 修改单据和单据详情
      * @param storageReportDto
      * @return
      */
-    public boolean updateStorageReportDto(StorageReportDto storageReportDto) throws SSException;
+    public void updateStorageReportDto(StorageReportDto storageReportDto) throws SSException;
 
     /**
-     * 统计单据数量
+     * 统计单据总数量
      * @return
      * @throws SSException
      */
     public int count() throws SSException;
-
 
 }

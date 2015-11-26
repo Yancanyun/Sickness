@@ -2,11 +2,9 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
-import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
@@ -35,46 +33,47 @@ public interface StorageReportMapper {
     public List<StorageReport> listByPage(@Param("offset")int offset,@Param("pageSize")int pageSize ) throws Exception;
 
     /**
-     *
-     * @param startTime
-     * @param endTime
-     * @param serialNumber
-     * @param depotId
-     * @param handlerPartyId
-     * @param createdPartyId
+     * 根据时间、存放点、经手人、操作人分页单据详情获取单据和单据详情
+     * @param report
      * @param offset
      * @param pageSize
+     * @param startTime
+     * @param endTime
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listStorageReportByCondition(@Param("startTime")Date startTime,
+    public List<StorageReport> listReportByCondition(@Param("report")StorageReport report,
+                                                     @Param("offset")int offset,
+                                                     @Param("pageSize")int pageSize,
+                                                     @Param("startTime")Date startTime,
+                                                     @Param("endTime")Date endTime) throws Exception;
+/*    public List<StorageReport> listStorageReportByCondition(@Param("startTime")Date startTime,
                                                             @Param("endTime")Date endTime,
                                                             @Param("serialNumber")String serialNumber,
                                                             @Param("depotId")int depotId,
                                                             @Param("handlerPartyId")int handlerPartyId,
                                                             @Param("createdPartyId")int createdPartyId,
                                                             @Param("offset")int offset,
-                                                            @Param("pageSize")int pageSize) throws Exception;
+                                                            @Param("pageSize")int pageSize) throws Exception;*/
 
 
-    /**
-     *
-     * @param id
-     * @param depotId
-     * @param handlerPartyId
-     * @param createdPartyId
-     * @param offset
-     * @param pageSize
-     * @return
-     * @throws Exception
-     */
+
 /*    public List<StorageReport> listStorageReportByCondition1(@Param("id")int id,
                                                              @Param("depotId")int depotId,
                                                              @Param("handlerPartyId")int handlerPartyId,
                                                              @Param("createdPartyId")int createdPartyId,
                                                              @Param("offset")int offset,
                                                              @Param("pageSize")int pageSize) throws Exception;*/
-    public List<StorageReport> listStorageReportByCondition1(@Param("storageReport")StorageReport storageReport,
+
+    /**
+     *
+     * @param report
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listStorageReportByCondition1(@Param("report")StorageReport report,
                                                              @Param("offset")int offset,
                                                              @Param("pageSize")int pageSize) throws Exception;
 

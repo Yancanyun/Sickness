@@ -30,7 +30,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -87,7 +86,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                 storageItemList = Collections.emptyList();
             }
             //获取当前时间之前所有未结算单据（包括当前时间）
-            List<StorageReportDto> storageReportDtoList = storageReportService.ListStorageReportDtoUnsettled(nowDate);
+            List<StorageReportDto> storageReportDtoList = storageReportService.ListReportDtoUnsettledByEndTime(nowDate);
             if(Assert.isEmpty(storageReportDtoList)){
                 storageReportDtoList = Collections.emptyList();
             }

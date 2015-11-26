@@ -52,25 +52,341 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void newReportDto(StorageReportDto storageReportDto) throws SSException {
+    public void newReportDto(StorageReportDto reportDto) throws SSException {
        try {
-           if(Assert.isNull(storageReportDto)){
+           if(Assert.isNull(reportDto)){
+               throw SSException.get(EmenuException.ReportDtoIsNotNull);
+           }
+           if(Assert.isNull(reportDto.getStorageReport())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
-           if(Assert.isNull(storageReportDto.getStorageReport())){
-               throw SSException.get(EmenuException.ReportIsNotNull);
+           if(Assert.isEmpty(reportDto.getStorageReportItemList()) ||Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
+               throw SSException.get(EmenuException.ReportItemListIsNotNull);
            }
-           if(Assert.isEmpty(storageReportDto.getStorageReportItemList())){
-               throw SSException.get(EmenuException.ReportItemIsNotNull);
-           }
-           this.newReport(storageReportDto.getStorageReport());
-           for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
-           storageReportItemService.newStorageReportItem(storageReportItem);
+           this.newReport(reportDto.getStorageReport());
+           for(StorageReportItem reportItem : reportDto.getStorageReportItemList()){
+           storageReportItemService.newReportItem(reportItem);
            }
        } catch (Exception e) {
            LogClerk.errLog.error(e);
            throw SSException.get(EmenuException.InsertReportFail, e);
        }
+    }
+
+    @Override
+    public List<StorageReport> listAll() throws SSException{
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            reportList = storageReportMapper.listAll();
+            return reportList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDto() throws SSException {
+        List<StorageReportDto> reportDtoList = new ArrayList();
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            //获取所有单据信息
+            reportList = listAll();
+            for (StorageReport report : reportList){
+                StorageReportDto reportDto = new StorageReportDto();
+                List<StorageReportItem> reportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+                reportItemList = storageReportItemService.listByReportId(report.getId());
+                //数据存入reportDto
+                reportDto.setStorageReport(report);
+                reportDto.setStorageReportItemList(reportItemList);
+                reportDtoList.add(reportDto);
+            }
+            return reportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> ListReportDtoUnsettledByEndTime(Date endTime) throws SSException {
+        List<StorageReportDto> reportDtoList = Collections.emptyList();
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            //获取所有单据信息
+            reportList = storageReportMapper.ListStorageReportUnsettled(endTime);
+            if (Assert.isEmpty(reportList)){
+                return reportDtoList;
+            }
+            reportDtoList = new ArrayList<StorageReportDto>();
+            for (StorageReport report : reportList){
+                StorageReportDto reportDto = new StorageReportDto();
+                List<StorageReportItem> reportItemList = Collections.emptyList();
+                //根据单据id获取单据详情信息
+                reportItemList = storageReportItemService.listByReportId(report.getId());
+                //数据存入reportDto
+                reportDto.setStorageReport(report);
+                reportDto.setStorageReportItemList(reportItemList);
+
+                reportDtoList.add(reportDto);
+            }
+            return reportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoByPage(int page, int pageSize) throws SSException {
+        page = page <= 0 ? 0 : page - 1;
+        int offset = page * pageSize;
+        List<StorageReportDto> reportDtoList = Collections.emptyList();
+        List<StorageReport> reportList = Collections.emptyList();
+        if(Assert.lessZero(offset)){
+            return reportDtoList;
+        }
+        reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            reportList = storageReportMapper.listByPage(offset, pageSize);
+            for (StorageReport report : reportList){
+                StorageReportDto reportDto = new StorageReportDto();
+                List<StorageReportItem> reportItemList = Collections.emptyList();
+                //根据单据id获取单据详情信息
+                reportItemList = storageReportItemService.listByReportId(report.getId());
+                //数据存入reportDto
+                reportDto.setStorageReport(report);
+                reportDto.setStorageReportItemList(reportItemList);
+
+                reportDtoList.add(reportDto);
+            }
+            return reportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoByCondition(StorageReport report,
+                                                           int page,
+                                                           int pageSize,
+                                                           Date startTime,
+                                                           Date endTime) throws SSException{
+
+        page = page <= 0 ? 0 : page - 1;
+        int offset = page * pageSize;
+
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
+        List<StorageReportDto> reportDtoList = Collections.emptyList();
+        List<StorageReport> reportList = Collections.emptyList();
+        if(Assert.lessZero(offset)){
+            return reportDtoList;
+        }
+        reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            if (Assert.isNull(report)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            reportList = storageReportMapper.listReportByCondition(report, offset, pageSize, startTime, endTime);
+
+            for (StorageReport storageReport : reportList) {
+                StorageReportDto reportDto = new StorageReportDto();
+                List<StorageReportItem> reportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+
+                reportItemList = storageReportItemService.listByReportId(storageReport.getId());
+                //数据存入reportDto
+                reportDto.setStorageReport(storageReport);
+                reportDto.setStorageReportItemList(reportItemList);
+                reportDtoList.add(reportDto);
+            }
+            return reportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
+                                                            int page,
+                                                            int pageSize) throws SSException {
+        page = page <= 0 ? 0 : page - 1;
+        int offset = page * pageSize;
+        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
+        List<StorageReport> storageReportList = Collections.emptyList();
+        if(Assert.lessZero(offset)){
+            return storageReportDtoList;
+        }
+        if(Assert.lessZero(pageSize)){
+            return storageReportDtoList;
+        }
+        storageReportDtoList = new ArrayList();
+        try {
+            if (Assert.isNull(report)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            //storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
+            storageReportList = storageReportMapper.listStorageReportByCondition1(report, offset, pageSize);
+            for (StorageReport storageReport : storageReportList) {
+                StorageReportDto storageReportDto = new StorageReportDto();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
+                storageReportDtoList.add(storageReportDto);
+            }
+            return storageReportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateById(StorageReport storageReport) throws SSException {
+        try {
+            if(Assert.isNull(storageReport)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+              }
+            if (Assert.isNull(storageReport.getId())&&Assert.lessOrEqualZero(storageReport.getId())){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            commonDao.update(storageReport);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public void updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException {
+        try {
+            storageReportMapper.updateStatusById(id, storageReportStatusEnum.getId());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public StorageReport queryById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            return commonDao.queryById(StorageReport.class,id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
+                                                                   Date endTime,
+                                                                   List<Integer> depotIdList,
+                                                                   List<Integer> tagIdList) throws SSException {
+
+        if (startTime == null && endTime == null) {
+            startTime = DateUtils.getTodayStartTime();
+            endTime = DateUtils.getTodayEndTime();
+        }
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
+        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
+        List<StorageReport> storageReportList = Collections.emptyList();
+        try {
+            //根据tagId获取分类下的物品
+            StorageItemSearchDto searchDto = new StorageItemSearchDto();
+            searchDto.setTagIdList(tagIdList);
+
+            List<StorageItem> storageItemList = Collections.emptyList();
+            storageItemList = storageItemService.listBySearchDto(searchDto);
+
+            if(Assert.isNull(storageItemList)){
+                return storageReportDtoList;
+            }
+            storageReportDtoList = new ArrayList();
+
+            //获取原料idList
+            List<Integer> itemIdList = new ArrayList<Integer>();
+            for(StorageItem storageItem : storageItemList){
+                itemIdList.add(storageItem.getId());
+            }
+            storageReportList = storageReportMapper.listByDepotIdList(startTime, endTime, depotIdList);
+            for (StorageReport storageReport : storageReportList) {
+                StorageReportDto storageReportDto = new StorageReportDto();
+                List<StorageReportItem> storageReportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+
+                storageReportItemList = storageReportItemService.listByReportIdAndItemIdList(storageReport.getId(), itemIdList);
+
+                //数据存入reportDto
+                storageReportDto.setStorageReport(storageReport);
+                storageReportDto.setStorageReportItemList(storageReportItemList);
+
+                storageReportDtoList.add(storageReportDto);
+            }
+            return storageReportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void delReportDtoById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            this.delById(id);
+            storageReportItemService.delByReportId(id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelReportOrItemFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateStorageReportDto(StorageReportDto storageReportDto) throws SSException {
+        try {
+            if (Assert.isNull(storageReportDto)){
+                throw SSException.get(EmenuException.ReportDtoIsNotNull);
+            }
+            delReportDtoById(storageReportDto.getStorageReport().getId());
+            this.newReportDto(storageReportDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
+        }
+    }
+
+    @Override
+    public int count() throws SSException {
+        Integer count = 0;
+        try {
+            count = storageReportMapper.count();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountReportFail, e);
+        }
+        return count == null ? 0 : count;
     }
 
     /**
@@ -129,306 +445,14 @@ public class StorageReportServiceImpl implements StorageReportService {
         return true;
     }
 
-    public List<StorageReport> listAll() throws SSException{
-
-        List<StorageReport> storageReportList = Collections.emptyList();
-
-        try {
-            storageReportList = storageReportMapper.listAll();
-            return storageReportList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.SystemException, e);
-        }
-
-    }
-
-    @Override
-    public List<StorageReportDto> listStorageReportDto() throws SSException {
-
-        List<StorageReportDto> storageReportDtoList = new ArrayList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-        try {
-            //获取所有单据信息
-            storageReportList = listAll();
-
-            for (StorageReport storageReport : storageReportList){
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-
-                storageReportDtoList.add(storageReportDto);
-            }
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.SystemException, e);
-        }
-
-    }
-
-    @Override
-    public List<StorageReportDto> ListStorageReportDtoUnsettled(Date endTime) throws SSException {
-        List<StorageReportDto> storageReportDtoList = new ArrayList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-        try {
-            //获取所有单据信息
-            storageReportList = storageReportMapper.ListStorageReportUnsettled(endTime);
-            if (Assert.isEmpty(storageReportList)){
-                return storageReportDtoList;
-            }
-            for (StorageReport storageReport : storageReportList){
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-
-                storageReportDtoList.add(storageReportDto);
-            }
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public List<StorageReportDto> listStorageReportDtoByPage(int page, int pageSize) throws SSException {
-        int offset = page * pageSize;
-        List<StorageReportDto> storageReportDtoList = Collections.emptyList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-        if(Assert.lessZero(offset)){
-            return storageReportDtoList;
-        }
-        storageReportDtoList = new ArrayList<StorageReportDto>();
-        try {
-            storageReportList = storageReportMapper.listByPage(offset,pageSize);
-            for (StorageReport storageReport : storageReportList){
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-
-                storageReportDtoList.add(storageReportDto);
-            }
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.SystemException, e);
-        }
-    }
-
-    @Override
-    public List<StorageReportDto> listStorageReportDtoByCondition(Date startTime,
-                                                                  Date endTime,
-                                                                  String serialNumber,
-                                                                  int depotId,
-                                                                  int handlerPartyId,
-                                                                  int createdPartyId,
-                                                                  int page,
-                                                                  int pageSize) throws SSException {
-
-        page = page <= 0 ? 0 : page - 1;
-        int offset = page * pageSize;
-        if (startTime == null && endTime == null) {
-            startTime = DateUtils.getTodayStartTime();
-            endTime = DateUtils.getTodayEndTime();
-        }
-        if (endTime != null) {
-            endTime.setHours(23);
-            endTime.setMinutes(59);
-            endTime.setSeconds(59);
-        }
-        List<StorageReportDto> storageReportDtoList = Collections.emptyList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-        if(Assert.lessZero(offset)){
-            return storageReportDtoList;
-        }
-        storageReportDtoList = new ArrayList<StorageReportDto>();
-        try {
-            storageReportList = storageReportMapper.listStorageReportByCondition(startTime,endTime,serialNumber,depotId,handlerPartyId,createdPartyId,offset,pageSize);
-
-            for (StorageReport storageReport : storageReportList) {
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-
-                storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-                storageReportDtoList.add(storageReportDto);
-            }
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public List<StorageReportDto> listStorageReportDtoByCondition1(StorageReport storageReport,
-                                                                     int page,
-                                                                     int pageSize) throws SSException {
-        page = page <= 0 ? 0 : page - 1;
-        int offset = page * pageSize;
-        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-        if(Assert.lessZero(offset)){
-            return storageReportDtoList;
-        }
-        if(Assert.lessZero(pageSize)){
-            return storageReportDtoList;
-        }
-        storageReportDtoList = new ArrayList();
-        try {
-            //storageReportList = storageReportMapper.listStorageReportByCondition1(id,depotId,handlerPartyId,createdPartyId,offset,pageSize);
-            storageReportList = storageReportMapper.listStorageReportByCondition1(storageReport,offset,pageSize);
-            for (StorageReport storageReport1 : storageReportList) {
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-                storageReportItemList = storageReportItemService.listByReportId(storageReport1.getId());
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport1);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-                storageReportDtoList.add(storageReportDto);
-            }
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public void updateById(StorageReport storageReport) throws SSException {
-        try {
-            if(Assert.isNull(storageReport)){
-                throw SSException.get(EmenuException.ReportIsNotNull);
-              }
-            if (Assert.isNull(storageReport.getId())&&Assert.lessOrEqualZero(storageReport.getId())){
-                throw SSException.get(EmenuException.ReportIdError);
-            }
-            commonDao.update(storageReport);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public void updateStatusById(int id, StorageReportStatusEnum storageReportStatusEnum) throws SSException {
-        try {
-            storageReportMapper.updateStatusById(id,storageReportStatusEnum.getId());
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public StorageReport queryById(int id) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(id)){
-                throw SSException.get(EmenuException.ReportIdError);
-            }
-            return commonDao.queryById(StorageReport.class,id);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryStorageReportFail, e);
-        }
-    }
-
-    @Override
-    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime, Date endTime, List<Integer> depotIdList, List<Integer> tagIdList) throws SSException {
-
-        if (startTime == null && endTime == null) {
-            startTime = DateUtils.getTodayStartTime();
-            endTime = DateUtils.getTodayEndTime();
-        }
-
-        if (endTime != null) {
-            endTime.setHours(23);
-            endTime.setMinutes(59);
-            endTime.setSeconds(59);
-        }
-
-        List<StorageReportDto> storageReportDtoList =  Collections.emptyList();
-        List<StorageReport> storageReportList = Collections.emptyList();
-
-        try {
-            //根据tagId获取分类下的物品
-            StorageItemSearchDto searchDto = new StorageItemSearchDto();
-            searchDto.setTagIdList(tagIdList);
-
-            List<StorageItem> storageItemList = Collections.emptyList();
-            storageItemList = storageItemService.listBySearchDto(searchDto);
-
-            if(Assert.isNull(storageItemList)){
-                return storageReportDtoList;
-            }
-
-            storageReportDtoList = new ArrayList();
-
-            //获取原料idList
-            List<Integer> itemIdList = new ArrayList<Integer>();
-            for(StorageItem storageItem : storageItemList){
-                itemIdList.add(storageItem.getId());
-            }
-
-            storageReportList = storageReportMapper.listByDepotIdList(startTime,endTime,depotIdList);
-
-            for (StorageReport storageReport : storageReportList) {
-                StorageReportDto storageReportDto = new StorageReportDto();
-                List<StorageReportItem> storageReportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-
-                storageReportItemList = storageReportItemService.listByReportIdAndItemIdList(storageReport.getId(), itemIdList);
-
-                //数据存入reportDto
-                storageReportDto.setStorageReport(storageReport);
-                storageReportDto.setStorageReportItemList(storageReportItemList);
-
-                storageReportDtoList.add(storageReportDto);
-            }
-
-            return storageReportDtoList;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListStorageReportFail, e);
-        }
-    }
-
-    @Override
+    /**
+     * 根据单据id删除单据
+     * @param id
+     * @return
+     * @throws SSException
+     */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean delReportDtoById(int id) throws SSException {
-        try {
-            if (Assert.lessOrEqualZero(id)){
-                return false;
-            }
-            this.delById(id);
-            storageReportItemService.delByReportId(id);
-            return true;
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DelReportOrItemFail, e);
-        }
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean delById(int id) throws SSException {
+    private boolean delById(int id) throws SSException {
         try {
             if (Assert.lessOrEqualZero(id)){
                 return false;
@@ -439,35 +463,5 @@ public class StorageReportServiceImpl implements StorageReportService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelReportOrItemFail, e);
         }
-
     }
-
-    @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean updateStorageReportDto(StorageReportDto storageReportDto) throws SSException {
-        try {
-            if (Assert.isNull(storageReportDto)){
-                return false;
-            }
-            delReportDtoById(storageReportDto.getStorageReport().getId());
-            this.newReportDto(storageReportDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateStorageReportFail, e);
-        }
-        return false;
-    }
-
-    @Override
-    public int count() throws SSException {
-        Integer count = 0;
-        try {
-            count = storageReportMapper.count();
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.CountReportFail, e);
-        }
-        return count == null ? 0 : count;
-    }
-
 }

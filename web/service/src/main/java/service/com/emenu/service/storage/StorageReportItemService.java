@@ -1,6 +1,5 @@
 package com.emenu.service.storage;
 
-import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.pandawork.core.common.exception.SSException;
 
@@ -16,11 +15,11 @@ public interface StorageReportItemService {
 
     /**
      * 添加单据详情
-     * @param storageReportItem
+     * @param reportItem
      * @return
      * @throws SSException
      */
-    public StorageReportItem newStorageReportItem(StorageReportItem storageReportItem) throws SSException;
+    public StorageReportItem newReportItem(StorageReportItem reportItem) throws SSException;
 
     /**
      * 获取所有单据详情信息
@@ -31,6 +30,7 @@ public interface StorageReportItemService {
 
     /**
      * 根据单据ID获取单据详情信息
+     * @param reportId
      * @return
      * @throws SSException
      */
@@ -51,7 +51,7 @@ public interface StorageReportItemService {
      * @return
      * @throws SSException
      */
-    boolean updateById(StorageReportItem storageReportItem) throws SSException;
+    public void updateById(StorageReportItem storageReportItem) throws SSException;
 
     /**
      * 根据reportId和itemIdList获取单据详情信息
@@ -68,5 +68,5 @@ public interface StorageReportItemService {
      * @return
      * @throws SSException
      */
-    public boolean delByReportId(int id) throws SSException;
+    public void delByReportId(int id) throws SSException;
 }

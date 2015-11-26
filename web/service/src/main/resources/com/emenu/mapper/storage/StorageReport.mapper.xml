@@ -5,17 +5,50 @@
 <mapper namespace="com.emenu.mapper.storage.StorageReportMapper">
 
     <select id="listAll" resultMap="pw.StorageReport">
-            SELECT * from t_storage_report ORDER BY `created_time` DESC
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report` ORDER BY `created_time` DESC
     </select>
 
     <select id="listByPage" resultMap="pw.StorageReport">
-            SELECT * from t_storage_report
-            ORDER BY `created_time` DESC
-            LIMIT #{offset}, #{pageSize}
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
+        ORDER BY `created_time` DESC
+        LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="listStorageReportByCondition" resultMap="pw.StorageReport">
-        SELECT * from t_storage_report
+    <select id="listReportByCondition" resultMap="pw.StorageReport">
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
         <where>
             <if test="startTime != null">
                 `created_time` &gt;= #{startTime}
@@ -23,17 +56,17 @@
             <if test="endTime != null">
                 AND `created_time` &lt;= #{endTime}
             </if>
-            <if test="serialNumber != null">
-                AND `serial_number` = #{serialNumber}
+            <if test="report.serialNumber != null">
+                AND `serial_number` = #{report.serialNumber}
             </if>
-            <if test="createdPartyId>0">
-                AND `created_party_id` = #{createdPartyId}
+            <if test="report.createdPartyId>0 and report.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
             </if>
-            <if test="depotId>0">
-                AND `depot_id` =#{depotId}
+            <if test="report.depotId>0 and report.depotId != null">
+                AND `depot_id` =#{report.depotId}
             </if>
-            <if test="handlerPartyId>0">
-                AND `handler_party_id` = #{handlerPartyId}
+            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
             </if>
         </where>
         ORDER BY `created_time` DESC
@@ -41,19 +74,30 @@
     </select>
 
     <select id="listStorageReportByCondition1" resultMap="pw.StorageReport">
-        SELECT * from t_storage_report
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
         <where>
-            <if test="storageReport.id>0">
-                AND `id` = #{storageReport.id}
+            <if test="report.id>0 and report.id != null">
+                AND `id` = #{report.id}
             </if>
-            <if test="storageReport.createdPartyId>0">
-                AND `created_party_id` = #{storageReport.createdPartyId}
+            <if test="report.createdPartyId>0 and report.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
             </if>
-            <if test="storageReport.depotId>0">
-                AND `depot_id` = #{storageReport.depotId}
+            <if test="report.depotId>0 and report.depotId != null">
+                AND `depot_id` =#{report.depotId}
             </if>
-            <if test="storageReport.handlerPartyId>0">
-                AND `handler_party_id` = #{storageReport.handlerPartyId}
+            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
             </if>
         </where>
         ORDER BY `created_time` DESC
@@ -61,7 +105,20 @@
     </select>
 
     <select id="ListStorageReportUnsettled" parameterType="date" resultMap="pw.StorageReport">
-        SELECT * FROM t_storage_report WHERE `created_time` &lt;= #{endTime} and status = 0 ORDER BY `created_time` DESC;
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
+        WHERE `created_time` &lt;= #{endTime} and `status` = 0
+        ORDER BY `created_time` DESC
     </select>
 
     <update id="updateStatusById" >
@@ -104,31 +161,5 @@
     <select id="count" resultType="int">
         SELECT count(1) FROM `t_storage_report`
     </select>
-
-<!--    <select id="listByTime" resultMap="pw.StorageReport">
-        SELECT `id` AS id,
-        `serial_number` AS serialNumber,
-        `comment` AS comment,
-        `depot_id` AS depotId,
-        `handler_party_id` AS handlerPartyId,
-        `created_party_id` AS createdPartyId,
-        `money` AS money,
-        `status` AS status,
-        `type` AS type,
-        `created_time` AS createdTime,
-        `last_modified_time` AS lastModifiedTime FROM t_storage_report
-        <where>
-            <if test="startTime != null">
-                AND `created_time` &gt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                AND `created_time` &lt;= #{endTime}
-            </if>
-        </where>
-        ORDER BY `created_time` DESC;
-    </select>-->
-   <!-- <select id="ListStorageReportDtoUnsettle"  resultMap="pw.StorageReport">
-        SELECT * from t_storage_report WHERE `created_time` <= #{endTime} and status = 1
-    </select>-->
 
 </mapper>

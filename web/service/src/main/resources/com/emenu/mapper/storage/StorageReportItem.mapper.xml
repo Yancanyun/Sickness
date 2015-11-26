@@ -5,31 +5,69 @@
 <mapper namespace="com.emenu.mapper.storage.StorageReportItemMapper">
 
         <select id="listAll" resultMap="pw.StorageReportItem">
-                SELECT * from t_storage_report_item
+            SELECT `id` AS id,
+            `item_id` AS itemId,
+            `quantity` AS quantity,
+            `count` AS count,
+            `price` As price,
+            `comment` AS comment,
+            `report_id` AS reportId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+            FROM `t_storage_report_item`
         </select>
 
         <select id="queryByReportId" parameterType="int" resultMap="pw.StorageReportItem">
-                SELECT * from t_storage_report_item WHERE `report_id` = #{reportId}
+            SELECT `id` AS id,
+            `item_id` AS itemId,
+            `quantity` AS quantity,
+            `count` AS count,
+            `price` As price,
+            `comment` AS comment,
+            `report_id` AS reportId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+            FROM `t_storage_report_item`
+            WHERE `report_id` = #{reportId}
         </select>
 
         <select id="listByReportId" parameterType="int" resultMap="pw.StorageReportItem">
-                SELECT * from t_storage_report_item WHERE `report_id` = #{reportId}
+            SELECT `id` AS id,
+            `item_id` AS itemId,
+            `quantity` AS quantity,
+            `count` AS count,
+            `price` As price,
+            `comment` AS comment,
+            `report_id` AS reportId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+            FROM `t_storage_report_item`
+            WHERE `report_id` = #{reportId}
         </select>
 
         <select id="listByReportIdAndItemIdList" resultMap="pw.StorageReportItem">
-                SELECT * FROM t_storage_report_item
-                 <where>
-                         `item_id` IN
-                         <foreach collection="itemIdList" index="index" item="itemId" open="(" separator="," close=")">
+            SELECT `id` AS id,
+            `item_id` AS itemId,
+            `quantity` AS quantity,
+            `count` AS count,
+            `price` As price,
+            `comment` AS comment,
+            `report_id` AS reportId,
+            `created_time` AS createdTime,
+            `last_modified_time` AS lastModifiedTime
+            FROM `t_storage_report_item`
+                <where>
+                        `item_id` IN
+                        <foreach collection="itemIdList" index="index" item="itemId" open="(" separator="," close=")">
                                  #{itemId}
-                         </foreach>
-                         and `report_id` = #{reportId}
+                        </foreach>
+                        and `report_id` = #{reportId}
                  </where>
-                ORDER BY `created_time` DESC
+            ORDER BY `created_time` DESC
         </select>
 
         <delete id="delByReportId" parameterType="int">
-                DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
+            DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
         </delete>
 
 </mapper>

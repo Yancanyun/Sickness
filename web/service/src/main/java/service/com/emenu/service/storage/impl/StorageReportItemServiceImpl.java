@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,29 +35,25 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public StorageReportItem newStorageReportItem(StorageReportItem storageReportItem) throws SSException {
+    public StorageReportItem newReportItem(StorageReportItem reportItem) throws SSException {
 
         try {
-            if(Assert.isNull(storageReportItem)){
+            if(Assert.isNull(reportItem)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
-
-            if(checkStorageReportItemBeforeSave(storageReportItem)){
-                return commonDao.insert(storageReportItem);
+            if(!checkStorageReportItemBeforeSave(reportItem)){
+                return null;
             }
+            return commonDao.insert(reportItem);
         } catch (Exception e) {
-
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
-        return null;
     }
 
     @Override
     public List<StorageReportItem> listAll() throws SSException {
-
         List<StorageReportItem> storageReportItemList = Collections.emptyList();
-
         try {
             storageReportItemList = storageReportItemMapper.listAll();
             return storageReportItemList;
@@ -76,30 +71,30 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
             return storageReportItem;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryStorageReportItemFail, e);
+            throw SSException.get(EmenuException.QueryReportItemFail, e);
         }
     }
 
     @Override
     public List<StorageReportItem> listByReportId(int reportId) throws SSException {
-        List<StorageReportItem> storageReportItemList =  Collections.emptyList();
+        List<StorageReportItem> reportItemList =  Collections.emptyList();
         try {
-            storageReportItemList = storageReportItemMapper.listByReportId(reportId);
-            return storageReportItemList;
+            reportItemList = storageReportItemMapper.listByReportId(reportId);
+            return reportItemList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryStorageReportItemFail, e);
+            throw SSException.get(EmenuException.QueryReportItemFail, e);
         }
     }
 
     @Override
-    public boolean updateById(StorageReportItem storageReportItem) throws SSException {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateById(StorageReportItem storageReportItem) throws SSException {
         try {
             if(Assert.isNull(storageReportItem)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
             commonDao.update(storageReportItem);
-            return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportItemFail, e);
@@ -114,35 +109,41 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
             return storageReportItemList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryStorageReportItemFail, e);
+            throw SSException.get(EmenuException.QueryReportItemFail, e);
         }
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean delByReportId(int id) throws SSException {
+    public void delByReportId(int id) throws SSException {
         try {
               if (Assert.lessOrEqualZero(id)){
-                  return false;
+                  throw SSException.get(EmenuException.ReportIdError);
               }
             storageReportItemMapper.delByReportId(id);
-            return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelReportOrItemFail, e);
         }
     }
 
+    /**
+     * 保存StorageReportItem检查关键字段是否合法
+     * @param storageReportItem
+     * @return
+     * @throws SSException
+     */
     private boolean checkStorageReportItemBeforeSave(StorageReportItem storageReportItem) throws SSException{
-
         if (Assert.isNull(storageReportItem)){
             return false;
         }
-
+        //单据详情数量字段
         Assert.isNotNull(storageReportItem.getQuantity(),EmenuException.QuantityError);
-        Assert.isNotNull(storageReportItem.getPrice(),EmenuException.PriceError);
-        Assert.lessOrEqualZero(storageReportItem.getReportId(),EmenuException.ReportIdError);
-
+        //单据详情成本价
+        Assert.isNotNull(storageReportItem.getPrice(), EmenuException.PriceError);
+        if (Assert.lessOrEqualZero(storageReportItem.getReportId())||Assert.isNull(storageReportItem.getReportId())){
+            Assert.lessOrEqualZero(storageReportItem.getReportId(),EmenuException.ReportIdError);
+        }
         return true;
     }
 

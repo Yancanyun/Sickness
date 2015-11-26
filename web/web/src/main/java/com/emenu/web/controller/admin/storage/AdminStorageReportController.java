@@ -64,7 +64,7 @@ public class AdminStorageReportController extends AbstractController {
 
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         try {
-            storageReportDtoList = storageReportService.listStorageReportDtoByPage(curPage,pageSize);
+            storageReportDtoList = storageReportService.listReportDtoByPage(curPage, pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
