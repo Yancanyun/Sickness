@@ -47,36 +47,19 @@ public interface StorageReportMapper {
                                                      @Param("pageSize")int pageSize,
                                                      @Param("startTime")Date startTime,
                                                      @Param("endTime")Date endTime) throws Exception;
-/*    public List<StorageReport> listStorageReportByCondition(@Param("startTime")Date startTime,
-                                                            @Param("endTime")Date endTime,
-                                                            @Param("serialNumber")String serialNumber,
-                                                            @Param("depotId")int depotId,
-                                                            @Param("handlerPartyId")int handlerPartyId,
-                                                            @Param("createdPartyId")int createdPartyId,
-                                                            @Param("offset")int offset,
-                                                            @Param("pageSize")int pageSize) throws Exception;*/
 
-
-
-/*    public List<StorageReport> listStorageReportByCondition1(@Param("id")int id,
-                                                             @Param("depotId")int depotId,
-                                                             @Param("handlerPartyId")int handlerPartyId,
-                                                             @Param("createdPartyId")int createdPartyId,
-                                                             @Param("offset")int offset,
-                                                             @Param("pageSize")int pageSize) throws Exception;*/
-
-    /**
+ /*   *//**
      *
      * @param report
      * @param offset
      * @param pageSize
      * @return
      * @throws Exception
-     */
+     *//*
     public List<StorageReport> listStorageReportByCondition1(@Param("report")StorageReport report,
                                                              @Param("offset")int offset,
                                                              @Param("pageSize")int pageSize) throws Exception;
-
+*/
     /**
      * 获取指定时间之前未结算的订单
      * @param endTime

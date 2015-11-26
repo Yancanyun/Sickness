@@ -4,12 +4,14 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -202,7 +204,7 @@ public class ReportTest extends AbstractTestCase{
 
         StorageReport storageReport = new StorageReport();
 
-        StorageReportDtoList = storageReportService.listReportDtoByCondition(storageReport,0,10,startTime,endTime);
+        StorageReportDtoList = storageReportService.listReportDtoByCondition(storageReport, 0, 10, startTime, endTime);
         for(StorageReportDto storageReportDto : StorageReportDtoList){
             List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
             System.out.println(storageReportDto.getStorageReport().getComment());
@@ -221,19 +223,38 @@ public class ReportTest extends AbstractTestCase{
     public void listStorageReportByCondition1() throws SSException{
         List<StorageReportDto> StorageReportDtoList = new ArrayList();
 
+        Date startTime = new Date();
+        Date endTime = new Date();
+
+        startTime = DateUtils.getTodayStartTime();
+        endTime = DateUtils.getTodayEndTime();
+
         StorageReport storageReport = new StorageReport();
-        storageReport.setId(2);
-        storageReport.setCreatedPartyId(33);
+        storageReport.setId(5);
+        storageReport.setSerialNumber("RKD-201511260001");
+        storageReport.setCreatedPartyId(2);
         storageReport.setDepotId(2);
-        storageReport.setHandlerPartyId(34);
-        StorageReportDtoList = storageReportService.listReportDtoByCondition1(storageReport, 0, 10);
+        storageReport.setHandlerPartyId(2);
+        StorageReportDtoList = storageReportService.listReportDtoByCondition(storageReport, 0, 10,startTime,endTime);
 
         for (StorageReportDto storageReportDto : StorageReportDtoList){
             System.out.println(storageReportDto.getStorageReport().getComment());
         }
         System.out.println("he");
     }
-/*
+
+    @Test
+    public void updateById() throws SSException{
+        StorageReport storageReport = new StorageReport();
+        storageReport.setId(5);
+        storageReport.setSerialNumber("RKD-201511260001");
+        storageReport.setCreatedPartyId(2);
+        storageReport.setDepotId(3);
+        storageReport.setHandlerPartyId(2);
+        storageReportService.updateById(storageReport);
+    }
+
+
     @Test
     public void updateStorageReport() throws SSException{
         StorageReport storageReport = storageReportService.queryById(2);
@@ -265,9 +286,9 @@ public class ReportTest extends AbstractTestCase{
 
         List<Integer> tagIdList = new ArrayList<Integer>();
         //tagIdList.add(33);
-        StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(null, null, deportIdList, tagIdList);
-        *//*if(Assert.isNull(StorageReportDtoList = storageReportService.listStorageReportDtoByCondition2(null, null, deportIdList, tagIdList))){
-        }*//*
+        StorageReportDtoList = storageReportService.listReportDtoByCondition(null, null, deportIdList, tagIdList);
+        if(Assert.isNull(StorageReportDtoList = storageReportService.listReportDtoByCondition(null, null, deportIdList, tagIdList))){
+        }
 
         for(StorageReportDto storageReportDto : StorageReportDtoList){
             System.out.println(storageReportDto.getStorageReport().getComment());
@@ -280,14 +301,72 @@ public class ReportTest extends AbstractTestCase{
 
     @Test
     public void count() throws SSException{
+        ArrayList<Integer> idList = new ArrayList<Integer>();
+        idList.add(1);
+        idList.add(2);
+        idList.add(3);
 
-       *//* ArrayList<Integer> idList = new ArrayList<Integer>();
-
-        if(idList.size()==0){
+        for (Integer i : idList){
+            if(i == 2){
+                idList.remove(i);
+            }
+        }
+        /*for (Integer i : idList){
+            System.out.println(i);
+        }*/
+        System.out.println(idList.size());
+       /* if(idList.size()==0){
             System.out.println("hello");
         }
-*//*
-        System.out.println(storageReportService.count());
-    }*/
 
+        System.out.println(storageReportService.count());*/
+    }
+
+    @Test
+    public void updateReportDto() throws SSException{
+
+        StorageReportDto reportDto = new StorageReportDto();
+
+        StorageReport storageReport = new StorageReport();
+        storageReport.setId(4);
+        storageReport.setStatus(0);
+        storageReport.setComment("你好杜哥");
+        storageReport.setCreatedPartyId(6);
+        storageReport.setDepotId(4);
+        storageReport.setHandlerPartyId(5);
+        storageReport.setSerialNumber("kdl-201510120001");
+        storageReport.setStatus(1);
+
+
+
+        BigDecimal money = new BigDecimal("35.55");
+
+
+        storageReport.setMoney(money);
+        storageReport.setType(1);
+
+        reportDto.setStorageReport(storageReport);
+
+        StorageReportItem storageReportItem = new StorageReportItem();
+        storageReportItem.setId(2);
+        storageReportItem.setComment("唱好");
+
+        BigDecimal count = new BigDecimal("0.00");
+        BigDecimal price = new BigDecimal("0.00");
+        BigDecimal quantity = new BigDecimal("0.00");
+
+
+        storageReportItem.setCount(count);
+        storageReportItem.setItemId(1);
+        storageReportItem.setPrice(price);
+        storageReportItem.setQuantity(quantity);
+        storageReportItem.setReportId(4);
+
+        List<StorageReportItem> storageReportItemList = new ArrayList<StorageReportItem>();
+        storageReportItemList.add(storageReportItem);
+        reportDto.setStorageReportItemList(storageReportItemList);
+
+         storageReportService.updateReportDto(reportDto);
+        // storageReportService.newReport(storageReport);
+    }
 }

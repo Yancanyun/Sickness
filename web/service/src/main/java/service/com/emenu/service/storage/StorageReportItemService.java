@@ -47,11 +47,11 @@ public interface StorageReportItemService {
 
     /**
      * 根据id修改单据详情
-     * @param storageReportItem
+     * @param reportItem
      * @return
      * @throws SSException
      */
-    public void updateById(StorageReportItem storageReportItem) throws SSException;
+    public void updateById(StorageReportItem reportItem) throws SSException;
 
     /**
      * 根据reportId和itemIdList获取单据详情信息
@@ -69,4 +69,11 @@ public interface StorageReportItemService {
      * @throws SSException
      */
     public void delByReportId(int id) throws SSException;
+
+    /**
+     * 根据id删除单据详情
+     * @param id
+     * @throws SSException
+     */
+    public void delById(int id) throws SSException;
 }

@@ -198,7 +198,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         try {
 
             //取出时间段之间的所有单据,根据条件
-            List<StorageReportDto> storageReportList = storageReportService.listStorageReportDtoByCondition2(startDate, endDate, depotIds, tagIds);
+            List<StorageReportDto> storageReportList = storageReportService.listReportDtoByCondition(startDate, endDate, depotIds, tagIds);
             if (Assert.isEmpty(storageReportList)) {
                 storageReportList = Collections.emptyList();
             }
@@ -419,7 +419,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             }
             //TODO 参数：开始时间settlementDate，结束时间startDate
             //单据列表——从上一次结算到开始时间之间的单据（不包括开始时间，不包括结束时间）
-            List<StorageReportDto> storageReportDtoList = storageReportService.listStorageReportDtoByCondition2(settlementDate, startDate, depotIds, tagIds);
+            List<StorageReportDto> storageReportDtoList = storageReportService.listReportDtoByCondition(settlementDate, startDate, depotIds, tagIds);
             if (Assert.isEmpty(storageReportDtoList)) {
                 storageReportDtoList = Collections.emptyList();
             }

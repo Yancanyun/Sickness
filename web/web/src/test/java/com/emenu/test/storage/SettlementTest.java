@@ -150,7 +150,7 @@ public class SettlementTest extends AbstractTestCase{
         Date endDate = sdf.parse(endDateStr);
         List<Integer> depotIds = new ArrayList<Integer>();
         List<Integer> tagIds = new ArrayList<Integer>();
-        List<StorageReportDto> storageReportDtoList = storageReportService.listStorageReportDtoByCondition2(startDate,endDate,depotIds,tagIds);
+        List<StorageReportDto> storageReportDtoList = storageReportService.listReportDtoByCondition(startDate, endDate, depotIds, tagIds);
         if(storageReportDtoList!=null) {
             for (StorageReportDto storageReportDto : storageReportDtoList) {
                 System.out.println(storageReportDto.getStorageReport().getComment());

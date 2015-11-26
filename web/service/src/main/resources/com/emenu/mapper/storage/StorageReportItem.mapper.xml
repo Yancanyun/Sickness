@@ -57,10 +57,12 @@
             `last_modified_time` AS lastModifiedTime
             FROM `t_storage_report_item`
                 <where>
+                    <if test="itemIdList != null and itemIdList.size()>0">
                         `item_id` IN
                         <foreach collection="itemIdList" index="index" item="itemId" open="(" separator="," close=")">
                                  #{itemId}
                         </foreach>
+                    </if>
                         and `report_id` = #{reportId}
                  </where>
             ORDER BY `created_time` DESC

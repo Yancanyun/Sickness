@@ -136,7 +136,7 @@ public class AdminStorageReportController extends AbstractController {
                          RedirectAttributes redirectAttributes){
         try{
 
-            storageReportService.updateStorageReportDto(storageReportDto);
+            storageReportService.updateReportDto(storageReportDto);
 
             String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
             //返回添加成功信息

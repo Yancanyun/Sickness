@@ -7,7 +7,6 @@ import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.common.utils.DateUtils;
 import com.emenu.mapper.storage.StorageReportMapper;
 import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageReportItemService;
@@ -213,7 +212,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
     }
 
-    @Override
+  /*  @Override
     public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
                                                             int page,
                                                             int pageSize) throws SSException {
@@ -249,19 +248,19 @@ public class StorageReportServiceImpl implements StorageReportService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListReportFail, e);
         }
-    }
+    }*/
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateById(StorageReport storageReport) throws SSException {
+    public void updateById(StorageReport report) throws SSException {
         try {
-            if(Assert.isNull(storageReport)){
+            if(Assert.isNull(report)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
               }
-            if (Assert.isNull(storageReport.getId())&&Assert.lessOrEqualZero(storageReport.getId())){
+            if (Assert.isNull(report.getId())&&Assert.lessOrEqualZero(report.getId())){
                 throw SSException.get(EmenuException.ReportIdError);
             }
-            commonDao.update(storageReport);
+            commonDao.update(report);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -287,20 +286,16 @@ public class StorageReportServiceImpl implements StorageReportService {
             return commonDao.queryById(StorageReport.class,id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryStorageReportFail, e);
+            throw SSException.get(EmenuException.QueryReportFail, e);
         }
     }
 
     @Override
-    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
-                                                                   Date endTime,
-                                                                   List<Integer> depotIdList,
-                                                                   List<Integer> tagIdList) throws SSException {
+    public List<StorageReportDto> listReportDtoByCondition(Date startTime,
+                                                           Date endTime,
+                                                           List<Integer> depotIdList,
+                                                           List<Integer> tagIdList) throws SSException {
 
-        if (startTime == null && endTime == null) {
-            startTime = DateUtils.getTodayStartTime();
-            endTime = DateUtils.getTodayEndTime();
-        }
         if (endTime != null) {
             endTime.setHours(23);
             endTime.setMinutes(59);
@@ -316,7 +311,7 @@ public class StorageReportServiceImpl implements StorageReportService {
             List<StorageItem> storageItemList = Collections.emptyList();
             storageItemList = storageItemService.listBySearchDto(searchDto);
 
-            if(Assert.isNull(storageItemList)){
+            if(Assert.isEmpty(storageItemList)){
                 return storageReportDtoList;
             }
             storageReportDtoList = new ArrayList();
@@ -364,13 +359,86 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStorageReportDto(StorageReportDto storageReportDto) throws SSException {
+    public void updateReportDto(StorageReportDto reportDto) throws SSException {
         try {
-            if (Assert.isNull(storageReportDto)){
+            if (Assert.isNull(reportDto)){
                 throw SSException.get(EmenuException.ReportDtoIsNotNull);
             }
-            delReportDtoById(storageReportDto.getStorageReport().getId());
-            this.newReportDto(storageReportDto);
+            if (Assert.isNull(reportDto.getStorageReport())){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            if (Assert.isEmpty(reportDto.getStorageReportItemList())){
+                throw SSException.get(EmenuException.StorageReportItemListIsNotNull);
+            }
+            //更新后的单据
+            StorageReport reportNew = reportDto.getStorageReport();
+            //数据库中原始未修改的单据
+            StorageReportDto reportDtoOld = queryReportDtoById(reportNew.getId());
+            //更新单据
+            updateById(reportNew);
+
+            List<StorageReportItem> reportItemListNew = reportDto.getStorageReportItemList();
+            List<StorageReportItem> reportItemListOld = reportDtoOld.getStorageReportItemList();
+
+            //根据temp判断是否增加元素
+            int temp = 0;
+
+            for (StorageReportItem reportItemOld : reportItemListOld){
+                //根据isExist判断是否删除了原来的单据详情
+                boolean isExist = false;
+                for (StorageReportItem reportItemNew : reportItemListNew){
+                    if (reportItemOld.getId()==reportItemNew.getId()){
+                        temp++;
+                        isExist = true;
+                    }
+                }
+                //对原有单据详情删除
+                if (!isExist){
+                    storageReportItemService.delById(reportItemOld.getId());
+                }
+            }
+            //没有新增或减少数据库中单据详情时，修改原始数据
+            if (temp == reportItemListOld.size()&&temp == reportItemListOld.size()){
+                for (StorageReportItem reportItemNew : reportItemListNew){
+                    storageReportItemService.updateById(reportItemNew);
+                }
+            }
+            //没有减少数据单据详情时，添加修改后新增的单据详情
+            if (temp == reportItemListOld.size()&&reportItemListNew.size() > temp){
+                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
+                for (StorageReportItem reportItemOld : reportItemListOld){
+                    for (StorageReportItem reportItemNew : reportItemListNew){
+                        if (reportItemOld.getId()==reportItemNew.getId()){
+                            storageReportItemService.updateById(reportItemNew);
+                            reportItemListNew.remove(reportItemNew);
+                        }
+                    }
+                }
+                reportItemListNew.removeAll(reportItemListTemp);
+                if (reportItemListNew.size()>0){
+                    for (StorageReportItem reportItemNew : reportItemListNew){
+                        storageReportItemService.newReportItem(reportItemNew);
+                    }
+                }
+            }
+            if (temp < reportItemListOld.size()){
+                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
+                for (StorageReportItem reportItemOld : reportItemListOld){
+                    //修改数据库中原有单据详情
+                    for (StorageReportItem reportItemNew : reportItemListNew){
+                        if (reportItemOld.getId()==reportItemNew.getId()){
+                            storageReportItemService.updateById(reportItemNew);
+                            reportItemListTemp.add(reportItemNew);
+                        }
+                    }
+                }
+                reportItemListNew.removeAll(reportItemListTemp);
+                if (reportItemListNew.size()>0){
+                    for (StorageReportItem reportItemNew : reportItemListNew){
+                        storageReportItemService.newReportItem(reportItemNew);
+                    }
+                }
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -387,6 +455,29 @@ public class StorageReportServiceImpl implements StorageReportService {
             throw SSException.get(EmenuException.CountReportFail, e);
         }
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public StorageReportDto queryReportDtoById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            StorageReport report = queryById(id);
+            if (Assert.isNull(report)){
+                throw SSException.get(EmenuException.QueryReportFail);
+            }
+            List<StorageReportItem> reportItemList = Collections.emptyList();
+            reportItemList = storageReportItemService.listByReportId(report.getId());
+
+            StorageReportDto reportDto = new StorageReportDto();
+            reportDto.setStorageReport(report);
+            reportDto.setStorageReportItemList(reportItemList);
+            return reportDto;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryReportDtoFail, e);
+        }
     }
 
     /**

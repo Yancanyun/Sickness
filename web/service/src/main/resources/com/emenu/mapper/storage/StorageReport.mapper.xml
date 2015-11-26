@@ -56,8 +56,11 @@
             <if test="endTime != null">
                 AND `created_time` &lt;= #{endTime}
             </if>
+            <if test="report.id>0 and report.id != null">
+                AND `id` = #{report.id}
+            </if>
             <if test="report.serialNumber != null">
-                AND `serial_number` = #{report.serialNumber}
+                AND `serial_number` LIKE '%${report.serialNumber}'
             </if>
             <if test="report.createdPartyId>0 and report.createdPartyId != null">
                 AND `created_party_id` = #{report.createdPartyId}
@@ -73,7 +76,7 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="listStorageReportByCondition1" resultMap="pw.StorageReport">
+  <!--  <select id="listStorageReportByCondition1" resultMap="pw.StorageReport">
         SELECT `id` AS id,
         `serial_number` AS serialNumber,
         `comment` AS comment,
@@ -94,7 +97,7 @@
                 AND `created_party_id` = #{report.createdPartyId}
             </if>
             <if test="report.depotId>0 and report.depotId != null">
-                AND `depot_id` =#{report.depotId}
+                AND `depot_id` = #{report.depotId}
             </if>
             <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
                 AND `handler_party_id` = #{report.handlerPartyId}
@@ -102,7 +105,7 @@
         </where>
         ORDER BY `created_time` DESC
         LIMIT #{offset}, #{pageSize}
-    </select>
+    </select>-->
 
     <select id="ListStorageReportUnsettled" parameterType="date" resultMap="pw.StorageReport">
         SELECT `id` AS id,

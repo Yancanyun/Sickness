@@ -71,25 +71,12 @@ public interface StorageReportService {
                                                            Date endTime) throws SSException;
 
     /**
-     * 根据经手人id、操作人id、单据id分页单据详情获取单据和单据详情
-     * @param report
-     * @param report
-     * @param page
-     * @param pageSize
-     * @return List<StorageReportDto>
-     * @throws SSException
-     */
-    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
-                                                            int page,
-                                                            int pageSize) throws SSException;
-
-    /**
      * 根据id修改单据
-     * @param storageReport
+     * @param report
      * @return
      * @throws SSException
      */
-    public void updateById(StorageReport storageReport) throws SSException;
+    public void updateById(StorageReport report) throws SSException;
 
     /**
      * 根据单据id修改单据状态
@@ -117,10 +104,10 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listStorageReportDtoByCondition2(Date startTime,
-                                                                   Date endTime,
-                                                                   List<Integer> depotIdList,
-                                                                   List<Integer> tagIdList) throws SSException;
+    public List<StorageReportDto> listReportDtoByCondition(Date startTime,
+                                                           Date endTime,
+                                                           List<Integer> depotIdList,
+                                                           List<Integer> tagIdList) throws SSException;
 
     /**
      * 根据reportId删除单据和单据详情
@@ -131,10 +118,10 @@ public interface StorageReportService {
 
     /**
      * 修改单据和单据详情
-     * @param storageReportDto
+     * @param reportDto
      * @return
      */
-    public void updateStorageReportDto(StorageReportDto storageReportDto) throws SSException;
+    public void updateReportDto(StorageReportDto reportDto) throws SSException;
 
     /**
      * 统计单据总数量
@@ -143,4 +130,11 @@ public interface StorageReportService {
      */
     public int count() throws SSException;
 
+    /**
+     * 根据reportId获取单据和单据详情
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StorageReportDto queryReportDtoById(int id) throws SSException;
 }

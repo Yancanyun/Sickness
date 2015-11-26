@@ -1,7 +1,9 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.entity.party.security.SecurityUserGroup;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.exception.PartyException;
 import com.emenu.mapper.storage.StorageReportItemMapper;
 import com.emenu.service.storage.StorageReportItemService;
 import com.pandawork.core.common.exception.SSException;
@@ -89,12 +91,12 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateById(StorageReportItem storageReportItem) throws SSException {
+    public void updateById(StorageReportItem reportItem) throws SSException {
         try {
-            if(Assert.isNull(storageReportItem)){
+            if(Assert.isNull(reportItem)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
-            commonDao.update(storageReportItem);
+            commonDao.update(reportItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportItemFail, e);
@@ -122,6 +124,19 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
               }
             storageReportItemMapper.delByReportId(id);
         } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelReportOrItemFail, e);
+        }
+    }
+
+    @Override
+    public void delById(int id) throws SSException {
+        if (Assert.lessOrEqualZero(id)){
+            return;
+        }
+        try{
+            commonDao.deleteById(StorageReportItem.class, id);
+        }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelReportOrItemFail, e);
         }
