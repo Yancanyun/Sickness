@@ -66,7 +66,7 @@ public class TagCacheServiceImpl implements TagCacheService {
                     throw SSException.get(EmenuException.TagIdError);
                 }
             }
-        } catch (SSException e){
+        } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InitTagCacheFailed,e);
         }

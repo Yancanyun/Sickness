@@ -18,7 +18,7 @@ public interface UnitMapper {
      * 获取所有单位
      * @throws SSException
      */
-    public List<Unit> listAll() throws SSException;
+    public List<Unit> listAll() throws Exception;
 
     /**
      * 根据分页显示获取列表
@@ -28,14 +28,14 @@ public interface UnitMapper {
      * @throws SSException
      */
     public List<Unit> listByPage(@Param("offset")int offset,
-                                 @Param("pageSize")int pageSize) throws SSException;
+                                 @Param("pageSize")int pageSize) throws Exception;
 
     /**
      * 获取单位总数
      * @return
      * @throws SSException
      */
-    public int countAll() throws SSException;
+    public int countAll() throws Exception;
 
     /**
      * 检查是否有重名
@@ -44,5 +44,5 @@ public interface UnitMapper {
      * @throws SSException
      */
     public int checkNameIsExist(@Param("name") String name,
-                                @Param("oldname") String oldname) throws SSException;
+                                @Param("oldname") String oldname) throws Exception;
 }

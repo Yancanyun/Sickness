@@ -26,7 +26,7 @@ public interface StorageSettlementMapper {
      * @throws SSException
      */
     @Deprecated
-    public List<StorageSettlementItem> listByDate(@Param("settlementDate") Date settlementDate) throws SSException;
+    public List<StorageSettlementItem> listByDate(@Param("settlementDate") Date settlementDate) throws Exception;
 
     /**
      * 根据时间取出某一物品在结算表最新的一次结算库存数据
@@ -36,7 +36,7 @@ public interface StorageSettlementMapper {
      * @throws SSException
      */
     public StorageSettlementItem queryByDateAndItemId(@Param("settlementDate") Date settlementDate,
-                                                      @Param("itemId") int itemId) throws SSException;
+                                                      @Param("itemId") int itemId) throws Exception;
 
 
     /**
@@ -49,7 +49,7 @@ public interface StorageSettlementMapper {
      */
     public List<StorageItemDto> listItemByDateAndSupplierId(@Param("supplierId") Integer supplierId,
                                                             @Param("startDate")Date startDate,
-                                                            @Param("endDate")Date endDate) throws SSException;
+                                                            @Param("endDate")Date endDate) throws Exception;
 
 
     /**
@@ -57,7 +57,7 @@ public interface StorageSettlementMapper {
      * @return
      * @throws SSException
      */
-    public StorageSettlement queryLastSettlement(@Param("settlementDate") Date settlementDate) throws SSException;
+    public StorageSettlement queryLastSettlement(@Param("settlementDate") Date settlementDate) throws Exception;
 
     /**
      * 根据存放点和分类ID获取库存物品列表
@@ -70,5 +70,5 @@ public interface StorageSettlementMapper {
                                                           @Param("tagIds") List<Integer> tagIds,
                                                           @Param("keyword") String keyword,
                                                           @Param("offset") Integer offset,
-                                                          @Param("pageSize") Integer pageSize)throws SSException;
+                                                          @Param("pageSize") Integer pageSize)throws Exception;
 }

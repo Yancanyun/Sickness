@@ -218,7 +218,7 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         int count = 0;
         try {
             count = storageDepotMapper.checkNameIsExist(name);
-        } catch (SSException e) {
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckDepotNameFailed);
         }
@@ -236,7 +236,7 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         int count = 0;
         try {
             count = storageDepotMapper.checkNameIsConflict(name,id);
-        } catch (SSException e) {
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckDepotNameConflictFailed);
         }

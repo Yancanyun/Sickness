@@ -155,7 +155,7 @@ public class TagServiceImpl implements TagService{
         }
         try {
             tagList = tagMapper.listByPage(curPage, pageSize);
-        } catch (SSException e) {
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListTagFailed, e);
         }
@@ -167,7 +167,7 @@ public class TagServiceImpl implements TagService{
         Integer count = 0;
         try{
             count = tagMapper.countAll();
-        } catch (SSException e) {
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListTagFailed, e);
         }

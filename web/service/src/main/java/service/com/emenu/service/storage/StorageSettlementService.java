@@ -40,7 +40,7 @@ public interface StorageSettlementService {
                                                      List<Integer> tagIds,
                                                      String keyword,
                                                      Integer curPage,
-                                                     Integer pageSize) throws Exception;
+                                                     Integer pageSize) throws SSException;
     /**
      * 结算中心
      * @param supplierId

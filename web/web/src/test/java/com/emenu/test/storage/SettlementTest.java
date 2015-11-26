@@ -61,7 +61,7 @@ public class SettlementTest extends AbstractTestCase{
     }
 
     @Test
-    public void queryByDateAndItemId() throws SSException, ParseException {
+    public void queryByDateAndItemId() throws Exception, ParseException {
         String startDateStr = "2015/11/10";
         //注意format的格式要与日期String的格式相匹配
         DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

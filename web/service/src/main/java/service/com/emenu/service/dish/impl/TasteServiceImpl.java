@@ -122,7 +122,7 @@ public class TasteServiceImpl implements TasteService{
         int count = 0;
         try {
             count = tasteMapper.checkNameIsExist(name,oldname);
-        } catch(SSException e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryUnitFailed, e);
         }

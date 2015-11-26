@@ -38,7 +38,7 @@ public class UnitServiceImpl implements UnitService {
         List<Unit> list = Collections.emptyList();
         try {
             list = unitMapper.listAll();
-        } catch(SSException e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -55,7 +55,7 @@ public class UnitServiceImpl implements UnitService {
         }
         try {
             unitList = unitMapper.listByPage(offset, pageSize);
-        } catch (SSException e){
+        } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -66,7 +66,7 @@ public class UnitServiceImpl implements UnitService {
     public int countAll() throws SSException {
         try{
             return unitMapper.countAll();
-        } catch (SSException e){
+        } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListUnitFailed, e);
         }
@@ -182,7 +182,7 @@ public class UnitServiceImpl implements UnitService {
         int count = 0;
         try {
             count = unitMapper.checkNameIsExist(name,oldname);
-        } catch(SSException e){
+        } catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryUnitFailed, e);
         }

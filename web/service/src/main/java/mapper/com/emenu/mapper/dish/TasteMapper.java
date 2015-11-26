@@ -21,14 +21,14 @@ public interface TasteMapper {
      * @throws SSException
      */
     public List<Taste> listAll(@Param("offset") int offset,
-                               @Param("pageSize") int pageSize) throws SSException;
+                               @Param("pageSize") int pageSize) throws Exception;
 
     /**
      * 计算口味总数
      * @return
      * @throws SSException
      */
-    public int countAll() throws SSException;
+    public int countAll() throws Exception;
 
     /**
      * 检查是否有重名
@@ -37,5 +37,5 @@ public interface TasteMapper {
      * @throws SSException
      */
     public int checkNameIsExist(@Param("name") String name,
-                                @Param("oldname") String oldname) throws SSException;
+                                @Param("oldname") String oldname) throws Exception;
 }

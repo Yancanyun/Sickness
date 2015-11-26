@@ -18,7 +18,7 @@ public interface TagMapper {
      * @return
      * @throws SSException
      */
-    public List<Tag> listAll() throws SSException;
+    public List<Tag> listAll() throws Exception;
 
     /**
      * 根据分页显示获取列表
@@ -28,28 +28,28 @@ public interface TagMapper {
      * @throws SSException
      */
     public List<Tag> listByPage(@Param("offset") int offset,
-                                @Param("pageSize") int pageSize) throws SSException;
+                                @Param("pageSize") int pageSize) throws Exception;
 
     /**
      * 获取单位总数
      * @return
      * @throws SSException
      */
-    public int countAll() throws SSException;
+    public int countAll() throws Exception;
 
     /**
      * 批量删除Tag
      * @param ids
      * @throws SSException
      */
-    public void delByIds(@Param("ids") List<Integer> ids) throws SSException;
+    public void delByIds(@Param("ids") List<Integer> ids) throws Exception;
 
     /**
      * 根据ID获取子节点个数
-     * @param ids
+     * @param id
      * @return
      * @throws SSException
      */
-    public int countChildrenById(@Param("id") int id) throws SSException;
+    public int countChildrenById(@Param("id") int id) throws Exception;
 
 }

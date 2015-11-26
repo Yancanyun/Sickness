@@ -21,7 +21,7 @@ public interface StorageDepotMapper {
      * @return
      * @throws SSException
      */
-    public List<StorageDepot> listAll() throws SSException;
+    public List<StorageDepot> listAll() throws Exception;
 
     /**
      * 分页获取存放点
@@ -32,7 +32,7 @@ public interface StorageDepotMapper {
      * @throws SSException
      */
     public List<StorageDepot> listByPage(@Param("offset") int offset,
-                                         @Param("pageSize") int pageSize) throws SSException;
+                                         @Param("pageSize") int pageSize) throws Exception;
 
     /**
      * 根据id查找存放点
@@ -40,7 +40,7 @@ public interface StorageDepotMapper {
      * @return
      * @throws SSException
      */
-    public StorageDepot queryById(@Param("id") int id) throws SSException;
+    public StorageDepot queryById(@Param("id") int id) throws Exception;
 
     /**
      * 根据名称查找存放点
@@ -50,7 +50,7 @@ public interface StorageDepotMapper {
      * @throws SSException
      */
 
-    public StorageDepot queryByName(@Param("name") String name) throws SSException;
+    public StorageDepot queryByName(@Param("name") String name) throws Exception;
 
     /**
      * 获取存放点总数
@@ -58,7 +58,7 @@ public interface StorageDepotMapper {
      * @return
      * @throws SSException
      */
-    public int countAll() throws SSException;
+    public int countAll() throws Exception;
 
     /**
      * 检查存放点名称是否重名
@@ -66,7 +66,7 @@ public interface StorageDepotMapper {
      * @return
      * @throws SSException
      */
-    public int checkNameIsExist(@Param("name")String name) throws SSException;
+    public int checkNameIsExist(@Param("name")String name) throws Exception;
 
     /**
      * 检查存放点名称是否冲突
@@ -75,5 +75,5 @@ public interface StorageDepotMapper {
      * @return
      * @throws SSException
      */
-    public int checkNameIsConflict(@Param("name")String name,@Param("id")int id) throws SSException;
+    public int checkNameIsConflict(@Param("name")String name,@Param("id")int id) throws Exception;
 }
