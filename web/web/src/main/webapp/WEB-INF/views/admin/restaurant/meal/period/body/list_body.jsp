@@ -5,13 +5,13 @@
   <div class="col-sm-12">
     <ol class="breadcrumb">
       <li>
-        <a href="#"><i class="fa fa-home"></i>&nbsp;首页</a>
+        <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
       </li>
       <li>
         <a href="#">饭店管理</a>
       </li>
-      <li>
-        <a href="#" class="active">餐段管理</a>
+      <li class="active">
+        餐段管理
       </li>
     </ol>
     <h2>餐段管理</h2>
