@@ -145,6 +145,15 @@
             //authority-group-config.html
             ['delAuthorityOfGroup', site.website + 'admin/party/security/group/permission/ajax/&{id}', 'delete', '权限组配置页面，删除权限']
         ],
+        //会员管理
+        VipManagement:[
+            //会员价方案
+            ['sendEditPlan', site.website + 'admin/vip/price/plan/ajax', 'put', '保存编辑后的方案'],
+            ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'get', '删除时发送ID'],
+            //会员价
+            ['sendSearchInfo', site.staticWebsite + 'mock/admin/vip-dish-price.json', 'get','搜索'],
+            ['sendEditInfo', site.staticWebsite + 'mock/admin/login.json', 'get', '保存']
+        ],
         // 公共模块
         Module: [
             ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],

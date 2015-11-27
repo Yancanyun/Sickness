@@ -170,6 +170,18 @@ public enum ModuleEnums {
     AdminStorageItemUnitConversion("Admin:Storage:Item:UnitConversion"),
     AdminStorageItemUnitConversionList("Admin:Storage:Item:UnitConversion:List"),
     AdminStorageItemUnitConversionUpdate("Admin:Storage:Item:UnitConversion:Update"),
+
+
+    //会员管理
+    AdminVip("Admin:Vip"),
+
+    //会员价方案管理
+    AdminVipVipDishPricePlanList("Admin:Vip:vipDishPricePlan:List"),
+    AdminVipVipDishPricePlanNew("Admin:Vip:vipDishPricePlan:New"),
+    AdminVipVipDishPricePlanUpdate("Admin:Vip:vipDishPricePlan:Update"),
+    AdminVipVipDishPricePlanDelete("Admin:Vip:vipDishPricePlan:Delete"),
+
+
     ;
 
     private String name;

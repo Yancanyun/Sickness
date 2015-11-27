@@ -87,9 +87,9 @@ public final class URLConstants {
     public static final String ADMIN_REMARK_URL = "admin/restaurant/remark";
 
     //会员价方案管理
-    public static final String ADMIN_VIP_VIP_DISH_PRICE_PLAN_URL = "admin/vip/vipDishPricePlan";
+    public static final String ADMIN_VIP_VIP_DISH_PRICE_PLAN_URL = "admin/vip/price/plan";
 
     //会员价管理
-    public static final String ADMIN_VIP_VIP_DISH_PRICE_URL = "admin/vip/vipDishPrice";
+    public static final String ADMIN_VIP_VIP_DISH_PRICE_URL = "admin/vip/price";
 
 }

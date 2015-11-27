@@ -178,9 +178,10 @@ public class VipInfoController extends AbstractController {
      * @param id
      * @return
      */
+    @Module(ModuleEnums.AdminVipInfoDel)
     @RequestMapping(value = "/ajax/del", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxDel(@RequestParam("id") Integer id){
+    public JSONObject ajaxDelById(@RequestParam("id") Integer id){
         try{
             vipInfoService.updateStatusById(id, UserStatusEnums.Deleted);
             return sendJsonObject(AJAX_SUCCESS_CODE);
