@@ -72,6 +72,15 @@
             ['saveEditArea', site.website + 'admin/restaurant/area/ajax/&{id}', 'put', '保存编辑原有区域信息结果'],
             ['delAreaId', site.website + 'admin/restaurant/area/ajax/&{id}', 'delete', '删除餐台区域时，发送需删除的id'],
 
+            //常用备注管理
+            ['chooseRemarkBigTag', site.website + 'admin/restaurant/remark/ajax/list', 'get','选择备注大类渲染对应的列表内容'],
+            ['delSmallClassify', site.website + 'admin/restaurant/remark/ajax/remark/tag/&{id}', 'delete','删除备注小类'],
+            ['addSmallClassify', site.website + 'admin/restaurant/remark/ajax/remark/tag', 'post','增加备注小类'],
+            ['editSmallClassify', site.website + 'admin/restaurant/remark/ajax/remark/tag/&{id}', 'put','编辑备注小类'],
+            ['delRemarkContentId', site.website + 'admin/restaurant/remark/ajax/remark/&{id}', 'delete','删除备注内容'],
+            ['addRemarkContent', site.website + 'admin/restaurant/remark/ajax/remark', 'post','增加备注内容'],
+            ['editRemarkContent', site.website + 'admin/restaurant/remark/ajax/remark/&{id}', 'put','编辑备注内容'],
+
             //餐段管理
             ['setCurrentPeriod', site.website + 'admin/restaurant/meal/period/ajax/current/&{id}', 'put','设置当前餐段'],
             ['delPeriod', site.website + 'admin/restaurant/meal/period/ajax/&{id}', 'delete', '删除餐段'],

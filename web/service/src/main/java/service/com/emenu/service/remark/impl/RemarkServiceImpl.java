@@ -175,10 +175,6 @@ public class RemarkServiceImpl implements RemarkService {
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateRemark(Integer id, Remark remark) throws SSException {
         try {
-            //判断RemarkTagId是否合法
-            if (Assert.lessOrEqualZero(remark.getRemarkTagId())){
-                throw SSException.get(EmenuException.RemarkTagNotExist);
-            }
             //若未传来ID，则为增加页，直接判断该名称是否在数据库中已存在
             if(id == null && checkNameIsExist(remark.getName())) {
                 throw SSException.get(EmenuException.RemarkNameExist);

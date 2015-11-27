@@ -45,6 +45,10 @@ public class AdminRemarkController extends AbstractController {
             List<RemarkTag> bigTagList = remarkTagService.listByParentId(0);
             model.addAttribute("bigTagList", bigTagList);
 
+            //显示第一个上级分类的名字
+            RemarkTag firstBigTag = remarkTagService.queryById(1);
+            model.addAttribute("firstBigTag", firstBigTag);
+
             //将第一个上级分类下的所有子分类存为一个List
             List<RemarkTag> firstChildTagList = remarkTagService.listByParentId(1);
 
@@ -73,20 +77,20 @@ public class AdminRemarkController extends AbstractController {
 
     /**
      * Ajax 获取上级分类下所有子分类及其所拥有的所有备注
-     * @param pId
+     * @param id
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantRemarkList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxList(@RequestParam(value = "pId") Integer pId) {
+    public JSONObject ajaxList(@RequestParam Integer id) {
         try {
-            //将该PID下的所有子分类存为一个List
-            List<RemarkTag> childTagList = remarkTagService.listByParentId(pId);
+            //将该分类下的所有子分类存为一个List
+            List<RemarkTag> childTagList = remarkTagService.listByParentId(id);
 
             JSONArray jsonArray = new JSONArray();
 
-            //将该PID下的所有子分类及其所拥有的所有备注放入JSONArray中
+            //将该分类下的所有子分类及其所拥有的所有备注放入JSONArray中
             for (RemarkTag remarkTag : childTagList) {
                 //获取该子分类下的所有备注
                 List<RemarkDto> remarkDtoList = remarkService.listRemarkDtoByRemarkTagId(remarkTag.getId());
@@ -104,12 +108,7 @@ public class AdminRemarkController extends AbstractController {
                     childJsonObject.put("weight", remarkDto.getRemark().getWeight());
                     childJsonObject.put("content", remarkDto.getRemark().getName());
                     childJsonObject.put("relatedCharge", remarkDto.getRemark().getRelatedCharge());
-                    if (remarkDto.getRemark().getIsCommon() == 0) {
-                        childJsonObject.put("isCommon", "否");
-                    }
-                    if (remarkDto.getRemark().getIsCommon() == 1) {
-                        childJsonObject.put("isCommon", "是");
-                    }
+                    childJsonObject.put("isCommon", remarkDto.getRemark().getIsCommon());
                     contentList.add(childJsonObject);
                 }
 
@@ -134,7 +133,7 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkNew)
     @RequestMapping(value = "ajax/remark/tag", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewChildRemarkTag(@PathVariable("pId") Integer pId, @RequestParam String name) {
+    public JSONObject ajaxNewChildRemarkTag(@RequestParam Integer pId, @RequestParam String name) {
         try {
             RemarkTag remarkTag = new RemarkTag();
             remarkTag.setpId(pId);
@@ -164,7 +163,7 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkNew)
     @RequestMapping(value = "ajax/remark", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewRemark(@PathVariable("smallTagId") Integer smallTagId,
+    public JSONObject ajaxNewRemark(@RequestParam Integer smallTagId,
                                     @RequestParam String name,
                                     @RequestParam Integer weight,
                                     @RequestParam Integer isCommon,

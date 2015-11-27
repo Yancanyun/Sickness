@@ -53,6 +53,9 @@
             <li <c:if test="${MethodModule eq 'Admin:Restaurant:MealPeriod:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/restaurant/meal/period">餐段管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Restaurant:Remark:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/restaurant/remark">备注管理</a>
+            </li>
             <li><a class="J_menu" href="javascript:;">今日特价</a></li>
             <li><a class="J_menu" href="javascript:;">销售排行</a></li>
             <li><a class="J_menu" href="javascript:;">本店特色</a></li>

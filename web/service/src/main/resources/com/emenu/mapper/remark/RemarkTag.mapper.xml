@@ -32,5 +32,8 @@
         FROM `t_remark_tag`
         WHERE `status` = 1
         AND `p_id` = #{pId}
+        <if test="pId != 0">
+            ORDER BY `id` DESC
+        </if>
     </select>
 </mapper>
