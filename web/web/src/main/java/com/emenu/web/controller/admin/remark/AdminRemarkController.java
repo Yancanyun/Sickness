@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,9 @@ public class AdminRemarkController extends AbstractController {
                 //获取该子分类下的所有备注
                 List<RemarkDto> remarkDtoList = remarkService.listRemarkDtoByRemarkTagId(remarkTag.getId());
 
+                //保留小数点两位
+                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("bigTagId", remarkTag.getpId());
                 jsonObject.put("bigTagName", remarkTagService.queryById(remarkTag.getpId()).getName());
@@ -107,7 +111,7 @@ public class AdminRemarkController extends AbstractController {
                     childJsonObject.put("contentId", remarkDto.getRemark().getId());
                     childJsonObject.put("weight", remarkDto.getRemark().getWeight());
                     childJsonObject.put("content", remarkDto.getRemark().getName());
-                    childJsonObject.put("relatedCharge", remarkDto.getRemark().getRelatedCharge());
+                    childJsonObject.put("relatedCharge", decimalFormat.format(remarkDto.getRemark().getRelatedCharge()));
                     childJsonObject.put("isCommon", remarkDto.getRemark().getIsCommon());
                     contentList.add(childJsonObject);
                 }
