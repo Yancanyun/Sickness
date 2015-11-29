@@ -120,6 +120,14 @@ public class AdminRemarkController extends AbstractController {
                 jsonArray.add(jsonObject);
             }
 
+//            //若没有子分类，则只传大类ID和大类Name
+//            if(childTagList.size() == 0) {
+//                JSONObject jsonObject = new JSONObject();
+//                jsonObject.put("bigTagId", id);
+//                jsonObject.put("bigTagName", remarkTagService.queryById(id).getName());
+//                jsonArray.add(jsonObject);
+//            }
+
             //不分页，故dataCount填0
             return sendJsonArray(jsonArray, 0);
         } catch (SSException e) {

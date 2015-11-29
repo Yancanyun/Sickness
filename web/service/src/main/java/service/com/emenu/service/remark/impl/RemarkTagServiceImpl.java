@@ -81,6 +81,10 @@ public class RemarkTagServiceImpl implements RemarkTagService{
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public RemarkTag newRemarkTag(RemarkTag remarkTag) throws SSException {
         try {
+            //判断PID是否存在
+            if (Assert.isNull(remarkTag.getpId())) {
+                throw SSException.get(EmenuException.RemarkTagNotExist);
+            }
             //判断是否重名
             if (checkNameIsExist(remarkTag.getName())) {
                 throw SSException.get(EmenuException.RemarkTagNameExist);
