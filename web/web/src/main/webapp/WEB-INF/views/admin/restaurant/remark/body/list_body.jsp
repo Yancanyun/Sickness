@@ -4,8 +4,8 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i>&nbsp;首页</a></li>
-            <li><a href="#">饭店管理</a></li>
+            <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+            <li><a href="${website}admin/restaurant">饭店管理</a></li>
             <li class="active">常用备注管理</li>
         </ol>
         <h2>常用备注管理-常用备注列表</h2>
@@ -21,6 +21,7 @@
                         <label>请选择常用备注的上级分类：</label>
 
                         <div class="big-remark-tags margin-top-15 margin-bottom-15 margin-left-50">
+                            <input type="hidden" class="J_saveBigTagIdInp" name="saveBigTagId" value="">
                             <c:forEach var="bigTag" items="${bigTagList}">
                                 <a class="label-info J_chooseBigRemarkTag" href="javascript:;"
                                    data-big-tag-id="${bigTag.id}"
@@ -54,7 +55,7 @@
                                            data-small-tag-id="${firstChildTagDto.remarkTag.id}"
                                            data-small-tag-name="${firstChildTagDto.remarkTag.name}">
                                             备注分类名称 : ${firstChildTagDto.remarkTag.name}
-                                            <a href="javascript:;" class="J_foldToggle">展开 <<</a>
+                                            <a href="javascript:;" class="J_foldToggle"></a>
                                         </p>
                                         <!-- 备注分类隐藏域 -->
                                         <div class="J_remarkHiddenInp">
