@@ -23,7 +23,7 @@
             </ul>
         </li>
         <li>
-        <li <c:if test="${PWModule eq 'Admin:Restaurant:Table'}">class="active"</c:if> >
+        <li <c:if test="${PWModule eq 'Admin:Restaurant'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="2" href="javascript:;">饭店管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/restaurant/area">餐台区域管理</a></li>
