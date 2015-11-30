@@ -3,7 +3,7 @@
   {@each list as it}
   <div class="col-sm-12 remark-classify">
     <p class="col-sm-9 no-padding-left J_classifyName" data-big-tag-id="&{it.bigTagId}"  data-big-tag-name="&{it.bigTagName}" data-small-tag-id="&{it.smallTagId}" data-small-tag-name="&{it.smallTagName}" >备注分类名称 :&nbsp;&{it.smallTagName}
-      <a href="javascript:;" class="J_foldToggle">展开 <<</a>
+      <a href="javascript:;" class="J_foldToggle"></a>
     </p>
     <div class="J_remarkHiddenInp">
       <input type="hidden" name="pId" value="&{it.bigTagId}">
@@ -161,7 +161,7 @@
     <div class="form-group">
       <label class="col-sm-3 control-label"><span>&nbsp;</span>关联收费</label>
       <div class="col-sm-9">
-        <input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isNumber|isNull"  value="&{dlg.relatedCharge}" name="relatedCharge" />
+        <input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isNumber|isFloat"  value="&{dlg.relatedCharge}" name="relatedCharge" />
       </div>
     </div>
   </form>
