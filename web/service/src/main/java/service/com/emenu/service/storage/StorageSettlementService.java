@@ -27,6 +27,7 @@ public interface StorageSettlementService {
      * 库存盘点
      * @param startDate
      * @param endDate
+     * @Param supplierId
      * @param depotIds
      * @param tagIds
      * @param keyword
@@ -36,11 +37,30 @@ public interface StorageSettlementService {
     //套页的时候注意前端传过来的时间是什么格式的
     public List<StorageCheckDto> listSettlementCheck(Date startDate,
                                                      Date endDate,
+                                                     Integer supplierId,
                                                      List<Integer> depotIds,
                                                      List<Integer> tagIds,
                                                      String keyword,
                                                      Integer curPage,
                                                      Integer pageSize) throws SSException;
+
+    /**
+     * 计算库存盘点总数
+     * @param startDate
+     * @param endDate
+     * @Param supplierId
+     * @param depotIds
+     * @param tagIds
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public int countSettlementCheck(Date startDate,
+                                    Date endDate,
+                                    Integer supplierId,
+                                    List<Integer> depotIds,
+                                    List<Integer> tagIds,
+                                    String keyword) throws SSException;
     /**
      * 结算中心
      * @param supplierId

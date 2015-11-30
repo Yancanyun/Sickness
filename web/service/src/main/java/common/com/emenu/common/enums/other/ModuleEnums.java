@@ -141,13 +141,20 @@ public enum ModuleEnums {
     AdminStorage("Admin:Storage"),
 
     //库存存放点管理
-    AdminStorageDepot("Admin:Storage:StorageDepot"),
-    AdminStorageDepotList("Admin:Storage:StorageDepot"),
-    AdminStorageDepotNew("Admin:Storage:StorageDepot:New"),
-    AdminStorageDepotDelete("Admin:Storage:StorageDepot:Delete"),
-    AdminStorageDepotUpdate("Admin:Storage:StorageDepot:Update"),
-    AdminStorageDepotSearch("Admin:Storage:StorageDepot:Search"),
-
+    AdminStorageDepot("Admin:Storage:Depot"),
+    AdminStorageDepotList("Admin:Storage:Depot:List"),
+    AdminStorageDepotNew("Admin:Storage:Depot:New"),
+    AdminStorageDepotDelete("Admin:Storage:Depot:Delete"),
+    AdminStorageDepotUpdate("Admin:Storage:Depot:Update"),
+    AdminStorageDepotSearch("Admin:Storage:Depot:Search"),
+    //库存结算中心
+    AdminStorageSettlementSupplier("Admin:Storage:Settlement:Supplier"),
+    AdminStorageSettlementSupplierList("Admin:Storage:Settlement:Supplier:List"),
+    AdminStorageSettlementSupplierExport("Admin:Storage:Settlement:Supplier:Export"),
+    //库存盘点
+    AdminStorageSettlementCheck("Admin:Storage:Settlement:Check"),
+    AdminStorageSettlementCheckList("Admin:Storage:Settlement:Check:List"),
+    AdminStorageSettlementCheckExport("Admin:Storage:Settlement:Check:Export"),
 
     // 供货商管理
     AdminStorageSupplier("Admin:Storage:Supplier"),

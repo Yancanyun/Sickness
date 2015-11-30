@@ -62,8 +62,8 @@
         </ul>
     </li>
     <li id="firstMenu3" class="active hidden">
-        <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">菜品管理</span><i
-                class="fa fa-angle-right angle-right"></i></a>
+        <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">菜品管理</span>
+            <i class="fa fa-angle-right angle-right"></i></a>
         <ul>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Unit:List'}">class="active" </c:if>>
                 <a class="J_menu" href="${website}admin/dish/unit">菜品单位管理</a>
@@ -155,7 +155,15 @@
                     </ul>
                 </c:if>
             </li>
-            <li><a class="J_menu" href="javascript:;">库存管理</a></li>
+            <li>
+                <a class="J_menu" href="${website}admin/storage/report">库存管理</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Settlement:Check:List'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/storage/settlement/check">库存盘点</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Settlement:Supplier:List'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/storage/settlement/supplier">结算中心</a>
+            </li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
             <li><a class="J_menu" href="javascript:;">预警管理</a></li>
         </ul>

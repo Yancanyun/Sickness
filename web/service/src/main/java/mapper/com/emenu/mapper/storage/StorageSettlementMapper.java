@@ -60,15 +60,34 @@ public interface StorageSettlementMapper {
     public StorageSettlement queryLastSettlement(@Param("settlementDate") Date settlementDate) throws Exception;
 
     /**
-     * 根据存放点和分类ID获取库存物品列表
+     * 根据条件获取库存物品列表
+     * @param supplierPartyId
      * @param depotIds
      * @param tagIds
+     * @param keyword
+     * @param offset
+     * @param pageSize
      * @return
-     * @throws SSException
+     * @throws Exception
      */
-    public List<StorageItem> listStorageItemByDepotAndTag(@Param("depotIds") List<Integer> depotIds,
+    public List<StorageItem> listStorageItemByDepotAndTag(@Param("supplierPartyId") Integer supplierPartyId,
+                                                          @Param("depotIds") List<Integer> depotIds,
                                                           @Param("tagIds") List<Integer> tagIds,
                                                           @Param("keyword") String keyword,
                                                           @Param("offset") Integer offset,
                                                           @Param("pageSize") Integer pageSize)throws Exception;
+
+    /**
+     * 根据条件获取库存物品总数
+     * @param supplierPartyId
+     * @param depotIds
+     * @param tagIds
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public int countStorageItemByDepotAndTag(@Param("supplierPartyId") Integer supplierPartyId,
+                                             @Param("depotIds") List<Integer> depotIds,
+                                             @Param("tagIds") List<Integer> tagIds,
+                                             @Param("keyword") String keyword)throws SSException;
 }

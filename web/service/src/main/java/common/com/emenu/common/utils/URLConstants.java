@@ -61,24 +61,30 @@ public final class URLConstants {
 
     public static final String ADMIN_DISH_URL = "admin/dish";
 
-    //菜品单位管理
+    // 菜品单位管理
     public static final String ADMIN_DISH_UNIT = "admin/dish/unit";
 
-    //菜品口味管理
+    // 菜品口味管理
     public static final String ADMIN_DISH_TASTE = "admin/dish/taste";
 
-    //菜品分类管理
+    // 菜品分类管理
     public static final String ADMIN_DISH_TAG = "admin/dish/tag";
 
     // 供应商管理
     public static final String ADMIN_STORAGE_SUPPLIER_URL = "admin/storage/supplier";
+
+    // 库存结算中心
+    public static final String ADMIN_STORAGE_SETTLEMENT_SUPPLIER_URL = "admin/storage/settlement/supplier";
+
+    // 库存盘点
+    public static final String ADMIN_STORAGE_SETTLEMENT_CHECK_URL = "admin/storage/settlement/check";
 
     // 库存分类管理
     public static final String ADMIN_STORAGE_TAG_URL = "admin/storage/tag";
 
     public static final String ADMIN_STORAGE_REPORT_URL = "admin/storage/report";
 
-    //存放点管理
+    // 存放点管理
     public static final String ADMIN_STORAGE_DEPOT = "admin/storage/depot";
 
     public static final String ADMIN_STORAGE_ITEM_URL = "admin/storage/item";

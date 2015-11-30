@@ -187,13 +187,14 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     }
 
     @Override
-    public List<StorageCheckDto> listSettlementCheck(Date startDate,
-                                                     Date endDate,
-                                                     List<Integer> depotIds,
-                                                     List<Integer> tagIds,
-                                                     String keyword,
-                                                     Integer curPage,
-                                                     Integer pageSize) throws SSException {
+    public List<StorageCheckDto>  listSettlementCheck(Date startDate,
+                                                      Date endDate,
+                                                      Integer supplierId,
+                                                      List<Integer> depotIds,
+                                                      List<Integer> tagIds,
+                                                      String keyword,
+                                                      Integer curPage,
+                                                      Integer pageSize) throws SSException {
         List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
         try {
 
@@ -203,7 +204,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                 storageReportList = Collections.emptyList();
             }
             //取出开始时间之前的所有库存物品计算结果（不包括开始时间）
-            List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, depotIds, tagIds, keyword, curPage, pageSize);
+            List<StorageSettlementItem> beforeSettlementList = listSettlementItemByDate(startDate, supplierId, depotIds, tagIds, keyword, curPage, pageSize);
             if (Assert.isEmpty(beforeSettlementList)) {
                 beforeSettlementList = Collections.emptyList();
             }
@@ -317,6 +318,31 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     }
 
     @Override
+    public int countSettlementCheck(Date startDate,
+                                    Date endDate,
+                                    Integer supplierId,
+                                    List<Integer> depotIds,
+                                    List<Integer> tagIds,
+                                    String keyword) throws SSException {
+        Integer count = 0;
+        //判断供货商ID是否为空
+        Integer supplierPartyId = 0;
+        if(Assert.isNotNull(supplierId) && !Assert.lessOrEqualZero(supplierId)){
+            Supplier supplier = supplierService.queryById(supplierId);
+            if(Assert.isNotNull(supplier)) {
+                supplierPartyId = supplier.getPartyId();
+            }
+        }
+        try{
+            count = storageSettlementMapper.countStorageItemByDepotAndTag(supplierPartyId,depotIds,tagIds,keyword);
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountStorageSettlementCheckFailed, e);
+        }
+        return count==null ? 0 : count;
+    }
+
+    @Override
     public List<StorageSupplierDto> listSettlementSupplier(Integer supplierId,
                                                            Date startDate,
                                                            Date endDate) throws SSException {
@@ -326,7 +352,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             Integer supplierPartyId = 0;
             if(Assert.isNotNull(supplierId) && !Assert.lessOrEqualZero(supplierId)){
                 Supplier supplier = supplierService.queryById(supplierId);
-                if(supplier!=null){
+                if(Assert.isNotNull(supplier)){
                     //获取供货商partyId
                     supplierPartyId = supplier.getPartyId();
                 }
@@ -375,7 +401,6 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         }
     }
 
-
     /**
      * 根据某个时间之前每个库存物品的库存结果
      * 主要是为了计算期初
@@ -389,6 +414,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
      * @throws SSException
      */
     private List<StorageSettlementItem> listSettlementItemByDate(Date startDate,
+                                                                 Integer supplierId,
                                                                  List<Integer> depotIds,
                                                                  List<Integer> tagIds,
                                                                  String keyword,
@@ -405,19 +431,27 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                 return settlementItemList;
             }
         }
+        //判断供货商ID是否为空
+        Integer supplierPartyId = 0;
+        if(Assert.isNotNull(supplierId) && !Assert.lessOrEqualZero(supplierId)){
+            Supplier supplier = supplierService.queryById(supplierId);
+            if(Assert.isNotNull(supplier)) {
+                supplierPartyId = supplier.getPartyId();
+            }
+        }
         try {
             //库存物品列表
-            List<StorageItem> storageItemList = storageSettlementMapper.listStorageItemByDepotAndTag(depotIds, tagIds, keyword, offset, pageSize);
+            List<StorageItem> storageItemList = storageSettlementMapper.listStorageItemByDepotAndTag(supplierPartyId, depotIds, tagIds, keyword, offset, pageSize);
             if (Assert.isEmpty(storageItemList)) {
                 storageItemList = Collections.emptyList();
             }
             //获取该时间之前最后一次结算时间(包括当前时间)
             StorageSettlement storageSettlement = storageSettlementMapper.queryLastSettlement(startDate);
             Date settlementDate = null;
-            if (Assert.isNull(storageSettlement)) {
+            if (Assert.isNotNull(storageSettlement)) {
                 settlementDate = storageSettlement.getCreatedTime();
             }
-            //TODO 参数：开始时间settlementDate，结束时间startDate
+            //参数：开始时间settlementDate，结束时间startDate
             //单据列表——从上一次结算到开始时间之间的单据（不包括开始时间，不包括结束时间）
             List<StorageReportDto> storageReportDtoList = storageReportService.listReportDtoByCondition(settlementDate, startDate, depotIds, tagIds);
             if (Assert.isEmpty(storageReportDtoList)) {

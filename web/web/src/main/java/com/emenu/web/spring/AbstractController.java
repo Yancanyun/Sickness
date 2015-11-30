@@ -344,4 +344,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("dishImgService")
     protected static DishImgService dishImgService;
+
+    //库存盘点和结算中心
+    @StaticAutoWire
+    @Qualifier("storageSettlementService")
+    protected static StorageSettlementService storageSettlementService;
+
  }

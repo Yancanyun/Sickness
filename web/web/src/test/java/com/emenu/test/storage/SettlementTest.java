@@ -100,7 +100,9 @@ public class SettlementTest extends AbstractTestCase{
         DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date startDate = sdf.parse(startDateStr);
         Date endDate = sdf.parse(endDateStr);
-        List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(4,startDate,endDate);
+
+//        List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(4,startDate,endDate);
+        List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(null, null, null);
         for(StorageSupplierDto storageSupplierDto : storageSupplierDtoList){
             System.out.println(storageSupplierDto.getSupplierName() + "  " + storageSupplierDto.getTotalMoney());
             for(StorageItemDto storageItemDto : storageSupplierDto.getStorageItemDtoList()){
@@ -122,13 +124,14 @@ public class SettlementTest extends AbstractTestCase{
         Date startDate = sdf.parse(startDateStr);
         Date endDate = sdf.parse(endDateStr);
         List<Integer> depotIds = new ArrayList<Integer>();
-        depotIds.add(2);
-        depotIds.add(3);
+//        depotIds.add(2);
+//        depotIds.add(3);
         List<Integer> tagIds = new ArrayList<Integer>();
-        tagIds.add(33);
-        tagIds.add(34);
-        tagIds.add(70);
-        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,null,1,20);
+//        tagIds.add(33);
+//        tagIds.add(34);
+//        tagIds.add(70);
+//        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,null,1,20);
+        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(null,null,null,depotIds,tagIds,"1",1,10);
         for(StorageCheckDto storageCheckDto : storageCheckDtoList){
             System.out.println(storageCheckDto.getItemName());
         }
@@ -155,7 +158,7 @@ public class SettlementTest extends AbstractTestCase{
             for (StorageReportDto storageReportDto : storageReportDtoList) {
                 System.out.println(storageReportDto.getStorageReport().getComment());
                 for(StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
-                    System.out.println(storageReportItem.getItemId());
+                    System.out.println(storageReportItem.getItemId()+"  "+storageReportItem.getQuantity().multiply(storageReportItem.getPrice()));
                 }
             }
         }

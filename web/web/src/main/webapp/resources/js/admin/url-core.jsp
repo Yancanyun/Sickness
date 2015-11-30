@@ -102,7 +102,13 @@
 
             // 库存物品管理
             ['delStoreItem', site.website + 'admin/storage/item/ajax/&{id}', 'delete','删除库存物品'],
-            ['editStoreItemConversionRatio', site.website + 'admin/storage/item/unit/conversion/ajax', 'put','编辑换算比例']
+            ['editStoreItemConversionRatio', site.website + 'admin/storage/item/unit/conversion/ajax', 'put','编辑换算比例'],
+
+            //存放点管理
+            ['delDepot', site.staticWebsite + 'mock/admin/del-depot.json', 'get', '删除存放点'],
+
+            //结算中心管理
+            ['getSettlementList', site.website + 'admin/storage/settlement/supplier/ajax/list', 'get', '获取结算列表'],
         ],
         // 菜品管理
         DishManagement: [

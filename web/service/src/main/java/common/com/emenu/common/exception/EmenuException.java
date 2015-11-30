@@ -51,6 +51,7 @@ public enum EmenuException implements IBizExceptionMes {
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
     ListStorageSettlementSupplierFailed("库存结算中心结算失败", 3031),
     ListStorageSettlementCheckFailed("库存盘点失败", 3032),
+    CountStorageSettlementCheckFailed("库存盘点统计总数失败", 3033),
 
     // 菜品管理模块
     // 分类管理
@@ -76,7 +77,6 @@ public enum EmenuException implements IBizExceptionMes {
     QueryTagFailed("查询分类失败！", 3020),
     listPathTagFailed("查询分类祖先路径失败！", 3021),
 
-
     //菜品口味
     ListTasteFailed("口味列表查询失败", 3040),
     NewTasteFailed("添加口味失败", 3041),
@@ -86,8 +86,6 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateTasteFailed("查询口味失败", 3045),
     TasteNameError("口味名称为空", 3046),
     TasteNameIsExist("口味名称已存在", 3048),
-
-
 
     // 单位管理
     ListUnitFailed("单位列表查询失败", 3050),
