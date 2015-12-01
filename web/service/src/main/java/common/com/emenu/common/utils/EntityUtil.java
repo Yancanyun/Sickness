@@ -1,4 +1,4 @@
-package com.emenu.common.utils.party;
+package com.emenu.common.utils;
 
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.framework.dao.impl.FieldPair;

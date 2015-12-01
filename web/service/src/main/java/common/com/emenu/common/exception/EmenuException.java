@@ -52,6 +52,8 @@ public enum EmenuException implements IBizExceptionMes {
     ListStorageSettlementSupplierFailed("库存结算中心结算失败", 3031),
     ListStorageSettlementCheckFailed("库存盘点失败", 3032),
     CountStorageSettlementCheckFailed("库存盘点统计总数失败", 3033),
+    ExportStorageSettlementCheckFailed("库存盘点导出EXCEL失败", 3034),
+    ExportStorageSettlementSupplierFailed("库存结算中心导出EXCEL失败", 3035),
 
     // 菜品管理模块
     // 分类管理

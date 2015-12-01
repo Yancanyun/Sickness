@@ -1,21 +1,24 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+
 <script type="text/template" id="renderTpl">
-    {@each list.items as it}
+    {@each list as it}
+    {@each it.items as item}
+    {@if item.status == 1}
+    <tr class="J_supplier">
+        <td rowspan=&{item.length}>&{it.supplierName}</td>
+        {@else}
     <tr>
-        {@if it.status == 1}
-        <td rowspan=&{length}>&{list.supplierName}</td>
         {@/if}
-
-        <td>&{it.itemName}</td>
-        <td>&{it.itemQuantity}</td>
-        <td>&{it.itemMoney}</td>
-        <td>&{it.handlerName}</td>
-        <td>&{it.createdName}</td>
-
-        {@if it.status == 1}
-        <td rowspan=&{length}>&{list.totalMoney}</td>
+        <td>&{item.itemName}</td>
+        <td>&{item.itemQuantity}</td>
+        <td>&{item.itemMoney}</td>
+        <td>&{item.handlerName}</td>
+        <td>&{item.createdName}</td>
+        {@if item.status == 1}
+        <td rowspan=&{item.length}>&{it.totalMoney}</td>
         {@/if}
     </tr>
+    {@/each}
     {@/each}
 </script>
 

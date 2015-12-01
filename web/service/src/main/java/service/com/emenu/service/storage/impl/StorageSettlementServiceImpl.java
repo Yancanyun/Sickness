@@ -6,11 +6,13 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.dto.storage.StorageSupplierDto;
 import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.entity.storage.*;
+import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.DateUtils;
+import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.storage.StorageSettlementMapper;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.dish.tag.TagFacadeService;
@@ -23,13 +25,19 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
+import com.pandawork.core.pweio.excel.DataType;
+import com.pandawork.core.pweio.excel.ExcelWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -400,6 +408,96 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             throw SSException.get(EmenuException.ListStorageSettlementSupplierFailed, e);
         }
     }
+
+    @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void exportSettlementCheckToExcel(Date startDate,
+                                             Date endDate,
+                                             Integer supplierId,
+                                             List<Integer> depotIds,
+                                             List<Integer> tagIds,
+                                             String keyword,
+                                             HttpServletResponse response) throws SSException {
+
+        OutputStream os = null;
+        try {
+            //从数据库中获取数据
+            List<StorageCheckDto> storageCheckDtoList = this.listSettlementCheck(startDate,endDate,supplierId,depotIds,tagIds,keyword,null,null);
+            for(StorageCheckDto storageCheckDto : storageCheckDtoList){
+                EntityUtil.setNullFieldDefault(storageCheckDto);
+            }
+
+            // 设置输出流
+            // 设置excel文件名和sheetName
+            String filename = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+
+            filename = ExcelExportTemplateEnums.AdminSettlementCheckList.getName() + sdf.format(new Date());
+
+            String contentType = "application/octet-stream";
+            response.setContentType(contentType);
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
+
+            os = response.getOutputStream();
+
+            int startRow = 2;
+
+            //调用core包里的工具类
+            ExcelWriter.writeExcelByTemplate(storageCheckDtoList, startRow, os, ExcelExportTemplateEnums.AdminSettlementCheckList, checkDataTypes);
+
+
+        } catch (Exception e) {
+
+            LogClerk.errLog.error(e);
+            response.setContentType("text/html");
+            response.setHeader("Content-Type", "text/html");
+            response.setHeader("Content-disposition", "");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                response.getOutputStream().write(new String("系统内部异常，请联系管理员！" + e.getMessage()).getBytes("UTF-8"));
+                os.close();
+            } catch (IOException e1) {
+                LogClerk.errLog.error(e1.getMessage());
+            }
+            throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (Exception e) {
+                    LogClerk.errLog.error(e);
+                    throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+                }
+            }
+        }
+    }
+
+    /**
+     * 库存盘点
+     */
+    private DataType[] checkDataTypes = {
+            new DataType("itemName", 0),
+            new DataType("itemNumber", 1),
+            new DataType("tagName", 2),
+            new DataType("orderUnitName", 3),
+            new DataType("storageUnitName", 4),
+            new DataType("lastStockInPrice", 5),
+            new DataType("beginQuantity", 6),
+            new DataType("beginMoney", 6),
+            new DataType("beginQuantity", 6),
+            new DataType("stockInQuantity", 6),
+            new DataType("stockInMoney", 6),
+            new DataType("stockOutQuantity", 6),
+            new DataType("stockOutMoney", 6),
+            new DataType("incomeLossQuantity", 6),
+            new DataType("incomeLossMoney", 6),
+            new DataType("totalQuantity", 6),
+            new DataType("totalAveragePrice", 6),
+            new DataType("totalMoney", 6),
+            new DataType("maxStorageQuantity", 6),
+            new DataType("minStorageQuantity", 6),
+    };
 
     /**
      * 根据某个时间之前每个库存物品的库存结果
