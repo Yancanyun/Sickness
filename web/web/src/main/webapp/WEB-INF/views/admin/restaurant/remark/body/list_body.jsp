@@ -21,7 +21,7 @@
                         <label>请选择常用备注的上级分类：</label>
 
                         <div class="big-remark-tags margin-top-15 margin-bottom-15 margin-left-50">
-                            <input type="hidden" class="J_saveBigTagIdInp" name="saveBigTagId" value="">
+                            <input type="hidden" class="J_saveBigTagIdInp" name="saveBigTagId" value="1">
                             <c:forEach var="bigTag" items="${bigTagList}">
                                 <a class="label-info J_chooseBigRemarkTag" href="javascript:;"
                                    data-big-tag-id="${bigTag.id}"
