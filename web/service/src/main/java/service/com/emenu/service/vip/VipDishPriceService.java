@@ -89,4 +89,12 @@ public interface VipDishPriceService {
                                      TrueEnums cover,
                                      int vipDishPricePlanId) throws SSException;
 
+    /**
+     * 根据dishId和会员价方案id更新会员价
+     * @param dishId
+     * @param vipDishPricePlanId
+     * @param vipDishPrice
+     * @throws SSException
+     */
+    public void updateVipDishPrice(int dishId, int vipDishPricePlanId, BigDecimal vipDishPrice) throws SSException;
 }

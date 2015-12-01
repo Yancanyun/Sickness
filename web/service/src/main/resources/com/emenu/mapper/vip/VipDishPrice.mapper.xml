@@ -83,4 +83,11 @@
         </foreach>
         ON DUPLICATE KEY UPDATE `vip_dish_price` = VALUES(`vip_dish_price`)
     </insert>
+
+    <update id="updateVipDishPrice">
+        UPDATE `t_vip_dish_price`
+        SET `vip_dish_price` = #{vipDishPrice}
+        WHERE `vip_dish_price_plan_id` = #{vipDishPricePlanId}
+        AND `dish_id` = #{dishId}
+    </update>
 </mapper>

@@ -9,7 +9,6 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipDishPriceMapper;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.vip.VipDishPriceService;
-import com.pandawork.core.common.exception.ExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -80,11 +79,16 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     @Override
     public List<VipDishPriceDto> listVipDishPriceDtos(int vipDishPricePlanId) throws SSException{
         List<VipDishPriceDto> vipDishPriceDtoList  = Collections.emptyList();
+        BigDecimal zero = new BigDecimal("0.00");
         try{
             if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             vipDishPriceDtoList = vipDishPriceMapper.listDishPriceDtos(vipDishPricePlanId);
+            for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
+                BigDecimal difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
+                vipDishPriceDto.setDifference(difference == null ? zero : difference);
+            }
         } catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipDishPriceFail, e);
@@ -308,6 +312,25 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
                 vipDishPriceList.add(vipDishPriceRecord);
             }
             vipDishPriceMapper.insertAll(vipDishPriceList);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateVipDishPriceFail);
+        }
+    }
+
+    public void updateVipDishPrice(int dishId, int vipDishPricePlanId, BigDecimal vipDishPrice) throws SSException{
+        BigDecimal zero = new BigDecimal("0.00");
+        try{
+            //判断菜品id是否合法
+            if (!Assert.isNull(dishId) && Assert.lessOrEqualZero(dishId)) {
+                throw SSException.get(EmenuException.DishIdNotNull);
+            }
+            //判断会员价方案id是否合法
+            if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
+                throw SSException.get(EmenuException.VipDishPricePlanIdError);
+            }
+            vipDishPrice = vipDishPrice.compareTo(zero) < 0 ? zero : vipDishPrice;
+            vipDishPriceMapper.updateVipDishPrice(dishId, vipDishPricePlanId, vipDishPrice);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipDishPriceFail);

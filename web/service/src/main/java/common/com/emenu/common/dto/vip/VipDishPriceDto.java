@@ -35,7 +35,7 @@ public class VipDishPriceDto {
     private BigDecimal vipDishPrice;
 
     //差价
-    private BigDecimal priceDifference;
+    private BigDecimal difference;
 
 
     //get、set方法
@@ -105,11 +105,11 @@ public class VipDishPriceDto {
         this.vipDishPrice = vipDishPrice;
     }
 
-    public BigDecimal getPriceDifference() {
-        return priceDifference;
+    public BigDecimal getDifference() {
+        return difference;
     }
 
-    public void setPriceDifference(BigDecimal priceDifference) {
-        this.priceDifference = priceDifference;
+    public void setDifference(BigDecimal difference) {
+        this.difference = difference;
     }
 }

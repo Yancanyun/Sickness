@@ -314,10 +314,12 @@ public class AbstractController extends Base {
     @Qualifier("dishService")
     protected static DishService dishService;
 
+    //会员价方案管理
     @StaticAutoWire
     @Qualifier("vipDishPricePlanService")
     protected static VipDishPricePlanService vipDishPricePlanService;
 
+    //会员价管理
     @StaticAutoWire
     @Qualifier("vipDishPriceService")
     protected static VipDishPriceService vipDishPriceService;

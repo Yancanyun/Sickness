@@ -64,7 +64,7 @@ public class VipVipDishPriceTest extends AbstractTestCase{
         List<VipDishPriceDto> vipDishPriceDtoList = vipDishPriceService.listVipDishPriceDtosByKeyword(vipDishPricePlanId, keyword);
         for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
             difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
-            vipDishPriceDto.setPriceDifference(difference);
+            vipDishPriceDto.setDifference(difference);
             System.out.print("菜品id:" + vipDishPriceDto.getDishId() + ";");
             System.out.print("菜品名称：" + vipDishPriceDto.getDishName() + ";");
             System.out.print("编号：" + vipDishPriceDto.getDishNumber() + ";");
@@ -72,7 +72,7 @@ public class VipVipDishPriceTest extends AbstractTestCase{
             System.out.print("原价：" + vipDishPriceDto.getPrice() + ";");
             System.out.print("售价：" + vipDishPriceDto.getSalePrice() + ";");
             System.out.print("会员价：" + vipDishPriceDto.getVipDishPrice() + ";");
-            System.out.println("差价" + vipDishPriceDto.getPriceDifference() + ";");
+            System.out.println("差价" + vipDishPriceDto.getDifference() + ";");
         }
     }
 
