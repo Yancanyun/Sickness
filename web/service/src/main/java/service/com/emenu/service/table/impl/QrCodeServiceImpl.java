@@ -144,7 +144,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String areaName = areaService.queryById(areaId).getName();
             //获取zip包的路径
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
-            String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
+            String zipName = resourcesPath + "zipDownloadTemp";
             //获取二维码路径
             qrCodeDtoList = qrCodeMapper.listByAreaId(areaId);
             //打包为zip文件
@@ -204,7 +204,7 @@ public class QrCodeServiceImpl implements QrCodeService {
             String fileName = "全部二维码";
             //获取zip包的路径
             String resourcesPath = request.getSession().getServletContext().getRealPath("/resources/");
-            String zipName = resourcesPath + "/upload/qrCode/" + "zipDownloadTemp";
+            String zipName = resourcesPath + "zipDownloadTemp";
             //获取二维码路径
             qrCodeDtoList = qrCodeMapper.listAll();
             //打包为zip文件

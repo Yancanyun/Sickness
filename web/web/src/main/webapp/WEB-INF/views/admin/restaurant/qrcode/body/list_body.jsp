@@ -24,7 +24,7 @@
       <div class="panel-body create-code-box">
         <form class="form-horizontal J_webDomain" action="${website}admin/restaurant/qrcode/newAllQrCode" method="POST">
           <div class="form-group">
-            <label class="control-label">原始网站域名:</label>
+            <label class="control-label col-sm-2">原始网站域名:</label>
             <div class="col-sm-6 initial-domain">${webDomain}
             </div>
           </div>

@@ -161,7 +161,7 @@
     <div class="form-group">
       <label class="col-sm-3 control-label"><span>&nbsp;</span>关联收费</label>
       <div class="col-sm-9">
-        <input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isNumber|isFloat"  value="&{dlg.relatedCharge}" name="relatedCharge" />
+        <input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isFloat"  value="&{dlg.relatedCharge}" name="relatedCharge" />
       </div>
     </div>
   </form>
