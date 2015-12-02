@@ -57,16 +57,6 @@ public class StorageDepotTest extends AbstractTestCase {
     public void queryById() throws SSException {
         System.out.print(storageDepotService.queryById(3).getIntroduction());
     }
-    @Test
-    public void listByPage() throws SSException {
-        List<StorageDepot> list = Collections.<StorageDepot>emptyList();
-
-        list = storageDepotService.listByPage(2, 2);
-        System.out.print(storageDepotService.countAll());
-        for (StorageDepot storageDepot : list) {
-            System.out.print(storageDepot.getIntroduction());
-        }
-    }
 
     @Test
     public void listAll() throws SSException {

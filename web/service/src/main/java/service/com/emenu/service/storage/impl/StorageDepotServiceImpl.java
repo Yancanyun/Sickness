@@ -35,33 +35,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
     private CommonDao commonDao;
 
     /**
-     * 分页查询存放点
-     *
-     * @param curPage
-     * @param pageSize
-     * @return
-     * @throws SSException
-     */
-    @Override
-    public List<StorageDepot> listByPage(int curPage, int pageSize) throws SSException {
-
-        curPage = curPage <=0 ? 0:curPage - 1;
-        int offset = curPage*pageSize;
-        if(Assert.lessZero(offset)) {
-            return Collections.emptyList();
-        }
-
-        List<StorageDepot> depotList = Collections.<StorageDepot>emptyList();
-        try {
-            depotList = storageDepotMapper.listByPage(offset, pageSize);
-        } catch(Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListDepotPageFailed,e);
-        }
-        return depotList;
-    }
-
-    /**
      * 查询全部存放点
      *
      * @return
@@ -200,6 +173,7 @@ public class StorageDepotServiceImpl implements StorageDepotService {
         if (checkNameIsConflict(storageDepot.getName(), storageDepot.getId())){
             throw SSException.get(EmenuException.DepotNameIsConflict);
         }
+
         try {
             commonDao.update(storageDepot);
         } catch (Exception e) {

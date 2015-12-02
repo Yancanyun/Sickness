@@ -14,16 +14,6 @@ import java.util.List;
 public interface StorageDepotService {
 
     /**
-     * 分页获取存放点
-     *
-     * @param curPage
-     * @param pageSize
-     * @return
-     * @throws SSException
-     */
-    public List<StorageDepot> listByPage(int curPage, int pageSize) throws SSException;
-
-    /**
      * 获取全部存放点
      *
      * @return
