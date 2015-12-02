@@ -168,9 +168,9 @@
 </script>
 <!-- 备注内容 -->
 <script type="text/template" id = "addContentTpl">
-  <tr data-remark-content-id="&{contentId}" data-remark-content="&{name}">
+  <tr data-remark-content-id="&{id}" data-remark-content="&{name}">
     <input type="hidden" name="smallTagId" value="&{smallTagId}">
-    <input type="hidden" name="id" value="&{contentId}">
+    <input type="hidden" name="id" value="&{id}">
     <input type="hidden" name="name" value="&{name}">
     <input type="hidden" name="weight" value="&{weight}">
     <input type="hidden" name="relatedCharge" value="&{relatedCharge}">

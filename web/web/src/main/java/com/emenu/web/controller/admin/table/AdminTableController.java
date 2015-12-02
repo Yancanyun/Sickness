@@ -292,8 +292,8 @@ public class AdminTableController extends AbstractController {
             tableService.updateTable(id, tableDto);
 
             String successUrl = "/" + URLConstants.ADMIN_TABLE_URL;
-            //返回编辑成功信息
-            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+            //返回修改成功信息
+            redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
             //返回列表页
             return "redirect:" + successUrl;
 
