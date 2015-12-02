@@ -221,8 +221,10 @@ public class AdminPrinterController extends AbstractController {
                             tagNameArray.add(s);
                         }
                     }
-                    dishTagNameList.put("dishTag", tagNameArray);
-                    return sendJsonObject(dishTagNameList, AJAX_FAILURE_CODE);
+                    if (!Assert.isEmpty(tagNameArray)) {
+                        dishTagNameList.put("dishTag", tagNameArray);
+                        return sendJsonObject(dishTagNameList, AJAX_FAILURE_CODE);
+                    }
                 }
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             } catch (SSException e) {
