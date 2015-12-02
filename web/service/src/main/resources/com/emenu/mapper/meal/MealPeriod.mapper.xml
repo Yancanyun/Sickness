@@ -20,6 +20,13 @@
         ORDER BY `weight`, `id`
     </select>
 
+    <select id="listEnabledMealPeriod" resultMap="pw.MealPeriod">
+        SELECT *
+        FROM `t_meal_period`
+        WHERE `status` = 1
+        ORDER BY `weight`, `id`
+    </select>
+
     <select id="countByName" resultType="int">
         SELECT COUNT(1)
         FROM `t_meal_period`

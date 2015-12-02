@@ -67,6 +67,14 @@ public interface MealPeriodService {
     public List<MealPeriod> listAll() throws SSException;
 
     /**
+     * 查询所有可用餐段
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<MealPeriod> listEnabledMealPeriod() throws SSException;
+
+    /**
      * 根据id查询餐段
      *
      * @param id

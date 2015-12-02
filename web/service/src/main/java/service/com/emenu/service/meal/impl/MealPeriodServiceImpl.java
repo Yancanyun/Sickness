@@ -167,7 +167,19 @@ public class MealPeriodServiceImpl implements MealPeriodService{
     public List<MealPeriod> listAll() throws SSException {
         List<MealPeriod> list = Collections.emptyList();
         try {
-            list =  mealPeriodMapper.listAll();
+            list = mealPeriodMapper.listAll();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryMealPeriodFail, e);
+        }
+        return list;
+    }
+
+    @Override
+    public List<MealPeriod> listEnabledMealPeriod() throws SSException {
+        List<MealPeriod> list = Collections.emptyList();
+        try {
+            list = mealPeriodMapper.listEnabledMealPeriod();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMealPeriodFail, e);

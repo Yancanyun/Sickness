@@ -154,8 +154,8 @@ public class AdminTableController extends AbstractController {
             //显示区域选择下拉列表
             List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
-            //显示餐段选择框
-            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            //显示餐段选择框，只显示可用餐段
+            List<MealPeriod> mealPeriodList = mealPeriodService.listEnabledMealPeriod();
             model.addAttribute("mealPeriodList", mealPeriodList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -248,8 +248,8 @@ public class AdminTableController extends AbstractController {
             //显示区域选择下拉列表
             List<Area> areaList = areaService.listAll();
             model.addAttribute("areaList", areaList);
-            //显示餐段选择框
-            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            //显示餐段选择框，只显示可用餐段
+            List<MealPeriod> mealPeriodList = mealPeriodService.listEnabledMealPeriod();
             model.addAttribute("mealPeriodList", mealPeriodList);
             //显示被选中的餐段ID
             List<Integer> checkedMealPeriodList = tableMealPeriodService.listMealPeriodIdByTableId(id);

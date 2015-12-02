@@ -41,6 +41,14 @@ public interface MealPeriodMapper {
     public List<MealPeriod> listAll() throws Exception;
 
     /**
+     * 查询所有可用餐段
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<MealPeriod> listEnabledMealPeriod() throws Exception;
+
+    /**
      * 判断同名餐段是否存在
      *
      * @param name
