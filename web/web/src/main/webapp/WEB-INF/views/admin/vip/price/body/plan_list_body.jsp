@@ -52,7 +52,7 @@
                 <td>
                   <a href="javascript:;" class="label-info J_edit"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
                   <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-                  <a href="javascript:;" src="#" class="label-info J_detail"><i class="fa fa-list"></i>&nbsp;查看详情</a>
+                  <a href="javascript:;" src="${website}admin/vip/price/list/${vipDishPricePlan.id}" class="label-info J_detail"><i class="fa fa-list"></i>&nbsp;查看详情</a>
                 </td>
               </tr>
               </c:forEach>

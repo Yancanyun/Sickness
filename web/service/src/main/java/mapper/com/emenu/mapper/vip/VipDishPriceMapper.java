@@ -5,6 +5,7 @@ import com.emenu.common.entity.vip.VipDishPrice;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,4 +66,14 @@ public interface VipDishPriceMapper {
      * @throws Exception
      */
     public void insertAll(@Param("vipDishPriceList") List<VipDishPrice> vipDishPriceList) throws Exception;
+
+    /**
+     * 根据dishId和会员价方案id更新会员价
+     * @param dishId
+     * @param vipDishPricePlanId
+     * @throws Exception
+     */
+    public void updateVipDishPrice(@Param("dishId")int dishId,
+                                   @Param("vipDishPricePlanId")int vipDishPricePlanId,
+                                   @Param("vipDishPrice")BigDecimal vipDishPrice) throws Exception;
 }

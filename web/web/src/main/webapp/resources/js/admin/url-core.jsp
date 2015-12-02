@@ -155,7 +155,7 @@
         VipManagement:[
             //会员价方案
             ['sendEditPlan', site.website + 'admin/vip/price/plan/ajax', 'put', '保存编辑后的方案'],
-            ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'get', '删除时发送ID'],
+            ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'delete', '删除时发送ID'],
             //会员价
             ['sendSearchInfo', site.staticWebsite + 'mock/admin/vip-dish-price.json', 'get','搜索'],
             ['sendEditInfo', site.staticWebsite + 'mock/admin/login.json', 'get', '保存']
