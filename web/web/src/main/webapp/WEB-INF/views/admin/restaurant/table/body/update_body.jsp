@@ -26,7 +26,7 @@
               <span class="requires">*</span>餐台区域
             </label>
             <div class="col-sm-6">
-              <select class="form-control J_tableArea" name="areaId">
+              <select class="form-control J_tableArea w180 error-field" name="areaId">
                 <option value="-1">请选择</option>
                 <c:forEach var="area" items="${areaList}">
                   <c:choose>
