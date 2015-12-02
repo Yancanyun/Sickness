@@ -82,7 +82,13 @@
             </if>
             AND dish.`status` != 3
         </where>
-        ORDER BY dish.`id` DESC
+        ORDER BY dish.${searchDto.orderByColumn}
+        <if test="searchDto.orderType == 0">
+            DESC
+        </if>
+        <if test="searchDto.orderType == 1">
+            ASC
+        </if>
         <if test="offset >= 0 and searchDto.pageSize > 0">
             LIMIT #{offset}, #{searchDto.pageSize}
         </if>

@@ -31,5 +31,11 @@ public class SimpleTest {
         System.out.println(list.subList(0, 3));
         System.out.println(list.subList(3, 7));
         System.out.println(list.subList(7, 10));
+
+        Integer a = 170;
+        System.out.println(Integer.toHexString(a));
+        Byte b = (byte) 0xaa;
+
+        System.out.println(b & 0xFF);
     }
 }

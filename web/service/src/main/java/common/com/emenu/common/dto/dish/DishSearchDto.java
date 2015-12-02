@@ -1,6 +1,10 @@
 package com.emenu.common.dto.dish;
 
+import com.pandawork.core.common.util.Assert;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * DishSearchDto
@@ -33,9 +37,25 @@ public class DishSearchDto {
     // 分类id
     private List<Integer> tagIdList;
 
+    // 排序字段
+    private String orderBy;
+
+    private String orderByColumn;
+
+    // 排序方式(0-降序,1-升序)
+    private Integer orderType;
+
+    private static Map<String, String> orderByMap = new HashMap<String, String>();
+
+    static {
+        orderByMap.put("salePrice", "sale_price");
+        orderByMap.put("", "id");
+    }
+
     public DishSearchDto() {
         this.pageNo = -1;
         this.pageSize = -1;
+        this.orderType = 0;
     }
 
     public Integer getPageNo() {
@@ -100,5 +120,37 @@ public class DishSearchDto {
 
     public void setTagIdList(List<Integer> tagIdList) {
         this.tagIdList = tagIdList;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public Integer getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
+    }
+
+    public String getOrderByColumn() {
+        return orderByColumn;
+    }
+
+    public void setOrderByColumn(String orderByColumn) {
+        this.orderByColumn = orderByColumn;
+    }
+
+    public void setOrderByColumn() {
+        String orderByColumn = orderByMap.get(orderBy);
+        if (Assert.isNull(orderByColumn)) {
+            orderByColumn = "id";
+        }
+        setOrderByColumn(orderByColumn);
     }
 }

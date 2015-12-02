@@ -76,8 +76,9 @@ public class DishServiceImpl implements DishService {
         List<Dish> list = Collections.emptyList();
         int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
         int offset = pageNo * searchDto.getPageSize();
-
         try {
+            // TODO: 15/12/2 这种方式不是很好
+            searchDto.setOrderByColumn();
             list = dishMapper.listBySearchDto(offset, searchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -71,7 +71,7 @@
                                 <th>名称</th>
                                 <th>单位</th>
                                 <th>定价</th>
-                                <th class="order pagination-reorder" data-order-key="sale">售价</th>
+                                <th class="order pagination-reorder" data-order-key="salePrice">售价</th>
                                 <th>状态</th>
                                 <th>点赞人数</th>
                                 <th>操作</th>

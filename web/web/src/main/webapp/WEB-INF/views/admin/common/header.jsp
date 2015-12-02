@@ -23,7 +23,7 @@
             </ul>
         </li>
         <li>
-        <li <c:if test="${PWModule eq 'Admin:Restaurant'}">class="active"</c:if> >
+        <li <c:if test="${PWModule eq 'Admin:Restaurant:Table'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="2" href="javascript:;">饭店管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/restaurant/area">餐台区域管理</a></li>
@@ -46,20 +46,14 @@
             </ul>
         </li>
         <li>
-            <a class="menu-list J_layer_1_menu" data-menu-id="4" href="javascript:;">原配料管理</a>
-            <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a class="J_menu" href="javascript:;">原配料单位管理</a></li>
-                <li><a class="J_menu" href="javascript:;">原配料管理</a></li>
-            </ul>
-        </li>
-        <li>
             <a class="menu-list J_layer_1_menu" data-menu-id="5" href="javascript:;">用户信息管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a></li>
                 <li><a class="J_menu" href="${website}admin/party/group/vip">会员管理</a></li>
             </ul>
         </li>
-        <li <c:if test="${PWModule eq 'Admin:Storage'}">class="active"</c:if> >
+        <li
+                <c:if test="${PWModule eq 'Admin:Storage'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="6" href="javascript:;">库存管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/storage/supplier">供货商管理</a></li>
