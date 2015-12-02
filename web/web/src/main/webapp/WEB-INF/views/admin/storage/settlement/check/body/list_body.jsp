@@ -86,7 +86,9 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="#" class="btn btn-success margin-bottom-15"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
+                    <a href="#?" class="btn btn-warning margin-bottom-15 J_export">
+                        <i class="fa fa-download"></i>&nbsp;导出Excel
+                    </a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">

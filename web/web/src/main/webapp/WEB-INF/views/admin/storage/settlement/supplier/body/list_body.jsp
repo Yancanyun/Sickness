@@ -7,11 +7,9 @@
         <ol class="breadcrumb">
             <li><a href="${website}"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">库存管理</a></li>
-            <li>
-                <a href="${website}admin/storage/settlement/supplier" class="active">结算中心</a>
-            </li>
+            <li class="active">结算中心管理</li>
         </ol>
-        <h2>结算中心</h2>
+        <h2>结算中心管理</h2>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -23,13 +21,13 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间：</label>
                         <div class="col-sm-2">
-                            <input type="text" class="w190 form-control date" readonly name="startTime" value="">
+                            <input type="text" class="w190 form-control date" readonly name="startDate" value="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">结束时间：</label>
                         <div class="col-sm-2">
-                            <input type="text" class="w190 form-control date" readonly name="endTime" value="">
+                            <input type="text" class="w190 form-control date" readonly name="endDate" value="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -57,7 +55,7 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="#" class="btn btn-success margin-bottom-15"><i class="fa fa-download"></i>&nbsp;导出excel</a>
+                    <a href="" class="btn btn-warning margin-bottom-15 J_exportExcel"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">

@@ -444,8 +444,6 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
 
             //调用core包里的工具类
             ExcelWriter.writeExcelByTemplate(storageCheckDtoList, startRow, os, ExcelExportTemplateEnums.AdminSettlementCheckList, checkDataTypes);
-
-
         } catch (Exception e) {
 
             LogClerk.errLog.error(e);

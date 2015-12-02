@@ -5,6 +5,7 @@ import com.emenu.common.dto.storage.StorageSupplierDto;
 import com.emenu.common.entity.storage.StorageSettlementItem;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -61,6 +62,7 @@ public interface StorageSettlementService {
                                     List<Integer> depotIds,
                                     List<Integer> tagIds,
                                     String keyword) throws SSException;
+
     /**
      * 结算中心
      * @param supplierId
@@ -73,4 +75,23 @@ public interface StorageSettlementService {
     public List<StorageSupplierDto> listSettlementSupplier(Integer supplierId,
                                                            Date startDate,
                                                            Date endDate) throws SSException;
+
+    /**
+     * 库存盘点导出EXCEL
+     * @param startDate
+     * @param endDate
+     * @param supplierId
+     * @param depotIds
+     * @param tagIds
+     * @param keyword
+     * @param response
+     * @throws SSException
+     */
+    public void exportSettlementCheckToExcel(Date startDate,
+                                             Date endDate,
+                                             Integer supplierId,
+                                             List<Integer> depotIds,
+                                             List<Integer> tagIds,
+                                             String keyword,
+                                             HttpServletResponse response) throws SSException;
 }

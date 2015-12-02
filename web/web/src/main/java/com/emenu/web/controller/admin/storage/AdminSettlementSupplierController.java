@@ -15,9 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,10 +61,12 @@ public class AdminSettlementSupplierController extends AbstractController{
     @Module(ModuleEnums.AdminStorageSettlementSupplierList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxListDishUnit() {
+    public JSONObject ajaxList(@RequestParam(value = "supplierId", required = false) Integer supplierId,
+                               @RequestParam(value = "startDate", required = false) Date startDate,
+                               @RequestParam(value = "endDate", required = false) Date endDate) {
         List<StorageSupplierDto> storageSupplierDtoList = Collections.emptyList();
         try {
-            storageSupplierDtoList = storageSettlementService.listSettlementSupplier(null,null,null);
+            storageSupplierDtoList = storageSettlementService.listSettlementSupplier(supplierId,startDate,endDate);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -90,4 +94,13 @@ public class AdminSettlementSupplierController extends AbstractController{
         return sendJsonArray(jsonArray);
     }
 
+    /**
+     * 导出EXCEL
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageSettlementCheckExport)
+    @RequestMapping(value = "export", method = RequestMethod.GET)
+    public String toExport(){
+        return "";
+    }
 }
