@@ -12,6 +12,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,20 +62,24 @@ public class StorageDepotController extends AbstractController{
      * 添加
      *
      * @param storageDepot
+     * @param redirectAttributes
      * @return
      */
     @Module(ModuleEnums.AdminStorageDepotNew)
     @RequestMapping(value = "new",method = RequestMethod.POST)
-    public String newStorageDepot(StorageDepot storageDepot) {
+    public String newStorageDepot(StorageDepot storageDepot,RedirectAttributes redirectAttributes) {
         try {
             storageDepotService.newStorageDepot(storageDepot);
+            String successUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/list";
+            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String failedUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/tonew";
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            return "redirect:" + failedUrl;
         }
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/list";
-        return "redirect:" + redirectUrl;
     }
 
     /**
@@ -105,16 +110,20 @@ public class StorageDepotController extends AbstractController{
      */
     @Module(ModuleEnums.AdminBasicInfoIndexImgUpdate)
     @RequestMapping(value= "update",method = RequestMethod.POST)
-    public String updateStorageDepot(StorageDepot storageDepot) {
+    public String updateStorageDepot(StorageDepot storageDepot,RedirectAttributes redirectAttributes) {
         try {
             storageDepotService.updateStorageDepot(storageDepot);
+            String successUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/list";
+            redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
+            return "redirect:" + successUrl;
         }  catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String failedUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/toupdate";
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            return "redirect:" + failedUrl;
         }
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_DEPOT_URL + "/list";
-        return "redirect:" + redirectUrl;
+
     }
 
     /**
