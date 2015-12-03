@@ -85,7 +85,7 @@ public final class URLConstants {
     public static final String ADMIN_STORAGE_REPORT_URL = "admin/storage/report";
 
     // 存放点管理
-    public static final String ADMIN_STORAGE_DEPOT = "admin/storage/depot";
+    public static final String ADMIN_STORAGE_DEPOT_URL = "admin/storage/depot";
 
     public static final String ADMIN_STORAGE_ITEM_URL = "admin/storage/item";
 

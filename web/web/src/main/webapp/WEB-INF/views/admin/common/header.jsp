@@ -64,6 +64,7 @@
                 <li><a class="J_menu" href="${website}admin/storage/settlement/supplier">结算中心</a></li>
                 <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
                 <li><a class="J_menu" href="javascript:;">预警管理</a></li>
+                <li><a class="J_menu" href="${website}admin/storage/depot">存放点管理</a></li>
             </ul>
         </li>
         <li>

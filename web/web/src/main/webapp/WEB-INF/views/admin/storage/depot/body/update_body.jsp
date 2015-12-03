@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">简介</label>
                         <div class="col-sm-6">
-                            <textarea class="form-control" data-valid-tip="请输入长度为0~20个字符的简介|输入有误，请重新输入" data-valid-rule="isNull|length(0,21)" name="introduction" value="${storageDepot.introduction}"></textarea>
+                            <textarea class="form-control" data-valid-tip="请输入长度为0~20个字符的简介|输入有误，请重新输入" data-valid-rule="isNull|length(0,21)" name="introduction">${storageDepot.introduction}</textarea>
                         </div>
                     </div>
                 </div>

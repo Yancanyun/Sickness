@@ -166,6 +166,9 @@
             </li>
             <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>
             <li><a class="J_menu" href="javascript:;">预警管理</a></li>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Depot:List'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/storage/depot">存放点管理</a>
+            </li>
         </ul>
     </li>
     <li id="firstMenu7" class="active hidden">
