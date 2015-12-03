@@ -5,7 +5,9 @@ import com.emenu.common.dto.storage.StorageSupplierDto;
 import com.emenu.common.entity.storage.StorageSettlementItem;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -94,4 +96,16 @@ public interface StorageSettlementService {
                                              List<Integer> tagIds,
                                              String keyword,
                                              HttpServletResponse response) throws SSException;
+
+    /**
+     * 结算中心导出Excel
+     * @param supplierId
+     * @param startDate
+     * @param endDate
+     * @throws SSException
+     */
+    public void exportSettlementSupplierToExcel(Integer supplierId,
+                                                Date startDate,
+                                                Date endDate,
+                                                HttpServletResponse response)throws SSException;
 }

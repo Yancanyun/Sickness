@@ -11,7 +11,8 @@ import com.pandawork.core.pweio.excel.ExcelTemplateEnum;
 public enum ExcelExportTemplateEnums implements ExcelTemplateEnum {
     AdminSettlementCheckList("库存盘点列表",
             "classpath:template/excel/admin_storage_settlement_check_excel_export_template.xls"),
-
+    AdminSettlementSupplierList("结算中心列表",
+            "classpath:template/excel/admin_storage_settlement_supplier_excel_export_template.xls"),
     ;
 
 

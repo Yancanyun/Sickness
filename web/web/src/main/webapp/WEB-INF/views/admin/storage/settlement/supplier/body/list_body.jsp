@@ -12,6 +12,9 @@
         <h2>结算中心管理</h2>
     </div>
     <div class="col-sm-12">
+        <c:if test="${eMsg!=null}">
+        <div class="alert alert-danger J_tip" role="alert">${eMsg}</div>
+        </c:if>
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h4>搜索</h4>
@@ -55,7 +58,7 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="" class="btn btn-warning margin-bottom-15 J_exportExcel"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
+                    <a href="${website}admin/storage/settlement/supplier/export" class="btn btn-warning margin-bottom-15 J_exportExcel"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -85,13 +88,15 @@
                             </c:if>
                             <c:if test="${fn:length(supplierDto.storageItemDtoList)==1}">
                                 <tr class="J_supplier">
-                                    <td rowspan="">${supplierDto.supplierName}</td>
-                                    <td>${supplierDto.storageItemDtoList.itemName}</td>
-                                    <td>${supplierDto.storageItemDtoList.itemQuantity}</td>
-                                    <td>${supplierDto.storageItemDtoList.itemMoney}</td>
-                                    <td>${supplierDto.storageItemDtoList.handlerName}</td>
-                                    <td>${supplierDto.storageItemDtoList.createdName}</td>
-                                    <td rowspan="">${supplierDto.totalMoney}</td>
+                                    <td rowspan="1">${supplierDto.supplierName}</td>
+                                    <c:forEach items="${supplierDto.storageItemDtoList}" var="itemDto">
+                                        <td>${itemDto.itemName}</td>
+                                        <td>${itemDto.itemQuantity}</td>
+                                        <td>${itemDto.itemMoney}</td>
+                                        <td>${itemDto.handlerName}</td>
+                                        <td>${itemDto.createdName}</td>
+                                    </c:forEach>
+                                    <td rowspan="1">${supplierDto.totalMoney}</td>
                                 </tr>
                             </c:if>
                             <c:if test="${fn:length(supplierDto.storageItemDtoList)>1}">
@@ -106,15 +111,15 @@
                                     </c:forEach>
                                     <td rowspan="${fn:length(supplierDto.storageItemDtoList)}">${supplierDto.totalMoney}</td>
                                 </tr>
+                                <c:forEach items="${supplierDto.storageItemDtoList}" var="itemDto" begin="1">
                                 <tr>
-                                    <c:forEach items="${supplierDto.storageItemDtoList}" var="itemDto" begin="1">
-                                        <td>${itemDto.itemName}</td>
-                                        <td>${itemDto.itemQuantity}</td>
-                                        <td>${itemDto.itemMoney}</td>
-                                        <td>${itemDto.handlerName}</td>
-                                        <td>${itemDto.createdName}</td>
-                                    </c:forEach>
+                                    <td>${itemDto.itemName}</td>
+                                    <td>${itemDto.itemQuantity}</td>
+                                    <td>${itemDto.itemMoney}</td>
+                                    <td>${itemDto.handlerName}</td>
+                                    <td>${itemDto.createdName}</td>
                                 </tr>
+                                </c:forEach>
                             </c:if>
                         </c:forEach>
                         </tbody>

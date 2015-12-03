@@ -37,7 +37,8 @@ public class AdminSettlementCheckController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model){
+    public String toList(Model model,
+                         @RequestParam(value = "eMsg", required = false) String eMsg){
         try {
             //获取供货商列表
             List<Supplier> supplierList = supplierService.listAll();
@@ -48,6 +49,7 @@ public class AdminSettlementCheckController extends AbstractController{
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("storageDepotList", storageDepotList);
             model.addAttribute("tagList", tagList);
+            model.addAttribute("eMsg", eMsg);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -64,14 +66,14 @@ public class AdminSettlementCheckController extends AbstractController{
     @Module(ModuleEnums.AdminStorageSettlementCheckList)
     @RequestMapping(value = "ajax/list/{curPage}", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxListDishUnit(@PathVariable("curPage") Integer curPage,
-                                       @RequestParam("pageSize") Integer pageSize,
-                                       @RequestParam(value = "startDate", required = false) Date startDate,
-                                       @RequestParam(value = "endDate", required = false) Date endDate,
-                                       @RequestParam(value = "supplierId", required = false) Integer supplierId,
-                                       @RequestParam(value = "itemName", required = false) String keyword,
-                                       @RequestParam(value = "depotIds", required = false) List<Integer> depotIds,
-                                       @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
+    public JSONObject ajaxList(@PathVariable("curPage") Integer curPage,
+                               @RequestParam("pageSize") Integer pageSize,
+                               @RequestParam(value = "startDate", required = false) Date startDate,
+                               @RequestParam(value = "endDate", required = false) Date endDate,
+                               @RequestParam(value = "supplierId", required = false) Integer supplierId,
+                               @RequestParam(value = "itemName", required = false) String keyword,
+                               @RequestParam(value = "depotIds", required = false) List<Integer> depotIds,
+                               @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
         List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
         try {
             storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,supplierId,depotIds,tagIds,keyword,curPage,pageSize);
@@ -121,7 +123,19 @@ public class AdminSettlementCheckController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckExport)
     @RequestMapping(value = "export", method = RequestMethod.GET)
-    public String toExport(){
-        return "";
+    public String toCheckExport(@RequestParam(value = "startDate", required = false) Date startDate,
+                              @RequestParam(value = "endDate", required = false) Date endDate,
+                              @RequestParam(value = "supplierId", required = false) Integer supplierId,
+                              @RequestParam(value = "itemName", required = false) String keyword,
+                              @RequestParam(value = "depotIds", required = false) List<Integer> depotIds,
+                              @RequestParam(value = "tagIds", required = false) List<Integer> tagIds){
+        try{
+            storageSettlementService.exportSettlementCheckToExcel(startDate,endDate,supplierId,depotIds,tagIds,keyword,getResponse());
+            sendErrMsg("导出成功");
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+        return "admin/storage/settlement/check/list_home";
     }
 }

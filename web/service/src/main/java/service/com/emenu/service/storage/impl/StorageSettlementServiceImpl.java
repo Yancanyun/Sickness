@@ -24,24 +24,30 @@ import com.emenu.service.storage.StorageReportService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.common.util.IOUtil;
 import com.pandawork.core.framework.dao.CommonDao;
 import com.pandawork.core.pweio.excel.DataType;
+import com.pandawork.core.pweio.excel.ExcelTemplateEnum;
 import com.pandawork.core.pweio.excel.ExcelWriter;
+import jxl.Workbook;
+import jxl.format.*;
+import jxl.write.*;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * StorageSettlementServiceImpl
@@ -416,7 +422,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                              List<Integer> depotIds,
                                              List<Integer> tagIds,
                                              String keyword,
-                                             HttpServletResponse response) throws SSException {
+                                             HttpServletResponse response) throws SSException{
 
         OutputStream os = null;
         try {
@@ -425,43 +431,38 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             for(StorageCheckDto storageCheckDto : storageCheckDtoList){
                 EntityUtil.setNullFieldDefault(storageCheckDto);
             }
-
             // 设置输出流
             // 设置excel文件名和sheetName
             String filename = "";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-
             filename = ExcelExportTemplateEnums.AdminSettlementCheckList.getName() + sdf.format(new Date());
-
-            String contentType = "application/octet-stream";
-            response.setContentType(contentType);
+            response.setContentType("application/msexcel");
             response.setHeader("Content-disposition",
                     "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
-
             os = response.getOutputStream();
-
-            int startRow = 2;
-
+            int startRow = 3;
             //调用core包里的工具类
             ExcelWriter.writeExcelByTemplate(storageCheckDtoList, startRow, os, ExcelExportTemplateEnums.AdminSettlementCheckList, checkDataTypes);
         } catch (Exception e) {
-
             LogClerk.errLog.error(e);
             response.setContentType("text/html");
             response.setHeader("Content-Type", "text/html");
             response.setHeader("Content-disposition", "");
             response.setCharacterEncoding("UTF-8");
             try {
-                response.getOutputStream().write(new String("系统内部异常，请联系管理员！" + e.getMessage()).getBytes("UTF-8"));
+                String eMsg = "系统内部异常，请联系管理员！";
+                eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+                response.sendRedirect("/admin/storage/settlement/check?eMsg="+eMsg);
                 os.close();
             } catch (IOException e1) {
                 LogClerk.errLog.error(e1.getMessage());
             }
             throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
-
-        } finally {
+        }
+        finally {
             if (os != null) {
                 try {
+                    os.flush();
                     os.close();
                 } catch (Exception e) {
                     LogClerk.errLog.error(e);
@@ -471,30 +472,136 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         }
     }
 
+    @Override
+    public void exportSettlementSupplierToExcel(Integer supplierId,
+                                                Date startDate,
+                                                Date endDate,
+                                                HttpServletResponse response) throws SSException {
+        OutputStream os = null;
+        try {
+           //从数据库中获取数据
+           List<StorageSupplierDto> storageSupplierDtoList = this.listSettlementSupplier(supplierId,startDate,endDate);
+           for (StorageSupplierDto storageSupplierDto : storageSupplierDtoList) {
+               EntityUtil.setNullFieldDefault(storageSupplierDto);
+           }
+            // 设置输出流
+            // 设置excel文件名和sheetName
+            String filename = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            filename = ExcelExportTemplateEnums.AdminSettlementSupplierList.getName() + sdf.format(new Date());
+            response.setContentType("application/msexcel");
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
+            os = response.getOutputStream();
+            // 获取模板
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminSettlementSupplierList.getFilePath());
+            Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
+            WritableWorkbook outBook = Workbook.createWorkbook(os, tplWorkBook);
+            // 获取sheet 往sheet中写入数据
+            WritableSheet sheet = outBook.getSheet(0);
+            int row =2;
+            for(StorageSupplierDto storageSupplierDto : storageSupplierDtoList){
+                //单元格居中格式
+                WritableCellFormat cellFormat=new WritableCellFormat();
+                cellFormat.setAlignment(jxl.format.Alignment.CENTRE);
+                cellFormat.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);
+                cellFormat.setWrap(true);
+                //供货商名称
+                Label labelSupplierName = new Label(0, row, storageSupplierDto.getSupplierName());
+                labelSupplierName.setCellFormat(cellFormat);
+                sheet.addCell(labelSupplierName);
+                //总金额
+                Label labelTotalMoney = new Label(6, row, storageSupplierDto.getTotalMoney().toString());
+                labelTotalMoney.setCellFormat(cellFormat);
+                sheet.addCell(labelTotalMoney);
+                //物品列表
+                List<StorageItemDto> storageItemDtoList = storageSupplierDto.getStorageItemDtoList();
+                int rowchildren = 0;
+                for(StorageItemDto storageItemDto : storageItemDtoList){
+                    //物品名称
+                    Label labelitemName = new Label(1, row+rowchildren, storageItemDto.getItemName());
+                    sheet.addCell(labelitemName);
+                    //数量
+                    Label labelItemQuantity = new Label(2, row+rowchildren, storageItemDto.getItemQuantity().toString());
+                    sheet.addCell(labelItemQuantity);
+                    //金额
+                    Label labelitemMoney = new Label(3, row+rowchildren, storageItemDto.getItemMoney().toString());
+                    sheet.addCell(labelitemMoney);
+                    //经手人
+                    Label labelHandlerName = new Label(4, row+rowchildren, storageItemDto.getHandlerName());
+                    sheet.addCell(labelHandlerName);
+                    //操作人
+                    Label labeCreatedName = new Label(5, row+rowchildren, storageItemDto.getCreatedName());
+                    sheet.addCell(labeCreatedName);
+                    rowchildren++;
+                }
+                if(storageItemDtoList.size()>1) {
+                    sheet.mergeCells(0, row, 0, row + rowchildren-1);
+                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
+                }
+                if(rowchildren<=1) {
+                    row ++;
+                }else {
+                    row = row + rowchildren;
+                }
+            }
+            outBook.write();
+            outBook.close();
+            tplWorkBook.close();
+            tplStream.close();
+            os.close();
+       } catch (Exception e) {
+           LogClerk.errLog.error(e);
+           response.setContentType("text/html");
+           response.setHeader("Content-Type", "text/html");
+           response.setHeader("Content-disposition", "");
+           response.setCharacterEncoding("UTF-8");
+           try {
+               String eMsg = "系统内部异常，请联系管理员！";
+               eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+               response.sendRedirect("/admin/storage/settlement/supplier?eMsg="+eMsg);
+               os.close();
+           } catch (IOException e1) {
+               LogClerk.errLog.error(e1.getMessage());
+           }
+           throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+       }
+       finally {
+           if (os != null) {
+               try {
+                   os.flush();
+                   os.close();
+               } catch (Exception e) {
+                   LogClerk.errLog.error(e);
+                   throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+               }
+           }
+       }
+    }
+
     /**
      * 库存盘点
      */
     private DataType[] checkDataTypes = {
-            new DataType("itemName", 0),
+            new DataType("tagName", 0),
             new DataType("itemNumber", 1),
-            new DataType("tagName", 2),
-            new DataType("orderUnitName", 3),
+            new DataType("itemName", 2),
+            new DataType("lastStockInPrice", 3),
             new DataType("storageUnitName", 4),
-            new DataType("lastStockInPrice", 5),
+            new DataType("orderUnitName", 5),
             new DataType("beginQuantity", 6),
-            new DataType("beginMoney", 6),
-            new DataType("beginQuantity", 6),
-            new DataType("stockInQuantity", 6),
-            new DataType("stockInMoney", 6),
-            new DataType("stockOutQuantity", 6),
-            new DataType("stockOutMoney", 6),
-            new DataType("incomeLossQuantity", 6),
-            new DataType("incomeLossMoney", 6),
-            new DataType("totalQuantity", 6),
-            new DataType("totalAveragePrice", 6),
-            new DataType("totalMoney", 6),
-            new DataType("maxStorageQuantity", 6),
-            new DataType("minStorageQuantity", 6),
+            new DataType("beginMoney", 7),
+            new DataType("stockInQuantity", 8),
+            new DataType("stockInMoney", 9),
+            new DataType("stockOutQuantity", 10),
+            new DataType("stockOutMoney", 11),
+            new DataType("incomeLossQuantity", 12),
+            new DataType("incomeLossMoney", 13),
+            new DataType("totalQuantity", 14),
+            new DataType("totalAveragePrice", 15),
+            new DataType("totalMoney", 16),
+            new DataType("maxStorageQuantity", 17),
+            new DataType("minStorageQuantity", 18),
     };
 
     /**

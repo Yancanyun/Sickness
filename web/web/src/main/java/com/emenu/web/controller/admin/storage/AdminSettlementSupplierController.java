@@ -40,13 +40,15 @@ public class AdminSettlementSupplierController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementSupplierList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String tolistSettlementSupplier(Model model){
+    public String tolistSettlementSupplier(Model model,
+                                           @RequestParam(value = "eMsg", required = false) String eMsg){
         try {
             //获取供货商
             List<Supplier> supplierList = supplierService.listAll();
             List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(0,null,null);
             model.addAttribute("supplierDtoList", storageSupplierDtoList);
             model.addAttribute("supplierList", supplierList);
+            model.addAttribute("eMsg", eMsg);
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -100,7 +102,16 @@ public class AdminSettlementSupplierController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckExport)
     @RequestMapping(value = "export", method = RequestMethod.GET)
-    public String toExport(){
-        return "";
+    public String toExport(@RequestParam(value = "supplierId", required = false) Integer supplierId,
+                           @RequestParam(value = "startDate", required = false) Date startDate,
+                           @RequestParam(value = "endDate", required = false) Date endDate)throws SSException{
+        try{
+            storageSettlementService.exportSettlementSupplierToExcel(supplierId,startDate,endDate,getResponse());
+            sendErrMsg("导出成功");
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+        return "admin/storage/settlement/supplier/list_home";
     }
 }

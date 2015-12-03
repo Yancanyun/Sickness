@@ -4,17 +4,14 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li>
-                <a href="${website}"><i class="fa fa-home"></i>&nbsp;首页</a>
-            </li>
-            <li>
-                <a href="#">库存管理</a>
-            </li>
-            <li>
-                <a href="${website}admin/storage/settlement/check" class="active">库存盘点</a>
-            </li>
+            <li><a href="${website}"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+            <li><a href="#">库存管理</a></li>
+            <li class="active">库存盘点</li>
         </ol>
         <h2>库存盘点</h2>
+        <c:if test="${eMsg!=null}">
+        <div class="alert alert-danger col-sm-12 J_msg" role="alert">${eMsg}</div>
+        </c:if>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -86,7 +83,7 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="#?" class="btn btn-warning margin-bottom-15 J_export">
+                    <a href="${website}admin/storage/settlement/check/export" class="btn btn-warning margin-bottom-15 J_export">
                         <i class="fa fa-download"></i>&nbsp;导出Excel
                     </a>
                 </div>
