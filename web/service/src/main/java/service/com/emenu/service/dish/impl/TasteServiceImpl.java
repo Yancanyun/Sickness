@@ -103,13 +103,20 @@ public class TasteServiceImpl implements TasteService{
             return tasteList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryTasteFailed,e);
+            throw SSException.get(EmenuException.ListTasteFailed,e);
         }
     }
 
     @Override
     public int countAll() throws SSException {
-        return 0;
+        Integer count = 0;
+        try {
+            count = tasteMapper.countAll();
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListTasteFailed,e);
+        }
+        return count == null?0:count;
     }
 
     /**

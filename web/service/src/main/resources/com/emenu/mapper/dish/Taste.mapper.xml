@@ -3,7 +3,7 @@
 <mapper namespace="com.emenu.mapper.dish.TasteMapper">
 
     <select id ="listAll" resultMap="pw.Taste">
-        SELECT `id`,`name`,`charge` ,`created_time`,`last_modified_time`
+        SELECT `id`,`name`,`related_charge` ,`created_time`,`last_modified_time`
         FROM `t_taste`
         LIMIT #{offset},#{pageSize}
     </select>
