@@ -13,7 +13,7 @@
         `related_charge`
         FROM `t_remark`
         WHERE `status` = 1
-        ORDER BY `weight` DESC, `id` ASC
+        ORDER BY `weight` ASC, `id` ASC
     </select>
 
     <select id="listByRemarkTagId" resultMap="pw.Remark">
@@ -26,7 +26,7 @@
         `related_charge`
         FROM `t_remark`
         WHERE `remark_tag_id` = #{remarkTagId} AND `status` = 1
-        ORDER BY `weight` DESC, `id` ASC
+        ORDER BY `weight` ASC, `id` ASC
     </select>
 
     <select id="countByName" resultType="int">

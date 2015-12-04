@@ -17,7 +17,7 @@
         FROM `t_table`
         INNER JOIN `t_area` ON t_area.`id` = `area_id`
         WHERE t_table.`status` != 6
-        ORDER BY t_area.`weight` DESC, `area_id` ASC, t_table.`id` ASC
+        ORDER BY t_area.`weight` ASC, `area_id` ASC, t_table.`id` ASC
     </select>
 
     <select id="listByAreaId" resultMap="pw.Table">

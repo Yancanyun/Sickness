@@ -37,7 +37,7 @@
     <div class="col-sm-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h4>当前选择上级分类：&nbsp;<span class="J_bigTagInfo">${firstBigTag.name}</span></h4>
+                <h4>当前选择上级分类：<span class="J_bigTagInfo">${firstBigTag.name}</span></h4>
             </div>
             <div class="panel-body clearfix">
                 <div class="row">

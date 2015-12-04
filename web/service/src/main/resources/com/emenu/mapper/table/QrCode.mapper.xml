@@ -5,11 +5,13 @@
 <mapper namespace="com.emenu.mapper.table.QrCodeMapper">
     <select id="listByAreaId" resultType="QrCodeDto">
         SELECT
-            `area_id` AS areaId,
-            `name` AS tableName,
-            `qrcode_path` AS qrCodePath
+            t_table.`area_id`,
+            t_table.`name`,
+            t_table.`qrcode_path
         FROM `t_table`
+        INNER JOIN `t_area` ON t_area.`id` = `area_id`
         WHERE `area_id` = #{areaId} AND `status` != 6
+        ORDER BY t_area.`weight` ASC, `area_id` ASC
     </select>
 
     <select id="listAll" resultType="QrCodeDto">
