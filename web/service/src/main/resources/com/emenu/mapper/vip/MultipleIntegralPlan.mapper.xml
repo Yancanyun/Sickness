@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.vip.MultipleIntegralPlanMapper">
+
+    <select id="listAll" resultMap="pw.MultipleIntegralPlan">
+        SELECT `id`,`name`,
+        `integral_multiples` AS integralMultiples,
+        `start_time` AS startTime,
+        `end_time` AS endTime,
+        `status`
+        FROM `t_multiple_integral_plan`
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE `t_multiple_integral_plan`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+
+    <select id="listEnabledPlan" resultMap="pw.MultipleIntegralPlan">
+        SELECT `id`,`name`,
+        `integral_multiples` AS integralMultiples,
+        `start_time` AS startTime,
+        `end_time` AS endTime,
+        `status`
+        FROM `t_multiple_integral_plan`
+        WHERE `status` = 1
+    </select>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_multiple_integral_plan`
+        WHERE `name` = #{name}
+    </select>
+</mapper>

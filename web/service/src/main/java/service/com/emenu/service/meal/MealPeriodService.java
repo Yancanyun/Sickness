@@ -42,6 +42,7 @@ public interface MealPeriodService {
 
     /**
      * 根据id修改启用状态
+     * 0-停用 1-启用
      *
      * @param id
      * @param status

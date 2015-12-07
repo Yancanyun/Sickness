@@ -342,6 +342,16 @@ public enum EmenuException implements IBizExceptionMes {
     //
     //
     //DeleteVipDishPriceFail("删除会员价失败",8026)
+
+    QueryMultipleIntegralPlanFail("查询多倍积分方案失败",8040),
+    UpdateMultipleIntegralPlanFail("修改多倍积分方案失败",8041),
+    DeleteMultipleIntegralPlanFail("删除多倍积分方案失败",8042),
+    InsertMultipleIntegralPlanFail("新增多倍积分方案失败",8043),
+    MultipleIntegralPlanNameNotNull("积分方案名称不能为空",8044),
+    MultipleIntegralPlanStatusNotNull("积分方案启用状态不能为空",8045),
+    IntegralMultiplesNotNull("积分方案倍数不能为空",8046),
+    MultipleIntegralPlanNameExist("积分方案名称已存在",8047),
+    MultipleIntegralPlanIdIllegal("Id为空或小于等于0",8048)
     ;
 
 
