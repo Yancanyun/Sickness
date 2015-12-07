@@ -40,6 +40,7 @@ public class DishSearchDto {
     // 排序字段
     private String orderBy;
 
+    // 排序列名
     private String orderByColumn;
 
     // 排序方式(0-降序,1-升序)

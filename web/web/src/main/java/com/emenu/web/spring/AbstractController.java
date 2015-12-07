@@ -4,11 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
-import com.emenu.service.dish.DishImgService;
-import com.emenu.service.dish.DishService;
-import com.emenu.service.dish.TasteService;
+import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
-import com.emenu.service.dish.UnitService;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
@@ -352,4 +349,7 @@ public class AbstractController extends Base {
     @Qualifier("storageSettlementService")
     protected static StorageSettlementService storageSettlementService;
 
+    @StaticAutoWire
+    @Qualifier("dishTagService")
+    protected static DishTagService dishTagService;
  }

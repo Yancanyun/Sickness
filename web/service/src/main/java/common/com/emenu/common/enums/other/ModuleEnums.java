@@ -115,6 +115,11 @@ public enum ModuleEnums {
     AdminDishTagNew("Admin:DishManagement:Tag:New"),
     AdminDishTagUpdate("Admin:DishManagement:Tag:Update"),
     AdminDishTagDel("Admin:DishManagement:Tag:Del"),
+    // 本店特色
+    AdminDishFeature("Admin:DishManagement:Feature"),
+    AdminDishFeatureList("Admin:DishManagement:Feature:List"),
+    AdminDishFeatureNew("Admin:DishManagement:Feature:New"),
+    AdminDishFeatureDel("Admin:DishManagement:Feature:Del"),
 
 
     //用户管理

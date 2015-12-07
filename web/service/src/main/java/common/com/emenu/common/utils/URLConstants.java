@@ -70,6 +70,8 @@ public final class URLConstants {
     // 菜品分类管理
     public static final String ADMIN_DISH_TAG = "admin/dish/tag";
 
+    public static final String ADMIN_DISH_FEATURE_URL = "admin/dish/feature";
+
     // 供应商管理
     public static final String ADMIN_STORAGE_SUPPLIER_URL = "admin/storage/supplier";
 

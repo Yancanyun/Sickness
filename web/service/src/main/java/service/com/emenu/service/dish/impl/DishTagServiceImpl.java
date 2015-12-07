@@ -1,9 +1,13 @@
 package com.emenu.service.dish.impl;
 
+import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.dto.dish.DishTagDto;
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishTag;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishTagMapper;
+import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTagService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -13,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 菜品-分类Service实现
@@ -27,6 +30,9 @@ public class DishTagServiceImpl implements DishTagService {
 
     @Autowired
     private DishTagMapper dishTagMapper;
+
+    @Autowired
+    private DishService dishService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -59,15 +65,16 @@ public class DishTagServiceImpl implements DishTagService {
     }
 
     @Override
-    public void newByTagId(int tagId, List<Integer> dishIdList) throws SSException {
+    public void newByTagId(int tagId, Integer[] dishIds) throws SSException {
         try {
             Assert.lessOrEqualZero(tagId, EmenuException.TagIdError);
-            if (Assert.isEmpty(dishIdList)) {
+            if (Assert.isNull(dishIds)
+                    || dishIds.length < 0) {
                 return ;
             }
 
             List<DishTag> dishTagList = new ArrayList<DishTag>();
-            for (Integer dishId : dishIdList) {
+            for (Integer dishId : dishIds) {
                 DishTag dishTag = new DishTag();
                 dishTag.setDishId(dishId);
                 dishTag.setTagId(tagId);
@@ -94,6 +101,64 @@ public class DishTagServiceImpl implements DishTagService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishTagDeleteFailed, e);
         }
+    }
+
+    @Override
+    public List<Dish> listDishByTagId(int tagId) throws SSException {
+        List<Dish> dishList = Collections.emptyList();
+        try {
+            List<Integer> dishIdList = dishTagMapper.listDishIdByTagId(tagId);
+            DishSearchDto searchDto = new DishSearchDto();
+            searchDto.setDishIdList(dishIdList);
+             dishList = dishService.listBySearchDto(searchDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishTagQueryFiled, e);
+        }
+        return dishList;
+    }
+
+    @Override
+    public List<DishTagDto> listDtoByTagId(int tagId) throws SSException {
+        List<DishTagDto> list = Collections.emptyList();
+        try {
+            list = dishTagMapper.listDtoByTagId(tagId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishTagQueryFiled, e);
+        }
+        return list;
+    }
+
+    @Override
+    public List<Dish> listNotSelectedByTagId(int tagId, List<Integer> searchTagIdList) throws SSException {
+        List<Dish> dishList = Collections.emptyList();
+        try {
+            // 先查询分类下已有的菜品
+            List<Integer> selectedDishIdList = dishTagMapper.listDishIdByTagId(tagId);
+
+            // 根据搜索分类查询菜品
+            DishSearchDto searchDto = new DishSearchDto();
+            searchDto.setTagIdList(searchTagIdList);
+            dishList = dishService.listBySearchDto(searchDto);
+
+            // 去掉已有的菜品
+            Map<Integer, Boolean> dishIdMap = new HashMap<Integer, Boolean>();
+            for (Integer dishId : selectedDishIdList) {
+                dishIdMap.put(dishId, true);
+            }
+            Iterator<Dish> dishIterator = dishList.iterator();
+            while (dishIterator.hasNext()) {
+                Dish dish = dishIterator.next();
+                if (dishIdMap.containsKey(dish.getId())) {
+                    dishIterator.remove();
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishTagQueryFiled, e);
+        }
+        return dishList;
     }
 
     private boolean checkBeforeSave(DishTag dishTag) throws SSException {

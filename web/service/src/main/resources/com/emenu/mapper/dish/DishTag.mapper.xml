@@ -5,9 +5,33 @@
 <mapper namespace="com.emenu.mapper.dish.DishTagMapper">
 
     <update id="updateFirstTag">
-        update `t_dish_tag`
+        UPDATE `t_dish_tag`
         SET	`tag_id` = #{tagId}
         WHERE `dish_id` = #{dishId}
                AND `is_first_tag` = 1
-        </update>
+    </update>
+
+    <select id="listDishIdByTagId" resultType="int">
+        SELECT
+            `dish_id`
+        FROM `t_dish_tag`
+        WHERE `tag_id` = #{tagId}
+    </select>
+
+    <select id="listDtoByTagId" resultType="DishTagDto">
+        SELECT
+            dishTag.`id` AS id,
+            dishTag.`tag_id` AS tagId,
+            dishTag.`dish_id` AS dishId,
+            dish.`dish_number` AS dishNumber,
+            dish.`assistant_code` AS dishAssistantCode,
+            dish.`name` AS dishName,
+            unit.`name` AS dishUnitName,
+            dish.`price` AS dishPrice,
+            dish.`sale_price` AS dishSalePrice,
+            dish.`status` AS dishStatus
+        FROM `t_dish_tag` dishTag
+        LEFT JOIN `t_dish` dish ON dishTag.`dish_id` = dish.`id`
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+    </select>
 </mapper>

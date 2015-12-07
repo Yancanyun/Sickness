@@ -1,5 +1,7 @@
 package com.emenu.service.dish;
 
+import com.emenu.common.dto.dish.DishTagDto;
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishTag;
 import com.pandawork.core.common.exception.SSException;
 
@@ -34,12 +36,13 @@ public interface DishTagService {
     /**
      * 根据tagId添加
      *
+     * @param dishIds
      * @param tagId
-     * @param dishIdList
+     * @param dishIds
      * @throws SSException
      */
     public void newByTagId(int tagId,
-                           List<Integer> dishIdList) throws SSException;
+                           Integer[] dishIds) throws SSException;
 
     /**
      * 根据id删除
@@ -48,4 +51,32 @@ public interface DishTagService {
      * @throws SSException
      */
     public void delById(int id) throws SSException;
+
+    /**
+     * 根据tagId获取菜品列表
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Dish> listDishByTagId(int tagId) throws SSException;
+
+    /**
+     * 根据tagId获取dto
+     *
+     * @param tagId
+     * @return
+     * @throws SSException
+     */
+    public List<DishTagDto> listDtoByTagId(int tagId) throws SSException;
+
+    /**
+     * 获取根据分类搜索出来的不在tagId分类下的菜品
+     *
+     * @param tagId
+     * @param searchTagIdList
+     * @return
+     * @throws SSException
+     */
+    public List<Dish> listNotSelectedByTagId(int tagId,
+                                             List<Integer> searchTagIdList) throws SSException;
 }

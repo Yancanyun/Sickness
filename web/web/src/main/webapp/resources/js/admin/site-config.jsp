@@ -73,8 +73,8 @@
                     at: 'bc' //options: tl,tc,tr, rt,rc,rb, bl,bc,br,lt,lc,lb
                 }
             },
-            skylo:{
-                themeUrl: site.staticWebsite + 'tool/base-widget/css/skylo.css'
+            select:{
+                themeUrl: site.staticWebsite + 'tool/base-widget/css/select.css'
             },
             // 文件上传swf路径
             upload: {

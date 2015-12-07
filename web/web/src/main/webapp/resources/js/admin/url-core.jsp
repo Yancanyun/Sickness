@@ -11,7 +11,7 @@
     var
     site = {
         website: '${website}', //站点地址
-        staticWebsite: '${website}', // 前端服务器地址
+        staticWebsite: '${staticWebsite}', // 前端服务器地址
         puiWebsite: '${staticWebsite}tool/pui2/'
     };
 
@@ -109,6 +109,11 @@
 
             //结算中心管理
             ['getSettlementList', site.website + 'admin/storage/settlement/supplier/ajax/list', 'get', '获取结算列表'],
+
+            // 库存单据管理
+            ['getMoney', site.website + '/test/ajax/bill', 'get', '获取当前物品小计'],
+            ['delStoreBill', site.staticWebsite + 'mock/admin/get-bill.json', 'get', '删除库存单据'],
+            ['addStoreBill', site.website + '/test/ajax', 'post', '添加库存单据']
         ],
         // 菜品管理
         DishManagement: [
@@ -130,6 +135,21 @@
             ['editClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'put', '编辑菜品分类'],
             ['delClassify', site.staticWebsite + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品分类'],
             ['search', site.staticWebsite + 'admin/dish/tag/ajax/search', 'get', '搜索菜品'],
+
+            //今日特价
+            ['revoteSpecials', site.website + 'admin/dish/feature/ajax/&{id}', 'delete', '撤销今日特价菜品'],
+            ['selectDishClassifyOfSpecials', site.website + 'admin/dish/feature/dish/ajax/list', 'get','选择今日特价中的菜品分类'],
+            ['sendSelectedDishOfSpecials',site.website + 'admin/dish/feature/ajax', 'post','发送今日特价中的被选中的菜品'],
+
+            //销量排行
+            ['revoteSales', site.staticWebsite + 'admin/dish/feature/ajax/&{id}', 'get', '撤销销量排行菜品'],
+            ['selectDishClassifyOfSales', site.staticWebsite + 'admin/dish/feature/dish/ajax/list', 'get','选择销量排行中的菜品分类'],
+            ['sendSelectedDishOfSales',site.staticWebsite + 'admin/dish/feature/ajax', 'get','发送销量排行中的被选中的菜品'],
+
+            //本店特色
+            ['revoteSpecialities', site.website + 'admin/dish/feature/ajax/&{id}', 'delete', '撤销本店特色菜品'],
+            ['selectDishClassifyOfSpecialities', site.website + 'admin/dish/feature/dish/ajax/list', 'get','选择本店特色中的菜品分类'],
+            ['sendSelectedDishOfSpecialities',site.website + 'admin/dish/feature/ajax', 'post','发送本店特色中的被选中的菜品'],
 
             // 菜品口味
             ['deleteTaste', site.staticWebsite + 'admin/dish/taste/ajax/&{id}', 'delete', '删除菜品口味'],

@@ -16,7 +16,11 @@ public enum TagEnum {
     Goods(4, "商品"),
     Drinks(5, "酒水"),
     Package(6 , "套餐"),
-    Others(7, "其他");
+    Others(7, "其他"),
+    Feature(8, "本店特色"),
+    TodayCheap(9, "今日特价"),
+    SaleRanking(10, "销量排行")
+    ;
 
     private Integer id;
     private String name;
