@@ -100,4 +100,9 @@ public final class URLConstants {
     //会员价管理
     public static final String ADMIN_VIP_VIP_DISH_PRICE_URL = "admin/vip/price";
 
+
+    // 服务员模块
+    // 服务员开台
+    public static final String WAITER_TABLE_OPEN_URL = "waiter/table/open";
+
 }
