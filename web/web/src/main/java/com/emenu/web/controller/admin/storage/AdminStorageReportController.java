@@ -39,7 +39,7 @@ public class AdminStorageReportController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = {"tolist"}, method = RequestMethod.GET)
     public String toList(){
-        return "admin/party/storage/report/list_home";
+        return "admin/storage/report/list_home";
     }
 
 
@@ -53,7 +53,6 @@ public class AdminStorageReportController extends AbstractController {
     @ResponseBody
     public JSON ajaxList(@PathVariable("curPage") Integer curPage,
                          @RequestParam("pageSize") Integer pageSize) {
-
         int dataCount = 0;
         try {
             dataCount = storageReportService.count();
@@ -61,7 +60,6 @@ public class AdminStorageReportController extends AbstractController {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         try {
             storageReportDtoList = storageReportService.listReportDtoByPage(curPage, pageSize);
@@ -70,12 +68,23 @@ public class AdminStorageReportController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
         JSONArray jsonArray = new JSONArray();
+        try{
+            for (StorageReportDto storageReportDto : storageReportDtoList) {
+                JSONObject jsonObject = new JSONObject();
+                String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
+                String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
 
-       for (StorageReportDto storageReportDto : storageReportDtoList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("storageReport", storageReportDto.getStorageReport());
-            jsonObject.put("storageReportItemList", storageReportDto.getStorageReportItemList());
-            jsonArray.add(jsonObject);
+                jsonObject.put("storageReport", storageReportDto.getStorageReport());
+                jsonObject.put("deportName",deportName);
+                jsonObject.put("handlerName",handlerName);
+                jsonObject.put("createdName",createdName);
+                jsonObject.put("storageReportItemList", storageReportDto.getStorageReportItemList());
+                jsonArray.add(jsonObject);
+            }
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
         }
         return sendJsonArray(jsonArray, dataCount, pageSize);
     }
@@ -85,8 +94,6 @@ public class AdminStorageReportController extends AbstractController {
                                       @RequestParam("storageReportItemList")List<StorageReportItem> storageReportItemList,
                                       RedirectAttributes redirectAttributes){
         StorageReportDto storageReportDto = new StorageReportDto();
-
-
         try {
             //生成单据编号
             String serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
@@ -94,9 +101,7 @@ public class AdminStorageReportController extends AbstractController {
             //数据存入Dto
             storageReportDto.setStorageReport(storageReport);
             storageReportDto.setStorageReportItemList(storageReportItemList);
-
             storageReportService.newReportDto(storageReportDto);
-
             String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
             redirectAttributes.addFlashAttribute("msg","编辑成功");
             return "redirect:" + successUrl;
@@ -135,9 +140,7 @@ public class AdminStorageReportController extends AbstractController {
     public String update(@RequestParam("storageReportDto")StorageReportDto storageReportDto,
                          RedirectAttributes redirectAttributes){
         try{
-
             storageReportService.updateReportDto(storageReportDto);
-
             String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
             //返回添加成功信息
             redirectAttributes.addFlashAttribute("msg", "编辑成功");
@@ -146,9 +149,7 @@ public class AdminStorageReportController extends AbstractController {
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
-
             int reportId = storageReportDto.getStorageReport().getId();
-
             String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/toupdate/"+"{"+String .valueOf(reportId)+"}";
             //返回添加失败信息
             redirectAttributes.addFlashAttribute("msg", "编辑失败");

@@ -1,8 +1,8 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!--编辑/添加时,对话框模板-->
 <script type="text/template" id="dlg">
     <form class="form-horizontal J_addForm" action="" method="">
-        <input type="hidden" name="id" value="&{id}">
+        <input type="hidden" name="reportId" value="&{reportId}">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
@@ -16,7 +16,7 @@
                 <div class="form-group">
                     <label class="col-sm-5 control-label no-padding-right">日期</label>
                     <div class="col-sm-6">
-                        <p class="form-control-static J_date">&{date}</p>
+                        <p class="form-control-static J_date">&{createdTime}</p>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right"><span class="requires">*</span>单价</label>
             <div class="col-sm-6 ">
-                <input class="form-control w180 J_price" type="text" disabled="disabled" data-valid-rule="isFloat" data-valid-tip="请选择物品|没有选择物品，请重新选择" name="price" value="&{price}">
+                <input class="form-control w180 J_price" type="text" data-valid-rule="isFloat" data-valid-tip="请输入单价|单价有误，请重新输入" name="price" value="&{price}">
             </div>
         </div>
         <div class="form-group">
@@ -77,7 +77,6 @@
                 <thead>
                 <tr>
                     <th><input type="checkbox" class="J_selectAll1"></th>
-                    <th>编号</th>
                     <th>名称</th>
                     <th>数量</th>
                     <th>成本价</th>
@@ -90,6 +89,89 @@
         </div>
     </form>
 </script>
+<!--查看时,对话框模板-->
+<script type="text/template" id="viewDlg">
+    <form class="form-horizontal" action="" method="">
+        <input type="hidden" name="reportId" value="&{reportId}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">单据编号</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static J_serialNumber">&{serialNumber}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">日期</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static J_date">&{createdTime}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label"><span class="requires">*</span>存放点</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">&{depotName}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label"><span class="requires">*</span>经手人</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">&{handlerName}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label"><span class="requires">*</span>操作人</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">&{createdName}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group money">
+                    <label class="col-sm-5 control-label">金额</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">￥<span class="J_totalMoney">&{money}</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>数量</th>
+                            <th>成本价</th>
+                            <th>成本金额</th>
+                            <th>备注</th>
+                        </tr>
+                        </thead>
+                        <tbody class="J_billList"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<!--查看时,物品项模板-->
+<script type="text/template" id="viewBillTpl">
+    <tr>
+        <td>&{itemName}</td>
+        <td>&{quantity}</td>
+        <td>&{price}</td>
+        <td class="J_countMoney">&{count}</td>
+        <td>&{comment}</td>
+    </tr>
+</script>
+<!--物品项模板-->
 <script type="text/template" id="billTpl">
     <tr>
         <input type="hidden" name="itemId" value="&{itemId}">
@@ -100,11 +182,10 @@
         <td>
             <input type="checkbox" class="J_check">
         </td>
-        <td>&{serialNumber}</td>
-        <td>&{name}</td>
+        <td>&{itemName}</td>
         <td>&{quantity}</td>
         <td>&{price}</td>
-        <td class="J_countMoney">&{money}</td>
+        <td class="J_countMoney">&{count}</td>
         <td>&{comment}</td>
     </tr>
 </script>
@@ -120,6 +201,20 @@
         <input type="hidden" name="money" value="&{it.money}"/>
         <input type="hidden" name="createdPartyId" value="&{it.createdPartyId}"/>
         <input type="hidden" name="status" value="&{it.status}"/>
+        <input type="hidden" name="depotName" value="&{it.depotName}"/>
+        <input type="hidden" name="handlerName" value="&{it.handlerName}"/>
+        <input type="hidden" name="createdName" value="&{it.createdName}"/>
+        <td class="J_reportItem hidden">
+            {@each it.reportItem as item}
+            <p data-item-id="&{item.itemId}">
+                <input type="hidden" value="&{item.quantity}" name="quantity">
+                <input type="hidden" value="&{item.price}" name="price">
+                <input type="hidden" value="&{item.count}" name="count">
+                <input type="hidden" value="&{item.comment}" name="comment">
+                <input type="hidden" value="&{item.itemName}" name="itemName">
+            </p>
+            {@/each}
+        </td>
         <td>
             {@if it.type == 1}入库单{@/if}
             {@if it.type == 2}出库单{@/if}
@@ -144,6 +239,7 @@
     </tr>
     {@/each}
 </script>
+
 <script type="text/javascript">
     KISSY.ready(function(S){
         S.use('page/store-management/store-bill-management', function(){
@@ -151,7 +247,7 @@
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
-                url: 'http://static.emenu2.net/mock/admin/store-management-list.json',
+                url: '/mock/admin/store-management-list.json',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
                     return url;
