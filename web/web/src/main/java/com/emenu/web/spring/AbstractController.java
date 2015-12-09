@@ -26,6 +26,7 @@ import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
+import com.emenu.service.vip.MultipleIntegralPlanService;
 import com.emenu.service.vip.VipDishPricePlanService;
 import com.emenu.service.vip.VipDishPriceService;
 import com.pandawork.core.common.exception.SSException;
@@ -352,4 +353,9 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("dishTagService")
     protected static DishTagService dishTagService;
+
+    //多分积分方案
+    @StaticAutoWire
+    @Qualifier("multipleIntegralPlanService")
+    protected static MultipleIntegralPlanService multipleIntegralPlanService;
  }

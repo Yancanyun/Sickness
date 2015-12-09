@@ -1,6 +1,7 @@
 package com.emenu.mapper.vip;
 
 import com.emenu.common.entity.vip.MultipleIntegralPlan;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface MultipleIntegralPlanMapper {
      * @param status
      * @throws Exception
      */
-    public void updateStatusById(int id, int status) throws Exception;
+    public void updateStatusById(@Param("id") int id, @Param("status") int status) throws Exception;
 
     /**
      * 列出启用的积分方案

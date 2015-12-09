@@ -62,7 +62,15 @@ public class MultipleIntegralPlanServiceImpl implements MultipleIntegralPlanServ
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateById(MultipleIntegralPlan multipleIntegralPlan) throws SSException {
-
+        if(!checkBeforeSave(multipleIntegralPlan)){
+            return;
+        }
+        try {
+            commonDao.update(multipleIntegralPlan);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateMultipleIntegralPlanFail, e);
+        }
     }
 
     @Override
@@ -103,6 +111,24 @@ public class MultipleIntegralPlanServiceImpl implements MultipleIntegralPlanServ
         return list;
     }
 
+    @Override
+    public MultipleIntegralPlan queryById(int id) throws SSException {
+        Assert.lessOrEqualZero(id, EmenuException.MultipleIntegralPlanIdIllegal);
+        try {
+            return commonDao.queryById(MultipleIntegralPlan.class, id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryMultipleIntegralPlanFail, e);
+        }
+    }
+
+    /**
+     * 检查实体及其关键字段
+     *
+     * @param multipleIntegralPlan
+     * @return
+     * @throws SSException
+     */
     private boolean checkBeforeSave(MultipleIntegralPlan multipleIntegralPlan) throws SSException {
         if (Assert.isNull(multipleIntegralPlan)){
             return false;
@@ -111,14 +137,29 @@ public class MultipleIntegralPlanServiceImpl implements MultipleIntegralPlanServ
         Assert.isNotNull(multipleIntegralPlan.getName(), EmenuException.MultipleIntegralPlanNameNotNull);
         Assert.isNotNull(MultipleIntegralPlanStatusEnums.valueOf(multipleIntegralPlan.getStatus()), EmenuException.MultipleIntegralPlanStatusNotNull);
         Assert.isNotNull(multipleIntegralPlan.getIntegralMultiples(), EmenuException.IntegralMultiplesNotNull);
-        if (checkNameExist(multipleIntegralPlan.getName())){
+
+        if (checkNameExist(multipleIntegralPlan.getName(), multipleIntegralPlan.getId())){
             throw SSException.get(EmenuException.MultipleIntegralPlanNameExist);
         }
         return true;
     }
 
-    private boolean checkNameExist(String name) throws SSException{
+    /**
+     * 判断是否重名
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    private boolean checkNameExist(String name, Integer id) throws SSException{
         int num = 0;
+        MultipleIntegralPlan multipleIntegralPlan = new MultipleIntegralPlan();
+        if (!Assert.isNull(id) && !Assert.lessOrEqualZero(id)){
+            multipleIntegralPlan = queryById(id);
+            if (name.equals(multipleIntegralPlan.getName())){
+                return false;
+            }
+        }
         try {
             num = multipleIntegralPlanMapper.countByName(name);
         } catch (Exception e) {

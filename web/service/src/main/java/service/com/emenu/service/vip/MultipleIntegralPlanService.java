@@ -65,4 +65,13 @@ public interface MultipleIntegralPlanService {
      * @throws SSException
      */
     public List<MultipleIntegralPlan> listEnabledPlan() throws SSException;
+
+    /**
+     * 根据id查询积分方案
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public MultipleIntegralPlan queryById(int id) throws SSException;
 }

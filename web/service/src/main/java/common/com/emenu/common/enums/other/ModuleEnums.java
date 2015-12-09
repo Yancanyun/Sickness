@@ -193,6 +193,12 @@ public enum ModuleEnums {
     AdminVipVipDishPricePlanUpdate("Admin:Vip:vipDishPricePlan:Update"),
     AdminVipVipDishPricePlanDelete("Admin:Vip:vipDishPricePlan:Delete"),
 
+    //多倍积分方案管理
+    AdminVipMultipleIntegralPlan("Admin:Vip:MultipleIntegralPlan"),
+    AdminVipMultipleIntegralPlanList("Admin:Vip:MultipleIntegralPlan:List"),
+    AdminVipMultipleIntegralPlanNew("Admin:Vip:MultipleIntegralPlan:New"),
+    AdminVipMultipleIntegralPlanUpdate("Admin:Vip:MultipleIntegralPlan:Update"),
+    AdminVipMultipleIntegralPlanDelete("Admin:Vip:MultipleIntegralPlan:Delete"),
 
     ;
 
