@@ -4,6 +4,14 @@
     <select id="queryByPartyId" parameterType="int" resultType="Integer">
         SELECT `table_id` As `tableId`
         FROM t_party_employee_waiter_table
-        WHERE `party_Id` = #{partyId}
+        WHERE `party_id` = #{partyId}
+    </select>
+
+    <select id="queryByPartyIdAndStatus" parameterType="int" resultType="Integer">
+        SELECT t_party_employee_waiter_table.`table_id` AS `tableId`
+        FROM t_party_employee_waiter_table, t_table
+        WHERE t_party_employee_waiter_table.`table_id` = t_table.id
+          AND `party_id` = #{partyId}
+          AND t_table.`status` = #{status}
     </select>
 </mapper>

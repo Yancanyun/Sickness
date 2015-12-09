@@ -104,6 +104,10 @@ public final class URLConstants {
     // 服务员模块
     // 服务员开台
     public static final String WAITER_TABLE_OPEN_URL = "waiter/table/open";
+    // 服务员换台
+    public static final String WAITER_TABLE_CHANGE_URL = "waiter/table/change";
+    // 服务员清台
+    public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
 
     //多分积分方案
     public static final String ADMIN_VIP_MULTIPLE_INTEGRAL_PLAN_URL = "admin/vip/multiple/integral/plan";

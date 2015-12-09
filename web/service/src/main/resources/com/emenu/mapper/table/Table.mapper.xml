@@ -13,7 +13,8 @@
             t_table.`table_fee`,
             t_table.`min_cost`,
             t_table.`status`,
-            t_table.`qrcode_path`
+            t_table.`qrcode_path`,
+            t_table.`open_time`
         FROM `t_table`
         INNER JOIN `t_area` ON t_area.`id` = `area_id`
         WHERE t_table.`status` != 6
@@ -30,7 +31,8 @@
             `table_fee`,
             `min_cost`,
             `status`,
-            `qrcode_path`
+            `qrcode_path`,
+            t_table.`open_time`
         FROM `t_table`
         WHERE `area_id` = #{areaId} AND `status` != 6
         ORDER BY `area_id`, `id`
@@ -46,7 +48,8 @@
             `table_fee`,
             `min_cost`,
             `status`,
-            `qrcode_path`
+            `qrcode_path`,
+            `open_time`
         FROM `t_table`
         WHERE `status` = #{status}
         ORDER BY `area_id`, `id`
@@ -62,7 +65,8 @@
             `table_fee`,
             `min_cost`,
             `status`,
-            `qrcode_path`
+            `qrcode_path`,
+            `open_time`
         FROM `t_table`
         WHERE `area_id` = #{areaId} AND `status` = #{status}
         ORDER BY `area_id`, `id`
@@ -95,6 +99,12 @@
     <update id="updateQrCode">
         UPDATE `t_table`
         SET `qrcode_path` = #{qrCodePath}
+        WHERE `id` = #{id}
+    </update>
+
+    <update id="updateOpenTime">
+        UPDATE `t_table`
+        SET `open_time` = #{openTime}
         WHERE `id` = #{id}
     </update>
 </mapper>

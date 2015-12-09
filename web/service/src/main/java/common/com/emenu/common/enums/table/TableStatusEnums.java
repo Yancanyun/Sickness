@@ -13,7 +13,7 @@ public enum TableStatusEnums {
     Disabled(0, "停用"),
     Enabled(1, "可用"),
     Checkouted(2, "占用已结账"),
-    Unchekouted(3, "占用未结账"),
+    Uncheckouted(3, "占用未结账"),
     Merged(4, "已并桌"),
     Booked(5, "已预订"),
     Deleted(6, "已删除");

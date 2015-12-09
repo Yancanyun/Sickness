@@ -1,6 +1,7 @@
 package com.emenu.service.table;
 
 import com.emenu.common.dto.table.AreaDto;
+import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.WaiterTable;
 import com.pandawork.core.common.exception.SSException;
 
@@ -36,6 +37,24 @@ public interface WaiterTableService {
      * @throws SSException
      */
     public List<AreaDto> queryAreaDtoByPartyId(int partyId) throws SSException;
+
+    /**
+     * 根据状态查询服务员负责的餐桌
+     * @param partyId
+     * @param status
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> queryByPartyIdAndStatus(int partyId, int status) throws SSException;
+
+    /**
+     * 根据状态查询服务员负责的餐桌
+     * @param partyId
+     * @param status
+     * @return
+     * @throws SSException
+     */
+    public List<AreaDto> queryAreaDtoByPartyIdAndStatus(int partyId, int status) throws SSException;
 
     /**
      * 查询所有区域和餐桌

@@ -84,7 +84,7 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxList(@RequestParam Integer id) {
+    public JSONObject ajaxList(@RequestParam("id") Integer id) {
         try {
             //将该分类下的所有子分类存为一个List
             List<RemarkTag> childTagList = remarkTagService.listByParentId(id);
@@ -120,14 +120,6 @@ public class AdminRemarkController extends AbstractController {
                 jsonArray.add(jsonObject);
             }
 
-            //若没有子分类，则只传大类ID和大类Name
-//            if(childTagList.size() == 0) {
-//                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("bigTagId", id);
-//                jsonObject.put("bigTagName", remarkTagService.queryById(id).getName());
-//                jsonArray.add(jsonObject);
-//            }
-
             //不分页，故dataCount填0
             return sendJsonArray(jsonArray, 0);
         } catch (SSException e) {
@@ -145,7 +137,8 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkNew)
     @RequestMapping(value = "ajax/remark/tag", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewChildRemarkTag(@RequestParam Integer pId, @RequestParam String name) {
+    public JSONObject ajaxNewChildRemarkTag(@RequestParam("pId") Integer pId,
+                                            @RequestParam("name") String name) {
         try {
             RemarkTag remarkTag = new RemarkTag();
             remarkTag.setpId(pId);
@@ -175,10 +168,10 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkNew)
     @RequestMapping(value = "ajax/remark", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewRemark(@RequestParam Integer smallTagId,
-                                    @RequestParam String name,
-                                    @RequestParam Integer weight,
-                                    @RequestParam Integer isCommon,
+    public JSONObject ajaxNewRemark(@RequestParam("smallTagId") Integer smallTagId,
+                                    @RequestParam("name") String name,
+                                    @RequestParam("weight") Integer weight,
+                                    @RequestParam("isCommon") Integer isCommon,
                                     @RequestParam(required = false) BigDecimal relatedCharge) {
         try {
             Remark remark = new Remark();
@@ -211,7 +204,8 @@ public class AdminRemarkController extends AbstractController {
     @Module(ModuleEnums.AdminRestaurantRemarkUpdate)
     @RequestMapping(value = "ajax/remark/tag/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateChildRemarkTag(@PathVariable("id") Integer id, @RequestParam String name) {
+    public JSONObject ajaxUpdateChildRemarkTag(@PathVariable("id") Integer id,
+                                               @RequestParam("name") String name) {
         try {
             RemarkTag remarkTag = new RemarkTag();
             remarkTag.setId(id);
@@ -238,9 +232,9 @@ public class AdminRemarkController extends AbstractController {
     @RequestMapping(value = "ajax/remark/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateRemark(@PathVariable("id") Integer id,
-                                       @RequestParam String name,
-                                       @RequestParam Integer weight,
-                                       @RequestParam Integer isCommon,
+                                       @RequestParam("name") String name,
+                                       @RequestParam("weight") Integer weight,
+                                       @RequestParam("isCommon") Integer isCommon,
                                        @RequestParam(required = false) BigDecimal relatedCharge) {
         try {
             Remark remark = new Remark();

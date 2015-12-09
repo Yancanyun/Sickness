@@ -6,6 +6,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -135,7 +136,15 @@ public interface TableService {
     public void updateTable(Integer id, TableDto tableDto) throws SSException;
 
     /**
-     * 修改餐台二维码信息
+     * 强制修改餐台
+     * @param id
+     * @param tableDto
+     * @throws SSException
+     */
+    public void forceUpdateTable(Integer id, TableDto tableDto) throws SSException;
+
+    /**
+     * 修改餐台二维码
      * @param id
      * @param qrCodePath
      * @throws SSException
@@ -171,4 +180,27 @@ public interface TableService {
      * @throws SSException
      */
     public int countByAreaId(int areaId) throws SSException;
+
+    /**
+     * 开台
+     * @param id
+     * @param personNum
+     * @throws SSException
+     */
+    public void openTable(int id, int personNum) throws SSException;
+
+    /**
+     * 换台
+     * @param oldTableId
+     * @param newTableId
+     * @throws SSException
+     */
+    public void changeTable(int oldTableId, int newTableId) throws SSException;
+
+    /**
+     * 清台
+     * @param id
+     * @throws SSException
+     */
+    public void cleanTable(int id) throws SSException;
 }

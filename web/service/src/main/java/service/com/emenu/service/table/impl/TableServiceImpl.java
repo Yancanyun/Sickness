@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
  * @time: 2015/10/23 10:47
  */
 @Service("tableService")
-public class TableServiceImpl implements TableService{
+public class TableServiceImpl implements TableService {
     @Autowired
     private TableMapper tableMapper;
 
@@ -59,8 +60,8 @@ public class TableServiceImpl implements TableService{
         try {
             tableList = tableMapper.listAll();
 
-            if(!tableList.isEmpty()) {
-                for(Table table : tableList) {
+            if (!tableList.isEmpty()) {
+                for (Table table : tableList) {
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
@@ -70,7 +71,7 @@ public class TableServiceImpl implements TableService{
                     List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
                     //将餐段List存入TableDto
                     List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-                    for (int mealPeriodId: mealPeriodIdList) {
+                    for (int mealPeriodId : mealPeriodIdList) {
                         MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
                         mealPeriodList.add(mealPeriod);
                     }
@@ -108,8 +109,8 @@ public class TableServiceImpl implements TableService{
         List<Table> tableList = Collections.emptyList();
         try {
             tableList = tableMapper.listByAreaId(areaId);
-            if(!tableList.isEmpty()) {
-                for(Table table : tableList) {
+            if (!tableList.isEmpty()) {
+                for (Table table : tableList) {
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
@@ -119,7 +120,7 @@ public class TableServiceImpl implements TableService{
                     List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
                     //将餐段List存入TableDto
                     List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-                    for (int mealPeriodId: mealPeriodIdList) {
+                    for (int mealPeriodId : mealPeriodIdList) {
                         MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
                         mealPeriodList.add(mealPeriod);
                     }
@@ -161,8 +162,8 @@ public class TableServiceImpl implements TableService{
         List<Table> tableList = Collections.emptyList();
         try {
             tableList = tableMapper.listByStatus(status.getId());
-            if(!tableList.isEmpty()) {
-                for(Table table : tableList) {
+            if (!tableList.isEmpty()) {
+                for (Table table : tableList) {
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
@@ -172,7 +173,7 @@ public class TableServiceImpl implements TableService{
                     List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
                     //将餐段List存入TableDto
                     List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-                    for (int mealPeriodId: mealPeriodIdList) {
+                    for (int mealPeriodId : mealPeriodIdList) {
                         MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
                         mealPeriodList.add(mealPeriod);
                     }
@@ -218,8 +219,8 @@ public class TableServiceImpl implements TableService{
         List<Table> tableList = Collections.emptyList();
         try {
             tableList = tableMapper.listByAreaIdAndStatus(areaId, status.getId());
-            if(!tableList.isEmpty()) {
-                for(Table table : tableList) {
+            if (!tableList.isEmpty()) {
+                for (Table table : tableList) {
                     TableDto tableDto = new TableDto();
                     tableDto.setTable(table);
                     tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
@@ -229,7 +230,7 @@ public class TableServiceImpl implements TableService{
                     List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
                     //将餐段List存入TableDto
                     List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-                    for (int mealPeriodId: mealPeriodIdList) {
+                    for (int mealPeriodId : mealPeriodIdList) {
                         MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
                         mealPeriodList.add(mealPeriod);
                     }
@@ -282,7 +283,7 @@ public class TableServiceImpl implements TableService{
             List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(id);
             //将餐段List存入TableDto
             List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
-            for (int mealPeriodId: mealPeriodIdList) {
+            for (int mealPeriodId : mealPeriodIdList) {
                 MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
                 mealPeriodList.add(mealPeriod);
             }
@@ -327,7 +328,7 @@ public class TableServiceImpl implements TableService{
     public void checkStatusById(int id) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
-            return ;
+            return;
         }
         try {
             int status = queryStatusById(id);
@@ -347,7 +348,7 @@ public class TableServiceImpl implements TableService{
             //从TableDto中获取Table
             Table table = tableDto.getTable();
             //从TableDto中获取MealPeriodList
-            List<MealPeriod> mealPeriodList= tableDto.getMealPeriodList();
+            List<MealPeriod> mealPeriodList = tableDto.getMealPeriodList();
 
             //判断AreaId是否存在
             if (Assert.isNull(areaService.queryById(table.getAreaId()))) {
@@ -414,24 +415,24 @@ public class TableServiceImpl implements TableService{
             //从TableDto中获取Table
             Table table = tableDto.getTable();
             //从TableDto中获取MealPeriodList
-            List<MealPeriod> mealPeriodList= tableDto.getMealPeriodList();
+            List<MealPeriod> mealPeriodList = tableDto.getMealPeriodList();
 
             int status = queryStatusById(table.getId());
             //仅当餐台状态为停用及可用时可以修改餐台
-            if((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
+            if ((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
             //判断AreaId是否合法
-            if (Assert.lessOrEqualZero(table.getAreaId())){
+            if (Assert.lessOrEqualZero(table.getAreaId())) {
                 throw SSException.get(EmenuException.AreaNotExist);
             }
             //若未传来ID，则为增加页，直接判断该名称是否在数据库中已存在
-            if(id == null && checkNameIsExist(table.getName())) {
+            if (id == null && checkNameIsExist(table.getName())) {
                 throw SSException.get(EmenuException.TableNameExist);
             }
             //若传来ID，则为编辑页
             //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
-            if (id != null && !table.getName().equals(queryById(id).getName()) && checkNameIsExist(table.getName())){
+            if (id != null && !table.getName().equals(queryById(id).getName()) && checkNameIsExist(table.getName())) {
                 throw SSException.get(EmenuException.TableNameExist);
             }
             //判断是否为空
@@ -440,6 +441,68 @@ public class TableServiceImpl implements TableService{
             }
             //更新餐台表
             commonDao.update(table);
+            //若将开台时间修改为null，则更新餐台表中的开台时间（commonDao对null不修改数据库，只能进行单独修改）
+            if (table.getOpenTime() == null) {
+                tableMapper.updateOpenTime(id, table.getOpenTime());
+            }
+
+            //若勾选了餐段，则设置餐台-餐段信息
+            if (mealPeriodList.size() != 0) {
+                List<TableMealPeriod> tableMealPeriodList = new ArrayList<TableMealPeriod>();
+                for (int i = 0; i < mealPeriodList.size(); i++) {
+                    MealPeriod mealPeriod = mealPeriodList.get(i);
+                    TableMealPeriod tableMealPeriod = new TableMealPeriod();
+                    //设置TableID
+                    tableMealPeriod.setTableId(table.getId());
+                    //设置MealPeriodID
+                    tableMealPeriod.setMealPeriodId(mealPeriod.getId());
+                    tableMealPeriodList.add(tableMealPeriod);
+                }
+                //更新餐台-餐段表
+                tableMealPeriodService.updateTableMealPeriod(tableMealPeriodList);
+            } else {
+                //若餐段被修改为空，则删除所有对应的餐台-餐段信息
+                tableMealPeriodService.delByTableId(id);
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void forceUpdateTable(Integer id, TableDto tableDto) throws SSException {
+        try {
+            //从TableDto中获取Table
+            Table table = tableDto.getTable();
+            //从TableDto中获取MealPeriodList
+            List<MealPeriod> mealPeriodList = tableDto.getMealPeriodList();
+
+            int status = queryStatusById(table.getId());
+            //判断AreaId是否合法
+            if (Assert.lessOrEqualZero(table.getAreaId())) {
+                throw SSException.get(EmenuException.AreaNotExist);
+            }
+            //若未传来ID，则为增加页，直接判断该名称是否在数据库中已存在
+            if (id == null && checkNameIsExist(table.getName())) {
+                throw SSException.get(EmenuException.TableNameExist);
+            }
+            //若传来ID，则为编辑页
+            //判断传来的Name与相应ID在数据库中对应的名称是否一致，若不一致，再判断该名称是否在数据库中已存在
+            if (id != null && !table.getName().equals(queryById(id).getName()) && checkNameIsExist(table.getName())) {
+                throw SSException.get(EmenuException.TableNameExist);
+            }
+            //判断是否为空
+            if (Assert.isNull(table.getName())) {
+                throw SSException.get(EmenuException.TableNameIsNull);
+            }
+            //更新餐台表
+            commonDao.update(table);
+            //若将开台时间修改为null，则更新餐台表中的开台时间（commonDao对null不修改数据库，只能进行单独修改）
+            if (table.getOpenTime() == null) {
+                tableMapper.updateOpenTime(id, table.getOpenTime());
+            }
 
             //若勾选了餐段，则设置餐台-餐段信息
             if (mealPeriodList.size() != 0) {
@@ -470,11 +533,11 @@ public class TableServiceImpl implements TableService{
     public void updateQrCode(int id, String qrCodePath) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
-            return ;
+            return;
         }
         //检查QrCodePath是否合法
         if (Assert.isNull(qrCodePath)) {
-            return ;
+            return;
         }
         try {
             tableMapper.updateQrCode(id, qrCodePath);
@@ -489,17 +552,17 @@ public class TableServiceImpl implements TableService{
     public void updateStatus(int id, int status) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
-            return ;
+            return;
         }
         //检查Status是否合法
         if (Assert.lessZero(status)) {
-            return ;
+            return;
         }
         try {
             //获取修改前的Status值
             int nowStatus = tableMapper.queryStatusById(id);
             //仅当修改前餐台状态为停用及可用时可以修改餐台
-            if((nowStatus != TableStatusEnums.Disabled.getId() && nowStatus != TableStatusEnums.Enabled.getId())) {
+            if ((nowStatus != TableStatusEnums.Disabled.getId() && nowStatus != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
             tableMapper.updateStatus(id, status);
@@ -514,12 +577,12 @@ public class TableServiceImpl implements TableService{
     public void delById(int id) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
-            return ;
+            return;
         }
         try {
             int status = queryStatusById(id);
             //仅当餐台状态为停用及可用时可以删除餐台
-            if((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
+            if ((status != TableStatusEnums.Disabled.getId() && status != TableStatusEnums.Enabled.getId())) {
                 throw SSException.get(EmenuException.TableHasUsed);
             }
             //将状态设为"删除"
@@ -537,14 +600,14 @@ public class TableServiceImpl implements TableService{
     public void delByIds(List<Integer> idList) throws SSException {
         //检查IDList是否合法
         if (Assert.isNull(idList)) {
-            return ;
+            return;
         }
         try {
             if (idList != null) {
                 //先判断是否全部餐台均可以删除，若不能，报错
                 for (int i : idList) {
                     if ((queryStatusById(i) != TableStatusEnums.Enabled.getId()) &&
-                        (queryStatusById(i) != TableStatusEnums.Disabled.getId())) {
+                            (queryStatusById(i) != TableStatusEnums.Disabled.getId())) {
                         throw SSException.get(EmenuException.TableHasUsed);
                     }
                 }
@@ -570,6 +633,96 @@ public class TableServiceImpl implements TableService{
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void openTable(int id, int personNum) throws SSException {
+        //检查TableID是否是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return;
+        }
+
+        try {
+            //检查是否为"可用"状态
+            if (queryStatusById(id) != TableStatusEnums.Enabled.getId()) {
+                throw SSException.get(EmenuException.TableIsNotEnabled);
+            }
+
+            //设置餐台信息
+            TableDto tableDto = queryTableDtoById(id);
+            tableDto.getTable().setPersonNum(personNum);
+            tableDto.getTable().setOpenTime(new Date());
+            tableDto.getTable().setStatus(TableStatusEnums.Uncheckouted.getId());
+
+            //更新餐台
+            updateTable(id, tableDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.OpenTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void changeTable(int oldTableId, int newTableId) throws SSException {
+        //检查两个餐台ID是否是否合法
+        if (Assert.lessOrEqualZero(oldTableId)) {
+            return;
+        }
+        if (Assert.lessOrEqualZero(newTableId)) {
+            return;
+        }
+
+        try {
+            //检查旧餐台是否为"占用未结账"状态
+            if (queryStatusById(oldTableId) != TableStatusEnums.Uncheckouted.getId()) {
+                throw SSException.get(EmenuException.TableIsNotUncheckouted);
+            }
+
+            //检查新餐台是否为"可用"状态
+            if (queryStatusById(newTableId) != TableStatusEnums.Enabled.getId()) {
+                throw SSException.get(EmenuException.TableIsNotEnabled);
+            }
+
+            //获取旧餐台信息
+            TableDto oldTableDto = queryTableDtoById(oldTableId);
+
+            //更新新餐台信息
+            TableDto newTableDto = queryTableDtoById(newTableId);
+            newTableDto.getTable().setPersonNum(oldTableDto.getTable().getPersonNum());
+            newTableDto.getTable().setOpenTime(oldTableDto.getTable().getOpenTime());
+            newTableDto.getTable().setStatus(TableStatusEnums.Uncheckouted.getId());
+
+            updateTable(newTableId, newTableDto);
+
+            //重置旧餐台信息
+            oldTableDto.getTable().setPersonNum(0);
+            oldTableDto.getTable().setOpenTime(null);
+            oldTableDto.getTable().setStatus(TableStatusEnums.Enabled.getId());
+
+            forceUpdateTable(oldTableId, oldTableDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ChangeTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void cleanTable(int id) throws SSException {
+        try {
+            //更新新餐台信息
+            TableDto tableDto = queryTableDtoById(id);
+            tableDto.getTable().setPersonNum(0);
+            tableDto.getTable().setOpenTime(null);
+            tableDto.getTable().setStatus(TableStatusEnums.Enabled.getId());
+
+            forceUpdateTable(id, tableDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CleanTableFail, e);
         }
     }
 }

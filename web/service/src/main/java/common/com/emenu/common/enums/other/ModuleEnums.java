@@ -200,6 +200,13 @@ public enum ModuleEnums {
     AdminVipMultipleIntegralPlanUpdate("Admin:Vip:MultipleIntegralPlan:Update"),
     AdminVipMultipleIntegralPlanDelete("Admin:Vip:MultipleIntegralPlan:Delete"),
 
+    //服务员模块
+    //服务员开台
+    WaiterTableOpen("Waiter:Table:Open"),
+    //服务员换台
+    WaiterTableChange("Waiter:Table:Change"),
+    //服务员清台
+    WaiterTableClean("Waiter:Table:Clean"),
     ;
 
     private String name;

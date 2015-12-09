@@ -133,4 +133,19 @@ public class TableTest extends AbstractTestCase {
                     + "  min_cost:" + tableDto.getTable().getMinCost());
         }
     }
+
+    @Test
+    public void openTable() throws SSException {
+        tableService.openTable(2, 22);
+    }
+
+    @Test
+    public void changeTable() throws SSException {
+        tableService.changeTable(2, 1);
+    }
+
+    @Test
+    public void cleanTable() throws SSException {
+        tableService.cleanTable(2);
+    }
 }

@@ -4,6 +4,7 @@ import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.table.Table;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,9 +79,18 @@ public interface TableMapper {
     public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 
     /**
-     * 修改餐台二维码信息
+     * 修改餐台二维码
+     * @param id
      * @param qrCodePath
      * @throws Exception
      */
     public void updateQrCode(@Param("id") int id, @Param("qrCodePath") String qrCodePath) throws Exception;
+
+    /**
+     * 修改餐台开台时间
+     * @param id
+     * @param openTime
+     * @throws Exception
+     */
+    public void updateOpenTime(@Param("id") int id, @Param("openTime") Date openTime) throws Exception;
 }

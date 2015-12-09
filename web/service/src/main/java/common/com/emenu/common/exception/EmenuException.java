@@ -163,6 +163,11 @@ public enum EmenuException implements IBizExceptionMes {
     AreaNotExist("区域不存在", 4026),
     TableNameIsNull("餐台名称不能为空", 4027),
     QueryWaiterTableFail("获取服务员-餐台信息失败", 4028),
+    TableIsNotEnabled("餐台不属于\"可用\"状态", 4029),
+    TableIsNotUncheckouted("餐台不属于\"占用未结账\"状态", 4030),
+    OpenTableFail("开台失败", 4031),
+    ChangeTableFail("换台失败", 4032),
+    CleanTableFail("清台失败", 4033),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4040),
     //餐台-餐段管理
