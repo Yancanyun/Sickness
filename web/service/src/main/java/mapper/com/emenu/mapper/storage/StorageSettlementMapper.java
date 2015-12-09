@@ -25,7 +25,6 @@ public interface StorageSettlementMapper {
      * @return
      * @throws SSException
      */
-    @Deprecated
     public List<StorageSettlementItem> listByDate(@Param("settlementDate") Date settlementDate) throws Exception;
 
     /**
