@@ -32,10 +32,10 @@
     <td>
       <a href="${website}admin/party/group/employee/toupdate/&{it.partyId}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
       {@if it.status == 1}
-      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check">禁用</i>&nbsp;</a>
+      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-circle">禁用</i>&nbsp;</a>
       {@/if}
       {@if it.status == 2}
-      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-circle">启用</i>&nbsp;</a>
+      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check">启用</i>&nbsp;</a>
       {@/if}
       <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
     </td>

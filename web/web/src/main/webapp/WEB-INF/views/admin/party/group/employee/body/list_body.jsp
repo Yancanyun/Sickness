@@ -93,7 +93,7 @@
                       <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;启用</a>
                     </c:if>
                     <c:if test="${employeeDto.employee.status ==1}">
-                      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-check"></i>&nbsp;禁用</a>
+                      <a href="javascript:;" class="label-info J_convert"><i class="fa fa-circle"></i>&nbsp;禁用</a>
                     </c:if>
                     <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
                   </td>
