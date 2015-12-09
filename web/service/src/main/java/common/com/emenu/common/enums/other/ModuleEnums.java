@@ -199,6 +199,9 @@ public enum ModuleEnums {
     AdminVipMultipleIntegralPlanNew("Admin:Vip:MultipleIntegralPlan:New"),
     AdminVipMultipleIntegralPlanUpdate("Admin:Vip:MultipleIntegralPlan:Update"),
     AdminVipMultipleIntegralPlanDelete("Admin:Vip:MultipleIntegralPlan:Delete"),
+    //会员价管理
+    AdminVipVipDishPriceList("Admin:Vip:vipDishPrice:List"),
+    AdminVipVipDishPriceUpdate("Admin:Vip:vipDishPrice:Update"),
 
     //服务员模块
     //服务员开台

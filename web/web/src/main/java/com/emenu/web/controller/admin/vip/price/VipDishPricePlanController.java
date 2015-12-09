@@ -23,6 +23,7 @@ import java.util.List;
  * @date 2015/11/23 15:07
  */
 @Controller
+@Module(ModuleEnums.AdminVip)
 @RequestMapping(value = URLConstants.ADMIN_VIP_VIP_DISH_PRICE_PLAN_URL)
 public class VipDishPricePlanController extends AbstractController{
 

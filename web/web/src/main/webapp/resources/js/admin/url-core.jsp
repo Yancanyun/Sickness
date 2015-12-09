@@ -182,8 +182,9 @@
             ['sendEditPlan', site.website + 'admin/vip/price/plan/ajax', 'put', '保存编辑后的方案'],
             ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'delete', '删除时发送ID'],
             //会员价
-            ['sendSearchInfo', site.staticWebsite + 'mock/admin/vip-dish-price.json', 'get','搜索'],
-            ['sendEditInfo', site.staticWebsite + 'mock/admin/login.json', 'get', '保存']
+            ['sendSearchInfo', site.website + 'admin/vip/price/ajax/list', 'get','搜索'],
+            ['sendEditInfo', site.website + 'admin/vip/price/ajax/{dishId}', 'put', '编辑'],
+            ['sendData', site.website + 'mock/admin/login.json', 'get', '自动生成发送数据']
         ],
         // 公共模块
         Module: [

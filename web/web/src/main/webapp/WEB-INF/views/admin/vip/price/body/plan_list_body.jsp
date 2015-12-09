@@ -14,10 +14,10 @@
         <a href="#"><i class="fa fa-home"></i>&nbsp;首页</a>
       </li>
       <li>
-        <a href="#">会员管理</a>
+        <a href="${website}admin/party/group/vip">会员管理</a>
       </li>
       <li>
-        <a href="#" class="active">会员价管理</a>
+        <a href="${website}admin/vip/price/plan/list" class="active">会员价管理</a>
       </li>
     </ol>
     <h2>会员价方案管理</h2>
