@@ -20,14 +20,14 @@
         // 用户管理
         UserManagement: [
             // 员工管理--列表
-            ['delEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/del/&{partyId}', 'delete', '删除员工'],
-            ['convertEmployeeStatus', site.staticWebsite + 'admin/party/group/employee/ajax/status/', 'put', '转换员工的状态,即启用\停用互换'],
-            ['sendEmployeeId', site.staticWebsite + 'admin/party/group/employee/ajax/tables/&{partyId}', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
-            ['searchEmployee', site.staticWebsite + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
+            ['delEmployee', site.website + 'admin/party/group/employee/ajax/del/&{partyId}', 'delete', '删除员工'],
+            ['convertEmployeeStatus', site.website + 'admin/party/group/employee/ajax/status/', 'put', '转换员工的状态,即启用\停用互换'],
+            ['sendEmployeeId', site.website + 'admin/party/group/employee/ajax/tables/&{partyId}', 'get', '获取当前员工的所管辖餐台,为气泡所用'],
+            ['searchEmployee', site.website + 'admin/party/group/employee/ajax/list', 'get', '搜索当前角色下的员工'],
             // 员工管理--员工添加\编辑
-            ['sendEmployeePhone', site.staticWebsite + 'admin/party/group/employee/ajax/checkphone', 'get', '判断员工的电话是否重复'],
-            ['sendEmployeeUserName', site.staticWebsite + 'admin/party/group/employee/ajax/checkloginname', 'get', '判断员工的用户命是否重复'],
-            ['sendEmployeeNo', site.staticWebsite + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
+            ['sendEmployeePhone', site.website + 'admin/party/group/employee/ajax/checkphone', 'get', '判断员工的电话是否重复'],
+            ['sendEmployeeUserName', site.website + 'admin/party/group/employee/ajax/checkloginname', 'get', '判断员工的用户命是否重复'],
+            ['sendEmployeeNo', site.website + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
 
             // 会员管理
             ['sendVipId', site.website + 'admin/party/group/vip/ajax/status', 'get', '改变会员状态时，发送会员id'],

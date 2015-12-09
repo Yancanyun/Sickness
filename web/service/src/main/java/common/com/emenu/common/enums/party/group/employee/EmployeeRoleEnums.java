@@ -10,7 +10,7 @@ import java.util.HashMap;
 public enum EmployeeRoleEnums {
 
 
-    Admin(1, "后台"),
+    Admin(1, "管理员"),
     Bar(2, "吧台"),
     Cook(3, "后厨"),
     Waiter(4, "服务员"),
