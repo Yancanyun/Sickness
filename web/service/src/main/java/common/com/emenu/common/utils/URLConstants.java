@@ -100,15 +100,33 @@ public final class URLConstants {
     //会员价管理
     public static final String ADMIN_VIP_VIP_DISH_PRICE_URL = "admin/vip/price";
 
-
-    // 服务员模块
-    // 服务员开台
-    public static final String WAITER_TABLE_OPEN_URL = "waiter/table/open";
-    // 服务员换台
-    public static final String WAITER_TABLE_CHANGE_URL = "waiter/table/change";
-    // 服务员清台
-    public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
-
     //多分积分方案
     public static final String ADMIN_VIP_MULTIPLE_INTEGRAL_PLAN_URL = "admin/vip/multiple/integral/plan";
+
+    /**********************服务员APP*************************/
+    //服务员查看餐台列表
+    public static final String WAITER_TABLE_LIST_URL = "waiter/table/list";
+
+    //服务员开台
+    public static final String WAITER_TABLE_OPEN_URL = "waiter/table/open";
+
+    //服务员换台
+    public static final String WAITER_TABLE_CHANGE_URL = "waiter/table/change";
+
+    //服务员清台
+    public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
+
+
+    /**********************吧台客户端*************************/
+    //吧台客户端餐台列表
+    public static final String BAR_TABLE_LIST_URL = "bar/table/list";
+
+    //吧台客户端开台
+    public static final String BAR_TABLE_OPEN_URL = "bar/table/open";
+
+    //吧台客户端换台
+    public static final String BAR_TABLE_CHANGE_URL = "bar/table/change";
+
+    //吧台客户端清台
+    public static final String BAR_TABLE_CLEAN_URL = "bar/table/clean";
 }

@@ -1,4 +1,4 @@
-package com.emenu.web.controller.waiter.operation;
+package com.emenu.web.controller.waiter.table;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -25,19 +25,19 @@ import java.util.List;
  * @time: 2015/12/8 10:01
  */
 @Controller
-@Module(ModuleEnums.WaiterTableOpen)
-@RequestMapping(value = URLConstants.WAITER_TABLE_OPEN_URL)
-public class WaiterTableOpenController extends AbstractAppBarController {
+@Module(ModuleEnums.WaiterTableList)
+@RequestMapping(value = URLConstants.WAITER_TABLE_LIST_URL)
+public class WaiterTableController extends AbstractAppBarController {
     /**
-     * Ajax 获取开台首页的数据
+     * Ajax 获取餐台列表首页的数据
      * @param partyId
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
         try {
-            //根据PartyId获取餐桌状态为可用的AreaDto
-            List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Enabled.getId());
+            //根据PartyId获取所有的AreaDto
+            List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyId(partyId);
 
             JSONArray jsonArray = new JSONArray();
 
@@ -66,52 +66,6 @@ public class WaiterTableOpenController extends AbstractAppBarController {
             }
 
             return sendJsonArray(jsonArray);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax 获取要开台的餐台的数据
-     * @param tableId
-     * @return
-     */
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
-        try {
-            Table table = tableService.queryById(tableId);
-
-            JSONArray jsonArray = new JSONArray();
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("tableId", tableId);
-            jsonObject.put("tableName", table.getName());
-            jsonObject.put("seatNum", table.getSeatNum());
-            jsonObject.put("seatFee", table.getSeatFee());
-            jsonObject.put("tableFee", table.getTableFee());
-            jsonObject.put("minCost", table.getMinCost());
-            jsonArray.add(jsonObject);
-
-            return sendJsonArray(jsonArray);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax 执行开台操作
-     * @param tableId
-     * @return
-     */
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public JSONObject openTable(@RequestParam("tableId") Integer tableId,
-                                @RequestParam("personNum") Integer personNum) {
-        try {
-            tableService.openTable(tableId, personNum);
-
-            return sendJsonArray(null);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

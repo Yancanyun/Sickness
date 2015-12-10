@@ -1,12 +1,10 @@
-package com.emenu.web.controller.waiter.operation;
+package com.emenu.web.controller.bar.operation;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
-import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.pandawork.core.common.exception.SSException;
@@ -16,62 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 /**
- * WaiterTableOpenController
+ * BarTableOpenController
  *
  * @author: yangch
- * @time: 2015/12/8 10:01
+ * @time: 2015/12/10 16:52
  */
 @Controller
-@Module(ModuleEnums.WaiterTableOpen)
-@RequestMapping(value = URLConstants.WAITER_TABLE_OPEN_URL)
-public class WaiterTableOpenController extends AbstractAppBarController {
-    /**
-     * Ajax 获取开台首页的数据
-     * @param partyId
-     * @return
-     */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
-        try {
-            //根据PartyId获取餐桌状态为可用的AreaDto
-            List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Enabled.getId());
-
-            JSONArray jsonArray = new JSONArray();
-
-            for (AreaDto areaDto : areaDtoList) {
-                JSONObject jsonObject = new JSONObject();
-
-                jsonObject.put("areaId", areaDto.getArea().getId());
-                jsonObject.put("areaName", areaDto.getArea().getName());
-
-                //获取AreaDto中的Table列表
-                List<Table> tables = areaDto.getTableList();
-
-                JSONArray tableList = new JSONArray();
-
-                for (Table table : tables) {
-                    JSONObject tableJsonObject = new JSONObject();
-                    tableJsonObject.put("tableId", table.getId());
-                    tableJsonObject.put("tableName", table.getName());
-                    tableJsonObject.put("personNum", table.getPersonNum());
-
-                    tableList.add(tableJsonObject);
-                }
-
-                jsonObject.put("tableList", tableList);
-                jsonArray.add(jsonObject);
-            }
-
-            return sendJsonArray(jsonArray);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
+@Module(ModuleEnums.BarTableOpen)
+@RequestMapping(value = URLConstants.BAR_TABLE_OPEN_URL)
+public class BarTableOpenController extends AbstractAppBarController {
     /**
      * Ajax 获取要开台的餐台的数据
      * @param tableId

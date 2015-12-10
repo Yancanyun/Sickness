@@ -203,13 +203,27 @@ public enum ModuleEnums {
     AdminVipVipDishPriceList("Admin:Vip:vipDishPrice:List"),
     AdminVipVipDishPriceUpdate("Admin:Vip:vipDishPrice:Update"),
 
+
     //服务员模块
+    //服务员查看餐台列表
+    WaiterTableList("Waiter:Table:List"),
     //服务员开台
     WaiterTableOpen("Waiter:Table:Open"),
     //服务员换台
     WaiterTableChange("Waiter:Table:Change"),
     //服务员清台
     WaiterTableClean("Waiter:Table:Clean"),
+
+
+    //吧台客户端模块
+    //吧台客户端查看餐台列表
+    BarTableList("Bar:Table:List"),
+    //吧台客户端开台
+    BarTableOpen("Bar:Table:Open"),
+    //吧台客户端换台
+    BarTableChange("Bar:Table:Change"),
+    //吧台客户端清台
+    BarTableClean("Bar:Table:Clean"),
     ;
 
     private String name;
