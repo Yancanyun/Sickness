@@ -76,7 +76,107 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
+    <select id="listReportByCondition1" resultMap="pw.StorageReport">
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `money` AS money,
+        `status` AS status,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
+        <where>
+            <if test="depotIdList != null and depotIdList.size()>0">
+                `depot_id` IN
+                <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
+                    #{depotId}
+                </foreach>
+            </if>
+            <if test="report.createdPartyId>0 and report.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
+            </if>
+            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
+            </if>
+            <if test="startTime != null">
+                AND `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY `created_time` DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+<!--    <select id="countByContition" resultType="int">
+        SELECT count(1)
+        FROM `t_storage_report`
+        <where>
+            <if test="depotIdList != null and depotIdList.size()>0">
+                `depot_id` IN
+                <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
+                    #{depotId}
+                </foreach>
+            </if>
+            <if test="startTime != null">
+                `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+            <if test="report.id>0 and report.id != null">
+                AND `id` = #{report.id}
+            </if>
+            <if test="report.serialNumber != null">
+                AND `serial_number` LIKE '%${report.serialNumber}'
+            </if>
+            <if test="report.createdPartyId>0 and report.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
+            </if>
+            <if test="report.depotId>0 and report.depotId != null">
+                AND `depot_id` =#{report.depotId}
+            </if>
+            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
+            </if>
+
+        </where>
+        ORDER BY `created_time` DESC
+    </select>-->
+
+    <select id="countByContition" resultType="int">
+        SELECT count(1)
+        FROM t_storage_report
+        <where>
+            <if test="depotIdList != null and depotIdList.size()>0">
+                `depot_id` IN
+                <foreach collection="depotIdList" index="index" item="depotId" open="(" separator="," close=")">
+                    #{depotId}
+                </foreach>
+            </if>
+            <if test="report.createdPartyId>0 and report.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
+            </if>
+            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
+            </if>
+            <if test="startTime != null">
+                AND `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY `created_time` DESC;
+    </select>
+
   <!--  <select id="listStorageReportByCondition1" resultMap="pw.StorageReport">
+
         SELECT `id` AS id,
         `serial_number` AS serialNumber,
         `comment` AS comment,

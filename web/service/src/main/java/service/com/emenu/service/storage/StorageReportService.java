@@ -110,6 +110,18 @@ public interface StorageReportService {
                                                            List<Integer> tagIdList) throws SSException;
 
     /**
+     * 根据时间，deportList，handlerPartyId,createdPartyId查询单据和单据详情
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
+                                                            int page,
+                                                            int pageSize,
+                                                            List<Integer> depotIdList,
+                                                            Date startTime,
+                                                            Date endTime) throws SSException;
+
+    /**
      * 根据reportId删除单据和单据详情
      * @param id
      * @throws SSException
@@ -137,4 +149,14 @@ public interface StorageReportService {
      * @throws SSException
      */
     public StorageReportDto queryReportDtoById(int id) throws SSException;
+
+    /**
+     * 根据查询条件统计记录数
+     * @param report
+     * @param depotIdList
+     * @param endTime
+     * @param startTime
+     * @return
+     */
+    public int countByContition(StorageReport report,List<Integer> depotIdList,Date startTime,Date endTime) throws SSException;
 }

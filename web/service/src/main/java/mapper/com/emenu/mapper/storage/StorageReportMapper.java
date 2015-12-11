@@ -48,6 +48,25 @@ public interface StorageReportMapper {
                                                      @Param("startTime")Date startTime,
                                                      @Param("endTime")Date endTime) throws Exception;
 
+    /**
+     * 根据时间、存放点list、经手人、操作人分页单据详情获取单据和单据详情
+     * @param report
+     * @param offset
+     * @param pageSize
+     * @param depotIdList
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listReportByCondition1(@Param("report")StorageReport report,
+                                                      @Param("offset")int offset,
+                                                      @Param("pageSize")int pageSize,
+                                                      @Param("depotIdList")List<Integer> depotIdList,
+                                                      @Param("startTime")Date startTime,
+                                                      @Param("endTime")Date endTime) throws Exception;
+
+
  /*   *//**
      *
      * @param report
@@ -101,6 +120,20 @@ public interface StorageReportMapper {
      * @throws Exception
      */
     public int count() throws Exception;
+
+
+    /**
+     * 根据条件查询记录数
+     * @param report
+     * @param depots
+     * @param endTime
+     * @param startTime
+     * @return
+     */
+    public int countByContition(@Param("report")StorageReport report,
+                                @Param("depotIdList")List<Integer> depotIdList,
+                                @Param("startTime")Date startTime,
+                                @Param("endTime")Date endTime) throws Exception;
 
     /**
      *

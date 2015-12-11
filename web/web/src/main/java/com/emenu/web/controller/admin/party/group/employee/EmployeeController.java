@@ -82,7 +82,6 @@ public class EmployeeController  extends AbstractController {
                 }
                 employeeDtoList = employeeService.listByRoles(roleList);
             }
-
         }catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

@@ -216,23 +216,23 @@
             {@/each}
         </td>
         <td>
-            {@if it.type == 1}入库单{@/if}
-            {@if it.type == 2}出库单{@/if}
-            {@if it.type == 3}盘盈单{@/if}
-            {@if it.type == 4}盘亏单{@/if}
+            {@if it.storageReport.type == 1}入库单{@/if}
+            {@if it.storageReport.type == 2}出库单{@/if}
+            {@if it.storageReport.type == 3}盘盈单{@/if}
+            {@if it.storageReport.type == 4}盘亏单{@/if}
         </td>
-        <td>&{it.serialNumber}</td>
+        <td>&{it.storageReport.serialNumber}</td>
         <td>&{it.depotName}</td>
         <td>&{it.handlerName}</td>
-        <td>&{it.money}</td>
+        <td>&{it.storageReport.money}</td>
         <td>&{it.createdName}</td>
         <td>
-            {@if it.status == 0}
+            {@if it.storageReport.status == 0}
             <a href="javascript:;" class="label-info J_edit"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
             <a href="javascript:;" class="label-info J_view"><i class="fa fa-search"></i>&nbsp;查看</a>
             {@/if}
-            {@if it.status == 1}
+            {@if it.storageReport.status == 1}
             <a href="javascript:;" class="label-info J_view"><i class="fa fa-search"></i>&nbsp;查看</a>
             {@/if}
         </td>
@@ -247,11 +247,11 @@
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
-                url: '/mock/admin/store-management-list.json',
+                url: '/admin/storage/report/ajax/list',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
-                    return url;
-//							return url + '/' + page;
+//                    return url;
+							return url + '/' + page;
                 },
                 date: '2015-11-11'
             });

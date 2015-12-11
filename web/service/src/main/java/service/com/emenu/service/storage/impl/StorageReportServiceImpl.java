@@ -343,6 +343,45 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
+    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report, int page, int pageSize, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
+        page = page <= 0 ? 0 : page - 1;
+        int offset = page * pageSize;
+
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
+        List<StorageReportDto> reportDtoList = Collections.emptyList();
+        List<StorageReport> reportList = Collections.emptyList();
+        if(Assert.lessZero(offset)){
+            return reportDtoList;
+        }
+        reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            if (Assert.isNull(report)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            reportList = storageReportMapper.listReportByCondition1(report, offset, pageSize, depotIdList, startTime, endTime);
+            for (StorageReport storageReport : reportList) {
+                StorageReportDto reportDto = new StorageReportDto();
+                List<StorageReportItem> reportItemList = new ArrayList();
+                //根据单据id获取单据详情信息
+
+                reportItemList = storageReportItemService.listByReportId(storageReport.getId());
+                //数据存入reportDto
+                reportDto.setStorageReport(storageReport);
+                reportDto.setStorageReportItemList(reportItemList);
+                reportDtoList.add(reportDto);
+            }
+            return reportDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delReportDtoById(int id) throws SSException {
         try {
@@ -450,6 +489,18 @@ public class StorageReportServiceImpl implements StorageReportService {
         Integer count = 0;
         try {
             count = storageReportMapper.count();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountReportFail, e);
+        }
+        return count == null ? 0 : count;
+    }
+
+    @Override
+    public int countByContition(StorageReport report, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
+        Integer count = 0;
+        try {
+            count = storageReportMapper.countByContition(report, depotIdList, startTime, endTime);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountReportFail, e);
