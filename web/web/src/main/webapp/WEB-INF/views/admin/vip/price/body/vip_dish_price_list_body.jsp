@@ -77,7 +77,7 @@
               <c:forEach items="${vipDishPriceDtoList}" var="vipDishPriceDto">
                 <tr data-dish-id="${vipDishPriceDto.dishId}">
                   <td>
-                    <input class="J_price" type="checkbox" value="${vipDishPriceDto.dishId}" />
+                    <input class="J_price" type="checkbox" value="${vipDishPriceDto.dishId}" name="dishIdList"/>
                   </td>
                   <td>${vipDishPriceDto.dishNumber}</td>
                   <td>${vipDishPriceDto.dishName}</td>

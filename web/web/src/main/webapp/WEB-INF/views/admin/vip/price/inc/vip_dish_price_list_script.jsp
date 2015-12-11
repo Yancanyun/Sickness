@@ -50,7 +50,7 @@
 </script>
 <!--弹出框内容模板-->
 <script type="text/template" id="dialogTpl">
-  <form method="" action="${website}admin/vip/price/ajaxGenerate" class="J_addForm">
+  <form method="" action="" class="J_addForm">
     <div class="form-group J_type">
       <label>
         <input type="radio" name="type" value="0" checked>按折扣生成

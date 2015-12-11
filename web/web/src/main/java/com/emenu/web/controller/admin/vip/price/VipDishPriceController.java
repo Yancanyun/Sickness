@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -106,72 +107,65 @@ public class VipDishPriceController extends AbstractController{
     }
 
     /**
+     * ajax修改
      * 根据dishId和VipDishPricePlanID更新会员价
      * @param dishId
      * @param vipDishPricePlanId
      * @param vipDishPrice
-     * @param redirectAttributes
      * @return
      */
     @Module(ModuleEnums.AdminVipVipDishPriceUpdate)
-    @RequestMapping(value = "ajax/{dishId}", method = RequestMethod.PUT)
-    public String updateVipDishPrice(@PathVariable("dishId") int dishId,
-                                     @RequestParam("vipDishPricePlanId") int vipDishPricePlanId,
-                                     @RequestParam("vipDishPrice") BigDecimal vipDishPrice,
-                                     RedirectAttributes redirectAttributes){
+    @RequestMapping(value = "ajax", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSONObject updateVipDishPrice(@RequestParam("dishId") int dishId,
+                                         @RequestParam("vipDishPricePlanId") int vipDishPricePlanId,
+                                         @RequestParam("vipDishPrice") BigDecimal vipDishPrice){
         try{
             vipDishPriceService.updateVipDishPrice(dishId, vipDishPricePlanId, vipDishPrice);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            redirectAttributes.addFlashAttribute("msg", UPDATE_FAIL_MSG);
+            return sendErrMsgAndErrCode(e);
         }
-        redirectAttributes.addFlashAttribute("msg",UPDATE_SUCCESS_MSG);
-        String redirectUrl = "/" + URLConstants.ADMIN_VIP_VIP_DISH_PRICE_URL + "/list";
-        return "redirect:" + redirectUrl;
     }
 
     /**
      * 自动生成会员价
-     * @param dishIds
+     * @param dishIdList
      * @param discount
      * @param difference
      * @param lowPrice
      * @param includeDrinks
      * @param cover
      * @param vipDishPricePlanId
+     * @param redirectAttributes
      * @return
      */
     @Module(ModuleEnums.AdminVipVipDishPriceUpdate)
-    @RequestMapping(value = "ajax/generate/", method = RequestMethod.GET)
-    public String ajaxGenerate(@RequestParam("dishIds") List<Integer> dishIds,
-                               @RequestParam("discount") BigDecimal discount,
-                               @RequestParam("difference") BigDecimal difference,
-                               @RequestParam("lowPrice") BigDecimal lowPrice,
-                               @RequestParam("includeDrinks") Integer includeDrinks,
-                               @RequestParam("cover") Integer cover,
-                               @RequestParam("vipDishPricePlanId") int vipDishPricePlanId,
-                               RedirectAttributes redirectAttributes){
+    @RequestMapping(value = "ajax/generate", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxGenerate(@RequestParam(value = "dishIdList", required = false) Integer[] dishIdList,
+                                   @RequestParam(value = "discount", required = false) BigDecimal discount,
+                                   @RequestParam(value = "difference", required = false) BigDecimal difference,
+                                   @RequestParam(value = "lowPrice", required = false) BigDecimal lowPrice,
+                                   @RequestParam(value = "includeDrinks", required = false) Integer includeDrinks,
+                                   @RequestParam(value = "cover", required = false) Integer cover,
+                                   @RequestParam("vipDishPricePlanId") Integer vipDishPricePlanId,
+                                   RedirectAttributes redirectAttributes){
         TrueEnums includeDrinksEnum = null;
         TrueEnums coverEnum = null;
-        List<VipDishPriceDto> vipDishPriceDtoList = Collections.emptyList();
-        try{
-            if (includeDrinks != null){
+        try {
+            if (includeDrinks != null) {
                 includeDrinksEnum = TrueEnums.valueOf(includeDrinks);
             }
-            if (cover != null){
+            if (cover != null) {
                 coverEnum = TrueEnums.valueOf(cover);
             }
-            vipDishPriceService.generateVipDishPrice(dishIds, discount, difference, lowPrice, includeDrinksEnum, coverEnum, vipDishPricePlanId);
-            redirectAttributes.addFlashAttribute("msg",GENERATE_SUCCESS_MSG);
-            String redirectUrl = "/" + URLConstants.ADMIN_VIP_VIP_DISH_PRICE_URL + "/list";
-            return "redirect:" + redirectUrl;
+            vipDishPriceService.generateVipDishPrice(Arrays.asList(dishIdList), discount, difference, lowPrice, includeDrinksEnum, coverEnum, vipDishPricePlanId);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            redirectAttributes.addFlashAttribute("msg", UPDATE_FAIL_MSG);
-            String redirectUrl = "/" + URLConstants.ADMIN_VIP_VIP_DISH_PRICE_URL + "/list";
-            return "redirect:" + redirectUrl;
+            return sendErrMsgAndErrCode(e);
         }
     }
 

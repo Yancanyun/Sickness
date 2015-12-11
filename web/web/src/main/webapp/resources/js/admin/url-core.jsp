@@ -183,8 +183,8 @@
             ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'delete', '删除时发送ID'],
             //会员价
             ['sendSearchInfo', site.website + 'admin/vip/price/ajax/list', 'get','搜索'],
-            ['sendEditInfo', site.website + 'admin/vip/price/ajax/{dishId}', 'put', '编辑'],
-            ['sendData', site.website + 'mock/admin/login.json', 'get', '自动生成发送数据']
+            ['sendEditInfo', site.website + 'admin/vip/price/ajax', 'put', '编辑'],
+            ['sendData', site.website + 'admin/vip/price/ajax/generate', 'get', '自动生成发送数据']
         ],
         // 公共模块
         Module: [
