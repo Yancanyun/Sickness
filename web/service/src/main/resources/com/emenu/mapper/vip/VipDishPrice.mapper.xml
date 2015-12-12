@@ -25,7 +25,7 @@
         `t_dish` dish
         WHERE dish.`id` = tableVipDishPrice.`dish_id`
         AND tableVipDishPrice.`vip_dish_price_plan_id` = #{vipDishPricePlanId}
-        ORDER BY  tableVipDishPrice.`id` ASC
+        ORDER BY  `t_dish`.`id` DEC
     </select>
 
     <select id="listDishPriceDtosByKeyword" resultType="com.emenu.common.dto.vip.VipDishPriceDto">
@@ -48,7 +48,7 @@
                 AND tableVipDishPrice.vip_dish_price_plan_id = #{vipDishPricePlanId}
             </if>
         </where>
-        ORDER BY  tableVipDishPrice.`id` ASC
+        ORDER BY  `t_dish`.`id` DEC
     </select>
     
     <select id="queryById" resultMap="pw.VipDishPrice">

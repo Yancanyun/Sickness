@@ -12,12 +12,14 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -152,16 +154,25 @@ public class VipDishPriceController extends AbstractController{
                                    @RequestParam(value = "cover", required = false) Integer cover,
                                    @RequestParam("vipDishPricePlanId") Integer vipDishPricePlanId,
                                    RedirectAttributes redirectAttributes){
+        System.out.print(dishIdList);
         TrueEnums includeDrinksEnum = null;
         TrueEnums coverEnum = null;
+        List<Integer> dishIds = Collections.emptyList();
         try {
-            if (includeDrinks != null) {
+            if (Assert.isNotNull(includeDrinks)) {
                 includeDrinksEnum = TrueEnums.valueOf(includeDrinks);
+            }else{
+                includeDrinksEnum = TrueEnums.True;
             }
-            if (cover != null) {
+            if (Assert.isNotNull(cover)) {
                 coverEnum = TrueEnums.valueOf(cover);
+            }else {
+                coverEnum = TrueEnums.False;
             }
-            vipDishPriceService.generateVipDishPrice(Arrays.asList(dishIdList), discount, difference, lowPrice, includeDrinksEnum, coverEnum, vipDishPricePlanId);
+            if (Assert.isNotNull(dishIdList)){
+                dishIds = Arrays.asList(dishIdList);
+            }
+            vipDishPriceService.generateVipDishPrice(dishIds, discount, difference, lowPrice, includeDrinksEnum, coverEnum, vipDishPricePlanId);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

@@ -6,6 +6,7 @@ import com.emenu.common.dto.vip.VipDishPriceDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.vip.VipDishPrice;
 import com.emenu.common.enums.TrueEnums;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipDishPriceMapper;
 import com.emenu.service.dish.DishService;
@@ -166,8 +167,31 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
                 dishList = dishService.listBySearchDto(searchDto);
             }
 
+            // 覆盖处理，如果不覆盖原有会员价，则把存在的会员价信息放入map中
+            if(cover == TrueEnums.False) {
+                vipDishPriceListExist = vipDishPriceMapper.listByVipDishPricePlanId(vipDishPricePlanId);
+                for (VipDishPrice vipDishPrice : vipDishPriceListExist) {
+                    map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
+                }
+            }
+
+            // 迭代，从菜品列表中删除不需要生成的菜品
+            Iterator<Dish> dishIterator = dishList.iterator();
+            while (dishIterator.hasNext()) {
+                Dish dish = dishIterator.next();
+                // 酒水处理，如果不包含酒水，则去除菜品列表中的酒水
+                if (TagEnum.Drinks.getId().equals(dish.getCategoryId())
+                        && includeDrinks == TrueEnums.False) {
+                    dishIterator.remove();
+                }
+                if (cover == TrueEnums.False
+                        && map.containsKey(dish.getId())) {
+                    dishIterator.remove();
+                }
+            }
+
             //酒水处理，如果不包含酒水，则去除菜品列表中的酒水
-            if (Assert.isNotNull(includeDrinks) &&includeDrinks == TrueEnums.False){
+            if (includeDrinks == TrueEnums.False){
                 for (int i = 0; i < dishList.size(); i++){
                     //不包含酒水时，是酒水（categoryId == 5），从列表中删除，否则跳出本次循环
                     if (dishList.get(i).getCategoryId() == 5){
@@ -178,13 +202,14 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
                     }
                 }
             }
-            //覆盖处理，如果不覆盖原有会员价，则把存在的会员价信息放入map中
-            if(Assert.isNotNull(cover) && cover == TrueEnums.False){
+
+            // 覆盖处理，如果不覆盖原有会员价，则把存在的会员价信息放入map中
+            if(cover == TrueEnums.False){
                 vipDishPriceListExist = vipDishPriceMapper.listByVipDishPricePlanId(vipDishPricePlanId);
                 for (VipDishPrice vipDishPrice: vipDishPriceListExist){
                     map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
                 }
-                //从菜品列表中去除已经含有的菜品
+                // 从菜品列表中去除已经含有的菜品
                 for (int i = 0; i < dishList.size(); i++){
                     if (map.containsKey(dishList.get(i).getId())){
                         dishList.remove(i--);

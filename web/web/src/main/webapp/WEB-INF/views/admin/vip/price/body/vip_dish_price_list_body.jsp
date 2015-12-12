@@ -42,7 +42,7 @@
           </div>
           <div class="col-sm-6 col-sm-offset-3">
             <div class="btn-toolbar">
-              <button class="btn-primary btn J_search" type="button"><i class="fa fa-search"></i>&nbsp;搜索</button>
+              <button class="btn-primary btn J_search" type="submit"><i class="fa fa-search"></i>&nbsp;搜索</button>
             </div>
           </div>
         </form>
