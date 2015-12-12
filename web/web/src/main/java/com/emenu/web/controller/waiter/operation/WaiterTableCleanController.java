@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class WaiterTableCleanController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
         try {
             //根据PartyId获取餐桌状态为占用已结账的AreaDto
@@ -79,11 +81,12 @@ public class WaiterTableCleanController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject cleanTable(@RequestParam("tableId") Integer tableId) {
         try {
             tableService.cleanTable(tableId);
 
-            return sendJsonArray(null);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

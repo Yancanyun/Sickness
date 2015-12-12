@@ -119,7 +119,7 @@ public final class URLConstants {
 
     /**********************吧台客户端*************************/
     //吧台客户端餐台列表
-    public static final String BAR_TABLE_LIST_URL = "bar/table/list";
+    public static final String BAR_TABLE_URL = "bar/table";
 
     //吧台客户端开台
     public static final String BAR_TABLE_OPEN_URL = "bar/table/open";

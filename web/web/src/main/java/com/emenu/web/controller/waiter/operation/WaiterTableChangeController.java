@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
         try {
             //根据PartyId获取餐桌状态为占用未结账的AreaDto
@@ -80,6 +82,7 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
         try {
             Table table = tableService.queryById(tableId);
@@ -88,7 +91,7 @@ public class WaiterTableChangeController extends AbstractAppBarController {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tableId", tableId);
-            jsonObject.put("name",table.getName());
+            jsonObject.put("tableName",table.getName());
             jsonObject.put("personNum",table.getPersonNum());
             jsonObject.put("seatNum",table.getSeatNum());
             jsonObject.put("seatFee",table.getSeatFee());
@@ -108,7 +111,8 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      * @param partyId
      * @return
      */
-    @RequestMapping(value = "enabled_list", method = RequestMethod.GET)
+    @RequestMapping(value = "area_list", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject enabledTableList(@RequestParam("partyId") Integer partyId) {
         try {
             //根据PartyId获取餐桌状态为可用的AreaDto
@@ -132,7 +136,6 @@ public class WaiterTableChangeController extends AbstractAppBarController {
                     JSONObject tableJsonObject = new JSONObject();
                     tableJsonObject.put("tableId", tables.get(t).getId());
                     tableJsonObject.put("tableName", tables.get(t).getName());
-                    tableJsonObject.put("personNum", tables.get(t).getPersonNum());
 
                     tableList.add(tableJsonObject);
                     t++;
@@ -156,13 +159,12 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "confirm", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject confirmChange(@RequestParam("oldTableId") Integer oldTableId,
                                     @RequestParam("newTableId") Integer newTableId) {
         try {
             Table oldTable = tableService.queryById(oldTableId);
             Table newTable = tableService.queryById(newTableId);
-
-            JSONArray jsonArray = new JSONArray();
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("oldTableId", oldTableId);
@@ -174,9 +176,8 @@ public class WaiterTableChangeController extends AbstractAppBarController {
             jsonObject.put("seatFee", newTable.getSeatFee());
             jsonObject.put("tableFee", newTable.getTableFee());
             jsonObject.put("minCost", newTable.getMinCost());
-            jsonArray.add(jsonObject);
 
-            return sendJsonArray(jsonArray);
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -190,12 +191,13 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
                                   @RequestParam("newTableId") Integer newTableId) {
         try {
             tableService.changeTable(oldTableId, newTableId);
 
-            return sendJsonArray(null);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

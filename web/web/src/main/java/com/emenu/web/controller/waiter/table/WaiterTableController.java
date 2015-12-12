@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -33,7 +34,8 @@ public class WaiterTableController extends AbstractAppBarController {
      * @param partyId
      * @return
      */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
         try {
             //根据PartyId获取所有的AreaDto
@@ -56,7 +58,6 @@ public class WaiterTableController extends AbstractAppBarController {
                     JSONObject tableJsonObject = new JSONObject();
                     tableJsonObject.put("tableId", table.getId());
                     tableJsonObject.put("tableName", table.getName());
-                    tableJsonObject.put("personNum", table.getPersonNum());
 
                     tableList.add(tableJsonObject);
                 }

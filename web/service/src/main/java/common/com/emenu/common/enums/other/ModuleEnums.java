@@ -223,8 +223,8 @@ public enum ModuleEnums {
 
 
     //吧台客户端模块
-    //吧台客户端查看餐台列表
-    BarTableList("Bar:Table:List"),
+    //吧台客户端餐台
+    BarTable("Bar:Table"),
     //吧台客户端开台
     BarTableOpen("Bar:Table:Open"),
     //吧台客户端换台

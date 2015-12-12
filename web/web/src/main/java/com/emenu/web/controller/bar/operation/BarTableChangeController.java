@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -32,21 +33,38 @@ public class BarTableChangeController extends AbstractAppBarController {
      *
      * @return
      */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public JSONObject toChangeTable() {
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
         try {
             //获取餐桌状态为可用的Table
             List<Table> tableList = tableService.listByStatus(TableStatusEnums.Enabled);
 
+            //获取当前餐台的信息
+            Table table = tableService.queryById(tableId);
+
             JSONArray jsonArray = new JSONArray();
 
-            for (Table table : tableList) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("tableId", table.getId());
-                jsonObject.put("tableName", table.getName());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("oldTableId", tableId);
+            jsonObject.put("oldTableName", table.getName());
+            jsonObject.put("seatNum", table.getSeatNum());
+            jsonObject.put("seatFee", table.getSeatFee());
+            jsonObject.put("tableFee", table.getTableFee());
+            jsonObject.put("minCost", table.getMinCost());
+            jsonArray.add(jsonObject);
 
-                jsonArray.add(jsonObject);
+            JSONArray newTableList = new JSONArray();
+            for (Table newTable : tableList) {
+                JSONObject childJsonObject = new JSONObject();
+                childJsonObject.put("newTableId", newTable.getId());
+                childJsonObject.put("newTableName", newTable.getName());
+
+                newTableList.add(childJsonObject);
             }
+
+            jsonObject.put("newTableList", newTableList);
+            jsonArray.add(jsonObject);
 
             return sendJsonArray(jsonArray);
         } catch (SSException e) {
@@ -62,12 +80,13 @@ public class BarTableChangeController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
                                   @RequestParam("newTableId") Integer newTableId) {
         try {
             tableService.changeTable(oldTableId, newTableId);
 
-            return sendJsonArray(null);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

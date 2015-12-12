@@ -1,6 +1,5 @@
 package com.emenu.web.controller.bar.operation;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.table.Table;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * BarTableOpenController
@@ -30,11 +30,10 @@ public class BarTableOpenController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
     public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
         try {
             Table table = tableService.queryById(tableId);
-
-            JSONArray jsonArray = new JSONArray();
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tableId", tableId);
@@ -43,9 +42,8 @@ public class BarTableOpenController extends AbstractAppBarController {
             jsonObject.put("seatFee", table.getSeatFee());
             jsonObject.put("tableFee", table.getTableFee());
             jsonObject.put("minCost", table.getMinCost());
-            jsonArray.add(jsonObject);
 
-            return sendJsonArray(jsonArray);
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -58,12 +56,13 @@ public class BarTableOpenController extends AbstractAppBarController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject openTable(@RequestParam("tableId") Integer tableId,
                                 @RequestParam("personNum") Integer personNum) {
         try {
             tableService.openTable(tableId, personNum);
 
-            return sendJsonArray(null);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
