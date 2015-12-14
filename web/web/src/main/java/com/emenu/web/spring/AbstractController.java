@@ -29,6 +29,7 @@ import com.emenu.service.table.*;
 import com.emenu.service.vip.MultipleIntegralPlanService;
 import com.emenu.service.vip.VipDishPricePlanService;
 import com.emenu.service.vip.VipDishPriceService;
+import com.emenu.service.vip.VipRechargePlanService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -354,8 +355,13 @@ public class AbstractController extends Base {
     @Qualifier("dishTagService")
     protected static DishTagService dishTagService;
 
-    //多分积分方案
+    //多倍积分方案
     @StaticAutoWire
     @Qualifier("multipleIntegralPlanService")
     protected static MultipleIntegralPlanService multipleIntegralPlanService;
+
+    //会员充值方案管理
+    @StaticAutoWire
+    @Qualifier("vipRechargePlanService")
+    protected static VipRechargePlanService vipRechargePlanService;
  }

@@ -209,7 +209,12 @@ public enum ModuleEnums {
     //会员价管理
     AdminVipVipDishPriceList("Admin:Vip:vipDishPrice:List"),
     AdminVipVipDishPriceUpdate("Admin:Vip:vipDishPrice:Update"),
-
+    //会员充值方案管理
+    AdminVipRechargePlan("Admin:Vip:RechargePlan"),
+    AdminVipRechargePlanList("Admin:Vip:RechargePlan:List"),
+    AdminVipRechargePlanNew("Admin:Vip:RechargePlan:New"),
+    AdminVipRechargePlanUpdate("Admin:Vip:RechargePlan:Update"),
+    AdminVipRechargePlanDel("Admin:Vip:RechargePlan:Del"),
 
     //服务员模块
     //服务员查看餐台列表

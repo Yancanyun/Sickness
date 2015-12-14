@@ -367,7 +367,16 @@ public enum EmenuException implements IBizExceptionMes {
     MultipleIntegralPlanStatusNotNull("积分方案启用状态不能为空",8045),
     IntegralMultiplesNotNull("积分方案倍数不能为空",8046),
     MultipleIntegralPlanNameExist("积分方案名称已存在",8047),
-    MultipleIntegralPlanIdIllegal("Id为空或小于等于0",8048)
+    MultipleIntegralPlanIdIllegal("Id为空或小于等于0",8048),
+
+    //会员充值方案
+    QueryVipRechargePlanFail("查询会员充值方案失败", 8060),
+    VipRechargePlanNameExist("会员充值方案名称已存在", 8061),
+    InsertVipRechargePlanFail("添加会员充值方案失败", 8062),
+    UpdateVipRechargePlanFail("编辑会员充值方案失败", 8063),
+    DeleteVipRechargePlanFail("删除会员充值方案失败", 8064),
+    VipRechargePlanNameIsNull("会员充值方案名称不能为空", 8065)
+
     ;
 
 

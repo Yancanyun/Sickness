@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.vip.VipRechargePlanMapper">
+    <select id="listAll" resultMap="pw.VipRechargePlan">
+        SELECT
+            `id`,
+            `name`,
+            `pay_amount`,
+            `recharge_amount`,
+            `status`
+        FROM `t_vip_recharge_plan`
+        WHERE `status` != 2
+        ORDER BY `id` ASC
+    </select>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_vip_recharge_plan`
+        WHERE `name` = #{name} AND `status` != 2
+    </select>
+
+    <update id="updateStatus">
+        UPDATE `t_vip_recharge_plan`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

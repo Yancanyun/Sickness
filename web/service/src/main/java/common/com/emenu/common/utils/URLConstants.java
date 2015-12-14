@@ -100,8 +100,11 @@ public final class URLConstants {
     //会员价管理
     public static final String ADMIN_VIP_VIP_DISH_PRICE_URL = "admin/vip/price";
 
-    //多分积分方案
+    //多倍积分方案
     public static final String ADMIN_VIP_MULTIPLE_INTEGRAL_PLAN_URL = "admin/vip/multiple/integral/plan";
+
+    //会员充值方案管理
+    public static final String ADMIN_VIP_RECHARGE_PLAN_URL = "admin/vip/recharge/plan";
 
     /**********************服务员APP*************************/
     //服务员查看餐台列表
