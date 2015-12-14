@@ -3,21 +3,28 @@ package com.emenu.common.entity.dish;
 import com.pandawork.core.common.entity.AbstractEntity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * DishPackage
+ * DishPackageService
  * 套餐
  * @author dujuan
  * @date 2015/12/10
  */
+@Entity
+@Table(name = "t_dish_package")
 public class DishPackage  extends AbstractEntity{
 
     private static final long serialVersionUID = 7474697007199812532L;
     //主键ID
     @Id
     private Integer id;
+
+    @Column(name = "package_id")
+    private Integer packageId;
 
     //菜品ID
     @Column(name = "dish_id")
@@ -42,6 +49,14 @@ public class DishPackage  extends AbstractEntity{
     @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getPackageId() {
+        return packageId;
+    }
+
+    public void setPackageId(Integer packageId) {
+        this.packageId = packageId;
     }
 
     public Integer getDishId() {

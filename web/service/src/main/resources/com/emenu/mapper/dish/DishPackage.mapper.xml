@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.dish.DishPackageMapper">
+
+    <delete id="delByPackageId">
+        DELETE FROM `t_dish_package` WHERE `package_id` = #{packageId}
+    </delete>
+
+    <select id="listDishPackage" resultMap="pw.DishPackage">
+    SELECT id,package_id,dish_id,dish_quantity
+    FROM t_dish_package
+    WHERE package_id = #{packageId}
+    </select>
+
+    <select id="countByPackageId" resultType="int">
+    SELECT COUNT(*)
+    FROM t_dish_package
+    WHERE package_id = #{packageId}
+    </select>
+
+</mapper>

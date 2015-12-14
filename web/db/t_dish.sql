@@ -108,10 +108,11 @@ CREATE TABLE `t_dish_img` (
 /* 套餐表 */
 DROP TABLE IF EXISTS `t_dish_package`;
 CREATE TABLE `t_dish_package` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `dish_id` INT(11) NOT NULL DEFAULT '0' COMMENT '菜品ID',
-  `dish_quantity` INT(11) NOT NULL DEFAULT '1' COMMENT '菜品数量',
-  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`package_id` INT(11) NOT NULL DEFAULT '0' COMMENT '套餐ID',
+	`dish_id` INT(11) NOT NULL DEFAULT '0' COMMENT '菜品ID',
+	`dish_quantity` INT(11) NOT NULL DEFAULT '1' COMMENT '菜品数量',
+	`created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
 	PRIMARY KEY(`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '套餐表';

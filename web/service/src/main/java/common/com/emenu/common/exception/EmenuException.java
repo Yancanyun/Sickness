@@ -100,6 +100,17 @@ public enum EmenuException implements IBizExceptionMes {
     UnitTypeError("单位类型为空或者小于0", 3057),
     UnitNameIsExist("单位名称已存在", 3058),
 
+    //套餐
+    ListDishPackageFailed("套餐列表查询失败", 3060),
+    NewDishPackageFailed("添加套餐失败", 3061),
+    QueryDishPackageFailed("查询套餐失败", 3062),
+    DishPackageIdError("套餐的ID为空或者小于0", 3063),
+    DeleteDishPackageFailed("删除套餐失败", 3064),
+    UpdateDishPackageFailed("更新套餐失败", 3065),
+    ListChildDishFailed("套餐菜品列表为空", 3066),
+    DishPackageIsNull("套餐关联表为空", 3067),
+    DishQuantityIsNull("套餐菜品列表中数量为空或者小于0", 3067),
+
     // 菜品图片
     DishImgQueryFailed("查询菜品图片失败", 1031),
     DishImgInsertFailed("添加菜品图片失败", 1032),
