@@ -6,14 +6,13 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i>&nbsp;首页</a></li>
-            <li><a href="#">用户信息管理</a></li>
+            <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li class="active">会员管理</li>
         </ol>
         <h2>会员管理-查看详情</h2>
     </div>
     <div class="col-sm-12">
-        <form class="form-horizontal J_addForm" action="" method="">
+        <form class="form-horizontal" action="" method="">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h4>详情</h4>

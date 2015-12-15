@@ -27,14 +27,7 @@
             // 员工管理--员工添加\编辑
             ['sendEmployeePhone', site.website + 'admin/party/group/employee/ajax/checkphone', 'get', '判断员工的电话是否重复'],
             ['sendEmployeeUserName', site.website + 'admin/party/group/employee/ajax/checkloginname', 'get', '判断员工的用户命是否重复'],
-            ['sendEmployeeNo', site.website + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复'],
-
-            // 会员管理
-            ['sendVipId', site.website + 'admin/party/group/vip/ajax/status', 'get', '改变会员状态时，发送会员id'],
-            // 会员管理--列表--删除
-            ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'put', '删除会员时，发送会员id'],
-            //会员管理--添加\编辑
-            ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重']
+            ['sendEmployeeNo', site.website + 'admin/party/group/employee/ajax/checknumber', 'get', '判断员工的编号是否重复']
         ],
         // 后台登录
         Login: [
@@ -178,6 +171,13 @@
         ],
         //会员管理
         VipManagement:[
+            // 会员管理
+            ['sendVipId', site.website + 'admin/party/group/vip/ajax/status', 'get', '改变会员状态时，发送会员id'],
+            // 会员管理--列表--删除
+            ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'put', '删除会员时，发送会员id'],
+            //会员管理--添加\编辑
+            ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重'],
+
             //会员价方案
             ['sendEditPlan', site.website + 'admin/vip/price/plan/ajax', 'put', '保存编辑后的方案'],
             ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'delete', '删除时发送ID'],
@@ -185,6 +185,7 @@
             ['sendSearchInfo', site.website + 'admin/vip/price/ajax/list', 'get','搜索'],
             ['sendEditInfo', site.website + 'admin/vip/price/ajax', 'put', '编辑'],
             ['sendData', site.website + 'admin/vip/price/ajax/generate', 'get', '自动生成发送数据']
+
         ],
         // 公共模块
         Module: [

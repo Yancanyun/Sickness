@@ -18,7 +18,7 @@
     <td>
       {@if it.order == 0}
       <i class="fa fa-long-arrow-down"></i>&nbsp;&{it.difference}
-      {@else}
+      {@else if it.order == 1}
       <i class="fa fa-long-arrow-up"></i>&nbsp;&{it.difference}
       {@/if}
     </td>
@@ -38,7 +38,7 @@
     <td class="v-middle">
       {@if order == 0}
       <i class="fa fa-long-arrow-down"></i>&nbsp;&{difference}
-      {@else}
+      {@else if order == 1}
       <i class="fa fa-long-arrow-up"></i>&nbsp;&{difference}
       {@/if}
     </td>

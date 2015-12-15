@@ -31,15 +31,15 @@
 </script>
 <script type="text/javascript">
     KISSY.ready(function(S){
-        S.use('page/user-management/vip-management-list', function(S){
-            PW.page.UserManagement.VipManagementList({
+        S.use('page/vip-management/vip-management-list', function(S){
+            PW.page.VipManagement.VipManagementList({
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
                 url: '/admin/party/group/vip/ajax/list',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
-                    // return url;
+                    //return url;
                     return url + '/' + page;
                 }
             });

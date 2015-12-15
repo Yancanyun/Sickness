@@ -5,8 +5,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript">
   KISSY.ready(function(S){
-    S.use('page/user-management/vip-management-add', function(S){
-      PW.page.UserManagement.VipManagementAdd();
+    S.use('page/vip-management/vip-management-add', function(S){
+      PW.page.VipManagement.VipManagementAdd();
     });
   });
 </script>

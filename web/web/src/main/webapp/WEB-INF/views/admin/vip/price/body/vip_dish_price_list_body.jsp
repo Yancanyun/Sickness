@@ -86,6 +86,9 @@
                   <td class="J_vipDishPrice">${vipDishPriceDto.vipDishPrice}</td>
                   <td>
                     <c:choose>
+                      <c:when test="${vipDishPriceDto.vipDishPrice == null}">
+                        &nbsp;
+                      </c:when>
                       <c:when test="${vipDishPriceDto.price - vipDishPriceDto.vipDishPrice > 0}">
                         <i class="fa fa-long-arrow-down"></i>&nbsp;${vipDishPriceDto.difference}
                       </c:when>

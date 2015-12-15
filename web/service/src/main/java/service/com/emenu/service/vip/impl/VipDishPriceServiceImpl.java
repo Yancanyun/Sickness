@@ -82,14 +82,31 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
     public List<VipDishPriceDto> listVipDishPriceDtos(int vipDishPricePlanId) throws SSException{
         List<VipDishPriceDto> vipDishPriceDtoList  = Collections.emptyList();
         BigDecimal zero = new BigDecimal("0.00");
+        Map<Integer,BigDecimal> map = new HashMap<Integer, BigDecimal>();
         try{
             if (!Assert.isNull(vipDishPricePlanId) && Assert.lessOrEqualZero(vipDishPricePlanId)) {
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             vipDishPriceDtoList = vipDishPriceMapper.listDishPriceDtos(vipDishPricePlanId);
-            for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
-                BigDecimal difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
-                vipDishPriceDto.setDifference(difference == null ? zero : difference);
+            if (Assert.isNotEmpty(vipDishPriceDtoList)){
+                for (VipDishPriceDto vipDishPriceDto: vipDishPriceDtoList){
+                    BigDecimal difference = vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice());
+                    vipDishPriceDto.setDifference(difference == null ? zero : difference);
+                    map.put(vipDishPriceDto.getDishId(), vipDishPriceDto.getPrice());
+                }
+            }
+            List<Dish> dishList = dishService.listAll();
+            for (Dish dish: dishList){
+                if (Assert.isNull(map)
+                        || !map.containsKey(dish.getId())){
+                    VipDishPriceDto vipDishPriceDto = new VipDishPriceDto();
+                    vipDishPriceDto.setDishId(dish.getId());
+                    vipDishPriceDto.setDishName(dish.getName());
+                    vipDishPriceDto.setDishNumber(dish.getDishNumber());
+                    vipDishPriceDto.setPrice(dish.getPrice());
+                    vipDishPriceDto.setSalePrice(dish.getSalePrice());
+                    vipDishPriceDtoList.add(vipDishPriceDto);
+                }
             }
         } catch(Exception e) {
             LogClerk.errLog.error(e);
@@ -179,44 +196,15 @@ public class VipDishPriceServiceImpl implements VipDishPriceService{
             Iterator<Dish> dishIterator = dishList.iterator();
             while (dishIterator.hasNext()) {
                 Dish dish = dishIterator.next();
-                // 酒水处理，如果不包含酒水，则去除菜品列表中的酒水
+                // 酒水处理。如果不包含酒水，则去除菜品列表中的酒水
                 if (TagEnum.Drinks.getId().equals(dish.getCategoryId())
                         && includeDrinks == TrueEnums.False) {
                     dishIterator.remove();
                 }
+                // 覆盖处理。如果不覆盖，将dish中已存在会员价的菜品去除
                 if (cover == TrueEnums.False
                         && map.containsKey(dish.getId())) {
                     dishIterator.remove();
-                }
-            }
-
-            //酒水处理，如果不包含酒水，则去除菜品列表中的酒水
-            if (includeDrinks == TrueEnums.False){
-                for (int i = 0; i < dishList.size(); i++){
-                    //不包含酒水时，是酒水（categoryId == 5），从列表中删除，否则跳出本次循环
-                    if (dishList.get(i).getCategoryId() == 5){
-                        dishList.remove(i--);
-                    }
-                    else {
-                        continue;
-                    }
-                }
-            }
-
-            // 覆盖处理，如果不覆盖原有会员价，则把存在的会员价信息放入map中
-            if(cover == TrueEnums.False){
-                vipDishPriceListExist = vipDishPriceMapper.listByVipDishPricePlanId(vipDishPricePlanId);
-                for (VipDishPrice vipDishPrice: vipDishPriceListExist){
-                    map.put(vipDishPrice.getDishId(), vipDishPrice.getVipDishPrice());
-                }
-                // 从菜品列表中去除已经含有的菜品
-                for (int i = 0; i < dishList.size(); i++){
-                    if (map.containsKey(dishList.get(i).getId())){
-                        dishList.remove(i--);
-                    }
-                    else {
-                        continue;
-                    }
                 }
             }
 

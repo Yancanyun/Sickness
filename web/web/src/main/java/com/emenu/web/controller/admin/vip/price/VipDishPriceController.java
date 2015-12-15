@@ -99,8 +99,10 @@ public class VipDishPriceController extends AbstractController{
             jsonObject.put("difference", vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice()).toString());
             if (vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice()).compareTo(zero) > 0){
                 jsonObject.put("order",0);
-            }else {
+            }else if (vipDishPriceDto.getPrice().subtract(vipDishPriceDto.getVipDishPrice()).compareTo(zero) < 0){
                 jsonObject.put("order",1);
+            }else {
+                jsonObject.put("order",2);
             }
 
             jsonArray.add(jsonObject);

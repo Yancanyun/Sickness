@@ -33,6 +33,8 @@ import java.util.List;
 public class VipInfoController extends AbstractController {
 
     protected final static String NEW_SUCCESS_MSG = "添加成功";
+    protected final static String UPDATE_SUCCESS_MSG = "修改成功";
+    protected final static String DELETE_SUCCESS_MSG = "删除成功";
 
     /**
      * 去会员基本信息列表页面
@@ -168,7 +170,7 @@ public class VipInfoController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+        redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
         String redirectUrl = "/" + URLConstants.ADMIN_PARTY_VIP_VIPINFO_URL + "/list";
         return "redirect:" + redirectUrl;
     }
