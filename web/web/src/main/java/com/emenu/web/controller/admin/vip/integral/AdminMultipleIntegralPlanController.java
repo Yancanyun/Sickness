@@ -1,4 +1,4 @@
-package com.emenu.web.controller.admin.vip;
+package com.emenu.web.controller.admin.vip.integral;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
