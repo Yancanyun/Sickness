@@ -49,6 +49,7 @@
                 <li><a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a></li>
                 <li><a class="J_menu" href="${website}admin/party/group/vip">会员管理</a></li>
                 <li><a class="J_menu" href="${website}admin/vip/price/plan/list">会员价方案管理</a></li>
+                <li><a class="J_menu" href="${website}admin/vip/recharge/plan/list">会员充值方案管理</a></li>
             </ul>
         </li>
         <li

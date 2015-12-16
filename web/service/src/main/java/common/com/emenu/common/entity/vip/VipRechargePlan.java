@@ -1,11 +1,9 @@
 package com.emenu.common.entity.vip;
 
+import com.emenu.common.enums.vip.VipRechargePlanStatusEnums;
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -43,6 +41,10 @@ public class VipRechargePlan extends AbstractEntity {
     //最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    //状态字符串
+    @Transient
+    private String statusStr;
 
     public Integer getId() {
         return id;
@@ -82,6 +84,8 @@ public class VipRechargePlan extends AbstractEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+        VipRechargePlanStatusEnums statusEnums = VipRechargePlanStatusEnums.valueOf(status);
+        this.setStatusStr(statusEnums == null ? "" : statusEnums.getType());
     }
 
     public Date getCreatedTime() {
@@ -98,5 +102,13 @@ public class VipRechargePlan extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 }

@@ -117,7 +117,9 @@
             </li>
             <li <c:if test="${MethodModule eq 'Admin:Vip:vipDishPricePlan:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/price/plan/list">会员价方案管理</a>
-            </li>
+            </li>            <li <c:if test="${MethodModule eq 'Admin:Vip:RechargePlan:List'}">class="active"</c:if>>
+            <a class="J_menu" href="${website}admin/vip/price/plan/list">会员充值方案管理</a>
+        </li>
         </ul>
     </li>
     <li id="firstMenu6" class="active hidden">

@@ -184,7 +184,12 @@
             //会员价
             ['sendSearchInfo', site.website + 'admin/vip/price/ajax/list', 'get','搜索'],
             ['sendEditInfo', site.website + 'admin/vip/price/ajax', 'put', '编辑'],
-            ['sendData', site.website + 'admin/vip/price/ajax/generate', 'get', '自动生成发送数据']
+            ['sendData', site.website + 'admin/vip/price/ajax/generate', 'get', '自动生成发送数据'],
+            //充值方案管理
+            ['sendEditInfo', site.website + 'admin/vip/recharge/plan/ajax/&{id}', 'put', '保存编辑数据'],
+            ['sendAddInfo', site.website + 'admin/vip/recharge/plan/ajax', 'post', '保存新添数据'],
+            ['delPlanId', site.website + 'admin/vip/recharge/plan/ajax/&{id}', 'delete', '发送删除数据id'],
+            ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态']
 
         ],
         // 公共模块
