@@ -375,7 +375,20 @@ public enum EmenuException implements IBizExceptionMes {
     InsertVipRechargePlanFail("添加会员充值方案失败", 8062),
     UpdateVipRechargePlanFail("编辑会员充值方案失败", 8063),
     DeleteVipRechargePlanFail("删除会员充值方案失败", 8064),
-    VipRechargePlanNameIsNull("会员充值方案名称不能为空", 8065)
+    VipRechargePlanNameIsNull("会员充值方案名称不能为空", 8065),
+
+    //会员等级方案
+    QueryVipGradeFail("查询会员等级方案失败", 8080),
+    InsertVipGradeFail("新增会员等级方案失败", 8081),
+    UpdateVipGradeFail("修改会员等级方案失败", 8082),
+    DeleteVipGradeFail("删除会员等级方案失败", 8083),
+    VipGradeNameNotNull("会员等级方案名称不能为空", 8084),
+    VipDishPricePlanIdIllegal("会员价方案Id数据非法", 8085),
+    MinConsumptionIllegal("最低消费金额数据非法", 8086),
+    CreditAmountIllegal("信用额度数据非法", 8087),
+    SettlementCycleIllegal("结算周期数据非法", 8088),
+    PreReminderAmountIllegal("升级预提醒额度数据非法", 8089),
+    VipGradeIdIllegal("会员等级方案id为空或小于等于0", 8090),
 
     ;
 

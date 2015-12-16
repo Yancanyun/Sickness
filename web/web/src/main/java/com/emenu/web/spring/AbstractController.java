@@ -26,10 +26,7 @@ import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
-import com.emenu.service.vip.MultipleIntegralPlanService;
-import com.emenu.service.vip.VipDishPricePlanService;
-import com.emenu.service.vip.VipDishPriceService;
-import com.emenu.service.vip.VipRechargePlanService;
+import com.emenu.service.vip.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -364,4 +361,9 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("vipRechargePlanService")
     protected static VipRechargePlanService vipRechargePlanService;
+
+    //会员等级管理
+    @StaticAutoWire
+    @Qualifier("vipGradeService")
+    protected static VipGradeService vipGradeService;
  }

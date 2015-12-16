@@ -59,27 +59,43 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     @ResponseBody
     public JSONObject newMultipleIntegralPlan(MultipleIntegralPlan multipleIntegralPlan) {
         try {
-            multipleIntegralPlanService.newMultipleIntegralPlan(multipleIntegralPlan);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            MultipleIntegralPlan plan = multipleIntegralPlanService.newMultipleIntegralPlan(multipleIntegralPlan);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", plan.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
     }
 
+    /**
+     * ajax修改多倍积分方案
+     *
+     * @param multipleIntegralPlan
+     * @return
+     */
     @Module(ModuleEnums.AdminVipMultipleIntegralPlanUpdate)
     @RequestMapping(value = "ajax", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject updateMultipleIntegralPlan(MultipleIntegralPlan multipleIntegralPlan) {
         try {
             multipleIntegralPlanService.updateById(multipleIntegralPlan);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", null);
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
     }
 
+    /**
+     * ajax删除多倍积分方案
+     *
+     * @param id
+     * @return
+     */
     @Module(ModuleEnums.AdminVipMultipleIntegralPlanDelete)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
     @ResponseBody

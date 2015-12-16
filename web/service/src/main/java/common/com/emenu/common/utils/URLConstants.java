@@ -106,6 +106,9 @@ public final class URLConstants {
     //会员充值方案管理
     public static final String ADMIN_VIP_RECHARGE_PLAN_URL = "admin/vip/recharge/plan";
 
+    //会员等级方案管理
+    public static final String ADMIN_VIP_GRADE_URL = "admin/vip/grade";
+
     /**********************服务员APP*************************/
     //服务员查看餐台列表
     public static final String WAITER_TABLE_LIST_URL = "waiter/table/list";

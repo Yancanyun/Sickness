@@ -215,6 +215,12 @@ public enum ModuleEnums {
     AdminVipRechargePlanNew("Admin:Vip:RechargePlan:New"),
     AdminVipRechargePlanUpdate("Admin:Vip:RechargePlan:Update"),
     AdminVipRechargePlanDel("Admin:Vip:RechargePlan:Del"),
+    //会员等级方案管理
+    AdminVipGrade("Admin:Vip:Grade"),
+    AdminVipGradeList("Admin:Vip:Grade:List"),
+    AdminVipGradeNew("Admin:Vip:Grade:New"),
+    AdminVipGradeUpdate("Admin:Vip:Grade:Update"),
+    AdminVipGradeDelete("Admin:Vip:Grade:Delete"),
 
     //服务员模块
     //服务员查看餐台列表
