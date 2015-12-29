@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.pandawork.core</groupId>
             <artifactId>framework</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>3.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.pandawork.core</groupId>

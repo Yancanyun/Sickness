@@ -11,7 +11,6 @@
         <h2>菜品管理-本店特色</h2>
     </div>
     <div class="col-sm-12">
-        <div class="alert alert-danger J_tip" role="alert">保存失败！</div>
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h4>添加</h4>

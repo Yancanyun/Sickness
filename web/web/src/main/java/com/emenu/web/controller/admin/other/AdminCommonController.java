@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,6 +32,13 @@ import java.util.List;
 @RequestMapping(value = URLConstants.ADMIN_COMMON_URL)
 public class AdminCommonController extends AbstractController {
 
+    /**
+     * 根据汉字获取拼音
+     *
+     * @param str
+     * @param type
+     * @return
+     */
     @IgnoreAuthorization
     @RequestMapping(value = "tool/str2py/ajax", method = RequestMethod.GET)
     @ResponseBody
@@ -53,6 +61,12 @@ public class AdminCommonController extends AbstractController {
         }
     }
 
+    /**
+     * 根据关键字获取库存物品名字列表
+     *
+     * @param keyword
+     * @return
+     */
     @IgnoreAuthorization
     @RequestMapping(value = "tool/storage/item/search/ajax", method = RequestMethod.GET)
     @ResponseBody
@@ -71,6 +85,13 @@ public class AdminCommonController extends AbstractController {
             jsonObject.put("id", storageItem.getId());
             jsonObject.put("name", storageItem.getName());
             jsonObject.put("assistantCode", storageItem.getAssistantCode());
+
+            BigDecimal price = new BigDecimal("0.00");
+            if (storageItem.getTotalStockInQuantity().equals(BigDecimal.ZERO)) {
+                price = storageItem.getTotalStockInMoney().divide(storageItem.getTotalStockInQuantity(), 10, BigDecimal.ROUND_HALF_DOWN);
+                price = price.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+            }
+            jsonObject.put("price", price);
 
             jsonArray.add(jsonObject);
         }

@@ -18,8 +18,6 @@
             <div class="panel-heading">
                 <h4>列表</h4>
             </div>
-
-
             <div class="panel-body">
                 <a href="${website}admin/dish/feature/new" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加菜品</a>
                 <div class="table-responsive">

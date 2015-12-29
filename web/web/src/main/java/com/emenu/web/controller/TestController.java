@@ -10,6 +10,12 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.IpUtil;
 import org.apache.commons.beanutils.BeanUtils;
+import org.quartz.CronTrigger;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +31,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "test")
 public class TestController extends AbstractController {
 
+    @Autowired
+    private SchedulerFactoryBean schedulerFactoryBean;
+
+    @Autowired
+    @Qualifier("testTrigger")
+    private CronTrigger testTrigger;
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String test() {
-        //LogClerk.bizLog.info("basePath: " + CommonUtil.getBasepath(getRequest()));
-        // LogClerk.bizLog.info("client ip: " + IpUtil.getClientIP(getRequest()));
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobDetail jobDetail = (JobDetail) testTrigger.getJobDataMap().remove("jobDetail");
+        try {
+            scheduler.scheduleJob(jobDetail, testTrigger);
+        } catch (Exception e) {
+
+        }
         getResponse().addHeader("Access-Control-Allow-Origin","*");
         return "admin/storage/report/list_home";
     }

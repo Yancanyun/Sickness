@@ -19,7 +19,7 @@
     <!-- 库存定时结算统计 -->
     <bean id="countSettlement" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject" ref="countSettlementTask"/>
-        <property name="targetMethod" value="newSettlementItem"/>
+        <property name="targetMethod" value="newSettlement"/>
         <property name="concurrent" value="false"/>
     </bean>
 
@@ -27,6 +27,17 @@
         <property name="jobDetail" ref="countSettlement"/>
         <!-- 每个月最后一天的23:59更新库存结算-->
         <property name="cronExpression" value="0 59 23 L * ?"/>
+    </bean>
+
+    <bean id="countSettlementTask1" class="com.emenu.service.storage.impl.StorageSettlementServiceImpl"/>
+
+    <bean id="testJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="countSettlementTask" />
+        <property name="targetMethod" value="test" />
+    </bean>
+    <bean id="testTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" >
+        <property name="jobDetail" ref="testJob" />
+        <property name="cronExpression" value="0 0/1 * * * ?" />
     </bean>
 
     <!--&lt;!&ndash; 定时检查预警 &ndash;&gt;-->
@@ -88,7 +99,7 @@
      <!--</bean>-->
 
     <!-- 定时器队列 -->
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
         <property name="triggers">
             <list>
                 <!-- 库存结算 -->
