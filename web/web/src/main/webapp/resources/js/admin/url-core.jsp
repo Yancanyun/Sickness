@@ -177,7 +177,14 @@
             ['delVip', site.website + 'admin/party/group/vip/ajax/del', 'put', '删除会员时，发送会员id'],
             //会员管理--添加\编辑
             ['hasVip', site.website + 'admin/party/group/vip/phone/ajax/exist', 'get', '发送新添加会员的手机号，与数据库进行判重'],
-
+            //多倍积分方案管理--删除
+            ['delExsitedPlan', site.website + 'admin/vip/multiple/integral/plan/ajax/&{id}', 'delete', '删除多倍积分方案时，发送方案id'],
+            //多倍积分方案管理--停用/启用
+            ['sendModifiedPlan', site.website + 'admin/vip/multiple/integral/plan/ajax/status', 'put', '停用、启用时，发送当前方案的id和status'],
+            //多倍积分方案管理--新方案的“保存”
+            ['sendAddedPlan', site.website + 'admin/vip/multiple/integral/plan/ajax', 'post', '保存新添加的方案时，发送方案内容，返回该方案的id'],
+            //多倍积分方案管理--修改后的方案“保存”
+            ['sendEditedPlan', site.website + 'admin/vip/multiple/integral/plan/ajax/&{id}', 'put', '保存修改后的方案时，发送方案内容'],
             //会员价方案
             ['sendEditPlan', site.website + 'admin/vip/price/plan/ajax', 'put', '保存编辑后的方案'],
             ['delPlan', site.website + 'admin/vip/price/plan/ajax/&{id}', 'delete', '删除时发送ID'],
@@ -189,8 +196,9 @@
             ['sendEditInfo', site.website + 'admin/vip/recharge/plan/ajax/&{id}', 'put', '保存编辑数据'],
             ['sendAddInfo', site.website + 'admin/vip/recharge/plan/ajax', 'post', '保存新添数据'],
             ['delPlanId', site.website + 'admin/vip/recharge/plan/ajax/&{id}', 'delete', '发送删除数据id'],
-            ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态']
-
+            ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态'],
+            //会员等级页面
+            ['delGrade', site.website + 'admin/vip/grade/ajax/&{id}', 'delete', '删除等级时发送id']
         ],
         // 公共模块
         Module: [

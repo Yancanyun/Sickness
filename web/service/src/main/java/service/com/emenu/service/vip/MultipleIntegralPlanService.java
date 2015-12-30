@@ -74,4 +74,12 @@ public interface MultipleIntegralPlanService {
      * @throws SSException
      */
     public MultipleIntegralPlan queryById(int id) throws SSException;
+
+    /**
+     * 查询某会员价方案中存在几个多倍积分方案
+     *
+     * @return
+     * @throws SSException
+     */
+    public int countByVipPricePlanId(int vipDishPricePlanId) throws SSException;
 }

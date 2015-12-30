@@ -122,6 +122,17 @@ public class MultipleIntegralPlanServiceImpl implements MultipleIntegralPlanServ
         }
     }
 
+    @Override
+    public int countByVipPricePlanId(int vipDishPricePlanId) throws SSException {
+        Assert.lessOrEqualZero(vipDishPricePlanId);
+        try {
+            return multipleIntegralPlanMapper.countByVipPricePlanId(vipDishPricePlanId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryMultipleIntegralPlanFail, e);
+        }
+    }
+
     /**
      * 检查实体及其关键字段
      *

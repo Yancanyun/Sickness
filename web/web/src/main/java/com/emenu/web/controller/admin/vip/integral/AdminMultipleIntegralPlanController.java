@@ -4,17 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.vip.MultipleIntegralPlan;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.vip.MultipleIntegralPlanStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,13 +40,25 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     public String toMultipleIntegralPlanPage(Model model) {
         try {
             List<MultipleIntegralPlan> plans = multipleIntegralPlanService.listAll();
+            //格式化日期显示
+            for (MultipleIntegralPlan plan : plans) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                if (plan.getStartTime() != null) {
+                    String startTimeString = format.format(plan.getStartTime());
+                    plan.setStartTimeString(startTimeString);
+                }
+                if (plan.getEndTime() != null) {
+                    String endTimeString = format.format(plan.getEndTime());
+                    plan.setEndTimeString(endTimeString);
+                }
+            }
             model.addAttribute("planList", plans);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "";
+        return "admin/vip/multiple/integral/plan/list_home";
     }
 
     /**
@@ -76,7 +89,7 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminVipMultipleIntegralPlanUpdate)
-    @RequestMapping(value = "ajax", method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject updateMultipleIntegralPlan(MultipleIntegralPlan multipleIntegralPlan) {
         try {
@@ -91,6 +104,26 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     }
 
     /**
+     * Ajax 修改餐台状态
+     * @param id
+     * @param status
+     * @return
+     */
+    @Module(ModuleEnums.AdminVipMultipleIntegralPlanUpdate)
+    @RequestMapping(value = "ajax/status", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSONObject updateStatus(@RequestParam("id") Integer id,
+                                   @RequestParam("status") Integer status) {
+        try {
+            multipleIntegralPlanService.updateStatusById(id, MultipleIntegralPlanStatusEnums.valueOf(status));
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
      * ajax删除多倍积分方案
      *
      * @param id
@@ -98,8 +131,7 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
      */
     @Module(ModuleEnums.AdminVipMultipleIntegralPlanDelete)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
-    @ResponseBody
-    public JSONObject delById(@PathVariable("id") int id) {
+    public JSONObject delById(@PathVariable("id") Integer id) {
         try {
             multipleIntegralPlanService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);

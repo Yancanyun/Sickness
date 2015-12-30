@@ -15,9 +15,9 @@
       <select class="form-control" name="status">
         {@if plan.status == 0}
         <option value ="0">停用</option>
-        <option value ="1">启用</option>
+        <option value ="1">可用</option>
         {@else}
-        <option value ="1">启用</option>
+        <option value ="1">可用</option>
         <option value ="0">停用</option>
         {@/if}
       </select>

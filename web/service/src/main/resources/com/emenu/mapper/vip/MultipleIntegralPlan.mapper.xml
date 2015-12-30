@@ -9,6 +9,7 @@
         `end_time` AS endTime,
         `status`
         FROM `t_multiple_integral_plan`
+        ORDER BY `id` DESC
     </select>
 
     <update id="updateStatusById">

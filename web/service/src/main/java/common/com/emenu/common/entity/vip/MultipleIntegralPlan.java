@@ -39,6 +39,12 @@ public class MultipleIntegralPlan extends AbstractEntity{
     @Column(name = "end_time")
     private Date endTime;
 
+    //格式化后的开始时间的String
+    private String startTimeString;
+
+    //格式化后的结束时间的String
+    private String endTimeString;
+
     //启用状态，0-未启用，1-启用
     private Integer status;
 
@@ -113,5 +119,21 @@ public class MultipleIntegralPlan extends AbstractEntity{
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getStartTimeString() {
+        return startTimeString;
+    }
+
+    public void setStartTimeString(String startTimeString) {
+        this.startTimeString = startTimeString;
+    }
+
+    public String getEndTimeString() {
+        return endTimeString;
+    }
+
+    public void setEndTimeString(String endTimeString) {
+        this.endTimeString = endTimeString;
     }
 }

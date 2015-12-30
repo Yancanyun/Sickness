@@ -1,8 +1,11 @@
 package com.emenu.service.vip.impl;
 
+import com.emenu.common.dto.vip.VipGradeDto;
+import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipGradeMapper;
+import com.emenu.service.vip.VipDishPricePlanService;
 import com.emenu.service.vip.VipGradeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -11,6 +14,7 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +33,9 @@ public class VipGradeServiceImpl implements VipGradeService{
     @Autowired
     private VipGradeMapper vipGradeMapper;
 
+    @Autowired
+    private VipDishPricePlanService vipDishPricePlanService;
+
     @Override
     public List<VipGrade> listAll() throws SSException {
         List<VipGrade> list = Collections.emptyList();
@@ -39,6 +46,29 @@ public class VipGradeServiceImpl implements VipGradeService{
             throw SSException.get(EmenuException.QueryVipGradeFail, e);
         }
         return list;
+    }
+
+    @Override
+    public List<VipGradeDto> listAllVipGradeDto() throws SSException {
+        List<VipGradeDto> vipGradeDtoList = new ArrayList<VipGradeDto>();
+        List<VipGrade> vipGradeList = Collections.emptyList();
+        try {
+            vipGradeList = vipGradeMapper.listAll();
+
+            if (!vipGradeList.isEmpty()) {
+                for (VipGrade vipGrade : vipGradeList) {
+                    VipGradeDto vipGradeDto = new VipGradeDto();
+                    vipGradeDto.setVipGrade(vipGrade);
+                    vipGradeDto.setVipDishPricePlanName(vipDishPricePlanService.queryById(vipGrade.getVipDishPricePlanId()).getName());
+
+                    vipGradeDtoList.add(vipGradeDto);
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipGradeFail, e);
+        }
+        return vipGradeDtoList;
     }
 
     @Override

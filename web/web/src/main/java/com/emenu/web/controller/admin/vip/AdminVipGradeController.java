@@ -2,6 +2,8 @@ package com.emenu.web.controller.admin.vip;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.vip.VipGradeDto;
+import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
@@ -39,14 +41,14 @@ public class AdminVipGradeController extends AbstractController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toVipGradePage(Model model) {
         try {
-            List<VipGrade> vipGrades = vipGradeService.listAll();
-            model.addAttribute("vipGrades", vipGrades);
+            List<VipGradeDto> vipGradeDtoList = vipGradeService.listAllVipGradeDto();
+            model.addAttribute("vipGradeDtoList", vipGradeDtoList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return null;
+        return "admin/vip/grade/list_home";
     }
 
     /**
@@ -56,8 +58,17 @@ public class AdminVipGradeController extends AbstractController {
      */
     @Module(ModuleEnums.AdminVipGradeNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
-    public String toNewVipGradePage() {
-        return null;
+    public String toNewVipGradePage(Model model) {
+        try {
+            //返回会员价方案列表
+            List<VipDishPricePlan> vipDishPricePlanList = vipDishPricePlanService.listAll();
+            model.addAttribute("vipDishPricePlanList", vipDishPricePlanList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/vip/grade/new_home";
     }
 
     /**
@@ -69,7 +80,7 @@ public class AdminVipGradeController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminVipGradeNew)
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipGrade(VipGrade vipGrade, HttpServletRequest httpServletRequest,
                               RedirectAttributes redirectAttributes) {
         try {
@@ -97,6 +108,10 @@ public class AdminVipGradeController extends AbstractController {
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateVipGradePage(@PathVariable("id") int id, Model model) {
         try {
+            //返回会员价方案列表
+            List<VipDishPricePlan> vipDishPricePlanList = vipDishPricePlanService.listAll();
+            model.addAttribute("vipDishPricePlanList", vipDishPricePlanList);
+
             VipGrade vipGrade = vipGradeService.queryById(id);
             model.addAttribute("vipGrade", vipGrade);
         } catch (SSException e) {
@@ -104,7 +119,7 @@ public class AdminVipGradeController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return  null;
+        return "admin/vip/grade/update_home";
     }
 
     /**
@@ -116,8 +131,9 @@ public class AdminVipGradeController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminVipGradeUpdate)
-    @RequestMapping(value = "" , method = RequestMethod.PUT)
-    public String updateById(VipGrade vipGrade, HttpServletRequest httpServletRequest,
+    @RequestMapping(value = "update/{id}" , method = RequestMethod.POST)
+    public String updateById(@PathVariable Integer id, VipGrade vipGrade,
+                             HttpServletRequest httpServletRequest,
                              RedirectAttributes redirectAttributes) {
         try {
             vipGradeService.updateById(vipGrade);
@@ -140,8 +156,8 @@ public class AdminVipGradeController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminVipGradeDelete)
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
-    public JSONObject delById(int id) {
+    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    public JSONObject delById(@PathVariable("id") Integer id) {
         try {
             vipGradeService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);

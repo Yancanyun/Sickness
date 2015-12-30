@@ -1,5 +1,6 @@
 package com.emenu.service.vip;
 
+import com.emenu.common.dto.vip.VipGradeDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.pandawork.core.common.exception.SSException;
 
@@ -21,6 +22,13 @@ public interface VipGradeService {
      * @throws SSException
      */
     public List<VipGrade> listAll() throws SSException;
+
+    /**
+     * 查询所有会员等级方案(包含会员等级信息)
+     * @return
+     * @throws SSException
+     */
+    public List<VipGradeDto> listAllVipGradeDto() throws SSException;
 
     /**
      * 新增会员等级方案
