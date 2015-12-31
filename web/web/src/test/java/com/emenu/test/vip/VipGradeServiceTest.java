@@ -64,4 +64,9 @@ public class VipGradeServiceTest extends AbstractTestCase {
     public void delById() throws SSException{
         vipGradeService.delById(2);
     }
+
+    @Test
+    public void countByVipPricePlanId() throws SSException{
+        System.out.println(vipGradeService.countByVipPricePlanId(1));
+    }
 }

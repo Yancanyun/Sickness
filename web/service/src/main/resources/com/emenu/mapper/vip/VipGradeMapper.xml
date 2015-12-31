@@ -12,7 +12,7 @@
         FROM `t_vip_grade`
     </select>
 
-    <select id="countByVipPricePlanId" resultType="com.emenu.common.entity.vip.VipGrade">
+    <select id="countByVipPricePlanId" resultType="int">
         SELECT COUNT(1) FROM `t_vip_grade` WHERE `vip_dish_price_plan_id` = #{vipDishPricePlanId}
     </select>
 </mapper>
