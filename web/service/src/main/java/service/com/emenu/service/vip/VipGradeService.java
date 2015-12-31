@@ -4,6 +4,7 @@ import com.emenu.common.dto.vip.VipGradeDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.pandawork.core.common.exception.SSException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -70,4 +71,13 @@ public interface VipGradeService {
      * @throws SSException
      */
     public int countByVipPricePlanId(int vipDishPricePlanId) throws SSException;
+
+    /**
+     * 根据消费金额查询对应会员等级
+     *
+     * @param consumption
+     * @return
+     * @throws SSException
+     */
+    public VipGrade queryByConsumption(BigDecimal consumption) throws SSException;
 }

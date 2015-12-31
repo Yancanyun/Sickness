@@ -14,8 +14,10 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -130,6 +132,33 @@ public class VipGradeServiceImpl implements VipGradeService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMultipleIntegralPlanFail, e);
         }
+    }
+
+    @Override
+    public VipGrade queryByConsumption(BigDecimal consumption) throws SSException {
+        if (Assert.isNull(consumption)){
+            return null;
+        }
+        try {
+            List<VipGrade> vipGrades = vipGradeMapper.listAll();
+            Collections.sort(vipGrades, new Comparator<VipGrade>() {
+                @Override
+                public int compare(VipGrade o1, VipGrade o2) {
+                    return o2.getMinConsumption().compareTo(o1.getMinConsumption());
+                }
+            });
+            for (VipGrade vipGrade : vipGrades){
+                if (consumption.subtract(vipGrade.getMinConsumption()).compareTo(new BigDecimal(0)) >= 0){
+                    return vipGrade;
+                }
+            }
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipGradeFail, e);
+        }
+        //传入的数据为空或小于0或没有符合最低消费要求的记录会返回null
+        return null;
     }
 
     /**

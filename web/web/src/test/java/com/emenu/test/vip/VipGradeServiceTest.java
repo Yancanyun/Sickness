@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -68,5 +70,23 @@ public class VipGradeServiceTest extends AbstractTestCase {
     @Test
     public void countByVipPricePlanId() throws SSException{
         System.out.println(vipGradeService.countByVipPricePlanId(1));
+    }
+
+    @Test
+    public void queryByConsumption() throws SSException{
+        BigDecimal bigDecimal = new BigDecimal(9000);
+        List<VipGrade> vipGrades = vipGradeService.listAll();
+        Collections.sort(vipGrades, new Comparator<VipGrade>() {
+            @Override
+            public int compare(VipGrade o1, VipGrade o2) {
+                return o2.getMinConsumption().compareTo(o1.getMinConsumption());
+            }
+        });
+        for (VipGrade vipGrade : vipGrades){
+            if (bigDecimal.subtract(vipGrade.getMinConsumption()).compareTo(new BigDecimal(0)) >= 0){
+                System.out.println(vipGrade);
+                break;
+            }
+        }
     }
 }
