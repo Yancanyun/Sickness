@@ -46,12 +46,4 @@ public interface MultipleIntegralPlanMapper {
      * @throws Exception
      */
     public int countByName(String name) throws Exception;
-
-    /**
-     * 查询某会员价方案中存在几个多倍积分方案
-     *
-     * @return
-     * @throws Exception
-     */
-    public int countByVipPricePlanId(int vipDishPricePlanId) throws Exception;
 }

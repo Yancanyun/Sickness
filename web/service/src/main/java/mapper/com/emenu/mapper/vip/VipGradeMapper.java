@@ -19,4 +19,12 @@ public interface VipGradeMapper {
      * @throws Exception
      */
     public List<VipGrade> listAll() throws Exception;
+
+    /**
+     * 查询某会员价方案中存在几个会员等级
+     *
+     * @return
+     * @throws Exception
+     */
+    public int countByVipPricePlanId(int vipDishPricePlanId) throws Exception;
 }

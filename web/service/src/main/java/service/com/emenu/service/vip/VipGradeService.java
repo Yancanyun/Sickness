@@ -62,4 +62,12 @@ public interface VipGradeService {
      * @throws SSException
      */
     public VipGrade queryById(int id) throws SSException;
+
+    /**
+     * 查询某会员价方案中存在几个会员等级方案
+     *
+     * @return
+     * @throws SSException
+     */
+    public int countByVipPricePlanId(int vipDishPricePlanId) throws SSException;
 }
