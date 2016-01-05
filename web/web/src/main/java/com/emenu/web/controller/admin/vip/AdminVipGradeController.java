@@ -37,7 +37,7 @@ public class AdminVipGradeController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminVipGradeList)
+    @Module(value = ModuleEnums.AdminVipGrade , extModule = ModuleEnums.AdminVipGradeList)
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toVipGradePage(Model model) {
         try {
@@ -56,7 +56,7 @@ public class AdminVipGradeController extends AbstractController {
      *
      * @return
      */
-    @Module(ModuleEnums.AdminVipGradeNew)
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipGradeNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewVipGradePage(Model model) {
         try {
@@ -79,7 +79,7 @@ public class AdminVipGradeController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminVipGradeNew)
+    @Module(value = ModuleEnums.AdminVipGradeNew, extModule = ModuleEnums.AdminVipGradeNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipGrade(VipGrade vipGrade, HttpServletRequest httpServletRequest,
                               RedirectAttributes redirectAttributes) {
@@ -104,7 +104,7 @@ public class AdminVipGradeController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminVipGradeUpdate)
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipGradeUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateVipGradePage(@PathVariable("id") int id, Model model) {
         try {
@@ -130,7 +130,7 @@ public class AdminVipGradeController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminVipGradeUpdate)
+    @Module(value = ModuleEnums.AdminVipGradeUpdate, extModule = ModuleEnums.AdminVipGradeUpdate)
     @RequestMapping(value = "update/{id}" , method = RequestMethod.POST)
     public String updateById(@PathVariable Integer id, VipGrade vipGrade,
                              HttpServletRequest httpServletRequest,

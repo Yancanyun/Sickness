@@ -121,8 +121,25 @@
             <li <c:if test="${MethodModule eq 'Admin:Vip:RechargePlan:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/price/plan/list">会员充值方案管理</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:Vip:Grade:List'}">class="active"</c:if>>
-                <a class="J_menu" href="${website}admin/vip/grade">会员等级管理</a>
+            <li <c:if test="${MethodModule eq 'Admin:Vip:Grade'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/vip/grade">
+                    会员等级管理
+                    <c:if test="${ExtModule eq 'Admin:Vip:Grade:New'
+                                    or ExtModule eq 'Admin:Vip:Grade:Update'}"><i class="fa fa-angle-right angle-right"></i></c:if>
+                </a>
+                <c:if test="${ExtModule eq 'Admin:Vip:Grade:New'
+                                or ExtModule eq 'Admin:Vip:Grade:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:Vip:Grade:New'}">class="active" </c:if>>
+                            <a href="${website}admin/vip/grade/new">添加会员等级</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:Vip:Grade:Update'}">
+                            <li class="active">
+                                <a href="#">修改会员等级</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </c:if>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:Vip:MultipleIntegralPlan:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/multiple/integral/plan">多倍积分方案管理</a>
