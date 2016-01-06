@@ -40,18 +40,18 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     public String toMultipleIntegralPlanPage(Model model) {
         try {
             List<MultipleIntegralPlan> plans = multipleIntegralPlanService.listAll();
-            //格式化日期显示
-            for (MultipleIntegralPlan plan : plans) {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                if (plan.getStartTime() != null) {
-                    String startTimeString = format.format(plan.getStartTime());
-                    plan.setStartTimeString(startTimeString);
-                }
-                if (plan.getEndTime() != null) {
-                    String endTimeString = format.format(plan.getEndTime());
-                    plan.setEndTimeString(endTimeString);
-                }
-            }
+//            //格式化日期显示
+//            for (MultipleIntegralPlan plan : plans) {
+//                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//                if (plan.getStartTime() != null) {
+//                    String startTimeString = format.format(plan.getStartTime());
+//                    plan.setStartTimeString(startTimeString);
+//                }
+//                if (plan.getEndTime() != null) {
+//                    String endTimeString = format.format(plan.getEndTime());
+//                    plan.setEndTimeString(endTimeString);
+//                }
+//            }
             model.addAttribute("planList", plans);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -72,6 +72,10 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     @ResponseBody
     public JSONObject newMultipleIntegralPlan(MultipleIntegralPlan multipleIntegralPlan) {
         try {
+            //将Time对应的String设为空，防止其往数据库里插
+            multipleIntegralPlan.setStartTimeString(null);
+            multipleIntegralPlan.setEndTimeString(null);
+
             MultipleIntegralPlan plan = multipleIntegralPlanService.newMultipleIntegralPlan(multipleIntegralPlan);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", plan.getId());
@@ -93,6 +97,10 @@ public class AdminMultipleIntegralPlanController extends AbstractController{
     @ResponseBody
     public JSONObject updateMultipleIntegralPlan(MultipleIntegralPlan multipleIntegralPlan) {
         try {
+            //将Time对应的String设为空，防止其往数据库里插
+            multipleIntegralPlan.setStartTimeString(null);
+            multipleIntegralPlan.setEndTimeString(null);
+
             multipleIntegralPlanService.updateById(multipleIntegralPlan);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", null);

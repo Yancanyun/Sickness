@@ -1,5 +1,6 @@
 package com.emenu.common.entity.vip;
 
+import com.emenu.common.utils.DateUtils;
 import com.pandawork.core.common.entity.AbstractEntity;
 
 import javax.persistence.Column;
@@ -87,6 +88,12 @@ public class MultipleIntegralPlan extends AbstractEntity{
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+
+        if (startTime != null) {
+            this.startTimeString = DateUtils.formatDate(startTime, "yyyy-MM-dd");
+        } else {
+            this.startTimeString = "";
+        }
     }
 
     public Date getEndTime() {
@@ -95,6 +102,12 @@ public class MultipleIntegralPlan extends AbstractEntity{
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+
+        if (endTime != null) {
+            this.endTimeString = DateUtils.formatDate(endTime, "yyyy-MM-dd");
+        } else {
+            this.endTimeString = "";
+        }
     }
 
     public Integer getStatus() {
