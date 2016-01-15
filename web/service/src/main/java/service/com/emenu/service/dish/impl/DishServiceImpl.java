@@ -112,18 +112,8 @@ public class DishServiceImpl implements DishService {
             }
             // 1. 添加菜品
             Dish dish = (new Dish()).constructFromDto(dishDto);
-            SaleTypeEnums saleTypeEnums = SaleTypeEnums.valueOf(dish.getSaleType());
-            BigDecimal salePrice = dish.getPrice();
-            // 如果是折扣，售价需要计算
-            if (SaleTypeEnums.Discount.equals(saleTypeEnums)) {
-                Integer discount = dish.getDiscount();
-                salePrice = dish.getPrice().multiply(new BigDecimal(discount.toString()))
-                                            .divide(new BigDecimal("100.00"));
-                salePrice = salePrice.setScale(2, BigDecimal.ROUND_HALF_UP);
-            } else if (SaleTypeEnums.SalePrice.equals(saleTypeEnums)) {
-                salePrice = dish.getSalePrice();
-            }
-            dish.setSalePrice(salePrice);
+            // 计算售价
+            dish = calcSalePrice(dish);
             // 设置状态
             dish.setStatus(DishStatusEnums.OnSale.getId());
             dish = commonDao.insert(dish);
@@ -165,18 +155,8 @@ public class DishServiceImpl implements DishService {
             }
             // 1. 更新菜品
             Dish dish = (new Dish()).constructFromDto(dishDto);
-            SaleTypeEnums saleTypeEnums = SaleTypeEnums.valueOf(dish.getSaleType());
-            BigDecimal salePrice = dish.getPrice();
-            // 如果是折扣，售价需要计算
-            if (SaleTypeEnums.Discount.equals(saleTypeEnums)) {
-                Integer discount = dish.getDiscount();
-                salePrice = dish.getPrice().multiply(new BigDecimal(discount.toString()))
-                        .divide(new BigDecimal("100.00"));
-                salePrice = salePrice.setScale(2, BigDecimal.ROUND_HALF_UP);
-            } else if (SaleTypeEnums.SalePrice.equals(saleTypeEnums)) {
-                salePrice = dish.getSalePrice();
-            }
-            dish.setSalePrice(salePrice);
+            // 计算售价
+            dish = calcSalePrice(dish);
             commonDao.update(dish);
 
             // 2. 更新口味
@@ -186,11 +166,14 @@ public class DishServiceImpl implements DishService {
             dishMealPeriodService.updateDishMealPeriod(dish.getId(), dishDto.getMealPeriodIdList());
 
             // 4. 更新打印机
-            DishTagPrinter dishTagPrinter = new DishTagPrinter();
-            dishTagPrinter.setDishId(dish.getId());
-            dishTagPrinter.setPrinterId(dishDto.getPrinterId());
-            dishTagPrinter.setType(PrinterDishEnum.DishPrinter.getId());
-            dishTagPrinterService.updatePrinterDish(dishTagPrinter);
+            if (!Assert.isNotNull(dishDto.getPrinterId())
+                    && !Assert.lessOrEqualZero(dishDto.getPrinterId())) {
+                DishTagPrinter dishTagPrinter = new DishTagPrinter();
+                dishTagPrinter.setDishId(dish.getId());
+                dishTagPrinter.setPrinterId(dishDto.getPrinterId());
+                dishTagPrinter.setType(PrinterDishEnum.DishPrinter.getId());
+                dishTagPrinterService.updatePrinterDish(dishTagPrinter);
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishUpdateFailed, e);
@@ -233,7 +216,7 @@ public class DishServiceImpl implements DishService {
             return null;
         }
         try {
-            DishDto dishDto = dishMapper.queryById(id);
+            DishDto dishDto =  dishMapper.queryById(id);
             // 查询餐段
             // 查询菜品退片
             List<DishImg> smallImgList = dishImgService.listByDishIdAndType(id, DishImgTypeEnums.SmallImg);
@@ -269,5 +252,27 @@ public class DishServiceImpl implements DishService {
         }
 
         return true;
+    }
+
+    /**
+     * 计算菜品售价
+     *
+     * @param dish
+     * @return
+     */
+    private Dish calcSalePrice(Dish dish) {
+        SaleTypeEnums saleTypeEnums = SaleTypeEnums.valueOf(dish.getSaleType());
+        BigDecimal salePrice = dish.getPrice();
+        // 如果是折扣，售价需要计算
+        if (SaleTypeEnums.Discount.equals(saleTypeEnums)) {
+            Float discount = dish.getDiscount();
+            salePrice = dish.getPrice().multiply(new BigDecimal(discount.toString()))
+                    .divide(new BigDecimal("10.00"));
+            salePrice = salePrice.setScale(2, BigDecimal.ROUND_HALF_UP);
+        } else if (SaleTypeEnums.SalePrice.equals(saleTypeEnums)) {
+            salePrice = dish.getSalePrice();
+        }
+        dish.setSalePrice(salePrice);
+        return  dish;
     }
 }

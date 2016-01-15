@@ -47,7 +47,7 @@ public class Dish extends AbstractEntity {
     private Integer saleType;
 
     // 折扣
-    private Integer discount;
+    private Float discount;
 
     // 售价
     @Column(name = "sale_price")
@@ -163,11 +163,11 @@ public class Dish extends AbstractEntity {
         this.saleType = saleType;
     }
 
-    public Integer getDiscount() {
+    public Float getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(Float discount) {
         this.discount = discount;
     }
 

@@ -54,7 +54,7 @@ CREATE TABLE `t_dish` (
 	`unit_id` INT(11) NOT NULL DEFAULT '0' COMMENT '单位ID',
 	`price` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '定价',
 	`sale_type` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '促销方式(1-无促销,2-折扣,3-促销价格)',
-	`discount` TINYINT(4) NOT NULL DEFAULT '100' COMMENT '折扣',
+	`discount` DECIMAL(4, 2) NOT NULL DEFAULT '10.00' COMMENT '折扣',
 	`sale_price` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '售价',
 	`category_id` INT(11) NOT NULL DEFAULT '3' COMMENT '总分类ID',
 	`tag_id` INT(11) NOT NULL DEFAULT '0' COMMENT '菜品小类ID',
@@ -116,3 +116,29 @@ CREATE TABLE `t_dish_package` (
 	`last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
 	PRIMARY KEY(`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '套餐表';
+
+
+/* 成本卡 */
+DROP TABLE IF EXISTS `t_cost_card`;
+CREATE TABLE `t_cost_card` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`dish_id` INT(11) NOT NULL DEFAULT '0' COMMENT '菜品ID',
+	`standard_cost` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '标准成本',
+	`condiment_cost` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '调料成本',
+	`created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`last_modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+	PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='成本卡';
+/* 成本卡物品 */
+DROP TABLE IF EXISTS `t_cost_card_item`;
+CREATE TABLE `t_cost_card_item` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`cost_card_id` INT(11) NOT NULL DEFAULT '0' COMMENT '成本卡ID',
+	`item_id` INT(11) NOT NULL DEFAULT '0' COMMENT '库存物品ID',
+	`net_item_quantity` DECIMAL(10, 2) NOT NULL DEFAULT '0.00' COMMENT '净料用量',
+	`net_item_ratio` DECIMAL(10, 2) NOT NULL DEFAULT '100.00' COMMENT '净料率',
+	`auto_stock_out` TINYINT(4) NOT NULL DEFAULT '0' COMMENT '是否自动出库(0-否，1-是)',
+	`created_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	`last_modified_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最近修改时间',
+	PRIMARY KEY(`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='成本卡物品表';

@@ -154,6 +154,11 @@ public enum EmenuException implements IBizExceptionMes {
     DishMealPeriodUpdateFailed("菜品-餐段更新失败", 1062),
     DishMealPeriodDeleteFailed("菜品-餐段删除失败", 1063),
 
+    // 成本卡
+    CostCardQueryFailed("成本卡查询失败", 1064),
+    CostCardInsertFailed("成本卡添加失败", 1065),
+    CostCardUpdateFailed("成本卡更新失败", 1066),
+    CostCardDeleteFailed("成本卡删除失败", 1067),
 
     //饭店管理
     //餐台区域

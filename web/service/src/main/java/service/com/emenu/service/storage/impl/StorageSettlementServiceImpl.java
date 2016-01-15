@@ -752,4 +752,8 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         }
         return settlementItemList;
     }
+
+    public void test() {
+        System.out.println("test quartz");
+    }
 }

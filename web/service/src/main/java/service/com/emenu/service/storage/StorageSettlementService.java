@@ -108,4 +108,6 @@ public interface StorageSettlementService {
                                                 Date startDate,
                                                 Date endDate,
                                                 HttpServletResponse response)throws SSException;
+
+    public void test();
 }

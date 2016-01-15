@@ -164,7 +164,9 @@
         SELECT
             `id` AS id,
             `name` AS name,
-            `assistant_code` AS assistantCode
+            `assistant_code` AS assistantCode,
+            `total_stock_in_quantity` AS totalStockInQuantity,
+            `total_stock_in_money` AS totalStockInMoney
         FROM `t_storage_item`
         WHERE
             `name` LIKE "%"#{keyword}"%" OR `assistant_code` LIKE "%"#{keyword}"%"

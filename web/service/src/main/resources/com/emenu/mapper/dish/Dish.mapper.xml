@@ -166,7 +166,7 @@
         WHERE dish.`id` = #{id}
     </select>
     
-    <resultMap id="dishDtoResultMap" type="DishDto">
+    <resultMap id="dishDtoResultMap" type="com.emenu.common.dto.dish.DishDto">
         <id property="id" column="id" />
         <result property="name" column="name" />
         <result property="dishNumber" column="dishNumber" />
@@ -177,6 +177,7 @@
         <result property="price" column="price" />
         <result property="saleType" column="saleType" />
         <result property="salePrice" column="salePrice" />
+        <result property="discount" column="discount" />
         <result property="categoryId" column="categoryId" />
         <result property="tagId" column="tagId" />
         <result property="description" column="description" />
@@ -187,11 +188,11 @@
         <result property="isVoucherAvailable" column="isVoucherAvailable" />
         <result property="timeLimit" column="timeLimit" />
         <result property="printerId" column="printerId" />
-        <collection property="mealPeriodList" ofType="DishMealPeriod">
+        <collection property="mealPeriodList" ofType="com.emenu.common.entity.dish.DishMealPeriod">
             <id property="id" column="dishMealPeriodId" />
             <result property="mealPeriodId" column="mealPeriodId" />
         </collection>
-        <collection property="tasteList" ofType="Taste">
+        <collection property="tasteList" ofType="com.emenu.common.entity.dish.Taste">
             <id property="id" column="tasteId" />
             <result property="name" column="tasteName" />
         </collection>

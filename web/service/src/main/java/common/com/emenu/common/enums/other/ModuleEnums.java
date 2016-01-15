@@ -13,6 +13,9 @@ public enum ModuleEnums {
     // 后台
     Admin("Admin"),
 
+    // 后台首页
+    AdminIndex("Admin:Index"),
+
     // 超级管理
     AdminSAdmin("Admin:SAdmin"),
 

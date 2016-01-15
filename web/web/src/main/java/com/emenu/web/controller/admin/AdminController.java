@@ -3,7 +3,9 @@ package com.emenu.web.controller.admin;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreLogin;
+import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.TrueEnums;
+import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -30,6 +32,7 @@ import java.io.PrintWriter;
 @RequestMapping(value = URLConstants.ADMIN_URL)
 public class AdminController extends AbstractController {
 
+    @Module(ModuleEnums.AdminIndex)
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toIndex() {
         return "admin/index/index_home";

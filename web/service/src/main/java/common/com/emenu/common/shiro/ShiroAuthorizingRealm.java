@@ -124,7 +124,6 @@ public class ShiroAuthorizingRealm extends AuthenticatingRealm
             roleSet.add(tmp.getName());
         }
 
-
         // 查询所有权限组的权限列表
         List<SecurityGroupPermission> groupPermissionList = new ArrayList<SecurityGroupPermission>();
         List<SecurityGroupPermission> tmpPerList = Collections.emptyList();

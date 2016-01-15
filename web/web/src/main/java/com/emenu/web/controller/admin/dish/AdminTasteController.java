@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2015/11/23
  */
 @Controller
-@Module(ModuleEnums.AdminDishTaste)
+@Module(ModuleEnums.AdminDishManagement)
 @RequestMapping(value = URLConstants.ADMIN_DISH_TASTE)
 public class AdminTasteController extends AbstractController{
 
