@@ -26,6 +26,10 @@ public class VipInfo extends AbstractEntity{
     @Column(name = "party_id")
     private Integer partyId;
 
+    //会员等级id
+    @Column(name = "grade_id")
+    private Integer gradeId;
+
     //会员姓名
     private String name;
 
@@ -71,6 +75,14 @@ public class VipInfo extends AbstractEntity{
 
     public void setPartyId(Integer partyId) {
         this.partyId = partyId;
+    }
+
+    public Integer getGradeId() {
+        return gradeId;
+    }
+
+    public void setGradeId(Integer gradeId) {
+        this.gradeId = gradeId;
     }
 
     public String getName() {

@@ -139,6 +139,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
             //3.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
+            vipInfo.setGradeId(0);//注册时设置为默认最低等级
             vipInfo.setStatus(UserStatusEnums.Enabled.getId());
             commonDao.insert(vipInfo);
 
