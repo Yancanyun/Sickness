@@ -5,6 +5,7 @@ import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipGradeMapper;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipDishPricePlanService;
 import com.emenu.service.vip.VipGradeService;
 import com.pandawork.core.common.exception.SSException;
@@ -37,6 +38,9 @@ public class VipGradeServiceImpl implements VipGradeService{
 
     @Autowired
     private VipDishPricePlanService vipDishPricePlanService;
+
+    @Autowired
+    private VipInfoService vipInfoService;
 
     @Override
     public List<VipGrade> listAll() throws SSException {
@@ -79,6 +83,13 @@ public class VipGradeServiceImpl implements VipGradeService{
             return null;
         }
         try {
+            //查看数据库中是否有相同最低消费金额的记录
+            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
+            if (!Assert.isNull(vipGrade1)){
+                if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption())){
+                    return null;
+                }
+            }
             return commonDao.insert(vipGrade);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -92,6 +103,13 @@ public class VipGradeServiceImpl implements VipGradeService{
             return;
         }
         try {
+            //查看数据库中是否有相同最低消费金额的记录，并且忽略其本身那条记录
+            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
+            if (!Assert.isNull(vipGrade1)){
+                if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption()) && vipGrade1.getId().equals(vipGrade.getId())){
+                    return;
+                }
+            }
             commonDao.update(vipGrade);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -102,6 +120,10 @@ public class VipGradeServiceImpl implements VipGradeService{
     @Override
     public void delById(int id) throws SSException {
         Assert.lessOrEqualZero(id, EmenuException.VipGradeIdIllegal);
+        //判断是否正在被使用
+        if (0 < vipInfoService.countByGradeId(id)){
+            throw SSException.get(EmenuException.VipGradeIdIsUsing);
+        }
         try {
             commonDao.deleteById(VipGrade.class, id);
         } catch (Exception e) {

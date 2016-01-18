@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.vip.VipGradeMapper">
-    <select id="listAll" resultType="com.emenu.common.entity.vip.VipGrade">
+    <select id="listAll" resultMap="pw.VipGrade">
         SELECT `id`, `name`,
         `vip_dish_price_plan_id` AS vipDishPricePlanId,
         `min_consumption` AS minConsumption,
@@ -14,5 +14,16 @@
 
     <select id="countByVipPricePlanId" resultType="int">
         SELECT COUNT(1) FROM `t_vip_grade` WHERE `vip_dish_price_plan_id` = #{vipDishPricePlanId}
+    </select>
+
+    <select id="countMinConsumptionExist" resultMap="pw.VipGrade">
+        SELECT `id`, `name`,
+        `vip_dish_price_plan_id` AS vipDishPricePlanId,
+        `min_consumption` AS minConsumption,
+        `credit_amount` AS creditAmount,
+        `settlement_cycle` AS settlementCycle,
+        `pre_reminder_amount` AS preReminderAmount,
+        `card_policy` AS cardPolicy
+        FROM `t_vip_grade` WHERE `min_consumption` = #{minConsumption}
     </select>
 </mapper>

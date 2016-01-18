@@ -2,6 +2,7 @@ package com.emenu.mapper.vip;
 
 import com.emenu.common.entity.vip.VipGrade;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,13 @@ public interface VipGradeMapper {
      * @throws Exception
      */
     public int countByVipPricePlanId(int vipDishPricePlanId) throws Exception;
+
+    /**
+     * 查询表中存在几个与传入最低消费金额相同的记录
+     *
+     * @param minConsumption
+     * @return
+     * @throws Exception
+     */
+    public VipGrade countMinConsumptionExist(BigDecimal minConsumption) throws Exception;
 }
