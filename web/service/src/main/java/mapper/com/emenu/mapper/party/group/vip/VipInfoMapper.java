@@ -83,4 +83,12 @@ public interface VipInfoMapper {
      * @throws Exception
      */
     public Integer querySecurityUserIdById(@Param("id")int id) throws Exception;
+
+    /**
+     * 根据会员类型返回该类型的会员个数，用于判断会员等级是否可以删除
+     * @param gradeId
+     * @return
+     * @throws Exception
+     */
+    public Integer countByGradeId(int gradeId) throws Exception;
 }

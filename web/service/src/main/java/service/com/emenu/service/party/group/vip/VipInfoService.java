@@ -94,4 +94,12 @@ public interface VipInfoService {
      * @throws SSException
      */
     public Integer querySecurityUserIdById(int id) throws SSException;
+
+    /**
+     * 根据会员类型返回该类型的会员个数，用于判断会员等级是否可以删除
+     * @param gradeId
+     * @return
+     * @throws SSException
+     */
+    public Integer countByGradeId(int gradeId) throws SSException;
 }

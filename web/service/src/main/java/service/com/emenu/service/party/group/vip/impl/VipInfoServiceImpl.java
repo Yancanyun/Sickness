@@ -233,14 +233,26 @@ public class VipInfoServiceImpl implements VipInfoService{
         try {
             CommonUtil.checkId(id, EmenuException.VipIdNotNull);
             VipInfo vipInfo = vipInfoMapper.queryById(id);
-            /*if (vipInfo.getBirthday() == null){
-                vipInfo.setBirthday();
-            }*/
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipInfoFail);
         }
+    }
+
+    @Override
+    public Integer countByGradeId(int gradeId) throws SSException{
+        Integer count = 0;
+        if (Assert.isNull(gradeId)){
+            throw SSException.get(EmenuException.VipGradeIdIllegal);
+        }
+        try{
+            count = vipInfoMapper.countByGradeId(gradeId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
+        }
+        return count;
     }
 
     /**
@@ -268,7 +280,6 @@ public class VipInfoServiceImpl implements VipInfoService{
         Integer securityUserId = 0;
         try{
             CommonUtil.checkId(id, PartyException.UserIdNotNull);
-
             securityUserId = vipInfoMapper.querySecurityUserIdById(id);
         } catch (Exception e){
             LogClerk.errLog.error(e);

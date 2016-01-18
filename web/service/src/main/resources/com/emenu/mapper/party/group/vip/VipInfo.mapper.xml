@@ -74,5 +74,11 @@
         AND party.`id` = securityUser.`party_id`
         AND vipInfo.`id` = #{id}
     </select>
+    
+    <select id="countByGradeId" resultType="int">
+        SELECT COUNT(1)
+        FROM t_party_vip_info
+        WHERE grade_id = #{gradeId}
+    </select>
 
 </mapper>

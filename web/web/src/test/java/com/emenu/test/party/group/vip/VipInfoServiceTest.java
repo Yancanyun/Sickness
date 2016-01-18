@@ -86,4 +86,12 @@ public class VipInfoServiceTest extends AbstractTestCase {
             System.out.println(vipInfo.getPhone());
         }
     }
+
+    @Test
+    public void countByGradeId() throws SSException{
+        Integer count  = 0;
+        Integer gradeId = 0;
+        count = vipInfoService.countByGradeId(gradeId);
+        System.out.println(count);
+    }
 }

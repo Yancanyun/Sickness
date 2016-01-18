@@ -340,6 +340,7 @@ public enum EmenuException implements IBizExceptionMes {
     VipInfoIdError("会员ID为空或者小于0",8010),
     SearchSecurityUserIdFail("获取用户登录id失败",8011),
     DeleteVipInfoFail("删除会员失败",8012),
+    CountVipByGradeIdFail("计算会员数量失败",8028),
 
     ListVipDishPricePlanFail("获取会员价方案列表失败",8013),
     QueryVipDishPricePlanFail("获取会员价方案失败",8014),
