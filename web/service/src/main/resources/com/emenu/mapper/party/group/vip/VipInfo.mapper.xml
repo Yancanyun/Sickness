@@ -81,4 +81,15 @@
         WHERE grade_id = #{gradeId}
     </select>
 
+    <select id="searchByNameOrPhone" resultMap="pw.VipInfo">
+        SELECT *
+        FROM `t_party_vip_info` vipInfo
+        <where>
+            <if test="keyword != null">
+                (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
+                AND (`status` = 1 OR `status` = 2)
+            </if>
+        </where>
+    </select>
+
 </mapper>

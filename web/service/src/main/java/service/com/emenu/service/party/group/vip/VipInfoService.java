@@ -102,4 +102,12 @@ public interface VipInfoService {
      * @throws SSException
      */
     public Integer countByGradeId(int gradeId) throws SSException;
+
+    /**
+     * 根据姓名或电话查询会员信息
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public List<VipInfo> searchByNameOrPhone(String keyword) throws SSException;
 }

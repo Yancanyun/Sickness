@@ -9,6 +9,7 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -93,5 +94,16 @@ public class VipInfoServiceTest extends AbstractTestCase {
         Integer gradeId = 0;
         count = vipInfoService.countByGradeId(gradeId);
         System.out.println(count);
+    }
+
+    @Test
+    public void searchByNameOrPhone() throws SSException{
+        String keyword = "";
+        List<VipInfo> vipInfoList = vipInfoService.searchByNameOrPhone(keyword);
+        for (VipInfo vipInfo: vipInfoList){
+            System.out.print(vipInfo.getName() + " ");
+            System.out.println(vipInfo.getPhone());
+            System.out.println("****************");
+        }
     }
 }

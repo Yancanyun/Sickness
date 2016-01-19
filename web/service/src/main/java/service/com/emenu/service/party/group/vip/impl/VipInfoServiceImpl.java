@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -253,6 +254,21 @@ public class VipInfoServiceImpl implements VipInfoService{
             throw SSException.get(EmenuException.ListVipInfoFail);
         }
         return count;
+    }
+
+    @Override
+    public List<VipInfo> searchByNameOrPhone(String keyword) throws SSException{
+        List<VipInfo> vipInfoList = new ArrayList<VipInfo>();
+        if (Assert.isNull(keyword)){
+            return vipInfoList;
+        }
+        try{
+            vipInfoList = vipInfoMapper.searchByNameOrPhone(keyword);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
+        }
+        return vipInfoList;
     }
 
     /**

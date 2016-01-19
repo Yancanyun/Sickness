@@ -82,7 +82,7 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public Integer querySecurityUserIdById(@Param("id")int id) throws Exception;
+    public Integer querySecurityUserIdById(@Param("id") int id) throws Exception;
 
     /**
      * 根据会员类型返回该类型的会员个数，用于判断会员等级是否可以删除
@@ -90,5 +90,13 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public Integer countByGradeId(int gradeId) throws Exception;
+    public Integer countByGradeId(@Param("id") int gradeId) throws Exception;
+
+    /**
+     * 根据姓名或电话查询会员信息
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public List<VipInfo> searchByNameOrPhone(@Param("keyword") String keyword) throws Exception;
 }
