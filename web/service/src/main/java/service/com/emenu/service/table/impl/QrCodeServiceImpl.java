@@ -56,6 +56,10 @@ public class QrCodeServiceImpl implements QrCodeService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public String newQrCode(int tableId, String webDomain, HttpServletRequest request) throws SSException {
+        //检查TableID是否合法
+        if (Assert.lessOrEqualZero(tableId)) {
+            return null;
+        }
         //若未传来获取网站域名，则从常量表获取
         if (Assert.isNull(webDomain)) {
             webDomain = constantService.queryValueByKey(ConstantEnum.WebDomain.getKey());
@@ -138,6 +142,10 @@ public class QrCodeServiceImpl implements QrCodeService {
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
         File downloadFile = null;
+        //检查AreaID是否合法
+        if (Assert.lessOrEqualZero(areaId)) {
+            return ;
+        }
         try {
             String contentType = "application/octet-stream";
             //区域名称

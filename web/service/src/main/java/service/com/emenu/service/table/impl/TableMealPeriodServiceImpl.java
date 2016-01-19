@@ -75,6 +75,10 @@ public class TableMealPeriodServiceImpl implements TableMealPeriodService{
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void delByTableId (int tableId) throws SSException {
+        //检查TableID是否合法
+        if (Assert.lessOrEqualZero(tableId)) {
+            return ;
+        }
         try {
             tableMealPeriodMapper.delByTableId(tableId);
         } catch (Exception e) {

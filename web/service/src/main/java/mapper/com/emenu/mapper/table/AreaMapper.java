@@ -20,7 +20,7 @@ public interface AreaMapper {
     public List<Area> listAll() throws Exception;
 
     /**
-     * 据ID查询区域状态
+     * 根据ID查询区域状态
      * @param id
      * @return int : 1、可用；2、已删除
      * @throws Exception

@@ -60,6 +60,14 @@ public interface VipInfoMapper {
     public VipInfo queryById(@Param("id") int id) throws Exception;
 
     /**
+     * 根据partyId查询会员信息
+     * @param partyId
+     * @return
+     * @throws Exception
+     */
+    public VipInfo queryByPartyId(@Param("partyId") int partyId) throws Exception;
+
+    /**
      * 统计电话号码个数，用于判断是否已经存在电话号码
      * @param phone
      * @return

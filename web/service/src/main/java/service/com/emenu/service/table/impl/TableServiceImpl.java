@@ -411,6 +411,10 @@ public class TableServiceImpl implements TableService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateTable(Integer id, TableDto tableDto) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
         try {
             //从TableDto中获取Table
             Table table = tableDto.getTable();
@@ -473,6 +477,10 @@ public class TableServiceImpl implements TableService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void forceUpdateTable(Integer id, TableDto tableDto) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
         try {
             //从TableDto中获取Table
             Table table = tableDto.getTable();
@@ -643,7 +651,6 @@ public class TableServiceImpl implements TableService {
         if (Assert.lessOrEqualZero(id)) {
             return;
         }
-
         try {
             //检查是否为"可用"状态
             if (queryStatusById(id) != TableStatusEnums.Enabled.getId()) {
@@ -674,7 +681,6 @@ public class TableServiceImpl implements TableService {
         if (Assert.lessOrEqualZero(newTableId)) {
             return;
         }
-
         try {
             //检查旧餐台是否为"占用未结账"状态
             if (queryStatusById(oldTableId) != TableStatusEnums.Uncheckouted.getId()) {
@@ -712,6 +718,10 @@ public class TableServiceImpl implements TableService {
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void cleanTable(int id) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return ;
+        }
         try {
             //更新新餐台信息
             TableDto tableDto = queryTableDtoById(id);

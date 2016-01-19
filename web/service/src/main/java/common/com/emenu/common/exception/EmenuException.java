@@ -401,6 +401,12 @@ public enum EmenuException implements IBizExceptionMes {
     VipIntegralPlanTypeNotNull("会员积分方案类型不能为空", 8100),
     VipIntegralPlanValueNotNull("会员积分方案兑换值不能为空", 8101),
     InsetVipIntegralPlanFail("会员积分方案插入失败", 8102),
+
+    //会员卡发放
+    QueryVipCardFail("查询会员卡失败", 8120),
+    InsertVipCardFail("发卡失败", 8121),
+    UpdateVipCardFail("修改会员卡失败", 8122),
+    DeleteVipCardFail("删除会员卡失败", 8123),
     ;
 
 

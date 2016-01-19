@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.vip.VipCardMapper">
+    <select id="listAll" resultMap="pw.VipCard">
+        SELECT
+        `id`,
+        `vip_party_id`,
+        `card_number`,
+        `physical_number`,
+        `validity_time`,
+        `permanently_effective`,
+        `operator_party_id`,
+        `status`,
+        `created_time`
+        FROM `t_vip_card`
+        WHERE `status` = 1
+        ORDER BY `id` ASC
+    </select>
+
+    <select id="listByKeywordAndDate" resultMap="pw.VipCard">
+        SELECT
+        `t_vip_card`.`id`,
+        `t_vip_card`.`vip_party_id`,
+        `t_vip_card`.`card_number`,
+        `t_vip_card`.`physical_number`,
+        `t_vip_card`.`validity_time`,
+        `t_vip_card`.`permanently_effective`,
+        `t_vip_card`.`operator_party_id`,
+        `t_vip_card`.`status`,
+        `t_vip_card`.`created_time`,
+        `t_party_vip_info`.`name`,
+        `t_party_vip_info`.`phone`,
+        `t_party_employee`.`name` AS `operator`
+        FROM `t_vip_card`
+        LEFT JOIN `t_party_vip_info` ON `t_vip_card`.`vip_party_id` = `t_party_vip_info`.`party_id`
+        LEFT JOIN `t_party_employee` ON `t_vip_card`.`operator_party_id` = `t_party_employee`.`party_id`
+        WHERE `t_vip_card`.`status` = 1
+        <if test="keyword != null">
+            AND (`t_party_vip_info`.`name` LIKE "%"#{keyword}"%" OR `t_party_vip_info`.`phone` LIKE "%"#{keyword}"%")
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND `t_vip_card`.`created_time` &gt;= #{startTime}
+            AND `t_vip_card`.`created_time` &lt;= #{endTime}
+        </if>
+        ORDER BY `id` ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_vip_card`
+        WHERE `status` = 1
+    </select>
+
+    <select id="countByKeywordAndDate" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_vip_card`
+        LEFT JOIN `t_party_vip_info` ON `t_vip_card`.`vip_party_id` = `t_party_vip_info`.`party_id`
+        LEFT JOIN `t_party_employee` ON `t_vip_card`.`operator_party_id` = `t_party_employee`.`party_id`
+        WHERE `t_vip_card`.`status` = 1
+        <if test="keyword != null">
+            AND (`t_party_vip_info`.`name` LIKE "%"#{keyword}"%" OR `t_party_vip_info`.`phone` LIKE "%"#{keyword}"%")
+        </if>
+        <if test="startTime != null and endTime != null">
+            AND `t_vip_card`.`created_time` &gt;= #{startTime}
+            AND `t_vip_card`.`created_time` &lt;= #{endTime}
+        </if>
+    </select>
+
+    <select id="listByPage" resultMap="pw.VipCard">
+        SELECT
+        `id`,
+        `vip_party_id`,
+        `card_number`,
+        `physical_number`,
+        `validity_time`,
+        `permanently_effective`,
+        `operator_party_id`,
+        `status`,
+        `created_time`
+        FROM `t_vip_card`
+        WHERE `status` = 1
+        ORDER BY `id` ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE `t_vip_card`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

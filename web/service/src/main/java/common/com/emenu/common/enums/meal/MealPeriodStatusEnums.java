@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public enum MealPeriodStatusEnums {
     Disabled(0, "停用"),
-    Enabled(1, "启用");
+    Enabled(1, "启用"), ;
 
     private Integer id;
     private String status;
