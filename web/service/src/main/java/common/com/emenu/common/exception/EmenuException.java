@@ -397,6 +397,10 @@ public enum EmenuException implements IBizExceptionMes {
     VipGradeIdIllegal("会员等级方案id为空或小于等于0", 8090),
     VipGradeIdIsUsing("会员等级方案正在使用", 8090),
 
+    //会员积分方案
+    VipIntegralPlanTypeNotNull("会员积分方案类型不能为空", 8100),
+    VipIntegralPlanValueNotNull("会员积分方案兑换值不能为空", 8101),
+    InsetVipIntegralPlanFail("会员积分方案插入失败", 8102),
     ;
 
 
