@@ -30,16 +30,14 @@
     </select>
 
     <select id="countByKeyword" resultType="int">
-        SELECT COUNT(*)
+        SELECT COUNT(1)
         FROM `t_party_vip_info` vipInfo
-        WHERE `status` = 1 OR `status` = 2
         <where>
             <if test="keyword != null">
                 (vipInfo.name LIKE "%"#{keyword}"%" OR vipInfo.phone like "%"#{keyword}"%")
                 AND (`status` = 1 OR `status` = 2)
             </if>
         </where>
-        LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="queryById" resultMap="pw.VipInfo">

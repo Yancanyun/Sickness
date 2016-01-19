@@ -82,7 +82,11 @@ public class VipInfoController extends AbstractController {
         }
         Integer dataCount = 0;
         try {
-            dataCount = vipInfoService.countAll();
+            if (keyword =="" || keyword == null || keyword.equals("")){
+                dataCount = vipInfoService.countAll();
+            }else {
+                dataCount = vipInfoService.countByKeyword(keyword);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -112,7 +116,7 @@ public class VipInfoController extends AbstractController {
                              RedirectAttributes redirectAttributes){
         try{
             int userPartyId = getPartyId();
-            vipInfoService.newVipInfo(userPartyId,vipInfo);
+            vipInfoService.newVipInfo(userPartyId, vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
