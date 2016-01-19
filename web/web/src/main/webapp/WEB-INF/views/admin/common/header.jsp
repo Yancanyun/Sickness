@@ -61,7 +61,7 @@
                 <li><a class="J_menu" href="${website}admin/storage/supplier">供货商管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/item">库存物品管理</a></li>
-                <li><a class="J_menu" href="${website}admin/storage/report">库存管理</a></li>
+                <li><a class="J_menu" href="${website}admin/storage/report">库存单据管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/settlement/check">库存盘点</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/settlement/supplier">结算中心</a></li>
                 <li><a class="J_menu" href="javascript:;">库存更新管理</a></li>

@@ -45,9 +45,18 @@
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>最低消费金额
             </label>
-            <div class="col-sm-6">
-              <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" data-valid-tip="请输入最低消费金额|最低消费金额不符合规格，请重新输入"  data-valid-rule="notNull&isFloat"/>&nbsp;元
-            </div>
+            <c:choose>
+              <c:when test="${vipGrade.id eq 1}">
+                <div class="col-sm-6">
+                  <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" readonly/>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条无法修改
+                </div>
+              </c:when>
+              <c:otherwise>
+                <div class="col-sm-6">
+                  <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" data-valid-tip="请输入最低消费金额|最低消费金额不符合规格，请重新输入"  data-valid-rule="notNull&isFloat"/>&nbsp;元
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">
@@ -69,9 +78,18 @@
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>升级预提醒额度
             </label>
-            <div class="col-sm-6">
-              <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" data-valid-tip="请输入升级预提醒额度|升级预提醒额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
-            </div>
+            <c:choose>
+              <c:when test="${vipGrade.id eq 1}">
+                <div class="col-sm-6">
+                  <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" readonly/>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条无法修改
+                </div>
+              </c:when>
+              <c:otherwise>
+                <div class="col-sm-6">
+                  <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" data-valid-tip="请输入升级预提醒额度|升级预提醒额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+                </div>
+              </c:otherwise>
+            </c:choose>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">卡片政策</label>

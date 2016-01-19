@@ -47,6 +47,10 @@ public class VipGrade extends AbstractEntity{
     @Column(name = "pre_reminder_amount")
     private BigDecimal preReminderAmount;
 
+    //积分启用状态,0-停用,1-启用
+    @Column(name = "integral_enable_state")
+    private Integer integralEnableState;
+
     //卡片政策
     @Column(name = "card_policy")
     private String cardPolicy;
@@ -114,6 +118,14 @@ public class VipGrade extends AbstractEntity{
 
     public void setPreReminderAmount(BigDecimal preReminderAmount) {
         this.preReminderAmount = preReminderAmount;
+    }
+
+    public Integer getIntegralEnableState() {
+        return integralEnableState;
+    }
+
+    public void setIntegralEnableState(Integer integralEnableState) {
+        this.integralEnableState = integralEnableState;
     }
 
     public String getCardPolicy() {

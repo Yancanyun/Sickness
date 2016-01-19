@@ -2,6 +2,7 @@ package com.emenu.service.vip;
 
 import com.emenu.common.dto.vip.VipGradeDto;
 import com.emenu.common.entity.vip.VipGrade;
+import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 
 import java.math.BigDecimal;
@@ -80,4 +81,13 @@ public interface VipGradeService {
      * @throws SSException
      */
     public VipGrade queryByConsumption(BigDecimal consumption) throws SSException;
+
+    /**
+     * 根据id修改积分启用状态
+     *
+     * @param id
+     * @param status
+     * @throws SSException
+     */
+    public void updateIntegralStatus(int id, IntegralEnableStatusEnums status) throws SSException;
 }

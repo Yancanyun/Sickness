@@ -1,8 +1,8 @@
 package com.emenu.service.vip.impl;
 
 import com.emenu.common.dto.vip.VipGradeDto;
-import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
+import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipGradeMapper;
 import com.emenu.service.party.group.vip.VipInfoService;
@@ -87,7 +87,7 @@ public class VipGradeServiceImpl implements VipGradeService{
             VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
             if (!Assert.isNull(vipGrade1)){
                 if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption())){
-                    return null;
+                    throw SSException.get(EmenuException.MinConsumptionExist);
                 }
             }
             return commonDao.insert(vipGrade);
@@ -107,7 +107,7 @@ public class VipGradeServiceImpl implements VipGradeService{
             VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
             if (!Assert.isNull(vipGrade1)){
                 if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption()) && vipGrade1.getId().equals(vipGrade.getId())){
-                    return;
+                    throw SSException.get(EmenuException.MinConsumptionExist);
                 }
             }
             commonDao.update(vipGrade);
@@ -181,6 +181,19 @@ public class VipGradeServiceImpl implements VipGradeService{
         }
         //传入的数据为空或小于0或没有符合最低消费要求的记录会返回null
         return null;
+    }
+
+    @Override
+    public void updateIntegralStatus(int id, IntegralEnableStatusEnums status) throws SSException {
+        if (Assert.lessOrEqualZero(id)){
+            throw SSException.get(EmenuException.VipGradeIdIllegal);
+        }
+        try {
+            vipGradeMapper.updateIntegralStatus(id, status.getId());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateVipGradeFail, e);
+        }
     }
 
     /**

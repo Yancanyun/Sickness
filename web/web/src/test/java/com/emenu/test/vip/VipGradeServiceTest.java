@@ -1,6 +1,7 @@
 package com.emenu.test.vip;
 
 import com.emenu.common.entity.vip.VipGrade;
+import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.emenu.service.vip.VipGradeService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -88,5 +89,10 @@ public class VipGradeServiceTest extends AbstractTestCase {
                 break;
             }
         }
+    }
+
+    @Test
+    public void updateIntegralStatus() throws SSException{
+        vipGradeService.updateIntegralStatus(4, IntegralEnableStatusEnums.Enabled);
     }
 }

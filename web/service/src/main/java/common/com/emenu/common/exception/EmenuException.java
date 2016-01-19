@@ -395,7 +395,9 @@ public enum EmenuException implements IBizExceptionMes {
     SettlementCycleIllegal("结算周期数据非法", 8088),
     PreReminderAmountIllegal("升级预提醒额度数据非法", 8089),
     VipGradeIdIllegal("会员等级方案id为空或小于等于0", 8090),
-    VipGradeIdIsUsing("会员等级方案正在使用", 8090),
+    VipGradeIdIsUsing("会员等级方案正在使用", 8091),
+    MinConsumptionExist("已存在相同最低消费金额", 8092),
+    IntegralStatusIllegal("积分启用状态不合法", 8093),
 
     //会员积分方案
     VipIntegralPlanTypeNotNull("会员积分方案类型不能为空", 8100),

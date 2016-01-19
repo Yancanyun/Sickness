@@ -8,6 +8,7 @@
         `credit_amount` AS creditAmount,
         `settlement_cycle` AS settlementCycle,
         `pre_reminder_amount` AS preReminderAmount,
+        `integral_enable_state` AS integralEnableState,
         `card_policy` AS cardPolicy
         FROM `t_vip_grade`
     </select>
@@ -23,7 +24,14 @@
         `credit_amount` AS creditAmount,
         `settlement_cycle` AS settlementCycle,
         `pre_reminder_amount` AS preReminderAmount,
+        `integral_enable_state` AS integralEnableState,
         `card_policy` AS cardPolicy
         FROM `t_vip_grade` WHERE `min_consumption` = #{minConsumption}
     </select>
+
+    <update id="updateIntegralStatus">
+        UPDATE `t_vip_grade`
+        SET `integral_enable_state` = #{status}
+        WHERE `id` = #{id}
+    </update>
 </mapper>

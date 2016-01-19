@@ -1,6 +1,7 @@
 package com.emenu.mapper.vip;
 
 import com.emenu.common.entity.vip.VipGrade;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,4 +38,12 @@ public interface VipGradeMapper {
      * @throws Exception
      */
     public VipGrade countMinConsumptionExist(BigDecimal minConsumption) throws Exception;
+
+    /**
+     * 根据id修改积分启用状态
+     *
+     * @param id
+     * @throws Exception
+     */
+    public void updateIntegralStatus(@Param("id") int id, @Param("status") int status) throws Exception;
 }
