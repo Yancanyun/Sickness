@@ -1,12 +1,10 @@
 package com.emenu.common.entity.vip;
 
+import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.utils.DateUtils;
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -56,9 +54,16 @@ public class VipCard extends AbstractEntity {
     @Column(name = "created_time")
     private Date createdTime;
 
+    //格式化后的创建时间tring
+    private String createdTimeString;
+
     //最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
+
+    //状态字符串
+    @Transient
+    private String statusStr;
 
     public Integer getId() {
         return id;
@@ -129,6 +134,8 @@ public class VipCard extends AbstractEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+        VipCardStatusEnums statusEnums = VipCardStatusEnums.valueOf(status);
+        this.setStatusStr(statusEnums == null ? "" : statusEnums.getType());
     }
 
     public Date getCreatedTime() {
@@ -153,5 +160,21 @@ public class VipCard extends AbstractEntity {
 
     public void setValidityTimeString(String validityTimeString) {
         this.validityTimeString = validityTimeString;
+    }
+
+    public String getCreatedTimeString() {
+        return createdTimeString;
+    }
+
+    public void setCreatedTimeString(String createdTimeString) {
+        this.createdTimeString = createdTimeString;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 }

@@ -224,6 +224,12 @@ public enum ModuleEnums {
     AdminVipGradeNew("Admin:Vip:Grade:New"),
     AdminVipGradeUpdate("Admin:Vip:Grade:Update"),
     AdminVipGradeDelete("Admin:Vip:Grade:Delete"),
+    //会员卡管理
+    AdminVipCard("Admin:Vip:Card"),
+    AdminVipCardList("Admin:Vip:Card:List"),
+    AdminVipCardNew("Admin:Vip:Card:New"),
+    AdminVipCardUpdate("Admin:Vip:Card:Update"),
+    AdminVipCardDel("Admin:Vip:Card:Del"),
 
     //服务员模块
     //服务员查看餐台列表

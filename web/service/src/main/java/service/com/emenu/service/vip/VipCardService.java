@@ -31,47 +31,47 @@ public interface VipCardService {
 
     /**
      * 分页查询会员卡信息（仅包含会员卡表中的信息）
-     * @param curPage
+     * @param pageNo
      * @param pageSize
      * @return
      * @throws SSException
      */
-    public List<VipCard> listByPage(int curPage, int pageSize) throws SSException;
+    public List<VipCard> listByPage(int pageNo, int pageSize) throws SSException;
 
     /**
      * 分页查询会员卡信息（包含会员信息及操作人姓名）
-     * @param curPage
+     * @param pageNo
      * @param pageSize
      * @return
      * @throws SSException
      */
-    public List<VipCardDto> listVipCardDtoByPage(int curPage, int pageSize) throws SSException;
+    public List<VipCardDto> listVipCardDtoByPage(int pageNo, int pageSize) throws SSException;
 
     /**
      * 根据关键词及发卡时间查询会员卡信息（仅包含会员卡表中的信息）
      * @param keyword
      * @param startTime
      * @param endTime
-     * @param curPage
+     * @param pageNo
      * @param pageSize
      * @return
      * @throws SSException
      */
     public List<VipCard> listByKeywordAndDate(String keyword, Date startTime, Date endTime,
-                                              int curPage, int pageSize) throws SSException;
+                                              int pageNo, int pageSize) throws SSException;
 
     /**
      * 根据关键词及发卡时间查询会员卡信息（包含会员信息及操作人姓名）
      * @param keyword
      * @param startTime
      * @param endTime
-     * @param curPage
+     * @param pageNo
      * @param pageSize
      * @return
      * @throws SSException
      */
     public List<VipCardDto> listVipCardDtoByKeywordAndDate(String keyword, Date startTime,
-                                                           Date endTime, int curPage,
+                                                           Date endTime, int pageNo,
                                                            int pageSize) throws SSException;
 
     /**
@@ -118,4 +118,12 @@ public interface VipCardService {
      * @throws SSException
      */
     public void delById(int id) throws SSException;
+
+    /**
+     * 修改会员卡状态
+     * @param id
+     * @param status
+     * @throws SSException
+     */
+    public void updateStatus(int id, int status) throws SSException;
 }

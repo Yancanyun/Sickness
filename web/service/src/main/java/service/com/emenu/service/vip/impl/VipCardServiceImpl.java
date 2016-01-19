@@ -10,7 +10,6 @@ import com.emenu.mapper.party.group.employee.EmployeeMapper;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.mapper.vip.VipCardMapper;
 import com.emenu.service.vip.VipCardService;
-import com.pandawork.core.common.exception.ExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -84,10 +83,10 @@ public class VipCardServiceImpl implements VipCardService {
     }
 
     @Override
-    public List<VipCard> listByPage(int curPage, int pageSize) throws SSException {
+    public List<VipCard> listByPage(int pageNo, int pageSize) throws SSException {
         List<VipCard> vipCardList = Collections.emptyList();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
+        pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+        int offset = pageNo * pageSize;
         if (Assert.lessZero(offset)) {
             return vipCardList;
         }
@@ -102,10 +101,10 @@ public class VipCardServiceImpl implements VipCardService {
     }
 
     @Override
-    public List<VipCardDto> listVipCardDtoByPage(int curPage, int pageSize) throws SSException {
+    public List<VipCardDto> listVipCardDtoByPage(int pageNo, int pageSize) throws SSException {
         List<VipCardDto> vipCardDtoList = new ArrayList<VipCardDto>();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
+        pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+        int offset = pageNo * pageSize;
         if (Assert.lessZero(offset)) {
             return vipCardDtoList;
         }
@@ -135,10 +134,10 @@ public class VipCardServiceImpl implements VipCardService {
 
     @Override
     public List<VipCard> listByKeywordAndDate(String keyword, Date startTime, Date endTime,
-                                              int curPage, int pageSize) throws SSException {
+                                              int pageNo, int pageSize) throws SSException {
         List<VipCard> vipCardList = Collections.emptyList();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
+        pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+        int offset = pageNo * pageSize;
         if (Assert.lessZero(offset)) {
             return vipCardList;
         }
@@ -153,11 +152,11 @@ public class VipCardServiceImpl implements VipCardService {
     }
     @Override
     public List<VipCardDto> listVipCardDtoByKeywordAndDate(String keyword, Date startTime,
-                                                           Date endTime, int curPage,
+                                                           Date endTime, int pageNo,
                                                            int pageSize) throws SSException {
         List<VipCardDto> vipCardDtoList = new ArrayList<VipCardDto>();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        int offset = curPage * pageSize;
+        pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+        int offset = pageNo * pageSize;
         if (Assert.lessZero(offset)) {
             return vipCardDtoList;
         }
@@ -260,6 +259,25 @@ public class VipCardServiceImpl implements VipCardService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteVipCardFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void updateStatus(int id, int status) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return;
+        }
+        //检查Status是否合法
+        if (Assert.lessZero(status)) {
+            return;
+        }
+        try {
+            vipCardMapper.updateStatus(id, status);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTableFail, e);
         }
     }
 }
