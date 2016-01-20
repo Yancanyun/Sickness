@@ -198,9 +198,9 @@
             ['delPlanId', site.website + 'admin/vip/recharge/plan/ajax/&{id}', 'delete', '发送删除数据id'],
             ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态'],
             //会员等级页面
-            ['delGrade', site.website + 'admin/vip/grade/ajax/&{id}', 'delete', '删除等级时发送id']
+            ['delGrade', site.website + 'admin/vip/grade/ajax/&{id}', 'delete', '删除等级时发送id'],
             //会员账户信息管理--停用/启用
-            ['changeAccountStatus', site.staticWebsite + 'admin/vip/account/status/ajax','get','点击停用/启用时，发送当前账户的id和status']
+            ['changeAccountStatus', site.website + 'admin/vip/account/ajax/status','get','点击停用/启用时，发送当前账户的id和status']
         ],
         // 公共模块
         Module: [

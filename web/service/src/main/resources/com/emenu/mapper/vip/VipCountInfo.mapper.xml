@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.vip.VipCountInfoMapper">
+
+    <select id="listByPageAndMin" resultType="com.emenu.common.dto.vip.VipCountInfoDto">
+        SELECT vipcount.`id` AS id,
+               grade.`min_consumption` AS minConsumption,
+               grade.`name` AS vipGrade,
+               vipinfo.`name` AS name,
+               vipinfo.`phone` AS phone,
+               card.`card_number` AS cardNumber,
+               vipcount.`balance` AS balance,
+               vipcount.`integral` AS integral,
+               vipcount.`total_consumption` AS totalConsumption,
+               vipcount.`used_credit_amount` AS usedCreditAmount,
+               vipcount.`status` AS status
+        FROM `t_vip_account_info` vipcount
+        LEFT JOIN `t_vip_card` card ON vipcount.`party_id` = card.`vip_party_id`
+        LEFT JOIN `t_party_vip_info` vipinfo ON card.`vip_party_id` = vipinfo.`party_id`
+        LEFT JOIN `t_vip_grade` grade ON grade.`id` = vipinfo.`grade_id`
+        <if test="orderType == 1">
+            ORDER BY ${orderBy} ASC
+        </if>
+        <if test="orderType == 0">
+            ORDER BY ${orderBy} DESC
+        </if>
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="countAll" resultType="int">
+        SELECT
+        COUNT(1)
+        FROM
+        `t_unit`
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE `t_vip_account_info`
+        SET `status` = #{status}
+        WHERE `id` = #{id}
+    </update>
+</mapper>

@@ -230,7 +230,6 @@ public enum ModuleEnums {
     AdminVipCardNew("Admin:Vip:Card:New"),
     AdminVipCardUpdate("Admin:Vip:Card:Update"),
     AdminVipCardDel("Admin:Vip:Card:Del"),
-
     //会员账号管理
     AdminVipAccount("Admin:Vip:Account"),
     AdminVipAccountList("Admin:Vip:Account:List"),
