@@ -147,6 +147,9 @@
             <li <c:if test="${MethodModule eq 'Admin:Vip:Account:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/account/list">会员账户信息管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Vip:Card:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/vip/card">会员卡管理</a>
+            </li>
         </ul>
     </li>
     <li id="firstMenu6" class="active hidden">

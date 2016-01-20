@@ -8,6 +8,7 @@ import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -190,6 +191,11 @@ public class VipInfoController extends AbstractController {
     public JSONObject ajaxDelById(@RequestParam("id") Integer id){
         try{
             vipInfoService.updateStatusById(id, UserStatusEnums.Deleted);
+
+            //将对应的会员卡也删除
+            VipInfo vipInfo = vipInfoService.queryById(id);
+            vipCardService.updateStatusByPartyId(vipInfo.getPartyId(), VipCardStatusEnums.Deleted.getId());
+
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -231,6 +237,16 @@ public class VipInfoController extends AbstractController {
         try{
             UserStatusEnums vipInfostatus = UserStatusEnums.valueOf(status);
             vipInfoService.updateStatusById(id, vipInfostatus);
+
+            //将对应的会员卡也修改状态
+            VipInfo vipInfo = vipInfoService.queryById(id);
+            if (vipInfostatus == UserStatusEnums.Disabled) {
+                vipCardService.updateStatusByPartyId(vipInfo.getPartyId(), VipCardStatusEnums.Disabled.getId());
+            }
+            if (vipInfostatus == UserStatusEnums.Enabled) {
+                vipCardService.updateStatusByPartyId(vipInfo.getPartyId(), VipCardStatusEnums.Enabled.getId());
+            }
+
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

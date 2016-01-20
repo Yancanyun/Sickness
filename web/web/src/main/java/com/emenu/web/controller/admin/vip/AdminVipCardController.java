@@ -30,16 +30,18 @@ public class AdminVipCardController extends AbstractController {
 
     /**
      * 去会员卡管理页面
+     *
      * @return
      */
     @Module(ModuleEnums.AdminVipCardList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toVipCardPage(){
+    public String toVipCardPage() {
         return "admin/vip/card/list_home";
     }
 
     /**
      * Ajax 获取分页数据
+     *
      * @param pageNo
      * @param pageSize
      * @return
@@ -47,32 +49,32 @@ public class AdminVipCardController extends AbstractController {
     @Module(ModuleEnums.AdminVipCardList)
     @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxList(@RequestParam("keyword") String keyword,
+    public JSONObject ajaxList(@PathVariable("pageNo") Integer pageNo,
+                               @RequestParam("keyword") String keyword,
                                @RequestParam("startTime") Date startTime,
                                @RequestParam("endTime") Date endTime,
-                               @PathVariable("pageNo") Integer pageNo,
                                @RequestParam("pageSize") Integer pageSize) {
         List<VipCardDto> vipCardDtoList = Collections.emptyList();
         try {
             vipCardDtoList = vipCardService.listVipCardDtoByKeywordAndDate(keyword, startTime,
-                                                                           endTime, pageNo, pageSize);
+                    endTime, pageNo, pageSize);
             JSONArray jsonArray = new JSONArray();
             for (VipCardDto vipCardDto : vipCardDtoList) {
                 JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", vipCardDto.getVipCard().getId());
                 jsonObject.put("name", vipCardDto.getVipInfo().getName());
                 jsonObject.put("phone", vipCardDto.getVipInfo().getPhone());
                 jsonObject.put("cardNumber", vipCardDto.getVipCard().getCardNumber());
-                jsonObject.put("createdTime", vipCardDto.getVipCard().getCreatedTime());
-                jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTime());
-                jsonObject.put("permanentlyEffective", vipCardDto.getVipCard().getPermanentlyEffective());
+                jsonObject.put("createdTime", vipCardDto.getVipCard().getCreatedTimeString());
+                jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTimeString());
+                jsonObject.put("permanentlyEffective", vipCardDto.getVipCard().getPermanentlyEffectiveStr());
                 jsonObject.put("operator", vipCardDto.getOperator());
                 jsonObject.put("status", vipCardDto.getVipCard().getStatusStr());
 
                 jsonArray.add(jsonObject);
             }
 
-            //获取会员卡总数量
-            Integer dataCount = vipCardService.countAll();
+            Integer dataCount = vipCardService.countByKeywordAndDate(keyword, startTime, endTime);
 
             return sendJsonArray(jsonArray, dataCount);
         } catch (SSException e) {
@@ -83,6 +85,7 @@ public class AdminVipCardController extends AbstractController {
 
     /**
      * Ajax 修改会员卡
+     *
      * @param id
      * @param validityTime
      * @param permanentlyEffective
@@ -92,8 +95,8 @@ public class AdminVipCardController extends AbstractController {
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateVipCard(@PathVariable("id") Integer id,
-                                   @RequestParam(required = false) Date validityTime,
-                                   @RequestParam("permanentlyEffective") Integer permanentlyEffective) {
+                                        @RequestParam(required = false) Date validityTime,
+                                        @RequestParam("permanentlyEffective") Integer permanentlyEffective) {
         try {
             VipCard vipCard = vipCardService.queryById(id);
             vipCard.setValidityTime(validityTime);
@@ -109,6 +112,7 @@ public class AdminVipCardController extends AbstractController {
 
     /**
      * Ajax 修改会员卡状态
+     *
      * @param id
      * @param status
      * @return
@@ -117,9 +121,9 @@ public class AdminVipCardController extends AbstractController {
     @RequestMapping(value = "ajax/status", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateStatus(@RequestParam("id") Integer id,
-                                   @RequestParam("status") Integer status) {
+                                       @RequestParam("status") Integer status) {
         try {
-            vipCardService.updateStatus(id, status);
+            vipCardService.updateStatusById(id, status);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -129,6 +133,7 @@ public class AdminVipCardController extends AbstractController {
 
     /**
      * Ajax 删除会员卡
+     *
      * @param id
      * @return
      */

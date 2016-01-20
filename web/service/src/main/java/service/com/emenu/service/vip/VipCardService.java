@@ -1,7 +1,6 @@
 package com.emenu.service.vip;
 
 import com.emenu.common.dto.vip.VipCardDto;
-import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.vip.VipCard;
 import com.pandawork.core.common.exception.SSException;
 
@@ -113,11 +112,18 @@ public interface VipCardService {
     public void updateVipCard(int id, VipCard vipCard) throws SSException;
 
     /**
-     * 删除会员卡
+     * 根据ID删除会员卡
      * @param id
      * @throws SSException
      */
     public void delById(int id) throws SSException;
+
+    /**
+     * 根据PartyId删除会员卡
+     * @param partyId
+     * @throws SSException
+     */
+    public void delByPartyId(int partyId) throws SSException;
 
     /**
      * 修改会员卡状态
@@ -125,5 +131,13 @@ public interface VipCardService {
      * @param status
      * @throws SSException
      */
-    public void updateStatus(int id, int status) throws SSException;
+    public void updateStatusById(int id, int status) throws SSException;
+
+    /**
+     * 修改会员卡状态
+     * @param partyId
+     * @param status
+     * @throws SSException
+     */
+    public void updateStatusByPartyId(int partyId, int status) throws SSException;
 }

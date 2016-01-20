@@ -1,5 +1,6 @@
 package com.emenu.common.entity.vip;
 
+import com.emenu.common.enums.vip.VipCardPermanentlyEffectiveEnums;
 import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.utils.DateUtils;
 import com.pandawork.core.common.entity.AbstractEntity;
@@ -47,14 +48,14 @@ public class VipCard extends AbstractEntity {
     @Column(name = "operator_party_id")
     private Integer operatorPartyId;
 
-    //会员卡状态: 0-停用, 1-启用, 2-已删除
+    //会员卡状态: 0-停用, 1-可用, 2-已挂失, 3-已删除
     private Integer status;
 
     //创建时间
     @Column(name = "created_time")
     private Date createdTime;
 
-    //格式化后的创建时间tring
+    //格式化后的创建时间String
     private String createdTimeString;
 
     //最近修改时间
@@ -64,6 +65,10 @@ public class VipCard extends AbstractEntity {
     //状态字符串
     @Transient
     private String statusStr;
+
+    //是否永久有效字符串
+    @Transient
+    private String permanentlyEffectiveStr;
 
     public Integer getId() {
         return id;
@@ -118,6 +123,8 @@ public class VipCard extends AbstractEntity {
 
     public void setPermanentlyEffective(Integer permanentlyEffective) {
         this.permanentlyEffective = permanentlyEffective;
+        VipCardPermanentlyEffectiveEnums vipCardPermanentlyEffectiveEnums = VipCardPermanentlyEffectiveEnums.valueOf(permanentlyEffective);
+        this.setPermanentlyEffectiveStr(vipCardPermanentlyEffectiveEnums == null ? "" : vipCardPermanentlyEffectiveEnums.getType());
     }
 
     public Integer getOperatorPartyId() {
@@ -144,6 +151,12 @@ public class VipCard extends AbstractEntity {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+
+        if (createdTime != null) {
+            this.createdTimeString = DateUtils.formatDate(createdTime, "yyyy-MM-dd");
+        } else {
+            this.createdTimeString = "";
+        }
     }
 
     public Date getLastModifiedTime() {
@@ -176,5 +189,13 @@ public class VipCard extends AbstractEntity {
 
     public void setStatusStr(String statusStr) {
         this.statusStr = statusStr;
+    }
+
+    public String getPermanentlyEffectiveStr() {
+        return permanentlyEffectiveStr;
+    }
+
+    public void setPermanentlyEffectiveStr(String permanentlyEffectiveStr) {
+        this.permanentlyEffectiveStr = permanentlyEffectiveStr;
     }
 }

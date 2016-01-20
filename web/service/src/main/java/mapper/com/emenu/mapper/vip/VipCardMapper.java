@@ -67,5 +67,13 @@ public interface VipCardMapper {
      * @param status
      * @throws Exception
      */
-    public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
+    public void updateStatusById(@Param("id") int id, @Param("status") int status) throws Exception;
+
+    /**
+     * 根据PartyID修改会员卡状态
+     * @param partyId
+     * @param status
+     * @throws Exception
+     */
+    public void updateStatusByPartyId(@Param("partyId") int partyId, @Param("status") int status) throws Exception;
 }
