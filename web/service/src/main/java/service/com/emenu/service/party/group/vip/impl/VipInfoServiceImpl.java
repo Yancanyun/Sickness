@@ -3,6 +3,7 @@ package com.emenu.service.party.group.vip.impl;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.vip.VipCountInfo;
 import com.emenu.common.enums.party.*;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -11,6 +12,7 @@ import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.party.group.vip.VipInfoService;
+import com.emenu.service.vip.VipCountInfoService;
 import com.pandawork.core.common.exception.ExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +47,9 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Autowired
     private PartyService partyService;
+
+    @Autowired
+    private VipCountInfoService vipCountInfoService;
 
     @Autowired
     private SecurityUserService securityUserService;
@@ -138,7 +144,17 @@ public class VipInfoServiceImpl implements VipInfoService{
             securityUser.setStatus(EnableEnums.Enabled.getId());
             this.securityUserService.newSecurityUser(securityUser);
 
-            //3.添加t_party_vip_info会员基本信息表
+            //3.向t_vip_account_info(即会员账户表)添加一条信息
+            VipCountInfo vipCountInfo = new VipCountInfo();
+            vipCountInfo.setPartyId(partyId);
+            vipCountInfo.setUsedCreditAmount(new BigDecimal(0));
+            vipCountInfo.setBalance(new BigDecimal(0));
+            vipCountInfo.setIntegral(0);
+            vipCountInfo.setTotalConsumption(new BigDecimal(0));
+            vipCountInfo.setStatus(0);
+            vipCountInfoService.newVipCountInfo(vipCountInfo);
+
+            //4.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
             vipInfo.setGradeId(0);//注册时设置为默认最低等级
             vipInfo.setStatus(UserStatusEnums.Enabled.getId());
