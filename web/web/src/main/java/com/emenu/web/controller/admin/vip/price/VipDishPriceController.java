@@ -104,7 +104,6 @@ public class VipDishPriceController extends AbstractController{
             }else {
                 jsonObject.put("order",2);
             }
-
             jsonArray.add(jsonObject);
         }
         return sendJsonArray(jsonArray);

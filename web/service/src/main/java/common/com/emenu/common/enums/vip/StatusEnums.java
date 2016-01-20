@@ -10,8 +10,10 @@ import java.util.Map;
  * @date 2016/1/19.
  */
 public enum StatusEnums {
+
     Disabled(0, "停用"),
-    Enabled(1, "启用");
+    Enabled(1, "启用"),
+    Deleted(2,"删除");
 
     private Integer id;
     private String status;
