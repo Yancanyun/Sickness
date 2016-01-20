@@ -6,27 +6,27 @@
 
     <select id="listDtoBySearchDto" resultMap="costCardDtoResultMap">
         SELECT
-            costCard.`id` AS id,
-            dish.`id` AS dishId,
-            dish.`dish_number` AS dishNumber,
-            dish.``name` AS dishName,
-            dishUnit.`name` AS dishUnitName,
-            dish.`sale_price` AS dishSalePrice,
-            costCard.`standardCost` AS standardCost,
-            costCard.`condimentCost` AS condimentCost,
-            costCardItem.`id` AS costCardItemId,
-            costCardItem.`cost_card_id` AS costCardId,
-            costCardItem.`item_id` AS itemId,
-            storageItem.`item_number` AS itemNumber,
-            storageItem.`name` AS itemName,
-            storageItem.`total_stock_in_quantity` AS itemTotalStockInQuantity,
-            storageItem.`total_stock_in_money` AS itemTotalStockInMoney,
-            itemStorageUnit.`name` AS itemStorageUnitName,
-            itemCostCardUnit.`name` AS itemCostCardUnitName,
-            sotrageItem.`storage_to_cost_card_ratio` AS itemStorageToCostCardRatio,
-            costCardItem.`net_item_quantity` AS netItemQuantity,
-            costCardItem.`net_item_ratio` AS netItemRatio,
-            costCardItem.`auto_stock_out` AS autoStockOut
+        costCard.`id` AS id,
+        dish.`id` AS dishId,
+        dish.`dish_number` AS dishNumber,
+        dish.``name` AS dishName,
+        dishUnit.`name` AS dishUnitName,
+        dish.`sale_price` AS dishSalePrice,
+        costCard.`standardCost` AS standardCost,
+        costCard.`condimentCost` AS condimentCost,
+        costCardItem.`id` AS costCardItemId,
+        costCardItem.`cost_card_id` AS costCardId,
+        costCardItem.`item_id` AS itemId,
+        storageItem.`item_number` AS itemNumber,
+        storageItem.`name` AS itemName,
+        storageItem.`total_stock_in_quantity` AS itemTotalStockInQuantity,
+        storageItem.`total_stock_in_money` AS itemTotalStockInMoney,
+        itemStorageUnit.`name` AS itemStorageUnitName,
+        itemCostCardUnit.`name` AS itemCostCardUnitName,
+        sotrageItem.`storage_to_cost_card_ratio` AS itemStorageToCostCardRatio,
+        costCardItem.`net_item_quantity` AS netItemQuantity,
+        costCardItem.`net_item_ratio` AS netItemRatio,
+        costCardItem.`auto_stock_out` AS autoStockOut
         FROM `t_dish` dish
         LEFT JOIN `t_unit` dishUnit ON dish.`unit_id` = dishUnit.`id`
         LEFT JOIN `t_cost_card` costCard ON dish.`id` = costCard.`dish_id`

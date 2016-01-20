@@ -144,6 +144,9 @@
             <li <c:if test="${MethodModule eq 'Admin:Vip:MultipleIntegralPlan:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/multiple/integral/plan">多倍积分方案管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Vip:Account:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/vip/account/list">会员账户信息管理</a>
+            </li>
         </ul>
     </li>
     <li id="firstMenu6" class="active hidden">

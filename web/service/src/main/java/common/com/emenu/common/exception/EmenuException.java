@@ -413,6 +413,21 @@ public enum EmenuException implements IBizExceptionMes {
     InsertVipCardFail("发卡失败", 8121),
     UpdateVipCardFail("修改会员卡失败", 8122),
     DeleteVipCardFail("删除会员卡失败", 8123),
+    InsetVipIntegralPlanFail("会员积分方案插入失败", 8102),
+
+    //会员账号信息
+    ListVipCountFailed("获取会员账号列表失败", 8120),
+    VipCountInfoIsNotNull("会员账号信息不为空", 8121),
+    VipCountInfoPartyIdError("会员账号当事人id错误", 8122),
+    NewVipCountInfoFailed("增加会员账号失败", 8123),
+    VipCountInfoIdError("会员账号id错误", 8124),
+    UpdateVipCountInfoFailed("修改会员账号失败", 8125),
+    DeleteVipCountInfoFailed("删除会员账号失败", 8126),
+    CountAllVipInfoFailed("查询会员账号数失败",8127),
+    UpdateVipCountStateFailed("修改会员账号状态失败",8128),
+    VipAccountInfoIdError("会员账号主键id错误",8129),
+    VipCountInfoStatesError("会员账号状态错误",8130),
+    UpdateVipCountInfoStatusFail("修改会员账号状态失败",8131),
     ;
 
 
