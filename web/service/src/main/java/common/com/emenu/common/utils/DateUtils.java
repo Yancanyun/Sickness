@@ -175,4 +175,59 @@ public class DateUtils {
     public static void main(String[] args) {
         System.out.println(weekOfDayFormat(new Date()));
     }
+
+    /**
+     * 获取上个月第一天
+     *
+     * @return
+     */
+    public static String getLastMonthFirstDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
+    /**
+     * 获取上个月最后一天
+     *
+     * @return
+     */
+    public static String getLastMonthLastDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 0);
+        String lastDay = format.format(calendar.getTime());
+        return lastDay;
+    }
+
+    /**
+     * 获取本月第一天
+     *
+     * @return
+     */
+    public static String getCurrentMonthFirstDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
+    /**
+     * 获取本月最后一天
+     *
+     * @return
+     */
+    public static String getCurrentMonthLastDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 0);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String lastDay = format.format(calendar.getTime());
+        return lastDay;
+    }
 }

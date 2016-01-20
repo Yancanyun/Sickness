@@ -1,5 +1,6 @@
 package com.emenu.test.storage;
 
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.service.storage.StorageDepotService;
 import com.emenu.test.AbstractTestCase;
@@ -8,6 +9,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,4 +72,20 @@ public class StorageDepotTest extends AbstractTestCase {
         }
     }
 
+    @Test
+    public void dateTest() throws SSException{
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 0);
+        String currentDay = format.format(calendar.getTime());
+        System.out.println(currentDay);
+    }
+
+    @Test
+    public void jsonTest() throws SSException{
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("aaa", 123);
+        jsonObject.replace("aaa",1233);
+        System.out.println(jsonObject);
+    }
 }

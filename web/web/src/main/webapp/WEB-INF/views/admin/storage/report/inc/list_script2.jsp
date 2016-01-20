@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!--编辑/添加时,对话框模板-->
 <script type="text/template" id="dlg">
     <form class="form-horizontal J_addForm" action="" method="">
@@ -193,20 +192,20 @@
 <!--刷分页模板-->
 <script type="text/template" id="tpl">
     {@each list as it}
-    <tr data-store-bill-createdTime="&{it.storageReport.createdTime}" data-store-bill-handlerPartyId="&{it.storageReport.handlerPartyId}" data-store-bill-createdPartyId="&{it.storageReport.createdPartyId}" data-store-bill-type="&{it.storageReport.type}" data-store-bill-id="&{it.storageReport.id}" dat-store-bill-status="&{it.storageReport.status}" data-store-bill-depot-id="&{it.storageReport.depotId}">
-        <input type="hidden" name="id" value="&{it.storageReport.id}"/>
-        <input type="hidden" name="type" value="&{it.storageReport.type}"/>
-        <input type="hidden" name="serialNumber" value="&{it.storageReport.serialNumber}"/>
-        <input type="hidden" name="depotId" value="&{it.storageReport.depotId}"/>
-        <input type="hidden" name="handlerPartyId" value="&{it.storageReport.handlerPartyId}"/>
-        <input type="hidden" name="money" value="&{it.storageReport.money}"/>
-        <input type="hidden" name="createdPartyId" value="&{it.storageReport.createdPartyId}"/>
-        <input type="hidden" name="status" value="&{it.storageReport.status}"/>
+    <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.handlerPartyId}" data-store-bill-createdPartyId="&{it.createdPartyId}" data-store-bill-type="&{it.type}" data-store-bill-id="&{it.id}" dat-store-bill-status="&{it.status}" data-store-bill-depot-id="&{it.depotId}">
+        <input type="hidden" name="id" value="&{it.id}"/>
+        <input type="hidden" name="type" value="&{it.type}"/>
+        <input type="hidden" name="serialNumber" value="&{it.serialNumber}"/>
+        <input type="hidden" name="depotId" value="&{it.depotId}"/>
+        <input type="hidden" name="handlerPartyId" value="&{it.handlerPartyId}"/>
+        <input type="hidden" name="money" value="&{it.money}"/>
+        <input type="hidden" name="createdPartyId" value="&{it.createdPartyId}"/>
+        <input type="hidden" name="status" value="&{it.status}"/>
         <input type="hidden" name="depotName" value="&{it.depotName}"/>
         <input type="hidden" name="handlerName" value="&{it.handlerName}"/>
         <input type="hidden" name="createdName" value="&{it.createdName}"/>
         <td class="J_reportItem hidden">
-            {@each it.storageReportItemList as item}
+            {@each it.reportItem as item}
             <p data-item-id="&{item.itemId}">
                 <input type="hidden" value="&{item.quantity}" name="quantity">
                 <input type="hidden" value="&{item.price}" name="price">
@@ -259,5 +258,3 @@
         });
     })
 </script>
-</body>
-</html>

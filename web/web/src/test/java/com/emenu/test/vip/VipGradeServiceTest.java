@@ -1,5 +1,6 @@
 package com.emenu.test.vip;
 
+import com.emenu.common.dto.vip.VipGradeDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.emenu.service.vip.VipGradeService;
@@ -94,5 +95,10 @@ public class VipGradeServiceTest extends AbstractTestCase {
     @Test
     public void updateIntegralStatus() throws SSException{
         vipGradeService.updateIntegralStatus(4, IntegralEnableStatusEnums.Enabled);
+    }
+
+    @Test
+    public void listVipGradeDto() throws SSException{
+        List<VipGradeDto> vipGradeDtos = vipGradeService.listAllVipGradeDto();
     }
 }

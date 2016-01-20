@@ -5,7 +5,7 @@
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li>
-                <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
+                <a href="#"><i class="fa fa-home"></i>&nbsp;首页</a>
             </li>
             <li>
                 <a href="#">库存管理</a>
@@ -39,18 +39,18 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">时间段</label>
                         <div class="col-sm-8">
-                            <input type="text" class="J_startTime w180" data-start-time="2000-1-01" readonly="readonly" name="startTime" value="2000-1-01" />
+                            <input type="text" class="J_startTime w180" data-start-time="2014-8-01" readonly="readonly" name="startTime" value="2014-8-01" />
                             <span class="to">~</span>
-                            <input type="text" class="J_endTime w180" data-end-time="${currentDay}" readonly="readonly" name="endTime" value="${currentDay}" />
-                            <span class="month J_shortcut" data-start-time="${currentMonthFirstDay}" data-end-time="${currentMonthLastDay}">本月</span>
-                            <span class="month J_shortcut" data-start-time="${lastMonthFirstDay}" data-end-time="${lastMonthLastDay}">上月</span>
+                            <input type="text" class="J_endTime w180" data-end-time="2015-9-11" readonly="readonly" name="endTime" value="2015-9-11" />
+                            <span class="month J_shortcut" data-start-time="2015-10-01" data-end-time="2015-10-31">本月</span>
+                            <span class="month J_shortcut" data-start-time="2015-09-01" data-end-time="2015-09-30">上月</span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">经手人</label>
                         <div class="col-sm-8">
                             <select class="form-control w180" name="handlerPartyId">
-                                <option value="-1">请选择</option>
+                                <option value="">请选择</option>
                                 <c:forEach var="handler" items="${handlerList}">
                                     <option value="${handler.employee.partyId}">${handler.employee.name}</option>
                                 </c:forEach>
@@ -61,7 +61,7 @@
                         <label class="col-sm-2 control-label">当事人</label>
                         <div class="col-sm-8">
                             <select class="form-control w180" name="createdPartyId">
-                                <option value="-1">请选择</option>
+                                <option value="">请选择</option>
                                 <c:forEach var="created" items="${createdList}">
                                     <option value="${created.employee.partyId}">${created.employee.name}</option>
                                 </c:forEach>
@@ -101,7 +101,11 @@
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody id="J_template"></tbody>
+                        <tbody id="J_template">
+
+
+
+                        </tbody>
                     </table>
                     <div class="J_pagination">
                     </div>
@@ -118,19 +122,21 @@
                         <option value="6" data-price="06" data-code="B">Ble</option>
                     </select>
                     <select class="form-control w180 hidden J_depotSelect" name="depotId">
-                        <c:forEach var="depot" items="${depotList}">
-                            <option value="${depot.id}">${depot.name}</option>
-                        </c:forEach>
+                        <option value="1">存放点1</option>
+                        <option value="2">存放点2</option>
+                        <option value="3">存放点3</option>
+                        <option value="4">存放点4</option>
                     </select>
                     <select class="form-control w180 hidden J_handlerSelect" name="handlerPartyId">
-                        <c:forEach var="handler" items="${handlerList}">
-                            <option value="${handler.employee.partyId}">${handler.employee.name}</option>
-                        </c:forEach>
+                        <option value="1">经手人1</option>
+                        <option value="2">经手人2</option>
+                        <option value="3">经手人3</option>
+                        <option value="4">经手人4</option>
                     </select>
                     <select class="form-control w180 hidden J_createSelect" name="createdPartyId">
-                        <c:forEach var="created" items="${createdList}">
-                            <option value="${created.employee.partyId}">${created.employee.name}</option>
-                        </c:forEach>
+                        <option value="0">操作人0</option>
+                        <option value="1">操作人1</option>
+                        <option value="2">操作人2</option>
                     </select>
                 </div>
             </div>

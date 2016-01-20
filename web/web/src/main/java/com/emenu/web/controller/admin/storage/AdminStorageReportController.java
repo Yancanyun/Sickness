@@ -6,23 +6,29 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.storage.StorageReportDto;
-import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.storage.StorageDepot;
+import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -50,12 +56,21 @@ public class AdminStorageReportController extends AbstractController {
             List<EmployeeDto> handlerList = Collections.emptyList();
             //操作人
             List<EmployeeDto> createdList = Collections.emptyList();
+            //库存物品列表
+            List<StorageItem> itemList = Collections.emptyList();
             depotList = storageDepotService.listAll();
             handlerList = employeeService.listAll();
             createdList = employeeService.listAll();
+            itemList = storageItemService.listAll();
             model.addAttribute("depotList", depotList);
-            model.addAttribute("handlerList",handlerList);
-            model.addAttribute("createdList",createdList);
+            model.addAttribute("handlerList", handlerList);
+            model.addAttribute("createdList", createdList);
+            model.addAttribute("itemList", itemList);
+            model.addAttribute("lastMonthFirstDay", DateUtils.getLastMonthFirstDay());
+            model.addAttribute("lastMonthLastDay", DateUtils.getLastMonthLastDay());
+            model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
+            model.addAttribute("currentMonthLastDay", DateUtils.getCurrentMonthLastDay());
+            model.addAttribute("currentDay", DateUtils.yearMonthDayFormat(DateUtils.now()));
             return "admin/storage/report/list_home";
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
@@ -130,7 +145,8 @@ public class AdminStorageReportController extends AbstractController {
                 jsonObject.put("depotName",deportName);
                 jsonObject.put("handlerName",handlerName);
                 jsonObject.put("createdName",createdName);
-                jsonObject.put("storageReportItemList", storageReportDto.getStorageReportItemList());
+                List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+                jsonObject.put("storageReportItemList", storageReportItemList);
                 jsonArray.add(jsonObject);
             }
         }catch (SSException e){
