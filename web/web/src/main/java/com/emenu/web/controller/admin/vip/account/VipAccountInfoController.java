@@ -89,7 +89,7 @@ public class VipAccountInfoController extends AbstractController{
     }
 
     /**
-     * ajax更改会员状态
+     * ajax更改会员账户状态
      *
      * @param id
      * @param status

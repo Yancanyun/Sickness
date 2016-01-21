@@ -3,14 +3,14 @@ package com.emenu.common.dto.vip;
 import java.math.BigDecimal;
 
 /**
- * 会员账号信息Dto
+ * 会员账户信息Dto
  *
  * @author xubr
  * @date 2016/1/18.
  */
 public class VipAccountInfoDto {
 
-    //会员账号Id
+    //会员账户Id
     private Integer id;
 
     //会员等级
@@ -40,7 +40,7 @@ public class VipAccountInfoDto {
     //已挂账金额
     private BigDecimal usedCreditAmount;
 
-    //会员账号状态
+    //会员账户状态
     private Integer status;
 
     /***********************Getter And Setter***********************/

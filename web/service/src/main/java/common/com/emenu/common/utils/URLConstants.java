@@ -112,7 +112,7 @@ public final class URLConstants {
     //会员卡管理
     public static final String ADMIN_VIP_CARD_URL = "admin/vip/card";
 
-    //会员账号管理
+    //会员账户管理
     public static final String ADMIN_VIP_ACCOUNT_URL = "admin/vip/account";
 
     /**********************服务员APP*************************/

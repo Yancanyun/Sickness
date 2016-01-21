@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * VipAccountInfoServiceImpl
- * 会员账号信息Service层实现
+ * 会员账户信息Service层实现
  *
  * @author xubr
  * @date 2016/1/18.

@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * VipAccountInfoMapper
- * 会员账号信息Mapper层
+ * 会员账户信息Mapper层
  *
  * @author xubr
  * @date 2016/1/18.
@@ -16,7 +16,7 @@ import java.util.List;
 public interface VipAccountInfoMapper {
 
     /**
-     * 分页获取会员账号信息并按最低消费额即会员等级进行排序
+     * 分页获取会员账户信息并按最低消费额即会员等级进行排序
      *
      * @param offset
      * @param pageSize
@@ -29,7 +29,7 @@ public interface VipAccountInfoMapper {
                                                   @Param("orderBy")String orderBy) throws SSException;
 
     /**
-     * 查询所有会员账号数
+     * 查询所有会员账户数
      *
      * @return
      * @throws Exception
@@ -37,7 +37,7 @@ public interface VipAccountInfoMapper {
     public int countAll() throws SSException;
 
     /**
-     * 根据会员账号id更改会员账号状态
+     * 根据会员账户id更改会员账户状态
      *
      * @param id
      * @param status

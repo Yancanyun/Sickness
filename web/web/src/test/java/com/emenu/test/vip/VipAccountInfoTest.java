@@ -13,7 +13,11 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Created by xubr on 2016/1/19.
+ * VipAccountInfoTest
+ * 会员账号测试
+ *
+ * @author xubr
+ * @date 2016/1/19.
  */
 public class VipAccountInfoTest extends AbstractTestCase {
 

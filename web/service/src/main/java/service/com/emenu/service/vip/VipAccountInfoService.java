@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Vip=AccountInfoService
- * 会员账号信息Service层
+ * 会员账户信息Service层
  *
  * @author xubr
  * @date 2016/1/18.
@@ -17,7 +17,7 @@ import java.util.List;
 public interface VipAccountInfoService {
 
     /**
-     * 根据最低消费额获取会员账号等级列表
+     * 根据最低消费额获取会账户等级列表
      *
      * @param curPage
      * @param pageSize
@@ -27,7 +27,7 @@ public interface VipAccountInfoService {
     public List<VipAccountInfoDto> listByPageAndMin(int curPage,int pageSize,int orderType,String orderBy) throws SSException;
 
     /**
-     * 查询所有会员账号数
+     * 查询所有会员账户数
      *
      * @return
      * @throws Exception
@@ -35,7 +35,7 @@ public interface VipAccountInfoService {
     public int countAll() throws SSException;
 
     /**
-     * 添加会员账号信息
+     * 添加会员账户信息
      *
      * @param vipAccountInfo
      * @return
@@ -43,7 +43,7 @@ public interface VipAccountInfoService {
     public VipAccountInfo newVipAccountInfo(VipAccountInfo vipAccountInfo) throws SSException;
 
     /**
-     * 修改会员账号信息
+     * 修改会员账户信息
      *
      * @param vipAccountInfo
      * @throws SSException
@@ -51,7 +51,7 @@ public interface VipAccountInfoService {
     public void updateVipAccountInfo(VipAccountInfo vipAccountInfo) throws SSException;
 
     /**
-     * 根据主键id删除会员信息
+     * 根据主键id删除会员账户信息
      *
      * @param id
      * @throws SSException
@@ -59,7 +59,7 @@ public interface VipAccountInfoService {
     public void deleteVipAccountInfo(Integer id) throws SSException;
 
     /**
-     * 根据id更新会员账号状态
+     * 根据id更新会员账户状态
      *
      * @param id
      * @param status
