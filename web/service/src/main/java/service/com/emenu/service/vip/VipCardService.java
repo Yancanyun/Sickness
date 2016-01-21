@@ -140,4 +140,12 @@ public interface VipCardService {
      * @throws SSException
      */
     public void updateStatusByPartyId(int partyId, int status) throws SSException;
+
+    /**
+     * 根据PartyId查询会员卡
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public VipCard queryByPartyId(int partyId) throws SSException;
 }

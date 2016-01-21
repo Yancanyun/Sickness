@@ -319,4 +319,14 @@ public class VipCardServiceImpl implements VipCardService {
             throw SSException.get(EmenuException.UpdateVipCardFail, e);
         }
     }
+
+    @Override
+    public VipCard queryByPartyId(int partyId) throws SSException {
+        try{
+            return vipCardMapper.queryByPartyId(partyId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
 }

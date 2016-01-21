@@ -37,7 +37,7 @@
         LEFT JOIN `t_party_vip_info` ON `t_vip_card`.`vip_party_id` = `t_party_vip_info`.`party_id`
         LEFT JOIN `t_party_employee` ON `t_vip_card`.`operator_party_id` = `t_party_employee`.`party_id`
         WHERE `t_vip_card`.`status` != 3
-        <if test="keyword != null">
+        <if test="keyword != null and keyword!=''">
             AND (`t_party_vip_info`.`name` LIKE "%"#{keyword}"%" OR `t_party_vip_info`.`phone` LIKE "%"#{keyword}"%")
         </if>
         <if test="startTime != null and endTime != null">
@@ -97,4 +97,20 @@
         SET `status` = #{status}
         WHERE `vip_party_id` = #{partyId}
     </update>
+
+    <select id="queryByPartyId" resultMap="pw.VipCard">
+        SELECT
+        `id`,
+        `vip_party_id`,
+        `card_number`,
+        `physical_number`,
+        `validity_time`,
+        `permanently_effective`,
+        `operator_party_id`,
+        `status`,
+        `created_time`
+        FROM `t_vip_card`
+        WHERE `vip_party_id` = #{partyId}
+        AND `status` != 3
+    </select>
 </mapper>

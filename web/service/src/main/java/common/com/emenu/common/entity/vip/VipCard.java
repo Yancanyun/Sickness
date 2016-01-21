@@ -38,7 +38,7 @@ public class VipCard extends AbstractEntity {
     private Date validityTime;
 
     //格式化后的有效期String
-    private String validityTimeString;
+    private String validityTimeStr;
 
     //是否永久有效: 0-否, 1-是
     @Column(name = "permanently_effective")
@@ -56,7 +56,7 @@ public class VipCard extends AbstractEntity {
     private Date createdTime;
 
     //格式化后的创建时间String
-    private String createdTimeString;
+    private String createdTimeStr;
 
     //最近修改时间
     @Column(name = "last_modified_time")
@@ -111,9 +111,9 @@ public class VipCard extends AbstractEntity {
         this.validityTime = validityTime;
 
         if (validityTime != null) {
-            this.validityTimeString = DateUtils.formatDate(validityTime, "yyyy-MM-dd");
+            this.validityTimeStr = DateUtils.formatDate(validityTime, "yyyy-MM-dd");
         } else {
-            this.validityTimeString = "";
+            this.validityTimeStr = "";
         }
     }
 
@@ -153,9 +153,9 @@ public class VipCard extends AbstractEntity {
         this.createdTime = createdTime;
 
         if (createdTime != null) {
-            this.createdTimeString = DateUtils.formatDate(createdTime, "yyyy-MM-dd");
+            this.createdTimeStr = DateUtils.formatDate(createdTime, "yyyy-MM-dd");
         } else {
-            this.createdTimeString = "";
+            this.createdTimeStr = "";
         }
     }
 
@@ -167,20 +167,20 @@ public class VipCard extends AbstractEntity {
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public String getValidityTimeString() {
-        return validityTimeString;
+    public String getValidityTimeStr() {
+        return validityTimeStr;
     }
 
-    public void setValidityTimeString(String validityTimeString) {
-        this.validityTimeString = validityTimeString;
+    public void setValidityTimeStr(String validityTimeStr) {
+        this.validityTimeStr = validityTimeStr;
     }
 
-    public String getCreatedTimeString() {
-        return createdTimeString;
+    public String getCreatedTimeStr() {
+        return createdTimeStr;
     }
 
-    public void setCreatedTimeString(String createdTimeString) {
-        this.createdTimeString = createdTimeString;
+    public void setCreatedTimeStr(String createdTimeStr) {
+        this.createdTimeStr = createdTimeStr;
     }
 
     public String getStatusStr() {

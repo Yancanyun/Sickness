@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
@@ -25,6 +26,7 @@ import java.util.List;
 
 /**
  * 会员基本信息管理controller
+ *
  * @author chenyuting
  * @date 2015/10/27 10:55
  */
@@ -39,16 +41,18 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 去会员基本信息列表页面
+     *
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(){
+    public String toList() {
         return "admin/party/group/vip/vip_info_list";
     }
 
     /**
      * 分页获取关键字搜索列表
+     *
      * @param curPage
      * @param pageSize
      * @param keyword
@@ -59,54 +63,60 @@ public class VipInfoController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxListVipInfo(@PathVariable("curPage") Integer curPage,
                                       @RequestParam Integer pageSize,
-                                      @RequestParam("keyword") String keyword){
+                                      @RequestParam("keyword") String keyword) {
         List<VipInfo> vipInfoList = Collections.emptyList();
-        try{
-            if (keyword =="" || keyword == null || keyword.equals("")){
+        try {
+            if (keyword == "" || keyword == null || keyword.equals("")) {
                 vipInfoList = vipInfoService.listByPage(curPage, pageSize);
-            }else {
+            } else {
                 vipInfoList = vipInfoService.listByKeyword(keyword, curPage, pageSize);
             }
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
 
-        JSONArray jsonArray = new JSONArray();
-        for (VipInfo vipInfo: vipInfoList){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", vipInfo.getId());
-            jsonObject.put("name", vipInfo.getName());
-            jsonObject.put("phone", vipInfo.getPhone());
-            jsonObject.put("status", vipInfo.getStatus());
-            jsonArray.add(jsonObject);
-        }
-        Integer dataCount = 0;
-        try {
-            if (keyword =="" || keyword == null || keyword.equals("")){
+            JSONArray jsonArray = new JSONArray();
+            for (VipInfo vipInfo : vipInfoList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", vipInfo.getId());
+                jsonObject.put("name", vipInfo.getName());
+                jsonObject.put("phone", vipInfo.getPhone());
+                jsonObject.put("status", vipInfo.getStatus());
+
+                //获取会员卡号
+                Integer partyId = vipInfo.getPartyId();
+                VipCard vipCard = vipCardService.queryByPartyId(partyId);
+                if (vipCard != null) {
+                    jsonObject.put("cardNum", vipCard.getCardNumber());
+                }
+
+                jsonArray.add(jsonObject);
+            }
+            Integer dataCount = 0;
+            if (keyword == "" || keyword == null || keyword.equals("")) {
                 dataCount = vipInfoService.countAll();
-            }else {
+            } else {
                 dataCount = vipInfoService.countByKeyword(keyword);
             }
+
+            return sendJsonArray(jsonArray, dataCount);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonArray(jsonArray, dataCount);
     }
 
     /**
      * 去新增会员页面
+     *
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
-    public String toNewVipInfo(){
+    public String toNewVipInfo() {
         return "admin/party/group/vip/vip_info_new";
     }
 
     /**
      * 新增会员
+     *
      * @param vipInfo
      * @param redirectAttributes
      * @return
@@ -114,8 +124,8 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipInfo(VipInfo vipInfo,
-                             RedirectAttributes redirectAttributes){
-        try{
+                             RedirectAttributes redirectAttributes) {
+        try {
             int userPartyId = getPartyId();
             vipInfoService.newVipInfo(userPartyId, vipInfo);
         } catch (SSException e) {
@@ -131,6 +141,7 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 跳修改会员信息页
+     *
      * @param id
      * @param model
      * @return
@@ -138,18 +149,18 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateVipInfo(@PathVariable("id") int id,
-                                  Model model){
+                                  Model model) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String birthday = null;
         try {
             VipInfo vipInfo = vipInfoService.queryById(id);
-            if (vipInfo.getBirthday() == null){
+            if (vipInfo.getBirthday() == null) {
                 birthday = "";
-            }else{
+            } else {
                 birthday = sdf.format(vipInfo.getBirthday());
             }
-            model.addAttribute("vipInfo",vipInfo);
-            model.addAttribute("birthday",birthday);
+            model.addAttribute("vipInfo", vipInfo);
+            model.addAttribute("birthday", birthday);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -160,6 +171,7 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 修改会员信息
+     *
      * @param vipInfo
      * @param redirectAttributes
      * @return
@@ -167,8 +179,8 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public String updateVipInfo(VipInfo vipInfo,
-                                RedirectAttributes redirectAttributes){
-        try{
+                                RedirectAttributes redirectAttributes) {
+        try {
             vipInfoService.updateVipInfo(vipInfo);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -182,14 +194,15 @@ public class VipInfoController extends AbstractController {
 
     /**
      * ajax删除（更改状态为3，隐藏不显示）
+     *
      * @param id
      * @return
      */
     @Module(ModuleEnums.AdminVipInfoDel)
     @RequestMapping(value = "/ajax/del", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxDelById(@RequestParam("id") Integer id){
-        try{
+    public JSONObject ajaxDelById(@RequestParam("id") Integer id) {
+        try {
             vipInfoService.updateStatusById(id, UserStatusEnums.Deleted);
 
             //将对应的会员卡也删除
@@ -205,15 +218,16 @@ public class VipInfoController extends AbstractController {
 
     /**
      * ajax返回电话号码存在的错误信息
+     *
      * @param phone
      * @return
      */
     @RequestMapping(value = "phone/ajax/exist", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject phoneIsExist(@RequestParam("phone") String phone,
-                                   @RequestParam("id") Integer id){
-        try{
-            if (vipInfoService.checkPhoneIsExist(id, phone)){
+                                   @RequestParam("id") Integer id) {
+        try {
+            if (vipInfoService.checkPhoneIsExist(id, phone)) {
                 return sendJsonObject(AJAX_FAILURE_CODE);
             }
         } catch (SSException e) {
@@ -225,6 +239,7 @@ public class VipInfoController extends AbstractController {
 
     /**
      * ajax更改会员状态
+     *
      * @param id
      * @param status
      * @return
@@ -233,8 +248,8 @@ public class VipInfoController extends AbstractController {
     @RequestMapping(value = "ajax/status", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject updateStatus(@RequestParam("id") Integer id,
-                                   @RequestParam("status") Integer status){
-        try{
+                                   @RequestParam("status") Integer status) {
+        try {
             UserStatusEnums vipInfostatus = UserStatusEnums.valueOf(status);
             vipInfoService.updateStatusById(id, vipInfostatus);
 
@@ -256,6 +271,7 @@ public class VipInfoController extends AbstractController {
 
     /**
      * 查看会员信息详情
+     *
      * @param id
      * @param model
      * @return
@@ -263,15 +279,15 @@ public class VipInfoController extends AbstractController {
     @Module(ModuleEnums.AdminVipInfoDetail)
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
     public String detailVipInfo(@PathVariable("id") Integer id,
-                                Model model){
+                                Model model) {
         String birthdayStr = null;
-        try{
+        try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             VipInfo vipInfo = vipInfoService.queryById(id);
             Date birthday = vipInfo.getBirthday();
-            if (birthday == null){
+            if (birthday == null) {
                 birthdayStr = "";
-            }else{
+            } else {
                 birthdayStr = sdf.format(birthday);
             }
             VipInfoDto vipInfoDto = new VipInfoDto();
@@ -281,7 +297,7 @@ public class VipInfoController extends AbstractController {
             vipInfoDto.setPhone(vipInfo.getPhone());
             vipInfoDto.setQq(vipInfo.getQq());
             vipInfoDto.setEmail(vipInfo.getEmail());
-            model.addAttribute("vipInfoDto",vipInfoDto);
+            model.addAttribute("vipInfoDto", vipInfoDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

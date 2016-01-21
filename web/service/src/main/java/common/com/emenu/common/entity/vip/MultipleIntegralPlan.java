@@ -41,10 +41,10 @@ public class MultipleIntegralPlan extends AbstractEntity{
     private Date endTime;
 
     //格式化后的开始时间的String
-    private String startTimeString;
+    private String startTimeStr;
 
     //格式化后的结束时间的String
-    private String endTimeString;
+    private String endTimeStr;
 
     //启用状态，0-未启用，1-启用
     private Integer status;
@@ -90,9 +90,9 @@ public class MultipleIntegralPlan extends AbstractEntity{
         this.startTime = startTime;
 
         if (startTime != null) {
-            this.startTimeString = DateUtils.formatDate(startTime, "yyyy-MM-dd");
+            this.startTimeStr = DateUtils.formatDate(startTime, "yyyy-MM-dd");
         } else {
-            this.startTimeString = "";
+            this.startTimeStr = "";
         }
     }
 
@@ -104,9 +104,9 @@ public class MultipleIntegralPlan extends AbstractEntity{
         this.endTime = endTime;
 
         if (endTime != null) {
-            this.endTimeString = DateUtils.formatDate(endTime, "yyyy-MM-dd");
+            this.endTimeStr = DateUtils.formatDate(endTime, "yyyy-MM-dd");
         } else {
-            this.endTimeString = "";
+            this.endTimeStr = "";
         }
     }
 
@@ -134,19 +134,19 @@ public class MultipleIntegralPlan extends AbstractEntity{
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public String getStartTimeString() {
-        return startTimeString;
+    public String getStartTimeStr() {
+        return startTimeStr;
     }
 
-    public void setStartTimeString(String startTimeString) {
-        this.startTimeString = startTimeString;
+    public void setStartTimeStr(String startTimeStr) {
+        this.startTimeStr = startTimeStr;
     }
 
-    public String getEndTimeString() {
-        return endTimeString;
+    public String getEndTimeStr() {
+        return endTimeStr;
     }
 
-    public void setEndTimeString(String endTimeString) {
-        this.endTimeString = endTimeString;
+    public void setEndTimeStr(String endTimeStr) {
+        this.endTimeStr = endTimeStr;
     }
 }

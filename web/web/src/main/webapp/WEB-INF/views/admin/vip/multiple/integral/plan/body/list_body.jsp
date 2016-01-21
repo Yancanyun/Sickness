@@ -35,8 +35,8 @@
                 <tr data-plan-id="${plan.id}" data-status="${plan.status}">
                   <td>${plan.name}</td>
                   <td>${plan.integralMultiples}</td>
-                  <td>${plan.startTimeString}</td>
-                  <td>${plan.endTimeString}</td>
+                  <td>${plan.startTimeStr}</td>
+                  <td>${plan.endTimeStr}</td>
                   <td><c:if test="${plan.status == 1}">启用</c:if>
                       <c:if test="${plan.status == 0}">停用</c:if>
                   </td>

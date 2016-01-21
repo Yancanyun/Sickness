@@ -57,7 +57,7 @@ public class AdminVipCardController extends AbstractController {
         List<VipCardDto> vipCardDtoList = Collections.emptyList();
         try {
             vipCardDtoList = vipCardService.listVipCardDtoByKeywordAndDate(keyword, startTime,
-                    endTime, pageNo, pageSize);
+                                                                           endTime, pageNo, pageSize);
             JSONArray jsonArray = new JSONArray();
             for (VipCardDto vipCardDto : vipCardDtoList) {
                 JSONObject jsonObject = new JSONObject();
@@ -65,8 +65,8 @@ public class AdminVipCardController extends AbstractController {
                 jsonObject.put("name", vipCardDto.getVipInfo().getName());
                 jsonObject.put("phone", vipCardDto.getVipInfo().getPhone());
                 jsonObject.put("cardNumber", vipCardDto.getVipCard().getCardNumber());
-                jsonObject.put("createdTime", vipCardDto.getVipCard().getCreatedTimeString());
-                jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTimeString());
+                jsonObject.put("createdTime", vipCardDto.getVipCard().getCreatedTimeStr());
+                jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTimeStr());
                 jsonObject.put("permanentlyEffective", vipCardDto.getVipCard().getPermanentlyEffectiveStr());
                 jsonObject.put("operator", vipCardDto.getOperator());
                 jsonObject.put("status", vipCardDto.getVipCard().getStatusStr());
