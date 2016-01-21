@@ -193,7 +193,7 @@
 <!--刷分页模板-->
 <script type="text/template" id="tpl">
     {@each list as it}
-    <tr data-store-bill-createdTime="&{it.storageReport.createdTime}" data-store-bill-handlerPartyId="&{it.storageReport.handlerPartyId}" data-store-bill-createdPartyId="&{it.storageReport.createdPartyId}" data-store-bill-type="&{it.storageReport.type}" data-store-bill-id="&{it.storageReport.id}" dat-store-bill-status="&{it.storageReport.status}" data-store-bill-depot-id="&{it.storageReport.depotId}">
+    <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.storageReport.handlerPartyId}" data-store-bill-createdPartyId="&{it.storageReport.createdPartyId}" data-store-bill-type="&{it.storageReport.type}" data-store-bill-id="&{it.storageReport.id}" dat-store-bill-status="&{it.storageReport.status}" data-store-bill-depot-id="&{it.storageReport.depotId}">
         <input type="hidden" name="id" value="&{it.storageReport.id}"/>
         <input type="hidden" name="type" value="&{it.storageReport.type}"/>
         <input type="hidden" name="serialNumber" value="&{it.storageReport.serialNumber}"/>
@@ -206,7 +206,7 @@
         <input type="hidden" name="handlerName" value="&{it.handlerName}"/>
         <input type="hidden" name="createdName" value="&{it.createdName}"/>
         <td class="J_reportItem hidden">
-            {@each it.storageReportItemList as item}
+            {@each it.storageReportItemDtoList as item}
             <p data-item-id="&{item.itemId}">
                 <input type="hidden" value="&{item.quantity}" name="quantity">
                 <input type="hidden" value="&{item.price}" name="price">
@@ -254,7 +254,7 @@
 //                    return url;
 							return url + '/' + page;
                 },
-                date: '2015-11-11'
+                date: '${currentDay}'
             });
         });
     })

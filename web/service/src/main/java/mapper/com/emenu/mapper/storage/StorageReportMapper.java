@@ -1,8 +1,6 @@
 package com.emenu.mapper.storage;
 
-import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
-import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -130,7 +128,7 @@ public interface StorageReportMapper {
      * @param startTime
      * @return
      */
-    public int countByContition(@Param("report")StorageReport report,
+    public int countByCondition(@Param("report")StorageReport report,
                                 @Param("depotIdList")List<Integer> depotIdList,
                                 @Param("startTime")Date startTime,
                                 @Param("endTime")Date endTime) throws Exception;

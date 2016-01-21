@@ -87,7 +87,7 @@ public class AdminCommonController extends AbstractController {
             jsonObject.put("assistantCode", storageItem.getAssistantCode());
 
             BigDecimal price = new BigDecimal("0.00");
-            if (storageItem.getTotalStockInQuantity().equals(BigDecimal.ZERO)) {
+            if (storageItem.getTotalStockInQuantity().compareTo(BigDecimal.ZERO) != 0) {
                 price = storageItem.getTotalStockInMoney().divide(storageItem.getTotalStockInQuantity(), 10, BigDecimal.ROUND_HALF_DOWN);
                 price = price.setScale(2, BigDecimal.ROUND_HALF_DOWN);
             }

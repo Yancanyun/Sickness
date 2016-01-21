@@ -106,16 +106,9 @@
                     <div class="J_pagination">
                     </div>
                     <select class="selectpicker show-tick form-control hidden" data-live-search="true">
-                        <option value="1" data-price="01" data-code="c">cow</option>
-                        <option value="2" data-price="02" data-code="b">bull</option>
-                        <option value="3" data-price="03" data-code="o">ox</option>
-                        <option value="4" data-price="04" data-code="A">ASD</option>
-                        <option value="5" data-price="05" data-code="B">Bla</option>
-                        <option value="6" data-price="06" data-code="B">Ble</option>
-                        <option value="6" data-price="06" data-code="B">Ble</option>
-                        <option value="6" data-price="06" data-code="B">Ble</option>
-                        <option value="6" data-price="06" data-code="B">Ble</option>
-                        <option value="6" data-price="06" data-code="B">Ble</option>
+                        <c:forEach var="item" items="${itemList}">
+                            <option value="${item.id}" data-price="" data-code="${item.assistantCode}">${item.name}</option>
+                        </c:forEach>
                     </select>
                     <select class="form-control w180 hidden J_depotSelect" name="depotId">
                         <c:forEach var="depot" items="${depotList}">

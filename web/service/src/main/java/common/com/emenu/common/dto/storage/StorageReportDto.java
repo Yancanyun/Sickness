@@ -19,6 +19,8 @@ public class StorageReportDto {
     //单据详情
     private List<StorageReportItem> storageReportItemList;
 
+    private List<StorageReportItemDto> storageReportItemDtoList;
+
     /********************getter and setter ********************/
 
     public StorageReport getStorageReport() {
@@ -35,5 +37,13 @@ public class StorageReportDto {
 
     public void setStorageReportItemList(List<StorageReportItem> storageReportItemList) {
         this.storageReportItemList = storageReportItemList;
+    }
+
+    public List<StorageReportItemDto> getStorageReportItemDtoList() {
+        return storageReportItemDtoList;
+    }
+
+    public void setStorageReportItemDtoList(List<StorageReportItemDto> storageReportItemDtoList) {
+        this.storageReportItemDtoList = storageReportItemDtoList;
     }
 }

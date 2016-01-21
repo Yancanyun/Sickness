@@ -113,7 +113,7 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
-<!--    <select id="countByContition" resultType="int">
+<!--    <select id="countByCondition" resultType="int">
         SELECT count(1)
         FROM `t_storage_report`
         <where>
@@ -149,7 +149,7 @@
         ORDER BY `created_time` DESC
     </select>-->
 
-    <select id="countByContition" resultType="int">
+    <select id="countByCondition" resultType="int">
         SELECT count(1)
         FROM t_storage_report
         <where>

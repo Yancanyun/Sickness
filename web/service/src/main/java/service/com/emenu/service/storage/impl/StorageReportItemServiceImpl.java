@@ -1,5 +1,6 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.storage.StorageReportItemDto;
 import com.emenu.common.entity.party.security.SecurityUserGroup;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.exception.EmenuException;
@@ -83,6 +84,18 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         try {
             reportItemList = storageReportItemMapper.listByReportId(reportId);
             return reportItemList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryReportItemFail, e);
+        }
+    }
+
+    @Override
+    public List<StorageReportItemDto> listDtoByReportId(int reportId) throws SSException {
+        List<StorageReportItemDto> reportItemDtoList = Collections.emptyList();
+        try {
+            reportItemDtoList = storageReportItemMapper.listDtoByReportId(reportId);
+            return reportItemDtoList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryReportItemFail, e);

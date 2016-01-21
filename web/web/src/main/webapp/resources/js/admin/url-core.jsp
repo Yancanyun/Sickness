@@ -104,9 +104,9 @@
             ['getSettlementList', site.website + 'admin/storage/settlement/supplier/ajax/list', 'get', '获取结算列表'],
 
             // 库存单据管理
-            ['getMoney', site.website + '/test/ajax/bill', 'get', '获取当前物品小计'],
-            ['delStoreBill', site.staticWebsite + 'mock/admin/get-bill.json', 'get', '删除库存单据'],
-            ['addStoreBill', site.website + '/test/ajax', 'post', '添加库存单据']
+            ['getMoney', site.website + 'admin/storage/report/ajax/bill', 'get', '获取当前物品小计'],
+            ['delStoreBill', site.website + 'admin/storage/report/ajax/del/&{id}', 'delete', '删除库存单据'],
+            ['addStoreBill', site.website + 'admin/storage/report/new', 'post', '添加库存单据']
         ],
         // 菜品管理
         DishManagement: [
@@ -205,7 +205,8 @@
         // 公共模块
         Module: [
             ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],
-            ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码']
+            ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码'],
+            ['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择']
         ]
     };
 })();

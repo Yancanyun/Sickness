@@ -68,7 +68,22 @@
             ORDER BY `created_time` DESC
         </select>
 
-        <delete id="delByReportId" parameterType="int">
+    <select id="listDtoByReportId" resultType="com.emenu.common.dto.storage.StorageReportItemDto">
+        SELECT `t_storage_report_item`.`id` AS id,
+        `item_id` AS itemId,
+        `t_storage_item`.`name` AS itemName,
+        `t_storage_item`.`assistant_code` AS assistantCode,
+        `quantity` AS quantity,
+        `count` AS count,
+        `price` As price,
+        `comment` AS comment,
+        `t_storage_report_item`.`created_time` AS createdTime
+        FROM `t_storage_report_item`
+        LEFT JOIN `t_storage_item` ON `t_storage_report_item`.`item_id` = `t_storage_item`.`id`
+        WHERE `report_id` = #{reportId}
+    </select>
+
+    <delete id="delByReportId" parameterType="int">
             DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
         </delete>
 

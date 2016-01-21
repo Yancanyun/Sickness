@@ -2,6 +2,7 @@ package com.emenu.service.storage.impl;
 
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.dto.storage.StorageReportDto;
+import com.emenu.common.dto.storage.StorageReportItemDto;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
@@ -63,8 +64,8 @@ public class StorageReportServiceImpl implements StorageReportService {
                throw SSException.get(EmenuException.ReportItemListIsNotNull);
            }
            this.newReport(reportDto.getStorageReport());
-           for(StorageReportItem reportItem : reportDto.getStorageReportItemList()){
-           storageReportItemService.newReportItem(reportItem);
+           for (StorageReportItem reportItem : reportDto.getStorageReportItemList()) {
+               storageReportItemService.newReportItem(reportItem);
            }
        } catch (Exception e) {
            LogClerk.errLog.error(e);
@@ -365,13 +366,13 @@ public class StorageReportServiceImpl implements StorageReportService {
             reportList = storageReportMapper.listReportByCondition1(report, offset, pageSize, depotIdList, startTime, endTime);
             for (StorageReport storageReport : reportList) {
                 StorageReportDto reportDto = new StorageReportDto();
-                List<StorageReportItem> reportItemList = new ArrayList();
+                List<StorageReportItemDto> reportItemDtoList = new ArrayList();
                 //根据单据id获取单据详情信息
 
-                reportItemList = storageReportItemService.listByReportId(storageReport.getId());
+                reportItemDtoList = storageReportItemService.listDtoByReportId(storageReport.getId());
                 //数据存入reportDto
                 reportDto.setStorageReport(storageReport);
-                reportDto.setStorageReportItemList(reportItemList);
+                reportDto.setStorageReportItemDtoList(reportItemDtoList);
                 reportDtoList.add(reportDto);
             }
             return reportDtoList;
@@ -500,7 +501,7 @@ public class StorageReportServiceImpl implements StorageReportService {
     public int countByContition(StorageReport report, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
         Integer count = 0;
         try {
-            count = storageReportMapper.countByContition(report, depotIdList, startTime, endTime);
+            count = storageReportMapper.countByCondition(report, depotIdList, startTime, endTime);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountReportFail, e);
