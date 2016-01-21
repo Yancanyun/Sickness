@@ -3,7 +3,7 @@ package com.emenu.service.party.group.vip.impl;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.party.group.vip.VipInfo;
-import com.emenu.common.entity.vip.VipCountInfo;
+import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.enums.party.*;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -12,7 +12,7 @@ import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.party.group.vip.VipInfoService;
-import com.emenu.service.vip.VipCountInfoService;
+import com.emenu.service.vip.VipAccountInfoService;
 import com.pandawork.core.common.exception.ExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -49,7 +49,7 @@ public class VipInfoServiceImpl implements VipInfoService{
     private PartyService partyService;
 
     @Autowired
-    private VipCountInfoService vipCountInfoService;
+    private VipAccountInfoService vipAccountInfoService;
 
     @Autowired
     private SecurityUserService securityUserService;
@@ -144,15 +144,15 @@ public class VipInfoServiceImpl implements VipInfoService{
             securityUser.setStatus(EnableEnums.Enabled.getId());
             this.securityUserService.newSecurityUser(securityUser);
 
-            //3.向t_vip_account_info(即会员账户表)添加一条信息
-            VipCountInfo vipCountInfo = new VipCountInfo();
-            vipCountInfo.setPartyId(partyId);
-            vipCountInfo.setUsedCreditAmount(new BigDecimal(0));
-            vipCountInfo.setBalance(new BigDecimal(0));
-            vipCountInfo.setIntegral(0);
-            vipCountInfo.setTotalConsumption(new BigDecimal(0));
-            vipCountInfo.setStatus(0);
-            vipCountInfoService.newVipCountInfo(vipCountInfo);
+            //3.向t_vip_account_info会员账户表添加一条信息
+            VipAccountInfo vipAccountInfo = new VipAccountInfo();
+            vipAccountInfo.setPartyId(partyId);
+            vipAccountInfo.setUsedCreditAmount(new BigDecimal(11));
+            vipAccountInfo.setBalance(new BigDecimal(0));
+            vipAccountInfo.setIntegral(0);
+            vipAccountInfo.setTotalConsumption(new BigDecimal(0));
+            vipAccountInfo.setStatus(0);
+            vipAccountInfoService.newVipAccountInfo(vipAccountInfo);
 
             //4.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
