@@ -168,12 +168,16 @@ public class VipCardServiceImpl implements VipCardService {
             for(VipCard vipCard : vipCardList) {
                 VipInfo vipInfo = vipInfoMapper.queryByPartyId(vipCard.getVipPartyId());
                 Employee employee = employeeMapper.queryByPartyId(vipCard.getOperatorPartyId());
-                String operator = employee.getName();
 
                 VipCardDto vipCardDto = new VipCardDto();
+
+                if (employee != null) {
+                    String operator = employee.getName();
+                    vipCardDto.setOperator(operator);
+                }
+
                 vipCardDto.setVipCard(vipCard);
                 vipCardDto.setVipInfo(vipInfo);
-                vipCardDto.setOperator(operator);
 
                 vipCardDtoList.add(vipCardDto);
             }
@@ -255,7 +259,7 @@ public class VipCardServiceImpl implements VipCardService {
         }
         try {
             //将状态设为"删除"
-            vipCardMapper.updateStatus(id, VipCardStatusEnums.Deleted.getId());
+            vipCardMapper.updateStatusById(id, VipCardStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteVipCardFail, e);
@@ -264,7 +268,23 @@ public class VipCardServiceImpl implements VipCardService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void updateStatus(int id, int status) throws SSException {
+    public void delByPartyId(int partyId) throws SSException {
+        //检查PartyID是否合法
+        if (Assert.lessOrEqualZero(partyId)) {
+            return ;
+        }
+        try {
+            //将状态设为"删除"
+            vipCardMapper.updateStatusByPartyId(partyId, VipCardStatusEnums.Deleted.getId());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteVipCardFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void updateStatusById(int id, int status) throws SSException {
         //检查ID是否合法
         if (Assert.lessOrEqualZero(id)) {
             return;
@@ -274,10 +294,39 @@ public class VipCardServiceImpl implements VipCardService {
             return;
         }
         try {
-            vipCardMapper.updateStatus(id, status);
+            vipCardMapper.updateStatusById(id, status);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void updateStatusByPartyId(int partyId, int status) throws SSException {
+        //检查PartyID是否合法
+        if (Assert.lessOrEqualZero(partyId)) {
+            return;
+        }
+        //检查Status是否合法
+        if (Assert.lessZero(status)) {
+            return;
+        }
+        try {
+            vipCardMapper.updateStatusByPartyId(partyId, status);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateVipCardFail, e);
+        }
+    }
+
+    @Override
+    public VipCard queryByPartyId(int partyId) throws SSException {
+        try{
+            return vipCardMapper.queryByPartyId(partyId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
         }
     }
 }

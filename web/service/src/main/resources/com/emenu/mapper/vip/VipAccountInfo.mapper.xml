@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.emenu.mapper.vip.VipCountInfoMapper">
+<mapper namespace="com.emenu.mapper.vip.VipAccountInfoMapper">
 
-    <select id="listByPageAndMin" resultType="com.emenu.common.dto.vip.VipCountInfoDto">
+    <select id="listByPageAndMin" resultType="com.emenu.common.dto.vip.VipAccountInfoDto">
         SELECT vipcount.`id` AS id,
                grade.`min_consumption` AS minConsumption,
                grade.`name` AS vipGrade,

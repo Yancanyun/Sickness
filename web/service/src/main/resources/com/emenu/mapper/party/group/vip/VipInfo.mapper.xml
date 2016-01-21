@@ -46,6 +46,12 @@
         WHERE vipInfo.id = #{id}
     </select>
 
+    <select id="queryByPartyId" resultMap="pw.VipInfo">
+        SELECT *
+        FROM `t_party_vip_info` vipInfo
+        WHERE vipInfo.party_id = #{partyId}
+    </select>
+
     <select id="countByPhone" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_vip_info`

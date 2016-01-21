@@ -3,11 +3,10 @@ package com.emenu.web.controller.admin.vip.account;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.dto.vip.VipCountInfoDto;
+import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.vip.StatusEnums;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.vip.VipCountInfoService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -26,7 +25,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.AdminVipAccount)
 @RequestMapping(value = URLConstants.ADMIN_VIP_ACCOUNT_URL)
-public class VipCountInfoController extends AbstractController{
+public class VipAccountInfoController extends AbstractController{
 
     /**
      * 去列表页面
@@ -57,31 +56,31 @@ public class VipCountInfoController extends AbstractController{
             orderBy= "minConsumption";
             orderType = 0;
         }
-        List<VipCountInfoDto> accountList = Collections.emptyList();
+        List<VipAccountInfoDto> accountList = Collections.emptyList();
         try {
-            accountList = vipCountInfoService.listByPageAndMin(curPage, pageSize,orderType,orderBy);
+            accountList = vipAccountInfoService.listByPageAndMin(curPage, pageSize,orderType,orderBy);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
         JSONArray jsonArray = new JSONArray();
-        for (VipCountInfoDto vipCountInfoDto :accountList) {
+        for (VipAccountInfoDto vipAccountInfoDto :accountList) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", vipCountInfoDto.getId());
-            jsonObject.put("vipGrade",vipCountInfoDto.getVipGrade());
-            jsonObject.put("name",vipCountInfoDto.getName());
-            jsonObject.put("phone",vipCountInfoDto.getPhone());
-            jsonObject.put("cardNumber",vipCountInfoDto.getCardNumber());
-            jsonObject.put("balance",vipCountInfoDto.getBalance());
-            jsonObject.put("integral",vipCountInfoDto.getIntegral());
-            jsonObject.put("totalConsumption",vipCountInfoDto.getTotalConsumption());
-            jsonObject.put("usedCreditAmount",vipCountInfoDto.getTotalConsumption());
-            jsonObject.put("status",vipCountInfoDto.getStatus());
+            jsonObject.put("id", vipAccountInfoDto.getId());
+            jsonObject.put("vipGrade", vipAccountInfoDto.getVipGrade());
+            jsonObject.put("name", vipAccountInfoDto.getName());
+            jsonObject.put("phone", vipAccountInfoDto.getPhone());
+            jsonObject.put("cardNumber", vipAccountInfoDto.getCardNumber());
+            jsonObject.put("balance", vipAccountInfoDto.getBalance());
+            jsonObject.put("integral", vipAccountInfoDto.getIntegral());
+            jsonObject.put("totalConsumption", vipAccountInfoDto.getTotalConsumption());
+            jsonObject.put("usedCreditAmount", vipAccountInfoDto.getTotalConsumption());
+            jsonObject.put("status", vipAccountInfoDto.getStatus());
             jsonArray.add(jsonObject);
         }
         int dataCount = 0;
         try {
-            dataCount = vipCountInfoService.countAll();
+            dataCount = vipAccountInfoService.countAll();
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -90,7 +89,7 @@ public class VipCountInfoController extends AbstractController{
     }
 
     /**
-     * ajax更改会员状态
+     * ajax更改会员账户状态
      *
      * @param id
      * @param status
@@ -103,7 +102,7 @@ public class VipCountInfoController extends AbstractController{
                                    @RequestParam("status") Integer status) {
         try {
             StatusEnums vipCountStatus = StatusEnums.valueOf(status);
-            vipCountInfoService.updateStatusById(id, vipCountStatus);
+            vipAccountInfoService.updateStatusById(id, vipCountStatus);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

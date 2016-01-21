@@ -11,16 +11,16 @@ import java.util.Date;
 
 /**
  * PartyVipCount
- * 会员账号信息实体
+ * 会员账户信息实体
  *
  * @author xubr
  * @date 2016/1/18.
  */
 @Entity
 @Table(name = "t_vip_account_info")
-public class VipCountInfo extends AbstractEntity {
+public class VipAccountInfo extends AbstractEntity {
 
-    //会员账号id
+    //会员账户id
     @Id
     private Integer id;
 

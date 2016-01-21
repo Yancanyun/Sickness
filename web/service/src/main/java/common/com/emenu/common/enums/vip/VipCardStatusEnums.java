@@ -12,7 +12,8 @@ import java.util.Map;
 public enum VipCardStatusEnums {
     Disabled(0, "停用"),
     Enabled(1, "可用"),
-    Deleted(2, "已删除");
+    Lossed(2, "已挂失"),
+    Deleted(3, "已删除");
 
     private Integer id;
     private String status;

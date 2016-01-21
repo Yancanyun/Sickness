@@ -23,10 +23,10 @@ public class VipCardTest extends AbstractTestCase {
     @Test
     public void newVipCard() throws SSException {
         VipCard vipCard = new VipCard();
-        vipCard.setVipPartyId(6);
-        vipCard.setCardNumber("20160119001");
+        vipCard.setVipPartyId(48);
+        vipCard.setCardNumber("20160120010");
         vipCard.setPhysicalNumber("");
-        vipCard.setPermanentlyEffective(0);
+        vipCard.setPermanentlyEffective(1);
         vipCard.setOperatorPartyId(67);
         vipCardService.newVipCard(vipCard);
     }

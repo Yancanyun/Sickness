@@ -53,6 +53,7 @@
                 <li><a class="J_menu" href="${website}admin/vip/grade">会员等级管理</a></li>
                 <li><a class="J_menu" href="${website}admin/vip/multiple/integral/plan">多倍积分方案管理</a></li>
                 <li><a class="J_menu" href="${website}admin/vip/account/list">会员账户信息管理</a></li>
+                <li><a class="J_menu" href="${website}admin/vip/card">会员卡管理</a></li>
             </ul>
         </li>
         <li

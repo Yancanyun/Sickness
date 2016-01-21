@@ -81,11 +81,11 @@ public class StorageDepotTest extends AbstractTestCase {
         System.out.println(currentDay);
     }
 
-    @Test
+  /*  @Test
     public void jsonTest() throws SSException{
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("aaa", 123);
-        jsonObject.replace("aaa",1233);
+        jsonObject.re("aaa",1233);
         System.out.println(jsonObject);
-    }
+    }*/
 }
