@@ -21,14 +21,14 @@ public interface VipIntegralPlanService {
      * @return
      * @throws SSException
      */
-    public List<VipIntegralPlan> listAll() throws SSException;
+    public List<VipIntegralPlan> listByGradeId(int gradeId) throws SSException;
 
     /**
      * 获取会员积分方案的所有兑换方式
      * @return
      * @throws SSException
      */
-    public List<VipIntegralDto> listAllDtos() throws SSException;
+    public List<VipIntegralDto> listDtosGradeId(int gradeId) throws SSException;
 
     /**
      * 添加积分管理方案
@@ -78,4 +78,12 @@ public interface VipIntegralPlanService {
      * @throws SSException
      */
     public void deletePlanById(Integer id) throws SSException;
+
+    /**
+     * 根据等级id更改方案状态
+     * @param gradeId
+     * @param status
+     * @throws SSException
+     */
+    public void updateStatus(int gradeId, int status) throws SSException;
 }

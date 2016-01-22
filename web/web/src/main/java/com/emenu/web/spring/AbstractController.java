@@ -379,6 +379,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("vipAccountInfoService")
     protected static VipAccountInfoService vipAccountInfoService;
+
+    //会员积分方案管理
+    @StaticAutoWire
+    @Qualifier("vipIntegralPlanService")
+    protected static VipIntegralPlanService vipIntegralPlanService;
 }
 
 

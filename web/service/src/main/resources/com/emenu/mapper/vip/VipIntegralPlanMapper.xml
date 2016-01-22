@@ -2,9 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.vip.VipIntegralPlanMapper">
 
-    <select id="listAll" resultMap="pw.VipIntegralPlan">
+    <select id="listByGradeId" resultMap="pw.VipIntegralPlan">
         SELECT *
         FROM `t_vip_integral_plan`
+        WHERE `grade_id` = #{gradeId}
+    </select>
+    
+    <select id="updateStatus">
+        UPDATE t_vip_integral_plan
+        SET `status` = #{status}
+        WHERE `grade_id` = #{gradeId}
     </select>
 
 </mapper>

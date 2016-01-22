@@ -37,10 +37,14 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
     private CommonDao commonDao;
 
     @Override
-    public List<VipIntegralPlan> listAll() throws SSException{
+    public List<VipIntegralPlan> listByGradeId(int gradeId) throws SSException{
         List<VipIntegralPlan> vipIntegralPlanList = Collections.emptyList();
         try{
-            vipIntegralPlanList = vipIntegralPlanMapper.listAll();
+            if (Assert.isNull(gradeId)
+                    && Assert.lessOrEqualZero(gradeId)){
+                throw SSException.get(EmenuException.VipGradeIdIllegal);
+            }
+            vipIntegralPlanList = vipIntegralPlanMapper.listByGradeId(gradeId);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.ListVipIntegralPlanFail);
@@ -49,13 +53,18 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
     }
 
     @Override
-    public List<VipIntegralDto> listAllDtos() throws SSException{
+    public List<VipIntegralDto> listDtosGradeId(int gradeId) throws SSException{
         List<VipIntegralPlan> vipIntegralPlanList = Collections.emptyList();
         List<VipIntegralDto> vipIntegralDtoList = new ArrayList<VipIntegralDto>();
         try{
-            vipIntegralPlanList = this.listAll();
+            if (Assert.isNull(gradeId)
+                    && Assert.lessOrEqualZero(gradeId)){
+                throw SSException.get(EmenuException.VipGradeIdIllegal);
+            }
+            vipIntegralPlanList = this.listByGradeId(gradeId);
             for (VipIntegralPlan vipIntegralPlan:vipIntegralPlanList){
                 VipIntegralDto vipIntegralDto = new VipIntegralDto();
+                vipIntegralDto.setId(vipIntegralPlan.getId());
                 vipIntegralDto.setIntegralType(VipIntegralPlanTypeEnums.valueOf(vipIntegralPlan.getType()).getType());
                 vipIntegralDto.setValue(vipIntegralPlan.getValue());
                 vipIntegralDtoList.add(vipIntegralDto);
@@ -153,6 +162,20 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
                 throw SSException.get(EmenuException.VipIntegralPlanIdIllegal);
             }
             commonDao.deleteById(VipIntegralPlan.class, id);
+        } catch (Exception e) {
+            LogClerk.errLog.equals(e);
+            throw SSException.get(EmenuException.UpdateVipIntegralPlanFail);
+        }
+    }
+
+    @Override
+    public void updateStatus(int gradeId, int status) throws SSException{
+        try{
+            if (Assert.isNull(gradeId)
+                && Assert.lessOrEqualZero(gradeId)){
+            throw SSException.get(EmenuException.VipIntegralPlanIdIllegal);
+        }
+            vipIntegralPlanMapper.updateStatus(gradeId, status);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.UpdateVipIntegralPlanFail);

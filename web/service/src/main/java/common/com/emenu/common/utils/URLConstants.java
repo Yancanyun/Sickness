@@ -115,6 +115,9 @@ public final class URLConstants {
     //会员账户管理
     public static final String ADMIN_VIP_ACCOUNT_URL = "admin/vip/account";
 
+    //会员积分方案管理
+    public static final String ADMIN_VIP_INTEGRAL_URL = "admin/vip/integral/plan";
+
     /**********************服务员APP*************************/
     //服务员查看餐台列表
     public static final String WAITER_TABLE_LIST_URL = "waiter/table/list";

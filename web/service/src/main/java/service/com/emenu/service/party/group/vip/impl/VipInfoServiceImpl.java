@@ -130,7 +130,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             //1.先向t_party表添加一条当事人信息
             Party party = new Party();
             party.setPartyTypeId(PartyTypeEnums.Vip.getId());//会员
-            party.setCreatedUserId(userPartyId);//此处应为当前登录者的id
+            party.setCreatedUserId(userPartyId);//当前登录者的id
             Party newParty = this.partyService.newParty(party);
             int partyId = newParty.getId();//获取刚插入数据的partyId
 

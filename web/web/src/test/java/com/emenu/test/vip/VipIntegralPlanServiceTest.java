@@ -1,7 +1,9 @@
 package com.emenu.test.vip;
 
 import com.emenu.common.dto.vip.VipIntegralDto;
+import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.entity.vip.VipIntegralPlan;
+import com.emenu.service.vip.VipGradeService;
 import com.emenu.service.vip.VipIntegralPlanService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -22,10 +24,16 @@ public class VipIntegralPlanServiceTest extends AbstractTestCase {
     @Autowired
     private VipIntegralPlanService vipIntegralPlanService;
 
+    @Autowired
+    private VipGradeService vipGradeService;
+
     @Test
     public void listAll() throws SSException{
         List<VipIntegralPlan> vipIntegralPlanList = new ArrayList<VipIntegralPlan>();
-        vipIntegralPlanList = vipIntegralPlanService.listAll();
+        Integer gradeId = 1;
+        vipIntegralPlanList = vipIntegralPlanService.listByGradeId(gradeId);
+        VipGrade vipGrade = vipGradeService.queryById(gradeId);
+        System.out.println("当前等级为" + vipGrade.getName());
         for (VipIntegralPlan vipIntegralPlan: vipIntegralPlanList){
             System.out.print(vipIntegralPlan.getGradeId() + " ");
             System.out.print(vipIntegralPlan.getType() + " ");
@@ -37,7 +45,10 @@ public class VipIntegralPlanServiceTest extends AbstractTestCase {
     @Test
     public void listAllDtos() throws SSException{
         List<VipIntegralDto> vipIntegralDtoList = Collections.emptyList();
-        vipIntegralDtoList = vipIntegralPlanService.listAllDtos();
+        Integer gradeId = 1;
+        vipIntegralDtoList = vipIntegralPlanService.listDtosGradeId(gradeId);
+        VipGrade vipGrade = vipGradeService.queryById(gradeId);
+        System.out.println("当前等级为" + vipGrade.getName());
         for (VipIntegralDto vipIntegralDto: vipIntegralDtoList){
             System.out.print(vipIntegralDto.getIntegralType() + " ");
             System.out.println(vipIntegralDto.getValue());

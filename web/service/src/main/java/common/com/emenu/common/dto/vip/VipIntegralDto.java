@@ -8,11 +8,22 @@ import java.math.BigDecimal;
  */
 public class VipIntegralDto {
 
+    // id
+    private Integer id;
+
     // 兑换类型
     private String IntegralType;
 
     // 兑换值
     private BigDecimal value;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getIntegralType() {
         return IntegralType;

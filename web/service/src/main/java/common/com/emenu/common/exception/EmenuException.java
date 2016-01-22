@@ -408,7 +408,7 @@ public enum EmenuException implements IBizExceptionMes {
     VipIntegralPlanIdIllegal("会员积分方案id不合法", 8105),
     ListVipIntegralPlanFail("获取会员积分方案列表失败", 8106),
 
-    //会员账号信息
+    //会员账户信息
     ListVipAccountFailed("获取会员账户分页列表失败", 8120),
     VipAccountInfoIsNotNull("会员账户信息不为空", 8121),
     VipAccountInfoPartyIdError("会员账户当事人id错误", 8122),
