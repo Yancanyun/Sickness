@@ -37,7 +37,7 @@
                   <td>${plan.integralMultiples}</td>
                   <td>${plan.startTimeStr}</td>
                   <td>${plan.endTimeStr}</td>
-                  <td><c:if test="${plan.status == 1}">启用</c:if>
+                  <td><c:if test="${plan.status == 1}">可用</c:if>
                       <c:if test="${plan.status == 0}">停用</c:if>
                   </td>
                   <td>

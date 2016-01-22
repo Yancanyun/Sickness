@@ -408,13 +408,6 @@ public enum EmenuException implements IBizExceptionMes {
     VipIntegralPlanIdIllegal("会员积分方案id不合法", 8105),
     ListVipIntegralPlanFail("获取会员积分方案列表失败", 8106),
 
-    //会员卡发放
-    QueryVipCardFail("查询会员卡失败", 8120),
-    InsertVipCardFail("发卡失败", 8121),
-    UpdateVipCardFail("修改会员卡失败", 8122),
-    DeleteVipCardFail("删除会员卡失败", 8123),
-    InsetVipIntegralPlanFail("会员积分方案插入失败", 8102),
-
     //会员账号信息
     ListVipAccountFailed("获取会员账户分页列表失败", 8120),
     VipAccountInfoIsNotNull("会员账户信息不为空", 8121),
@@ -427,6 +420,13 @@ public enum EmenuException implements IBizExceptionMes {
     VipAccountInfoIdError("会员账户主键id错误",8128),
     VipAccountInfoStatesError("会员账户状态错误",8129),
     UpdateVipAccountInfoStatusFail("修改会员账户状态失败",8130),
+
+    //会员卡发放
+    QueryVipCardFail("查询会员卡失败", 8140),
+    InsertVipCardFail("发卡失败", 8141),
+    UpdateVipCardFail("修改会员卡失败", 8142),
+    DeleteVipCardFail("删除会员卡失败", 8143),
+    PermanentlyEffectiveIsNull("有效期不可为空", 8144),
     ;
 
 

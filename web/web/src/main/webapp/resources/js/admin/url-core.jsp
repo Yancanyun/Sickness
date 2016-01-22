@@ -199,6 +199,10 @@
             ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态'],
             //会员等级页面
             ['delGrade', site.website + 'admin/vip/grade/ajax/&{id}', 'delete', '删除等级时发送id'],
+            //会员卡管理
+            ['changeStatus', site.website + 'admin/vip/card/ajax/status', 'put', '挂失、解挂时，发送当前会员卡的id和status'],
+            ['delCardId', site.website + 'admin/vip/card/ajax/&{id}', 'delete', 'ajax发送删除的会员卡id'],
+            ['sendSaveInfo',site.website + 'admin/vip/card/ajax/&{id}', 'put', 'ajax发送会员卡id,修改的有效期和是否永久有效'],
             //会员账户信息管理--停用/启用
             ['changeAccountStatus', site.website + 'admin/vip/account/ajax/status','get','点击停用/启用时，发送当前账户的id和status']
         ],

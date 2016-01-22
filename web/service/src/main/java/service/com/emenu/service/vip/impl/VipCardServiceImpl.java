@@ -3,11 +3,14 @@ package com.emenu.service.vip.impl;
 import com.emenu.common.dto.vip.VipCardDto;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.vip.VipCard;
+import com.emenu.common.enums.vip.VipCardPermanentlyEffectiveEnums;
 import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.party.group.employee.EmployeeMapper;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
+import com.emenu.mapper.party.security.SecurityUserMapper;
 import com.emenu.mapper.vip.VipCardMapper;
 import com.emenu.service.vip.VipCardService;
 import com.pandawork.core.common.exception.SSException;
@@ -40,6 +43,9 @@ public class VipCardServiceImpl implements VipCardService {
 
     @Autowired
     private VipInfoMapper vipInfoMapper;
+
+    @Autowired
+    private SecurityUserMapper securityUserMapper;
 
     @Autowired
     private CommonDao commonDao;
@@ -175,6 +181,12 @@ public class VipCardServiceImpl implements VipCardService {
                     String operator = employee.getName();
                     vipCardDto.setOperator(operator);
                 }
+                //若在Employee表里不存在，则去找User表里的LoginName
+                else {
+                    SecurityUser securityUser = securityUserMapper.queryByPartyIdAndAccountType(vipCard.getOperatorPartyId(), 1);
+                    String operator = securityUser.getLoginName();
+                    vipCardDto.setOperator(operator);
+                }
 
                 vipCardDto.setVipCard(vipCard);
                 vipCardDto.setVipInfo(vipInfo);
@@ -243,6 +255,16 @@ public class VipCardServiceImpl implements VipCardService {
             return;
         }
         try {
+            //把转换出的字符置空，防止插入数据库
+            vipCard.setPermanentlyEffectiveStr(null);
+            vipCard.setValidityTimeStr(null);
+
+            //若不为永久有效且有效期为空，则报错
+            if (vipCard.getPermanentlyEffective() == VipCardPermanentlyEffectiveEnums.False.getId()
+                    && vipCard.getValidityTime() == null) {
+                throw SSException.get(EmenuException.PermanentlyEffectiveIsNull);
+            }
+
             commonDao.update(vipCard);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -297,7 +319,7 @@ public class VipCardServiceImpl implements VipCardService {
             vipCardMapper.updateStatusById(id, status);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateTableFail, e);
+            throw SSException.get(EmenuException.UpdateVipCardFail, e);
         }
     }
 
@@ -327,6 +349,24 @@ public class VipCardServiceImpl implements VipCardService {
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
+
+    @Override
+    public void updateOperatorById(int id, int operatorPartyId) throws SSException {
+        //检查ID是否合法
+        if (Assert.lessOrEqualZero(id)) {
+            return;
+        }
+        //检查操作人PartyId是否合法
+        if (Assert.lessOrEqualZero(operatorPartyId)) {
+            return;
+        }
+        try {
+            vipCardMapper.updateOperatorById(id, operatorPartyId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateVipCardFail, e);
         }
     }
 }

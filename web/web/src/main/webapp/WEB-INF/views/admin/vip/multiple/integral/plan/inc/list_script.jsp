@@ -19,11 +19,11 @@
       <select class="form-control" data-valid-rule="scale(0,1,1)" name="status">
         {@if data.status == 0 }
         <option value="0" selected>停用</option>
-        <option value="1">启用</option>
+        <option value="1">可用</option>
         {@/if}
         {@if  data.status == 1 }
         <option value="0">停用</option>
-        <option value="1" selected>启用</option>
+        <option value="1" selected>可用</option>
         {@/if}
         {@if  data.status != 0 && data.status != 1 }
         <option value="0">停用</option>
@@ -51,7 +51,7 @@
       <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
     </td>
     {@else}
-    <td>启用</td>
+    <td>可用</td>
     <td>
       <a href="javascript:;" class="label-info J_change"><i class="fa fa-circle"></i>&nbsp;停用</a>
       <a href="javascript:;" class="label-info J_edit"><i class="fa fa-pencil"></i>&nbsp;编辑</a>

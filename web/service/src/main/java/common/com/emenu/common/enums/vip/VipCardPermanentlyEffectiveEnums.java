@@ -10,8 +10,8 @@ import java.util.Map;
  * @time: 2015/11/2 15:22
  */
 public enum VipCardPermanentlyEffectiveEnums {
-    No(0, "否"),
-    Yes(1, "是");
+    False(0, "否"),
+    True(1, "是");
 
     private Integer id;
     private String status;

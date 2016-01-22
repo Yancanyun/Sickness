@@ -134,7 +134,7 @@ public interface VipCardService {
     public void updateStatusById(int id, int status) throws SSException;
 
     /**
-     * 修改会员卡状态
+     * 根据PartyId修改会员卡状态
      * @param partyId
      * @param status
      * @throws SSException
@@ -148,4 +148,12 @@ public interface VipCardService {
      * @throws SSException
      */
     public VipCard queryByPartyId(int partyId) throws SSException;
+
+    /**
+     * 修改操作人
+     * @param id
+     * @param operatorPartyId
+     * @throws SSException
+     */
+    public void updateOperatorById(int id, int operatorPartyId) throws SSException;
 }

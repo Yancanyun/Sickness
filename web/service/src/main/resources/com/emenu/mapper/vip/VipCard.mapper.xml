@@ -40,8 +40,10 @@
         <if test="keyword != null and keyword!=''">
             AND (`t_party_vip_info`.`name` LIKE "%"#{keyword}"%" OR `t_party_vip_info`.`phone` LIKE "%"#{keyword}"%")
         </if>
-        <if test="startTime != null and endTime != null">
+        <if test="startTime != null">
             AND `t_vip_card`.`created_time` &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
             AND `t_vip_card`.`created_time` &lt;= #{endTime}
         </if>
         ORDER BY `id` ASC
@@ -113,4 +115,10 @@
         WHERE `vip_party_id` = #{partyId}
         AND `status` != 3
     </select>
+
+    <update id="updateOperatorById">
+        UPDATE `t_vip_card`
+        SET `operator_party_id` = #{operatorPartyId}
+        WHERE `id` = #{id}
+    </update>
 </mapper>

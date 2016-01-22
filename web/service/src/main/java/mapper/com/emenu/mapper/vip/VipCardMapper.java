@@ -83,4 +83,12 @@ public interface VipCardMapper {
      * @throws Exception
      */
     public VipCard queryByPartyId(@Param("partyId") int partyId) throws Exception;
+
+    /**
+     * 根据ID修改操作人
+     * @param id
+     * @param operatorPartyId
+     * @throws Exception
+     */
+    public void updateOperatorById(@Param("id") int id, @Param("operatorPartyId") int operatorPartyId) throws Exception;
 }

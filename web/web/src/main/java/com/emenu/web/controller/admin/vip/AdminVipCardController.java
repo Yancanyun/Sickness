@@ -4,8 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.vip.VipCardDto;
+import com.emenu.common.entity.party.group.employee.Employee;
+import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.party.AccountTypeEnums;
+import com.emenu.common.enums.vip.VipCardPermanentlyEffectiveEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -50,12 +56,19 @@ public class AdminVipCardController extends AbstractController {
     @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxList(@PathVariable("pageNo") Integer pageNo,
-                               @RequestParam("keyword") String keyword,
-                               @RequestParam("startTime") Date startTime,
-                               @RequestParam("endTime") Date endTime,
+                               @RequestParam(required = false) String keyword,
+                               @RequestParam(required = false) Date startTime,
+                               @RequestParam(required = false) Date endTime,
                                @RequestParam("pageSize") Integer pageSize) {
         List<VipCardDto> vipCardDtoList = Collections.emptyList();
         try {
+            //将结束时间设置为当天的最后一秒，以查询当天的记录
+            if (endTime != null) {
+                endTime.setHours(23);
+                endTime.setMinutes(59);
+                endTime.setSeconds(59);
+            }
+
             vipCardDtoList = vipCardService.listVipCardDtoByKeywordAndDate(keyword, startTime,
                                                                            endTime, pageNo, pageSize);
             JSONArray jsonArray = new JSONArray();
@@ -66,7 +79,9 @@ public class AdminVipCardController extends AbstractController {
                 jsonObject.put("phone", vipCardDto.getVipInfo().getPhone());
                 jsonObject.put("cardNumber", vipCardDto.getVipCard().getCardNumber());
                 jsonObject.put("createdTime", vipCardDto.getVipCard().getCreatedTimeStr());
-                jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTimeStr());
+                if (vipCardDto.getVipCard().getValidityTime() != null) {
+                    jsonObject.put("validityTime", vipCardDto.getVipCard().getValidityTimeStr());
+                }
                 jsonObject.put("permanentlyEffective", vipCardDto.getVipCard().getPermanentlyEffectiveStr());
                 jsonObject.put("operator", vipCardDto.getOperator());
                 jsonObject.put("status", vipCardDto.getVipCard().getStatusStr());
@@ -98,12 +113,26 @@ public class AdminVipCardController extends AbstractController {
                                         @RequestParam(required = false) Date validityTime,
                                         @RequestParam("permanentlyEffective") Integer permanentlyEffective) {
         try {
-            VipCard vipCard = vipCardService.queryById(id);
+            VipCard vipCard = new VipCard();
+            vipCard.setId(id);
             vipCard.setValidityTime(validityTime);
             vipCard.setPermanentlyEffective(permanentlyEffective);
             vipCard.setOperatorPartyId(getPartyId());
             vipCardService.updateVipCard(id, vipCard);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+
+            //返回操作人给前端
+            JSONObject jsonObject = new JSONObject();
+            Employee employee = employeeService.queryByPartyId(getPartyId());
+            if (employee != null) {
+                jsonObject.put("operator", employee.getName());
+            }
+            //若在Employee表里不存在，则去找User表里的LoginName
+            else {
+                SecurityUser securityUser = securityUserService.queryByPartyIdAndAccountType(getPartyId(), AccountTypeEnums.Normal);
+                jsonObject.put("operator", securityUser.getLoginName());
+            }
+
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -124,7 +153,21 @@ public class AdminVipCardController extends AbstractController {
                                        @RequestParam("status") Integer status) {
         try {
             vipCardService.updateStatusById(id, status);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            vipCardService.updateOperatorById(id, getPartyId());
+
+            //返回操作人给前端
+            JSONObject jsonObject = new JSONObject();
+            Employee employee = employeeService.queryByPartyId(getPartyId());
+            if (employee != null) {
+                jsonObject.put("operator", employee.getName());
+            }
+            //若在Employee表里不存在，则去找User表里的LoginName
+            else {
+                SecurityUser securityUser = securityUserService.queryByPartyIdAndAccountType(getPartyId(), AccountTypeEnums.Normal);
+                jsonObject.put("operator", securityUser.getLoginName());
+            }
+
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -142,6 +185,7 @@ public class AdminVipCardController extends AbstractController {
     @ResponseBody
     public JSONObject ajaxDelVipCard(@PathVariable Integer id) {
         try {
+            vipCardService.updateOperatorById(id, getPartyId());
             vipCardService.delById(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
