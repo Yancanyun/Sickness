@@ -265,7 +265,19 @@ public class VipCardServiceImpl implements VipCardService {
                 throw SSException.get(EmenuException.PermanentlyEffectiveIsNull);
             }
 
+            //若有效期在今天之前，则报错
+            Date today = new Date();
+            if (vipCard.getValidityTime().before(today)) {
+                throw SSException.get(EmenuException.PermanentlyEffectiveBeforeToday);
+            }
+
             commonDao.update(vipCard);
+
+            //若为永久有效，则将有效期置空
+            if (vipCard.getPermanentlyEffective() == VipCardPermanentlyEffectiveEnums.True.getId()) {
+                //commonDao不能将null值传入数据库，因而需要自己写SQL语句
+                vipCardMapper.emptyValidityTimeById(id);
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipCardFail, e);

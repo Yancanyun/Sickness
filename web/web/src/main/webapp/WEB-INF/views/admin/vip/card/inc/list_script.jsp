@@ -56,7 +56,6 @@
 <!-- 保存模板 -->
 <script type="text/template" id="saveTpl">
     <tr vip-card-id="&{card.id}">
-        <input class="J_card" type="hidden" value="" name="id"/>
         <td class="J_name">&{card.name}</td>
         <td class="J_phone">&{card.phone}</td>
         <td class="J_cardNumber">&{card.cardNumber}</td>

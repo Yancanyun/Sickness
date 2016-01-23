@@ -60,7 +60,6 @@
             </div>
             <div class="panel-body">
                 <form class="J_operForm" method="" action="">
-                    <!--  <input class="J_hidden" type="hidden" name="id" value=""/> -->
                     <input class="J_card" type="hidden" value="" name="id"/>
                     <input class="J_card" type="hidden" value="" name="name"/>
                     <input class="J_card" type="hidden" value="" name="phone"/>

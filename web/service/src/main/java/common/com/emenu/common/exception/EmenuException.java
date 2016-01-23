@@ -427,6 +427,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateVipCardFail("修改会员卡失败", 8142),
     DeleteVipCardFail("删除会员卡失败", 8143),
     PermanentlyEffectiveIsNull("有效期不可为空", 8144),
+    PermanentlyEffectiveBeforeToday("有效期不可为今天或今天之前", 8145),
     ;
 
 

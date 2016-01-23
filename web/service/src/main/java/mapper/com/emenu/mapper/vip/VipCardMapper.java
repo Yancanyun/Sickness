@@ -91,4 +91,11 @@ public interface VipCardMapper {
      * @throws Exception
      */
     public void updateOperatorById(@Param("id") int id, @Param("operatorPartyId") int operatorPartyId) throws Exception;
+
+    /**
+     * 根据ID清空有效期
+     * @param id
+     * @throws Exception
+     */
+    public void emptyValidityTimeById(@Param("id") int id) throws Exception;
 }

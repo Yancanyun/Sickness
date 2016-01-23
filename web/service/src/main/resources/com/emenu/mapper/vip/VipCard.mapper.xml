@@ -121,4 +121,10 @@
         SET `operator_party_id` = #{operatorPartyId}
         WHERE `id` = #{id}
     </update>
+
+    <update id="emptyValidityTimeById">
+        UPDATE `t_vip_card`
+        SET `validity_time` = NULL
+        WHERE `id` = #{id}
+    </update>
 </mapper>
