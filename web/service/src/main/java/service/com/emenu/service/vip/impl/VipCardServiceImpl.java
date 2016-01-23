@@ -8,6 +8,7 @@ import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.vip.VipCardPermanentlyEffectiveEnums;
 import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.mapper.party.group.employee.EmployeeMapper;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.mapper.party.security.SecurityUserMapper;
@@ -240,6 +241,33 @@ public class VipCardServiceImpl implements VipCardService {
         try {
             //将状态设为"可用"
             vipCard.setStatus(VipCardStatusEnums.Enabled.getId());
+
+            //获取当前时间
+            Date today = new Date();
+            String todayStr = DateUtils.formatDate(today, "yyyyMMdd");
+
+            //获取数据库中最后的一条数据，如果该条数据是今天的，则将新发卡的卡号递增
+            VipCard lastVipCard = vipCardMapper.queryLastVipCard();
+            String lastVipCardNumber = lastVipCard.getCardNumber();
+            String newVipCardNumber = null;
+            if (lastVipCardNumber.substring(0, 8).equals(todayStr)) {
+                int newNum = Integer.parseInt(lastVipCardNumber.substring(8, 11)) + 1;
+                if (newNum < 10) {
+                    newVipCardNumber = todayStr + "00" + newNum;
+                }
+                if (newNum < 100 && newNum >= 10) {
+                    newVipCardNumber = todayStr + "0" + newNum;
+                }
+                else {
+                    newVipCardNumber = todayStr + newNum;
+                }
+            }
+            //若最后一条数据不是今天的，则新发卡的卡号为今天的日期+001
+            else {
+                newVipCardNumber = todayStr + "001";
+            }
+            vipCard.setCardNumber(newVipCardNumber);
+
             return commonDao.insert(vipCard);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

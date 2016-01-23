@@ -98,4 +98,11 @@ public interface VipCardMapper {
      * @throws Exception
      */
     public void emptyValidityTimeById(@Param("id") int id) throws Exception;
+
+    /**
+     * 查询数据库中最后一条记录
+     * @return
+     * @throws Exception
+     */
+    public VipCard queryLastVipCard() throws Exception;
 }

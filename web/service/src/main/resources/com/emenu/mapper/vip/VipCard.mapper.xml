@@ -127,4 +127,20 @@
         SET `validity_time` = NULL
         WHERE `id` = #{id}
     </update>
+
+    <select id="queryLastVipCard" resultMap="pw.VipCard">
+        SELECT
+        `id`,
+        `vip_party_id`,
+        `card_number`,
+        `physical_number`,
+        `validity_time`,
+        `permanently_effective`,
+        `operator_party_id`,
+        `status`,
+        `created_time`
+        FROM `t_vip_card`
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
 </mapper>
