@@ -191,8 +191,8 @@
                     </ul>
                 </c:if>
             </li>
-            <li>
-                <a class="J_menu" href="${website}admin/storage/report">库存管理</a>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Report:List'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/storage/report">库存单据管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:Storage:Settlement:Check:List'}">class="active" </c:if>>
                 <a class="J_menu" href="${website}admin/storage/settlement/check">库存盘点</a>

@@ -5,6 +5,7 @@ import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -159,4 +160,15 @@ public interface StorageReportService {
      * @return
      */
     public int countByContition(StorageReport report,List<Integer> depotIdList,Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 导出到Excel
+     *
+     * @param startTime
+     * @param endTime
+     * @param handlerPartyId
+     * @param createdPartyId
+     * @throws SSException
+     */
+    public void exportToExcel(Date startTime, Date endTime, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
 }

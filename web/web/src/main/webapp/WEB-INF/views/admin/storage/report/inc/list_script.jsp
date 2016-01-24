@@ -1,9 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!--编辑/添加时,对话框模板-->
 <script type="text/template" id="dlg">
     <form class="form-horizontal J_addForm" action="" method="">
-        <input type="hidden" name="reportId" value="&{reportId}">
+        <input type="hidden" name="id" value="&{id}">
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
@@ -45,7 +47,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">单据备注</label>
             <div class="col-sm-6">
-                <input class="form-control J_comment" type="text" name="" value="">
+                <input class="form-control J_comment" type="text" name="" value="&{comment}">
             </div>
         </div>
         <div class="form-group">
@@ -65,6 +67,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label no-padding-right">物品备注</label>
+            <div class="col-sm-6 ">
+                <input class="form-control w180 J_itemComment" type="text" name="" value="">
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label no-padding-right">小计</label>
             <div class="col-sm-6 ">
                 <input class="form-control w180 J_money" readonly="readonly" type="text" placeholder="点击这里,获得小计" name="" value="">
@@ -80,8 +88,8 @@
                     <th><input type="checkbox" class="J_selectAll1"></th>
                     <th>名称</th>
                     <th>数量</th>
-                    <th>成本价</th>
-                    <th>成本金额</th>
+                    <th>成本单价</th>
+                    <th>小计金额</th>
                     <th>备注</th>
                 </tr>
                 </thead>
@@ -93,7 +101,7 @@
 <!--查看时,对话框模板-->
 <script type="text/template" id="viewDlg">
     <form class="form-horizontal" action="" method="">
-        <input type="hidden" name="reportId" value="&{reportId}">
+        <input type="hidden" name="id" value="&{id}">
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
@@ -144,14 +152,22 @@
                 </div>
             </div>
             <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" style="padding-right: 48px;margin-right: -34px;">单据备注</label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">&{comment}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
                             <th>名称</th>
                             <th>数量</th>
-                            <th>成本价</th>
-                            <th>成本金额</th>
+                            <th>成本单价</th>
+                            <th>小计金额</th>
                             <th>备注</th>
                         </tr>
                         </thead>
@@ -193,7 +209,7 @@
 <!--刷分页模板-->
 <script type="text/template" id="tpl">
     {@each list as it}
-    <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.storageReport.handlerPartyId}" data-store-bill-createdPartyId="&{it.storageReport.createdPartyId}" data-store-bill-type="&{it.storageReport.type}" data-store-bill-id="&{it.storageReport.id}" dat-store-bill-status="&{it.storageReport.status}" data-store-bill-depot-id="&{it.storageReport.depotId}">
+    <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.storageReport.handlerPartyId}" data-store-bill-createdPartyId="&{it.storageReport.createdPartyId}" data-store-bill-type="&{it.storageReport.type}" data-store-bill-id="&{it.storageReport.id}" dat-store-bill-status="&{it.storageReport.status}" data-store-bill-depot-id="&{it.storageReport.depotId}" data-store-bill-comment="&{it.storageReport.comment}">
         <input type="hidden" name="id" value="&{it.storageReport.id}"/>
         <input type="hidden" name="type" value="&{it.storageReport.type}"/>
         <input type="hidden" name="serialNumber" value="&{it.storageReport.serialNumber}"/>
@@ -202,9 +218,9 @@
         <input type="hidden" name="money" value="&{it.storageReport.money}"/>
         <input type="hidden" name="createdPartyId" value="&{it.storageReport.createdPartyId}"/>
         <input type="hidden" name="status" value="&{it.storageReport.status}"/>
-        <input type="hidden" name="depotName" value="&{it.depotName}"/>
-        <input type="hidden" name="handlerName" value="&{it.handlerName}"/>
-        <input type="hidden" name="createdName" value="&{it.createdName}"/>
+        <input type="hidden" name="depotName" value="&{it.storageReport.depotName}"/>
+        <input type="hidden" name="handlerName" value="&{it.storageReport.handlerName}"/>
+        <input type="hidden" name="createdName" value="&{it.storageReport.createdName}"/>
         <td class="J_reportItem hidden">
             {@each it.storageReportItemDtoList as item}
             <p data-item-id="&{item.itemId}">
@@ -259,5 +275,3 @@
         });
     })
 </script>
-</body>
-</html>

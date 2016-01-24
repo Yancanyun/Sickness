@@ -52,7 +52,9 @@
               <td class="hidden J_cardPolicy">${vipGradeDto.vipGrade.cardPolicy}</td>
               <td><a href="${website}admin/vip/grade/update/${vipGradeDto.vipGrade.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
                 <a href="javascript:;" class="label-info J_delete"><i class="fa fa-times"></i>&nbsp;删除</a>
-                <a href="javascript:;" class="label-info J_detail"><i class="fa fa-list"></i>&nbsp;查看卡片政策</a></td>
+                <a href="javascript:;" class="label-info J_detail"><i class="fa fa-list"></i>&nbsp;查看卡片政策</a>
+                <a href="${website}admin/vip/integral/plan/list/${vipGradeDto.vipGrade.id}" class="label-info"><i class="fa fa-cog"></i>&nbsp;积分管理</a>
+              </td>
             </tr>
             </c:forEach>
             </tbody>

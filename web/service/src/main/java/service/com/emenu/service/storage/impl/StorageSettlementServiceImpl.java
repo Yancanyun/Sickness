@@ -415,6 +415,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         }
     }
 
+    @Override
     @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void exportSettlementCheckToExcel(Date startDate,
                                              Date endDate,

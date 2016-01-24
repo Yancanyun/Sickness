@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -63,8 +65,9 @@ public class StorageReportServiceImpl implements StorageReportService {
            if(Assert.isEmpty(reportDto.getStorageReportItemList()) ||Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
                throw SSException.get(EmenuException.ReportItemListIsNotNull);
            }
-           this.newReport(reportDto.getStorageReport());
+           StorageReport storageReport = this.newReport(reportDto.getStorageReport());
            for (StorageReportItem reportItem : reportDto.getStorageReportItemList()) {
+               reportItem.setReportId(storageReport.getId());
                storageReportItemService.newReportItem(reportItem);
            }
        } catch (Exception e) {
@@ -500,6 +503,11 @@ public class StorageReportServiceImpl implements StorageReportService {
     @Override
     public int countByContition(StorageReport report, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
         Integer count = 0;
+        if (endTime != null) {
+            endTime.setHours(23);
+            endTime.setMinutes(59);
+            endTime.setSeconds(59);
+        }
         try {
             count = storageReportMapper.countByCondition(report, depotIdList, startTime, endTime);
         } catch (Exception e) {
@@ -607,4 +615,12 @@ public class StorageReportServiceImpl implements StorageReportService {
             throw SSException.get(EmenuException.DelReportOrItemFail, e);
         }
     }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void exportToExcel(Date startTime, Date endTime, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException {
+        OutputStream os = null;
+
+    }
+
 }

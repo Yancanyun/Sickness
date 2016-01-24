@@ -19,6 +19,7 @@ public class StorageReportDto {
     //单据详情
     private List<StorageReportItem> storageReportItemList;
 
+    //单据详情dto，用于显示数据
     private List<StorageReportItemDto> storageReportItemDtoList;
 
     /********************getter and setter ********************/

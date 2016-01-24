@@ -155,6 +155,7 @@ public enum ModuleEnums {
     AdminStorageReportUpdate("Admin:Storage:Report:Update"),
     AdminStorageReportDelete("Admin:Storage:Report:Delete"),
     AdminStorageReportSearch("Admin:Storage:Report:Search"),
+    AdminStorageReportExport("Admin:Storage:Report:Export"),
     //库存存放点管理
     AdminStorageDepot("Admin:Storage:Depot"),
     AdminStorageDepotList("Admin:Storage:Depot:List"),

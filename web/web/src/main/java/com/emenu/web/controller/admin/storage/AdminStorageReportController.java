@@ -10,23 +10,19 @@ import com.emenu.common.dto.storage.StorageReportItemDto;
 import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
-import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.ModuleEnums;
-import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
-import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -160,40 +156,20 @@ public class AdminStorageReportController extends AbstractController {
         return sendJsonArray(jsonArray, dataCount, pageSize);
     }
 
-    @RequestMapping(value = "new", method = RequestMethod.POST)
+    @Module(ModuleEnums.AdminStorageReportNew)
+    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject newStorageReportDto(@RequestParam("money")BigDecimal money, @RequestParam("depotId")int depotId,
-                                      @RequestParam("handlerPartyId")int handlerPartyId, @RequestParam("createdPartyId")int createdPartyId,
-                                      @RequestParam("type")int type, @RequestParam("reportId")int reportId,
-                                      @RequestParam("reportList")List<StorageReportItem> reportList,
-                                      RedirectAttributes redirectAttributes){
-//        StorageReportDto storageReportDto = new StorageReportDto();
-//        StorageReport storageReport = new StorageReport();
-//        storageReport.setMoney(money);
-//        storageReport.setDepotId(depotId);
-//        storageReport.setHandlerPartyId(handlerPartyId);
-//        storageReport.setCreatedPartyId(createdPartyId);
-//        storageReport.setType(type);
+    public JSONObject newStorageReportDto(@RequestBody StorageReportDto storageReportDto){
 //        try {
 //            //生成单据编号
 //            String serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
-//            storageReport.setSerialNumber(serialNumber);
-//            //数据存入Dto
-//            storageReportDto.setStorageReport(storageReport);
-//            storageReportDto.setStorageReportItemList(reportList);
+//            storageReportDto.getStorageReport().setSerialNumber(serialNumber);
+//
 //            storageReportService.newReportDto(storageReportDto);
-//            String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
-//            redirectAttributes.addFlashAttribute("msg","编辑成功");
-//            return "redirect:" + successUrl;
+//            return sendJsonObject(AJAX_SUCCESS_CODE);
 //        } catch (SSException e) {
-//            sendErrMsg(e.getMessage());
 //            LogClerk.errLog.error(e);
-//            //String failedUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL + "/toupdate/"+"{"+String .valueOf(storageReport.ge)+"}";
-//            //返回添加失败信息
-//            redirectAttributes.addFlashAttribute("msg", "编辑失败");
-//            //返回添加页
-//            //return "redirect:" + failedUrl;
-//            return null;
+//            return sendErrMsgAndErrCode(e);
 //        }
         return null;
     }
@@ -218,27 +194,38 @@ public class AdminStorageReportController extends AbstractController {
 
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
-    public String update(@RequestParam("storageReportDto")StorageReportDto storageReportDto,
+    @ResponseBody
+    public JSONObject update(@RequestParam("storageReportDto")StorageReportDto storageReportDto,
                          RedirectAttributes redirectAttributes){
         try{
             storageReportService.updateReportDto(storageReportDto);
-            String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
+//            String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
             //返回添加成功信息
-            redirectAttributes.addFlashAttribute("msg", "编辑成功");
+//            redirectAttributes.addFlashAttribute("msg", "编辑成功");
             //返回列表页
-            return "redirect:" + successUrl;
+//            return "redirect:" + successUrl;
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
-            sendErrMsg(e.getMessage());
+//            sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
-            int reportId = storageReportDto.getStorageReport().getId();
-            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/toupdate/"+"{"+String .valueOf(reportId)+"}";
+            return sendErrMsgAndErrCode(e);
+//            int reportId = storageReportDto.getStorageReport().getId();
+//            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/toupdate/"+"{"+String .valueOf(reportId)+"}";
             //返回添加失败信息
-            redirectAttributes.addFlashAttribute("msg", "编辑失败");
+//            redirectAttributes.addFlashAttribute("msg", "编辑失败");
             //返回添加页
-            return "redirect:" + failedUrl;
+//            return "redirect:" + failedUrl;
         }
     }
 
+    /**
+     * 计算小计金额
+     *
+     * @param price
+     * @param quantity
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "ajax/bill", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject calculateTotalPrice(@RequestParam("price")BigDecimal price, @RequestParam("quantity")BigDecimal quantity,
@@ -247,5 +234,21 @@ public class AdminStorageReportController extends AbstractController {
         BigDecimal money = price.multiply(quantity);
         jsonObject.put("money", money);
         return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+    }
+
+    @Module(ModuleEnums.AdminStorageReportExport)
+    @RequestMapping(value = "export", method = RequestMethod.GET)
+    public String toCheckExport(@RequestParam(value = "startTime", required = false) Date startTime,
+                                @RequestParam(value = "endTime", required = false) Date endTime,
+                                @RequestParam(value = "handlerPartyId", required = false) Integer handlerPartyId,
+                                @RequestParam(value = "createdPartyId", required = false) Integer createdPartyId){
+        try{
+            storageReportService.exportToExcel(startTime, endTime, handlerPartyId, createdPartyId, getResponse());
+            sendErrMsg("导出成功");
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+        return "admin/storage/report/list_home";
     }
 }
