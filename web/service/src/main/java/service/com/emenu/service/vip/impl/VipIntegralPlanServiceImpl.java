@@ -65,6 +65,7 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
             for (VipIntegralPlan vipIntegralPlan:vipIntegralPlanList){
                 VipIntegralDto vipIntegralDto = new VipIntegralDto();
                 vipIntegralDto.setId(vipIntegralPlan.getId());
+                vipIntegralDto.setType(vipIntegralPlan.getType());
                 vipIntegralDto.setIntegralType(VipIntegralPlanTypeEnums.valueOf(vipIntegralPlan.getType()).getType());
                 vipIntegralDto.setValue(vipIntegralPlan.getValue());
                 vipIntegralDtoList.add(vipIntegralDto);
@@ -76,7 +77,7 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
         return vipIntegralDtoList;
     }
 
-    @Override
+    /*@Override
     public void newPlan(VipIntegralPlan vipIntegralPlan) throws SSException{
         try{
             if (Assert.isNull(vipIntegralPlan.getGradeId())
@@ -92,17 +93,23 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.InsertVipIntegralPlanFail);
         }
-    }
+    }*/
 
-    public void newPlans(List<VipIntegralPlan> vipIntegralPlans, Integer gradeId) throws SSException{
+    public void newPlans(List<VipIntegralPlan> vipIntegralPlanList, Integer gradeId) throws SSException{
         try{
-            for (VipIntegralPlan vipIntegralPlan: vipIntegralPlans){
-                this.newPlan(vipIntegralPlan);
+            for (VipIntegralPlan vipIntegralPlan: vipIntegralPlanList){
+                vipIntegralPlan.setGradeId(gradeId);
             }
+            vipIntegralPlanMapper.insetAll(vipIntegralPlanList);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.InsertVipIntegralPlanFail);
         }
+    }
+
+    @Override
+    public void generateBeforeSave(List<VipIntegralDto> vipIntegralDtoList) throws SSException{
+
     }
 
     @Override
@@ -144,9 +151,14 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
                     && Assert.lessOrEqualZero(gradeId)){
                 throw SSException.get(EmenuException.VipGradeIdIllegal);
             }
-            for (VipIntegralPlan vipIntegralPlan: vipIntegralPlans){
-                vipIntegralPlan.setGradeId(gradeId);
-                this.updatePlan(vipIntegralPlan, integralStatus);
+            if(vipIntegralPlans.size() == 0
+                    && vipIntegralPlans.isEmpty()){
+                vipGradeService.updateIntegralStatus(gradeId, integralStatus);
+            }else {
+                for (VipIntegralPlan vipIntegralPlan: vipIntegralPlans){
+                    vipIntegralPlan.setGradeId(gradeId);
+                    this.updatePlan(vipIntegralPlan, integralStatus);
+                }
             }
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
@@ -161,7 +173,7 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
                     && Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.VipIntegralPlanIdIllegal);
             }
-            commonDao.deleteById(VipIntegralPlan.class, id);
+            vipIntegralPlanMapper.deletePlanById(id);
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.UpdateVipIntegralPlanFail);

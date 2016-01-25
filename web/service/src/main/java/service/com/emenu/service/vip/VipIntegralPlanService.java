@@ -30,20 +30,22 @@ public interface VipIntegralPlanService {
      */
     public List<VipIntegralDto> listDtosGradeId(int gradeId) throws SSException;
 
-    /**
+   /* *//**
      * 添加积分管理方案
      * @param vipIntegralPlan
      * @throws SSException
-     */
-    public void newPlan(VipIntegralPlan vipIntegralPlan) throws SSException;
+     *//*
+    public void newPlan(VipIntegralPlan vipIntegralPlan) throws SSException;*/
 
     /**
      * 批量添加会员积分管理方案
-     * @param vipIntegralPlans
+     * @param vipIntegralPlanList
      * @param gradeId
      * @throws SSException
      */
-    public void newPlans(List<VipIntegralPlan> vipIntegralPlans, Integer gradeId) throws SSException;
+    public void newPlans(List<VipIntegralPlan> vipIntegralPlanList, Integer gradeId) throws SSException;
+
+    public void generateBeforeSave(List<VipIntegralDto> vipIntegralDtoList) throws SSException;
 
     /**
      * 保存前检查

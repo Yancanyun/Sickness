@@ -55,15 +55,28 @@ public class VipIntegralPlanServiceTest extends AbstractTestCase {
         }
     }
 
-    @Test
+    /*@Test
     public void newPlan() throws SSException{
         VipIntegralPlan vipIntegralPlan = new VipIntegralPlan();
-        BigDecimal value = new BigDecimal("2.00");
+        BigDecimal value = new BigDecimal("8.00");
         vipIntegralPlan.setGradeId(1);
-        vipIntegralPlan.setType(0);
+        vipIntegralPlan.setType(7);
         vipIntegralPlan.setValue(value);
         vipIntegralPlanService.newPlan(vipIntegralPlan);
         System.out.println("插入成功！");
+    }*/
+
+    @Test
+    public void newPlans() throws SSException{
+        List<VipIntegralPlan> vipIntegralPlanList = new ArrayList<VipIntegralPlan>();
+        VipIntegralPlan vipIntegralPlan = new VipIntegralPlan();
+        BigDecimal value = new BigDecimal("1.01");
+        Integer gradeId = 2;
+        vipIntegralPlan.setType(1);
+        vipIntegralPlan.setValue(value);
+        vipIntegralPlanList.add(vipIntegralPlan);
+        vipIntegralPlanService.newPlans(vipIntegralPlanList, gradeId);
+        System.out.println("*********success***********");
     }
 
 }

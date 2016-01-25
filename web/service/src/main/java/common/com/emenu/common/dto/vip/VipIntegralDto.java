@@ -12,7 +12,10 @@ public class VipIntegralDto {
     private Integer id;
 
     // 兑换类型
-    private String IntegralType;
+    private Integer type;
+
+    // 兑换类型名称
+    private String integralType;
 
     // 兑换值
     private BigDecimal value;
@@ -25,12 +28,20 @@ public class VipIntegralDto {
         this.id = id;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getIntegralType() {
-        return IntegralType;
+        return integralType;
     }
 
     public void setIntegralType(String integralType) {
-        IntegralType = integralType;
+        this.integralType = integralType;
     }
 
     public BigDecimal getValue() {

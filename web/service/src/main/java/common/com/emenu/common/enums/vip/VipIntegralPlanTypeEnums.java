@@ -11,12 +11,12 @@ public enum VipIntegralPlanTypeEnums {
 
     CompleteInfoIntegral(0,"完善信息赠送积分"),
     IntegralToMoney(1,"积分兑换现金"),
-    ConsumptionCashToIntegral(2,"消费时现金兑换积分"),
-    ConsumptionCardToIntegral(3,"消费时刷卡兑换积分"),
-    ConsumptionOnlineToIntegral(4,"消费时在线支付兑换积分"),
-    RechargeCashToIntegral(5,"储值时现金兑换积分"),
-    RechargeCardToIntegral(6,"储值时刷卡兑换积分"),
-    RechargeOnlineToIntegral(7,"储值时在线支付兑换积分");
+    ConCashToIntegral(2,"消费时现金兑换积分"),
+    ConCardToIntegral(3,"消费时刷卡兑换积分"),
+    ConOnlineToIntegral(4,"消费时在线支付兑换积分"),
+    RecCashToIntegral(5,"储值时现金兑换积分"),
+    RecCardToIntegral(6,"储值时刷卡兑换积分"),
+    RecOnlineToIntegral(7,"储值时在线支付兑换积分");
 
     private Integer id;
     private String type;

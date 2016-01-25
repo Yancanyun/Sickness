@@ -5,13 +5,28 @@
     <select id="listByGradeId" resultMap="pw.VipIntegralPlan">
         SELECT *
         FROM `t_vip_integral_plan`
-        WHERE `grade_id` = #{gradeId}
+        WHERE `grade_id` = #{gradeId} AND `status` != 2
     </select>
     
     <select id="updateStatus">
         UPDATE t_vip_integral_plan
         SET `status` = #{status}
-        WHERE `grade_id` = #{gradeId}
+        WHERE `grade_id` = #{gradeId} AND `status` = 1
+    </select>
+    
+    <insert id="insetAll">
+        INSERT INTO `t_vip_integral_plan`(`grade_id`, `type`, `value`)
+        VALUES
+        <foreach collection="vipIntegralPlanList" item="vipIntegralPlan" separator=",">
+            (#{vipIntegralPlan.gradeId}, #{vipIntegralPlan.type}, #{vipIntegralPlan.value})
+        </foreach>
+        ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)
+    </insert>
+
+    <select id="deletePlanById">
+        UPDATE t_vip_integral_plan
+        SET `status` = 2
+        WHERE `id` = #{id}
     </select>
 
 </mapper>

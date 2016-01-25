@@ -205,7 +205,10 @@
             ['delCardId', site.website + 'admin/vip/card/ajax/&{id}', 'delete', 'ajax发送删除的会员卡id'],
             ['sendSaveInfo',site.website + 'admin/vip/card/ajax/&{id}', 'put', 'ajax发送会员卡id,修改的有效期和是否永久有效'],
             //会员账户信息管理--停用/启用
-            ['changeAccountStatus', site.website + 'admin/vip/account/ajax/status','get','点击停用/启用时，发送当前账户的id和status']
+            ['changeAccountStatus', site.website + 'admin/vip/account/ajax/status','get','点击停用/启用时，发送当前账户的id和status'],
+            //会员积分管理
+            ['sendStatus', site.website + 'admin/vip/integral/plan/ajax/status', 'get','积分管理是否开启积分'],
+            ['sendId', site.staticWebsite + 'mock/admin/login.json', 'get', '删除是发送Id']
         ],
         // 公共模块
         Module: [
