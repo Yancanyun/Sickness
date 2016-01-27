@@ -296,7 +296,7 @@ public enum EmenuException implements IBizExceptionMes {
     QuantityError("数量不能为空或小于0",7014),
     CountError("计数不能为空或小于0",7015),
     InsertReportItemFail("添加单据详情失败",7016),
-    ReportIdError("计数不能为空或小于0",7017),
+    ReportIdError("单据Id不能为空或小于0",7017),
     ListReportFail("获取单据信息失败",7018),
     ListStorageReportItemFail("获取单据详情信息l列表失败",7019),
     QueryReportItemFail("获取单据详情信息失败",7020),

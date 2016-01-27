@@ -423,65 +423,99 @@ public class StorageReportServiceImpl implements StorageReportService {
             List<StorageReportItem> reportItemListNew = reportDto.getStorageReportItemList();
             List<StorageReportItem> reportItemListOld = reportDtoOld.getStorageReportItemList();
 
-            //根据temp判断是否增加元素
-            int temp = 0;
-
-            for (StorageReportItem reportItemOld : reportItemListOld){
-                //根据isExist判断是否删除了原来的单据详情
-                boolean isExist = false;
-                for (StorageReportItem reportItemNew : reportItemListNew){
-                    if (reportItemOld.getId()==reportItemNew.getId()){
-                        temp++;
-                        isExist = true;
+            //判断更新后的单据是否存在数据
+            if (reportItemListNew.size() > 0){
+                //判断以前的单据是否存在数据，若不存在，则直接到下一个if处添加物品
+                if (reportItemListOld.size() > 0){
+                    //判断新单据和老单据中每条物品id是否一致，若一致，则修改老单据的相应物品
+                    for (StorageReportItem itemOld : reportItemListOld){
+                        for (StorageReportItem itemNew : reportItemListNew){
+                            if (!Assert.isNull(itemNew.getId()) && itemOld.getId().equals(itemNew.getId())){
+                                itemNew.setReportId(reportNew.getId());
+                                storageReportItemService.updateById(itemNew);
+                                //删除新单据中已修改的物品，最后剩下的物品为老单据中没有的，即需要被添加的物品
+                                reportItemListNew.remove(itemNew);
+                                //删除老单据中已修改的物品，最后剩下的物品为新单据中没有的，即需要被删掉的物品
+                                reportItemListOld.remove(itemOld);
+                            }
+                        }
                     }
-                }
-                //对原有单据详情删除
-                if (!isExist){
-                    storageReportItemService.delById(reportItemOld.getId());
-                }
-            }
-            //没有新增或减少数据库中单据详情时，修改原始数据
-            if (temp == reportItemListOld.size()&&temp == reportItemListOld.size()){
-                for (StorageReportItem reportItemNew : reportItemListNew){
-                    storageReportItemService.updateById(reportItemNew);
-                }
-            }
-            //没有减少数据单据详情时，添加修改后新增的单据详情
-            if (temp == reportItemListOld.size()&&reportItemListNew.size() > temp){
-                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
-                for (StorageReportItem reportItemOld : reportItemListOld){
-                    for (StorageReportItem reportItemNew : reportItemListNew){
-                        if (reportItemOld.getId()==reportItemNew.getId()){
-                            storageReportItemService.updateById(reportItemNew);
-                            reportItemListNew.remove(reportItemNew);
+                    //删除物品
+                    if (reportItemListOld.size() > 0){
+                        for (StorageReportItem itemOld : reportItemListOld){
+                            storageReportItemService.delById(itemOld.getId());
                         }
                     }
                 }
-                reportItemListNew.removeAll(reportItemListTemp);
-                if (reportItemListNew.size()>0){
-                    for (StorageReportItem reportItemNew : reportItemListNew){
-                        storageReportItemService.newReportItem(reportItemNew);
+                //添加物品
+                if (reportItemListNew.size() > 0){
+                    for (StorageReportItem itemNew : reportItemListNew){
+                        itemNew.setReportId(reportNew.getId());
+                        storageReportItemService.newReportItem(itemNew);
                     }
                 }
             }
-            if (temp < reportItemListOld.size()){
-                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
-                for (StorageReportItem reportItemOld : reportItemListOld){
-                    //修改数据库中原有单据详情
-                    for (StorageReportItem reportItemNew : reportItemListNew){
-                        if (reportItemOld.getId()==reportItemNew.getId()){
-                            storageReportItemService.updateById(reportItemNew);
-                            reportItemListTemp.add(reportItemNew);
-                        }
-                    }
-                }
-                reportItemListNew.removeAll(reportItemListTemp);
-                if (reportItemListNew.size()>0){
-                    for (StorageReportItem reportItemNew : reportItemListNew){
-                        storageReportItemService.newReportItem(reportItemNew);
-                    }
-                }
-            }
+//            //根据temp判断是否增加元素
+//            int temp = 0;
+//
+//            for (StorageReportItem reportItemOld : reportItemListOld){
+//                //根据isExist判断是否删除了原来的单据详情
+//                boolean isExist = false;
+//                for (StorageReportItem reportItemNew : reportItemListNew){
+//                    if (reportItemOld.getId()==reportItemNew.getId()){
+//                        temp++;
+//                        isExist = true;
+//                    }
+//                }
+//                //对原有单据详情删除
+//                if (!isExist){
+//                    storageReportItemService.delById(reportItemOld.getId());
+//                }
+//            }
+//            //没有新增或减少数据库中单据详情时，修改原始数据
+//            if (temp == reportItemListOld.size()&&temp == reportItemListOld.size()){
+//                for (StorageReportItem reportItemNew : reportItemListNew){
+//                    storageReportItemService.updateById(reportItemNew);
+//                }
+//            }
+//            //没有减少数据单据详情时，添加修改后新增的单据详情
+//            if (temp == reportItemListOld.size()&&reportItemListNew.size() > temp){
+//                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
+//                for (StorageReportItem reportItemOld : reportItemListOld){
+//                    for (StorageReportItem reportItemNew : reportItemListNew){
+//                        if (reportItemOld.getId()==reportItemNew.getId()){
+//                            storageReportItemService.updateById(reportItemNew);
+//                            reportItemListNew.remove(reportItemNew);
+//                        }
+//                    }
+//                }
+//                reportItemListNew.removeAll(reportItemListTemp);
+//                if (reportItemListNew.size()>0){
+//                    for (StorageReportItem reportItemNew : reportItemListNew){
+//                        reportItemNew.setReportId(reportNew.getId());
+//                        storageReportItemService.newReportItem(reportItemNew);
+//                    }
+//                }
+//            }
+//            if (temp < reportItemListOld.size()){
+//                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
+//                for (StorageReportItem reportItemOld : reportItemListOld){
+//                    //修改数据库中原有单据详情
+//                    for (StorageReportItem reportItemNew : reportItemListNew){
+//                        if (reportItemOld.getId()==reportItemNew.getId()){
+//                            storageReportItemService.updateById(reportItemNew);
+//                            reportItemListTemp.add(reportItemNew);
+//                        }
+//                    }
+//                }
+//                reportItemListNew.removeAll(reportItemListTemp);
+//                if (reportItemListNew.size()>0){
+//                    for (StorageReportItem reportItemNew : reportItemListNew){
+//                        reportItemNew.setReportId(reportNew.getId());
+//                        storageReportItemService.newReportItem(reportItemNew);
+//                    }
+//                }
+//            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -576,19 +610,19 @@ public class StorageReportServiceImpl implements StorageReportService {
         if (Assert.isNull(storageReport)) {
             return false;
         }
-        if (Assert.isNull(storageReport.getCreatedPartyId())&& Assert.lessOrEqualZero(storageReport.getCreatedPartyId())){
+        if (Assert.isNull(storageReport.getCreatedPartyId()) || Assert.lessOrEqualZero(storageReport.getCreatedPartyId())){
             throw SSException.get(EmenuException.CreatedPartyIdError);
         }
-        if (Assert.isNull(storageReport.getHandlerPartyId())&&Assert.lessOrEqualZero(storageReport.getHandlerPartyId())){
+        if (Assert.isNull(storageReport.getHandlerPartyId()) || Assert.lessOrEqualZero(storageReport.getHandlerPartyId())){
             throw SSException.get(EmenuException.HandlerPartyId);
         }
-        if (Assert.isNull(storageReport.getDepotId())&&Assert.lessOrEqualZero(storageReport.getDepotId())){
+        if (Assert.isNull(storageReport.getDepotId()) || Assert.lessOrEqualZero(storageReport.getDepotId())){
             throw SSException.get(EmenuException.DepotIdError);
         }
-        if (Assert.isNull(storageReport.getStatus())&&Assert.lessOrEqualZero(storageReport.getStatus())){
-            throw SSException.get(EmenuException.ReportStatusError);
+        if (Assert.isNull(storageReport.getStatus()) || Assert.lessOrEqualZero(storageReport.getStatus())){
+//            throw SSException.get(EmenuException.ReportStatusError);
         }
-        if (Assert.isNull(storageReport.getType())&&Assert.lessOrEqualZero(storageReport.getType())){
+        if (Assert.isNull(storageReport.getType()) || Assert.lessOrEqualZero(storageReport.getType())){
             throw SSException.get(EmenuException.ReportTypeError);
         }
         Assert.isNotNull(storageReport.getSerialNumber(), EmenuException.SerialNumberError);

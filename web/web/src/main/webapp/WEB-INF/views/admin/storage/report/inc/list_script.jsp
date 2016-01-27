@@ -218,9 +218,9 @@
         <input type="hidden" name="money" value="&{it.storageReport.money}"/>
         <input type="hidden" name="createdPartyId" value="&{it.storageReport.createdPartyId}"/>
         <input type="hidden" name="status" value="&{it.storageReport.status}"/>
-        <input type="hidden" name="depotName" value="&{it.storageReport.depotName}"/>
-        <input type="hidden" name="handlerName" value="&{it.storageReport.handlerName}"/>
-        <input type="hidden" name="createdName" value="&{it.storageReport.createdName}"/>
+        <input type="hidden" name="depotName" value="&{it.depotName}"/>
+        <input type="hidden" name="handlerName" value="&{it.handlerName}"/>
+        <input type="hidden" name="createdName" value="&{it.createdName}"/>
         <td class="J_reportItem hidden">
             {@each it.storageReportItemDtoList as item}
             <p data-item-id="&{item.itemId}">

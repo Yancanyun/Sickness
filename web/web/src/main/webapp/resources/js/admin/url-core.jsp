@@ -107,7 +107,7 @@
             ['getMoney', site.website + 'admin/storage/report/ajax/bill', 'get', '获取当前物品小计'],
             ['delStoreBill', site.website + 'admin/storage/report/ajax/del/&{id}', 'delete', '删除库存单据'],
             ['addStoreBill', site.website + 'admin/storage/report/ajax/new', 'post', '添加库存单据', 'json'],
-            ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'put', '编辑库存单据', 'json']
+            ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'post', '编辑库存单据', 'json']
         ],
         // 菜品管理
         DishManagement: [

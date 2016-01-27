@@ -11,6 +11,7 @@ import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
@@ -20,7 +21,6 @@ import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class AdminStorageReportController extends AbstractController {
                 JSONObject jsonObject = new JSONObject();
                 String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
                 String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
-                String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
+                String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getCreatedPartyId()).getName();
                 String createdTime = DateUtils.yearMonthDayFormat(storageReportDto.getStorageReport().getCreatedTime());
 
                 jsonObject.put("storageReport", storageReportDto.getStorageReport());
@@ -160,18 +160,17 @@ public class AdminStorageReportController extends AbstractController {
     @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject newStorageReportDto(@RequestBody StorageReportDto storageReportDto){
-//        try {
-//            //生成单据编号
-//            String serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
-//            storageReportDto.getStorageReport().setSerialNumber(serialNumber);
-//
-//            storageReportService.newReportDto(storageReportDto);
-//            return sendJsonObject(AJAX_SUCCESS_CODE);
-//        } catch (SSException e) {
-//            LogClerk.errLog.error(e);
-//            return sendErrMsgAndErrCode(e);
-//        }
-        return null;
+        try {
+            //生成单据编号
+            String serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
+            storageReportDto.getStorageReport().setSerialNumber(serialNumber);
+
+            storageReportService.newReportDto(storageReportDto);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     /**
@@ -193,28 +192,16 @@ public class AdminStorageReportController extends AbstractController {
     }
 
 
-    @RequestMapping(value = "update",method = RequestMethod.POST)
+    @Module(ModuleEnums.AdminStorageReportUpdate)
+    @RequestMapping(value = "ajax/update",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject update(@RequestParam("storageReportDto")StorageReportDto storageReportDto,
-                         RedirectAttributes redirectAttributes){
+    public JSONObject update(@RequestBody StorageReportDto storageReportDto){
         try{
             storageReportService.updateReportDto(storageReportDto);
-//            String successUrl = "/" + URLConstants.ADMIN_STORAGE_REPORT_URL;
-            //返回添加成功信息
-//            redirectAttributes.addFlashAttribute("msg", "编辑成功");
-            //返回列表页
-//            return "redirect:" + successUrl;
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
-//            sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
-//            int reportId = storageReportDto.getStorageReport().getId();
-//            String failedUrl = "/" + URLConstants.ADMIN_TABLE_URL + "/toupdate/"+"{"+String .valueOf(reportId)+"}";
-            //返回添加失败信息
-//            redirectAttributes.addFlashAttribute("msg", "编辑失败");
-            //返回添加页
-//            return "redirect:" + failedUrl;
         }
     }
 

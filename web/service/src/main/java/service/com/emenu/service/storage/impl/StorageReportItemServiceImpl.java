@@ -169,7 +169,7 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         Assert.isNotNull(storageReportItem.getQuantity(),EmenuException.QuantityError);
         //单据详情成本价
         Assert.isNotNull(storageReportItem.getPrice(), EmenuException.PriceError);
-        if (Assert.lessOrEqualZero(storageReportItem.getReportId())||Assert.isNull(storageReportItem.getReportId())){
+        if (!Assert.isNull(storageReportItem.getReportId())){
             Assert.lessOrEqualZero(storageReportItem.getReportId(),EmenuException.ReportIdError);
         }
         return true;

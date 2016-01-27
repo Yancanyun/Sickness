@@ -112,18 +112,18 @@
                         </c:forEach>
                     </select>
                     <select class="form-control w180 hidden J_depotSelect" name="depotId">
-                        <c:forEach var="depot" items="${depotList}">
-                            <option value="${depot.id}">${depot.name}</option>
+                        <c:forEach var="depot" items="${depotList}" varStatus="status">
+                            <option value="${depot.id}" <c:if test="${status.index eq 0}">selected="selected"</c:if>>${depot.name}</option>
                         </c:forEach>
                     </select>
                     <select class="form-control w180 hidden J_handlerSelect" name="handlerPartyId">
-                        <c:forEach var="handler" items="${handlerList}">
-                            <option value="${handler.employee.partyId}">${handler.employee.name}</option>
+                        <c:forEach var="handler" items="${handlerList}" varStatus="status">
+                            <option value="${handler.employee.partyId}" <c:if test="${status.index eq 0}">selected="selected"</c:if>>${handler.employee.name}</option>
                         </c:forEach>
                     </select>
                     <select class="form-control w180 hidden J_createSelect" name="createdPartyId">
-                        <c:forEach var="created" items="${createdList}">
-                            <option value="${created.employee.partyId}">${created.employee.name}</option>
+                        <c:forEach var="created" items="${createdList}" varStatus="status">
+                            <option value="${created.employee.partyId}" <c:if test="${status.index eq 0}">selected="selected"</c:if>>${created.employee.name}</option>
                         </c:forEach>
                     </select>
                 </div>
