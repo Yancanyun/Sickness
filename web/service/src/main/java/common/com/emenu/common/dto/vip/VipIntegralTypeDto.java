@@ -1,5 +1,9 @@
 package com.emenu.common.dto.vip;
 
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * @author chenyuting
  * @date 2016/1/25 9:25
@@ -7,92 +11,106 @@ package com.emenu.common.dto.vip;
 public class VipIntegralTypeDto {
 
     //完善信息赠送积分
-    private Integer completeInfoIntegral;
+    private BigDecimal completeInfoIntegral;
 
     //积分兑换现金
-    private Integer integralToMoney;
+    private BigDecimal integralToMoney;
 
     // 消费时现金兑换积分
-    private Integer conCashToIntegral;
+    private BigDecimal conCashToIntegral;
 
     // 消费时刷卡兑换积分
-    private Integer conCardToIntegral;
+    private BigDecimal conCardToIntegral;
 
     // 消费时在线支付兑换积分
-    private Integer conOnlineToIntegral;
+    private BigDecimal conOnlineToIntegral;
 
     // 储值时现金兑换积分
-    private Integer recCashToIntegral;
+    private BigDecimal recCashToIntegral;
 
     // 储值时刷卡兑换积分
-    private Integer recCardToIntegral;
+    private BigDecimal recCardToIntegral;
 
     // 储值时在线支付兑换积分
-    private Integer recOnlineToIntegral;
+    private BigDecimal recOnlineToIntegral;
 
+    // 兑换类型的name
+    private List<String> typeName;
+
+    // 利用java反射获取name
+    public List<String> getTypeName(Object obj)
+    {
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for(int i=0;i<fields.length;i++){
+            String name = fields[i].getName();
+            typeName.add(name);
+        }
+        return typeName;
+    }
 
     //************getter、setter***************
-    public Integer getCompleteInfoIntegral() {
+
+    public BigDecimal getCompleteInfoIntegral() {
         return completeInfoIntegral;
     }
 
-    public void setCompleteInfoIntegral(Integer completeInfoIntegral) {
+    public void setCompleteInfoIntegral(BigDecimal completeInfoIntegral) {
         this.completeInfoIntegral = completeInfoIntegral;
     }
 
-    public Integer getIntegralToMoney() {
+    public BigDecimal getIntegralToMoney() {
         return integralToMoney;
     }
 
-    public void setIntegralToMoney(Integer integralToMoney) {
+    public void setIntegralToMoney(BigDecimal integralToMoney) {
         this.integralToMoney = integralToMoney;
     }
 
-    public Integer getConCashToIntegral() {
+    public BigDecimal getConCashToIntegral() {
         return conCashToIntegral;
     }
 
-    public void setConCashToIntegral(Integer conCashToIntegral) {
+    public void setConCashToIntegral(BigDecimal conCashToIntegral) {
         this.conCashToIntegral = conCashToIntegral;
     }
 
-    public Integer getConCardToIntegral() {
+    public BigDecimal getConCardToIntegral() {
         return conCardToIntegral;
     }
 
-    public void setConCardToIntegral(Integer conCardToIntegral) {
+    public void setConCardToIntegral(BigDecimal conCardToIntegral) {
         this.conCardToIntegral = conCardToIntegral;
     }
 
-    public Integer getConOnlineToIntegral() {
+    public BigDecimal getConOnlineToIntegral() {
         return conOnlineToIntegral;
     }
 
-    public void setConOnlineToIntegral(Integer conOnlineToIntegral) {
+    public void setConOnlineToIntegral(BigDecimal conOnlineToIntegral) {
         this.conOnlineToIntegral = conOnlineToIntegral;
     }
 
-    public Integer getRecCashToIntegral() {
+    public BigDecimal getRecCashToIntegral() {
         return recCashToIntegral;
     }
 
-    public void setRecCashToIntegral(Integer recCashToIntegral) {
+    public void setRecCashToIntegral(BigDecimal recCashToIntegral) {
         this.recCashToIntegral = recCashToIntegral;
     }
 
-    public Integer getRecCardToIntegral() {
+    public BigDecimal getRecCardToIntegral() {
         return recCardToIntegral;
     }
 
-    public void setRecCardToIntegral(Integer recCardToIntegral) {
+    public void setRecCardToIntegral(BigDecimal recCardToIntegral) {
         this.recCardToIntegral = recCardToIntegral;
     }
 
-    public Integer getRecOnlineToIntegral() {
+    public BigDecimal getRecOnlineToIntegral() {
         return recOnlineToIntegral;
     }
 
-    public void setRecOnlineToIntegral(Integer recOnlineToIntegral) {
+    public void setRecOnlineToIntegral(BigDecimal recOnlineToIntegral) {
         this.recOnlineToIntegral = recOnlineToIntegral;
     }
 }

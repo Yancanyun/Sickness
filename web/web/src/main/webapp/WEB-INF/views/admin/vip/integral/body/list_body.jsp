@@ -35,12 +35,22 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">是否启用积分</label>
             <div class="col-sm-3">
+              <c:if test="${vipGrade.integralEnableState == 1}">
               <label class="radio-inline">
-                <input type="radio" class="J_startRadio" name="status" value="1"> 是
+                  <input type="radio" class="J_startRadio" name="status" value="1" checked> 是
               </label>
               <label class="radio-inline">
-                <input type="radio" class="J_stopRadio" name="status"  value="0" checked> 否
+                <input type="radio" class="J_stopRadio" name="status"  value="0"> 否
               </label>
+              </c:if>
+              <c:if test="${vipGrade.integralEnableState == 0}">
+                <label class="radio-inline">
+                  <input type="radio" class="J_startRadio" name="status" value="1"> 是
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" class="J_stopRadio" name="status"  value="0" checked> 否
+                </label>
+              </c:if>
             </div>
           </div>
         </form>
@@ -53,16 +63,27 @@
         <h4>积分规则</h4>
       </div>
       <div class="panel-body">
-        <form class="form-horizontal J_operForm" id="dataForm">
+        <form class="form-horizontal J_operForm operForm" id="dataForm" action="" method="">
           <input type="hidden" class="gradeIdInp" name="gradeId" value="${vipGrade.id}">
           <div>
             <h4>完善信息</h4>
             <hr/>
             <div class="form-group">
               <label class="col-sm-3 control-label">赠送积分</label>
-              <div class="col-sm-6">
-                <input type="text" class="w180" data-valid-rule="isNumber | isNull" name="" value="" >
-              </div>
+              <c:if test="${!empty vipIntegralDtoList}">
+                <c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
+                  <c:if test="${vipIntegralDto.type == 0}">
+                    <div class="col-sm-6">
+                      <input type="text" class="w180" data-valid-rule="isFloat | isNull" name="completeInfoIntegral" value="${vipIntegralDto.value}" >
+                    </div>
+                  </c:if>
+                </c:forEach>
+              </c:if>
+              <c:if test="${empty vipIntegralDtoList}">
+                <div class="col-sm-6">
+                  <input type="text" class="w180" data-valid-rule="isFloat | isNull" name="completeInfoIntegral" value="" >
+                </div>
+              </c:if>
             </div>
           </div>
           <div class="J_subContainer" type="0">
@@ -70,43 +91,38 @@
             <hr/>
             <div class="form-group">
               <label class="col-sm-3 control-label">消费方式</label>
-              <div class="col-sm-3">
+              <div class="col-sm-2">
                 <select class="form-control w180">
-                  <option value="1" selected="selected" name="zhifubao">支付宝</option>
-                  <option value="2" name="xianjin">现金</option>
-                  <option value="3" name="yinhangka">银行卡</option>
+                  <option value="2" selected="selected" name="conCashToIntegral">现金消费</option>
+                  <option value="3" name="conCardToIntegral">刷卡消费</option>
+                  <option value="4" name="conOnlineToIntegral">在线支付</option>
                 </select>
               </div>
               <button class="btn-success btn J_addBtn" type="button"><i class="fa fa-plus"></i>&nbsp;添加</button>
             </div>
             <div class="table-responsive">
-              <table class="col-sm-9 table table-hover table-bordered">
+              <table class="table-list col-sm-9 table table-hover table-bordered">
                 <thead>
                 <tr>
-                  <th class="w20">消费方式</th>
+                  <th >消费方式</th>
                   <th>积分规则</th>
                   <th>操作</th>
                 </tr>
                 </thead>
                 <tbody id="J_template">
-                <tr data-type-num ="1"data-pointPlan-id="1">
-                  <td>支付宝</td>
-                  <td>
-                    <input type="text" class="w180 h20" data-valid-rule="isNumber & notNull" name="" value="">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
-                  </td>
-                  <td>
-                    <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-                  </td>
-                </tr>
-                <tr data-type-num = "2"data-pointPlan-id="2">
-                  <td>现金</td>
-                  <td>
-                    <input type="text" class="w180 h20" data-valid-rule="isNumber & notNull" name="" value="">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
-                  </td>
-                  <td>
-                    <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-                  </td>
-                </tr>
+                <c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
+                    <c:if test="${vipIntegralDto.type >= 2 && vipIntegralDto.type <= 4}">
+                      <tr data-type-num ="${vipIntegralDto.type}" data-pointPlan-id="${vipIntegralDto.id}">
+                        <td>${vipIntegralDto.integralType}</td>
+                        <td>
+                          <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.type}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
+                        </td>
+                        <td>
+                          <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+                        </td>
+                      </tr>
+                    </c:if>
+                </c:forEach>
                 </tbody>
               </table>
             </div>
@@ -116,25 +132,38 @@
             <hr/>
             <div class="form-group">
               <label class="col-sm-3 control-label">储值方式</label>
-              <div class="col-sm-3">
+              <div class="col-sm-2">
                 <select class="form-control w180"  name="">
-                  <option value="1" selected="selected">支付宝</option>
-                  <option value="2">现金</option>
-                  <option value="3">银行卡</option>
+                  <option value="5" selected="selected" name="recCashToIntegral">现金储值</option>
+                  <option value="6" name="recCardToIntegral">刷卡储值</option>
+                  <option value="7" name="recOnlineToIntegral">在线支付储值</option>
                 </select>
               </div>
               <button class="btn-success btn J_addBtn" type="button"><i class="fa fa-plus"></i>&nbsp;添加</button>
             </div>
             <div class="table-responsive">
-              <table class="col-sm-9 table table-hover table-bordered">
+              <table class="table-list col-sm-9 table table-hover table-bordered">
                 <thead>
                 <tr>
-                  <th class="w20">储值方式</th>
+                  <th>储值方式</th>
                   <th>积分规则</th>
                   <th>操作</th>
                 </tr>
                 </thead>
                 <tbody id="J_template">
+                <c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
+                  <c:if test="${vipIntegralDto.type >= 5 && vipIntegralDto.type <= 7}">
+                    <tr data-type-num ="${vipIntegralDto.type}" data-pointPlan-id="${vipIntegralDto.id}">
+                      <td>${vipIntegralDto.integralType}</td>
+                      <td>
+                        <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.type}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
+                      </td>
+                      <td>
+                        <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+                      </td>
+                    </tr>
+                  </c:if>
+                </c:forEach>
                 </tbody>
               </table>
             </div>
@@ -142,10 +171,22 @@
           <div>
             <h4>积分兑换设置</h4>
             <hr/>
-            <div class="col-sm-2 col-sm-offset-3">
-              <input type="text" class="form-control w180" data-valid-rule="isNumber|isNull" name="0" value="" form="dataForm">
-            </div>
-            <label class="col-sm-1 text-left control-label">分 = 1元</label>
+            <c:if test="${!empty vipIntegralDtoList}">
+              <c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
+                <c:if test="${vipIntegralDto.type == 7}">
+                  <div class="col-sm-2 col-sm-offset-3">
+                    <input type="text" class="form-control w180" data-valid-rule="isFloat|isNull" name="integralToMoney" value="${vipIntegralDto.value}" form="dataForm">
+                  </div>
+                  <label class="col-sm-1 text-left control-label">分 = 1元</label>
+                </c:if>
+              </c:forEach>
+            </c:if>
+            <c:if test="${empty vipIntegralDtoList}">
+              <div class="col-sm-2 col-sm-offset-3">
+                <input type="text" class="form-control w180" data-valid-rule="isFloat|isNull" name="integralToMoney" value="" form="dataForm">
+              </div>
+              <label class="col-sm-1 text-left control-label">分 = 1元</label>
+            </c:if>
           </div>
         </form>
       </div>
@@ -165,18 +206,3 @@
     </div>
   </div>
 </div>
-<%--
-
-
-当前等级为：${vipGrade.name}<br>
-<c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
-  <c:if test="${vipIntegralDto.type == 0}">
-    ${vipIntegralDto.integralType}:${vipIntegralDto.value}<br>
-  </c:if>
-</c:forEach>
-*******************************************************************<br>
-<c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
-  <c:if test="${vipIntegralDto.type != 0}">
-    ${vipIntegralDto.integralType}:${vipIntegralDto.value}<br>
-  </c:if>
-</c:forEach>--%>

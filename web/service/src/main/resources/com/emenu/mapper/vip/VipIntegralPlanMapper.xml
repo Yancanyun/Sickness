@@ -11,7 +11,7 @@
     <select id="updateStatus">
         UPDATE t_vip_integral_plan
         SET `status` = #{status}
-        WHERE `grade_id` = #{gradeId} AND `status` = 1
+        WHERE `grade_id` = #{gradeId} AND `status` != 2
     </select>
     
     <insert id="insetAll">

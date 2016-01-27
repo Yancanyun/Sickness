@@ -10,7 +10,7 @@
   <tr data-type-num="&{payTypeNum}" >
     <td>&{payType}</td>
     <td>
-      <input type="text" class="w180 h20" data-valid-rule="isNumber & notNull" name="&{inputName}" value="">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
+      <input type="text" class="w180 h20" data-valid-rule="isFloat & notNull" name="&{inputName}" value="">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
     </td>
     <td>
       <a href="javascript:;" class="label-info J_cancel"><i class="fa fa-times"></i>&nbsp;取消</a>

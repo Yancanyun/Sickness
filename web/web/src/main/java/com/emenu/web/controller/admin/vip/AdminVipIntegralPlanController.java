@@ -6,6 +6,7 @@ import com.emenu.common.dto.vip.VipIntegralTypeDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.entity.vip.VipIntegralPlan;
 import com.emenu.common.enums.vip.StatusEnums;
+import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -56,6 +57,14 @@ public class AdminVipIntegralPlanController extends AbstractController {
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String newPlans(@RequestParam("vipIntegralTypeDtoList") List<VipIntegralTypeDto> vipIntegralTypeDtoList,
                            @RequestParam("gradeId") int gradeId){
+        /*try{
+            for (VipIntegralTypeDto vipIntegralTypeDto: vipIntegralTypeDtoList){
+                List<String> typeNames = vipIntegralTypeDto.getTypeName(vipIntegralTypeDto);
+                for (String typeName: typeNames){
+                    if ()
+                }
+            }
+        }*/
         return "";
     }
 
@@ -71,6 +80,7 @@ public class AdminVipIntegralPlanController extends AbstractController {
                                    @RequestParam("status") int status){
         try{
             vipIntegralPlanService.updateStatus(gradeId, status);
+            vipGradeService.updateIntegralStatus(gradeId, IntegralEnableStatusEnums.valueOf(status));
         }  catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
