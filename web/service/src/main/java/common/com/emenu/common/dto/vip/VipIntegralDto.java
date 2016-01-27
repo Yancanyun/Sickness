@@ -17,6 +17,9 @@ public class VipIntegralDto {
     // 兑换类型名称
     private String integralType;
 
+    // 兑换类型名称的name
+    private String integralTypeName;
+
     // 兑换值
     private BigDecimal value;
 
@@ -42,6 +45,14 @@ public class VipIntegralDto {
 
     public void setIntegralType(String integralType) {
         this.integralType = integralType;
+    }
+
+    public String getIntegralTypeName() {
+        return integralTypeName;
+    }
+
+    public void setIntegralTypeName(String integralTypeName) {
+        this.integralTypeName = integralTypeName;
     }
 
     public BigDecimal getValue() {

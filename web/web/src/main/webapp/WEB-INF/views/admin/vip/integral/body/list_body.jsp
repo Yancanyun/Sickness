@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="row">
   <div class="col-sm-12">
     <ol class="breadcrumb">
@@ -21,9 +22,9 @@
       </li>
     </ol>
     <h2>会员积分管理</h2>
-    <div class="alert alert-success col-sm-12
-                            J_msg" role="alert">添加成功！</div>
-    <!-- <div class="alert alert-danger col-sm-12 J_msg" role="alert">添加失败！</div> -->
+    <c:if test="${!empty msg}">
+      <div class="alert alert-success col-sm-12 J_msg" role="alert">${msg}</div>
+    </c:if>
   </div>
   <div class="col-sm-12">
     <div class="panel panel-info">
@@ -63,7 +64,7 @@
         <h4>积分规则</h4>
       </div>
       <div class="panel-body">
-        <form class="form-horizontal J_operForm operForm" id="dataForm" action="" method="">
+        <form class="form-horizontal J_operForm operForm" id="dataForm" action="${website}admin/vip/integral/plan/new" method="post">
           <input type="hidden" class="gradeIdInp" name="gradeId" value="${vipGrade.id}">
           <div>
             <h4>完善信息</h4>
@@ -115,7 +116,7 @@
                       <tr data-type-num ="${vipIntegralDto.type}" data-pointPlan-id="${vipIntegralDto.id}">
                         <td>${vipIntegralDto.integralType}</td>
                         <td>
-                          <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.type}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
+                          <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.integralTypeName}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
                         </td>
                         <td>
                           <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
@@ -156,7 +157,7 @@
                     <tr data-type-num ="${vipIntegralDto.type}" data-pointPlan-id="${vipIntegralDto.id}">
                       <td>${vipIntegralDto.integralType}</td>
                       <td>
-                        <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.type}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
+                        <input type="text" data-valid-rule="isFloat & notNull" name="${vipIntegralDto.integralTypeName}" value="${vipIntegralDto.value}">&nbsp;&nbsp;元&nbsp;&nbsp;=&nbsp;&nbsp;1积分
                       </td>
                       <td>
                         <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
@@ -171,22 +172,16 @@
           <div>
             <h4>积分兑换设置</h4>
             <hr/>
-            <c:if test="${!empty vipIntegralDtoList}">
+            <div class="col-sm-2 col-sm-offset-3">
+              <c:set var="flag" value=""/>
               <c:forEach items="${vipIntegralDtoList}" var="vipIntegralDto">
                 <c:if test="${vipIntegralDto.type == 7}">
-                  <div class="col-sm-2 col-sm-offset-3">
-                    <input type="text" class="form-control w180" data-valid-rule="isFloat|isNull" name="integralToMoney" value="${vipIntegralDto.value}" form="dataForm">
-                  </div>
-                  <label class="col-sm-1 text-left control-label">分 = 1元</label>
+                  <c:set var="flag" value="${vipIntegralDto.value}"/>
                 </c:if>
               </c:forEach>
-            </c:if>
-            <c:if test="${empty vipIntegralDtoList}">
-              <div class="col-sm-2 col-sm-offset-3">
-                <input type="text" class="form-control w180" data-valid-rule="isFloat|isNull" name="integralToMoney" value="" form="dataForm">
-              </div>
-              <label class="col-sm-1 text-left control-label">分 = 1元</label>
-            </c:if>
+              <input type="text" class="form-control w180" data-valid-rule="isFloat|isNull" name="integralToMoney" value="${flag}" form="dataForm">
+            </div>
+            <label class="col-sm-1 text-left control-label">分 = 1元</label>
           </div>
         </form>
       </div>
@@ -198,7 +193,8 @@
                 <i class="fa fa-save"></i>
                 &nbsp;保存
               </button>
-              <button type="reset" class="btn-default btn"><i class="fa fa-undo"></i>&nbsp;重置</button>
+              <button type="reset" class="btn-default btn J_resetBtn"><i class="fa fa-undo"></i>&nbsp;重置</button>
+              <button type="button" class="btn-default btn" onclick="history.go(-1)"><i class="fa fa-reply"></i>&nbsp;返回</button>
             </div>
           </div>
         </div>

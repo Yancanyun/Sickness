@@ -9,21 +9,23 @@ import java.util.Map;
  */
 public enum VipIntegralPlanTypeEnums {
 
-    CompleteInfoIntegral(0,"完善信息赠送积分"),
-    IntegralToMoney(1,"积分兑换现金"),
-    ConCashToIntegral(2,"消费时现金兑换积分"),
-    ConCardToIntegral(3,"消费时刷卡兑换积分"),
-    ConOnlineToIntegral(4,"消费时在线支付兑换积分"),
-    RecCashToIntegral(5,"储值时现金兑换积分"),
-    RecCardToIntegral(6,"储值时刷卡兑换积分"),
-    RecOnlineToIntegral(7,"储值时在线支付兑换积分");
+    CompleteInfoIntegral(0,"完善信息赠送积分","completeInfoIntegral"),
+    IntegralToMoney(1,"积分兑换现金","integralToMoney"),
+    ConCashToIntegral(2,"消费时现金兑换积分","conCashToIntegral"),
+    ConCardToIntegral(3,"消费时刷卡兑换积分","conCardToIntegral"),
+    ConOnlineToIntegral(4,"消费时在线支付兑换积分","conOnlineToIntegral"),
+    RecCashToIntegral(5,"储值时现金兑换积分","recCashToIntegral"),
+    RecCardToIntegral(6,"储值时刷卡兑换积分","recCardToIntegral"),
+    RecOnlineToIntegral(7,"储值时在线支付兑换积分","recOnlineToIntegral");
 
     private Integer id;
     private String type;
+    private String typeName;
 
-    VipIntegralPlanTypeEnums(Integer id, String type) {
+    VipIntegralPlanTypeEnums(Integer id, String type, String typeName) {
         this.id = id;
         this.type = type;
+        this.typeName = typeName;
     }
 
     private static Map<Integer, VipIntegralPlanTypeEnums> map = new HashMap<Integer, VipIntegralPlanTypeEnums>();
@@ -50,4 +52,6 @@ public enum VipIntegralPlanTypeEnums {
     public String getType() {
         return type;
     }
+
+    public String getTypeName() { return typeName; }
 }

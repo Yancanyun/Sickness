@@ -67,6 +67,7 @@ public class VipIntegralPlanServiceImpl implements VipIntegralPlanService{
                 vipIntegralDto.setId(vipIntegralPlan.getId());
                 vipIntegralDto.setType(vipIntegralPlan.getType());
                 vipIntegralDto.setIntegralType(VipIntegralPlanTypeEnums.valueOf(vipIntegralPlan.getType()).getType());
+                vipIntegralDto.setIntegralTypeName(VipIntegralPlanTypeEnums.valueOf(vipIntegralPlan.getType()).getTypeName());
                 vipIntegralDto.setValue(vipIntegralPlan.getValue());
                 vipIntegralDtoList.add(vipIntegralDto);
             }
