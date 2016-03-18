@@ -293,9 +293,10 @@ public class VipCardServiceImpl implements VipCardService {
                 throw SSException.get(EmenuException.PermanentlyEffectiveIsNull);
             }
 
-            //若有效期在今天之前，则报错
+            //若不为永久且有效期在今天之前，则报错
             Date today = new Date();
-            if (vipCard.getValidityTime().before(today)) {
+            if (vipCard.getPermanentlyEffective() == VipCardPermanentlyEffectiveEnums.False.getId()
+                    && vipCard.getValidityTime().before(today)) {
                 throw SSException.get(EmenuException.PermanentlyEffectiveBeforeToday);
             }
 
