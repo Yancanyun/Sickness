@@ -225,6 +225,12 @@ public enum ModuleEnums {
     AdminVipGradeNew("Admin:Vip:Grade:New"),
     AdminVipGradeUpdate("Admin:Vip:Grade:Update"),
     AdminVipGradeDelete("Admin:Vip:Grade:Delete"),
+    //会员积分方案管理
+    AdminVipIntegratePlan("Admin:Vip:Grade:Integrate"),
+    AdminVipIntegratePlanList("Admin:Vip:Grade:Integrate:List"),
+    AdminVipIntegratePlanNew("Admin:Vip:Grade:Integrate:New"),
+    AdminVipIntegratePlanUpdate("Admin:Vip:Grade:Integrate:Update"),
+    AdminVipIntegratePlanDel("Admin:Vip:Grade:Integrate:Del"),
     //会员卡管理
     AdminVipCard("Admin:Vip:Card"),
     AdminVipCardList("Admin:Vip:Card:List"),

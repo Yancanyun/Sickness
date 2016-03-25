@@ -1,10 +1,12 @@
 package com.emenu.web.controller.admin.vip;
 
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.vip.VipIntegralDto;
 import com.emenu.common.dto.vip.VipIntegralTypeDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.entity.vip.VipIntegralPlan;
+import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.vip.StatusEnums;
 import com.emenu.common.enums.vip.VipIntegralPlanTypeEnums;
 import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
@@ -36,6 +38,7 @@ public class AdminVipIntegralPlanController extends AbstractController {
      * @param model
      * @return
      */
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipIntegratePlanList)
     @RequestMapping(value = "list/{gradeId}", method = RequestMethod.GET)
     public String listAll(@PathVariable("gradeId") Integer gradeId,
                           Model model){
@@ -68,6 +71,7 @@ public class AdminVipIntegralPlanController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipIntegratePlanNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newPlans(@RequestParam(value = "completeInfoIntegral",required = false) BigDecimal completeInfoIntegral,
                            @RequestParam(value = "integralToMoney",required = false) BigDecimal integralToMoney,
@@ -146,6 +150,7 @@ public class AdminVipIntegralPlanController extends AbstractController {
      * @param status
      * @return
      */
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipIntegratePlanUpdate)
     @RequestMapping(value = "ajax/status", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject updateStatus(@RequestParam("gradeId") int gradeId,
@@ -165,6 +170,7 @@ public class AdminVipIntegralPlanController extends AbstractController {
      * @param id
      * @return
      */
+    @Module(value = ModuleEnums.AdminVipGrade, extModule = ModuleEnums.AdminVipIntegratePlanDel)
     @RequestMapping(value = "ajax/del", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject deletePlan(@RequestParam("id") int id){
