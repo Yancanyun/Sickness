@@ -3,7 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.emenu.mapper.dish.DishMapper">
-
     <select id="listAll" resultMap="pw.Dish">
         SELECT
             dish.`id` AS id,
@@ -31,6 +30,7 @@
         FROM `t_dish` dish
         LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
         WHERE dish.`status` != 3
+        AND dish.`category_id` != 6
         ORDER BY dish.`id` DESC
     </select>
     
@@ -81,6 +81,7 @@
                 </foreach>
             </if>
             AND dish.`status` != 3
+            AND dish.`category_id` != 6
         </where>
         ORDER BY dish.${searchDto.orderByColumn}
         <if test="searchDto.orderType == 0">
@@ -118,6 +119,7 @@
                 </foreach>
             </if>
             AND `status` != 3
+            AND `category_id` != 6
         </where>
     </select>
 

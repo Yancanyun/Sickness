@@ -20,4 +20,123 @@
     WHERE package_id = #{packageId}
     </select>
 
+    <select id="listAll" resultMap="pw.Dish">
+        SELECT
+        dish.`id` AS id,
+        dish.`name` AS NAME,
+        dish.`dish_number` AS dishNumber,
+        dish.`assistant_code` AS assistantCode,
+        dish.`unit_id` AS unitId,
+        unit.`name` AS unitName,
+        dish.`price` AS price,
+        dish.`sale_type` AS saleType,
+        dish.`discount` AS discount,
+        dish.`sale_price` AS salePrice,
+        dish.`category_id` AS categoryId,
+        dish.`tag_id` AS tagId,
+        dish.`description` AS description,
+        dish.`status` AS status,
+        dish.`like_nums` AS likeNums,
+        dish.`is_network_available` AS isNetworkAvailable,
+        dish.`is_vip_price_available` AS isVipPriceAvailable,
+        dish.`is_voucher_available` AS isVoucherAvailable,
+        dish.`time_limit` AS timeLimit,
+        dish.`created_party_id` AS createdPartyId,
+        dish.`created_time` AS createdTime,
+        dish.`last_modified_time` AS lastModifiedTime
+        FROM `t_dish` dish
+        LEFT JOIN `t_unit` unit ON dish.`id` = unit.`id`
+        WHERE dish.`status` != 3
+        AND dish.`category_id` = 6
+        ORDER BY dish.`id` DESC
+    </select>
+
+    <select id="listBySearchDto" resultMap="pw.Dish">
+        SELECT
+        dish.`id` AS id,
+        dish.`name` AS NAME,
+        dish.`dish_number` AS dishNumber,
+        dish.`assistant_code` AS assistantCode,
+        dish.`unit_id` AS unitId,
+        unit.`name` AS unitName,
+        dish.`price` AS price,
+        dish.`sale_type` AS saleType,
+        dish.`discount` AS discount,
+        dish.`sale_price` AS salePrice,
+        dish.`category_id` AS categoryId,
+        dish.`tag_id` AS tagId,
+        dish.`description` AS description,
+        dish.`status` AS status,
+        dish.`like_nums` AS likeNums,
+        dish.`is_network_available` AS isNetworkAvailable,
+        dish.`is_vip_price_available` AS isVipPriceAvailable,
+        dish.`is_voucher_available` AS isVoucherAvailable,
+        dish.`time_limit` AS timeLimit,
+        dish.`created_party_id` AS createdPartyId,
+        dish.`created_time` AS createdTime,
+        dish.`last_modified_time` AS lastModifiedTime
+        FROM `t_dish` dish
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        <where>
+            <if test="searchDto.keyword != null and searchDto.keyword != ''">
+                (
+                dish.`name` LIKE "%"#{searchDto.keyword}"%"
+                OR dish.`dish_number` LIKE "%"#{searchDto.keyword}"%"
+                OR dish.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                )
+            </if>
+            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                AND dish.`tag_id` IN
+                <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+            </if>
+            <if test="searchDto.dishIdList != null and searchDto.dishIdList.size > 0">
+                AND dish.`id` IN
+                <foreach collection="searchDto.dishIdList" item="dishId" open="(" separator="," close=")">
+                    #{dishId}
+                </foreach>
+            </if>
+            AND dish.`status` != 3
+            AND dish.`category_id` = 6
+        </where>
+        ORDER BY dish.${searchDto.orderByColumn}
+        <if test="searchDto.orderType == 0">
+            DESC
+        </if>
+        <if test="searchDto.orderType == 1">
+            ASC
+        </if>
+        <if test="offset >= 0 and searchDto.pageSize > 0">
+            LIMIT #{offset}, #{searchDto.pageSize}
+        </if>
+    </select>
+
+    <select id="countBySearchDto" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_dish`
+        <where>
+            <if test="searchDto.keyword != null and searchDto.keyword != ''">
+                (
+                `name` LIKE "%"#{searchDto.keyword}"%"
+                OR `dish_number` LIKE "%"#{searchDto.keyword}"%"
+                OR `assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                )
+            </if>
+            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                AND `tag_id` IN
+                <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+            </if>
+            <if test="searchDto.dishIdList != null and searchDto.dishIdList.size > 0">
+                AND dish.`id` IN
+                <foreach collection="searchDto.dishIdList" item="dishId" open="(" separator="," close=")">
+                    #{dishId}
+                </foreach>
+            </if>
+            AND `status` != 3
+            AND `category_id` = 6
+        </where>
+    </select>
 </mapper>

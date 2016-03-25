@@ -92,6 +92,25 @@
                     </ul>
                 </c:if>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:Package'}">class="active"</c:if> >
+                <a class="J_menu" href="${website}admin/dish/package">套餐管理
+                    <c:if test="${ExtModule eq 'Admin:DishManagement:Package:New'
+                                or ExtModule eq 'Admin:DishManagement:Package:Update'}">
+                        <i class="fa fa-angle-right angle-right"></i>
+                    </c:if>
+                </a>
+                <c:if test="${ExtModule eq 'Admin:DishManagement:Package:New'
+                                or ExtModule eq 'Admin:DishManagement:Package:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:DishManagement:Package:New'}">class="active"</c:if> >
+                            <a href="${website}admin/dish/package/new" >添加菜品</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:DishManagement:Package:Update'}">
+                            <li class="active"><a href="#">编辑菜品</a></li>
+                        </c:if>
+                    </ul>
+                </c:if>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Feature'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish/feature">本店特色</a>
             </li>

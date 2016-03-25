@@ -2,6 +2,8 @@ package com.emenu.service.dish;
 
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
+import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
@@ -14,6 +16,9 @@ import java.util.List;
  * 套餐Service
  * @author dujuan
  * @date: 2015/12/11
+ *
+ * @modify yangch
+ * @date: 2016/3/24
  */
 public interface DishPackageService {
 
@@ -71,4 +76,29 @@ public interface DishPackageService {
      */
     public BigDecimal countPriceByPackageId(int packageId) throws SSException;
 
+    /**
+     * 查询全部
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Dish> listAll() throws SSException;
+
+    /**
+     * 根据分页和搜索条件查询
+     *
+     * @param searchDto
+     * @return
+     * @throws SSException
+     */
+    public List<Dish> listBySearchDto(DishSearchDto searchDto) throws SSException;
+
+    /**
+     * 根据搜索条件计算数量
+     *
+     * @param searchDto
+     * @return
+     * @throws SSException
+     */
+    public int countBySearchDto(DishSearchDto searchDto) throws SSException;
 }

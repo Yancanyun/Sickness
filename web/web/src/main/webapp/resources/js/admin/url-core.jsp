@@ -148,7 +148,14 @@
             // 菜品口味
             ['deleteTaste', site.staticWebsite + 'admin/dish/taste/ajax/&{id}', 'delete', '删除菜品口味'],
             ['saveEditTaste', site.staticWebsite + 'admin/dish/taste/ajax', 'put', '发送编辑的菜品口味'],
-            ['saveAddTaste', site.staticWebsite + 'admin/dish/taste/ajax', 'post', '发送新添加的菜品口味']
+            ['saveAddTaste', site.staticWebsite + 'admin/dish/taste/ajax', 'post', '发送新添加的菜品口味'],
+
+            // 套餐管理
+            ['delPackageDish', site.website + 'admin/dish/package/ajax/&{id}', 'delete', '删除套餐'],
+            ['changePackageDishStatus', site.website + 'admin/dish/package/ajax/status/&{id}', 'put', '修改套餐状态'],
+            ['getPackageDishTotalMoney', site.staticWebsite + 'mock/admin/dish.json', 'get', '获取套餐总金额']
+            //['delDishInPackage', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除套餐中的菜品'],
+            //['saveDishInPackage', site.staticWebsite + 'mock/admin/dish.json', 'get', '保存套餐中的菜品']
         ],
         // 权限管理
         AuthorityManagement: [

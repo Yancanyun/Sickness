@@ -3,6 +3,7 @@ package com.emenu.web.spring;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
@@ -312,6 +313,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("dishService")
     protected static DishService dishService;
+
+    //套餐管理
+    @StaticAutoWire
+    @Qualifier("dishPackageService")
+    protected static DishPackageService dishPackageService;
 
     //会员价方案管理
     @StaticAutoWire

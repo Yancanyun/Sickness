@@ -40,6 +40,7 @@
                 <li><a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/taste">菜品口味管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish">菜品管理</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/package">套餐管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/feature">本店特色</a></li>
             </ul>
         </li>

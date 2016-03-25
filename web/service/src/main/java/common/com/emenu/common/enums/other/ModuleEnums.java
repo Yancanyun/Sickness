@@ -123,6 +123,12 @@ public enum ModuleEnums {
     AdminDishFeatureList("Admin:DishManagement:Feature:List"),
     AdminDishFeatureNew("Admin:DishManagement:Feature:New"),
     AdminDishFeatureDel("Admin:DishManagement:Feature:Del"),
+    // 本店特色
+    AdminDishPackage("Admin:DishManagement:Package"),
+    AdminDishPackageList("Admin:DishManagement:Package:List"),
+    AdminDishPackageNew("Admin:DishManagement:Package:New"),
+    AdminDishPackageDel("Admin:DishManagement:Package:Del"),
+    AdminDishPackageUpdate("Admin:DishManagement:Package:Update"),
 
 
     //用户管理
