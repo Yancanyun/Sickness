@@ -112,23 +112,23 @@
         // 菜品管理
         DishManagement: [
             // 单位管理--列表
-            ['saveUnit', site.staticWebsite + 'admin/dish/unit/ajax', 'put', '编辑单位'],
-            ['saveNewUnit', site.staticWebsite + 'admin/dish/unit/ajax', 'post', '添加单位'],
-            ['delUnit', site.staticWebsite + 'admin/dish/unit/ajax/&{id}', 'delete', '删除单位'],
+            ['saveUnit', site.website + 'admin/dish/unit/ajax', 'put', '编辑单位'],
+            ['saveNewUnit', site.website + 'admin/dish/unit/ajax', 'post', '添加单位'],
+            ['delUnit', site.website + 'admin/dish/unit/ajax/&{id}', 'delete', '删除单位'],
 
             // 菜品管理--列表
             ['delDish', site.website + 'admin/dish/ajax/&{id}', 'delete', '删除菜品'],
             ['changeDishStatus', site.website + 'admin/dish/ajax/status/&{id}', 'put', '编辑菜品状态'],
             ['sendClassLinkage', site.website + 'admin/dish/ajax/tag/children', 'get', '发送菜品分类联动id,获取菜品小分类'],
-            ['sendUnitLinkage', site.staticWebsite + 'mock/admin/small-classify.json', 'get', '发送计量单位联动id,获取计量单位'],
+            ['sendUnitLinkage', site.website + 'mock/admin/small-classify.json', 'get', '发送计量单位联动id,获取计量单位'],
             // 菜品管理--编辑菜品图片
             ['delPic', site.website + 'admin/dish/img/&{id}', 'delete', '删除菜品图片'],
 
             // 菜品分类管理
-            ['addClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'post', '添加菜品分类'],
-            ['editClassify', site.staticWebsite + 'admin/dish/tag/ajax', 'put', '编辑菜品分类'],
-            ['delClassify', site.staticWebsite + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品分类'],
-            ['search', site.staticWebsite + 'admin/dish/tag/ajax/search', 'get', '搜索菜品'],
+            ['addClassify', site.website + 'admin/dish/tag/ajax', 'post', '添加菜品分类'],
+            ['editClassify', site.website + 'admin/dish/tag/ajax', 'put', '编辑菜品分类'],
+            ['delClassify', site.website + 'admin/dish/tag/ajax/&{id}', 'delete', '删除菜品分类'],
+            ['search', site.website + 'admin/dish/tag/ajax/search', 'get', '搜索菜品'],
 
             //今日特价
             ['revoteSpecials', site.website + 'admin/dish/feature/ajax/&{id}', 'delete', '撤销今日特价菜品'],
@@ -146,9 +146,9 @@
             ['sendSelectedDishOfSpecialities',site.website + 'admin/dish/feature/ajax', 'post','发送本店特色中的被选中的菜品'],
 
             // 菜品口味
-            ['deleteTaste', site.staticWebsite + 'admin/dish/taste/ajax/&{id}', 'delete', '删除菜品口味'],
-            ['saveEditTaste', site.staticWebsite + 'admin/dish/taste/ajax', 'put', '发送编辑的菜品口味'],
-            ['saveAddTaste', site.staticWebsite + 'admin/dish/taste/ajax', 'post', '发送新添加的菜品口味'],
+            ['deleteTaste', site.website + 'admin/dish/taste/ajax/&{id}', 'delete', '删除菜品口味'],
+            ['saveEditTaste', site.website + 'admin/dish/taste/ajax', 'put', '发送编辑的菜品口味'],
+            ['saveAddTaste', site.website + 'admin/dish/taste/ajax', 'post', '发送新添加的菜品口味'],
 
             // 套餐管理
             ['delPackageDish', site.website + 'admin/dish/package/ajax/&{id}', 'delete', '删除套餐'],
