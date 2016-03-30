@@ -6,16 +6,30 @@ import com.emenu.common.dto.storage.StorageReportItemDto;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.entity.storage.StorageReportItem;
+import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
+import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.exception.PartyException;
+import com.emenu.common.utils.DateUtils;
+import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.storage.StorageReportMapper;
+import com.emenu.service.party.group.employee.EmployeeService;
+import com.emenu.service.storage.StorageDepotService;
 import com.emenu.service.storage.StorageItemService;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.common.util.IOUtil;
 import com.pandawork.core.framework.dao.CommonDao;
+import com.pandawork.core.framework.dao.repository.SimpelNameToClassRepository;
+import com.pandawork.core.pweio.excel.DataType;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,7 +37,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -51,6 +69,12 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Autowired
     private StorageItemService storageItemService;
+
+    @Autowired
+    private StorageDepotService storageDepotService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -347,9 +371,13 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report, int page, int pageSize, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
-        page = page <= 0 ? 0 : page - 1;
-        int offset = page * pageSize;
+    public List<StorageReportDto> listReportDtoByCondition1(StorageReport report, Integer page, Integer pageSize, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
+
+        Integer offset = null;
+        if (Assert.isNotNull(page) && Assert.isNotNull(pageSize)) {
+            page = page <= 0 ? 0 : page - 1;
+            offset = page * pageSize;
+        }
 
         if (endTime != null) {
             endTime.setHours(23);
@@ -358,7 +386,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
         List<StorageReportDto> reportDtoList = Collections.emptyList();
         List<StorageReport> reportList = Collections.emptyList();
-        if(Assert.lessZero(offset)){
+        if (Assert.isNotNull(offset)&&Assert.lessZero(offset)){
             return reportDtoList;
         }
         reportDtoList = new ArrayList<StorageReportDto>();
@@ -455,67 +483,6 @@ public class StorageReportServiceImpl implements StorageReportService {
                     }
                 }
             }
-//            //根据temp判断是否增加元素
-//            int temp = 0;
-//
-//            for (StorageReportItem reportItemOld : reportItemListOld){
-//                //根据isExist判断是否删除了原来的单据详情
-//                boolean isExist = false;
-//                for (StorageReportItem reportItemNew : reportItemListNew){
-//                    if (reportItemOld.getId()==reportItemNew.getId()){
-//                        temp++;
-//                        isExist = true;
-//                    }
-//                }
-//                //对原有单据详情删除
-//                if (!isExist){
-//                    storageReportItemService.delById(reportItemOld.getId());
-//                }
-//            }
-//            //没有新增或减少数据库中单据详情时，修改原始数据
-//            if (temp == reportItemListOld.size()&&temp == reportItemListOld.size()){
-//                for (StorageReportItem reportItemNew : reportItemListNew){
-//                    storageReportItemService.updateById(reportItemNew);
-//                }
-//            }
-//            //没有减少数据单据详情时，添加修改后新增的单据详情
-//            if (temp == reportItemListOld.size()&&reportItemListNew.size() > temp){
-//                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
-//                for (StorageReportItem reportItemOld : reportItemListOld){
-//                    for (StorageReportItem reportItemNew : reportItemListNew){
-//                        if (reportItemOld.getId()==reportItemNew.getId()){
-//                            storageReportItemService.updateById(reportItemNew);
-//                            reportItemListNew.remove(reportItemNew);
-//                        }
-//                    }
-//                }
-//                reportItemListNew.removeAll(reportItemListTemp);
-//                if (reportItemListNew.size()>0){
-//                    for (StorageReportItem reportItemNew : reportItemListNew){
-//                        reportItemNew.setReportId(reportNew.getId());
-//                        storageReportItemService.newReportItem(reportItemNew);
-//                    }
-//                }
-//            }
-//            if (temp < reportItemListOld.size()){
-//                List<StorageReportItem> reportItemListTemp = new ArrayList<StorageReportItem>();
-//                for (StorageReportItem reportItemOld : reportItemListOld){
-//                    //修改数据库中原有单据详情
-//                    for (StorageReportItem reportItemNew : reportItemListNew){
-//                        if (reportItemOld.getId()==reportItemNew.getId()){
-//                            storageReportItemService.updateById(reportItemNew);
-//                            reportItemListTemp.add(reportItemNew);
-//                        }
-//                    }
-//                }
-//                reportItemListNew.removeAll(reportItemListTemp);
-//                if (reportItemListNew.size()>0){
-//                    for (StorageReportItem reportItemNew : reportItemListNew){
-//                        reportItemNew.setReportId(reportNew.getId());
-//                        storageReportItemService.newReportItem(reportItemNew);
-//                    }
-//                }
-//            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStorageReportFail, e);
@@ -652,9 +619,132 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void exportToExcel(Date startTime, Date endTime, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException {
+    public void exportToExcel(StorageReport report,Date startTime, Date endTime,List<Integer> deports, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException{
         OutputStream os = null;
+        List<StorageReportDto> storageReportDtoList = Collections.emptyList();
+        try{
+            //从数据库中取数据
+            storageReportDtoList = this.listReportDtoByCondition1(report,null,null,deports,startTime,endTime);
+            for (StorageReportDto storageReportDto : storageReportDtoList){
+                EntityUtil.setNullFieldDefault(storageReportDto);
 
+            }
+            //设置输出流
+            //设置excel文件名和sheetName
+            String filename = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            filename = ExcelExportTemplateEnums.AdminStorageReportList.getName()+sdf.format(new Date());
+            response.setContentType("application/msexcel");
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
+            os = response.getOutputStream();
+            //获取模板
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminStorageReportList.getFilePath());
+            Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
+            WritableWorkbook outBook = Workbook.createWorkbook(os,tplWorkBook);
+            //获取sheet往sheet中写入数据
+            WritableSheet sheet = outBook.getSheet(0);
+            int row = 2;
+            for (StorageReportDto storageReportDto : storageReportDtoList){
+                // 类型
+                Label labelReportType = new Label(0, row, StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName());
+                sheet.addCell(labelReportType);
+                // 单据编号
+                Label labelSerialNumber = new Label(1, row, storageReportDto.getStorageReport().getSerialNumber());
+                sheet.addCell(labelSerialNumber);
+                // 存放点
+                String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                Label labelDepot = new Label(2, row, deportName);
+                sheet.addCell(labelDepot);
+                // 经手人
+                String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
+                Label labelHandlerName = new Label(3, row, handlerName);
+                sheet.addCell(labelHandlerName);
+                // 金额
+                Label labelMoney = new Label(4, row, storageReportDto.getStorageReport().getMoney().toString());
+                sheet.addCell(labelMoney);
+                // 操作人
+                String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getCreatedPartyId()).getName();
+                Label labelCreatedName = new Label(5, row, createdName);
+                sheet.addCell(labelCreatedName);
+                // 单据备注
+                Label labelReportComment = new Label(6, row, storageReportDto.getStorageReport().getComment());
+                sheet.addCell(labelReportComment);
+                // 日期
+                String createdTime = DateUtils.yearMonthDayFormat(storageReportDto.getStorageReport().getCreatedTime());
+                Label labelCreatedTime = new Label(7, row, createdTime);
+                sheet.addCell(labelCreatedTime);
+                // 物品列表
+                List<StorageReportItemDto> storageItemDtoList = storageReportDto.getStorageReportItemDtoList();
+                int rowchildren = 0;
+                for (StorageReportItemDto storageItemDto : storageItemDtoList){
+                    // 物品名称
+                    Label labelItemName = new Label(8, row+rowchildren,storageItemDto.getItemName());
+                    sheet.addCell(labelItemName);
+                    // 物品数量
+                    Label labelQuantity = new Label(9, row+rowchildren, storageItemDto.getQuantity().toString());
+                    sheet.addCell(labelQuantity);
+                    // 物品价格
+                    Label labelPrice = new Label(10, row+rowchildren, storageItemDto.getPrice().toString());
+                    sheet.addCell(labelPrice);
+                    // 小计金额
+                    BigDecimal price = storageItemDto.getPrice();
+                    BigDecimal quantity = storageItemDto.getQuantity();
+                    BigDecimal subTotal = price.multiply(quantity);
+                    Label labelSubTotal = new Label(11, row, subTotal.toString());
+                    sheet.addCell(labelSubTotal);
+                    //备注
+                    Label labelItemComment = new Label(12, row+rowchildren ,storageItemDto.getComment());
+                    sheet.addCell(labelItemComment);
+                    rowchildren++;
+                }
+                if(storageItemDtoList.size()>1) {
+                    sheet.mergeCells(0, row, 0, row + rowchildren-1);
+                    sheet.mergeCells(1, row, 1, row + rowchildren-1);
+                    sheet.mergeCells(2, row, 2, row + rowchildren-1);
+                    sheet.mergeCells(3, row, 3, row + rowchildren-1);
+                    sheet.mergeCells(4, row, 4, row + rowchildren-1);
+                    sheet.mergeCells(5, row, 5, row + rowchildren-1);
+                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
+                    sheet.mergeCells(7, row, 7, row + rowchildren-1);
+                }
+                if(rowchildren<=1) {
+                    row ++;
+                }else {
+                    row = row + rowchildren;
+                }
+            }
+            outBook.write();
+            outBook.close();
+            tplWorkBook.close();
+            tplStream.close();
+            os.close();
+            }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            response.setContentType("text/html");
+            response.setHeader("Content-Type", "text/html");
+            response.setHeader("Content-disposition", "");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                String eMsg = "系统内部异常，请联系管理员！";
+                eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+                response.sendRedirect("/admin/storage/report?eMsg="+eMsg);
+                os.close();
+            } catch (IOException e1) {
+                LogClerk.errLog.error(e1.getMessage());
+            }
+            throw SSException.get(EmenuException.ExportReportFail, e);
+        }
+        finally {
+            if (os != null) {
+                try {
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    LogClerk.errLog.error(e);
+                    throw SSException.get(EmenuException.ExportReportFail, e);
+                }
+            }
+        }
     }
-
 }

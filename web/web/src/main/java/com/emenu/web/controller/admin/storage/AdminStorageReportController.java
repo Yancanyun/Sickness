@@ -18,6 +18,7 @@ import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -83,16 +84,6 @@ public class AdminStorageReportController extends AbstractController {
      * @param pageSize
      * @return
      */
-/*    @Module(ModuleEnums.AdminStorageReportList)
-    @RequestMapping(value = "ajax/list/{curPage}",method = RequestMethod.GET)
-    @ResponseBody
-    public JSON ajaxList(@PathVariable("curPage") Integer curPage,
-                         @RequestParam Integer pageSize) {
-
-
-    }*/
-
-
     @Module(ModuleEnums.AdminStorageReportList)
     @RequestMapping(value = "ajax/list/{curPage}",method = RequestMethod.GET)
     @ResponseBody
@@ -125,7 +116,6 @@ public class AdminStorageReportController extends AbstractController {
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         try {
             //分页获取单据和单据详情
-            //storageReportDtoList = storageReportService.listReportDtoByPage(curPage, pageSize);
             storageReportDtoList = storageReportService.listReportDtoByCondition1(report,curPage,pageSize, depots,startTime,endTime);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -223,19 +213,38 @@ public class AdminStorageReportController extends AbstractController {
         return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
     }
 
+    /**
+     * 导出单据
+     * @param startTime
+     * @param endTime
+     * @param createdPartyId
+     * @param depotId
+     * @param handlerPartyId
+     * @return
+     */
     @Module(ModuleEnums.AdminStorageReportExport)
     @RequestMapping(value = "export", method = RequestMethod.GET)
-    public String toCheckExport(@RequestParam(value = "startTime", required = false) Date startTime,
-                                @RequestParam(value = "endTime", required = false) Date endTime,
-                                @RequestParam(value = "handlerPartyId", required = false) Integer handlerPartyId,
-                                @RequestParam(value = "createdPartyId", required = false) Integer createdPartyId){
+    public String toReportExport(@RequestParam(value = "startTime",required = false) Date startTime,
+                                 @RequestParam(value = "endTime",required = false) Date endTime,
+                                 @RequestParam("createdPartyId") Integer createdPartyId,
+                                 @RequestParam(value = "depotId", required = false) Integer[] depotId,
+                                 @RequestParam("handlerPartyId") Integer handlerPartyId){
         try{
-            storageReportService.exportToExcel(startTime, endTime, handlerPartyId, createdPartyId, getResponse());
+            List<Integer> depots = new ArrayList<Integer>();
+            if (depotId != null && depotId.length > 0) {
+                for (int i = 0; i < depotId.length; i++) {
+                    depots.add(depotId[i]);
+                }
+            }
+            StorageReport report = new StorageReport();
+            report.setHandlerPartyId(handlerPartyId);
+            report.setCreatedPartyId(createdPartyId);
+            storageReportService.exportToExcel(report,startTime,endTime,depots,createdPartyId,handlerPartyId,getResponse());
             sendErrMsg("导出成功");
-        }catch (SSException e){
+        }catch (Exception e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
         }
-        return "admin/storage/report/list_home";
+        return null;
     }
 }

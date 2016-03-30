@@ -309,6 +309,8 @@ public enum EmenuException implements IBizExceptionMes {
     ReportItemListIsNotNull("单据详情list不能为空",7027),
     QueryReportDtoFail("查询单据和单据详情失败",7028),
     StorageReportItemListIsNotNull("单据详情list不能为空",7029),
+    ExportReportFail("导出库存单据失败",7030),
+
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7024),
     ListDepotFailed("获取全部存放点列表失败", 7025),

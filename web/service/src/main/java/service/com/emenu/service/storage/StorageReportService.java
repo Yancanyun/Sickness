@@ -116,8 +116,8 @@ public interface StorageReportService {
      * @throws SSException
      */
     public List<StorageReportDto> listReportDtoByCondition1(StorageReport report,
-                                                            int page,
-                                                            int pageSize,
+                                                            Integer page,
+                                                            Integer pageSize,
                                                             List<Integer> depotIdList,
                                                             Date startTime,
                                                             Date endTime) throws SSException;
@@ -170,5 +170,5 @@ public interface StorageReportService {
      * @param createdPartyId
      * @throws SSException
      */
-    public void exportToExcel(Date startTime, Date endTime, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
+    public void exportToExcel(StorageReport report,Date startTime, Date endTime,List<Integer> deports, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
 }

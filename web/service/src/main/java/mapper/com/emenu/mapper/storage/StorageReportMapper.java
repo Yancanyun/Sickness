@@ -58,8 +58,8 @@ public interface StorageReportMapper {
      * @throws Exception
      */
     public List<StorageReport> listReportByCondition1(@Param("report")StorageReport report,
-                                                      @Param("offset")int offset,
-                                                      @Param("pageSize")int pageSize,
+                                                      @Param("offset")Integer offset,
+                                                      @Param("pageSize")Integer pageSize,
                                                       @Param("depotIdList")List<Integer> depotIdList,
                                                       @Param("startTime")Date startTime,
                                                       @Param("endTime")Date endTime) throws Exception;

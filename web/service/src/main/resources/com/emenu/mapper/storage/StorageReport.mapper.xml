@@ -110,7 +110,9 @@
             </if>
         </where>
         ORDER BY `created_time` DESC
-        LIMIT #{offset}, #{pageSize}
+        <if test="offset != null and pageSize != null">
+            LIMIT #{offset}, #{pageSize}
+        </if>
     </select>
 
 <!--    <select id="countByCondition" resultType="int">

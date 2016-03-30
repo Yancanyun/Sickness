@@ -12,7 +12,7 @@
                 <a href="#">库存管理</a>
             </li>
             <li>
-                <a href="#" class="active">库存单据管理</a>
+                <a class="active">库存单据管理</a>
             </li>
         </ol>
         <h2>库存单据管理</h2>
@@ -40,7 +40,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">时间段</label>
                         <div class="col-sm-8">
-                            <input type="text" class="J_startTime w180" data-start-time="2000-1-01" readonly="readonly" name="startTime" value="2000-1-01" />
+                            <input type="text" class="J_startTime w180" data-start-time="${currentMonthFirstDay}" readonly="readonly" name="startTime" value="${currentMonthFirstDay}" />
                             <span class="to">~</span>
                             <input type="text" class="J_endTime w180" data-end-time="${currentDay}" readonly="readonly" name="endTime" value="${currentDay}" />
                             <span class="month J_shortcut" data-start-time="${currentMonthFirstDay}" data-end-time="${currentMonthLastDay}">本月</span>
@@ -87,7 +87,7 @@
                     <a class="btn btn-success margin-bottom-15 J_outStoreBill" href="javascript:;"><i class="fa fa-plus"></i>&nbsp;添加出库单</a>
                     <a class="btn btn-success margin-bottom-15 J_getStoreBill" href="javascript:;"><i class="fa fa-plus"></i>&nbsp;添加盘盈单</a>
                     <a class="btn btn-success margin-bottom-15 J_loseStoreBill" href="javascript:;"><i class="fa fa-plus"></i>&nbsp;添加盘亏单</a>
-                    <a class="btn btn-warning margin-bottom-15 pull-right J_export" href="#?" target="_blank"><i class="fa fa-download"></i>&nbsp;导出excel</a>
+                    <a class="btn btn-warning margin-bottom-15 pull-right J_export" href="${website}/admin/storage/report/export" target="_blank"><i class="fa fa-download"></i>&nbsp;导出excel</a>
                 </p>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
