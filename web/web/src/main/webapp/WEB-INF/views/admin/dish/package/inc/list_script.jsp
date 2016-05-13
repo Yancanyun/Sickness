@@ -14,7 +14,7 @@
         </td>
         <td>&{it.likeNums}</td>
         <td>
-            <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+            <a href="${website}admin/dish/package/update/&{it.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             {@if it.status == 0}
             <a href="javascript:;" class="label-info J_status"><i class="fa fa-check"></i>&nbsp;恢复</a>
             {@/if}

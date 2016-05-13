@@ -1,5 +1,7 @@
 package com.emenu.common.dto.dish;
 
+import com.emenu.common.entity.dish.DishPackage;
+
 import java.util.List;
 
 /**
@@ -7,6 +9,9 @@ import java.util.List;
  *
  * @author dujuan
  * @date: 2015/12/14
+ *
+ * @modify yangch
+ * @date: 2016/4/16
  */
 public class DishPackageDto {
     // 菜品

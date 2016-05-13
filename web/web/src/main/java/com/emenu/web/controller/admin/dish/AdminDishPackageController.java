@@ -4,20 +4,27 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.TagEnum;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.dish.tag.TagService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,10 +38,13 @@ import java.util.List;
  */
 @Module(value = ModuleEnums.AdminDishManagement)
 @Controller
-@RequestMapping(value = URLConstants.ADMIN_DISH_PACKAGE)
+@RequestMapping(value = URLConstants.ADMIN_DISH_PACKAGE_URL)
 public class AdminDishPackageController extends AbstractController {
+    // 暂存添加的菜品
+    private List<DishPackage> dishPackageList = new ArrayList<DishPackage>();
+
     /**
-     * 列表页
+     * 去列表页
      * @param model
      * @return
      */
@@ -150,5 +160,171 @@ public class AdminDishPackageController extends AbstractController {
         }
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 去新增页
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
+    @RequestMapping(value = "new", method = RequestMethod.GET)
+    public String toNewDishPackage(Model model) {
+        try {
+            // TODO: 根据分类层数改变选择列表数量
+            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+            int categoryLayer = 2;
+            if (Assert.isNotNull(categoryLayerStr)) {
+                categoryLayer = Integer.parseInt(categoryLayerStr);
+            }
+            model.addAttribute("categoryLayer", categoryLayer);
+
+            // 获取餐段
+            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            model.addAttribute("mealPeriodList", mealPeriodList);
+
+            // 获取打印机
+            List<Printer> printerList = printerService.listDishTagPrinter();
+            model.addAttribute("printerList", printerList);
+
+            // 获取"套餐"大类下的子类
+            List<Tag> childTagList = tagFacadeService.listChildrenByTagId(TagEnum.Package.getId());
+            model.addAttribute("childTagList", childTagList);
+
+            // 获取菜品列表
+            List<Dish> dishList = dishService.listAll();
+            for (Dish dish: dishList) {
+                // 获取每个菜品的单位名称
+                Integer unitId = dish.getUnitId();
+                if (Assert.isNotNull(unitId) && !Assert.lessOrEqualZero(unitId)) {
+                    dish.setUnitName(unitService.queryById(unitId).getName());
+                }
+            }
+            model.addAttribute("dishList", dishList);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/dish/package/new_home";
+    }
+
+    /**
+     * 新增套餐提交
+     * @param dishDto
+     * @param redirectAttributes
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
+    @RequestMapping(value = "new", method = RequestMethod.POST)
+    public String newDish(DishDto dishDto,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            // 设置创建者
+            dishDto.setCreatedPartyId(getPartyId());
+            // 设置单位ID为“份”
+            dishDto.setUnitId(11);
+
+            // 新增套餐
+            dishPackageService.newDishPackage(dishDto, dishPackageList);
+            // 将套餐中包含的菜品清空
+            dishPackageList.clear();
+
+            String successUrl = "/" + URLConstants.ADMIN_DISH_PACKAGE_URL;
+            //返回添加成功信息
+            redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
+            //返回列表页
+            return "redirect:" + successUrl;
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            redirectAttributes.addAttribute("msg", e.getMessage());
+
+            String failedUrl = "/" + URLConstants.ADMIN_DISH_PACKAGE_URL + "/new";
+            //返回添加失败信息
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            //返回添加页
+            return "redirect:" + failedUrl;
+        }
+    }
+
+    /**
+     * Ajax 保存套餐中的菜品
+     * @param dishId
+     * @param dishQuantity
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
+    @RequestMapping(value = "ajax/save/dish", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSON ajaxSaveDish(@RequestParam("dishId") Integer dishId,
+                             @RequestParam("dishQuantity") Integer dishQuantity) {
+        // 先清空原有的dishPackageList
+        dishPackageList.clear();
+
+        DishPackage dishPackage = new DishPackage();
+        dishPackage.setDishId(dishId);
+        dishPackage.setDishQuantity(dishQuantity);
+        dishPackageList.add(dishPackage);
+
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    public List<DishPackage> getDishPackageList() {
+        return dishPackageList;
+    }
+
+    public void setDishPackageList(List<DishPackage> dishPackageList) {
+        this.dishPackageList = dishPackageList;
+    }
+
+    /**
+     * 去编辑页
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageUpdate)
+    @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+    public String toUpdateDishPackage(@PathVariable("id") Integer id, Model model) {
+        try {
+            // TODO: 根据分类层数改变选择列表数量
+            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+            int categoryLayer = 2;
+            if (Assert.isNotNull(categoryLayerStr)) {
+                categoryLayer = Integer.parseInt(categoryLayerStr);
+            }
+            model.addAttribute("categoryLayer", categoryLayer);
+
+            // 获取餐段
+            List<MealPeriod> mealPeriodList = mealPeriodService.listAll();
+            model.addAttribute("mealPeriodList", mealPeriodList);
+
+            // 获取打印机
+            List<Printer> printerList = printerService.listDishTagPrinter();
+            model.addAttribute("printerList", printerList);
+
+            // 获取"套餐"大类下的子类
+            List<Tag> childTagList = tagFacadeService.listChildrenByTagId(TagEnum.Package.getId());
+            model.addAttribute("childTagList", childTagList);
+
+            // 获取所有菜品列表
+            List<Dish> dishList = dishService.listAll();
+            for (Dish dish: dishList) {
+                // 获取每个菜品的单位名称
+                Integer unitId = dish.getUnitId();
+                if (Assert.isNotNull(unitId) && !Assert.lessOrEqualZero(unitId)) {
+                    dish.setUnitName(unitService.queryById(unitId).getName());
+                }
+            }
+            model.addAttribute("dishList", dishList);
+
+            // 获取当前套餐的信息及当前套餐内已存在的菜品
+            DishPackageDto dishPackageDto = dishPackageService.queryDishPackageById(id);
+            model.addAttribute("dishPackageDto", dishPackageDto);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/dish/package/update_home";
     }
 }

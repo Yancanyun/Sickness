@@ -9,7 +9,9 @@
             <li class="active">套餐管理</li>
         </ol>
         <h2>菜品管理-套餐列表</h2>
-        <div class="alert alert-success J_tip">提示信息!</div>
+        <c:if test="${!empty msg}">
+            <div class="alert alert-danger J_tip">${msg}</div>
+        </c:if>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -55,7 +57,7 @@
                 <h4>套餐列表</h4>
             </div>
             <div class="panel-body">
-                <a class="btn btn-success margin-bottom-15" href="#"><i class="fa fa-plus"></i>&nbsp;添加套餐</a>
+                <a class="btn btn-success margin-bottom-15" href="${website}admin/dish/package/new"><i class="fa fa-plus"></i>&nbsp;添加套餐</a>
                 <form class="J_operForm">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">

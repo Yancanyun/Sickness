@@ -4,7 +4,9 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishMealPeriod;
 import com.emenu.common.entity.dish.DishPackage;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishPackageMapper;
@@ -106,6 +108,10 @@ public class DishPackageServiceImpl implements DishPackageService{
             List<DishPackage> dishPackageList = dishPackageMapper.listDishPackage(packageId);
             for(DishPackage dishPackage : dishPackageList){
                 childDishDtoList.add(dishService.queryById(dishPackage.getDishId()));
+                // 依次添加套餐下的菜品的DishPackage至childDishDtoList中的DishDto
+                for (DishDto childDishDto : childDishDtoList) {
+                    childDishDto.setDishPackage(dishPackage);
+                }
             }
             dishPackageDto.setChildDishDtoList(childDishDtoList);
             return dishPackageDto;

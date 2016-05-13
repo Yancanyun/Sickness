@@ -2,6 +2,7 @@ package com.emenu.common.dto.dish;
 
 import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.DishMealPeriod;
+import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.Taste;
 
 import java.math.BigDecimal;
@@ -105,6 +106,9 @@ public class DishDto {
 
     // 大图
     private List<DishImg> bigImgList;
+
+    // 若为套餐中的菜品，则此处为此菜品在某套餐中对应的DishPackage。
+    private DishPackage dishPackage;
 
     public Integer getId() {
         return id;
@@ -344,5 +348,13 @@ public class DishDto {
 
     public void setBigImgList(List<DishImg> bigImgList) {
         this.bigImgList = bigImgList;
+    }
+
+    public DishPackage getDishPackage() {
+        return dishPackage;
+    }
+
+    public void setDishPackage(DishPackage dishPackage) {
+        this.dishPackage = dishPackage;
     }
 }
