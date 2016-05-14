@@ -23,7 +23,8 @@ public class ErrorInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         String url = request.getScheme() + "://" +
                         request.getServerName() + request.getContextPath() +
-                        request.getServerPort() + request.getServletPath();
+                        (request.getServerPort() == 80 ? "" : (":" + request.getServerPort())) +
+                        request.getServletPath();
         String queryString = request.getQueryString();
         queryString = queryString == null ? "" : queryString;
         url += queryString;

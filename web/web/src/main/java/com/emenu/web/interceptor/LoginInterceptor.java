@@ -112,7 +112,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     }
 
     private String getBasePath(HttpServletRequest request) {
-        String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String basePath = request.getScheme() + "://" +
+                request.getServerName() +
+                (request.getServerPort() == 80 ? "" : (":" + request.getServerPort())) +
+                request.getContextPath();
         return basePath;
     }
 
@@ -123,6 +126,5 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute(WebConstants.WEB_PARTY_ID, user.getPartyId());
         // 登录名 loginName
         request.setAttribute(WebConstants.WEB_USER_LOGIN_NAME, user.getLoginName());
-
     }
 }
