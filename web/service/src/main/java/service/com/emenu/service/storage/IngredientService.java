@@ -2,7 +2,10 @@ package com.emenu.service.storage;
 
 import com.emenu.common.dto.storage.ItemSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
+import com.lowagie.text.pdf.draw.LineSeparator;
 import com.pandawork.core.common.exception.SSException;
+
+import java.util.List;
 
 /**
  * IngredientService
@@ -43,6 +46,11 @@ public interface IngredientService {
      */
     public Ingredient queryByCondition(ItemSearchDto itemSearchDto) throws SSException;
 
-
+    /**
+     * 获取所有原配料
+     * @return
+     * @throws SSException
+     */
+    public List<Ingredient> listAll() throws SSException;
 
 }

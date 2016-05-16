@@ -4,6 +4,7 @@ import com.pandawork.core.common.entity.AbstractEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,6 +20,7 @@ import java.util.Date;
 public class Ingredient extends AbstractEntity{
 
     // 主键
+    @Id
     private Integer id;
 
     // 原配料分类id

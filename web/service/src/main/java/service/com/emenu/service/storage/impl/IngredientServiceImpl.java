@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * IngredientServiceImpl
  *
@@ -50,7 +53,7 @@ public class IngredientServiceImpl implements IngredientService {
     public void updateIngredient(Ingredient ingredient) throws SSException {
         try {
             if (this.checkBeforeSave(ingredient)) {
-                //ingredientMapper.updateIngredient(ingredient);
+                ingredientMapper.updateIngredient(ingredient);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -84,6 +87,18 @@ public class IngredientServiceImpl implements IngredientService {
             throw SSException.get(PartyException.SystemException, e);
         }
         return ingredient;
+    }
+
+    @Override
+    public List<Ingredient> listAll() throws SSException {
+        List<Ingredient> ingredientList = Collections.emptyList();
+        try {
+            //ingredientMapper.listAll();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return ingredientList;
     }
 
 
