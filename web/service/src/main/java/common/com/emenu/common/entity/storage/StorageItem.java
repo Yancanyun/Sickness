@@ -10,8 +10,8 @@ import java.util.Date;
 /**
  * 库存物品实体
  *
- * @author: zhangteng
- * @time: 2015/11/11 14:02
+ * @author: xiaozl
+ * @time: 2016/5/14 14:02
  **/
 @Entity
 @Table(name = "t_storage_item")

@@ -55,6 +55,22 @@ public enum EmenuException implements IBizExceptionMes {
     ExportStorageSettlementCheckFailed("库存盘点导出EXCEL失败", 3034),
     ExportStorageSettlementSupplierFailed("库存结算中心导出EXCEL失败", 3035),
 
+    // 原配料
+    IngredientTagIdIsNotNull("原配料分类id不能为空",3100),
+    IngredientNumberIsNotNull("原配料编号不能为空",3101),
+    IngredientAssistantCodeIsNotNull("助记码不能为空",3102),
+    IngredientOrderUnitIdIsNotNull("订货单位Id不能为空",3103),
+    IngredientStorageUnitIdIsNotNull("库存单位id不能为空",3104),
+    IngredientCostCardUnitIdIsNotNull("成本卡单位Id不能为空",3105),
+    IngredientOrderToStorageRatioIsNotNull("订货单位转换库存单位比例不能为空",3106),
+    IngredientStorageToCostCardRatioIsNotNull("库存单位转换成本卡单位比例不能为空",3107),
+    IngredientMaxStorageQuantityIsNotNull("最大库存量不能为空",3108),
+    IngredientNameIsNotNull("原配料名称不能为空",3109),
+    IngredientMinStorageQuantityIsNotNull("最大库存量不能为空",3110),
+    IngredientUpdateFailed("更新原配料失败",31101),
+    IngredientInserFailed("新增原配料失败",31102),
+
+
     // 菜品管理模块
     // 分类管理
     NewTagFailed("添加分类失败！", 3001),
