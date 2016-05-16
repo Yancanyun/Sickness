@@ -54,7 +54,6 @@ public class AdminTableController extends AbstractController {
         return "admin/restaurant/table/list_home";
     }
 
-
     /**
      * Ajax 获取数据
      * @param areaId

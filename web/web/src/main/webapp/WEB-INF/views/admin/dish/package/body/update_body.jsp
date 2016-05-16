@@ -8,7 +8,7 @@
             <li><a href="#">菜品管理</a></li>
             <li class="active">套餐管理</li>
         </ol>
-        <h2>菜品管理-编辑套餐</h2>
+        <h2>菜品管理-套餐管理-编辑套餐</h2>
         <c:if test="${!empty msg}">
             <div class="alert alert-danger J_tip">${msg}</div>
         </c:if>
@@ -16,21 +16,21 @@
     <div class="col-sm-12 margin-bottom-30">
         <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish/package/new" method="POST">
             <!--菜品id-->
-            <input class="J_id" type="hidden" name="id" value="112233">
+            <input class="J_id" type="hidden" name="id" value="${dishPackageDto.dishDto.id}">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
                     <a class="tab" data-tabpanel="#single" role="tab" data-toggle="tab">编辑套餐</a>
                 </li>
-                <!--<li role="presentation">-->
-                <!--如果是编辑页面, "批量添加"改为编辑图片-->
-                <!--<a class="tab" data-tabpanel="#batch" role="tab" data-toggle="tab">批量添加</a>-->
-                <!--</li>-->
+                <li role="presentation">
+                    <!--如果是编辑页面, "批量添加"改为编辑图片-->
+                    <a class="tab" data-tabpanel="#batch" role="tab" data-toggle="tab">编辑套餐图片</a>
+                </li>
             </ul>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="single">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h4>套餐编辑</h4>
+                            <h4>编辑套餐</h4>
                         </div>
                         <div class="panel-body">
                             <div class="">
@@ -103,7 +103,7 @@
                                     <div class="col-sm-6 clearfix">
                                         <div class="taste-list J_dishList">
                                             <c:forEach var="childDishDto" items="${dishPackageDto.childDishDtoList}">
-                                                <div data-result-unit="${childDishDto.unitName}" data-result-price="${childDishDto.price}" data-result-name="${childDishDto.name}" data-result-id="${childDishDto.id}" data-result-quantity="${childDishDto.dishPackage.dishQuantity}" class="select-tag">${childDishDto.name}<i class="fa fa-times J_delSelectTag"></i><input type="hidden" value="${childDishDto.dishPackage.dishId}" name="dishId"></div>
+                                                <div data-result-unit="${childDishDto.unitName}" data-result-price="${childDishDto.price}" data-result-name="[${childDishDto.assistantCode}] ${childDishDto.name}" data-result-id="${childDishDto.id}" data-result-quantity="${childDishDto.dishPackage.dishQuantity}" class="select-tag">[${childDishDto.assistantCode}] ${childDishDto.name} ${childDishDto.dishPackage.dishQuantity}${childDishDto.unitName}<i class="fa fa-times J_delSelectTag"></i><input type="hidden" value="${childDishDto.dishPackage.dishId}" name="dishId"></div>
                                             </c:forEach>
                                         </div>
                                         <a href="javascript:;" class="J_addDish btn btn-success"><i class="fa fa-plus">&nbsp;</i>添加菜品</a>
@@ -217,6 +217,67 @@
                 <!--<div role="tabpanel" class="tab-pane" id="batch">-->
                 <!--批量-->
                 <!--</div>-->
+                <div role="tabpanel" class="tab-pane" id="batch">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4>编辑套餐大图</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <h4>当前套餐大图</h4>
+                                    <hr>
+                                    <c:forEach var="dishImg" items="${dishPackageDto.dishDto.bigImgList}">
+                                        <div class="col-sm-3 J_imgContainer" data-img-id="${dishImg.id}">
+                                            <div class="img-container">
+                                                <img class="img-responsive J_currentBigPic" src="${tinyStaticWebsite}${dishImg.imgPath}" alt="套餐大图">
+                                                <a href="javascript:;" class="J_del del"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 margin-top-15">
+                                <div class="clearfix uploader">
+                                    <div id="dndArea1" class="placeholder">
+                                        <div id="fileList1" class="uploader-list clearfix"></div>
+                                    </div>
+                                    <div id="filePicker1" class="pull-left">选择图片</div>
+                                    <button id="ctlBtn1" class="btn btn-default">开始上传</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4>编辑套餐小图</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <h4>当前套餐小图</h4>
+                                    <hr>
+                                    <c:if test="${dishPackageDto.dishDto.smallImg != null}">
+                                        <div class="col-sm-3 J_imgContainer" data-img-id="${dishPackageDto.dishDto.smallImg.id}">
+                                            <div class="img-container">
+                                                <img class="img-responsive J_currentBigPic" src="${tinyStaticWebsite}${dishPackageDto.dishDto.smallImg.imgPath}" alt="套餐小图">
+                                                <a href="javascript:;" class="J_del del"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 margin-top-15">
+                                <div class="clearfix uploader">
+                                    <div id="dndArea2" class="placeholder">
+                                        <div id="fileList2" class="uploader-list clearfix"></div>
+                                    </div>
+                                    <div id="filePicker2" class="pull-left">选择图片</div>
+                                    <button id="ctlBtn2" class="btn btn-default">开始上传</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </form>
     </div>

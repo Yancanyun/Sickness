@@ -5,5 +5,6 @@
     <tiles:putAttribute name="title" value="${webTitle}"/>
     <tiles:putAttribute name="body" value="/WEB-INF/views/admin/dish/package/body/update_body.jsp"/>
     <tiles:putAttribute name="script" value="/WEB-INF/views/admin/dish/package/inc/update_script.jsp"/>
-    <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/admin/dish-management/dish-management.css'>"/>
+    <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/admin/dish-management/dish-management.css'>
+    <link rel='stylesheet' type='text/css' href='${staticWebsite}tool/webuploader/css/webuploader.css'>" />
 </tiles:insertDefinition>

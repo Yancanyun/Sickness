@@ -103,10 +103,10 @@
                                 or ExtModule eq 'Admin:DishManagement:Package:Update'}">
                     <ul>
                         <li <c:if test="${ExtModule eq 'Admin:DishManagement:Package:New'}">class="active"</c:if> >
-                            <a href="${website}admin/dish/package/new" >添加菜品</a>
+                            <a href="${website}admin/dish/package/new" >添加套餐</a>
                         </li>
                         <c:if test="${ExtModule eq 'Admin:DishManagement:Package:Update'}">
-                            <li class="active"><a href="#">编辑菜品</a></li>
+                            <li class="active"><a href="${website}admin/dish/package/update">编辑套餐</a></li>
                         </c:if>
                     </ul>
                 </c:if>

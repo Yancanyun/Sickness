@@ -125,7 +125,9 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateDishPackageFailed("更新套餐失败", 3065),
     ListChildDishFailed("套餐菜品列表为空", 3066),
     DishPackageIsNull("套餐关联表为空", 3067),
-    DishQuantityIsNull("套餐菜品列表中数量为空或者小于0", 3067),
+    DishQuantityIsNull("套餐菜品列表中数量为空或者小于0", 3068),
+    DishIdIsNotPackage("该ID属于菜品，请前往菜品管理处进行编辑", 3069),
+    DishIdIsPackage("该ID属于套餐，请前往套餐管理处进行编辑", 3070),
 
     // 菜品图片
     DishImgQueryFailed("查询菜品图片失败", 1031),

@@ -15,6 +15,7 @@ import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -237,6 +238,11 @@ public class AdminDishController extends AbstractController {
     public String toUpdate(@PathVariable("id") Integer id,
                            Model model) {
         try {
+            // 判断是否是套餐
+            if (dishPackageService.queryDishPackageById(id).getDishDto().getCategoryId() == TagEnum.Package.getId()) {
+                throw SSException.get(EmenuException.DishIdIsNotPackage);
+            }
+
             DishDto dishDto = dishService.queryById(id);
             // 分类
             List<Tag> tagList = tagFacadeService.listAllByTagId(dishDto.getCategoryId());

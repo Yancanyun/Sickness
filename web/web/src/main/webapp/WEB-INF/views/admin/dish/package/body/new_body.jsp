@@ -8,7 +8,7 @@
             <li><a href="#">菜品管理</a></li>
             <li class="active">套餐管理</li>
         </ol>
-        <h2>菜品管理-添加套餐</h2>
+        <h2>菜品管理-套餐管理-添加套餐</h2>
         <c:if test="${!empty msg}">
             <div class="alert alert-danger J_tip">${msg}</div>
         </c:if>
@@ -30,7 +30,7 @@
                 <div role="tabpanel" class="tab-pane active" id="single">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            <h4>套餐添加</h4>
+                            <h4>添加套餐</h4>
                         </div>
                         <div class="panel-body">
                             <div class="">
