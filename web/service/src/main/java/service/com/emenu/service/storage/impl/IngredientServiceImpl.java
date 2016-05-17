@@ -1,11 +1,12 @@
 package com.emenu.service.storage.impl;
 
-import com.emenu.common.dto.storage.ItemSearchDto;
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
-import com.emenu.common.utils.CommonUtil;
 import com.emenu.mapper.storage.IngredientMapper;
+import com.emenu.service.dish.UnitService;
 import com.emenu.service.storage.IngredientService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -33,6 +34,9 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Autowired
     private IngredientMapper ingredientMapper;
+
+    @Autowired
+    private UnitService unitService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -75,25 +79,52 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient queryByCondition(ItemSearchDto itemSearchDto) throws SSException {
-        Ingredient ingredient = null;
-        if (Assert.isNull(itemSearchDto)){
-            return ingredient;
-        }
+    public List<Ingredient> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException {
+        List<Ingredient> ingredientList = Collections.emptyList();
+        int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo()-1;
+        int offset = pageNo * searchDto.getPageSize();
+        searchDto.setOffSet(offset);
         try {
-
+            ingredientList = ingredientMapper.listBySearchDto(searchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
-        return ingredient;
+        return ingredientList;
     }
 
     @Override
     public List<Ingredient> listAll() throws SSException {
         List<Ingredient> ingredientList = Collections.emptyList();
-        try {
-            //ingredientMapper.listAll();
+         try {
+             ingredientList = ingredientMapper.listAll();
+
+             //设置单位名称
+             for (Ingredient ingredient : ingredientList){
+
+                 Unit orderUnit = unitService.queryById(ingredient.getOrderUnitId());
+                 if (Assert.isNotNull(orderUnit)){
+                     ingredient.setOrderUnitName(orderUnit.getName());
+                 } else {
+                     throw SSException.get(EmenuException.QueryUnitFailed);
+                 }
+
+                 Unit storageUnit = unitService.queryById(ingredient.getStorageUnitId());
+                 if (Assert.isNotNull(storageUnit)){
+                     ingredient.setStorageUnitName(storageUnit.getName());
+                 } else {
+                     throw SSException.get(EmenuException.QueryUnitFailed);
+                 }
+                 ingredient.setStorageUnitName(storageUnit.getName());
+
+                 Unit costCardUnit = unitService.queryById(ingredient.getCostCardUnitId());
+                 if (Assert.isNotNull(costCardUnit)){
+                     ingredient.setOrderUnitName(costCardUnit.getName());
+                 } else {
+                     throw SSException.get(EmenuException.QueryUnitFailed);
+                 }
+                 ingredient.setCostCardUnitName(costCardUnit.getName());
+             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);

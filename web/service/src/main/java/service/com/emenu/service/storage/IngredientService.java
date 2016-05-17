@@ -1,15 +1,14 @@
 package com.emenu.service.storage;
 
-import com.emenu.common.dto.storage.ItemSearchDto;
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
-import com.lowagie.text.pdf.draw.LineSeparator;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;
 
 /**
  * IngredientService
- *
+ * 原配料管理service
  * @author xiaozl
  * @date: 2016/5/14
  */
@@ -39,12 +38,12 @@ public interface IngredientService {
     public Ingredient queryById(int id) throws SSException;
 
     /**
-     * 根据itemSearchDto查询原配料
-     * @param itemSearchDto
+     * 根据searchDto查询原配料
+     * @param searchDto
      * @return
      * @throws SSException
      */
-    public Ingredient queryByCondition(ItemSearchDto itemSearchDto) throws SSException;
+    public List<Ingredient> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
 
     /**
      * 获取所有原配料
@@ -52,5 +51,6 @@ public interface IngredientService {
      * @throws SSException
      */
     public List<Ingredient> listAll() throws SSException;
+
 
 }
