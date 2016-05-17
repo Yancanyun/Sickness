@@ -27,6 +27,8 @@ public class Ingredient extends AbstractEntity{
     @Column(name = "tag_id")
     private Integer tagId;
 
+    private String tagName;
+
     // 原配料名称
     private String name;
 
@@ -42,13 +44,22 @@ public class Ingredient extends AbstractEntity{
     @Column(name = "order_unit_id")
     private Integer orderUnitId;
 
+    // 订货单位名称
+    private String orderUnitName;
+
     // 库存单位id
     @Column(name = "storage_unit_id")
     private Integer storageUnitId;
 
+    // 库存单位名称
+    private String storageUnitName;
+
     // 成本卡单位id
     @Column(name = "cost_card_unit_id")
     private Integer costCardUnitId;
+
+    // 成本卡单位名称
+    private String costCardUnitName;
 
     // 订货单位到库存单位转换比例
     @Column(name = "order_to_storage_ratio")
@@ -114,6 +125,14 @@ public class Ingredient extends AbstractEntity{
         this.tagId = tagId;
     }
 
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
     public String getName() {
         return name;
     }
@@ -146,6 +165,14 @@ public class Ingredient extends AbstractEntity{
         this.orderUnitId = orderUnitId;
     }
 
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
     public Integer getStorageUnitId() {
         return storageUnitId;
     }
@@ -154,12 +181,28 @@ public class Ingredient extends AbstractEntity{
         this.storageUnitId = storageUnitId;
     }
 
+    public String getStorageUnitName() {
+        return storageUnitName;
+    }
+
+    public void setStorageUnitName(String storageUnitName) {
+        this.storageUnitName = storageUnitName;
+    }
+
     public Integer getCostCardUnitId() {
         return costCardUnitId;
     }
 
     public void setCostCardUnitId(Integer costCardUnitId) {
         this.costCardUnitId = costCardUnitId;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
     }
 
     public BigDecimal getOrderToStorageRatio() {

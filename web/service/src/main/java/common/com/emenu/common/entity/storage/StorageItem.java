@@ -21,24 +21,39 @@ public class StorageItem extends AbstractEntity {
     @Id
     private Integer id;
 
-    // 供货商ID
-    @Column(name = "supplier_party_id")
-    private Integer supplierPartyId;
-
-    // 分类ID
-    @Column(name = "tag_id")
-    private Integer tagId;
-
     // 名称
     private String name;
+
+    // 助记码
+    @Column(name = "assistant_code")
+    private String assistantCode;
 
     // 物品编号
     @Column(name = "item_number")
     private String itemNumber;
 
-    // 助记码
-    @Column(name = "assistant_code")
-    private String assistantCode;
+    // 原配料id
+    @Column(name = "ingredient_id")
+    private Integer ingredientId;
+
+    // 原配料名称
+    private String ingredientName;
+
+    // 分类ID
+    @Column(name = "tag_id")
+    private Integer tagId;
+
+    // 分类名称
+    @Transient
+    private String tagName;
+
+    // 供货商ID
+    @Column(name = "supplier_party_id")
+    private Integer supplierPartyId;
+
+    // 供货商名称
+    @Transient
+    private String supplierName;
 
     // 状态(1-正常使用,2-已删除)
     private Integer status;
@@ -47,17 +62,29 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "order_unit_id")
     private Integer orderUnitId;
 
+    @Transient
+    private String orderUnitName;
+
     // 库存单位
     @Column(name = "storage_unit_id")
     private Integer storageUnitId;
+
+    @Transient
+    private String storageUnitName;
 
     // 成本卡单位
     @Column(name = "cost_card_unit_id")
     private Integer costCardUnitId;
 
+    @Transient
+    private String costCardUnitName;
+
     // 计数单位
     @Column(name = "count_unit_id")
     private Integer countUnitId;
+
+    @Transient
+    private String countUnitName;
 
     // 订货单位到库存单位转换率
     @Column(name = "order_to_storage_ratio")
@@ -79,6 +106,9 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "stock_out_type")
     private Integer stockOutType;
 
+    @Transient
+    private String stockOutTypeStr;
+
     // 总入库数量
     @Column(name = "total_stock_in_quantity")
     private BigDecimal totalStockInQuantity;
@@ -99,29 +129,6 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
-    // 分类名称
-    @Transient
-    private String tagName;
-
-    // 供货商名称
-    @Transient
-    private String supplierName;
-
-    // 出库方式
-    @Transient
-    private String stockOutTypeStr;
-
-    @Transient
-    private String orderUnitName;
-
-    @Transient
-    private String storageUnitName;
-
-    @Transient
-    private String costCardUnitName;
-
-    @Transient
-    private String countUnitName;
 
     public Integer getId() {
         return id;
@@ -348,5 +355,21 @@ public class StorageItem extends AbstractEntity {
 
     public void setCountUnitName(String countUnitName) {
         this.countUnitName = countUnitName;
+    }
+
+    public Integer getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 }
