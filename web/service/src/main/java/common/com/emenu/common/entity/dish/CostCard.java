@@ -12,28 +12,40 @@ import java.util.Date;
 /**
  * 成本卡实体
  *
- * @author: zhangteng
- * @time: 2015/12/14 18:08
+ * @author: quanyibo
+ * @time: 2016/5/16 8:46
  **/
 @Entity
 @Table(name = "t_cost_card")
 public class CostCard extends AbstractEntity {
 
-    // 主键
+    //成本卡自增主键
     @Id
     private Integer id;
 
-    // 菜品ID
+    //成本卡编号
+    @Column(name = "cost_card_number")
+    private  String costCardNumber;
+
+    //成本卡对应菜品id
     @Column(name = "dish_id")
-    private Integer dish_id;
+    private  Integer dishId;
 
-    // 标准成本
+    //主料成本
+    @Column(name = "main_cost")
+    private BigDecimal mainCost;
+
+    //辅料成本
+    @Column(name = "assist_cost")
+    private BigDecimal assistCost;
+
+    //调料成本
+    @Column(name = "delicious_cost")
+    private BigDecimal deliciousCost;
+
+    //标准成本
     @Column(name = "standard_cost")
-    private BigDecimal standardCost;
-
-    // 调料成本
-    @Column(name = "condiment_cost")
-    private BigDecimal condimentCost;
+    private  BigDecimal standardCost;
 
     // 创建时间
     @Column(name = "created_time")
@@ -52,12 +64,36 @@ public class CostCard extends AbstractEntity {
         this.id = id;
     }
 
-    public Integer getDish_id() {
-        return dish_id;
+    public String getCostCardNumber() {
+        return costCardNumber;
     }
 
-    public void setDish_id(Integer dish_id) {
-        this.dish_id = dish_id;
+    public void setCostCardNumber(String costCardNumber) {
+        this.costCardNumber = costCardNumber;
+    }
+
+    public Integer getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(Integer dishId) {
+        this.dishId = dishId;
+    }
+
+    public BigDecimal getAssistCost() {
+        return assistCost;
+    }
+
+    public void setAssistCost(BigDecimal assistCost) {
+        this.assistCost = assistCost;
+    }
+
+    public BigDecimal getMainCost() {
+        return mainCost;
+    }
+
+    public void setMainCost(BigDecimal mainCost) {
+        this.mainCost = mainCost;
     }
 
     public BigDecimal getStandardCost() {
@@ -68,12 +104,12 @@ public class CostCard extends AbstractEntity {
         this.standardCost = standardCost;
     }
 
-    public BigDecimal getCondimentCost() {
-        return condimentCost;
+    public BigDecimal getDeliciousCost() {
+        return deliciousCost;
     }
 
-    public void setCondimentCost(BigDecimal condimentCost) {
-        this.condimentCost = condimentCost;
+    public void setDeliciousCost(BigDecimal deliciousCost) {
+        this.deliciousCost = deliciousCost;
     }
 
     public Date getCreatedTime() {

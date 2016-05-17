@@ -2,6 +2,7 @@ package com.emenu.service.dish.impl;
 
 import com.emenu.common.dto.dish.CostCardDto;
 import com.emenu.common.dto.dish.CostCardSearchDto;
+import com.emenu.common.entity.dish.CostCard;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.CostCardMapper;
 import com.emenu.service.dish.CostCardService;
@@ -18,8 +19,8 @@ import java.util.List;
 /**
  * CostCardServiceImpl
  *
- * @author: zhangteng
- * @time: 2015/12/15 13:39
+ * @author: quanyibo
+ * @time: 2016/5/16 9:13
  **/
 @Service("costCardService")
 public class CostCardServiceImpl implements CostCardService {
@@ -45,4 +46,5 @@ public class CostCardServiceImpl implements CostCardService {
 
         return list;
     }
+
 }
