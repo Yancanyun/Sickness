@@ -5,8 +5,8 @@
 <mapper namespace="com.emenu.mapper.dish.CostCardMapper">
 
     <insert id = "newCostCard">
-        INSERT INTO t_cost_card(cost_card_number,dish_id
-        ,main_cost,assist_cost,delicious_cost,standard_cost)
+        INSERT INTO t_cost_card(cost_card_number,dish_id,main_cost
+        ,assist_cost,delicious_cost,standard_cost)
         VALUES (#{costCard.costCardNumber},#{costCard.dishId},#{costCard.mainCost}
         ,#{costCard.assistCost},#{costCard.deliciousCost},#{costCard.standardCost})
     </insert>

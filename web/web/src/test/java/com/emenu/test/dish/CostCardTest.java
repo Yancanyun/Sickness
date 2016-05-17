@@ -29,7 +29,7 @@ public class CostCardTest extends AbstractTestCase {
     {
         CostCard costCard = new CostCard();
         costCard.setCostCardNumber("0001");
-        costCard.setDishId(5);
+        costCard.setDishId(6);
         costCard.setMainCost(new BigDecimal("1.0"));
         costCard.setAssistCost(new BigDecimal("1.0"));
         costCard.setDeliciousCost(new BigDecimal("1.0"));

@@ -15,13 +15,12 @@ import java.util.List;
 public interface CostCardMapper {
 
     /**
-     * 新增成本卡
+     * 新建成本卡
      *
      * @param costCard
      * @return
      * @throws SSException
      */
-
     public void newCostCard(@Param("costCard")CostCard costCard) throws SSException;
 
     /**

@@ -16,7 +16,7 @@ import java.util.List;
 public interface CostCardService {
 
     /**
-     * 新增成本卡
+     * 新建成本卡
      *
      * @param costCard
      * @return int

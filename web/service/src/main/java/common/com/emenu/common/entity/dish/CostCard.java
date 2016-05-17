@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Costcard成本卡实体
  *
  * @author quanyibo
- * @date 2016/5/16.
+ * @date 2016/5/17
  */
 @Entity
 @Table(name="t_cost_card")
