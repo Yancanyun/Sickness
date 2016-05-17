@@ -3,5 +3,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.emenu.mapper.dish.CostCardItemMapper">
+   <select id="listByCostCardId" resultType="CostCardItemDto">
+       SELECT item.`id` AS id,
+       item.`net_count` AS netCount,
+       item.`total_count` AS totalCount,
+       item.`item_type` AS itemType,
+       item.`cost_card_id` AS costCardId,
+       item.`is_auto_out` AS isAutoOut,
+       ingredient.`id` AS ingredientId,
+       ingredient.`name` AS ingredientName,
+       ingredient.`average_price` AS averagePrice,
+       unit.`name` AS costCardUnit
+       FROM `t_cost_card_item` item
+       LEFT JOIN `t_ingredient` ingredient ON item.`ingredient_id` = ingredient.`id`
+       LEFT JOIN `t_unit` unit ON ingredient.`cost_card_unit_id` = unit.`id`
+       WHERE item.`cost_card_id` = #{costCardId}
+       ORDER BY item.`item_type` ASC
+   </select>
+
+    <insert id="newCostCardItems" >
+        INSERT INTO `t_cost_card_item`(ingredient_id,cost_card_id,item_type,net_count,total_count,is_auto_out)
+        VALUES
+        <foreach collection="costCardItemList" index="index" item="item" separator=",">
+            (#{item.ingredientId},#{item.costCardId},#{item.itemType},#{item.netCount},#{item.totalCount},#{item.isAutoOut})
+        </foreach>
+    </insert>
+
+    <delete id="delByCostCardId">
+        DELETE
+        FROM `t_cost_card_item`
+        WHERE t_cost_card_item.`cost_card_id` = #{costCardId}
+    </delete>
 
 </mapper>

@@ -1,64 +1,48 @@
 package com.emenu.common.dto.dish;
 
-import com.pandawork.core.common.util.Assert;
-
 import java.math.BigDecimal;
 
 /**
- * 成本卡物品Dto
+ * CostCardItemDto
  *
- * @author: zhangteng
- * @time: 2015/12/14 18:37
- **/
+ * @author xubaorong
+ * @date 2016/5/16.
+ */
 public class CostCardItemDto {
-
+    //主键
     private Integer id;
 
-    // 成本卡ID
-    private Integer costCardId;
+    //原料名称
+    private String ingredientName;
 
-    // 库存物品ID
-    private Integer itemId;
+    //原料id
+    private Integer ingredientId;
 
-    // 物品编号
-    private String itemNumber;
+    //原料单位
+    private String costCardUnit;
 
-    // 物品名称
-    private String itemName;
-
-    // 物品总入库量
-    private BigDecimal itemTotalStockInQuantity;
-
-    // 物品入库总金额
-    private BigDecimal itemTotalStockInMoney;
-
-    // 库存单位名称
-    private String itemStorageUnitName;
-
-    // 成本卡单位名称
-    private String itemCostCardUnitName;
-
-    // 库存单位到成本卡单位的换算比例
-    private BigDecimal itemStorageToCostCardRatio;
-
-    // 净料用量
-    private BigDecimal netItemQuantity;
-
-    // 净料率
-    private BigDecimal netItemRatio;
-
-    // 是否自动出库
-    private Integer autoStockOut;
-
-    // 均价
+    //原料单价
     private BigDecimal averagePrice;
 
-    // 原料用量
-    private BigDecimal rawMaterialQuantity;
+    //净料率
+    private BigDecimal netRate;
 
-    // 原料金额
-    private BigDecimal rawMaterialMoney;
+    //成本卡id
+    private Integer costCardId;
 
+    //原料类别,0为主料，1为辅料，2为调料
+    private Integer itemType;
+
+    //净料用量
+    private BigDecimal netCount;
+
+    //毛料用量
+    private BigDecimal totalCount;
+
+    //班结时是否自动出库,1为是，0为否
+    private Integer isAutoOut;
+
+    /*******getter and setter**********************/
     public Integer getId() {
         return id;
     }
@@ -67,109 +51,20 @@ public class CostCardItemDto {
         this.id = id;
     }
 
-    public Integer getCostCardId() {
-        return costCardId;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setCostCardId(Integer costCardId) {
-        this.costCardId = costCardId;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 
-    public Integer getItemId() {
-        return itemId;
+    public String getCostCardUnit() {
+        return costCardUnit;
     }
 
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getItemNumber() {
-        return itemNumber;
-    }
-
-    public void setItemNumber(String itemNumber) {
-        this.itemNumber = itemNumber;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public BigDecimal getItemTotalStockInQuantity() {
-        return itemTotalStockInQuantity;
-    }
-
-    public void setItemTotalStockInQuantity(BigDecimal itemTotalStockInQuantity) {
-        this.itemTotalStockInQuantity = itemTotalStockInQuantity;
-
-        // 计算库存均价
-        calcAveragePrice();
-    }
-
-    public BigDecimal getItemTotalStockInMoney() {
-        return itemTotalStockInMoney;
-    }
-
-    public void setItemTotalStockInMoney(BigDecimal itemTotalStockInMoney) {
-        this.itemTotalStockInMoney = itemTotalStockInMoney;
-
-        // 计算库存均价
-        calcAveragePrice();
-    }
-
-    public String getItemStorageUnitName() {
-        return itemStorageUnitName;
-    }
-
-    public void setItemStorageUnitName(String itemStorageUnitName) {
-        this.itemStorageUnitName = itemStorageUnitName;
-    }
-
-    public String getItemCostCardUnitName() {
-        return itemCostCardUnitName;
-    }
-
-    public void setItemCostCardUnitName(String itemCostCardUnitName) {
-        this.itemCostCardUnitName = itemCostCardUnitName;
-    }
-
-    public BigDecimal getItemStorageToCostCardRatio() {
-        return itemStorageToCostCardRatio;
-    }
-
-    public void setItemStorageToCostCardRatio(BigDecimal itemStorageToCostCardRatio) {
-        this.itemStorageToCostCardRatio = itemStorageToCostCardRatio;
-    }
-
-    public BigDecimal getNetItemQuantity() {
-        return netItemQuantity;
-    }
-
-    public void setNetItemQuantity(BigDecimal netItemQuantity) {
-        this.netItemQuantity = netItemQuantity;
-    }
-
-    public BigDecimal getNetItemRatio() {
-        return netItemRatio;
-    }
-
-    public void setNetItemRatio(BigDecimal netItemRatio) {
-        this.netItemRatio = netItemRatio;
-
-        // 计算原料用量和金额
-        calcRawMaterialQuantityAndMoney();
-    }
-
-    public Integer getAutoStockOut() {
-        return autoStockOut;
-    }
-
-    public void setAutoStockOut(Integer autoStockOut) {
-        this.autoStockOut = autoStockOut;
+    public void setCostCardUnit(String costCardUnit) {
+        this.costCardUnit = costCardUnit;
     }
 
     public BigDecimal getAveragePrice() {
@@ -180,49 +75,66 @@ public class CostCardItemDto {
         this.averagePrice = averagePrice;
     }
 
-    public BigDecimal getRawMaterialQuantity() {
-        return rawMaterialQuantity;
+    public BigDecimal getNetRate() {
+        return netRate;
     }
 
-    public void setRawMaterialQuantity(BigDecimal rawMaterialQuantity) {
-        this.rawMaterialQuantity = rawMaterialQuantity;
+    public void setNetRate(BigDecimal netRate) {
+        this.netRate = netRate;
     }
 
-    public BigDecimal getRawMaterialMoney() {
-        return rawMaterialMoney;
+    public Integer getCostCardId() {
+        return costCardId;
     }
 
-    public void setRawMaterialMoney(BigDecimal rawMaterialMoney) {
-        this.rawMaterialMoney = rawMaterialMoney;
+    public void setCostCardId(Integer costCardId) {
+        this.costCardId = costCardId;
     }
 
-    /**
-     * 调用这个方法时,需要先确保itemTotalStockInMoney和itemTotalStockInQuantity
-     *
-     */
-    public void calcAveragePrice() {
-        if (Assert.isNotNull(this.itemTotalStockInMoney)
-                && Assert.isNotNull(this.itemTotalStockInQuantity)
-                && !this.itemTotalStockInQuantity.equals(BigDecimal.ZERO)) {
-            this.averagePrice = this.itemTotalStockInMoney.divide(itemTotalStockInQuantity, 10, BigDecimal.ROUND_DOWN);
-            this.averagePrice = this.averagePrice.setScale(2, BigDecimal.ROUND_HALF_UP);
-        }
+    public Integer getItemType() {
+        return itemType;
     }
 
-    /**
-     * 调用这个方法时,需要先确保netItemQuantity和netItemRatio有值
-     *
-     */
-    public void calcRawMaterialQuantityAndMoney() {
-        if (Assert.isNotNull(this.netItemQuantity)
-                && Assert.isNotNull(this.netItemRatio)
-                && !this.netItemRatio.equals(BigDecimal.ZERO)) {
-            this.rawMaterialQuantity = this.netItemQuantity.divide(this.netItemRatio, 10, BigDecimal.ROUND_DOWN);
-            this.rawMaterialQuantity = this.rawMaterialQuantity.setScale(2, BigDecimal.ROUND_HALF_UP);
+    public void setItemType(Integer itemType) {
+        this.itemType = itemType;
+    }
 
-            this.rawMaterialMoney = this.averagePrice.divide(this.itemStorageToCostCardRatio, 10, BigDecimal.ROUND_DOWN)
-                                        .multiply(this.rawMaterialQuantity);
-            this.rawMaterialMoney = this.rawMaterialMoney.setScale(2, BigDecimal.ROUND_HALF_UP);
+    public Integer getIngredientId() {
+        return ingredientId;
+    }
+
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public BigDecimal getNetCount() {
+        return netCount;
+    }
+
+    public void setNetCount(BigDecimal netCount) {
+        this.netCount = netCount;
+    }
+
+    public BigDecimal getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(BigDecimal totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Integer getIsAutoOut() {
+        return isAutoOut;
+    }
+
+    public void setIsAutoOut(Integer isAutoOut) {
+        this.isAutoOut = isAutoOut;
+    }
+
+    public void  setResultNetRate(){
+        if(this.netCount!=null && this.totalCount!=null&&!this.totalCount.equals(BigDecimal.ZERO)) {
+            this.netRate =  netCount.divide(totalCount,10, BigDecimal.ROUND_DOWN);
+            this.netRate = this.netRate.setScale(2, BigDecimal.ROUND_HALF_UP);
         }
     }
 }
