@@ -18,7 +18,7 @@ public class CostCard {
     @Id
     private Integer id;
 
-    //成本卡编号
+    //成本卡的编号
     @Column(name = "cost_card_number")
     private String costCardNumber;
 
