@@ -2,6 +2,7 @@ package com.emenu.service.dish.impl;
 
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.printer.DishTagPrinter;
@@ -230,6 +231,18 @@ public class DishServiceImpl implements DishService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishQueryFailed, e);
         }
+    }
+
+    @Override
+    public List<DishSmallDto> listByKeyword(String keyword) throws SSException {
+        List<DishSmallDto> dishSmallDtoList = Collections.emptyList();
+        try {
+            dishSmallDtoList  = dishMapper.listByKeyword(keyword);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListByKeywordFailed);
+        }
+        return dishSmallDtoList;
     }
 
     private boolean checkBeforeSave(DishDto dishDto) throws SSException {

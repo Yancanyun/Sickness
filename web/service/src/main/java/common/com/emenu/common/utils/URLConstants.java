@@ -61,6 +61,9 @@ public final class URLConstants {
 
     public static final String ADMIN_DISH_URL = "admin/dish";
 
+    //成本卡管理
+    public static final String ADMIN_COST_CARD_URL = "admin/cost/card";
+
     // 菜品单位管理
     public static final String ADMIN_DISH_UNIT = "admin/dish/unit";
 

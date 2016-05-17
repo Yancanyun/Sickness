@@ -2,6 +2,7 @@ package com.emenu.mapper.dish;
 
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import org.apache.ibatis.annotations.Param;
 
@@ -60,4 +61,13 @@ public interface DishMapper {
      * @throws Exception
      */
     public DishDto queryById(@Param("id") int id) throws Exception;
+
+    /**
+     * 根据菜品名或助记码模糊查询DishSmallDto
+     *
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public List<DishSmallDto> listByKeyword(@Param("keyword")String keyword) throws Exception;
 }

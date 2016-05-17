@@ -158,6 +158,7 @@ public enum EmenuException implements IBizExceptionMes {
     DishTagInsertFailed("菜品-分类添加失败", 1057),
     DishTagUpdateFailed("菜品-分类更新失败", 1058),
     DishTagDeleteFailed("菜品-分类删除失败", 1059),
+    ListByKeywordFailed("根据关键字查询小部分菜品信息失败",1060),
 
     // 菜品口味
     DishTasteQueryFailed("菜品口味查询失败", 1049),
