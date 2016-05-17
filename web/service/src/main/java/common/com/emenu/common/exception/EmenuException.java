@@ -448,6 +448,23 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteVipCardFail("删除会员卡失败", 8143),
     PermanentlyEffectiveIsNull("有效期不可为空", 8144),
     PermanentlyEffectiveBeforeToday("有效期不可为今天或今天之前", 8145),
+
+    //成本卡原料
+    IngredientIdError("原料id错误",8120),
+    CostCardIdError("成本卡id错误",8121),
+    NetCountError("净料用量不为空且不为0.00",8122),
+    TotalCountError("原料用量不为空且不为0.00",8123),
+    IsAutoOutIsNotNull("是否自动出库不为空",8124),
+    CostCardItemIsNotNUll("成本卡原料不为空",8125),
+    NewCostCardItemFailed("添加成本卡原料失败",8126),
+    NewCostcardItemsFailed("批量添加成本卡原料失败",8127),
+    DelCostCardItemByIdFailed("根据主键id删除成本卡原料失败",8128),
+    DelCostCardItemByCostCardIdFailed("根据成本卡id删除其所有成本卡原料失败",8129),
+    UpdateCostCardItemFailed("修改成本卡原料失败",8130),
+    QueryByCostCardIdFailed("根据成本卡id查询其所有原料失败",8131),
+    CostCardItemTypeIsNotNull("成本卡原料类别不为空",8132),
+    CostCardItemIdError("成本卡原料主键错误",8133),
+
     ;
 
 

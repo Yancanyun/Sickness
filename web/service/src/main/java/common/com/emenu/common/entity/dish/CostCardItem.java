@@ -10,47 +10,52 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 成本卡物品实体
+ * CostcardItem成本卡详细实体
  *
- * @author: zhangteng
- * @time: 2015/12/14 18:13
- **/
+ * @author xubaorong
+ * @date 2016/5/16.
+ */
 @Entity
-@Table(name = "t_cost_card_item")
-public class CostCardItem extends AbstractEntity {
+@Table(name="t_cost_card_item")
+public class CostCardItem extends AbstractEntity{
 
-    // 主键
+    //主键
     @Id
     private Integer id;
 
-    // 成本卡ID
+    //原料id
+    @Column(name="ingredient_id")
+    private Integer ingredientId;
+
+    //成本卡id
     @Column(name = "cost_card_id")
     private Integer costCardId;
 
-    // 库存物品ID
-    @Column(name = "item_id")
-    private Integer itemId;
+    //原料类别,0为主料，1为辅料，2为调料
+    @Column(name = "item_type")
+    private Integer itemType;
 
-    // 净料用量
-    @Column(name = "net_item_quantity")
-    private BigDecimal netItemQuantity;
+    //净料用量
+    @Column(name = "net_count")
+    private BigDecimal netCount;
 
-    // 净料率
-    @Column(name = "net_item_ratio")
-    private BigDecimal netItemRatio;
+    //毛料用量
+    @Column(name = "total_count")
+    private BigDecimal totalCount;
 
-    // 是否自动出库(0-否,1-是)
-    @Column(name = "auto_stock_out")
-    private Integer autoStockOut;
+    //班结时是否自动出库,1为是，0为否
+    @Column(name = "is_auto_out")
+    private Integer isAutoOut;
 
-    // 创建时间
+    //创建时间
     @Column(name = "created_time")
     private Date createdTime;
 
-    // 最近修改时间
+    //最后修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+    /**********getter and setter********************/
     public Integer getId() {
         return id;
     }
@@ -68,36 +73,44 @@ public class CostCardItem extends AbstractEntity {
         this.costCardId = costCardId;
     }
 
-    public Integer getItemId() {
-        return itemId;
+    public Integer getIngredientId() {
+        return ingredientId;
     }
 
-    public void setItemId(Integer itemId) {
-        this.itemId = itemId;
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
     }
 
-    public BigDecimal getNetItemQuantity() {
-        return netItemQuantity;
+    public Integer getItemType() {
+        return itemType;
     }
 
-    public void setNetItemQuantity(BigDecimal netItemQuantity) {
-        this.netItemQuantity = netItemQuantity;
+    public void setItemType(Integer itemType) {
+        this.itemType = itemType;
     }
 
-    public BigDecimal getNetItemRatio() {
-        return netItemRatio;
+    public BigDecimal getNetCount() {
+        return netCount;
     }
 
-    public void setNetItemRatio(BigDecimal netItemRatio) {
-        this.netItemRatio = netItemRatio;
+    public void setNetCount(BigDecimal netCount) {
+        this.netCount = netCount;
     }
 
-    public Integer getAutoStockOut() {
-        return autoStockOut;
+    public BigDecimal getTotalCount() {
+        return totalCount;
     }
 
-    public void setAutoStockOut(Integer autoStockOut) {
-        this.autoStockOut = autoStockOut;
+    public void setTotalCount(BigDecimal totalCount) {
+        this.totalCount = totalCount;
+    }
+
+    public Integer getIsAutoOut() {
+        return isAutoOut;
+    }
+
+    public void setIsAutoOut(Integer isAutoOut) {
+        this.isAutoOut = isAutoOut;
     }
 
     public Date getCreatedTime() {
