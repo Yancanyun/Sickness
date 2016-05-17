@@ -4,82 +4,23 @@
 
 <mapper namespace="com.emenu.mapper.dish.CostCardMapper">
 
-    <select id="listDtoBySearchDto" resultMap="costCardDtoResultMap">
-        SELECT
-        costCard.`id` AS id,
-        dish.`id` AS dishId,
-        dish.`dish_number` AS dishNumber,
-        dish.``name` AS dishName,
-        dishUnit.`name` AS dishUnitName,
-        dish.`sale_price` AS dishSalePrice,
-        costCard.`standardCost` AS standardCost,
-        costCard.`condimentCost` AS condimentCost,
-        costCardItem.`id` AS costCardItemId,
-        costCardItem.`cost_card_id` AS costCardId,
-        costCardItem.`item_id` AS itemId,
-        storageItem.`item_number` AS itemNumber,
-        storageItem.`name` AS itemName,
-        storageItem.`total_stock_in_quantity` AS itemTotalStockInQuantity,
-        storageItem.`total_stock_in_money` AS itemTotalStockInMoney,
-        itemStorageUnit.`name` AS itemStorageUnitName,
-        itemCostCardUnit.`name` AS itemCostCardUnitName,
-        sotrageItem.`storage_to_cost_card_ratio` AS itemStorageToCostCardRatio,
-        costCardItem.`net_item_quantity` AS netItemQuantity,
-        costCardItem.`net_item_ratio` AS netItemRatio,
-        costCardItem.`auto_stock_out` AS autoStockOut
-        FROM `t_dish` dish
-        LEFT JOIN `t_unit` dishUnit ON dish.`unit_id` = dishUnit.`id`
-        LEFT JOIN `t_cost_card` costCard ON dish.`id` = costCard.`dish_id`
-        LEFT JOIN `t_cost_card_item` costCardItem ON costCard.`id` = costCardItem.`cost_card_id`
-        LEFT JOIN `t_storage_item` storageItem ON costCardItem.`item_id` = storageItem.`id`
-        LEFT JOIN `t_unit` itemStorageUnit ON sotrageItem.`storage_unit_id` = itemStorageUnit.`id`
-        LEFT JOIN `t_unit` itemCostCardUnit ON storageItem.`cost_card_unit_id` = itemCostCardUnit.`id`
-        <if test="searchDto != null">
-            <where>
-                <if test="searchDto.keyword != null and searchDto.keyword != ''">
-                    (
-                      dish.`name` LIKE "%"#{searchDto.keyword}"%"
-                      OR dish.`dish_number` LIKE "%"#{searchDto.keyword}"%"
-                      OR dish.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
-                    )
-                </if>
-                <if test="searchDto.dishTagIdList != null and searchDto.dishTagIdList.size != 0">
-                    AND dish.`tag_id` IN
-                    <foreach collection="searchDto.dishTagIdList" item="tagId" open="(" separator="," close=")">
-                        #{tagId}
-                    </foreach>
-                </if>
-            </where>
-        </if>
-        ORDER BY dish.`id`
-        <if test="offset >= 0 and searchDto.pageSize > 0">
-            LIMIT #{offset}, #{searchDto.pageSize}
-        </if>
-    </select>
+    <insert id = "newCostCard">
+        INSERT INTO t_cost_card(cost_card_number,dish_id
+        ,main_cost,assist_cost,delicious_cost,standard_cost)
+        VALUES (#{costCard.costCardNumber},#{costCard.dishId},#{costCard.mainCost}
+        ,#{costCard.assistCost},#{costCard.deliciousCost},#{costCard.standardCost})
+    </insert>
 
-    <resultMap id="costCardDtoResultMap" type="com.emenu.common.dto.dish.CostCardDto">
-        <id property="id" column="id" />
-        <result property="dishId" column="dishId" />
-        <result property="dishNumber" column="dishNumber" />
-        <result property="dishName" column="dishName" />
-        <result property="dishUnitName" column="dishUnitName" />
-        <result property="dishSalePrice" column="dishSaleprice" />
-        <result property="standardCost" column="standardCost" />
-        <result property="condimentCost" column="condimentCost" />
-        <collection property="itemList" ofType="com.emenu.common.dto.dish.CostCardItemDto">
-            <id property="id" column="costCardItemId" />
-            <result property="costCardId" column="costCardId" />
-            <result property="itemId" column="itemId" />
-            <result property="itemNumber" column="itemNumber" />
-            <result property="itemName" column="itemName" />
-            <result property="itemTotalStockInQuantity" column="itemTotalStockInQuantity" />
-            <result property="itemTotalStockInMoney" column="itemTotalStockInMoney" />
-            <result property="itemStorageUnitName" column="itemStorageUnitName" />
-            <result property="itemCostCardUnitName" column="itemCostCardUnitName" />
-            <result property="itemStorageToCostCardRatio" column="itemStorageToCostCardRatio" />
-            <result property="netItemQuantity" column="netItemQuantity" />
-            <result property="netItemRatio" column="netItemRatio" />
-            <result property="autoStockOut" column="autoStockOut" />
-        </collection>
-    </resultMap>
+    <delete id = "delCostCardById">
+        DELETE FROM t_cost_card
+        WHERE id = #{id}
+    </delete>
+
+    <update id = "updateCostCard">
+        UPDATE t_cost_card SET cost_card_number=#{costCard.costCardNumber}
+        ,dish_id=#{costCard.dishId},main_cost=#{costCard.mainCost}
+        ,assist_cost=#{costCard.assistCost},delicious_cost=#{costCard.deliciousCost}
+        ,standard_cost=#{costCard.standardCost}
+        WHERE id=#{costCard.id}
+    </update>
 </mapper>
