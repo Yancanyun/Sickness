@@ -118,6 +118,11 @@ public enum ModuleEnums {
     AdminDishTagNew("Admin:DishManagement:Tag:New"),
     AdminDishTagUpdate("Admin:DishManagement:Tag:Update"),
     AdminDishTagDel("Admin:DishManagement:Tag:Del"),
+    //菜品成本卡管理
+    AdminDishCostCard("Admin:DishManagement:CostCard"),
+    AdminDishCostCardList("Admin:DishManagement:CostCard:List"),
+    AdminDishCostCardNew("Admin:DishManagement:CostCard:New"),
+    AdminDishCostCardDel("Admin:DishManagement:CostCard:Del"),
     // 本店特色
     AdminDishFeature("Admin:DishManagement:Feature"),
     AdminDishFeatureList("Admin:DishManagement:Feature:List"),

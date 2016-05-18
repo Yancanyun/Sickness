@@ -23,25 +23,33 @@ public class Tag extends AbstractEntity implements Cloneable ,Comparable<Tag>{
     //主键ID
     @Id
     private Integer id;
+
     //类别名称
     private String name;
+
     //类别的父类别ID
     @Column(name = "p_id")
     private Integer pId;
+
     //权重
     private Integer weight;
+
     //上菜时限
     @Column(name = "time_limit")
     private Integer timeLimit;
+
     //下单之后是否立即打印(0-不立即打印,1-立即打印)
     @Column(name = "print_after_confirm_order")
     private Integer printAfterConfirmOrder;
+
     //分类下的菜同时最多可以做的数量
     @Column(name = "max_print_num")
     private Integer maxPrintNum;
+
     // 创建时间
     @Column(name = "created_time")
     private Date createTime;
+
     // 最后修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;

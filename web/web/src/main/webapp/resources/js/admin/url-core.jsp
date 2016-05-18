@@ -155,7 +155,11 @@
             ['changePackageDishStatus', site.website + 'admin/dish/package/ajax/status/&{id}', 'put', '修改套餐状态'],
             ['getPackageDishTotalMoney', site.staticWebsite + 'mock/admin/dish.json', 'get', '获取套餐总金额'],
             ['delDishInPackage', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除套餐中的菜品'],
-            ['addDishInPackage', site.website + 'admin/dish/package/ajax/add/dish', 'put', '保存套餐中的菜品']
+            ['addDishInPackage', site.website + 'admin/dish/package/ajax/add/dish', 'put', '保存套餐中的菜品'],
+
+             //成本卡管理
+            ['delCostCard', site.website + 'admin/dish/cost/card/del', 'get', '删除成本卡']
+
         ],
         // 权限管理
         AuthorityManagement: [
