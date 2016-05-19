@@ -111,23 +111,33 @@ public class AdminCostCardController extends AbstractController {
     }
 
     /**
-     * 删除成本卡
-     * @param
+     * ajax删除成本卡
+     * @param id
      * @return
      */
     @Module(value = ModuleEnums.AdminDishCostCard, extModule = ModuleEnums.AdminDishCostCardDel)
-    @RequestMapping(value = "/del" ,method = RequestMethod.GET)
-    public void delCostCard(@RequestParam("id")Integer id) throws SSException
+    @RequestMapping(value = "/ajax/del" ,method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxDelCostCard(@RequestParam("id")Integer id) throws SSException
     {
+        JSONObject jsonObject = new JSONObject();
         try {
             if(!Assert.lessOrEqualZero(id))
             {
                 costCardMapper.delCostCardById(id);
+                jsonObject.put("code",0);
+                jsonObject.put("errMsg","成本卡删除成功");
+            }
+            else
+            {
+                jsonObject.put("code",1);
+                jsonObject.put("errMsg","成本卡未删除成功");
             }
         } catch (SSException e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
         }
+        return jsonObject;
     }
 
     /**
