@@ -33,7 +33,7 @@
                         <div class="col-sm-6">
                             <div class="checkbox block">
                                 <label>
-                                    <input class="J_selectAll" type="checkbox" value="0" name="bigTag"> 全部大类
+                                    <input class="J_selectAll" type="checkbox" value="0" name="bigTag"> 全部分类
                                 </label>
                                 <c:forEach var="tag" items="${tagList}">
                                     <label>

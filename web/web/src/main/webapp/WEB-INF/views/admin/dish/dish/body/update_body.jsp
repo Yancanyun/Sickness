@@ -41,7 +41,7 @@
                                 <hr>
                                 <div class="form-group">
                                     <!--联动级数,如果是三级联动,请刷3,并且刷3个select,如果是二级联动同理-->
-                                    <input class="J_linkage" type="hidden" value="2">
+                                    <input class="J_linkage" type="hidden" value="${categoryLayer}">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>选择分类</label>
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_rootClass w180" name="categoryId">
@@ -63,16 +63,16 @@
                                         <div class="col-sm-2 no-padding-right J_bigClassSelect">
                                             <!--如果是编辑页面, 就刷下方的下拉列表-->
                                             <select class="form-control J_bigClass w180" name="">
-                                                <c:forEach var="tag" items="${tagList}">
-                                                    <c:if test="${tag.pId == dishDto.categoryId}">
-                                                        <option value="${tag.id}" <c:if test="${tagPid == dishDto.tagId}">selected="selected"</c:if>>${tag.name}</option>
-                                                    </c:if>
+                                                <c:forEach var="tag" items="${bigTagList}">
+                                                    <%--<c:if test="${tag.pId == dishDto.categoryId}">--%>
+                                                        <option value="${tag.id}" <c:if test="${tag.id == bigTagId}">selected="selected"</c:if>>${tag.name}</option>
+                                                    <%--</c:if>--%>
                                                 </c:forEach>
                                             </select>
                                         </div>
                                         <div class="col-sm-2 no-padding-right J_smallClassSelect">
                                             <select class="form-control J_smallClass w180" name="tagId">
-                                                <c:forEach var="tag" items="${tagList}">
+                                                <c:forEach var="tag" items="${smallTagList}">
                                                     <option value="${tag.id}" <c:if test="${tag.id == dishDto.tagId}">selected="selected"</c:if>>${tag.name}</option>
                                                 </c:forEach>
                                             </select>

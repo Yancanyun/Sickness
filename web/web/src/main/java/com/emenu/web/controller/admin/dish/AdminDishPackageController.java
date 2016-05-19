@@ -173,7 +173,6 @@ public class AdminDishPackageController extends AbstractController {
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewDishPackagePage(Model model) {
         try {
-            // TODO: 根据分类层数改变选择列表数量
             String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
             int categoryLayer = 2;
             if (Assert.isNotNull(categoryLayerStr)) {
@@ -220,7 +219,7 @@ public class AdminDishPackageController extends AbstractController {
     @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newDishPackage(DishDto dishDto,
-                                 List<DishPackage> dishPackageList,
+//                                 List<DishPackage> dishPackageList,
                                  RedirectAttributes redirectAttributes) {
         try {
             // 设置创建者
@@ -229,6 +228,13 @@ public class AdminDishPackageController extends AbstractController {
             dishDto.setUnitId(11);
 
             // 新增套餐
+            // TODO: 在前端写完之前，写死一个套餐内容做测试，前端写完之后要改回来
+            DishPackage dishPackage = new DishPackage();
+            dishPackage.setDishId(43);
+            dishPackage.setDishQuantity(5);
+            List<DishPackage> dishPackageList = new ArrayList<DishPackage>();
+            dishPackageList.add(dishPackage);
+
             dishPackageService.newDishPackage(dishDto, dishPackageList);
 
             // 前往添加套餐图片页
@@ -294,7 +300,7 @@ public class AdminDishPackageController extends AbstractController {
                 throw SSException.get(EmenuException.DishIdIsNotPackage);
             }
 
-            // TODO: 根据分类层数改变选择列表数量
+            // 获取分级层数
             String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
             int categoryLayer = 2;
             if (Assert.isNotNull(categoryLayerStr)) {
@@ -310,10 +316,6 @@ public class AdminDishPackageController extends AbstractController {
             List<Printer> printerList = printerService.listDishTagPrinter();
             model.addAttribute("printerList", printerList);
 
-            // 获取"套餐"大类下的子类
-            List<Tag> childTagList = tagFacadeService.listChildrenByTagId(TagEnum.Package.getId());
-            model.addAttribute("childTagList", childTagList);
-
             // 获取所有菜品列表
             List<Dish> dishList = dishService.listAll();
             for (Dish dish: dishList) {
@@ -328,6 +330,16 @@ public class AdminDishPackageController extends AbstractController {
             // 获取当前套餐的信息及当前套餐内已存在的菜品
             DishPackageDto dishPackageDto = dishPackageService.queryDishPackageById(id);
             model.addAttribute("dishPackageDto", dishPackageDto);
+
+            // 获取分类
+            int smallTagId = dishPackageDto.getDishDto().getTagId();
+            int bigTagId = tagFacadeService.queryById(smallTagId).getpId();
+            List<Tag> bigTagList = tagFacadeService.listChildrenByTagId(dishPackageService.queryDishPackageById(id).getDishDto().getCategoryId());
+            List<Tag> smallTagList = tagFacadeService.listChildrenByTagId(bigTagId);
+            model.addAttribute("smallTagId", smallTagId);
+            model.addAttribute("bigTagId", bigTagId);
+            model.addAttribute("bigTagList", bigTagList);
+            model.addAttribute("smallTagList", smallTagList);
 
             // 计算当前套餐内的已存在菜品的总价格及数量
             BigDecimal totalPrice = new BigDecimal(0);

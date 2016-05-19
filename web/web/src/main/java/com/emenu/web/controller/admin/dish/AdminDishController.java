@@ -244,14 +244,18 @@ public class AdminDishController extends AbstractController {
             }
 
             DishDto dishDto = dishService.queryById(id);
+
             // 分类
-            List<Tag> tagList = tagFacadeService.listAllByTagId(dishDto.getCategoryId());
-            int tagPid = dishDto.getCategoryId();
-            for (Tag tag : tagList) {
-                if (tag.getId().equals(dishDto.getTagId())) {
-                    tagPid = tag.getpId();
-                }
-            }
+            int smallTagId = dishDto.getTagId();
+            int bigTagId = tagFacadeService.queryById(smallTagId).getpId();
+            List<Tag> bigTagList = tagFacadeService.listChildrenByTagId(dishPackageService.queryDishPackageById(id).getDishDto().getCategoryId());
+            List<Tag> smallTagList = tagFacadeService.listChildrenByTagId(bigTagId);
+
+//            for (Tag tag : smallTagList) {
+//                if (tag.getId().equals(dishDto.getTagId())) {
+//                    smallTagId = tag.getpId();
+//                }
+//            }
 
             // 餐段
             Map<Integer, Integer> selectedMealPeriod = new HashMap<Integer, Integer>();
@@ -261,8 +265,10 @@ public class AdminDishController extends AbstractController {
                 }
             }
             model.addAttribute("selectedMealPeriod", selectedMealPeriod);
-            model.addAttribute("tagPid", tagPid);
-            model.addAttribute("tagList", tagList);
+            model.addAttribute("tagPid", smallTagId);
+            model.addAttribute("smallTagList", smallTagList);
+            model.addAttribute("bigTagList", bigTagList);
+            model.addAttribute("bigTagId", bigTagId);
             model.addAttribute("dishDto", dishDto);
             addAttributesToModel(model);
         } catch (SSException e) {

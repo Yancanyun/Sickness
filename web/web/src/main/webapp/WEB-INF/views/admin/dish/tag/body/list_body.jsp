@@ -22,8 +22,8 @@
                         <div class="col-sm-3">
                             <select class="form-control" name="rootId">
                                 <option value="0">全部</option>
-                                <option value="3">菜类</option>
-                                <option value="5">酒水类</option>
+                                <option value="3">菜品</option>
+                                <option value="5">酒水</option>
                                 <option value="4">商品</option>
                                 <option value="6">套餐</option>
                                 <option value="7">其他</option>
@@ -132,8 +132,8 @@
                         </c:forEach>
                     </ul>
                     <select class="form-control hidden J_bigClassifyHidden" disabled="disabled" name="pId">
-                        <option value="3">菜类</option>
-                        <option value="5">酒水类</option>
+                        <option value="3">菜品</option>
+                        <option value="5">酒水</option>
                         <option value="4">商品</option>
                         <option value="6">套餐</option>
                         <option value="7">其他</option>

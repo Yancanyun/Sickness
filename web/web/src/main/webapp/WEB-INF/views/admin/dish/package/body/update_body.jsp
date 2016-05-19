@@ -37,20 +37,35 @@
                                 <h4>编辑套餐信息</h4>
                                 <hr>
                                 <div class="form-group">
+                                    <!--联动级数,如果是三级联动,请刷3,并且刷3个select,如果是二级联动同理-->
+                                    <input class="J_linkage" type="hidden" value="${categoryLayer}">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>选择分类</label>
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_rootClass w180" name="categoryId">
+                                            <option value="-1">请选择</option>
                                             <option value="6" selected="selected">套餐</option>
                                         </select>
                                     </div>
-                                    <div class="col-sm-2 no-padding-right">
-                                        <select class="form-control J_rootClass w180" name="tagId">
-                                            <option value="-1" selected="selected">请选择</option>
-                                            <c:forEach var="childTag" items="${childTagList}">
-                                                <option value="${childTag.id}" <c:if test="${dishPackageDto.dishDto.tagId == childTag.id}">selected="selected"</c:if>> ${childTag.name}</option>
+                                    <div class="col-sm-2 no-padding-right J_bigClassSelect">
+                                        <!--如果是编辑页面, 就刷下方的下拉列表-->
+                                        <select class="form-control J_bigClass w180" name="tagId">
+                                            <option value="-1">请选择</option>
+                                            <c:forEach var="bigTag" items="${bigTagList}">
+                                                <option value="${bigTag.id}" <c:if test="${bigTagId == bigTag.id}">selected="selected"</c:if>> ${bigTag.name}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
+                                    <c:if test="${categoryLayer == 3}">
+                                        <div class="col-sm-2 no-padding-right J_smallClassSelect">
+                                            <!--&lt;!&ndash;如果是编辑页面, 就刷下方的下拉列表&ndash;&gt;-->
+                                            <select class="form-control J_smallClass w180" name="tagId">
+                                                <option value="-1">请选择</option>
+                                                <c:forEach var="smallTag" items="${smallTagList}">
+                                                    <option value="${smallTag.id}" <c:if test="${smallTagId == smallTag.id}">selected="selected"</c:if>> ${smallTag.name}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </c:if>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>套餐名称</label>

@@ -16,7 +16,7 @@
     <div class="col-sm-12 margin-bottom-30">
         <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish/package/new" method="POST">
             <!--菜品id-->
-            <input class="J_id" type="hidden" name="id" value="112233">
+            <input class="J_id" type="hidden" name="id" value="">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active">
                     <a class="tab" data-tabpanel="#single" role="tab" data-toggle="tab">添加套餐</a>
@@ -37,20 +37,29 @@
                                 <h4>添加套餐信息</h4>
                                 <hr>
                                 <div class="form-group">
+                                    <!--联动级数,如果是三级联动,请刷3,并且刷3个select,如果是二级联动同理-->
+                                    <input class="J_linkage" type="hidden" value="${categoryLayer}">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>选择分类</label>
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_rootClass w180" name="categoryId">
-                                            <option value="6" selected="selected">套餐</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-2 no-padding-right">
-                                        <select class="form-control J_rootClass w180" name="tagId">
                                             <option value="-1" selected="selected">请选择</option>
-                                            <c:forEach var="childTag" items="${childTagList}">
-                                                <option value="${childTag.id}">${childTag.name}</option>
-                                            </c:forEach>
+                                            <option value="6">套餐</option>
                                         </select>
                                     </div>
+                                    <div class="col-sm-2 no-padding-right J_bigClassSelect">
+                                        <!--如果是编辑页面, 就刷下方的下拉列表-->
+                                        <select class="form-control J_bigClass w180" name="tagId">
+                                            <option value="-1" selected="selected">请选择</option>
+                                        </select>
+                                    </div>
+                                    <c:if test="${categoryLayer == 3}">
+                                    <div class="col-sm-2 no-padding-right J_smallClassSelect">
+                                        <!--&lt;!&ndash;如果是编辑页面, 就刷下方的下拉列表&ndash;&gt;-->
+                                        <select class="form-control J_smallClass w180" name="tagId">
+                                            <option value="-1" selected="selected">请选择</option>
+                                        </select>
+                                    </div>
+                                    </c:if>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>套餐名称</label>
