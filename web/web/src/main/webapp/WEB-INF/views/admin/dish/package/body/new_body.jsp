@@ -98,8 +98,8 @@
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>促销方式</label>
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_promotionType J_select w180" name="saleType">
-                                            <option value="1">无促销</option>
-                                            <option value="2" selected="selected" data-name="discount" data-value="3.5" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
+                                            <option value="1" selected="selected">无促销</option>
+                                            <option value="2" data-name="discount" data-value="3.5" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
                                             <option value="3" data-name="salePrice" data-value="100" data-valid-rule="isFloat" data-valid-tip="请输入售价|售价不能为空，请重新输入">售价</option>
                                         </select>
                                     </div>
@@ -115,6 +115,8 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>选择菜品</label>
                                     <div class="col-sm-6 clearfix">
+                                        <input class="J_dishIdInp" type="hidden" value="" name="dishId">
+                                        <input class="J_dishQuantityInp" type="hidden" value="" name="dishQuantity">
                                         <div class="taste-list J_dishList">
                                         </div>
                                         <a href="javascript:;" class="J_addDish btn btn-success"><i class="fa fa-plus">&nbsp;</i>添加菜品</a>
@@ -132,7 +134,7 @@
                                         <div class="checkbox block">
                                             <c:forEach var="mealPeriod" items="${mealPeriodList}">
                                                 <label>
-                                                    <input class="J_selectAll" type="checkbox" value="${mealPeriod.id}" name="period" checked="checked"> ${mealPeriod.name}
+                                                    <input class="J_selectAll" type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList" checked="checked"> ${mealPeriod.name}
                                                 </label>
                                             </c:forEach>
                                         </div>

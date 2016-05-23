@@ -10,7 +10,7 @@
         </ol>
         <h2>菜品管理-套餐列表</h2>
         <c:if test="${!empty msg}">
-            <div class="alert alert-danger J_tip">${msg}</div>
+            <div class="alert alert-success J_tip">${msg}</div>
         </c:if>
     </div>
     <div class="col-sm-12">

@@ -219,21 +219,40 @@ public class AdminDishPackageController extends AbstractController {
     @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newDishPackage(DishDto dishDto,
-//                                 List<DishPackage> dishPackageList,
+                                 @RequestParam("dishId") String dishId,
+                                 @RequestParam("dishQuantity") String dishQuantity,
                                  RedirectAttributes redirectAttributes) {
         try {
+            // 把用String按逗号分割成List<Integer>
+            List<Integer> dishIdList = new ArrayList<Integer>();
+            String[] dishIdStringList = dishId.split(",");
+            for (String dishIdString : dishIdStringList) {
+                dishIdList.add(Integer.valueOf(dishIdString));
+            }
+            List<Integer> dishQuantityList = new ArrayList<Integer>();
+            String[] dishQuantityStringList = dishQuantity.split(",");
+            for (String dishQuantityString : dishQuantityStringList) {
+                dishQuantityList.add(Integer.valueOf(dishQuantityString));
+            }
+
+            // 若dishIdList和dishQuantityList大小不一致，报系统内部异常
+            if (dishIdList.size() != dishQuantityList.size()) {
+                throw SSException.get(EmenuException.SystemException);
+            }
+
+            // 根据dishIdList和dishQuantityList新增套餐
+            List<DishPackage> dishPackageList = new ArrayList<DishPackage>();
+            for (int i = 0; i < dishIdList.size(); i++) {
+                DishPackage dishPackage = new DishPackage();
+                dishPackage.setDishId(dishIdList.get(i));
+                dishPackage.setDishQuantity(dishQuantityList.get(i));
+                dishPackageList.add(dishPackage);
+            }
+
             // 设置创建者
             dishDto.setCreatedPartyId(getPartyId());
             // 设置单位ID为“份”
             dishDto.setUnitId(11);
-
-            // 新增套餐
-            // TODO: 在前端写完之前，写死一个套餐内容做测试，前端写完之后要改回来
-            DishPackage dishPackage = new DishPackage();
-            dishPackage.setDishId(43);
-            dishPackage.setDishQuantity(5);
-            List<DishPackage> dishPackageList = new ArrayList<DishPackage>();
-            dishPackageList.add(dishPackage);
 
             dishPackageService.newDishPackage(dishDto, dishPackageList);
 
@@ -378,9 +397,36 @@ public class AdminDishPackageController extends AbstractController {
     @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String updateDishPackagePage(DishDto dishDto,
-                                        List<DishPackage> dishPackageList,
+                                        @RequestParam("dishId") String dishId,
+                                        @RequestParam("dishQuantity") String dishQuantity,
                                         RedirectAttributes redirectAttributes) {
         try {
+            // 把用String按逗号分割成List<Integer>
+            List<Integer> dishIdList = new ArrayList<Integer>();
+            String[] dishIdStringList = dishId.split(",");
+            for (String dishIdString : dishIdStringList) {
+                dishIdList.add(Integer.valueOf(dishIdString));
+            }
+            List<Integer> dishQuantityList = new ArrayList<Integer>();
+            String[] dishQuantityStringList = dishQuantity.split(",");
+            for (String dishQuantityString : dishQuantityStringList) {
+                dishQuantityList.add(Integer.valueOf(dishQuantityString));
+            }
+
+            // 若dishIdList和dishQuantityList大小不一致，报系统内部异常
+            if (dishIdList.size() != dishQuantityList.size()) {
+                throw SSException.get(EmenuException.SystemException);
+            }
+
+            // 根据dishIdList和dishQuantityList新增套餐
+            List<DishPackage> dishPackageList = new ArrayList<DishPackage>();
+            for (int i = 0; i < dishIdList.size(); i++) {
+                DishPackage dishPackage = new DishPackage();
+                dishPackage.setDishId(dishIdList.get(i));
+                dishPackage.setDishQuantity(dishQuantityList.get(i));
+                dishPackageList.add(dishPackage);
+            }
+
             // 设置编辑者
             dishDto.setCreatedPartyId(getPartyId());
             // 设置单位ID为“份”

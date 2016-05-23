@@ -24,7 +24,7 @@
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
-                            <th>菜品总分类</th>
+                            <%--<th>菜品总分类</th>--%>
                             <%--<th>菜品小类</th>--%>
                             <th>编号</th>
                             <th>助记码</th>
@@ -42,7 +42,7 @@
                         <tbody>
                         <c:forEach var="dishTagDto" items="${dishTagDtoList}">
                             <tr data-dish-id="${dishTagDto.id}">
-                                <td>${dishTagDto.categoryNameStr}</td>
+                                <%--<td>${dishTagDto.categoryNameStr}</td>--%>
                                 <%--<td>${dishTagDto.tagNameStr}</td>--%>
                                 <td>${dishTagDto.dishNumber}</td>
                                 <td>${dishTagDto.dishAssistantCode}</td>

@@ -121,9 +121,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label"><span class="requires">*</span>选择菜品</label>
                                     <div class="col-sm-6 clearfix">
+                                        <input class="J_dishIdInp" type="hidden" value="" name="dishId">
+                                        <input class="J_dishQuantityInp" type="hidden" value="" name="dishQuantity">
                                         <div class="taste-list J_dishList">
                                             <c:forEach var="childDishDto" items="${dishPackageDto.childDishDtoList}">
-                                                <div data-result-unit="${childDishDto.unitName}" data-result-price="${childDishDto.price}" data-result-name="[${childDishDto.assistantCode}] ${childDishDto.name}" data-result-id="${childDishDto.id}" data-result-quantity="${childDishDto.dishPackage.dishQuantity}" class="select-tag">[${childDishDto.assistantCode}] ${childDishDto.name} ${childDishDto.dishPackage.dishQuantity}${childDishDto.unitName}<i class="fa fa-times J_delSelectTag"></i><input type="hidden" value="${childDishDto.dishPackage.dishId}" name="dishId"></div>
+                                                <div data-result-unit="${childDishDto.unitName}" data-result-price="${childDishDto.price}" data-result-name="[${childDishDto.assistantCode}] ${childDishDto.name}" data-result-id="${childDishDto.id}" data-result-quantity="${childDishDto.dishPackage.dishQuantity}" class="select-tag">[${childDishDto.assistantCode}] ${childDishDto.name} ${childDishDto.dishPackage.dishQuantity}${childDishDto.unitName}<i class="fa fa-times J_delSelectTag"></i>
+                                                    <input type="hidden" value="${childDishDto.dishPackage.dishId}" name="dishId">
+                                                    <input type="hidden" value="${childDishDto.dishPackage.dishQuantity}" name="dishQuantity">
+                                                </div>
                                             </c:forEach>
                                         </div>
                                         <a href="javascript:;" class="J_addDish btn btn-success"><i class="fa fa-plus">&nbsp;</i>添加菜品</a>
@@ -141,7 +146,7 @@
                                         <div class="checkbox block">
                                             <c:forEach var="mealPeriod" items="${mealPeriodList}">
                                                 <label>
-                                                    <input class="J_selectAll" type="checkbox" value="${mealPeriod.id}" name="period" <c:forEach var="nowMealPeriod" items="${dishPackageDto.dishDto.mealPeriodList}"><c:if test="${nowMealPeriod.mealPeriodId == mealPeriod.id}">checked="checked"</c:if></c:forEach>> ${mealPeriod.name}
+                                                    <input class="J_selectAll" type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList" <c:forEach var="nowMealPeriod" items="${dishPackageDto.dishDto.mealPeriodList}"><c:if test="${nowMealPeriod.mealPeriodId == mealPeriod.id}">checked="checked"</c:if></c:forEach>> ${mealPeriod.name}
                                                 </label>
                                             </c:forEach>
                                         </div>
