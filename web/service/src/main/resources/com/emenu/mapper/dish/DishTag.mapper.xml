@@ -29,9 +29,12 @@
             unit.`name` AS dishUnitName,
             dish.`price` AS dishPrice,
             dish.`sale_price` AS dishSalePrice,
-            dish.`status` AS dishStatus
+            dish.`status` AS dishStatus,
+            dish.`category_id` AS dishCategoryId,
+            dish.`discount` AS dishDiscount
         FROM `t_dish_tag` dishTag
         LEFT JOIN `t_dish` dish ON dishTag.`dish_id` = dish.`id`
         LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        WHERE dishTag.`tag_id` = #{tagId}
     </select>
 </mapper>

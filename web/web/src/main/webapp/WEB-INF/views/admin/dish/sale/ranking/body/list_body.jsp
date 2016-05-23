@@ -1,14 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
+
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li><a href="${webiste}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">菜品管理</a></li>
-            <li class="active">本店特色</li>
+            <li class="active">销量排行</li>
         </ol>
-        <h2>菜品管理-本店特色</h2>
+        <h2>菜品管理-销量排行</h2>
     </div>
     <div class="col-sm-12">
         <c:if test="${!empty msg}">
@@ -19,7 +21,7 @@
                 <h4>列表</h4>
             </div>
             <div class="panel-body">
-                <a href="${website}admin/dish/feature/new" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加菜品</a>
+                <a href="${website}admin/dish/sale/ranking/new" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加菜品</a>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -43,7 +45,7 @@
                         <c:forEach var="dishTagDto" items="${dishTagDtoList}">
                             <tr data-dish-id="${dishTagDto.id}">
                                 <td>${dishTagDto.categoryNameStr}</td>
-                                <%--<td>${dishTagDto.tagNameStr}</td>--%>
+                                    <%--<td>${dishTagDto.tagNameStr}</td>--%>
                                 <td>${dishTagDto.dishNumber}</td>
                                 <td>${dishTagDto.dishAssistantCode}</td>
                                 <td>${dishTagDto.dishName}</td>

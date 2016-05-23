@@ -21,16 +21,16 @@
                     <a class="btn btn-success margin-bottom-15 J_addBigTag" href="javascript:;"><i
                             class="fa fa-plus"></i>&nbsp;添加库存分类</a>
                     <ul class="classify J_classify">
-                        <c:forEach var="dto" items="${tagDtoList}">
-                            <li class="clearfix" data-big-tag-id="${dto.tag.id}" data-root-tag-id="2" data-root-tag-name="顶级分类"
-                                data-big-tag-name="${dto.tag.name}">
+                        <c:forEach var="dishTagDto" items="${tagDtoList}">
+                            <li class="clearfix" data-big-tag-id="${dishTagDto.tag.id}" data-root-tag-id="2" data-root-tag-name="顶级分类"
+                                data-big-tag-name="${dishTagDto.tag.name}">
                                 <div class="J_inputGroup">
-                                    <input type="hidden" name="pId" value="${dto.tag.pId}"/>
-                                    <input type="hidden" name="id" value="${dto.tag.id}"/>
-                                    <input type="hidden" name="name" value="${dto.tag.name}"/>
+                                    <input type="hidden" name="pId" value="${dishTagDto.tag.pId}"/>
+                                    <input type="hidden" name="id" value="${dishTagDto.tag.id}"/>
+                                    <input type="hidden" name="name" value="${dishTagDto.tag.name}"/>
                                 </div>
                                 <span class="root-tag">[顶级分类]</span>
-                                <span class="big-tag">${dto.tag.name}</span>
+                                <span class="big-tag">${dishTagDto.tag.name}</span>
                                 <a href="javascript:;" class="J_foldToggle">展开 <<</a>
                                 <a href="javascript:;" class="label-info pull-right oper J_delBigTag"><i
                                         class="fa fa-times"></i>&nbsp;删除大类</a>
@@ -38,14 +38,14 @@
                                         class="fa fa-pencil"></i>&nbsp;编辑大类</a>
                                 <a href="javascript:;" class="label-info pull-right oper J_addSmallTag"><i
                                         class="fa fa-plus"></i>&nbsp;添加小类</a>
-                                <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="${dto.tag.id}"
-                                    data-big-tag-name="${dto.tag.name}">
-                                    <c:forEach var="dto" items="${dto.childTagList}">
-                                        <li class="clearfix" data-small-tag-name="${dto.tag.name}" data-small-tag-id="${dto.tag.id}">
-                                            <input type="hidden" name="pId" value="${dto.tag.pId}"/>
-                                            <input type="hidden" name="id" value="${dto.tag.id}"/>
-                                            <input type="hidden" name="name" value="${dto.tag.name}"/>
-                                            <span class="small-tag">${dto.tag.name}</span>
+                                <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="${dishTagDto.tag.id}"
+                                    data-big-tag-name="${dishTagDto.tag.name}">
+                                    <c:forEach var="dto" items="${dishTagDto.childTagList}">
+                                        <li class="clearfix" data-small-tag-name="${dishTagDto.tag.name}" data-small-tag-id="${dishTagDto.tag.id}">
+                                            <input type="hidden" name="pId" value="${dishTagDto.tag.pId}"/>
+                                            <input type="hidden" name="id" value="${dishTagDto.tag.id}"/>
+                                            <input type="hidden" name="name" value="${dishTagDto.tag.name}"/>
+                                            <span class="small-tag">${dishTagDto.tag.name}</span>
                                             <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i
                                                     class="fa fa-times"></i>&nbsp;删除小类</a>
                                             <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i

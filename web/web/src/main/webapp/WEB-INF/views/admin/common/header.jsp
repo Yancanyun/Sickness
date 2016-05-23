@@ -39,10 +39,12 @@
                 <li><a class="J_menu" href="${website}admin/dish/unit">菜品单位管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/tag">菜品分类管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/taste">菜品口味管理</a></li>
-                <li><a class="J_menu" href="${website}admin/dish">菜品管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/cost/card">菜品成本卡管理</a></li>
+                <li><a class="J_menu" href="${website}admin/dish">菜品管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/package">套餐管理</a></li>
                 <li><a class="J_menu" href="${website}admin/dish/feature">本店特色</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/today/cheap">今日特价</a></li>
+                <li><a class="J_menu" href="${website}admin/dish/sale/ranking">销量排行</a></li>
             </ul>
         </li>
         <li>

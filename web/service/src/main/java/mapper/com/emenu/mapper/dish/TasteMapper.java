@@ -16,12 +16,19 @@ import java.util.List;
 public interface TasteMapper {
 
     /**
-     * 获取所有数据
+     * 分页获取数据
      * @return
      * @throws SSException
      */
-    public List<Taste> listAll(@Param("offset") int offset,
-                               @Param("pageSize") int pageSize) throws Exception;
+    public List<Taste> listByPage(@Param("offset") int offset,
+                                  @Param("pageSize") int pageSize) throws Exception;
+
+    /**
+     * 获取全部数据
+     * @return
+     * @throws SSException
+     */
+    public List<Taste> listAll() throws Exception;
 
     /**
      * 计算口味总数

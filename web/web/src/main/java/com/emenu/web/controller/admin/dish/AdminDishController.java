@@ -22,7 +22,6 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.web.spring.fileupload.PandaworkMultipartFile;
-import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -408,10 +407,14 @@ public class AdminDishController extends AbstractController {
         // 获取打印机
         List<Printer> printerList = printerService.listDishTagPrinter();
 
+        // 获取口味
+        List<Taste> tasteList = tasteService.listAll();
+
         model.addAttribute("categoryLayer", categoryLayer);
         model.addAttribute("weightUnitList", weightUnitList);
         model.addAttribute("quantityUnitList", quantityUnitList);
         model.addAttribute("mealPeriodList", mealPeriodList);
         model.addAttribute("printerList", printerList);
+        model.addAttribute("tasteList", tasteList);
     }
 }

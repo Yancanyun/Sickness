@@ -1,14 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">菜品管理</a></li>
-            <li class="active">本店特色</li>
+            <li class="active">今日特价</li>
         </ol>
-        <h2>菜品管理-本店特色</h2>
+        <h2>菜品管理-今日特价</h2>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -46,9 +47,7 @@
                                 <th>折扣</th>
                                 <th>售价</th>
                                 <th>状态</th>
-                                <%--<th>上月销量</th>--%>
-                                <%--<th>总销量</th>--%>
-                                <th>本店特色</th>
+                                <th>今日特价</th>
                             </tr>
                             </thead>
                             <tbody id="dataRender">

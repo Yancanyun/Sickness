@@ -1,6 +1,7 @@
 package com.emenu.common.dto.dish;
 
 import com.emenu.common.enums.dish.DishStatusEnums;
+import com.emenu.common.enums.dish.TagEnum;
 
 import java.math.BigDecimal;
 
@@ -42,8 +43,20 @@ public class DishTagDto {
     // 菜品状态
     private Integer dishStatus;
 
-    // 妆品状态
+    // 菜品折扣
+    private Float dishDiscount;
+
+    // 菜品状态
     private String dishStatusStr;
+
+    // 菜品小类ID
+    private Integer dishCategoryId;
+
+    // 总分类名称
+    private String categoryNameStr;
+
+    // 菜品小类名称
+    private String tagNameStr;
 
     public Integer getId() {
         return id;
@@ -127,11 +140,43 @@ public class DishTagDto {
         this.dishStatusStr = statusEnums == null ? "" : statusEnums.getStatus();
     }
 
+    public Float getDishDiscount() {
+        return dishDiscount;
+    }
+
+    public void setDishDiscount(Float dishDiscount) {
+        this.dishDiscount = dishDiscount;
+    }
+
     public String getDishStatusStr() {
         return dishStatusStr;
     }
 
     public void setDishStatusStr(String dishStatusStr) {
         this.dishStatusStr = dishStatusStr;
+    }
+
+    public Integer getDishCategoryId() {
+        return dishCategoryId;
+    }
+
+    public void setDishCategoryId(Integer dishCategoryId) {
+        this.dishCategoryId = dishCategoryId;
+    }
+
+    public String getCategoryNameStr() {
+        return categoryNameStr;
+    }
+
+    public void setCategoryNameStr(String categoryNameStr) {
+        this.categoryNameStr = categoryNameStr;
+    }
+
+    public String getTagNameStr() {
+        return tagNameStr;
+    }
+
+    public void setTagNameStr(String tagNameStr) {
+        this.tagNameStr = tagNameStr;
     }
 }

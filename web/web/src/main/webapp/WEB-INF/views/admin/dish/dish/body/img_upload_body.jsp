@@ -53,7 +53,7 @@
     </div>
     <div class="col-sm-6 col-sm-offset-3 margin-bottom-20">
         <div class="btn-toolbar">
-            <button class="btn-default btn" type="button" onclick="history.go(-1);"><i class="fa fa-undo"></i>&nbsp;返回</button>
+            <button class="btn-default btn" type="button" onclick="location='${website}admin/dish'"><i class="fa fa-undo"></i>&nbsp;返回</button>
         </div>
     </div>
 </div>

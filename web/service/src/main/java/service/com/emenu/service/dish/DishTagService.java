@@ -1,5 +1,6 @@
 package com.emenu.service.dish;
 
+import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishTag;

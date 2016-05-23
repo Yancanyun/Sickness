@@ -152,6 +152,7 @@ public class TagFacadeServiceImpl implements TagFacadeService {
         DishTagPrinter dishTagPrinter = new DishTagPrinter();
         dishTagPrinter.setDishId(tag.getId());
         dishTagPrinter.setPrinterId(printerId);
+        dishTagPrinter.setType(PrinterDishEnum.TagPrinter.getId());
         dishTagPrinterService.updatePrinterDish(dishTagPrinter);
     }
 

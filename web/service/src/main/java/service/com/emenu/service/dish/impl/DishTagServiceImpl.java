@@ -7,8 +7,10 @@ import com.emenu.common.entity.dish.DishTag;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishTagMapper;
+import com.emenu.service.dish.DishPackageService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTagService;
+import com.emenu.service.dish.tag.TagFacadeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -33,6 +35,12 @@ public class DishTagServiceImpl implements DishTagService {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private DishPackageService dishPackageService;
+
+    @Autowired
+    private TagFacadeService tagFacadeService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -120,19 +128,25 @@ public class DishTagServiceImpl implements DishTagService {
 
     @Override
     public List<DishTagDto> listDtoByTagId(int tagId) throws SSException {
-        List<DishTagDto> list = Collections.emptyList();
+        List<DishTagDto> dishTagDtoList = Collections.emptyList();
         try {
-            list = dishTagMapper.listDtoByTagId(tagId);
+            dishTagDtoList = dishTagMapper.listDtoByTagId(tagId);
+            // 把菜品总分类及小类名称加进去
+            for (DishTagDto dishTagDto: dishTagDtoList) {
+                dishTagDto.setCategoryNameStr(tagFacadeService.queryById(dishTagDto.getDishCategoryId()).getName());
+                dishTagDto.setTagNameStr(tagFacadeService.queryById(dishTagDto.getTagId()).getName());
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishTagQueryFiled, e);
         }
-        return list;
+
+        return dishTagDtoList;
     }
 
     @Override
     public List<Dish> listNotSelectedByTagId(int tagId, List<Integer> searchTagIdList) throws SSException {
-        List<Dish> dishList = Collections.emptyList();
+        List<Dish> dishList = new ArrayList<Dish>();
         try {
             // 先查询分类下已有的菜品
             List<Integer> selectedDishIdList = dishTagMapper.listDishIdByTagId(tagId);
@@ -140,7 +154,13 @@ public class DishTagServiceImpl implements DishTagService {
             // 根据搜索分类查询菜品
             DishSearchDto searchDto = new DishSearchDto();
             searchDto.setTagIdList(searchTagIdList);
-            dishList = dishService.listBySearchDto(searchDto);
+            dishList.addAll(dishService.listBySearchDto(searchDto));
+            dishList.addAll(dishPackageService.listBySearchDto(searchDto)); // 套餐
+            // 把菜品总分类及小类名称加进去
+            for (Dish dish: dishList) {
+                dish.setCategoryNameStr(tagFacadeService.queryById(dish.getCategoryId()).getName());
+                dish.setTagNameStr(tagFacadeService.queryById(dish.getTagId()).getName());
+            }
 
             // 去掉已有的菜品
             Map<Integer, Boolean> dishIdMap = new HashMap<Integer, Boolean>();

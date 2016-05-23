@@ -16,7 +16,6 @@ import java.util.List;
  * @time: 2015/11/17 16:38
  **/
 public class DishDto {
-
     // 主键
     private Integer id;
 

@@ -15,7 +15,6 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,44 +28,42 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * AdminFeatureController
- *
- * @author: zhangteng
- * @time: 2015/12/3 14:31
- **/
+ * AdminTodayCheapController
+ * 今日特价
+ * @author: yangch
+ * @time: 2016/5/22 16:01
+ */
 @Module(ModuleEnums.AdminDishManagement)
 @Controller
-@RequestMapping(URLConstants.ADMIN_DISH_FEATURE_URL)
-public class AdminDishFeatureController extends AbstractController {
-
+@RequestMapping(URLConstants.ADMIN_DISH_TODAY_CHEAP_URL)
+public class AdminTodayCheapController extends AbstractController {
     /**
      * 去列表页
-     *
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureList)
+    @Module(value = ModuleEnums.AdminDishTodayCheap, extModule = ModuleEnums.AdminDishTodayCheapList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model) {
+    public String toTodayCheapList(Model model) {
         try {
-            List<DishTagDto> dishTagDtoList = dishTagService.listDtoByTagId(TagEnum.Feature.getId());
+            List<DishTagDto> dishTagDtoList = dishTagService.listDtoByTagId(TagEnum.TodayCheap.getId());
             model.addAttribute("dishTagDtoList", dishTagDtoList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/dish/feature/list_home";
+        return "admin/dish/today/cheap/list_home";
     }
 
     /**
      * 去添加页
-     *
+     * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureNew)
+    @Module(value = ModuleEnums.AdminDishTodayCheap, extModule = ModuleEnums.AdminDishTodayCheapNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
-    public String toNew(Model model) {
+    public String toTodayCheapNew(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
@@ -79,16 +76,15 @@ public class AdminDishFeatureController extends AbstractController {
             return ADMIN_SYS_ERR_PAGE;
         }
         model.addAttribute("tagList", tagList);
-        return "admin/dish/feature/new_home";
+        return "admin/dish/today/cheap/new_home";
     }
 
     /**
-     * ajax获取没有选择的菜品
-     *
+     * Ajax 获取没有选择的菜品
      * @param tagIdList
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature)
+    @Module(value = ModuleEnums.AdminDishTodayCheap)
     @RequestMapping(value = "dish/ajax/list", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxDishList(Integer[] tagIdList) {
@@ -98,7 +94,7 @@ public class AdminDishFeatureController extends AbstractController {
             searchTagIdList = Arrays.asList(tagIdList);
         }
         try {
-            dishList = dishTagService.listNotSelectedByTagId(TagEnum.Feature.getId(), searchTagIdList);
+            dishList = dishTagService.listNotSelectedByTagId(TagEnum.TodayCheap.getId(), searchTagIdList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -130,17 +126,16 @@ public class AdminDishFeatureController extends AbstractController {
     }
 
     /**
-     * ajax添加
-     *
-     * @param dishIds
+     * Ajax 添加
+     * @param dishId
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureNew)
+    @Module(value = ModuleEnums.AdminDishTodayCheap, extModule = ModuleEnums.AdminDishTodayCheapNew)
     @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
-    public JSON ajaxNew(Integer[] dishIds) {
+    public JSON ajaxNewTodayCheap(Integer[] dishId) {
         try {
-            dishTagService.newByTagId(TagEnum.Feature.getId(), dishIds);
+            dishTagService.newByTagId(TagEnum.TodayCheap.getId(), dishId);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -150,15 +145,14 @@ public class AdminDishFeatureController extends AbstractController {
     }
 
     /**
-     * ajax删除
-     *
+     * Ajax 删除
      * @param id
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureDel)
+    @Module(value = ModuleEnums.AdminDishTodayCheap, extModule = ModuleEnums.AdminDishTodayCheapDel)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSON ajaxDel(@PathVariable("id") Integer id) {
+    public JSON ajaxDelTodayCheap(@PathVariable("id") Integer id) {
         try {
             dishTagService.delById(id);
         } catch (SSException e) {

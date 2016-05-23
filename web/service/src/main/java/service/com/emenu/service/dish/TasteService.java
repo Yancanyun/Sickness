@@ -44,11 +44,18 @@ public interface TasteService {
     public Taste queryById(int id) throws SSException;
 
     /**
-     * 获取所有口味
+     * 分页获取口味
      * @return
      * @throws SSException
      */
-    public List<Taste> listAll(int curPage, int pageSize) throws SSException;
+    public List<Taste> listByPage(int curPage, int pageSize) throws SSException;
+
+    /**
+     * 获取全部口味
+     * @return
+     * @throws SSException
+     */
+    public List<Taste> listAll() throws SSException;
 
     /**
      * 获取所有口味数量

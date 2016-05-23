@@ -102,9 +102,18 @@ public class Dish extends AbstractEntity {
     // 单位名称
     @Transient
     private String unitName;
+
     // 状态
     @Transient
     private String statusStr;
+
+    // 总分类名称
+    @Transient
+    private String categoryNameStr;
+
+    // 菜品小类名称
+    @Transient
+    private String tagNameStr;
 
     public Integer getId() {
         return id;
@@ -291,6 +300,22 @@ public class Dish extends AbstractEntity {
 
     public void setStatusStr(String statusStr) {
         this.statusStr = statusStr;
+    }
+
+    public String getCategoryNameStr() {
+        return categoryNameStr;
+    }
+
+    public void setCategoryNameStr(String categoryNameStr) {
+        this.categoryNameStr = categoryNameStr;
+    }
+
+    public String getTagNameStr() {
+        return tagNameStr;
+    }
+
+    public void setTagNameStr(String tagNameStr) {
+        this.tagNameStr = tagNameStr;
     }
 
     /**

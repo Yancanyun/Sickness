@@ -243,12 +243,12 @@
                             <div class="col-sm-6 col-sm-offset-3">
                                 <div class="btn-toolbar">
                                     <button class="btn-primary btn J_submitBtn" type="submit" data-btn-type="loading" data-btn-loading-text="正在保存，请稍后">
-                                        <i class="fa fa-arrow-right"></i>
-                                        &nbsp;下一步
+                                        <i class="fa fa-save"></i>
+                                        &nbsp;保存
                                     </button>
-                                    <button class="btn-default btn" type="reset"><i class="fa fa-undo"></i>&nbsp;重置</button>
+                                    <%--<button class="btn-default btn" type="reset"><i class="fa fa-undo"></i>&nbsp;重置</button>--%>
                                     <!--如果是编辑页面,请刷下面的按钮-->
-                                    <!--<button class="btn-default btn" type="button"><i class="fa fa-undo"></i>&nbsp;返回</button>-->
+                                    <button class="btn-default btn" type="button" onclick="history.go(-1);"><i class="fa fa-undo"></i>&nbsp;返回</button>
                                 </div>
                             </div>
                         </div>

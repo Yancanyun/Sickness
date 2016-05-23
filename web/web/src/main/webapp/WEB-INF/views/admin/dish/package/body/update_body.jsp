@@ -14,7 +14,12 @@
         </c:if>
     </div>
     <div class="col-sm-12 margin-bottom-30">
-        <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish/package/new" method="POST">
+        <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish/package/update/${dishPackageDto.dishDto.id}" method="POST">
+            <!-- change: 加input——用于编辑页初始化时显示已有菜品的价格和数量,后台需套 -->
+            <div class="form-group J_initialNumberAndCount">
+                <input type="hidden" name="initalDishPrice" value="${totalPrice}">
+                <input type="hidden" name="initalDishQuantity" value="${totalQuantity}">
+            </div>
             <!--菜品id-->
             <input class="J_id" type="hidden" name="id" value="${dishPackageDto.dishDto.id}">
             <ul class="nav nav-tabs" role="tablist">
@@ -100,8 +105,8 @@
                                     <div class="col-sm-2 no-padding-right">
                                         <select class="form-control J_promotionType J_select w180" name="saleType">
                                             <option value="1" <c:if test="${dishPackageDto.dishDto.saleType == 1}">selected="selected"</c:if>>无促销</option>
-                                            <option value="2" <c:if test="${dishPackageDto.dishDto.saleType == 1}">selected="selected"</c:if> data-name="discount" data-value="${dishPackageDto.dishDto.discount}" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
-                                            <option value="3" <c:if test="${dishPackageDto.dishDto.saleType == 1}">selected="selected"</c:if> data-name="salePrice" data-value="${dishPackageDto.dishDto.salePrice}" data-valid-rule="isFloat" data-valid-tip="请输入售价|售价不能为空，请重新输入">售价</option>
+                                            <option value="2" <c:if test="${dishPackageDto.dishDto.saleType == 2}">selected="selected"</c:if> data-name="discount" data-value="${dishPackageDto.dishDto.discount}" data-valid-rule="scale(0,10)" data-valid-tip="请输入大于0小于10的整数或小数，如6或6.5|折扣超范围，请重新输入">折扣</option>
+                                            <option value="3" <c:if test="${dishPackageDto.dishDto.saleType == 3}">selected="selected"</c:if> data-name="salePrice" data-value="${dishPackageDto.dishDto.salePrice}" data-valid-rule="isFloat" data-valid-tip="请输入售价|售价不能为空，请重新输入">售价</option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6">
@@ -212,12 +217,12 @@
                                 <div class="col-sm-6 col-sm-offset-3">
                                     <div class="btn-toolbar">
                                         <button class="btn-primary btn J_submitBtn" type="submit" data-btn-type="loading" data-btn-loading-text="正在保存，请稍后">
-                                            <i class="fa fa-arrow-right"></i>
-                                            &nbsp;下一步
+                                            <i class="fa fa-save"></i>
+                                            &nbsp;保存
                                         </button>
                                         <%--<button class="btn-default btn" type="reset"><i class="fa fa-undo"></i>&nbsp;重置</button>--%>
                                         <!--如果是编辑页面,请刷下面的按钮-->
-                                        <button class="btn-default btn" type="button"><i class="fa fa-undo"></i>&nbsp;返回</button>
+                                        <button class="btn-default btn" type="button" onclick="history.go(-1);"><i class="fa fa-undo"></i>&nbsp;返回</button>
                                     </div>
                                 </div>
                             </div>
@@ -226,7 +231,7 @@
                 </div>
                 <select class="selectpicker show-tick form-control hidden" data-live-search="true">
                     <c:forEach var="dish" items="${dishList}">
-                        <option value="${dish.id}" data-price="${dish.salePrice}" data-code="${dish.assistantCode}" data-unit="${dish.unitName}">${dish.name}</option>
+                        <option value="${dish.id}" data-price="${dish.price}" data-code="${dish.assistantCode}" data-unit="${dish.unitName}">${dish.name}</option>
                     </c:forEach>
                 </select>
                 <!--<div role="tabpanel" class="tab-pane" id="batch">-->

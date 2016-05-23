@@ -128,7 +128,17 @@ public enum ModuleEnums {
     AdminDishFeatureList("Admin:DishManagement:Feature:List"),
     AdminDishFeatureNew("Admin:DishManagement:Feature:New"),
     AdminDishFeatureDel("Admin:DishManagement:Feature:Del"),
-    // 本店特色
+    // 今日特价
+    AdminDishTodayCheap("Admin:DishManagement:TodayCheap"),
+    AdminDishTodayCheapList("Admin:DishManagement:TodayCheap:List"),
+    AdminDishTodayCheapNew("Admin:DishManagement:TodayCheap:New"),
+    AdminDishTodayCheapDel("Admin:DishManagement:TodayCheap:Del"),
+    // 销量排行
+    AdminDishSaleRanking("Admin:DishManagement:SaleRanking"),
+    AdminDishSaleRankingList("Admin:DishManagement:SaleRanking:List"),
+    AdminDishSaleRankingNew("Admin:DishManagement:SaleRanking:New"),
+    AdminDishSaleRankingDel("Admin:DishManagement:SaleRanking:Del"),
+    // 套餐管理
     AdminDishPackage("Admin:DishManagement:Package"),
     AdminDishPackageList("Admin:DishManagement:Package:List"),
     AdminDishPackageNew("Admin:DishManagement:Package:New"),

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!--添加菜品对话框-->
+<!-- change：价格改为只读 -->
 <script type="text/template" id="dlgTpl">
     <form class="form-horizontal J_addForm" action="" method="">
         <p class="count pull-right">共&nbsp;<span class="J_dishNumber">0</span>&nbsp;道菜</p>
@@ -13,7 +14,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>价格</label>
             <div class="col-sm-6">
-                <input class="w180 J_priceInp" type="text" data-valid-rule="isFloat" data-valid-tip="请输入价格|价格有误,请重新输入" name="dishPrice" value="">
+                <input class="w180 J_priceInp" type="text" name="dishPrice" value="" readonly>
             </div>
         </div>
         <div class="form-group">
@@ -30,7 +31,7 @@
     </form>
     <form class="J_oper" action="" method="">
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered J_table">
                 <thead>
                 <tr>
                     <th>
@@ -49,8 +50,12 @@
     </form>
 </script>
 <!--菜品模板-->
+<!-- change:每个tr加input-->
 <script type="text/template" id="dishTpl">
     <tr data-dish-id="&{dishId}">
+        <input type="hidden" name="dishId" value="&{dishId}">
+        <input type="hidden" name="dishPrice" value="&{dishPrice}">
+        <input type="hidden" name="dishQuantity" value="&{dishQuantity}">
         <td><input type="checkbox" class="J_check" /></td>
         <td>&{dishName}</td>
         <td>&{dishUnit}</td>
@@ -68,7 +73,7 @@
         <td><input type="checkbox" class="J_check" /></td>
         <td><input class="dish-input J_dishInput" type="text" data-valid-rule="notNull" value="&{dishName}" name="dishName" /></td>
         <td><input class="dish-input J_dishInput" type="text" data-valid-rule="notNull" value="&{dishUnit}" name="dishUnit" /></td>
-        <td><input class="dish-input J_dishInput" type="text" data-valid-rule="isFloat" value="&{dishPrice}" name="dishPrice" /></td>
+        <td><input class="dish-input J_dishInput" type="text" value="&{dishPrice}" name="dishPrice"  readonly/></td>
         <td><input class="dish-input J_dishInput" type="text" data-valid-rule="isFloat" value="&{dishQuantity}" name="dishQuantity" /></td>
         <td>
             <a href="javascript:;" class="label-info J_saveDish"><i class="fa fa-save"></i>&nbsp;保存</a>

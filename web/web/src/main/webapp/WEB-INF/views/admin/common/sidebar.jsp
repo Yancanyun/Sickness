@@ -73,6 +73,9 @@
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Taste:List'}">class="active" </c:if>>
                 <a class="J_menu" href="${website}admin/dish/taste">菜品口味管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:CostCard'}">class="active" </c:if>>
+                <a class="J_menu" href="${website}admin/dish/cost/card">菜品成本卡管理</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Dish'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish">菜品管理
                     <c:if test="${ExtModule eq 'Admin:DishManagement:Dish:New'
@@ -91,9 +94,6 @@
                         </c:if>
                     </ul>
                 </c:if>
-            </li>
-            <li <c:if test="${MethodModule eq 'Admin:DishManagement:CostCard'}">class="active" </c:if>>
-                <a class="J_menu" href="${website}admin/dish/cost/card">菜品成本卡管理</a>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Package'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish/package">套餐管理
@@ -116,6 +116,12 @@
             </li>
             <li <c:if test="${MethodModule eq 'Admin:DishManagement:Feature'}">class="active"</c:if> >
                 <a class="J_menu" href="${website}admin/dish/feature">本店特色</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:TodayCheap'}">class="active"</c:if> >
+                <a class="J_menu" href="${website}admin/dish/today/cheap">今日特价</a>
+            </li>
+            <li <c:if test="${MethodModule eq 'Admin:DishManagement:SaleRanking'}">class="active"</c:if> >
+                <a class="J_menu" href="${website}admin/dish/sale/ranking">销量排行</a>
             </li>
         </ul>
     </li>

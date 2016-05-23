@@ -1,5 +1,6 @@
 package com.emenu.mapper.dish;
 
+import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;

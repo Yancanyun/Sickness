@@ -2,11 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.dish.TasteMapper">
 
-    <select id ="listAll" resultMap="pw.Taste">
+    <select id ="listByPage" resultMap="pw.Taste">
         SELECT `id`,`name`,`related_charge` ,`created_time`,`last_modified_time`
         FROM `t_taste`
         LIMIT #{offset},#{pageSize}
     </select>
+
+    <select id ="listAll" resultMap="pw.Taste">
+        SELECT `id`,`name`,`related_charge` ,`created_time`,`last_modified_time`
+        FROM `t_taste`
+    </select>
+
 
     <select id="countAll" resultType="int">
         SELECT

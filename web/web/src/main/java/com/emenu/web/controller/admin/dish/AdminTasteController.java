@@ -49,7 +49,7 @@ public class AdminTasteController extends AbstractController{
                                        @RequestParam("pageSize") Integer pageSize) {
         List<Taste> tasteList = Collections.emptyList();
         try {
-            tasteList = tasteService.listAll(curPage,pageSize);
+            tasteList = tasteService.listByPage(curPage,pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

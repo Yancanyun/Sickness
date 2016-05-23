@@ -1,14 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li><a href="${webiste}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">菜品管理</a></li>
-            <li class="active">本店特色</li>
+            <li class="active">今日特价</li>
         </ol>
-        <h2>菜品管理-本店特色</h2>
+        <h2>菜品管理-今日特价</h2>
     </div>
     <div class="col-sm-12">
         <c:if test="${!empty msg}">
@@ -19,7 +18,7 @@
                 <h4>列表</h4>
             </div>
             <div class="panel-body">
-                <a href="${website}admin/dish/feature/new" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加菜品</a>
+                <a href="${website}admin/dish/today/cheap/new" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加菜品</a>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>

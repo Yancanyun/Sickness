@@ -261,25 +261,36 @@ public class AdminDishPackageController extends AbstractController {
     @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageNew)
     @RequestMapping(value = "ajax/count", method = RequestMethod.PUT)
     @ResponseBody
-    public JSON ajaxCountDish(@RequestParam("dishIdList") List<Integer> dishIdList,
-                              @RequestParam("dishPriceList") List<Integer> dishPriceList,
-                              @RequestParam("dishQuantityList") List<Integer> dishQuantityList) throws SSException {
+    public JSON ajaxCountDish(@RequestParam("dishId") String dishId,
+                              @RequestParam("dishPrice") String dishPrice,
+                              @RequestParam("dishQuantity") String dishQuantity) throws SSException {
+        // 把用String按逗号分割成List<Integer>
+        List<Integer> dishIdList = new ArrayList<Integer>();
+        String[] dishIdStringList = dishId.split(",");
+        for (String dishIdString : dishIdStringList) {
+            dishIdList.add(Integer.valueOf(dishIdString));
+        }
+        List<Integer> dishQuantityList = new ArrayList<Integer>();
+        String[] dishQuantityStringList = dishQuantity.split(",");
+        for (String dishQuantityString : dishQuantityStringList) {
+            dishQuantityList.add(Integer.valueOf(dishQuantityString));
+        }
+
         // 若dishIdList和dishQuantityList大小不一致，报系统内部异常
         if (dishIdList.size() != dishQuantityList.size()) {
             throw SSException.get(EmenuException.SystemException);
         }
 
-        BigDecimal totalPrice = new BigDecimal(0);
+        BigDecimal totalPrice = new BigDecimal(0.0);
         Integer totalQuantity = 0;
-
         for (int i = 0; i < dishIdList.size(); i++) {
             DishDto dishDto = dishService.queryById(dishIdList.get(i));
-            totalPrice.add(dishDto.getSalePrice());
+            totalPrice = totalPrice.add(dishDto.getPrice().multiply(new BigDecimal(dishQuantityList.get(i))));
             totalQuantity += dishQuantityList.get(i);
         }
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("totalPrice", totalPrice);
+        jsonObject.put("totalPrice", totalPrice.toString()); // 把BigDecimal转成String交给前端，解决保留小数问题
         jsonObject.put("totalQuantity", totalQuantity);
 
         return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
@@ -342,10 +353,10 @@ public class AdminDishPackageController extends AbstractController {
             model.addAttribute("smallTagList", smallTagList);
 
             // 计算当前套餐内的已存在菜品的总价格及数量
-            BigDecimal totalPrice = new BigDecimal(0);
+            BigDecimal totalPrice = new BigDecimal(0.0);
             Integer totalQuantity = 0;
             for (DishDto dishDto : dishPackageDto.getChildDishDtoList()) {
-                totalPrice.add(dishDto.getSalePrice());
+                totalPrice = totalPrice.add(dishDto.getPrice().multiply(new BigDecimal(dishDto.getDishPackage().getDishQuantity())));
                 totalQuantity += dishDto.getDishPackage().getDishQuantity();
             }
             model.addAttribute("totalPrice", totalPrice);
@@ -365,7 +376,7 @@ public class AdminDishPackageController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageUpdate)
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public String updateDishPackagePage(DishDto dishDto,
                                         List<DishPackage> dishPackageList,
                                         RedirectAttributes redirectAttributes) {
@@ -441,7 +452,7 @@ public class AdminDishPackageController extends AbstractController {
      * @param id
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageUpdate)
+    @Module(value = ModuleEnums.AdminDishPackage, extModule = ModuleEnums.AdminDishPackageDel)
     @RequestMapping(value = "img/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSON ajaxDelDishPackageImg(@PathVariable("id") Integer id) {

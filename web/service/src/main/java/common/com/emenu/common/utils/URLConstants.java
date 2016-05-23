@@ -74,7 +74,14 @@ public final class URLConstants {
     // 菜品分类管理
     public static final String ADMIN_DISH_TAG = "admin/dish/tag";
 
+    // 本店特色
     public static final String ADMIN_DISH_FEATURE_URL = "admin/dish/feature";
+
+    // 今日特价
+    public static final String ADMIN_DISH_TODAY_CHEAP_URL = "admin/dish/today/cheap";
+
+    // 销量排行
+    public static final String ADMIN_DISH_SALE_RANKING_URL = "admin/dish/sale/ranking";
 
     // 套餐管理
     public static final String ADMIN_DISH_PACKAGE_URL = "admin/dish/package";

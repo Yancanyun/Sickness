@@ -131,19 +131,19 @@
             ['search', site.website + 'admin/dish/tag/ajax/search', 'get', '搜索菜品'],
 
             //今日特价
-            ['revoteSpecials', site.website + 'admin/dish/feature/ajax/&{id}', 'delete', '撤销今日特价菜品'],
-            ['selectDishClassifyOfSpecials', site.website + 'admin/dish/feature/dish/ajax/list', 'get','选择今日特价中的菜品分类'],
-            ['sendSelectedDishOfSpecials',site.website + 'admin/dish/feature/ajax', 'post','发送今日特价中的被选中的菜品'],
+            ['revoteSpecials', site.website + 'admin/dish/today/cheap/ajax/&{id}', 'delete', '撤销今日特价菜品'],
+            ['selectDishClassifyOfSpecials', site.website + 'admin/dish/today/cheap/dish/ajax/list', 'get','选择今日特价中的菜品分类'],
+            ['sendSelectedDishOfSpecials',site.website + 'admin/dish/today/cheap/ajax', 'post','发送今日特价中的被选中的菜品'],
 
-            //销量排行
-            ['revoteSales', site.staticWebsite + 'admin/dish/feature/ajax/&{id}', 'get', '撤销销量排行菜品'],
-            ['selectDishClassifyOfSales', site.staticWebsite + 'admin/dish/feature/dish/ajax/list', 'get','选择销量排行中的菜品分类'],
-            ['sendSelectedDishOfSales',site.staticWebsite + 'admin/dish/feature/ajax', 'get','发送销量排行中的被选中的菜品'],
+            // 销量排行
+            ['revoteSales', site.website + 'admin/dish/sale/ranking/ajax/&{id}', 'delete', '撤销销量排行菜品'],
+            ['selectDishClassifyOfSales', site.website + 'admin/dish/sale/ranking/dish/ajax/list', 'get', '选择销量排行中的菜品分类'],
+            ['sendSelectedDishOfSales', site.website + 'admin/dish/sale/ranking/ajax', 'post', '发送销量排行中的被选中的菜品'],
 
-            //本店特色
+            // 本店特色
             ['revoteSpecialities', site.website + 'admin/dish/feature/ajax/&{id}', 'delete', '撤销本店特色菜品'],
             ['selectDishClassifyOfSpecialities', site.website + 'admin/dish/feature/dish/ajax/list', 'get','选择本店特色中的菜品分类'],
-            ['sendSelectedDishOfSpecialities',site.website + 'admin/dish/feature/ajax', 'post','发送本店特色中的被选中的菜品'],
+            ['sendSelectedDishOfSpecialities', site.website + 'admin/dish/feature/ajax', 'post','发送本店特色中的被选中的菜品'],
 
             // 菜品口味
             ['deleteTaste', site.website + 'admin/dish/taste/ajax/&{id}', 'delete', '删除菜品口味'],
@@ -154,8 +154,9 @@
             ['delPackageDish', site.website + 'admin/dish/package/ajax/&{id}', 'delete', '删除套餐'],
             ['changePackageDishStatus', site.website + 'admin/dish/package/ajax/status/&{id}', 'put', '修改套餐状态'],
             ['getPackageDishTotalMoney', site.staticWebsite + 'mock/admin/dish.json', 'get', '获取套餐总金额'],
-            ['delDishInPackage', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除套餐中的菜品'],
-            ['addDishInPackage', site.website + 'admin/dish/package/ajax/add/dish', 'put', '保存套餐中的菜品'],
+            //['delDishInPackage', site.staticWebsite + 'mock/admin/dish.json', 'get', '删除套餐中的菜品'],
+            //['addDishInPackage', site.website + 'admin/dish/package/ajax/add/dish', 'put', '保存套餐中的菜品'],
+            ['getPackagePriceAndQuantity', site.website + 'admin/dish/package/ajax/count', 'put', '更新当前套餐中已选菜品的总金额和数量'],
 
              //成本卡管理\删除成本卡
             ['delCostCard', site.website + 'admin/dish/cost/card/ajax/del', 'get', '删除成本卡']

@@ -14,6 +14,11 @@
         </c:if>
     </div>
     <div class="col-sm-12 margin-bottom-30">
+        <!-- change: 加input——用于编辑页初始化时显示已有菜品的价格和数量,后台需套 -->
+        <div class="form-group J_initialNumberAndCount">
+            <input type="hidden" name="initalDishPrice" value="0">
+            <input type="hidden" name="initalDishQuantity" value="0">
+        </div>
         <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish/package/new" method="POST">
             <!--菜品id-->
             <input class="J_id" type="hidden" name="id" value="">
@@ -217,7 +222,7 @@
                 </div>
                 <select class="selectpicker show-tick form-control hidden" data-live-search="true">
                     <c:forEach var="dish" items="${dishList}">
-                        <option value="${dish.id}" data-price="${dish.salePrice}" data-code="${dish.assistantCode}" data-unit="${dish.unitName}">${dish.name}</option>
+                        <option value="${dish.id}" data-price="${dish.price}" data-code="${dish.assistantCode}" data-unit="${dish.unitName}">${dish.name}</option>
                     </c:forEach>
                 </select>
                 <!--<div role="tabpanel" class="tab-pane" id="batch">-->

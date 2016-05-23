@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
@@ -15,7 +14,6 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,44 +27,42 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * AdminFeatureController
- *
- * @author: zhangteng
- * @time: 2015/12/3 14:31
- **/
+ * AdminSaleRankingController
+ * 销量排行
+ * @author: yangch
+ * @time: 2016/5/23 14:19
+ */
 @Module(ModuleEnums.AdminDishManagement)
 @Controller
-@RequestMapping(URLConstants.ADMIN_DISH_FEATURE_URL)
-public class AdminDishFeatureController extends AbstractController {
-
+@RequestMapping(URLConstants.ADMIN_DISH_SALE_RANKING_URL)
+public class AdminSaleRankingController extends AbstractController {
     /**
      * 去列表页
-     *
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureList)
+    @Module(value = ModuleEnums.AdminDishSaleRanking, extModule = ModuleEnums.AdminDishSaleRankingList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model) {
+    public String toSaleRankingList(Model model) {
         try {
-            List<DishTagDto> dishTagDtoList = dishTagService.listDtoByTagId(TagEnum.Feature.getId());
+            List<DishTagDto> dishTagDtoList = dishTagService.listDtoByTagId(TagEnum.SaleRanking.getId());
             model.addAttribute("dishTagDtoList", dishTagDtoList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/dish/feature/list_home";
+        return "admin/dish/sale/ranking/list_home";
     }
 
     /**
      * 去添加页
-     *
+     * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureNew)
+    @Module(value = ModuleEnums.AdminDishSaleRanking, extModule = ModuleEnums.AdminDishSaleRankingNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
-    public String toNew(Model model) {
+    public String toSaleRankingNew(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
@@ -79,16 +75,15 @@ public class AdminDishFeatureController extends AbstractController {
             return ADMIN_SYS_ERR_PAGE;
         }
         model.addAttribute("tagList", tagList);
-        return "admin/dish/feature/new_home";
+        return "admin/dish/sale/ranking/new_home";
     }
 
     /**
-     * ajax获取没有选择的菜品
-     *
+     * Ajax 获取没有选择的菜品
      * @param tagIdList
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature)
+    @Module(value = ModuleEnums.AdminDishSaleRanking)
     @RequestMapping(value = "dish/ajax/list", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxDishList(Integer[] tagIdList) {
@@ -98,7 +93,7 @@ public class AdminDishFeatureController extends AbstractController {
             searchTagIdList = Arrays.asList(tagIdList);
         }
         try {
-            dishList = dishTagService.listNotSelectedByTagId(TagEnum.Feature.getId(), searchTagIdList);
+            dishList = dishTagService.listNotSelectedByTagId(TagEnum.SaleRanking.getId(), searchTagIdList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -130,17 +125,16 @@ public class AdminDishFeatureController extends AbstractController {
     }
 
     /**
-     * ajax添加
-     *
-     * @param dishIds
+     * Ajax 添加
+     * @param dishId
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureNew)
+    @Module(value = ModuleEnums.AdminDishSaleRanking, extModule = ModuleEnums.AdminDishSaleRankingNew)
     @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
-    public JSON ajaxNew(Integer[] dishIds) {
+    public JSON ajaxNewSaleRanking(Integer[] dishId) {
         try {
-            dishTagService.newByTagId(TagEnum.Feature.getId(), dishIds);
+            dishTagService.newByTagId(TagEnum.SaleRanking.getId(), dishId);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -150,15 +144,14 @@ public class AdminDishFeatureController extends AbstractController {
     }
 
     /**
-     * ajax删除
-     *
+     * Ajax 删除
      * @param id
      * @return
      */
-    @Module(value = ModuleEnums.AdminDishFeature, extModule = ModuleEnums.AdminDishFeatureDel)
+    @Module(value = ModuleEnums.AdminDishSaleRanking, extModule = ModuleEnums.AdminDishSaleRankingDel)
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSON ajaxDel(@PathVariable("id") Integer id) {
+    public JSON ajaxDelSaleRanking(@PathVariable("id") Integer id) {
         try {
             dishTagService.delById(id);
         } catch (SSException e) {
