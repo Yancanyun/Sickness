@@ -16,8 +16,7 @@ import java.util.Date;
  **/
 @Entity
 @Table(name = "t_dish_taste")
-public class DishTaste extends AbstractEntity{
-
+public class DishTaste extends AbstractEntity {
     // 主键
     @Id
     private Integer id;

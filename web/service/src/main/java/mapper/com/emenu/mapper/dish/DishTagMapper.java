@@ -41,5 +41,5 @@ public interface DishTagMapper {
      * @return
      * @throws SSException
      */
-    public List<DishTagDto> listDtoByTagId(@Param("tagId") int tagId) throws SSException;
+    public List<DishTagDto> listDtoByTagId(@Param("tagId") int tagId) throws Exception;
 }

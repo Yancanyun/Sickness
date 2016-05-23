@@ -25,6 +25,7 @@ import java.util.List;
 @Service("dishTasteService")
 public class DishTasteServiceImpl implements DishTasteService {
 
+    @Autowired
     private DishTasteMapper dishTasteMapper;
 
     @Autowired

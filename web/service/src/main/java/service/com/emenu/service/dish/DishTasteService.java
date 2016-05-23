@@ -59,9 +59,8 @@ public interface DishTasteService {
 
     /**
      * 根据菜品ID查询
-     *
      * @param dishId
-     * @rern
+     * @return
      * @throws SSException
      */
     public List<DishTaste> listByDishId(int dishId) throws SSException;

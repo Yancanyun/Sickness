@@ -11,12 +11,12 @@
     
     <select id="listByDishId" resultMap="pw.DishTaste">
         SELECT
-            `id` AS id,
-            `dish_id` AS dishId,
-            `taste_id` AS tasteId,
-            `created_time` AS createdTime,
-            `last_modified_time` AS lastModifiedTime
-        WHERE
-        `dish_id` = #{dishId}
+            `id`,
+            `dish_id`,
+            `taste_id`,
+            `created_time`,
+            `last_modified_time`
+        FROM `t_dish_taste`
+        WHERE `dish_id` = #{dishId}
     </select>
 </mapper>

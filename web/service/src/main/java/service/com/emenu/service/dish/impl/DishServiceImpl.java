@@ -162,6 +162,10 @@ public class DishServiceImpl implements DishService {
 
             // 2. 更新口味
             dishTasteService.updateDishTaste(dish.getId(), dishDto.getTasteIdList());
+            // 若tasteIdList为空，则证明本次修改把所有口味都删除，应对应将所有的DishTaste全部删除
+            if(dishDto.getTasteIdList() == null) {
+                dishTasteService.delByDishId(dish.getId());
+            }
 
             // 3. 更新餐段
             dishMealPeriodService.updateDishMealPeriod(dish.getId(), dishDto.getMealPeriodIdList());

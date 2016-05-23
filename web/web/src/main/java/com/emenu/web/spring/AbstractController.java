@@ -343,11 +343,17 @@ public class AbstractController extends Base {
     @Qualifier("serialNumService")
     protected static SerialNumService serialNumService;
 
-    //菜品口味
+    // 口味
     @StaticAutoWire
     @Qualifier("tasteService")
     protected static TasteService tasteService;
 
+    // 菜品-口味
+    @StaticAutoWire
+    @Qualifier("dishTasteService")
+    protected static DishTasteService dishTasteService;
+
+    // 菜品图片
     @StaticAutoWire
     @Qualifier("dishImgService")
     protected static DishImgService dishImgService;

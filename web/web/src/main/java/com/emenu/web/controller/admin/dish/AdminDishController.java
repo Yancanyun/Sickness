@@ -263,12 +263,22 @@ public class AdminDishController extends AbstractController {
                     selectedMealPeriod.put(mealPeriod.getMealPeriodId(), 1);
                 }
             }
+
+            // 口味
+            List<DishTaste> dishTasteList = dishTasteService.listByDishId(dishDto.getId());
+            List<Taste> tasteList = new ArrayList<Taste>();
+            for (DishTaste dishTaste : dishTasteList) {
+                Taste taste = tasteService.queryById(dishTaste.getTasteId());
+                tasteList.add(taste);
+            }
+
             model.addAttribute("selectedMealPeriod", selectedMealPeriod);
             model.addAttribute("tagPid", smallTagId);
             model.addAttribute("smallTagList", smallTagList);
             model.addAttribute("bigTagList", bigTagList);
             model.addAttribute("bigTagId", bigTagId);
             model.addAttribute("dishDto", dishDto);
+            model.addAttribute("selectTasteList", tasteList);
             addAttributesToModel(model);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

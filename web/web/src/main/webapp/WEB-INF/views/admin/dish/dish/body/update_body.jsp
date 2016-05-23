@@ -150,8 +150,12 @@
                                 <hr>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">口味</label>
-                                    <div class="col-sm-6 clearfix">
-                                        <div class="taste-list"></div>
+                                    <div class="col-sm-4 clearfix">
+                                        <div id="basic" data-isEdit="true">
+                                            <c:forEach var="taste" items="${selectTasteList}">
+                                                <span class="J_tagEdit hidden" data-result-id="${taste.id}" data-result-name="${taste.name}" data-result-price=""></span>
+                                            </c:forEach>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -255,6 +259,11 @@
                     </div>
                 </div>
             </div>
+            <select class="selectpicker show-tick form-control hidden" data-live-search="true">
+                <c:forEach var="taste" items="${tasteList}">
+                    <option value="${taste.id}" data-price="" data-code="">${taste.name}</option>
+                </c:forEach>
+            </select>
             <div role="tabpanel" class="tab-pane" id="batch">
                 <div class="panel panel-info">
                     <div class="panel-heading">
