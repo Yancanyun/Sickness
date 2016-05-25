@@ -91,7 +91,7 @@ public class AdminCostCardController extends AbstractController {
                     json.put("id",dto.getId());//成本卡的id
                     json.put("costCardNumber",dto.getCostCardNumber());
                     json.put("name",dto.getName());
-                    json.put("assistantNumber",dto.getAssistantNumber());
+                    json.put("assistantCode",dto.getAssistantCode());
                     json.put("mainCost",dto.getMainCost());
                     json.put("assistCost",dto.getAssistCost());
                     json.put("deliciousCost",dto.getDeliciousCost());

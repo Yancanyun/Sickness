@@ -6,7 +6,7 @@
     <tr data-costCard-id="&{item.id}">
         <td>&{item.costCardNumber}</td>
         <td>&{item.name}</td>
-        <td>&{item.assistantNumber}</td>
+        <td>&{item.assistantCode}</td>
         <td>&{item.mainCost}</td>
         <td>&{item.assistCost}</td>
         <td>&{item.deliciousCost}</td>

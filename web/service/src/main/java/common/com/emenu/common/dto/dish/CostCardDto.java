@@ -20,7 +20,7 @@ public class CostCardDto {
     private String name;
 
     //菜品助记码
-    private String assistantNumber;
+    private String assistantCode;
 
     //主料成本
     private BigDecimal mainCost;
@@ -75,12 +75,12 @@ public class CostCardDto {
         this.mainCost = mainCost;
     }
 
-    public String getAssistantNumber() {
-        return assistantNumber;
+    public String getAssistantCode() {
+        return assistantCode;
     }
 
-    public void setAssistantNumber(String assistantNumber) {
-        this.assistantNumber = assistantNumber;
+    public void setAssistantCode(String assistantCode) {
+        this.assistantCode = assistantCode;
     }
 
     public String getName() {
