@@ -397,6 +397,11 @@ public class AbstractController extends Base {
     @Qualifier("vipIntegralPlanService")
     protected static VipIntegralPlanService vipIntegralPlanService;
 
+    //成本卡
+    @StaticAutoWire
+    @Qualifier("costCardService")
+    protected static CostCardService costCardService;
+
     //成本卡原料
     @StaticAutoWire
     @Qualifier("costCardItemService")

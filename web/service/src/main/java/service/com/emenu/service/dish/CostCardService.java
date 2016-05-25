@@ -1,6 +1,8 @@
 package com.emenu.service.dish;
 
+import com.emenu.common.dto.dish.CostCardDto;
 import com.emenu.common.dto.dish.CostCardSearchDto;
+import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.CostCard;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -42,4 +44,20 @@ public interface CostCardService {
      */
 
     public int updateCostCard(CostCard costCard) throws SSException;
+
+    /**
+     * 根据searchDto查询成本卡
+     *
+     * @return List<CostCardDto>
+     * @throws SSException
+     */
+    public List<CostCardDto> queryCostCardDto(DishSearchDto searchDto)throws SSException;
+
+    /**
+     * 根据searchDto查询成本卡数量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int countBySearchDto(DishSearchDto searchDto) throws SSException;
 }

@@ -5,10 +5,9 @@
 <mapper namespace="com.emenu.mapper.dish.CostCardMapper">
 
     <insert id = "newCostCard">
-        INSERT INTO t_cost_card(cost_card_number,dish_id,main_cost
-        ,assist_cost,delicious_cost,standard_cost)
-        VALUES (#{costCard.costCardNumber},#{costCard.dishId},#{costCard.mainCost}
-        ,#{costCard.assistCost},#{costCard.deliciousCost},#{costCard.standardCost})
+        INSERT INTO t_cost_card(cost_card_number,dish_id,main_cost,assist_cost,delicious_cost,standard_cost)
+        VALUES (#{costCard.costCardNumber},#{costCard.dishId},
+                 #{costCard.mainCost},#{costCard.assistCost},#{costCard.deliciousCost},#{costCard.standardCost})
     </insert>
 
     <delete id = "delCostCardById">
@@ -17,20 +16,26 @@
     </delete>
 
     <update id = "updateCostCard">
-        UPDATE t_cost_card SET cost_card_number=#{costCard.costCardNumber}
-        ,dish_id=#{costCard.dishId},main_cost=#{costCard.mainCost}
-        ,assist_cost=#{costCard.assistCost},delicious_cost=#{costCard.deliciousCost}
-        ,standard_cost=#{costCard.standardCost}
-        WHERE id=#{costCard.id}
+        UPDATE t_cost_card
+        SET cost_card_number = #{costCard.costCardNumber},
+            main_cost = #{costCard.mainCost},
+            assist_cost = #{costCard.assistCost},
+            delicious_cost = #{costCard.deliciousCost},
+            standard_cost = #{costCard.standardCost}
+        WHERE id = #{costCard.id}
     </update>
 
     <select id ="queryCostCardDto" resultType="CostCardDto">
-        SELECT t_cost_card.id as id,t_dish.name AS name,assistant_code AS assistantCode
-        ,cost_card_number AS costCardNumber,main_cost AS mainCost
-        ,assist_cost AS assistCost,delicious_cost AS deliciousCost
-        ,standard_cost AS standardCost
-        FROM  t_cost_card LEFT JOIN t_dish
-        ON t_dish.id = t_cost_card.dish_id
+        SELECT t_cost_card.id as id,
+                t_dish.name AS name,
+                t_dish.assistant_code AS assistantCode,
+                t_cost_card.cost_card_number AS costCardNumber,
+                t_cost_card.main_cost AS mainCost,
+                t_cost_card.assist_cost AS assistCost,
+                t_cost_card.delicious_cost AS deliciousCost,
+                t_cost_card.standard_cost AS standardCost
+        FROM   t_cost_card LEFT JOIN t_dish
+        ON    t_dish.id = t_cost_card.dish_id
         LEFT JOIN t_dish_tag
         ON t_dish.id = t_dish_tag.dish_id
         <where>
@@ -46,6 +51,8 @@
                     #{tagId}
                 </foreach>
             </if>
+            AND t_dish.`status` != 3
+            AND t_dish.`category_id` != 6
         </where>
         <if test="offset >= 0 and searchDto.pageSize > 0">
             LIMIT #{offset}, #{searchDto.pageSize}
@@ -53,7 +60,7 @@
     </select>
 
     <select id = "countBySearchDto" resultType="int">
-        SELECT COUNT(*)
+        SELECT COUNT(1)
         FROM  t_cost_card LEFT JOIN t_dish
         ON t_dish.id = t_cost_card.dish_id
         LEFT JOIN t_dish_tag
@@ -70,6 +77,8 @@
                 <foreach collection="searchDto.tagIdList" item="tagId" open="(" separator="," close=")">
                     #{tagId}
                 </foreach>
+                AND t_dish.`status` != 3
+                AND t_dish.`category_id` != 6
             </if>
         </where>
     </select>

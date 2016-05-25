@@ -1,7 +1,10 @@
 package com.emenu.service.dish.impl;
 
+import com.emenu.common.dto.dish.CostCardDto;
 import com.emenu.common.dto.dish.CostCardSearchDto;
+import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.CostCard;
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.CostCardMapper;
 import com.emenu.service.dish.CostCardService;
@@ -90,6 +93,32 @@ public class CostCardServiceImpl implements CostCardService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CostCardUpdateFailed, e);
         }
+    }
+
+    @Override
+    public List<CostCardDto> queryCostCardDto(DishSearchDto searchDto) throws SSException {
+        List<CostCardDto> list = Collections.emptyList();
+        int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
+        int offset = pageNo * searchDto.getPageSize();
+        try{
+            list = costCardMapper.queryCostCardDto(offset,searchDto);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCostCardFailed, e);
+        }
+        return list;
+    }
+
+    @Override
+    public int countBySearchDto(DishSearchDto searchDto) throws SSException {
+        int count = 0;
+        try {
+            count = costCardMapper.countBySearchDto(searchDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCostCardFailed, e);
+        }
+        return count;
     }
 
 }
