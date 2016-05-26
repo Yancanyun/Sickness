@@ -29,6 +29,21 @@
         )
         AND t_storage_settlement_item.item_id=#{itemId}
     </select>
+    
+    <select id="queryByDateAndIngredientId" resultMap="pw.StorageSettlementIngredient">
+         SELECT `id`,`settlement_id`,`ingredient_id`,`stock_in_quantity`,`stock_in_money`,`stock_out_quantity`,
+        `stock_out_money`,`income_on_quantity`,`income_on_money`,`loss_on_quantity`,
+        `loss_on_money`,`real_quantity`,`real_money`,`total_quantity`,`total_money`,`created_time`,`last_modified_time`
+        FROM t_storage_settlement_ingredient
+        WHERE t_storage_settlement_item.`settlement_id`=
+        (
+        SELECT id FROM t_storage_settlement
+        WHERE t_storage_settlement.`created_time`&lt;#{settlementDate}
+        ORDER BY t_storage_settlement.`created_time` DESC
+        LIMIT 1
+        )
+        AND t_storage_settlement_ingredient.`ingredient_id`=#{ingredientId}
+    </select>
 
     <select id="listItemByDateAndSupplierId" resultType="com.emenu.common.dto.storage.StorageItemDto">
         SELECT t_storage_item.`id`,t_storage_item.`name` AS itemName,

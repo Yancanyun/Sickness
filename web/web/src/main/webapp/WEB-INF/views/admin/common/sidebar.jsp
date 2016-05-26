@@ -200,6 +200,9 @@
             <li <c:if test="${MethodModule eq 'Admin:Storage:Tag:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Storage:Ingredient'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/storage/ingredient">库存原配料管理</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:Storage:Item'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/storage/item">
                     库存物品管理

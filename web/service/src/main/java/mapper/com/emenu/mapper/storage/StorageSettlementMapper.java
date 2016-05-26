@@ -1,9 +1,9 @@
 package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.StorageItemDto;
-import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageSettlement;
+import com.emenu.common.entity.storage.StorageSettlementIngredient;
 import com.emenu.common.entity.storage.StorageSettlementItem;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -36,6 +36,16 @@ public interface StorageSettlementMapper {
      */
     public StorageSettlementItem queryByDateAndItemId(@Param("settlementDate") Date settlementDate,
                                                       @Param("itemId") int itemId) throws Exception;
+
+    /**
+     * 根据时间取出某一原配料在结算表最新的一次结算库存数据
+     * @param settlementDate
+     * @param ingredientId
+     * @return
+     * @throws Exception
+     */
+    public StorageSettlementIngredient queryByDateAndIngredientId(@Param("settlementDate") Date settlementDate,
+                                                                  @Param("ingredientId") int ingredientId) throws Exception;
 
 
     /**

@@ -372,4 +372,5 @@ public class StorageItem extends AbstractEntity {
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
     }
+
 }

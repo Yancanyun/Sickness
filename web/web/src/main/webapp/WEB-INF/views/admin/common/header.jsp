@@ -60,12 +60,12 @@
                 <li><a class="J_menu" href="${website}admin/vip/card">会员卡管理</a></li>
             </ul>
         </li>
-        <li
-                <c:if test="${PWModule eq 'Admin:Storage'}">class="active"</c:if> >
+        <li <c:if test="${PWModule eq 'Admin:Storage'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="6" href="javascript:;">库存管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/storage/supplier">供货商管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/tag">库存分类管理</a></li>
+                <li><a class="J_menu" href="${website}admin/storage/ingredient">库存原配料管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/item">库存物品管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/report">库存单据管理</a></li>
                 <li><a class="J_menu" href="${website}admin/storage/settlement/check">库存盘点</a></li>

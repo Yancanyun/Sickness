@@ -1,5 +1,6 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.dto.storage.StorageReportItemDto;
@@ -333,7 +334,7 @@ public class StorageReportServiceImpl implements StorageReportService {
         List<StorageReport> storageReportList = Collections.emptyList();
         try {
             //根据tagId获取分类下的物品
-            StorageItemSearchDto searchDto = new StorageItemSearchDto();
+            ItemAndIngredientSearchDto searchDto = new ItemAndIngredientSearchDto();
             searchDto.setTagIdList(tagIdList);
 
             List<StorageItem> storageItemList = Collections.emptyList();
@@ -354,9 +355,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 StorageReportDto storageReportDto = new StorageReportDto();
                 List<StorageReportItem> storageReportItemList = new ArrayList();
                 //根据单据id获取单据详情信息
-
                 storageReportItemList = storageReportItemService.listByReportIdAndItemIdList(storageReport.getId(), itemIdList);
-
                 //数据存入reportDto
                 storageReportDto.setStorageReport(storageReport);
                 storageReportDto.setStorageReportItemList(storageReportItemList);

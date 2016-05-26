@@ -1,8 +1,10 @@
 package com.emenu.service.storage;
 
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.storage.StorageItem;
 import com.pandawork.core.common.exception.SSException;
+import com.sun.scenario.effect.impl.sw.sse.SSESepiaTonePeer;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface StorageItemService {
      * @return
      * @throws SSException
      */
-    public List<StorageItem> listBySearchDto(StorageItemSearchDto searchDto) throws SSException;
+    public List<StorageItem> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
 
     /**
      * 根据搜索查询数量
@@ -30,7 +32,7 @@ public interface StorageItemService {
      * @return
      * @throws SSException
      */
-    public int countBySearchDto(StorageItemSearchDto searchDto) throws SSException;
+    public int countBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
 
     /**
      * 查询所有
@@ -94,12 +96,20 @@ public interface StorageItemService {
      * 根据关键字进行查询
      * 此方法只用于根据助记码或名字查询
      * 返回的实体中只有id、name、assistantCode三个字段有值
-     * 其余查询请使用{@link #listBySearchDto(StorageItemSearchDto)}
+     * 其余查询请使用{@link #listBySearchDto(ItemAndIngredientSearchDto)}
      *
      * @param keyword
      * @return
      * @throws SSException
      */
     public List<StorageItem> listByKeyword(String keyword) throws SSException;
+
+    /**
+     * 根据原配料id获取库存物品
+     * @param IngredientId
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> listIdsByIngredientId(Integer IngredientId) throws SSException;
 
 }

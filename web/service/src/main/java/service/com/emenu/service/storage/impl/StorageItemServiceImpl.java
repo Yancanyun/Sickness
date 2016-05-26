@@ -1,5 +1,6 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.StorageItem;
@@ -43,13 +44,14 @@ public class StorageItemServiceImpl implements StorageItemService {
     private CommonDao commonDao;
 
     @Override
-    public List<StorageItem> listBySearchDto(StorageItemSearchDto searchDto) throws SSException {
+    public List<StorageItem> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException {
         List<StorageItem> list = Collections.emptyList();
         int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
         int offset = pageNo * searchDto.getPageSize();
-
+        searchDto.setOffset(offset);
         try {
-            list = storageItemMapper.listBySearchDto(offset, searchDto);
+            list = storageItemMapper.listBySearchDto(searchDto);
+            // 设置单位名
             setUnitName(list);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -59,7 +61,7 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     @Override
-    public int countBySearchDto(StorageItemSearchDto searchDto) throws SSException {
+    public int countBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException {
         Integer count = 0;
         try {
             count = storageItemMapper.countBySearchDto(searchDto);
@@ -90,7 +92,6 @@ public class StorageItemServiceImpl implements StorageItemService {
             if (!checkBeforeSave(storageItem)) {
                 return ;
             }
-
             commonDao.insert(storageItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -139,8 +140,8 @@ public class StorageItemServiceImpl implements StorageItemService {
             return ;
         }
         try {
-            // TODO: 2015/11/12 查询是否有成本卡使用物品
-
+            // TODO: 2015/11/12 查询是否有成本卡使用物品,查询结算的库存物品是否还有剩余
+            // 删除即修改使用状态 Deleted(2, "删除")
             storageItemMapper.updateStatusById(id, StorageItemStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -189,6 +190,22 @@ public class StorageItemServiceImpl implements StorageItemService {
             throw SSException.get(EmenuException.SystemException, e);
         }
         return list;
+    }
+
+    @Override
+    public List<Integer> listIdsByIngredientId(Integer ingredientId) throws SSException {
+        List<Integer> itemIdList = Collections.emptyList();
+        if (Assert.isNull(ingredientId)
+                || Assert.lessOrEqualZero(ingredientId)){
+            return itemIdList;
+        }
+        try {
+            itemIdList = storageItemMapper.listIdsByIngredientId(ingredientId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return itemIdList;
     }
 
     private boolean checkBeforeSave(StorageItem storageItem) throws SSException {

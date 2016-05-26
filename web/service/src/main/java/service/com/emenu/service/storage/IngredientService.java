@@ -52,5 +52,20 @@ public interface IngredientService {
      */
     public List<Ingredient> listAll() throws SSException;
 
+    /**
+     * 根据搜索查询数量
+     * @param searchDto
+     * @return
+     * @throws SSException
+     */
+    public int countBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
+
+    /**
+     * 检查原配料名是否存在
+     * @return
+     * @throws SSException
+     */
+    public boolean checkIngredientNameIsExist(String name) throws SSException;
+
 
 }

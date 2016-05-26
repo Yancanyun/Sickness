@@ -57,7 +57,7 @@
         FROM `t_ingredient` AS ingredient
         LEFT JOIN `t_tag` AS tag ON ingredient.`tag_id` = tag.`id`
         <where>
-            <if test="searchDto != NULL">
+            <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != '' ">
                     (
                     ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
@@ -65,19 +65,50 @@
                     ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
                     )
                 </if>
-            </if>
-            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
-                AND ingredient.`tag_id` IN
-                <foreach item="tagId" collection="searchDto.tagIdList" open="(" separator="," close=")">
-                    #{tagId}
-                </foreach>
+                <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                    AND ingredient.`tag_id` IN
+                    <foreach item="tagId" collection="searchDto.tagIdList" open="(" separator="," close=")">
+                        #{tagId}
+                    </foreach>
+                </if>
             </if>
             AND ingredient.`status` != 2
         </where>
         ORDER BY ingredient.`tag_id` ASC, ingredient.`id` ASC
-        <if test="searchDto.offset >=0 and searchDto.pageSize >= 0">
-            LIMIT #{offset},#{pageSize}
+        <if test="searchDto.offset >= 0 and searchDto.pageSize >= 0">
+            LIMIT #{searchDto.offset},#{searchDto.pageSize}
         </if>
+    </select>
+
+    <select id="countBySearchDto" resultType="int">
+        SELECT
+        COUNT(ingredient.`id`)
+        FROM `t_ingredient` AS ingredient
+        <where>
+            <if test="searchDto != null">
+                <if test="searchDto.keyword != null and searchDto.keyword != '' ">
+                    (
+                    ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
+                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                    )
+                </if>
+                <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                    AND ingredient.`tag_id` IN
+                    <foreach item="tagId" collection="searchDto.tagIdList" open="(" separator="," close=")">
+                        #{tagId}
+                    </foreach>
+                </if>
+            </if>
+            AND ingredient.`status` != 2
+        </where>
+    </select>
+
+    <select id="coutByName" resultType="int">
+        SELECT
+        COUNT(ingredient.`id`)
+        FROM `t_ingredient` AS ingredient
+        WHERE ingredient.`name` = #{name}
     </select>
 
     <update id="updateIngredient">

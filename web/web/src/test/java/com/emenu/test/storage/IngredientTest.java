@@ -1,13 +1,18 @@
 package com.emenu.test.storage;
 
 import com.emenu.common.entity.storage.Ingredient;
+import com.emenu.common.exception.PartyException;
+import com.emenu.common.utils.StringUtils;
 import com.emenu.service.storage.IngredientService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * IngredientTest
@@ -40,7 +45,19 @@ public class IngredientTest extends AbstractTestCase{
 
     @Test
     public void listAll() throws SSException{
-        ingredientService.listAll();
+//
+//        List<Integer> list = new ArrayList<Integer>();
+//        List list1 = new ArrayList();
+//        ingredientService.listAll();
+        try {
+            String str = StringUtils.str2Pinyin("糖醋排骨","headChar");
+            System.out.println(str);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+
+
     }
 
 }

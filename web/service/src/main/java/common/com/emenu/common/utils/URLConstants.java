@@ -105,6 +105,9 @@ public final class URLConstants {
 
     public static final String ADMIN_STORAGE_ITEM_URL = "admin/storage/item";
 
+    // 库存原配料管理
+    public static final String ADMIN_STORAGE_INGREDIENT_URL = "admin/storage/ingredient";
+
     //备注管理
     public static final String ADMIN_REMARK_URL = "admin/restaurant/remark";
 

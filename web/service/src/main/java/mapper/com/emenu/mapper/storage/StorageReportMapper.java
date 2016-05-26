@@ -96,7 +96,7 @@ public interface StorageReportMapper {
 
     /**
      * 根据存放点IdList获取单据信息
-     * @param deportIdList
+     * @param depotIdList
      * @return
      * @throws Exception
      */

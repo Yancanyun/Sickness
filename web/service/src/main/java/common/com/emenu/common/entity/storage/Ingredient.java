@@ -2,10 +2,7 @@ package com.emenu.common.entity.storage;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -27,6 +24,8 @@ public class Ingredient extends AbstractEntity{
     @Column(name = "tag_id")
     private Integer tagId;
 
+    // 分类名
+    @Transient
     private String tagName;
 
     // 原配料名称
@@ -45,6 +44,7 @@ public class Ingredient extends AbstractEntity{
     private Integer orderUnitId;
 
     // 订货单位名称
+    @Transient
     private String orderUnitName;
 
     // 库存单位id
@@ -73,13 +73,19 @@ public class Ingredient extends AbstractEntity{
     @Column(name = "max_storage_quantity")
     private BigDecimal maxStorageQuantity;
 
+    private String maxStorageQuantityStr;
+
     // 最小库存量：以成本卡单位为单位存储-展示的时候用库存规格
     @Column(name = "min_storage_quantity")
     private BigDecimal minStorageQuantity;
 
+    private String minStorageQuantityStr;
+
     // 实际数量-剩余库存 以成本卡单位为单位存储-展示的时候用库存单位
     @Column(name = "real_quantity")
     private BigDecimal realQuantity;
+
+    private String realQuantityStr;
 
     // 实际金额：剩余库存
     @Column(name = "real_money")
@@ -88,6 +94,8 @@ public class Ingredient extends AbstractEntity{
     // 总数量：入库以来累计数量和 以成本卡单位为单位存储-展示的时候用库存单位
     @Column(name = "total_quantity")
     private BigDecimal totalQuantity;
+
+    private String totalQuantityStr;
 
     // 入库以来累计金额
     @Column(name = "total_money")
@@ -229,6 +237,14 @@ public class Ingredient extends AbstractEntity{
         this.maxStorageQuantity = maxStorageQuantity;
     }
 
+    public String getMaxStorageQuantityStr() {
+        return maxStorageQuantityStr;
+    }
+
+    public void setMaxStorageQuantityStr(String maxStorageQuantityStr) {
+        this.maxStorageQuantityStr = maxStorageQuantityStr;
+    }
+
     public BigDecimal getMinStorageQuantity() {
         return minStorageQuantity;
     }
@@ -237,12 +253,28 @@ public class Ingredient extends AbstractEntity{
         this.minStorageQuantity = minStorageQuantity;
     }
 
+    public String getMinStorageQuantityStr() {
+        return minStorageQuantityStr;
+    }
+
+    public void setMinStorageQuantityStr(String minStorageQuantityStr) {
+        this.minStorageQuantityStr = minStorageQuantityStr;
+    }
+
     public BigDecimal getRealQuantity() {
         return realQuantity;
     }
 
     public void setRealQuantity(BigDecimal realQuantity) {
         this.realQuantity = realQuantity;
+    }
+
+    public String getRealQuantityStr() {
+        return realQuantityStr;
+    }
+
+    public void setRealQuantityStr(String realQuantityStr) {
+        this.realQuantityStr = realQuantityStr;
     }
 
     public BigDecimal getRealMoney() {
@@ -259,6 +291,14 @@ public class Ingredient extends AbstractEntity{
 
     public void setTotalQuantity(BigDecimal totalQuantity) {
         this.totalQuantity = totalQuantity;
+    }
+
+    public String getTotalQuantityStr() {
+        return totalQuantityStr;
+    }
+
+    public void setTotalQuantityStr(String totalQuantityStr) {
+        this.totalQuantityStr = totalQuantityStr;
     }
 
     public BigDecimal getTotalMoney() {

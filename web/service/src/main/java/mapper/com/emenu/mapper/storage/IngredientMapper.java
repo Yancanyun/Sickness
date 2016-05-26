@@ -35,4 +35,20 @@ public interface IngredientMapper {
      * @throws Exception
      */
     List<Ingredient> listBySearchDto(@Param("searchDto") ItemAndIngredientSearchDto searchDto) throws Exception;
+
+    /**
+     * 根据搜索查询数量
+     * @param searchDto
+     * @return
+     * @throws Exception
+     */
+    public int countBySearchDto(@Param("searchDto") ItemAndIngredientSearchDto searchDto) throws Exception;
+
+    /**
+     *
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public int coutByName(@Param("name") String name) throws Exception;
 }

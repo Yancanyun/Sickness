@@ -17,7 +17,7 @@ public class ItemAndIngredientSearchDto {
     private Integer pageSize;
 
     // 偏移量
-    private Integer offSet;
+    private Integer offset;
 
     // 关键词（名称、编号、助记码）
     private String keyword;
@@ -31,7 +31,7 @@ public class ItemAndIngredientSearchDto {
     public ItemAndIngredientSearchDto() {
         this.pageNo = -1;
         this.pageSize = -1;
-        this.offSet = -1;
+        this.offset = -1;
     }
 
     public Integer getPageNo() {
@@ -74,11 +74,11 @@ public class ItemAndIngredientSearchDto {
         this.tagIdList = tagIdList;
     }
 
-    public Integer getOffSet() {
-        return offSet;
+    public Integer getOffset() {
+        return offset;
     }
 
-    public void setOffSet(Integer offSet) {
-        this.offSet = offSet;
+    public void setOffset(Integer offset) {
+        this.offset = offset;
     }
 }

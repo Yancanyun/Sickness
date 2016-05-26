@@ -9,9 +9,11 @@
             storageItem.`id` AS id,
             storageItem.`supplier_party_id` AS supplierPartyId,
             storageItem.`tag_id` AS tagId,
+            storageItem.`ingredient_id` AS ingredientId,
+            ingredient.`name` AS ingredientName,
             supplier.`name` AS supplierName,
             tag.`name` AS tagName,
-            storageItem.`name` AS NAME,
+            storageItem.`name` AS name,
             storageItem.`item_number` AS itemNumber,
             storageItem.`assistant_code` AS assistantCode,
             storageItem.`order_unit_id` AS orderUnitId,
@@ -31,6 +33,7 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
+        LEFT JOIN `t_ingredient` ingredient ON ingredient.`id` = storage.`ingredient_id`
         <where>
             <if test="searchDto != null">
                 <if test="searchDto.keyword != null and searchDto.keyword != ''">
@@ -53,8 +56,8 @@
             </if>
         </where>
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
-        <if test="offset >= 0 and searchDto.pageSize > 0">
-            LIMIT #{offset}, #{searchDto.pageSize}
+        <if test=" searchDto != null and searchDto.offset >= 0 and searchDto.pageSize > 0">
+            LIMIT #{searchDto.offset}, #{searchDto.pageSize}
         </if>
     </select>
 
@@ -90,6 +93,8 @@
             storageItem.`id` AS id,
             storageItem.`supplier_party_id` AS supplierPartyId,
             storageItem.`tag_id` AS tagId,
+            storageItem.`ingredient_id` AS ingredientId,
+            ingredient.`name` AS ingredientName,
             supplier.`name` AS supplierName,
             tag.`name` AS tagName,
             storageItem.`name` AS NAME,
@@ -112,6 +117,7 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
+        LEFT JOIN `t_ingredient` ingredient ON ingredient.`id` = storage.`ingredient_id`
         WHERE storageItem.`id` = #{id}
     </select>
 
@@ -120,6 +126,8 @@
             storageItem.`id` AS id,
             storageItem.`supplier_party_id` AS supplierPartyId,
             storageItem.`tag_id` AS tagId,
+            storageItem.`ingredient_id` AS ingredientId,
+            ingredient.`name` AS ingredientName,
             supplier.`name` AS supplierName,
             tag.`name` AS tagName,
             storageItem.`name` AS NAME,
@@ -142,6 +150,7 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
+        LEFT JOIN `t_ingredient` ingredient ON ingredient.`id` = storage.`ingredient_id`
         WHERE storageItem.`status` != 2
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
     </select>
@@ -170,5 +179,11 @@
         FROM `t_storage_item`
         WHERE
             `name` LIKE "%"#{keyword}"%" OR `assistant_code` LIKE "%"#{keyword}"%"
+    </select>
+
+    <select id="listIdsByIngredientId">
+        SELECT id
+        FROM `t_storage_item`
+        WHERE `t_storage_item`.`ingredient_id` = #{ingredient}
     </select>
 </mapper>

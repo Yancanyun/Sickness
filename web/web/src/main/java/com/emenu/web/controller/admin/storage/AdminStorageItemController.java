@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
@@ -33,7 +34,7 @@ import java.util.List;
 @Module(ModuleEnums.AdminStorage)
 @Controller
 @RequestMapping(value = URLConstants.ADMIN_STORAGE_ITEM_URL)
-public class StorageItemController extends AbstractController {
+public class AdminStorageItemController extends AbstractController {
 
     /**
      * 去列表
@@ -71,7 +72,7 @@ public class StorageItemController extends AbstractController {
     @ResponseBody
     public JSON ajaxList(@PathVariable("pageNo") Integer pageNo,
                          @RequestParam("pageSize") Integer pageSize,
-                         StorageItemSearchDto searchDto) {
+                         ItemAndIngredientSearchDto searchDto) {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
@@ -211,7 +212,6 @@ public class StorageItemController extends AbstractController {
                     quantityUnit.add(unit);
                 }
             }
-
             model.addAttribute("storageItem", storageItem);
             model.addAttribute("orderUnitType", orderUnitType);
             model.addAttribute("storageUnitType", storageUnitType);
@@ -309,7 +309,7 @@ public class StorageItemController extends AbstractController {
     @ResponseBody
     public JSON ajaxConversionList(@PathVariable("pageNo") Integer pageNo,
                                    @RequestParam("pageSize") Integer pageSize,
-                                   StorageItemSearchDto searchDto) {
+                                   ItemAndIngredientSearchDto searchDto) {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);

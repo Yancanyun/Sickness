@@ -27,7 +27,7 @@ public interface StorageSettlementService {
     public void newSettlement() throws SSException;
 
     /**
-     * 库存盘点
+     * 库存盘点（库存物品）
      * @param startDate
      * @param endDate
      * @Param supplierId
@@ -42,6 +42,24 @@ public interface StorageSettlementService {
                                                      Date endDate,
                                                      Integer supplierId,
                                                      List<Integer> depotIds,
+                                                     List<Integer> tagIds,
+                                                     String keyword,
+                                                     Integer curPage,
+                                                     Integer pageSize) throws SSException;
+
+    /**
+     * 库存盘点（原配料）
+     * @param startDate
+     * @param endDate
+     * @param tagIds
+     * @param keyword
+     * @param curPage
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StorageCheckDto> listSettlementIngredientCheck(Date startDate,
+                                                     Date endDate,
                                                      List<Integer> tagIds,
                                                      String keyword,
                                                      Integer curPage,

@@ -30,11 +30,17 @@ public class SerialNumServiceImpl implements SerialNumService {
     public String generateSerialNum(SerialNumTemplateEnums templateEnums) throws SSException {
         Assert.isNotNull(templateEnums, EmenuException.SerialNumTemplateNotNull);
         String template = templateEnums.getTemplate();
+        // 字符串"|"第一次出现的位置
         int firstDelimiterIndex = template.indexOf("|");
+        // 在位置（包括该位置）firstDelimiterIndex + 1以后，字符串"|"第一次出现的位置
         int secondDelimiterIndex = template.indexOf("|", firstDelimiterIndex + 1);
+        // template中第一个"|"之前的子串,取得的是RKD-
         String prefix = template.substring(0, firstDelimiterIndex);
+        // RKD-|yyyyMMdd|####，取到的是yyyyMMdd
         String timestampFormat = template.substring(firstDelimiterIndex + 1, secondDelimiterIndex);
+        // 取到的是####
         String numberFormat = template.substring(secondDelimiterIndex + 1);
+        // 用"0"替代#
         numberFormat = numberFormat.replaceAll("#", "0");
 
         // 生成流水号

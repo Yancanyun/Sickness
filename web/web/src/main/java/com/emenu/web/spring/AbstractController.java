@@ -406,6 +406,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("costCardItemService")
     protected  static CostCardItemService costCardItemService;
+
+    //原配料管理
+    @StaticAutoWire
+    @Qualifier("ingredientService")
+    protected static IngredientService ingredientService;
 }
 
 

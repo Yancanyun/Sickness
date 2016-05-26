@@ -1,5 +1,6 @@
 package com.emenu.mapper.storage;
 
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.storage.StorageItem;
 import com.pandawork.core.common.exception.SSException;
@@ -18,13 +19,11 @@ public interface StorageItemMapper {
     /**
      * 根据分页和搜索查询
      *
-     * @param offset
      * @param searchDto
      * @return
      * @throws Exception
      */
-    public List<StorageItem> listBySearchDto(@Param("offset") int offset,
-                                             @Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
+    public List<StorageItem> listBySearchDto(@Param("searchDto") ItemAndIngredientSearchDto searchDto) throws Exception;
 
     /**
      * 根据搜索条件查询数量
@@ -33,7 +32,7 @@ public interface StorageItemMapper {
      * @return
      * @throws Exception
      */
-    public int countBySearchDto(@Param("searchDto") StorageItemSearchDto searchDto) throws Exception;
+    public int countBySearchDto(@Param("searchDto") ItemAndIngredientSearchDto searchDto) throws Exception;
 
     /**
      * 根据id进行查询
@@ -82,4 +81,12 @@ public interface StorageItemMapper {
      * @throws Exception
      */
     public List<StorageItem> listByKeyword(@Param("keyword") String keyword) throws Exception;
+
+    /**
+     * 根据原配料id获取库存物品list
+     * @param ingredientId
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> listIdsByIngredientId(@Param("ingredientId") Integer ingredientId) throws Exception;
 }

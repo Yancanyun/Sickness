@@ -205,6 +205,13 @@ public enum ModuleEnums {
     AdminStorageTagNew("Admin:Storage:Tag:New"),
     AdminStorageTagUpdate("Admin:Storage:Tag:Update"),
     AdminStorageTagDelete("Admin:Storage:Tag:Delete"),
+
+    // 库存原配料
+    AdminStorageIngredient("Admin:Storage:Ingredient"),
+    AdminStorageIngredientList("Admin:Storage:Ingredient:List"),
+    AdminStorageIngredientNew("Admin:Storage:Ingredient:New"),
+    AdminStorageIngredientUpdate("Admin:Storage:Ingredient:Update"),
+
     // 库存物品管理
     AdminStorageItem("Admin:Storage:Item"),
     AdminStorageItemList("Admin:Storage:Item:List"),
