@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.service.CallWaiterMapper">
+
+    <insert id ="newCallWaiter">
+        INSERT INTO t_call_waiter(t_call_waiter.name,weight,status)
+        VALUES (#{callWaiter.name},#{callWaiter.weight},#{callWaiter.status})
+            </insert>
+
+    <delete id ="delCallWaiter">
+        DELETE FROM t_call_waiter
+        WHERE id = #{id}
+            </delete>
+
+    <update id ="updateCallWaiter">
+        UPDATE t_call_waiter
+        SET name = #{callWaiter.name}
+        ,weight = #{callWaiter.weight}
+        ,status = #{callWaiter.status}
+        WHERE id = #{callWaiter.id}
+            </update>
+
+    <select id ="queryAllCallWaiter" resultType="CallWaiter">
+        SELECT * FROM t_call_waiter
+        ORDER BY weight ASC
+            </select>
+
+    <update id ="updateCallWaiterStatus">
+        UPDATE t_call_waiter
+        SET status =#{status}
+        WHERE  id =#{id}
+            </update>
+</mapper>
