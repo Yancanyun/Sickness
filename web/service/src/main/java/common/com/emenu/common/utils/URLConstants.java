@@ -138,6 +138,14 @@ public final class URLConstants {
     //会员积分方案管理
     public static final String ADMIN_VIP_INTEGRAL_URL = "admin/vip/integral/plan";
 
+
+
+    /**********************顾客点菜平台*************************/
+    public static final String MOBILE_URL = "mobile";
+
+    // 顾客点菜平台首页
+    public static final String MOBILE_INDEX_URL = "mobile/index";
+
     /**********************服务员APP*************************/
     //服务员查看餐台列表
     public static final String WAITER_TABLE_LIST_URL = "waiter/table/list";
