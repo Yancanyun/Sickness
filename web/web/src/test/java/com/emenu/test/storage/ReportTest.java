@@ -75,7 +75,7 @@ public class ReportTest extends AbstractTestCase {
         BigDecimal quantity = new BigDecimal("0.00");
 
 
-        storageReportItem.setCount(count);
+        storageReportItem.setCost(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);
@@ -99,7 +99,7 @@ public class ReportTest extends AbstractTestCase {
 
         String setSerialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
 
-        storageReportItem.setCount(count);
+        storageReportItem.setCost(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);
@@ -358,7 +358,7 @@ public class ReportTest extends AbstractTestCase {
         BigDecimal quantity = new BigDecimal("0.00");
 
 
-        storageReportItem.setCount(count);
+        storageReportItem.setCost(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);

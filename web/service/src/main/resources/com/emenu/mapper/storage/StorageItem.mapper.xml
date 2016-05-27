@@ -150,7 +150,7 @@
         FROM `t_storage_item` storageItem
         LEFT JOIN `t_party_supplier` supplier ON storageItem.`supplier_party_id` = supplier.`party_id`
         LEFT JOIN `t_tag` tag ON storageItem.`tag_id` = tag.`id`
-        LEFT JOIN `t_ingredient` ingredient ON ingredient.`id` = storage.`ingredient_id`
+        LEFT JOIN `t_ingredient` ingredient ON ingredient.`id` = storageItem.`ingredient_id`
         WHERE storageItem.`status` != 2
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
     </select>

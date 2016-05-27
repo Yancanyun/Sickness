@@ -185,6 +185,15 @@ public class AbstractController extends Base {
         return json;
     }
 
+    // 发送ajax 编号和信息
+    protected JSONObject sendMsgAndCode(int code , String msg) {
+        JSONObject json = new JSONObject();
+        json.put("code", code);
+        json.put("errMsg", msg);
+        return json;
+    }
+
+
     // 发送ajax分页信息
     protected JSONObject sendJsonArray(JSONArray jsonArray, int dataCount, int pageSize) {
         JSONObject jsonObject = new JSONObject();

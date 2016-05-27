@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">当事人</label>
+                        <label class="col-sm-2 control-label">操作人</label>
                         <div class="col-sm-8">
                             <select class="form-control w180" name="createdPartyId">
                                 <option value="-1">请选择</option>

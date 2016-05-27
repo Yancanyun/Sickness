@@ -31,7 +31,7 @@ public class StorageReportItem extends AbstractEntity{
     private BigDecimal quantity;
 
     //计数
-    private BigDecimal count;
+    private BigDecimal cost;
 
     //成本价
     private BigDecimal price;
@@ -77,12 +77,12 @@ public class StorageReportItem extends AbstractEntity{
         this.quantity = quantity;
     }
 
-    public BigDecimal getCount() {
-        return count;
+    public BigDecimal getCost() {
+        return cost;
     }
 
-    public void setCount(BigDecimal count) {
-        this.count = count;
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 
     public BigDecimal getPrice() {

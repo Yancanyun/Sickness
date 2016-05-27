@@ -166,7 +166,7 @@ public class AdminIngredientController extends AbstractController{
     public JSONObject newIngredient(Ingredient ingredient){
         try {
             ingredientService.newIngredient(ingredient);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"添加成功");
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -184,6 +184,7 @@ public class AdminIngredientController extends AbstractController{
     public JSONObject checkIngredientName(@RequestParam("name")String name){
         if (Assert.isNull(name)){
             return sendJsonObject(AJAX_SUCCESS_CODE);
+
         }
         try {
             if (ingredientService.checkIngredientNameIsExist(name)){
@@ -270,6 +271,12 @@ public class AdminIngredientController extends AbstractController{
         }
         String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/update/" + ingredient.getId();
         return "redirect:" + redirectUrl;
+    }
+
+    @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void export() {
+
     }
 
 }
