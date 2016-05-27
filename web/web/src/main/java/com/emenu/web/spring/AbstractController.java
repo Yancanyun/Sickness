@@ -65,6 +65,13 @@ public class AbstractController extends Base {
     // 无法找到404页面
     protected final static String ADMIN_NOT_FOUND_PAGE = "admin/404";
 
+    // 顾客点餐平台异常返回页面
+    protected final static String MOBILE_SYS_ERR_PAGE = "mobile/500";
+    // 顾客点餐平台禁止访问返回页面
+    protected final static String MOBILE_FORBIDDEN_PAGE = "mobile/403";
+    // 顾客点餐平台无法找到404页面
+    protected final static String MOBILE_NOT_FOUND_PAGE = "mobile/404";
+
     // 系统异常返回页面
     protected final static String VIP_SYS_ERR_PAGE = "forward:/500.jsp";
     // 禁止访问返回页面
