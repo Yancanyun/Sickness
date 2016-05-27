@@ -91,6 +91,12 @@ public enum ModuleEnums {
     AdminRestaurantRemarkNew("Admin:Restaurant:Remark:New"),
     AdminRestaurantRemarkUpdate("Admin:Restaurant:Remark:Update"),
     AdminRestaurantRemarkDel("Admin:Restaurant:Remark:Del"),
+    //服务类型管理
+    AdminRestaurantCallWaiter("Admin:Restaurant:CallWaiter"),
+    AdminRestaurantCallWaiterList("Admin:Restaurant:CallWaiter:List"),
+    AdminRestaurantCallWaiterNew("Admin:Restaurant:CallWaiter:New"),
+    AdminRestaurantCallWaiterDel("Admin:Restaurant:CallWaiter:Del"),
+    AdminRestaurantCallWaiterUpdate("Admin:Restaurant:CallWaiter:Update"),
 
     // 菜品管理
     AdminDishManagement("Admin:DishManagement"),

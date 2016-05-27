@@ -37,11 +37,14 @@ import java.util.List;
 @RequestMapping(value = URLConstants.ADMIN_COST_CARD_URL)
 public class AdminCostCardController extends AbstractController {
 
+    @Autowired
+    CostCardMapper costCardMapper;
     /**
      * 去成本卡页面
      * @param model
      * @return
      */
+
     @Module(value = ModuleEnums.AdminDishCostCard, extModule = ModuleEnums.AdminDishCostCardList)
     @RequestMapping(value = {"","/list"} ,method = RequestMethod.GET)
     public String  toList(Model model) {
@@ -67,12 +70,11 @@ public class AdminCostCardController extends AbstractController {
     @Module(value = ModuleEnums.AdminDishCostCard, extModule = ModuleEnums.AdminDishCostCardList)
     @RequestMapping(value = "/ajax/list/cost/card/{pageNo}",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxListCostCard(@PathVariable("pageNo") Integer pageNo,
-                                       @RequestParam("pageSize") Integer pageSize,
-                                       DishSearchDto searchDto)throws SSException
+    public JSONObject ajaxListCostCard(@PathVariable("pageNo") Integer pageNo
+                                      ,@RequestParam("pageSize") Integer pageSize
+                                        ,DishSearchDto searchDto)throws SSException
     {
-        pageNo = pageNo == null ? 0 : pageNo;
-        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        int offset = (pageNo-1)*pageSize;//查询的偏移量
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
         List<CostCardDto> costCardDto= new ArrayList<CostCardDto>();
@@ -80,8 +82,8 @@ public class AdminCostCardController extends AbstractController {
         JSONObject jsonMessage = new JSONObject();
         int dataCount = 0;
         try {
-            dataCount=costCardService.countBySearchDto(searchDto);
-            costCardDto = costCardService.queryCostCardDto(searchDto);
+            dataCount=costCardMapper.countBySearchDto(searchDto);
+            costCardDto = costCardMapper.queryCostCardDto(offset,searchDto);
             if(Assert.isNotEmpty(costCardDto))
             {
                 jsonMessage.put("code",AJAX_SUCCESS_CODE);
@@ -91,7 +93,7 @@ public class AdminCostCardController extends AbstractController {
                     json.put("id",dto.getId());//成本卡的id
                     json.put("costCardNumber",dto.getCostCardNumber());
                     json.put("name",dto.getName());
-                    json.put("assistantCode",dto.getAssistantCode());
+                    json.put("assistantNumber",dto.getAssistantCode());
                     json.put("mainCost",dto.getMainCost());
                     json.put("assistCost",dto.getAssistCost());
                     json.put("deliciousCost",dto.getDeliciousCost());
@@ -122,7 +124,7 @@ public class AdminCostCardController extends AbstractController {
         try {
             if(!Assert.lessOrEqualZero(id))
             {
-                costCardService.delCostCardById(id);
+                costCardMapper.delCostCardById(id);
                 jsonObject.put("code",0);
                 jsonObject.put("errMsg","成本卡删除成功");
             }

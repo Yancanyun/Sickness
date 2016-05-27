@@ -50,6 +50,9 @@ public final class URLConstants {
     //餐段管理
     public static final String ADMIN_MEAL_PERIOD_URL = "admin/restaurant/meal/period";
 
+    //呼叫服务管理
+    public static final String ADMIN_CALL_WAITER_URL = "admin/restaurant/call/waiter";
+
     //打印机管理
     public static final String ADMIN_PRINTER_URL = "admin/printer";
 

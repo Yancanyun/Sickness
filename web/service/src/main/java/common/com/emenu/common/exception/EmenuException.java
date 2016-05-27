@@ -227,6 +227,12 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteRemarkFail("删除备注失败", 4103),
     RemarkNameExist("备注名称已存在", 4104),
     RemarkNameIsNull("备注名称不能为空", 4105),
+    //呼叫服务管理
+    InsertCallWaiterFail("添加服务类型失败", 4120),
+    UpdateCallWaiterFail("更新服务类型失败", 4121),
+    DeleteCallWaiterFail("删除服务类型失败", 4122),
+    QueryAllCallWaiterFail("查询服务类型失败", 4123),
+    UpdateCallWaiterStatusFail("修改服务类型启用状态失败", 4124),
 
     //基本信息管理
     //搜索风向标

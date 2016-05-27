@@ -44,6 +44,9 @@
             <li <c:if test="${MethodModule eq 'Admin:Restaurant:Area:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/restaurant/area">餐台区域管理</a>
             </li>
+            <li <c:if test="${MethodModule eq 'Admin:Restaurant:CallWaiter:List'}">class="active"</c:if>>
+                <a class="J_menu" href="${website}admin/restaurant/call/waiter">服务类型管理</a>
+            </li>
             <li <c:if test="${MethodModule eq 'Admin:Restaurant:Table:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/restaurant/table">餐台管理</a>
             </li>
