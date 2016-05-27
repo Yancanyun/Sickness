@@ -233,10 +233,16 @@ public enum ModuleEnums {
     AdminVip("Admin:Vip"),
 
     //会员价方案管理
-    AdminVipVipDishPricePlanList("Admin:Vip:vipDishPricePlan:List"),
-    AdminVipVipDishPricePlanNew("Admin:Vip:vipDishPricePlan:New"),
-    AdminVipVipDishPricePlanUpdate("Admin:Vip:vipDishPricePlan:Update"),
-    AdminVipVipDishPricePlanDelete("Admin:Vip:vipDishPricePlan:Delete"),
+    AdminVipVipDishPrice("Admin:Vip:VipDishPrice"),
+    AdminVipVipDishPricePlan("Admin:Vip:VipDishPrice:Plan"),
+    AdminVipVipDishPricePlanList("Admin:Vip:VipDishPrice:Plan:List"),
+    AdminVipVipDishPricePlanNew("Admin:Vip:VipDishPrice:Plan:New"),
+    AdminVipVipDishPricePlanUpdate("Admin:Vip:VipDishPrice:Plan:Update"),
+    AdminVipVipDishPricePlanDelete("Admin:Vip:VipDishPrice:Plan:Delete"),
+
+    //会员价管理
+    AdminVipVipDishPriceList("Admin:Vip:VipDishPrice:List"),
+    AdminVipVipDishPriceUpdate("Admin:Vip:VipDishPrice:Update"),
 
     //多倍积分方案管理
     AdminVipMultipleIntegralPlan("Admin:Vip:MultipleIntegralPlan"),
@@ -244,9 +250,7 @@ public enum ModuleEnums {
     AdminVipMultipleIntegralPlanNew("Admin:Vip:MultipleIntegralPlan:New"),
     AdminVipMultipleIntegralPlanUpdate("Admin:Vip:MultipleIntegralPlan:Update"),
     AdminVipMultipleIntegralPlanDelete("Admin:Vip:MultipleIntegralPlan:Delete"),
-    //会员价管理
-    AdminVipVipDishPriceList("Admin:Vip:vipDishPrice:List"),
-    AdminVipVipDishPriceUpdate("Admin:Vip:vipDishPrice:Update"),
+
     //会员充值方案管理
     AdminVipRechargePlan("Admin:Vip:RechargePlan"),
     AdminVipRechargePlanList("Admin:Vip:RechargePlan:List"),

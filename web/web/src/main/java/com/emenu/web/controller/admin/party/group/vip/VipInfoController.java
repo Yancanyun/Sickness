@@ -44,7 +44,7 @@ public class VipInfoController extends AbstractController {
      *
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoList)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList() {
         return "admin/party/group/vip/vip_info_list";
@@ -58,7 +58,7 @@ public class VipInfoController extends AbstractController {
      * @param keyword
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoList)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoList)
     @RequestMapping(value = "ajax/list/{curPage}", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxListVipInfo(@PathVariable("curPage") Integer curPage,
@@ -108,7 +108,7 @@ public class VipInfoController extends AbstractController {
      *
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoNew)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.GET)
     public String toNewVipInfo() {
         return "admin/party/group/vip/vip_info_new";
@@ -121,7 +121,7 @@ public class VipInfoController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoNew)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoNew)
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String newVipInfo(VipInfo vipInfo,
                              RedirectAttributes redirectAttributes) {
@@ -146,7 +146,7 @@ public class VipInfoController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoUpdate)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateVipInfo(@PathVariable("id") int id,
                                   Model model) {
@@ -176,7 +176,7 @@ public class VipInfoController extends AbstractController {
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoUpdate)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public String updateVipInfo(VipInfo vipInfo,
                                 RedirectAttributes redirectAttributes) {
@@ -198,7 +198,7 @@ public class VipInfoController extends AbstractController {
      * @param id
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoDel)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoDel)
     @RequestMapping(value = "/ajax/del", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxDelById(@RequestParam("id") Integer id) {
@@ -244,7 +244,7 @@ public class VipInfoController extends AbstractController {
      * @param status
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoUpdate)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoUpdate)
     @RequestMapping(value = "ajax/status", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject updateStatus(@RequestParam("id") Integer id,
@@ -276,7 +276,7 @@ public class VipInfoController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminVipInfoDetail)
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoDetail)
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
     public String detailVipInfo(@PathVariable("id") Integer id,
                                 Model model) {

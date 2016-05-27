@@ -44,7 +44,7 @@ public class VipDishPriceController extends AbstractController{
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminVipVipDishPriceList)
+    @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPriceList)
     @RequestMapping(value = "list/{vipDishPricePlanId}", method = RequestMethod.GET)
     public String listVipDishPrice(@PathVariable("vipDishPricePlanId") int vipDishPricePlanId,
                                    Model model){
@@ -68,7 +68,7 @@ public class VipDishPriceController extends AbstractController{
      * @param vipDishPricePlanId
      * @return
      */
-    @Module(ModuleEnums.AdminVipVipDishPriceList)
+    @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPriceList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxSearch(@RequestParam("keyword") String keyword,
@@ -117,7 +117,7 @@ public class VipDishPriceController extends AbstractController{
      * @param vipDishPrice
      * @return
      */
-    @Module(ModuleEnums.AdminVipVipDishPriceUpdate)
+    @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPriceUpdate)
     @RequestMapping(value = "ajax", method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject updateVipDishPrice(@RequestParam("dishId") int dishId,
@@ -144,7 +144,7 @@ public class VipDishPriceController extends AbstractController{
      * @param redirectAttributes
      * @return
      */
-    @Module(ModuleEnums.AdminVipVipDishPriceUpdate)
+    @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPriceUpdate)
     @RequestMapping(value = "ajax/generate", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxGenerate(@RequestParam(value = "dishIdList", required = false) Integer[] dishIdList,

@@ -143,11 +143,32 @@
             <li <c:if test="${MethodModule eq 'Admin:User:Management:Employee:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:User:Management:Vip:VipInfo:List'}">class="active"</c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:User:Management:Vip:VipInfo'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/party/group/vip/">会员管理</a>
+                <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:New'
+                                            or ExtModule eq 'Admin:User:Management:Vip:VipInfo:Update'}">
+                    <ul>
+                        <li <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:New'}">class="active" </c:if>>
+                            <a href="${website}admin/party/group/vip/new">添加会员</a>
+                        </li>
+                        <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:Update'}">
+                            <li class="active">
+                                <a href="#">修改会员</a>
+                            </li>
+                        </c:if>
+                    </ul>
+                </c:if>
             </li>
-            <li <c:if test="${MethodModule eq 'Admin:Vip:vipDishPricePlan:List'}">class="active"</c:if>>
+            <li <c:if test="${MethodModule eq 'Admin:Vip:VipDishPrice'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/price/plan/list">会员价方案管理</a>
+                <c:if test="${ExtModule eq 'Admin:Vip:VipDishPrice:List'
+                                            or ExtModule eq 'Admin:Vip:VipDishPrice:Plan:Update'}">
+                    <ul>
+                        <li class="active">
+                            <a href="">会员价管理</a>
+                        </li>
+                    </ul>
+                </c:if>
             </li>
             <li <c:if test="${MethodModule eq 'Admin:Vip:RechargePlan:List'}">class="active"</c:if>>
                 <a class="J_menu" href="${website}admin/vip/recharge/plan/list">会员充值方案管理</a>
@@ -166,12 +187,9 @@
                         </li>
                         <c:if test="${ExtModule eq 'Admin:Vip:Grade:Update'}">
                             <li class="active">
-                                <a href="#">修改会员等级</a>
+                                <a href="#">编辑会员等级</a>
                             </li>
                         </c:if>
-                        <li <c:if test="${ExtModule eq 'Admin:Vip:Grade:New'}">class="active" </c:if>>
-                            <a href="${website}admin/vip/grade/new">添加会员等级</a>
-                        </li>
                     </ul>
                 </c:if>
                 <c:if test="${ExtModule eq 'Admin:Vip:Grade:Integrate:List'}">
