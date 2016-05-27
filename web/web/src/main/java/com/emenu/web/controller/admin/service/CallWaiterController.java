@@ -40,7 +40,7 @@ public class CallWaiterController extends AbstractController{
      */
     @Module(ModuleEnums.AdminRestaurantCallWaiterList)
     @RequestMapping(value = "",method = RequestMethod.GET)
-    public String toCallServicePage(Model model)
+    public String toCallWaiterPage(Model model)
     {
         List<CallWaiter> callWaiter =new ArrayList<CallWaiter>();
         try {
@@ -154,9 +154,9 @@ public class CallWaiterController extends AbstractController{
         List<CallWaiter> callWaiter = new ArrayList<CallWaiter>();
         try {
             callWaiter = callWaiterService.queryAllCallWaiter();
-            if(callWaiter.isEmpty())
-            jsonObject.put("weight",1);//若没有服务类型则默认值为1
-            else
+            if(callWaiter.isEmpty())//若没有服务类型则默认值为1
+            jsonObject.put("weight",1);
+            else//否则为做大的值加1
             jsonObject.put("weight",callWaiter.get(callWaiter.size()-1).getWeight()+1);
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {

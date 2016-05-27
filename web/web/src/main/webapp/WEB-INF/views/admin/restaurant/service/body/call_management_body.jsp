@@ -13,8 +13,10 @@
 			<li class="active">呼叫服务类型管理</li>
 		</ol>
 		<h2>呼叫服务类型管理</h2>
+		<c:if test="${!empty msg}">
 		<div class="alert alert-success col-sm-12
-							J_msg" role="alert">添加成功！</div>
+							J_msg" role="alert">${msg}</div>
+		</c:if>
 		<!-- <div class="alert alert-danger col-sm-12 J_msg" role="alert">添加失败！</div> -->
 	</div>
 	<div class="col-sm-12">
