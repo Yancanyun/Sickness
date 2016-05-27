@@ -4,6 +4,7 @@ import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -66,6 +67,15 @@ public interface IngredientService {
      * @throws SSException
      */
     public boolean checkIngredientNameIsExist(String name) throws SSException;
+
+    /**
+     * 导出原配料
+     * @param keyword
+     * @param tagIdList
+     * @param response
+     * @throws SSException
+     */
+    public void exportExcel(String keyword, List<Integer> tagIdList, HttpServletResponse response) throws SSException;
 
 
 }

@@ -9,6 +9,7 @@ import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -21,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +50,8 @@ public class AdminStorageItemController extends AbstractController {
         try {
             List<Supplier> supplierList = supplierService.listAll();
             List<Tag> tagList = storageTagService.listAllSmallTag();
-
+            List<Ingredient> ingredientList = ingredientService.listAll();
+            model.addAttribute("ingredientList",ingredientList);
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("tagList", tagList);
         } catch (SSException e) {
@@ -90,16 +93,27 @@ public class AdminStorageItemController extends AbstractController {
             jsonObject.put("id", storageItem.getId());
             jsonObject.put("name", storageItem.getName());
             jsonObject.put("assistantCode", storageItem.getAssistantCode());
-            jsonObject.put("orderUnit", storageItem.getOrderUnitId());
+            jsonObject.put("ingredientName",storageItem.getIngredientName());
             jsonObject.put("tagName", storageItem.getTagName());
             jsonObject.put("supplierName", storageItem.getSupplierName());
-            jsonObject.put("maxStorageQuantity", storageItem.getMaxStorageQuantity());
-            jsonObject.put("minStorageQuantity", storageItem.getMinStorageQuantity());
+            // 各种单位
+            jsonObject.put("orderUnitName", storageItem.getOrderUnitName());
+            jsonObject.put("orderToStorageRatio", storageItem.getOrderToStorageRatio());
+            jsonObject.put("storageUnitName", storageItem.getStorageUnitName());
+            jsonObject.put("storageToCostCardRatio", storageItem.getStorageToCostCardRatio());
+            jsonObject.put("costCardUnitName", storageItem.getCostCardUnitName());
+            jsonObject.put("countUnitName", storageItem.getOrderUnitName());
+            // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
+            jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
+            // 最小库存
+            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
+            jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
             jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
-
             jsonArray.add(jsonObject);
         }
-
         int dataCount = 0;
         try {
             dataCount = storageItemService.countBySearchDto(searchDto);

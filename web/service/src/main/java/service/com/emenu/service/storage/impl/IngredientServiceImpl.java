@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -169,6 +170,11 @@ public class IngredientServiceImpl implements IngredientService {
             throw SSException.get(PartyException.SystemException, e);
         }
         return count > 0 ? true:false;
+    }
+
+    @Override
+    public void exportExcel(String keyword, List<Integer> tagIdList, HttpServletResponse response) throws SSException {
+
     }
 
 

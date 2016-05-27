@@ -37,6 +37,7 @@ public class StorageItem extends AbstractEntity {
     private Integer ingredientId;
 
     // 原配料名称
+    @Transient
     private String ingredientName;
 
     // 分类ID
@@ -372,5 +373,6 @@ public class StorageItem extends AbstractEntity {
     public void setIngredientName(String ingredientName) {
         this.ingredientName = ingredientName;
     }
+
 
 }
