@@ -29,7 +29,7 @@
             <div role="tabpanel" class="tab-pane active" id="single">
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <h4>菜品编辑</h4>
+                        <h4>编辑菜品</h4>
                     </div>
                     <div class="panel-body">
                         <form class="form-horizontal J_operForm" autocomplete="off" action="${website}admin/dish" method="post">

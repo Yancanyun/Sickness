@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------
-* @Description: 配置url地址 (url-core.js)
+* @Description: 配置url地址 (url-core.jsp)
 * @Version: V2.0.0
 * @author: cuiy(361151713@qq.com)
 * @date 2015.11.02

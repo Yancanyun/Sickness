@@ -5,7 +5,7 @@
     var site ={
         website:'${website}', //站点地址
         staticWebsite: '${staticWebsite}', // 前端服务器地址
-        puiWebsite: '${staticWebsite}/tool/pui2/'
+        puiWebsite: '${staticWebsite}tool/pui2/'
     }
 
 

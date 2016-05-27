@@ -31,11 +31,11 @@
                         <div class="col-sm-6">
                             <div class="checkbox block">
                                 <label>
-                                    <input class="J_selectAll"  type="checkbox" value="1" name="bigTag"> 全部大类
+                                    <input class="J_selectAll" type="checkbox" value="1" name="bigTag" > 全部大类
                                 </label>
                                 <c:forEach var="tag" items="${tagList}">
                                     <label>
-                                        <input class="J_selectAll" type="checkbox" value="${tag.id}" name="tagIdList"> ${tag.name}
+                                        <input class="J_bigTag" type="checkbox" value="${tag.id}" name="tagIdList"> ${tag.name}
                                     </label>
                                 </c:forEach>
                             </div>
