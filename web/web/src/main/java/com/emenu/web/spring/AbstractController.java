@@ -25,6 +25,7 @@ import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
+import com.emenu.service.service.CallWaiterService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
@@ -411,6 +412,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("ingredientService")
     protected static IngredientService ingredientService;
+
+    //成本卡原料
+    @StaticAutoWire
+    @Qualifier("callWaiterService")
+    protected  static CallWaiterService callWaiterService;
 }
 
 

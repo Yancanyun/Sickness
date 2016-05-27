@@ -27,7 +27,7 @@
             <a class="menu-list J_layer_1_menu" data-menu-id="2" href="javascript:;">饭店管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/restaurant/area">餐台区域管理</a></li>
-                <li><a class="J_menu" href="${website}admin/restaurant/call/waiter">服务类型管理</a></li>
+                <li><a class="J_menu" href="${website}admin/restaurant/call/waiter">呼叫服务类型管理</a></li>
                 <li><a class="J_menu" href="${website}admin/restaurant/table">餐台管理</a></li>
                 <li><a class="J_menu" href="${website}admin/restaurant/qrcode">餐台二维码</a></li>
                 <li><a class="J_menu" href="${website}admin/restaurant/meal/period">餐段管理</a></li>

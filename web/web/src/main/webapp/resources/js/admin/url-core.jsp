@@ -82,10 +82,10 @@
             ['saveEditItem', site.website + 'admin/restaurant/meal/period/ajax', 'put', '保存编辑项'],
 
              //呼叫类型管理
-+            ['delCall', site.website + 'admin/restaurant/call/waiter/ajax/del', 'delete', '删除呼叫类型'],
-+            ['getRank', site.website + 'admin/restaurant/call/waiter/ajax/get/tolerant/state', 'get', '添加呼叫类型时获取默认排序'],
-+            ['changeState', site.website + 'admin/restaurant/call/waiter/ajax/status/update', 'get', '改变状态'],
-+            ['saveEditTerm', site.website + 'admin/restaurant/call/waiter/ajax/update', 'get', '保存编辑项']
+            ['delCall', site.website + 'admin/restaurant/call/waiter/ajax/del', 'get', '删除呼叫类型'],
+            ['getRank', site.website + 'admin/restaurant/call/waiter/ajax/get/tolerant/state', 'get', '添加呼叫类型时获取默认排序'],
+            ['changeState', site.website + 'admin/restaurant/call/waiter/ajax/status/update', 'get', '改变状态'],
+            ['saveEditTerm', site.website + 'admin/restaurant/call/waiter/ajax/update', 'get', '保存编辑项']
 
         ],
         // 库存管理

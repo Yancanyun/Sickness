@@ -10,9 +10,9 @@
 			<li>
 				<a href="#">饭店管理</a>
 			</li>
-			<li class="active">呼叫类型管理</li>
+			<li class="active">呼叫服务类型管理</li>
 		</ol>
-		<h2>呼叫类型管理</h2>
+		<h2>呼叫服务类型管理</h2>
 		<div class="alert alert-success col-sm-12
 							J_msg" role="alert">添加成功！</div>
 		<!-- <div class="alert alert-danger col-sm-12 J_msg" role="alert">添加失败！</div> -->
@@ -20,10 +20,10 @@
 	<div class="col-sm-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h4>呼叫类型管理</h4>
+				<h4>呼叫服务类型管理</h4>
 			</div>
 			<div class="panel-body">
-				<a href="javascript:;" class="btn btn-success margin-bottom-15 J_add"><i class="fa fa-plus"></i>&nbsp;添加呼叫类型</a>
+				<a href="javascript:;" class="btn btn-success margin-bottom-15 J_add"><i class="fa fa-plus"></i>&nbsp;添加呼叫服务类型</a>
 				<form class="J_operForm" method="post" action="${website}admin/restaurant/call/waiter">
 					<input class="J_hidden" type="hidden" name="id" value=""/>
 					<div class="table-responsive">

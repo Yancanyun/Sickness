@@ -32,9 +32,6 @@ import java.util.List;
 @RequestMapping(value = URLConstants.ADMIN_CALL_WAITER_URL)
 public class CallWaiterController extends AbstractController{
 
-    @Autowired
-    CallWaiterService callWaiterService;
-
     /**
      * 去服务管理首页
      *
@@ -88,7 +85,7 @@ public class CallWaiterController extends AbstractController{
      * @return
      */
     @Module(ModuleEnums.AdminRestaurantCallWaiterDel)
-    @RequestMapping(value = "/ajax/del" , method = RequestMethod.DELETE)
+    @RequestMapping(value = "/ajax/del" , method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxDelCallWaiter(@RequestParam("id")Integer id)
     {
@@ -157,13 +154,10 @@ public class CallWaiterController extends AbstractController{
         List<CallWaiter> callWaiter = new ArrayList<CallWaiter>();
         try {
             callWaiter = callWaiterService.queryAllCallWaiter();
-            jsonObject.put("code",0);
-            JSONObject temp = new JSONObject();
             if(callWaiter.isEmpty())
-            temp.put("weight",1);//若没有服务类型则默认值为1
+            jsonObject.put("weight",1);//若没有服务类型则默认值为1
             else
-            temp.put("weight",callWaiter.get(callWaiter.size()-1).getWeight()+1);
-            jsonObject.put("data",temp);
+            jsonObject.put("weight",callWaiter.get(callWaiter.size()-1).getWeight()+1);
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
