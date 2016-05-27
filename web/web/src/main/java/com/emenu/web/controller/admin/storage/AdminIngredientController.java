@@ -160,15 +160,11 @@ public class AdminIngredientController extends AbstractController{
         return "admin/storage/ingredient/new_home";
     }
 
-    /**
-     * 添加原配料
-     * @param ingredient
-     * @return
-     */
+
     @Module(value = ModuleEnums.AdminStorageIngredientNew, extModule = ModuleEnums.AdminStorageIngredientNew)
     @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject newStorageReportDto(@RequestBody Ingredient ingredient){
+    public JSONObject newIngredient(Ingredient ingredient){
         try {
             ingredientService.newIngredient(ingredient);
             return sendJsonObject(AJAX_SUCCESS_CODE);

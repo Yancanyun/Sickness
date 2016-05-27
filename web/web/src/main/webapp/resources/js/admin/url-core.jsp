@@ -114,7 +114,12 @@
             ['getMoney', site.website + 'admin/storage/report/ajax/bill', 'get', '获取当前物品小计'],
             ['delStoreBill', site.website + 'admin/storage/report/ajax/del/&{id}', 'delete', '删除库存单据'],
             ['addStoreBill', site.website + 'admin/storage/report/ajax/new', 'post', '添加库存单据', 'json'],
-            ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'post', '编辑库存单据', 'json']
+            ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'post', '编辑库存单据', 'json'],
+
+            //原配料管理
+            ['hasName', site.website + 'admin/storage/ingredient/ajax/checkname', 'get', 'yuanpeil判断原配料名称是否重复'],
+            ['submitIngredient', site.website + 'admin/storage/ingredient/ajax/new', 'post', '提交添加的原配料'],
+            ['getRelatedSettings', site.staticWebsite + 'mock/admin/get-related-settings.json', 'get', '获取均价、结存、总数量'],
         ],
         // 菜品管理
         DishManagement: [

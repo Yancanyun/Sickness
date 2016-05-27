@@ -58,10 +58,12 @@ public class IngredientServiceImpl implements IngredientService {
             // 原配料编号
             String serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.IngredientNum);
             ingredient.setIngredientNumber(serialNumber);
+            ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+            ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
             // 助记码
             if (Assert.isNull(ingredient.getAssistantCode())
                     || ingredient.getAssistantCode().equals("")){
-                String assistantCode = StringUtils.str2Pinyin("糖醋排骨","headChar");
+                String assistantCode = StringUtils.str2Pinyin(ingredient.getName(),"headChar");
                 ingredient.setAssistantCode(assistantCode);
             }
         } catch (Exception e) {

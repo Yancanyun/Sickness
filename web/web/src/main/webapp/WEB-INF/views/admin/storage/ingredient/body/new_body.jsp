@@ -52,12 +52,12 @@
                             </select>
                             <select class="w180 form-control" name="orderUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                             <select class="w180 form-control hidden" name="orderUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -77,12 +77,12 @@
                             </select>
                             <select class="w180 form-control J_storageUnit" name="storageUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                             <select class="w180 form-control hidden J_storageUnit" name="storageUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -102,12 +102,12 @@
                             </select>
                             <select class="w180 form-control" name="costCardUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                             <select class="w180 form-control hidden" name="costCardUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
