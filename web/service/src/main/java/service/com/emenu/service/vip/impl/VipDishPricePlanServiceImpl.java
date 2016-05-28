@@ -76,7 +76,8 @@ public class VipDishPricePlanServiceImpl implements VipDishPricePlanService {
     public void updatePlan(VipDishPricePlan vipDishPricePlan) throws SSException{
         try{
             //判断id是否合法
-            if (!Assert.isNull(vipDishPricePlan.getId()) && Assert.lessOrEqualZero(vipDishPricePlan.getId())){
+            if (!Assert.isNull(vipDishPricePlan.getId())
+                    && Assert.lessOrEqualZero(vipDishPricePlan.getId())){
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
             //判断会员方案名称是否为空

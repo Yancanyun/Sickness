@@ -306,6 +306,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         Assert.isNotNull(ingredient.getTagId(), EmenuException.IngredientTagIdIsNotNull);
         Assert.isNotNull(ingredient.getName(), EmenuException.IngredientNameIsNotNull);
+        checkIngredientNameIsExist(ingredient.getName());
         Assert.isNotNull(ingredient.getOrderUnitId(), EmenuException.IngredientOrderUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getStorageUnitId(), EmenuException.IngredientStorageUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getCostCardUnitId(), EmenuException.IngredientCostCardUnitIdIsNotNull);
