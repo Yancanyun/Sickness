@@ -9,11 +9,6 @@
         <td>&{it.ingredientNumber}</td>
         <td>&{it.assistantCode}</td>
         <td>&{it.tagName}</td>
-        <td>&{it.orderUnitName}</td>
-        <td>&{it.orderToStorageRatio}</td>
-        <td>&{it.storageUnitName}</td>
-        <td>&{it.storageToCostCardRatio}</td>
-        <td>&{it.costCardUnitName}</td>
         <td>&{it.maxStorageQuantityStr}</td>
         <td>&{it.minStorageQuantityStr}</td>
         <td>&{it.averagePrice}</td>
@@ -22,8 +17,9 @@
         <td>&{it.totalQuantityStr}</td>
         <td>&{it.totalMoney}</td>
         <td>
-            <a href="#" class="label-info"><i class="fa fa-pencil">&nbsp;编辑</i></a>
+            <a href="${website}admin/storage/ingredient/toupdate/&{it.id}" class="label-info"><i class="fa fa-pencil">&nbsp;编辑</i></a>
             <a href="javascript:;" class="label-info"><i class="fa fa-times">&nbsp;删除</i></a>
+            <a href="${website}admin/storage/ingredient/todetail/&{it.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
         </td>
     </tr>
     {@/each}

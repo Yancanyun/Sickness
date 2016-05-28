@@ -66,11 +66,6 @@
                             <th rowspan="2">原配料编号</th>
                             <th rowspan="2">助记码</th>
                             <th rowspan="2">所属分类</th>
-                            <th rowspan="2">订货单位</th>
-                            <th rowspan="2" class="ratio-width">订货单位与库存换算关系</th>
-                            <th rowspan="2">库存单位</th>
-                            <th rowspan="2" class="ratio-width">库存单位与成本卡换算关系</th>
-                            <th rowspan="2">成本卡单位</th>
                             <th colspan="2">库存预警</th>
                             <th colspan="3">结存</th>
                             <th rowspan="2">总数量</th>
