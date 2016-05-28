@@ -17,7 +17,11 @@ public class DishSearchDto {
     // 页码
     private Integer pageNo;
 
+    // 页面大小
     private Integer pageSize;
+
+    // 开始数据
+    private Integer offset;
 
     // 菜品名称
     private String name;
@@ -36,6 +40,9 @@ public class DishSearchDto {
 
     // 分类id
     private List<Integer> tagIdList;
+
+    // 当前餐段id
+    private List<Integer> dishMealPeriodIdList;
 
     // 排序字段
     private String orderBy;
@@ -73,6 +80,14 @@ public class DishSearchDto {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
     }
 
     public String getName() {
@@ -121,6 +136,14 @@ public class DishSearchDto {
 
     public void setTagIdList(List<Integer> tagIdList) {
         this.tagIdList = tagIdList;
+    }
+
+    public List<Integer> getDishMealPeriodIdList() {
+        return dishMealPeriodIdList;
+    }
+
+    public void setDishMealPeriodIdList(List<Integer> dishMealPeriodIdList) {
+        this.dishMealPeriodIdList = dishMealPeriodIdList;
     }
 
     public String getOrderBy() {

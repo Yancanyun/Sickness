@@ -3,6 +3,7 @@ package com.emenu.service.dish;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSmallDto;
+import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
@@ -94,5 +95,17 @@ public interface DishService {
      * @throws SSException
      */
     public List<DishSmallDto> listByKeyword(String keyword) throws SSException;
+
+
+    //***************************顾客端Service*************************************
+
+    /**
+     * 顾客端菜品列表（分页）
+     * keyword为空返回所有结果
+     * @author: chenyuting
+     * @return
+     * @throws SSException
+     */
+    public List<DishDto> listBySearchDtoInMobile(DishSearchDto dishSearchDto) throws SSException;
 }
 
