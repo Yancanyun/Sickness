@@ -217,7 +217,7 @@ public enum ModuleEnums {
     AdminStorageIngredientList("Admin:Storage:Ingredient:List"),
     AdminStorageIngredientNew("Admin:Storage:Ingredient:New"),
     AdminStorageIngredientUpdate("Admin:Storage:Ingredient:Update"),
-
+    AdminStorageIngredientExport("Admin:Storage:Ingredient:Export"),
     // 库存物品管理
     AdminStorageItem("Admin:Storage:Item"),
     AdminStorageItemList("Admin:Storage:Item:List"),

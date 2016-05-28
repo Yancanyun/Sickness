@@ -68,14 +68,14 @@ public interface IngredientService {
      */
     public boolean checkIngredientNameIsExist(String name) throws SSException;
 
+
     /**
-     * 导出原配料
-     * @param keyword
-     * @param tagIdList
+     *
+     * @param searchDto
      * @param response
      * @throws SSException
      */
-    public void exportExcel(String keyword, List<Integer> tagIdList, HttpServletResponse response) throws SSException;
+    public void exportExcel(ItemAndIngredientSearchDto searchDto, HttpServletResponse response) throws SSException;
 
 
 }

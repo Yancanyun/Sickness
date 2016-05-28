@@ -3,6 +3,7 @@ package com.emenu.mapper.storage;
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author xiaozl
  * @date: 2016/5/14
  */
+
 public interface IngredientMapper {
 
     /**
@@ -30,7 +32,7 @@ public interface IngredientMapper {
 
     /**
      * 根据条件检索原配料
-     * @param itemSearchDto
+     * @param searchDto
      * @return
      * @throws Exception
      */
@@ -51,4 +53,8 @@ public interface IngredientMapper {
      * @throws Exception
      */
     public int coutByName(@Param("name") String name) throws Exception;
+    /**
+     *
+     */
+    public List<Ingredient> listByKeywordAndTagids(String keyword, List<Integer> tagIdList)throws Exception;
 }
