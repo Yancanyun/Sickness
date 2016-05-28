@@ -56,7 +56,7 @@
             </div>
             <div class="panel-body">
                 <a href="${website}admin/storage/ingredient/tonew" class="btn btn-success margin-bottom-15"><i class="fa fa-plus">&nbsp;添加原配料</i></a>
-                <a href="1?" class="btn btn-warning pull-right J_export"><i class="fa fa-download">&nbsp;导出</i></a>
+                <a href="${website}admin/storage/ingredient/export" class="btn btn-warning pull-right J_export"><i class="fa fa-download">&nbsp;导出</i></a>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead class="v-center">

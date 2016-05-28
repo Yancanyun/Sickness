@@ -232,11 +232,11 @@ public class IngredientServiceImpl implements IngredientService {
                 sheet.addCell(AssistantCode);
 
              //所属分类
-                Label TagName = new Label(6, row,ingredient.getTagName());
+                Label TagName = new Label(4, row,ingredient.getTagName());
                 TagName.setCellFormat(cellFormat);
                 sheet.addCell(TagName);
              //订货单位
-                Label OrderUnitName = new Label(6, row,ingredient.getOrderUnitName());
+                Label OrderUnitName = new Label(5, row,ingredient.getOrderUnitName());
                 OrderUnitName.setCellFormat(cellFormat);
                 sheet.addCell(OrderUnitName);
              //订货单位与库存换算关系
@@ -244,15 +244,15 @@ public class IngredientServiceImpl implements IngredientService {
                 OrderToStorageRatio.setCellFormat(cellFormat);
                 sheet.addCell(OrderToStorageRatio);
             //库存单位
-                Label StorageUnitName = new Label(6, row,ingredient.getStorageUnitName());
+                Label StorageUnitName = new Label(7, row,ingredient.getStorageUnitName());
                 StorageUnitName.setCellFormat(cellFormat);
                 sheet.addCell(StorageUnitName);
             //库存单位与成本卡换算关系
-                Label StorageToCostCardRatio = new Label(6, row,ingredient.getStorageToCostCardRatio().toString());
+                Label StorageToCostCardRatio = new Label(8, row,ingredient.getStorageToCostCardRatio().toString());
                 StorageToCostCardRatio.setCellFormat(cellFormat);
                 sheet.addCell(StorageToCostCardRatio);
             //成本卡单位
-                Label CostCardUnitName = new Label(6, row,ingredient.getCostCardUnitName());
+                Label CostCardUnitName = new Label(9, row,ingredient.getCostCardUnitName());
                 CostCardUnitName.setCellFormat(cellFormat);
                 sheet.addCell(CostCardUnitName);
           /*    //库存预警上限

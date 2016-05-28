@@ -9,6 +9,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
@@ -277,8 +278,16 @@ public class AdminIngredientController extends AbstractController{
 
     @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = "export",method = RequestMethod.GET)
-    public void export() {
-
+    public void export(ItemAndIngredientSearchDto searchDto,
+                       HttpServletResponse response) {
+        if(searchDto==null)System.out.println("searchDto is null!!!");
+        try {
+            ingredientService.exportExcel(searchDto,response);
+            sendErrMsg("导出成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
     }
 
 }
