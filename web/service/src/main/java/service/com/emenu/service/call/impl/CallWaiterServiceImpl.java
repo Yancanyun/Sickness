@@ -1,9 +1,9 @@
-package com.emenu.service.service.impl;
+package com.emenu.service.call.impl;
 
-import com.emenu.common.entity.service.CallWaiter;
+import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.mapper.service.CallWaiterMapper;
-import com.emenu.service.service.CallWaiterService;
+import com.emenu.mapper.call.CallWaiterMapper;
+import com.emenu.service.call.CallWaiterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * CallServiceService
- * 呼叫服务service
+ * CallWaiterService
+ * 后台呼叫服务类型service
  * @author quanyibo
  * @date: 2016/5/23
  */

@@ -10,8 +10,8 @@
 
     <!-- 定时任务 start -->
 
-    <!--<bean id="countTimeTask" class="com.rest.service.timetask.CountTimeTaskService"/>-->
-    <!--<bean id="statisticsTask" class="com.rest.service.timetask.StatisticsTaskService"/>-->
+    <!--<bean id="countTimeTask" class="com.rest.call.timetask.CountTimeTaskService"/>-->
+    <!--<bean id="statisticsTask" class="com.rest.call.timetask.StatisticsTaskService"/>-->
 
     <!--库存结算类-->
     <bean id="countSettlementTask" class="com.emenu.service.storage.impl.StorageSettlementServiceImpl"/>

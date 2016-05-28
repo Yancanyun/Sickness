@@ -1,7 +1,6 @@
-package com.emenu.mapper.service;
+package com.emenu.mapper.call;
 
-import com.emenu.common.entity.service.CallWaiter;
-import com.pandawork.core.common.exception.SSException;
+import com.emenu.common.entity.call.CallWaiter;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

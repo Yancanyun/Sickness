@@ -13,7 +13,7 @@
         <!-- <div>
         </div>
         <div></div> -->
-        <!-- <div class="service-info">
+        <!-- <div class="call-info">
             <p>
                 <label>上菜方式 ：</label>
                 <input type="radio" checked="checked" name="serviceWay" value="0" /><span>即起</span>

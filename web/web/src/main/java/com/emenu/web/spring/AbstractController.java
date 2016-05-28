@@ -3,8 +3,8 @@ package com.emenu.web.spring;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.call.CallCacheService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
@@ -25,7 +25,7 @@ import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
-import com.emenu.service.service.CallWaiterService;
+import com.emenu.service.call.CallWaiterService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
@@ -36,9 +36,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -433,6 +430,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("callWaiterService")
     protected  static CallWaiterService callWaiterService;
+
+    //成本卡原料
+    @StaticAutoWire
+    @Qualifier("callCacheService")
+    protected  static CallCacheService callCacheService;
 }
 
 

@@ -1,13 +1,13 @@
-package com.emenu.service.service;
+package com.emenu.service.call;
 
-import com.emenu.common.entity.service.CallWaiter;
+import com.emenu.common.entity.call.CallWaiter;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;
 
 /**
- * CallService
- * 服务管理service
+ * CallWaiterService
+ * 后台呼叫服务类型管理service
  * @author quanyibo
  * @date: 2016/5/23
  */
