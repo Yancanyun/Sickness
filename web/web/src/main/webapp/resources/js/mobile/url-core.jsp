@@ -28,7 +28,7 @@
         //菜品分类文字版
         ClassifyText: [
             ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品'],
-            ['getDishList', site.staticWebsite + 'mock/mobile/dish-list.json', 'get', '获取菜品']
+            ['getDishList', site.website + 'mobile/dish/text/ajax/list/{curPage}', 'get', '获取菜品']
         ],
         //订单
         Order: [
