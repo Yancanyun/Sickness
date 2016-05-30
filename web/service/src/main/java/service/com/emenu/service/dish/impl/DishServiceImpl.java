@@ -279,6 +279,17 @@ public class DishServiceImpl implements DishService {
             }
             dishSearchDto.setDishMealPeriodIdList(dishMealPeriodIdList);
             dishDtoList = dishMapper.listBySearchDtoInMobile(dishSearchDto);
+
+            // 把菜品小图、大图加进去
+            for (DishDto dishDto : dishDtoList) {
+                List<DishImg> smallImgList = dishImgService.listByDishIdAndType(dishDto.getId(), DishImgTypeEnums.SmallImg);
+                if (Assert.isNotEmpty(smallImgList)) {
+                    dishDto.setSmallImg(smallImgList.get(0));
+                }
+                List<DishImg> bigImgList = dishImgService.listByDishIdAndType(dishDto.getId(), DishImgTypeEnums.BigImg);
+                dishDto.setBigImgList(bigImgList);
+            }
+
             return dishDtoList;
         } catch (Exception e){
             LogClerk.errLog.error(e);

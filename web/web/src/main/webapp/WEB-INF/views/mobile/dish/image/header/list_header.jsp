@@ -17,7 +17,7 @@
         <input type="text" placeholder="搜索..." class="search form-control"><i class="fa fa-search search-img"></i>
     </div>
     <div class="text-trigger">
-        <a href="#">文</a>
+        <a href="${website}mobile/dish/text">文</a>
     </div>
 </div>
 

@@ -70,30 +70,30 @@
 
     <!--菜品列表-->
     <ul class="dish-list clearfix J_scroll">
-      <c:forEach var="dishDto" items="${dishDtoList}">
-        <li class="dish clearfix" data-dish-id="${dishDto.id}">
-          <a href="#" class="dish-img"><img src="${tinyWebsite}${dishDto.smallImg.imgPath}" alt="${dishDto.name}"></a>
-          <p class="dish-name">${dishDto.name}</p>
-          <p class="dish-like"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="dish-like-number">${dishDto.likeNums}</span></p>
-          <div class="add-dish J_addDishTrigger" data-dish-number="1">
-            点餐
-            <span class="dish-number J_dishNumber hidden"></span>
-          </div>
-          <div class="dish-info clearfix">
-            <p class="dish-star">
-              <i class="fa fa-star active"></i>
-              <i class="fa fa-star active"></i>
-              <i class="fa fa-star active"></i>
-              <i class="fa fa-star active"></i>
-              <i class="fa fa-star"></i>
-            </p>
-            <p class="dish-price-sale">
-              <span class="dish-price">￥${dishDto.price}</span>
-              <span class="dish-sale">￥${dishDto.salePrice}</span>
-            </p>
-          </div>
-        </li>
-      </c:forEach>
+      <%--<c:forEach var="dishDto" items="${dishDtoList}">--%>
+        <%--<li class="dish clearfix" data-dish-id="${dishDto.id}">--%>
+          <%--<a href="#" class="dish-img"><img src="${tinyWebsite}${dishDto.smallImg.imgPath}" alt="${dishDto.name}"></a>--%>
+          <%--<p class="dish-name">${dishDto.name}</p>--%>
+          <%--<p class="dish-like"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="dish-like-number">${dishDto.likeNums}</span></p>--%>
+          <%--<div class="add-dish J_addDishTrigger" data-dish-number="1">--%>
+            <%--点餐--%>
+            <%--<span class="dish-number J_dishNumber hidden"></span>--%>
+          <%--</div>--%>
+          <%--<div class="dish-info clearfix">--%>
+            <%--<p class="dish-star">--%>
+              <%--<i class="fa fa-star active"></i>--%>
+              <%--<i class="fa fa-star active"></i>--%>
+              <%--<i class="fa fa-star active"></i>--%>
+              <%--<i class="fa fa-star active"></i>--%>
+              <%--<i class="fa fa-star"></i>--%>
+            <%--</p>--%>
+            <%--<p class="dish-price-sale">--%>
+              <%--<span class="dish-price">￥${dishDto.price}</span>--%>
+              <%--<span class="dish-sale">￥${dishDto.salePrice}</span>--%>
+            <%--</p>--%>
+          <%--</div>--%>
+        <%--</li>--%>
+      <%--</c:forEach>--%>
     </ul>
   </div>
 </div>
