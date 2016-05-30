@@ -188,6 +188,7 @@
         LEFT JOIN `t_taste` taste ON taste.`id` = dishTaste.`taste_id`
         WHERE dish.`id` = #{id}
     </select>
+
     <select id="listBySearchDtoInMobile" resultType="DishDto">
         SELECT
         dish.`id` AS id,

@@ -95,27 +95,8 @@ public class DishServiceImpl implements DishService {
         int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
         int offset = pageNo * searchDto.getPageSize();
         try {
-            // 如果分类有3级，则先根据第2级分类获取所有的第三级分类ID
-            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
-            int categoryLayer = 2;
-            if (Assert.isNotNull(categoryLayerStr)) {
-                categoryLayer = Integer.parseInt(categoryLayerStr);
-            }
-
-            if (categoryLayer == 3 && searchDto.getTagIdList() != null) {
-                List<Tag> smallTagList = new ArrayList<Tag>();
-                for (int bigTagId : searchDto.getTagIdList()) {
-                    List<Tag> smallTagInBigTag = tagFacadeService.listChildrenByTagId(bigTagId);
-                    smallTagList.addAll(smallTagInBigTag);
-                }
-
-                List<Integer> smallTagIdList = new ArrayList<Integer>();
-                for (Tag smallTag : smallTagList) {
-                    smallTagIdList.add(smallTag.getId());
-                }
-
-                searchDto.setTagIdList(smallTagIdList);
-            }
+            // 如果分类有3级，则先根据第2级分类获取所有的第3级分类ID
+            getSmallTag(searchDto);
 
             // TODO: 15/12/2 这种方式不是很好
             searchDto.setOrderByColumn();
@@ -131,27 +112,8 @@ public class DishServiceImpl implements DishService {
     public int countBySearchDto(DishSearchDto searchDto) throws SSException {
         Integer count = 0;
         try {
-            // 如果分类有3级，则先根据第2级分类获取所有的第三级分类ID
-            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
-            int categoryLayer = 2;
-            if (Assert.isNotNull(categoryLayerStr)) {
-                categoryLayer = Integer.parseInt(categoryLayerStr);
-            }
-
-            if (categoryLayer == 3 && searchDto.getTagIdList() != null) {
-                List<Tag> smallTagList = new ArrayList<Tag>();
-                for (int bigTagId : searchDto.getTagIdList()) {
-                    List<Tag> smallTagInBigTag = tagFacadeService.listChildrenByTagId(bigTagId);
-                    smallTagList.addAll(smallTagInBigTag);
-                }
-
-                List<Integer> smallTagIdList = new ArrayList<Integer>();
-                for (Tag smallTag : smallTagList) {
-                    smallTagIdList.add(smallTag.getId());
-                }
-
-                searchDto.setTagIdList(smallTagIdList);
-            }
+            // 如果分类有3级，则先根据第2级分类获取所有的第3级分类ID
+            getSmallTag(searchDto);
 
             count = dishMapper.countBySearchDto(searchDto);
         } catch (Exception e) {
@@ -310,6 +272,33 @@ public class DishServiceImpl implements DishService {
         return dishSmallDtoList;
     }
 
+    public List<DishDto> listBySearchDtoInMobile(DishSearchDto dishSearchDto) throws SSException{
+        Integer curPage = dishSearchDto.getPageNo();
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        dishSearchDto.setOffset(curPage * dishSearchDto.getPageSize());
+        List<DishDto> dishDtoList = new ArrayList<DishDto>();
+        List<Integer> dishMealPeriodIdList = new ArrayList<Integer>();
+        try{
+            // 如果分类有3级，则先根据第2级分类获取所有的第3级分类ID
+            getSmallTag(dishSearchDto);
+
+            // 取出当前餐段的id，放入searchDto
+            MealPeriod mealPeriod = mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.Using);
+            Integer curMealPeriod =  mealPeriod.getId();
+            dishMealPeriodIdList.add(curMealPeriod);
+            // 如果当前餐段不是整天，则把整天销售的菜品放入
+            if (curMealPeriod != 1){
+                dishMealPeriodIdList.add(1);
+            }
+            dishSearchDto.setDishMealPeriodIdList(dishMealPeriodIdList);
+            dishDtoList = dishMapper.listBySearchDtoInMobile(dishSearchDto);
+            return dishDtoList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
+        }
+    }
+
     private boolean checkBeforeSave(DishDto dishDto) throws SSException {
         if (Assert.isNull(dishDto)) {
             return false;
@@ -354,27 +343,33 @@ public class DishServiceImpl implements DishService {
         return  dish;
     }
 
-    public List<DishDto> listBySearchDtoInMobile(DishSearchDto dishSearchDto) throws SSException{
-        Integer curPage = dishSearchDto.getPageNo();
-        curPage = curPage <= 0 ? 0 : curPage - 1;
-        dishSearchDto.setOffset(curPage * dishSearchDto.getPageSize());
-        List<DishDto> dishDtoList = new ArrayList<DishDto>();
-        List<Integer> dishMealPeriodIdList = new ArrayList<Integer>();
-        try{
-            // 取出当前餐段的id，放入searchDto
-            MealPeriod mealPeriod = mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.Using);
-            Integer curMealPeriod =  mealPeriod.getId();
-            dishMealPeriodIdList.add(curMealPeriod);
-            // 如果当前餐段不是整天，则把整天销售的菜品放入
-            if (curMealPeriod != 1){
-                dishMealPeriodIdList.add(1);
-            }
-            dishSearchDto.setDishMealPeriodIdList(dishMealPeriodIdList);
-            dishDtoList = dishMapper.listBySearchDtoInMobile(dishSearchDto);
-            return dishDtoList;
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+    /**
+     * 如果分类有3级，根据第2级分类获取所有的第3级分类ID
+     * @author yangch
+     * @param dishSearchDto
+     * @return
+     */
+    private DishSearchDto getSmallTag(DishSearchDto dishSearchDto) throws SSException {
+        String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+        int categoryLayer = 2;
+        if (Assert.isNotNull(categoryLayerStr)) {
+            categoryLayer = Integer.parseInt(categoryLayerStr);
         }
+        if (categoryLayer == 3 && dishSearchDto.getTagIdList() != null) {
+            List<Tag> smallTagList = new ArrayList<Tag>();
+            for (int bigTagId : dishSearchDto.getTagIdList()) {
+                List<Tag> smallTagInBigTag = tagFacadeService.listChildrenByTagId(bigTagId);
+                smallTagList.addAll(smallTagInBigTag);
+            }
+
+            List<Integer> smallTagIdList = new ArrayList<Integer>();
+            for (Tag smallTag : smallTagList) {
+                smallTagIdList.add(smallTag.getId());
+            }
+
+            dishSearchDto.setTagIdList(smallTagIdList);
+        }
+
+        return dishSearchDto;
     }
 }
