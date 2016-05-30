@@ -75,9 +75,6 @@ public interface DishMapper {
      * 顾客端-根据关键字，分页显示菜品列表
      * @author: chenyuting
      *
-     * @param keyword
-     * @param offset
-     * @param pageSize
      * @return
      * @throws Exception
      */
