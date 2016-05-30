@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -189,7 +190,8 @@ public class IngredientServiceImpl implements IngredientService {
         OutputStream os = null;
         try {
             //从数据库中获取数据
-            List<Ingredient> ingredientList=ingredientMapper.listBySearchDto(searchDto);
+            List<Ingredient> ingredientList=ingredientMapper.listDetailsBySearchDto(searchDto);
+
             for (Ingredient ingredient :ingredientList) {
                 EntityUtil.setNullFieldDefault(ingredient);
             }
@@ -207,7 +209,8 @@ public class IngredientServiceImpl implements IngredientService {
             WritableWorkbook outBook = Workbook.createWorkbook(os, tplWorkBook);
             //获取sheet 往sheet中写入数据
             WritableSheet sheet = outBook.getSheet(0);
-            int row=2;
+            int row=3;
+
             for(Ingredient ingredient :ingredientList){
                 //单元格居中格式
                 WritableCellFormat cellFormat=new WritableCellFormat();
@@ -215,9 +218,9 @@ public class IngredientServiceImpl implements IngredientService {
                 cellFormat.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);
                 cellFormat.setWrap(true);
                 //编号
-                Label labelSupplierName = new Label(0, row, ingredient.getAssistantCode());
-                labelSupplierName.setCellFormat(cellFormat);
-                sheet.addCell(labelSupplierName);
+                Label lableId= new Label(0, row, ingredient.getId()+"");
+                lableId.setCellFormat(cellFormat);
+                sheet.addCell(lableId);
                //名称
                 Label labelName = new Label(1, row,ingredient.getName());
                 labelName.setCellFormat(cellFormat);
@@ -255,44 +258,74 @@ public class IngredientServiceImpl implements IngredientService {
                 Label CostCardUnitName = new Label(9, row,ingredient.getCostCardUnitName());
                 CostCardUnitName.setCellFormat(cellFormat);
                 sheet.addCell(CostCardUnitName);
-          /*    //库存预警上限
-                Label labelTotalMoney = new Label(6, row,ingredient.getTotalQuantityStr());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
+
+             //库存预警上限
+                Label MaxStorageQuantity = new Label(10, row,ingredient.getMaxStorageQuantity().intValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                MaxStorageQuantity.setCellFormat(cellFormat);
+                sheet.addCell(MaxStorageQuantity);
              //库存预警下限
-                Label labelTotalMoney = new Label(6, row,ingredient.getTableName());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
+                Label MinStorageQuantity = new Label(11, row,ingredient.getMinStorageQuantity().intValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                MinStorageQuantity.setCellFormat(cellFormat);
+                sheet.addCell(MinStorageQuantity);
              //均价
-                Label labelTotalMoney = new Label(6, row,ingredient.get);
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
+                Label AveragePrice = new Label(12, row,ingredient.getAveragePrice().toString());
+                AveragePrice.setCellFormat(cellFormat);
+                sheet.addCell(AveragePrice);
               //数量
-                Label labelTotalMoney = new Label(6, row,ingredient.getCostCardUnitName());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
+                Label RealQuantity = new Label(13, row,ingredient.getRealQuantity().doubleValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                RealQuantity.setCellFormat(cellFormat);
+                sheet.addCell(RealQuantity);
 
                 //金额
-                Label labelTotalMoney = new Label(6, row,ingredient.getCostCardUnitName());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
+                Label RealMoney = new Label(14, row,ingredient.getRealMoney().toString());
+                RealMoney.setCellFormat(cellFormat);
+                sheet.addCell(RealMoney);
 
                 //总数量
-                Label labelTotalMoney = new Label(6, row,ingredient.getCostCardUnitName());
+                Label TotalQuantity = new Label(15, row,ingredient.getTotalQuantity().doubleValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                TotalQuantity.setCellFormat(cellFormat);
+                sheet.addCell(TotalQuantity);
+
+                //总金额
+                Label labelTotalMoney = new Label(16, row,ingredient.getTotalMoney().toString());
                 labelTotalMoney.setCellFormat(cellFormat);
                 sheet.addCell(labelTotalMoney);
 
-                //总金额
-                Label labelTotalMoney = new Label(6, row,ingredient.getCostCardUnitName());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
-*/
                 row++;
 
             }
 
+
+            outBook.write();
+            outBook.close();
+            tplWorkBook.close();
+            tplStream.close();
+            os.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogClerk.errLog.error(e);
+            response.setContentType("text/html");
+            response.setHeader("Content-Type", "text/html");
+            response.setHeader("Content-disposition", "");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                String eMsg = "系统内部异常，请联系管理员！";
+                eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+                response.sendRedirect("/admin/storage/settlement/supplier?eMsg="+eMsg);
+                os.close();
+            } catch (IOException e1) {
+                LogClerk.errLog.error(e1.getMessage());
+            }
+            throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+        }finally {
+            if (os != null) {
+                try {
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    LogClerk.errLog.error(e);
+                    throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
+                }
+            }
         }
 
 
