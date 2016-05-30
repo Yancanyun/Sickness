@@ -178,6 +178,70 @@
         LEFT JOIN `t_taste` taste ON taste.`id` = dishTaste.`taste_id`
         WHERE dish.`id` = #{id}
     </select>
+    <select id="listBySearchDtoInMobile" resultType="DishDto">
+        SELECT
+        dish.`id` AS id,
+        dish.`name` AS name,
+        dish.`dish_number` AS dishNumber,
+        dish.`assistant_code` AS assistantCode,
+        dish.`unit_id` AS unitId,
+        unit.`name` AS unitName,
+        unit.`type` AS unitType,
+        dish.`price` AS price,
+        dish.`sale_type` AS saleType,
+        dish.`discount` AS discount,
+        dish.`sale_price` AS salePrice,
+        dish.`category_id` AS categoryId,
+        dish.`tag_id` AS tagId,
+        dish.`description` AS description,
+        dish.`status` AS status,
+        dish.`like_nums` AS likeNums,
+        dish.`is_network_available` AS isNetworkAvailable,
+        dish.`is_vip_price_available` AS isVipPriceAvailable,
+        dish.`is_voucher_available` AS isVoucherAvailable,
+        dish.`time_limit` AS timeLimit,
+        dish.`created_party_id` AS createdPartyId,
+        dish.`created_time` AS createdTime,
+        dish.`last_modified_time` AS lastModifiedTime,
+        dishMealPeriod.`id` AS dishMealPeriodId,
+        dishMealPeriod.`meal_period_id` AS mealPeriodId,
+        dishTagPrinter.`printer_id` AS printerId,
+        taste.`id` AS tasteId,
+        taste.`name` AS tasteName
+        FROM `t_dish` dish
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        LEFT JOIN `t_dish_meal_period` dishMealPeriod ON dish.`id` = dishMealPeriod.`dish_id`
+        LEFT JOIN `t_dish_tag_printer` dishTagPrinter ON dish.`id` = dishTagPrinter.`dish_tag_id` AND dishTagPrinter.type = 2
+        LEFT JOIN `t_dish_taste` dishTaste ON dish.`id` = dishTaste.`dish_id`
+        LEFT JOIN `t_taste` taste ON taste.`id` = dishTaste.`taste_id`
+        <where>
+            <if test="dishSearchDto.keyword != null and dishSearchDto.keyword != ''">
+                (
+                dish.`name` LIKE "%"#{dishSearchDto.keyword}"%"
+                OR dish.`dish_number` LIKE "%"#{dishSearchDto.keyword}"%"
+                OR dish.`assistant_code` LIKE "%"#{dishSearchDto.keyword}"%"
+                )
+            </if>
+            <if test="dishSearchDto.tagIdList != null and dishSearchDto.tagIdList.size > 0">
+                AND dish.`tag_id` IN
+                <foreach collection="dishSearchDto.tagIdList" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+            </if>
+            <if test="dishSearchDto.dishMealPeriodIdList != null and dishSearchDto.dishMealPeriodIdList.size > 0">
+                AND dishMealPeriod.`meal_period_id` IN
+                <foreach collection="dishSearchDto.dishMealPeriodIdList" item="dishMealPeriodId" open="(" separator="," close=")">
+                    #{dishMealPeriodId}
+                </foreach>
+            </if>
+            AND dish.`status` != 3
+            AND dish.`status` != 0
+            AND (dish.`category_id` = 3 OR dish.`category_id` = 4 OR dish.`category_id` = 5 OR dish.`category_id` = 6 OR dish.`category_id` = 7)
+        </where>
+        GROUP BY dish.`id`
+        ORDER BY  `status` ASC, `id` DESC
+        LIMIT #{dishSearchDto.offset},#{dishSearchDto.pageSize}
+    </select>
     
     <resultMap id="dishDtoResultMap" type="com.emenu.common.dto.dish.DishDto">
         <id property="id" column="id" />

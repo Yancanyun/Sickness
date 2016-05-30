@@ -70,4 +70,16 @@ public interface DishMapper {
      * @throws Exception
      */
     public List<DishSmallDto> listByKeyword(@Param("keyword")String keyword) throws Exception;
+
+    /**
+     * 顾客端-根据关键字，分页显示菜品列表
+     * @author: chenyuting
+     *
+     * @param keyword
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    public List<DishDto> listBySearchDtoInMobile(@Param("dishSearchDto") DishSearchDto dishSearchDto) throws Exception;
 }

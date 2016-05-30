@@ -5,10 +5,12 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.SaleTypeEnums;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishMapper;
@@ -16,6 +18,7 @@ import com.emenu.service.dish.DishImgService;
 import com.emenu.service.dish.DishMealPeriodService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTasteService;
+import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,6 +50,9 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private DishTasteService dishTasteService;
+
+    @Autowired
+    private MealPeriodService mealPeriodService;
 
     @Autowired
     private DishMealPeriodService dishMealPeriodService;
@@ -223,7 +230,7 @@ public class DishServiceImpl implements DishService {
         try {
             DishDto dishDto =  dishMapper.queryById(id);
             // 查询餐段
-            // 查询菜品退片
+            // 查询菜品图片
             List<DishImg> smallImgList = dishImgService.listByDishIdAndType(id, DishImgTypeEnums.SmallImg);
             if (Assert.isNotEmpty(smallImgList)) {
                 dishDto.setSmallImg(smallImgList.get(0));
@@ -291,5 +298,29 @@ public class DishServiceImpl implements DishService {
         }
         dish.setSalePrice(salePrice);
         return  dish;
+    }
+
+    public List<DishDto> listBySearchDtoInMobile(DishSearchDto dishSearchDto) throws SSException{
+        Integer curPage = dishSearchDto.getPageNo();
+        curPage = curPage <= 0 ? 0 : curPage - 1;
+        dishSearchDto.setOffset(curPage * dishSearchDto.getPageSize());
+        List<DishDto> dishDtoList = new ArrayList<DishDto>();
+        List<Integer> dishMealPeriodIdList = new ArrayList<Integer>();
+        try{
+            // 取出当前餐段的id，放入searchDto
+            MealPeriod mealPeriod = mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.Using);
+            Integer curMealPeriod =  mealPeriod.getId();
+            dishMealPeriodIdList.add(curMealPeriod);
+            // 如果当前餐段不是整天，则把整天销售的菜品放入
+            if (curMealPeriod != 1){
+                dishMealPeriodIdList.add(1);
+            }
+            dishSearchDto.setDishMealPeriodIdList(dishMealPeriodIdList);
+            dishDtoList = dishMapper.listBySearchDtoInMobile(dishSearchDto);
+            return dishDtoList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListVipInfoFail);
+        }
     }
 }
