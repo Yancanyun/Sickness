@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,8 +59,10 @@ public class DishTest extends AbstractTestCase {
         DishSearchDto dishSearchDto = new DishSearchDto();
         dishSearchDto.setPageNo(1);
         dishSearchDto.setPageSize(5);
-        //dishSearchDto.setKeyword("鱼");
-        //dishSearchDto.setTagIdList();
+//        dishSearchDto.setKeyword("鱼");
+        List<Integer> tagIdList = new ArrayList<Integer>();
+        tagIdList.add(91);
+        dishSearchDto.setTagIdList(tagIdList);
         dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
         for (DishDto dishDto: dishDtoList){
             System.out.printf(dishDto.getName() + "：");

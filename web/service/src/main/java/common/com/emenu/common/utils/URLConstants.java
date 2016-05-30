@@ -148,6 +148,10 @@ public final class URLConstants {
 
     // 顾客点餐菜品文字列表
     public static final String MOBILE_DISH_TEXT_URL = "mobile/dish/text";
+
+    // 菜品分类图片版
+    public static final String MOBILE_DISH_IMAGE_URL = "mobile/dish/image";
+
     /**********************服务员APP*************************/
     //服务员查看餐台列表
     public static final String WAITER_TABLE_LIST_URL = "waiter/table/list";

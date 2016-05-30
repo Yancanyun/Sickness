@@ -51,9 +51,9 @@ public class AdminDishController extends AbstractController {
     public String toList(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Dishes.getId())));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Drinks.getId())));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Goods.getId())));
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -81,6 +81,7 @@ public class AdminDishController extends AbstractController {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
+        searchDto.setIsPackage(0);
         List<Dish> dishList = Collections.emptyList();
         try {
             dishList = dishService.listBySearchDto(searchDto);

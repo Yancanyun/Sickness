@@ -65,10 +65,10 @@ public class AdminSaleRankingController extends AbstractController {
     public String toSaleRankingNew(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Dishes.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Drinks.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Goods.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Package.getId()));
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -89,7 +89,7 @@ public class AdminSaleRankingController extends AbstractController {
     public JSON ajaxDishList(Integer[] tagIdList) {
         List<Dish> dishList = Collections.emptyList();
         List<Integer> searchTagIdList = Collections.emptyList();
-        if (Assert.isNotNull(tagIdList)) {
+        if (Assert.isNotNull(tagIdList) && tagIdList[0] != -1) { // 若选择"全部，则tagIdList=-1"，此时无需传-1给Service
             searchTagIdList = Arrays.asList(tagIdList);
         }
         try {

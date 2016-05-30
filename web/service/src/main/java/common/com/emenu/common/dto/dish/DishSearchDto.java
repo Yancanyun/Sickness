@@ -53,6 +53,9 @@ public class DishSearchDto {
     // 排序方式(0-降序,1-升序)
     private Integer orderType;
 
+    // 是否是套餐(0-否, 1-是, 不填写-不分辨是否为套餐)
+    private Integer isPackage;
+
     private static Map<String, String> orderByMap = new HashMap<String, String>();
 
     static {
@@ -176,5 +179,13 @@ public class DishSearchDto {
             orderByColumn = "id";
         }
         setOrderByColumn(orderByColumn);
+    }
+
+    public Integer getIsPackage() {
+        return isPackage;
+    }
+
+    public void setIsPackage(Integer isPackage) {
+        this.isPackage = isPackage;
     }
 }

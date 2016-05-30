@@ -96,7 +96,6 @@ public interface DishService {
      */
     public List<DishSmallDto> listByKeyword(String keyword) throws SSException;
 
-
     //***************************顾客端Service*************************************
 
     /**

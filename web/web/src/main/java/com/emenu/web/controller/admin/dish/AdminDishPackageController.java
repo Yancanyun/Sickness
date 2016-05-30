@@ -55,7 +55,7 @@ public class AdminDishPackageController extends AbstractController {
     public String toDishPackageList(Model model) {
         List<Tag> tagList = new ArrayList<Tag>();
         try {
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Package.getId())));
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -82,9 +82,10 @@ public class AdminDishPackageController extends AbstractController {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
+        searchDto.setIsPackage(1);
         List<Dish> dishList = Collections.emptyList();
         try {
-            dishList = dishPackageService.listBySearchDto(searchDto);
+            dishList = dishService.listBySearchDto(searchDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -113,7 +114,7 @@ public class AdminDishPackageController extends AbstractController {
 
         int dataCount = 0;
         try {
-            dataCount = dishPackageService.countBySearchDto(searchDto);
+            dataCount = dishService.countBySearchDto(searchDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
