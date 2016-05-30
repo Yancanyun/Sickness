@@ -280,10 +280,19 @@ public enum ModuleEnums {
     AdminVipAccountList("Admin:Vip:Account:List"),
     AdminVipAccountUpdateStatus("Admin:Vip:Account:Update:Status"),
 
+
+
+
     // 顾客点餐平台
     Mobile("Mobile"),
     // 首页
     MobileIndex("Mobile:Index"),
+    // 菜品选择图片版
+    MobileDishImage("Mobile:Dish:Image"),
+    MobileDishImageList("Mobile:Dish:Image:List"),
+
+
+
 
     //服务员模块
     //服务员查看餐台列表
@@ -294,6 +303,8 @@ public enum ModuleEnums {
     WaiterTableChange("Waiter:Table:Change"),
     //服务员清台
     WaiterTableClean("Waiter:Table:Clean"),
+
+
 
 
     //吧台客户端模块
