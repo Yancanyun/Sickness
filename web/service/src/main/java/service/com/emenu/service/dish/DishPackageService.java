@@ -83,22 +83,4 @@ public interface DishPackageService {
      * @throws SSException
      */
     public List<Dish> listAll() throws SSException;
-
-    /**
-     * 根据分页和搜索条件查询
-     *
-     * @param searchDto
-     * @return
-     * @throws SSException
-     */
-    public List<Dish> listBySearchDto(DishSearchDto searchDto) throws SSException;
-
-    /**
-     * 根据搜索条件计算数量
-     *
-     * @param searchDto
-     * @return
-     * @throws SSException
-     */
-    public int countBySearchDto(DishSearchDto searchDto) throws SSException;
 }

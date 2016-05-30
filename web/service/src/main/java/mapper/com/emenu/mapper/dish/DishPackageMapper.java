@@ -47,23 +47,4 @@ public interface DishPackageMapper {
      * @throws Exception
      */
     public List<Dish> listAll() throws Exception;
-
-    /**
-     * 根据searchDto查询
-     *
-     * @param searchDto
-     * @return
-     * @throws Exception
-     */
-    public List<Dish> listBySearchDto(@Param("offset") int offset,
-                                      @Param("searchDto") DishSearchDto searchDto) throws Exception;
-
-    /**
-     * 根据searchDto查询数量
-     *
-     * @param searchDto
-     * @return
-     * @throws Exception
-     */
-    public int countBySearchDto(@Param("searchDto") DishSearchDto searchDto) throws Exception;
 }

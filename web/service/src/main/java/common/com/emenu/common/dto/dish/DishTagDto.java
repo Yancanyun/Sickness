@@ -1,9 +1,11 @@
 package com.emenu.common.dto.dish;
 
+import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.TagEnum;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * DishTagDto
@@ -57,6 +59,12 @@ public class DishTagDto {
 
     // 菜品小类名称
     private String tagNameStr;
+
+    // 小图
+    private DishImg smallImg;
+
+    // 大图
+    private List<DishImg> bigImgList;
 
     public Integer getId() {
         return id;
@@ -178,5 +186,21 @@ public class DishTagDto {
 
     public void setTagNameStr(String tagNameStr) {
         this.tagNameStr = tagNameStr;
+    }
+
+    public DishImg getSmallImg() {
+        return smallImg;
+    }
+
+    public void setSmallImg(DishImg smallImg) {
+        this.smallImg = smallImg;
+    }
+
+    public List<DishImg> getBigImgList() {
+        return bigImgList;
+    }
+
+    public void setBigImgList(List<DishImg> bigImgList) {
+        this.bigImgList = bigImgList;
     }
 }

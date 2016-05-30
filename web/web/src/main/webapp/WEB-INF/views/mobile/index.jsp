@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="page">
-    <div class="container" style="position: absolute; width: 99%; height: 98%;">
+    <div class="container" style="position: absolute; width: 98.5%; height: 99%;">
         <a href="${website}mobile"><img src="${tinyWebsite}${indexImg}" height="100%" width="100%"></a>
     </div>
 </div>

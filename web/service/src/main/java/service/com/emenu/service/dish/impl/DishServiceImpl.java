@@ -5,12 +5,14 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.DishTagPrinter;
 import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.SaleTypeEnums;
 import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishMapper;
@@ -18,7 +20,9 @@ import com.emenu.service.dish.DishImgService;
 import com.emenu.service.dish.DishMealPeriodService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTasteService;
+import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.other.ConstantService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -61,6 +65,12 @@ public class DishServiceImpl implements DishService {
     private DishImgService dishImgService;
 
     @Autowired
+    private ConstantService constantService;
+
+    @Autowired
+    private TagFacadeService tagFacadeService;
+
+    @Autowired
     private DishMapper dishMapper;
 
     @Autowired
@@ -85,6 +95,28 @@ public class DishServiceImpl implements DishService {
         int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
         int offset = pageNo * searchDto.getPageSize();
         try {
+            // 如果分类有3级，则先根据第2级分类获取所有的第三级分类ID
+            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+            int categoryLayer = 2;
+            if (Assert.isNotNull(categoryLayerStr)) {
+                categoryLayer = Integer.parseInt(categoryLayerStr);
+            }
+
+            if (categoryLayer == 3 && searchDto.getTagIdList() != null) {
+                List<Tag> smallTagList = new ArrayList<Tag>();
+                for (int bigTagId : searchDto.getTagIdList()) {
+                    List<Tag> smallTagInBigTag = tagFacadeService.listChildrenByTagId(bigTagId);
+                    smallTagList.addAll(smallTagInBigTag);
+                }
+
+                List<Integer> smallTagIdList = new ArrayList<Integer>();
+                for (Tag smallTag : smallTagList) {
+                    smallTagIdList.add(smallTag.getId());
+                }
+
+                searchDto.setTagIdList(smallTagIdList);
+            }
+
             // TODO: 15/12/2 这种方式不是很好
             searchDto.setOrderByColumn();
             list = dishMapper.listBySearchDto(offset, searchDto);
@@ -99,6 +131,28 @@ public class DishServiceImpl implements DishService {
     public int countBySearchDto(DishSearchDto searchDto) throws SSException {
         Integer count = 0;
         try {
+            // 如果分类有3级，则先根据第2级分类获取所有的第三级分类ID
+            String categoryLayerStr = constantService.queryValueByKey(ConstantEnum.DishCategoryLayers.getKey());
+            int categoryLayer = 2;
+            if (Assert.isNotNull(categoryLayerStr)) {
+                categoryLayer = Integer.parseInt(categoryLayerStr);
+            }
+
+            if (categoryLayer == 3 && searchDto.getTagIdList() != null) {
+                List<Tag> smallTagList = new ArrayList<Tag>();
+                for (int bigTagId : searchDto.getTagIdList()) {
+                    List<Tag> smallTagInBigTag = tagFacadeService.listChildrenByTagId(bigTagId);
+                    smallTagList.addAll(smallTagInBigTag);
+                }
+
+                List<Integer> smallTagIdList = new ArrayList<Integer>();
+                for (Tag smallTag : smallTagList) {
+                    smallTagIdList.add(smallTag.getId());
+                }
+
+                searchDto.setTagIdList(smallTagIdList);
+            }
+
             count = dishMapper.countBySearchDto(searchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
