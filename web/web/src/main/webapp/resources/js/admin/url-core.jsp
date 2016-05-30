@@ -119,7 +119,9 @@
             //原配料管理
             ['hasName', site.website + 'admin/storage/ingredient/ajax/checkname', 'get', 'yuanpeil判断原配料名称是否重复'],
             ['submitIngredient', site.website + 'admin/storage/ingredient/ajax/new', 'post', '提交添加的原配料'],
-            ['getRelatedSettings', site.staticWebsite + 'mock/admin/get-related-settings.json', 'get', '获取均价、结存、总数量'],
+            ['submitEditIngredient', site.website + 'admin/storage/ingredient/ajax/update', 'post', '提交编辑页的原配料'],
+            ['getRelatedSettings', site.website + 'admin/storage/ingredient/ajax/convert/quantity', 'get', '获取均价、结存、总数量'],
+
         ],
         // 菜品管理
         DishManagement: [
