@@ -12,9 +12,9 @@
         <td>&{item.deliciousCost}</td>
         <td>&{item.standardCost}</td>
         <td>
-            <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+            <a href="${website}admin/dish/cost/card/update/&{item.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-            <a href="#;" class="label-info"><i class="fa fa-search"></i>&nbsp;查看</a>
+          <%--  <a href="${website}admin/dish/cost/card/look/&{item.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看</a>--%>
         </td>
     </tr>
     {@/each}

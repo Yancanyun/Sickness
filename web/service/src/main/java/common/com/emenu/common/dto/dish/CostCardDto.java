@@ -1,6 +1,7 @@
 package com.emenu.common.dto.dish;
 import java.math.BigDecimal;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * CostCardItemDto
@@ -15,6 +16,9 @@ public class CostCardDto {
 
     //成本卡编号
     private String costCardNumber;
+
+    //菜品id
+    private Integer dishId;
 
     //菜品名称
     private String name;
@@ -34,6 +38,15 @@ public class CostCardDto {
     //标准成本即总成本
     private BigDecimal standardCost;
 
+    private List<CostCardItemDto> costCardItemDtos;
+
+    public List<CostCardItemDto> getCostCardItemDtos() {
+        return costCardItemDtos;
+    }
+
+    public void setCostCardItemDtos(List<CostCardItemDto> costCardItemDtos) {
+        this.costCardItemDtos = costCardItemDtos;
+    }
 
     public Integer getId() {
         return id;
@@ -41,6 +54,13 @@ public class CostCardDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    public Integer getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(Integer dishId) {
+        this.dishId = dishId;
     }
 
     public BigDecimal getStandardCost() {

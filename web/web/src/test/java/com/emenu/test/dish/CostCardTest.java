@@ -62,12 +62,12 @@ public class CostCardTest extends AbstractTestCase {
     @Test
     public void testQueryCostCardDtoBySearchDto()throws SSException
     {
-        System.out.println(costCardMapper.queryCostCardDto(0, new DishSearchDto()));
+        System.out.println(costCardService.queryCostCardDto(new DishSearchDto()));
     }
 
     @Test
     public void testCountBySearchDto()throws SSException
     {
-        System.out.println(costCardMapper.countBySearchDto(new DishSearchDto()));
+        System.out.println(costCardService.countBySearchDto(new DishSearchDto()));
     }
 }

@@ -1,5 +1,8 @@
 package com.emenu.common.dto.dish;
 
+import com.emenu.common.entity.dish.CostCardItem;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -37,12 +40,22 @@ public class CostCardItemDto {
     private BigDecimal netCount;
 
     //毛料用量
-    private BigDecimal totalCount;
+    private BigDecimal otherCount;
 
     //班结时是否自动出库,1为是，0为否
     private Integer isAutoOut;
 
+    //将原配料信息拼成字符串
+    private String  ingredientInfo;
+
     /*******getter and setter**********************/
+    public String getIngredientInfo() {
+        return ingredientInfo;
+    }
+
+    public void setIngredientInfo(String ingredientInfo) {
+        this.ingredientInfo = ingredientInfo;
+    }
     public Integer getId() {
         return id;
     }
@@ -114,14 +127,15 @@ public class CostCardItemDto {
     public void setNetCount(BigDecimal netCount) {
         this.netCount = netCount;
     }
-
-    public BigDecimal getTotalCount() {
-        return totalCount;
+    public BigDecimal getOtherCount() {
+        return otherCount;
     }
 
-    public void setTotalCount(BigDecimal totalCount) {
-        this.totalCount = totalCount;
+    public void setOtherCount(BigDecimal otherCount) {
+        this.otherCount = otherCount;
     }
+
+
 
     public Integer getIsAutoOut() {
         return isAutoOut;
@@ -132,9 +146,10 @@ public class CostCardItemDto {
     }
 
     public void  setResultNetRate(){
-        if(this.netCount!=null && this.totalCount!=null&&!this.totalCount.equals(BigDecimal.ZERO)) {
-            this.netRate =  netCount.divide(totalCount,10, BigDecimal.ROUND_DOWN);
+        if(this.netCount!=null && this.otherCount!=null&&!this.otherCount.equals(BigDecimal.ZERO)) {
+            this.netRate =  netCount.divide(otherCount,10, BigDecimal.ROUND_DOWN);
             this.netRate = this.netRate.setScale(2, BigDecimal.ROUND_HALF_UP);
         }
     }
+
 }

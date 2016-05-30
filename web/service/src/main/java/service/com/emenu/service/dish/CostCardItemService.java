@@ -61,4 +61,11 @@ public interface CostCardItemService {
      * @throws SSException
      */
     public List<CostCardItemDto> listByCostCardId(int costCardId) throws SSException;
+
+    /**
+     * 修改升成本卡原料集合
+     * @param costCardItems
+     * @throws SSException
+     */
+    public void updateCostCardItemList(List<CostCardItem> costCardItems,int cardId) throws SSException;
 }

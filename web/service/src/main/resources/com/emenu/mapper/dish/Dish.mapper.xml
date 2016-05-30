@@ -33,17 +33,6 @@
         AND dish.`category_id` != 6
         ORDER BY dish.`id` DESC
     </select>
-
-    <select id="listByKeyword" resultType="DishSmallDto">
-        SELECT t_dish.id AS id,t_dish.name AS name,t_dish.`assistant_code` AS assistantCode
-        FROM `t_dish`
-        <where>
-            <if test="keyword != null and keyword != ''">
-                t_dish.`name` LIKE "%"#{keyword}"%"
-                OR t_dish.`assistant_code` LIKE "%"#{keyword}"%"
-            </if>
-        </where>
-    </select>
     
     <select id="listBySearchDto" resultMap="pw.Dish">
         SELECT

@@ -18,6 +18,14 @@ import java.util.List;
 public interface CostCardService {
 
     /**
+     * 根据id查询成本卡
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public CostCardDto queryById(int id) throws SSException;
+
+    /**
      * 新建成本卡
      *
      * @param costCard

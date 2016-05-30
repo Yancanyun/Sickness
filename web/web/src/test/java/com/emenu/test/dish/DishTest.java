@@ -2,7 +2,6 @@ package com.emenu.test.dish;
 
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
-import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.service.dish.DishService;
 import com.emenu.test.AbstractTestCase;
@@ -42,15 +41,6 @@ public class DishTest extends AbstractTestCase {
     public void queryById() throws Exception {
         DishDto dishDto = dishService.queryById(17);
         System.out.println(BeanUtils.describe(dishDto));
-    }
-
-    @Test
-    public void listByKeyword() throws Exception{
-        List<DishSmallDto> dishSmallDtoList = Collections.emptyList();
-        dishSmallDtoList = dishService.listByKeyword("酒");
-        for(DishSmallDto dishSmallDto:dishSmallDtoList){
-            System.out.print(dishSmallDto.getName());
-        }
     }
 
     @Test

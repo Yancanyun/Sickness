@@ -41,7 +41,7 @@ public class CostCardItem extends AbstractEntity{
 
     //毛料用量
     @Column(name = "total_count")
-    private BigDecimal totalCount;
+    private BigDecimal otherCount;
 
     //班结时是否自动出库,1为是，0为否
     @Column(name = "is_auto_out")
@@ -97,12 +97,12 @@ public class CostCardItem extends AbstractEntity{
         this.netCount = netCount;
     }
 
-    public BigDecimal getTotalCount() {
-        return totalCount;
+    public BigDecimal getOtherCount() {
+        return otherCount;
     }
 
-    public void setTotalCount(BigDecimal totalCount) {
-        this.totalCount = totalCount;
+    public void setOtherCount(BigDecimal otherCount) {
+        this.otherCount = otherCount;
     }
 
     public Integer getIsAutoOut() {
@@ -128,4 +128,36 @@ public class CostCardItem extends AbstractEntity{
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(this == obj) return true;
+        CostCardItem obj1 = (CostCardItem) obj;
+        boolean flag = true;
+        if(obj1.getId()!=null&&id!=null){
+            if(obj1.getId().equals(id)){
+                flag = false;
+            }
+        }
+        if(!obj1.getIngredientId().equals(ingredientId)){
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    /**
+     * 重写hashcode 方法，返回的hashCode 不一样才认定为不同的对象
+     */
+    @Override
+    public int hashCode() {
+        if(costCardId!=null) {
+            return ingredientId.hashCode()*costCardId.hashCode();
+        }else {
+            return ingredientId.hashCode();
+        }
+    }
+
+
 }
