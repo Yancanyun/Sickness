@@ -86,7 +86,6 @@ public class CostCardItemServiceImpl implements CostCardItemService {
                 for(CostCardItem costCardItem:updateItems1){
                   costCardItemMapper.updateByCardId(costCardItem);
                 }
-              /*  costCardItemMapper.updateCostCardItems(updateItems1,cardId);*/
                 updateItems2.removeAll(preItems1);//新增的原配料
                 if(!updateItems2.isEmpty()) {
                     costCardItemMapper.newCostCardItems(updateItems2);

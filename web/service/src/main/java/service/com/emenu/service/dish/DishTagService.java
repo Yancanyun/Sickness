@@ -80,4 +80,23 @@ public interface DishTagService {
      */
     public List<Dish> listNotSelectedByTagId(int tagId,
                                              List<Integer> searchTagIdList) throws SSException;
+
+    /**
+     * 根据当前节点分页获取DishTagDto列表
+     * @param tagId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<DishTagDto> listByTagIdAndPage(int tagId,int pageNo,int pageSize,String keyword) throws SSException;
+
+    /**
+     * 计算当前节点的DishTag数
+     * @param tagId
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public int countByTagId(int tagId,String keyword) throws SSException;
 }
