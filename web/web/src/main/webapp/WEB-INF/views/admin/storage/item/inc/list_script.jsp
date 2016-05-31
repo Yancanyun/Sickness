@@ -20,7 +20,7 @@
         <td>
             <a href="#" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             <a href="JavaScript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-            <a href="#" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
+            <a href="${website}admin/storage/item/todetails/&{it.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
         </td>
     </tr>
     {@/each}

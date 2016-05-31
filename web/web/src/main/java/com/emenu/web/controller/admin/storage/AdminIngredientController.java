@@ -47,7 +47,7 @@ public class AdminIngredientController extends AbstractController{
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminStorageIngredient, extModule = ModuleEnums.AdminStorageIngredientList)
+    @Module(value = ModuleEnums.AdminStorageIngredientList, extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = {"","list"},method = RequestMethod.GET)
     public String toList(Model model){
         try {

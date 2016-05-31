@@ -33,4 +33,9 @@ public class StorageItemTest extends AbstractTestCase{
         }
     }
 
+    @Test
+    public void queryById() throws SSException{
+        StorageItem item = storageItemService.queryById(1);
+        System.out.println(item.getName());
+    }
 }

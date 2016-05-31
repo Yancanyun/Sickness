@@ -56,6 +56,7 @@ public class StorageItem extends AbstractEntity {
     @Transient
     private String supplierName;
 
+
     // 状态(1-正常使用,2-已删除)
     private Integer status;
 
@@ -99,9 +100,15 @@ public class StorageItem extends AbstractEntity {
     @Column(name = "max_storage_quantity")
     private BigDecimal maxStorageQuantity;
 
+    @Transient
+    private String maxStorageQuantityStr;
+
     // 最小库存量
     @Column(name = "min_storage_quantity")
     private BigDecimal minStorageQuantity;
+
+    @Transient
+    private String minStorageQuantityStr;
 
     // 出库方式(1-加权平均，2-手动)
     @Column(name = "stock_out_type")
@@ -113,6 +120,9 @@ public class StorageItem extends AbstractEntity {
     // 总入库数量
     @Column(name = "total_stock_in_quantity")
     private BigDecimal totalStockInQuantity;
+
+    @Transient
+    private String totalStockInQuantityStr;
 
     // 总入库金额
     @Column(name = "total_stock_in_money")
@@ -374,5 +384,27 @@ public class StorageItem extends AbstractEntity {
         this.ingredientName = ingredientName;
     }
 
+    public String getMaxStorageQuantityStr() {
+        return maxStorageQuantityStr;
+    }
 
+    public void setMaxStorageQuantityStr(String maxStorageQuantityStr) {
+        this.maxStorageQuantityStr = maxStorageQuantityStr;
+    }
+
+    public String getMinStorageQuantityStr() {
+        return minStorageQuantityStr;
+    }
+
+    public void setMinStorageQuantityStr(String minStorageQuantityStr) {
+        this.minStorageQuantityStr = minStorageQuantityStr;
+    }
+
+    public String getTotalStockInQuantityStr() {
+        return totalStockInQuantityStr;
+    }
+
+    public void setTotalStockInQuantityStr(String totalStockInQuantityStr) {
+        this.totalStockInQuantityStr = totalStockInQuantityStr;
+    }
 }

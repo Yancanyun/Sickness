@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +171,12 @@ public class StorageItemServiceImpl implements StorageItemService {
             return null;
         }
         try {
-            return storageItemMapper.queryById(id);
+            StorageItem StorageItem = storageItemMapper.queryById(id);
+            if (Assert.isNull(StorageItem)){
+                return StorageItem;
+            }
+            setUnitName(StorageItem);
+            return StorageItem;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
@@ -240,5 +246,54 @@ public class StorageItemServiceImpl implements StorageItemService {
             storageItem.setCostCardUnitName(unitMap.get(storageItem.getCostCardUnitId()));
             storageItem.setCountUnitName(unitMap.get(storageItem.getCountUnitId()));
         }
+    }
+
+    private void setUnitName(StorageItem storageItem) throws SSException {
+        List<Unit> unitList = unitService.listAll();
+        Map<Integer, String> unitMap = new HashMap<Integer, String>();
+        for (Unit unit : unitList) {
+            unitMap.put(unit.getId(), unit.getName());
+        }
+        unitMap.put(0, "");
+        storageItem.setOrderUnitName(unitMap.get(storageItem.getOrderUnitId()));
+        storageItem.setStorageUnitName(unitMap.get(storageItem.getStorageUnitId()));
+        storageItem.setCostCardUnitName(unitMap.get(storageItem.getCostCardUnitId()));
+        storageItem.setCountUnitName(unitMap.get(storageItem.getCountUnitId()));
+    }
+
+    public void setQuantityFormat(List<StorageItem> storageItemList) throws SSException{
+        for (StorageItem storageItem : storageItemList) {
+            // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
+            storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
+
+            // 最小库存
+            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
+            storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
+
+            // 总数量
+            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+            String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
+            storageItem.setTotalStockInQuantityStr(totalQuantityStr);
+        }
+    }
+
+    public void setQuantityFormat(StorageItem storageItem) throws SSException{
+        // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+        BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+        String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
+        storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
+
+        // 最小库存
+        BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+        String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
+        storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
+
+        // 总数量
+        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+        String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
+        storageItem.setTotalStockInQuantityStr(totalQuantityStr);
     }
 }

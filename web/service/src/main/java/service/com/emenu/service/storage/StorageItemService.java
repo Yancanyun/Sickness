@@ -112,4 +112,18 @@ public interface StorageItemService {
      */
     public List<Integer> listIdsByIngredientId(Integer IngredientId) throws SSException;
 
+    /**
+     * 设置数量格式
+     * @param storageItemList
+     * @throws SSException
+     */
+    public void setQuantityFormat(List<StorageItem> storageItemList) throws SSException;
+
+    /**
+     * 设置数量格式
+     * @param storageItem
+     * @throws SSException
+     */
+    public void setQuantityFormat(StorageItem storageItem) throws SSException;
+
 }

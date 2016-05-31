@@ -17,6 +17,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +61,23 @@ public class AdminStorageItemController extends AbstractController {
             return ADMIN_SYS_ERR_PAGE;
         }
         return "admin/storage/item/list_home";
+    }
+
+    @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemList)
+    @RequestMapping(value = "todetails/{id}", method = RequestMethod.GET)
+    public String toDetails(@PathVariable("id")Integer id, Model model) {
+        try {
+            StorageItem storageItem = storageItemService.queryById(id);
+            if (Assert.isNotNull(storageItem)){
+                storageItemService.setQuantityFormat(storageItem);
+            }
+            model.addAttribute("storageItem",storageItem);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/storage/item/details_home";
     }
 
     /**
