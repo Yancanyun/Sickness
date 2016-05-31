@@ -37,4 +37,34 @@ public interface CostCardItemMapper {
      * @throws Exception
      */
     public void delByCostCardId(@Param("costCardId")int costCardId) throws Exception;
+
+    /**
+     * 根据成本卡id查询原配料CostCardItem
+     * @param cardId
+     * @return
+     * @throws Exception
+     */
+    public List<CostCardItem> listByCardId(@Param("cardId")int cardId)throws Exception;
+
+    /**
+     * 根据原配料集合删除原配料
+     * @param costCardItems
+     * @throws Exception
+     */
+    public void delByCostCardItems(@Param("costCardItems")List<CostCardItem> costCardItems) throws Exception;
+
+ /*   *//**
+     * 根据原配料集合修改原配料
+     * @param
+     * @throws Exception
+     *//*
+    public void updateCostCardItems(@Param("costCardItems")List<CostCardItem> costCardItems,@Param("cardId")int cardId)throws Exception;*/
+
+    /**
+     * 根据成本卡id更新原配料
+     * @param costCardItem
+     * @throws Exception
+     */
+    public void updateByCardId(@Param("costCardItem")CostCardItem costCardItem) throws Exception;
+
 }

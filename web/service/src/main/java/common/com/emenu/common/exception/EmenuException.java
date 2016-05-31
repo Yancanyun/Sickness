@@ -179,6 +179,7 @@ public enum EmenuException implements IBizExceptionMes {
     CostCardUpdateFailed("成本卡更新失败", 1066),
     CostCardDeleteFailed("成本卡删除失败", 1067),
     QueryCostCardFailed("查询成本卡失败",1068),
+    QueryCostCardByIdFailed("根据id查询成本卡",1069),
 
     //饭店管理
     //餐台区域

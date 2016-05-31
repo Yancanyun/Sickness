@@ -3,10 +3,13 @@ package com.emenu.service.dish.impl;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.DishTag;
 import com.emenu.common.enums.TrueEnums;
+import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishTagMapper;
+import com.emenu.service.dish.DishImgService;
 import com.emenu.service.dish.DishPackageService;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTagService;
@@ -41,6 +44,9 @@ public class DishTagServiceImpl implements DishTagService {
 
     @Autowired
     private TagFacadeService tagFacadeService;
+
+    @Autowired
+    private DishImgService dishImgService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -131,10 +137,17 @@ public class DishTagServiceImpl implements DishTagService {
         List<DishTagDto> dishTagDtoList = Collections.emptyList();
         try {
             dishTagDtoList = dishTagMapper.listDtoByTagId(tagId);
-            // 把菜品总分类及小类名称加进去
+            // 把菜品总分类名称、小类名称、小图、大图加进去
             for (DishTagDto dishTagDto: dishTagDtoList) {
                 dishTagDto.setCategoryNameStr(tagFacadeService.queryById(dishTagDto.getDishCategoryId()).getName());
                 dishTagDto.setTagNameStr(tagFacadeService.queryById(dishTagDto.getTagId()).getName());
+
+                List<DishImg> smallImgList = dishImgService.listByDishIdAndType(dishTagDto.getDishId(), DishImgTypeEnums.SmallImg);
+                if (Assert.isNotEmpty(smallImgList)) {
+                    dishTagDto.setSmallImg(smallImgList.get(0));
+                }
+                List<DishImg> bigImgList = dishImgService.listByDishIdAndType(dishTagDto.getDishId(), DishImgTypeEnums.BigImg);
+                dishTagDto.setBigImgList(bigImgList);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -153,9 +166,11 @@ public class DishTagServiceImpl implements DishTagService {
 
             // 根据搜索分类查询菜品
             DishSearchDto searchDto = new DishSearchDto();
-            searchDto.setTagIdList(searchTagIdList);
+            if (searchTagIdList.size() != 0) {
+                searchDto.setTagIdList(searchTagIdList);
+            }
+            searchDto.setIsPackage(2);
             dishList.addAll(dishService.listBySearchDto(searchDto));
-            dishList.addAll(dishPackageService.listBySearchDto(searchDto)); // 套餐
             // 把菜品总分类及小类名称加进去
             for (Dish dish: dishList) {
                 dish.setCategoryNameStr(tagFacadeService.queryById(dish.getCategoryId()).getName());

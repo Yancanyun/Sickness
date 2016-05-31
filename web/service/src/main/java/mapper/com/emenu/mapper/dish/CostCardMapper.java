@@ -18,13 +18,21 @@ import java.util.List;
 public interface CostCardMapper {
 
     /**
+     * 根据id查询成本卡
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public CostCardDto queryById(@Param("id")int id) throws Exception;
+
+    /**
      * 新建成本卡
      *
      * @param costCard
      * @return
      * @throws SSException
      */
-    public void newCostCard(@Param("costCard")CostCard costCard) throws SSException;
+    public void newCostCard(@Param("costCard")CostCard costCard) throws Exception;
 
     /**
      * 删除成本卡
@@ -33,7 +41,7 @@ public interface CostCardMapper {
      * @return
      * @throws SSException
      */
-    public void delCostCardById(@Param("id")Integer id) throws SSException;
+    public void delCostCardById(@Param("id")Integer id) throws Exception;
 
     /**
      * 更新成本卡
@@ -43,7 +51,7 @@ public interface CostCardMapper {
      * @throws SSException
      */
 
-    public void updateCostCard(@Param("costCard")CostCard costCard)throws SSException;
+    public void updateCostCard(@Param("costCard")CostCard costCard)throws Exception;
 
     /**
      * 根据searchDto查询成本卡
@@ -53,8 +61,8 @@ public interface CostCardMapper {
      * @return List<CostCardDto>
      * @throws SSException
      */
-    public List<CostCardDto> queryCostCardDto(@Param("offset")Integer offset
-                                              ,@Param("searchDto")DishSearchDto searchDto)throws SSException;
+    public List<CostCardDto> queryCostCardDto(@Param("offset")Integer offset,
+                                              @Param("searchDto")DishSearchDto searchDto)throws Exception;
 
     /**
      * 根据searchDto查询成本卡数量
@@ -63,5 +71,5 @@ public interface CostCardMapper {
      * @return
      * @throws SSException
      */
-    public int countBySearchDto(@Param("searchDto")DishSearchDto searchDto) throws SSException;
+    public int countBySearchDto(@Param("searchDto")DishSearchDto searchDto) throws Exception;
 }

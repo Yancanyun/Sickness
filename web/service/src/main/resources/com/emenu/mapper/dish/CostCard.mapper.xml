@@ -4,7 +4,7 @@
 
 <mapper namespace="com.emenu.mapper.dish.CostCardMapper">
 
-    <insert id = "newCostCard">
+    <insert id = "newCostCard" useGeneratedKeys="true" keyProperty="costCard.id">
         INSERT INTO t_cost_card(cost_card_number,dish_id,main_cost,assist_cost,delicious_cost,standard_cost)
         VALUES (#{costCard.costCardNumber},#{costCard.dishId},
                  #{costCard.mainCost},#{costCard.assistCost},#{costCard.deliciousCost},#{costCard.standardCost})
@@ -14,6 +14,21 @@
         DELETE FROM t_cost_card
         WHERE id = #{id}
     </delete>
+
+    <select id="queryById" resultType="CostCardDto">
+        SELECT t_cost_card.`id` as id,
+                t_dish.`name` AS name,
+                t_dish.`id` AS dishId,
+                t_dish.`assistant_code` AS assistantCode,
+                t_cost_card.`cost_card_number` AS costCardNumber,
+                t_cost_card.`main_cost` AS mainCost,
+                t_cost_card.`assist_cost` AS assistCost,
+                t_cost_card.`delicious_cost` AS deliciousCost,
+                t_cost_card.`standard_cost` AS standardCost
+        FROM t_cost_card LEFT JOIN t_dish
+        ON    t_dish.id = t_cost_card.dish_id
+        WHERE t_cost_card.`id` = #{id}
+    </select>
 
     <update id = "updateCostCard">
         UPDATE t_cost_card
@@ -28,6 +43,7 @@
     <select id ="queryCostCardDto" resultType="CostCardDto">
         SELECT t_cost_card.id as id,
                 t_dish.name AS name,
+                t_dish.`id` AS dishId,
                 t_dish.assistant_code AS assistantCode,
                 t_cost_card.cost_card_number AS costCardNumber,
                 t_cost_card.main_cost AS mainCost,

@@ -14,7 +14,7 @@ import java.util.Map;
 public enum ItemTypeEnums {
     MainIngredient(0,"主料"),
     AssistIngredient(1,"辅料"),
-    DiliciousIngredient(2,"调料")
+    DeliciousIngredient(2,"调料")
     ;
     private Integer id;
     private String type;

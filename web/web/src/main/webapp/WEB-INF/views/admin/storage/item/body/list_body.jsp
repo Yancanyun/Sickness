@@ -5,14 +5,12 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+            <li><a href="#"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">库存管理</a></li>
             <li class="active">库存物品管理</li>
         </ol>
         <h2>库存管理-库存物品管理</h2>
-        <c:if test="${!empty msg}">
-            <div class="alert alert-success col-sm-12 J_msg" role="alert"> ${msg}</div>
-        </c:if>
+        <div class="alert alert-success J_tip">提示信息!</div>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -23,37 +21,48 @@
                 <form class="form-horizontal J_searchForm">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">搜索</label>
-
                         <div class="col-sm-3">
-                            <input type="text" class="form-control w180" name="keyword" value=""
-                                   placeholder="请输入名称/编号/助记码">
+                            <input type="text" class="form-control" name="keyword" value="" placeholder="请输入名称/编号/助记码">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">选择供货商</label>
-
                         <div class="col-sm-3">
                             <select class="form-control" name="supplierPartyId">
-                                <option value="0">请选择</option>
-                                <c:forEach var="supplier" items="${supplierList}">
-                                    <option value="${supplier.partyId}">${supplier.name}</option>
-                                </c:forEach>
+                                <option value="-1">请选择</option>
+                                <option value="1">供货商11</option>
+                                <option value="2">供货商22</option>
+                                <option value="3">供货商33</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">选择原配料</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="tagName">
+                                <option value="-1">请选择</option>
+                                <option value="1">土豆</option>
+                                <option value="2">牛肉</option>
+                                <option value="3">醋</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">库存分类</label>
-
                         <div class="col-sm-6">
                             <div class="checkbox block">
                                 <label>
-                                    <input class="J_selectAll" type="checkbox" value="0" name=""> 全部
+                                    <input class="J_selectAll"  type="checkbox" value="1" name="tagIdList"> 全部
                                 </label>
-                                <c:forEach var="tag" items="${tagList}">
-                                    <label>
-                                        <input class="J_storeType" type="checkbox" value="${tag.id}" name="tagIdList"> ${tag.name}
-                                    </label>
-                                </c:forEach>
+                                <label>
+                                    <input class="J_storeType" type="checkbox" value="11" name="tagIdList"> 分类1
+                                </label>
+                                <label>
+                                    <input class="J_storeType" type="checkbox" value="12" name="tagIdList"> 分类2
+                                </label>
+                                <label>
+                                    <input class="J_storeType" type="checkbox" value="13" name="tagIdList"> 分类3
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -72,23 +81,29 @@
                 <h4>库存物品列表</h4>
             </div>
             <div class="panel-body">
-                <a class="btn btn-success margin-bottom-15" href="${website}admin/storage/item/new"><i class="fa fa-plus"></i>&nbsp;添加库存物品</a>
-                <a class="btn btn-success margin-bottom-15" href="${website}admin/storage/item/unit/conversion/list"><i class="fa fa-exchange"></i>&nbsp;换算比例</a>
-
+                <a class="btn btn-success margin-bottom-15" href="#"><i class="fa fa-plus"></i>&nbsp;添加库存物品</a>
                 <form class="J_operForm">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">
-                            <thead>
+                            <thead class="v-center">
                             <tr>
-                                <th>编号</th>
-                                <th>助记码</th>
-                                <th>名称</th>
-                                <th>所属分类</th>
-                                <th>供货商</th>
-                                <th>最大库存量</th>
-                                <th>最小库存量</th>
-                                <th>出库方式</th>
-                                <th>操作</th>
+                                <th rowspan="2">编号</th>
+                                <th rowspan="2">名称</th>
+                                <th rowspan="2">物品编号</th>
+                                <th rowspan="2">助记码</th>
+                                <th rowspan="2">原配料</th>
+                                <th rowspan="2">所属分类</th>
+                                <th rowspan="2">供货商</th>
+                                <th rowspan="2">入库总数量</th>
+                                <th rowspan="2">入库总金额</th>
+                                <th rowspan="2">最新入库价格</th>
+                                <th colspan="2">库存预警</th>
+                                <th rowspan="2">出库方式</th>
+                                <th rowspan="2">操作</th>
+                            </tr>
+                            <tr>
+                                <th>上限</th>
+                                <th>下限</th>
                             </tr>
                             </thead>
                             <tbody id="J_template"></tbody>

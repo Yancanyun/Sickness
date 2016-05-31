@@ -1,5 +1,6 @@
 package com.emenu.test.storage;
 
+import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.StringUtils;
@@ -10,6 +11,7 @@ import com.pandawork.core.common.log.LogClerk;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +61,14 @@ public class IngredientTest extends AbstractTestCase{
 
 
     }
+   @Test
+    public void exportExcel(HttpServletResponse response) throws SSException {
+       ItemAndIngredientSearchDto searchDto=new ItemAndIngredientSearchDto();
+       searchDto.setKeyword("辣椒");
+       List<Integer> tagIdlist=new ArrayList<Integer>();
+       tagIdlist.add(70);
+       searchDto.setTagIdList(tagIdlist);
 
+       ingredientService.exportExcel(searchDto,response);
+   }
 }

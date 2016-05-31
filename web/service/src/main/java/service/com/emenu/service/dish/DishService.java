@@ -2,7 +2,6 @@ package com.emenu.service.dish;
 
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
-import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.enums.dish.DishStatusEnums;
@@ -86,16 +85,6 @@ public interface DishService {
      * @throws SSException
      */
     public DishDto queryById(int id) throws SSException;
-
-    /**
-     * 根据菜品名或助记码模糊查询DishSmallDto
-     *
-     * @param keyword
-     * @return
-     * @throws SSException
-     */
-    public List<DishSmallDto> listByKeyword(String keyword) throws SSException;
-
 
     //***************************顾客端Service*************************************
 

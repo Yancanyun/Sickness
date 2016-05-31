@@ -92,6 +92,7 @@ public class AdminStorageItemController extends AbstractController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", storageItem.getId());
             jsonObject.put("name", storageItem.getName());
+            jsonObject.put("itemNumber", storageItem.getItemNumber());
             jsonObject.put("assistantCode", storageItem.getAssistantCode());
             jsonObject.put("ingredientName",storageItem.getIngredientName());
             jsonObject.put("tagName", storageItem.getTagName());
@@ -111,7 +112,14 @@ public class AdminStorageItemController extends AbstractController {
             BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
             String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
             jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
+            jsonObject.put("lastStockInPrice", storageItem.getLastStockInPrice());
+            // 总数量
+            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+            String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
+            jsonObject.put("totalStockInQuantityStr", totalStockInQuantityStr);
+            jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());
             jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
+
             jsonArray.add(jsonObject);
         }
         int dataCount = 0;

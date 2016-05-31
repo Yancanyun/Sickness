@@ -6,6 +6,7 @@ import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.CostCard;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.mapper.dish.CostCardItemMapper;
 import com.emenu.mapper.dish.CostCardMapper;
 import com.emenu.service.dish.CostCardService;
 import com.pandawork.core.common.exception.SSException;
@@ -32,6 +33,24 @@ public class CostCardServiceImpl implements CostCardService {
 
     @Autowired
     private CostCardMapper costCardMapper;
+
+    @Autowired
+    private CostCardItemMapper costCardItemMapper;
+
+    @Override
+    public CostCardDto queryById(int id) throws SSException {
+        CostCardDto costCardDto = null;
+        try{
+            if(Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.QueryCostCardByIdFailed);
+            }
+            costCardDto = costCardMapper.queryById(id);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCostCardByIdFailed, e);
+        }
+        return costCardDto;
+    }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -63,6 +82,7 @@ public class CostCardServiceImpl implements CostCardService {
             if(!Assert.lessOrEqualZero(id))
             {
                 costCardMapper.delCostCardById(id);
+                costCardItemMapper.delByCostCardId(id);
                 return 1;//删除成功
             }
             else

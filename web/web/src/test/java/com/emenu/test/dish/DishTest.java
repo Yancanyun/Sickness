@@ -2,7 +2,6 @@ package com.emenu.test.dish;
 
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
-import com.emenu.common.dto.dish.DishSmallDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.service.dish.DishService;
 import com.emenu.test.AbstractTestCase;
@@ -11,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,22 +44,15 @@ public class DishTest extends AbstractTestCase {
     }
 
     @Test
-    public void listByKeyword() throws Exception{
-        List<DishSmallDto> dishSmallDtoList = Collections.emptyList();
-        dishSmallDtoList = dishService.listByKeyword("酒");
-        for(DishSmallDto dishSmallDto:dishSmallDtoList){
-            System.out.print(dishSmallDto.getName());
-        }
-    }
-
-    @Test
     public void listBySearchDtoInMobile() throws Exception{
         List<DishDto> dishDtoList = Collections.emptyList();
         DishSearchDto dishSearchDto = new DishSearchDto();
         dishSearchDto.setPageNo(1);
         dishSearchDto.setPageSize(5);
-        //dishSearchDto.setKeyword("鱼");
-        //dishSearchDto.setTagIdList();
+//        dishSearchDto.setKeyword("鱼");
+        List<Integer> tagIdList = new ArrayList<Integer>();
+        tagIdList.add(91);
+        dishSearchDto.setTagIdList(tagIdList);
         dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
         for (DishDto dishDto: dishDtoList){
             System.out.printf(dishDto.getName() + "：");

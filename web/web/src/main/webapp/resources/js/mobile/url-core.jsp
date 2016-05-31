@@ -18,7 +18,7 @@
     _pw_apiData = {
         // 菜品分类图片版
         Classify: [
-            ['getDishList', site.staticWebsite + 'mock/mobile/list.json', 'get', '获取菜品'],
+            ['getDishList', site.website + 'mobile/dish/image/ajax/list', 'get', '获取菜品'],
             ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品']
         ],
         // 搜索
@@ -28,7 +28,7 @@
         //菜品分类文字版
         ClassifyText: [
             ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品'],
-            ['getDishList', site.staticWebsite + 'mock/mobile/dish-list.json', 'get', '获取菜品']
+            ['getDishList', site.website + 'mobile/dish/text/ajax/list/{curPage}', 'get', '获取菜品']
         ],
         //订单
         Order: [

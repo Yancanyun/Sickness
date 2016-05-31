@@ -6,12 +6,16 @@ import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishMealPeriod;
 import com.emenu.common.entity.dish.DishPackage;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.enums.dish.DishStatusEnums;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishPackageMapper;
 import com.emenu.service.dish.DishPackageService;
 import com.emenu.service.dish.DishService;
+import com.emenu.service.dish.tag.TagFacadeService;
+import com.emenu.service.other.ConstantService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -37,6 +41,12 @@ public class DishPackageServiceImpl implements DishPackageService{
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private TagFacadeService tagFacadeService;
+
+    @Autowired
+    private ConstantService constantService;
 
     @Autowired
     private DishPackageMapper dishPackageMapper;
@@ -281,32 +291,5 @@ public class DishPackageServiceImpl implements DishPackageService{
             throw SSException.get(EmenuException.DishQueryFailed, e);
         }
         return list;
-    }
-
-    @Override
-    public List<Dish> listBySearchDto(DishSearchDto searchDto) throws SSException {
-        List<Dish> list = Collections.emptyList();
-        int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
-        int offset = pageNo * searchDto.getPageSize();
-        try {
-            searchDto.setOrderByColumn();
-            list = dishPackageMapper.listBySearchDto(offset, searchDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DishQueryFailed, e);
-        }
-        return list;
-    }
-
-    @Override
-    public int countBySearchDto(DishSearchDto searchDto) throws SSException {
-        Integer count = 0;
-        try {
-            count = dishPackageMapper.countBySearchDto(searchDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DishQueryFailed, e);
-        }
-        return count == null ? 0 : count;
     }
 }

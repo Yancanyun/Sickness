@@ -119,7 +119,9 @@
             //原配料管理
             ['hasName', site.website + 'admin/storage/ingredient/ajax/checkname', 'get', 'yuanpeil判断原配料名称是否重复'],
             ['submitIngredient', site.website + 'admin/storage/ingredient/ajax/new', 'post', '提交添加的原配料'],
-            ['getRelatedSettings', site.staticWebsite + 'mock/admin/get-related-settings.json', 'get', '获取均价、结存、总数量'],
+            ['submitEditIngredient', site.website + 'admin/storage/ingredient/ajax/update', 'post', '提交编辑页的原配料'],
+            ['getRelatedSettings', site.website + 'admin/storage/ingredient/ajax/convert/quantity', 'get', '获取均价、结存、总数量'],
+
         ],
         // 菜品管理
         DishManagement: [
@@ -170,9 +172,15 @@
             //['addDishInPackage', site.website + 'admin/dish/package/ajax/add/dish', 'put', '保存套餐中的菜品'],
             ['getPackagePriceAndQuantity', site.website + 'admin/dish/package/ajax/count', 'put', '更新当前套餐中已选菜品的总金额和数量'],
 
-             //成本卡管理\删除成本卡
-            ['delCostCard', site.website + 'admin/dish/cost/card/ajax/del', 'get', '删除成本卡']
-
+             //成本卡管理
+            ['delCostCard', site.website + 'admin/dish/cost/card/ajax/del', 'get', '删除成本卡'],
+            ['getUnit', site.website + 'admin/dish/cost/card/get/unit', 'get', '选择原材料后返回原材料的单位'],
+            ['getIngredientsName', site.website + 'admin/dish/cost/card/ajax/ingredient/list', 'get', '成本卡明细添加也页-获取相应的值,搜索选择，返回原材料信息'],
+            ['afterAddIngredient', site.website + 'admin/dish/cost/card/afterAdd/getPrice', 'get', '获取菜品成本卡的一些列成本'],
+            ['afterEditIngredient', site.website + 'admin/dish/cost/card/afterEdit/getPrice', 'get', '获取菜品成本卡的一些列成本'],
+            ['delIngredient', site.website + 'admin/dish/cost/card/afterDel/getPrice', 'get', '删除原配料'],
+            ['submitData', site.website + 'admin/dish/cost/card/save/all', 'get', '保存成本卡所有信息'],
+            ['getPrice', site.website + 'admin/dish/cost/card/afterHand/getPrice', 'get','手动添加成本时，发送成本']
         ],
         // 权限管理
         AuthorityManagement: [
@@ -238,7 +246,8 @@
         Module: [
             ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],
             ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码'],
-            ['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择']
+            ['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择'],
+            ['getDish', site.website + 'admin/dish/cost/card/ajax/dish/list', 'get', '成本卡添加页-搜索菜品，返回菜品信息']
         ]
     };
 })();

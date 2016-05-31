@@ -33,6 +33,54 @@
     </select>
 
     <select id="listBySearchDto" resultMap="pw.Ingredient">
+    SELECT
+    ingredient.`id` AS id,
+    ingredient.`tag_id` AS tagId,
+    tag.`name` AS tagName,
+    ingredient.`name` AS name,
+    ingredient.`ingredient_number` AS ingredientNumber,
+    ingredient.`assistant_code` AS assistantCode,
+    ingredient.`order_unit_id` AS orderUnitId,
+    ingredient.`storage_unit_id` AS storageUnitId,
+    ingredient.`cost_card_unit_id` AS costCardUnitId,
+    ingredient.`order_to_storage_ratio` AS orderToStorageRatio,
+    ingredient.`storage_to_cost_card_ratio` AS storageToCostCardRatio,
+    ingredient.`max_storage_quantity` AS maxStorageQuantity,
+    ingredient.`min_storage_quantity` AS minStorageQuantity,
+    ingredient.`real_quantity` AS realQuantity,
+    ingredient.`real_money` AS realMoney,
+    ingredient.`total_quantity` AS totalQuantity,
+    ingredient.`total_money` AS totalMoney,
+    ingredient.`average_price` AS averagePrice,
+    ingredient.`created_time` AS createdTime,
+    ingredient.`last_modified_time` AS lastModifiedTime
+    FROM `t_ingredient` AS ingredient
+    LEFT JOIN `t_tag` AS tag ON ingredient.`tag_id` = tag.`id`
+    <where>
+        <if test="searchDto != null">
+            <if test="searchDto.keyword != null and searchDto.keyword != '' ">
+                (
+                ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
+                ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                )
+            </if>
+            <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
+                AND ingredient.`tag_id` IN
+                <foreach item="tagId" collection="searchDto.tagIdList" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+            </if>
+        </if>
+        AND ingredient.`status` != 2
+    </where>
+    ORDER BY ingredient.`tag_id` ASC, ingredient.`id` ASC
+    <if test="searchDto.offset >= 0 and searchDto.pageSize >= 0">
+        LIMIT #{searchDto.offset},#{searchDto.pageSize}
+    </if>
+</select>
+
+    <select id="listDetailsBySearchDto" resultMap="pw.Ingredient">
         SELECT
         ingredient.`id` AS id,
         ingredient.`tag_id` AS tagId,
@@ -40,9 +88,9 @@
         ingredient.`name` AS name,
         ingredient.`ingredient_number` AS ingredientNumber,
         ingredient.`assistant_code` AS assistantCode,
-        ingredient.`order_unit_id` AS orderUnitId,
-        ingredient.`storage_unit_id` AS storageUnitId,
-        ingredient.`cost_card_unit_id` AS costCardUnitId,
+        ( SELECT unit.name FROM t_unit AS unit WHERE unit.id=ingredient.order_unit_id) AS orderUnitName,
+        ( SELECT unit.name FROM t_unit AS unit WHERE unit.id=ingredient.storage_unit_id) AS storageUnitName,
+        ( SELECT unit.name FROM t_unit AS unit WHERE unit.id=ingredient.cost_card_unit_id) AS costCardUnitName,
         ingredient.`order_to_storage_ratio` AS orderToStorageRatio,
         ingredient.`storage_to_cost_card_ratio` AS storageToCostCardRatio,
         ingredient.`max_storage_quantity` AS maxStorageQuantity,
@@ -61,8 +109,8 @@
                 <if test="searchDto.keyword != null and searchDto.keyword != '' ">
                     (
                     ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
-                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
-                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                    OR ingredient.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    OR ingredient.`ingredient_number` LIKE "%"#{searchDto.keyword}"%"
                     )
                 </if>
                 <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
@@ -79,6 +127,7 @@
             LIMIT #{searchDto.offset},#{searchDto.pageSize}
         </if>
     </select>
+
 
     <select id="countBySearchDto" resultType="int">
         SELECT
@@ -120,7 +169,7 @@
                 `order_to_storage_ratio` = #{ingredient.orderToStorageRatio},
                 `storage_to_cost_card_ratio` = #{ingredient.storageToCostCardRatio},
                 `max_storage_quantity` = #{ingredient.maxStorageQuantity},
-                `min_storage_quantity` = #{ingredient.maxStorageQuantity}
+                `min_storage_quantity` = #{ingredient.minStorageQuantity}
           WHERE `id` = #{ingredient.id};
     </update>
 

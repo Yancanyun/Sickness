@@ -16,8 +16,11 @@ import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +41,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     private CommonDao commonDao;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public List<CostCardItemDto> listByCostCardId(int costCardId) throws SSException {
         List<CostCardItemDto> costCardItemDtoList = Collections.emptyList();
         try {
@@ -53,6 +57,49 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
+    public void updateCostCardItemList(List<CostCardItem> costCardItems,int cardId) throws SSException {
+        List<CostCardItem> preItems = new ArrayList<CostCardItem>();//保存原来有而修改的集合中没有的原配料，即删除
+        List<CostCardItem> preItems1 = new ArrayList<CostCardItem>();//将原来的原配料复制一份
+        List<CostCardItem> updateItems1 = new ArrayList<CostCardItem>();//将修改的原配料复制一份
+        List<CostCardItem> updateItems2 = new ArrayList<CostCardItem>();//将修改的原配料复制一份
+        for(CostCardItem costCardItem:costCardItems){
+            updateItems1.add(costCardItem);
+            updateItems2.add(costCardItem);
+        }
+        try {
+            if (Assert.isNull(costCardItems) ||costCardItems.isEmpty()) {
+                throw SSException.get(EmenuException.CostCardItemIsNotNUll);
+            }
+            preItems = costCardItemMapper.listByCardId(cardId);
+            if(preItems.isEmpty()){
+                costCardItemMapper.newCostCardItems(costCardItems);
+            }else {
+                for(CostCardItem costCardItem:preItems){
+                    preItems1.add(costCardItem);
+                }
+                preItems.removeAll(costCardItems);
+                if(!preItems.isEmpty()) {
+                    costCardItemMapper.delByCostCardItems(preItems);
+                }
+                updateItems1.retainAll(preItems1);//修改过的原配料
+                for(CostCardItem costCardItem:updateItems1){
+                  costCardItemMapper.updateByCardId(costCardItem);
+                }
+              /*  costCardItemMapper.updateCostCardItems(updateItems1,cardId);*/
+                updateItems2.removeAll(preItems1);//新增的原配料
+                if(!updateItems2.isEmpty()) {
+                    costCardItemMapper.newCostCardItems(updateItems2);
+                }
+            }
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateCostCardItemFailed);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void newCostCardItems(List<CostCardItem> costCardItemList) throws SSException {
         try {
             if (Assert.isNull(costCardItemList) ||costCardItemList.isEmpty()) {
@@ -71,6 +118,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void newCostCardItem(CostCardItem costCardItem) throws SSException {
         try {
             if (!this.checkCostCardItem(costCardItem)) {
@@ -84,6 +132,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delById(int id) throws SSException {
         try{
             if(Assert.lessOrEqualZero(id)){
@@ -97,6 +146,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void delByCostCardId(int costCardId) throws SSException {
         try{
             if(Assert.lessOrEqualZero(costCardId)){
@@ -110,6 +160,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void updateCostCardItem(CostCardItem costCardItem) throws SSException {
         try {
             if(!checkCostCardItem(costCardItem)){
@@ -122,6 +173,7 @@ public class CostCardItemServiceImpl implements CostCardItemService {
         }
 
     }
+
 
     private Boolean checkCostCardItem(CostCardItem costCardItem)throws SSException{
         if(Assert.isNull(costCardItem)){
@@ -139,12 +191,12 @@ public class CostCardItemServiceImpl implements CostCardItemService {
         if(Assert.isNull(costCardItem.getIngredientId())||Assert.lessOrEqualZero(costCardItem.getIngredientId())){
             throw SSException.get(EmenuException.IngredientIdError);
         }
-        if(Assert.isNull(costCardItem.getNetCount())|| costCardItem.getNetCount().equals(BigDecimal.ZERO)){
-            throw SSException.get(EmenuException.NetCountError);
-        }
-        if(Assert.isNull(costCardItem.getTotalCount())||costCardItem.getTotalCount().equals(BigDecimal.ZERO)){
-            throw SSException.get(EmenuException.TotalCountError);
-        }
+     /*   if(Assert.isNull(costCardItem.getNetCount())|| costCardItem.getNetCount().equals(BigDecimal.ZERO)){
+                throw SSException.get(EmenuException.NetCountError);
+            }
+            if(Assert.isNull(costCardItem.getOtherCount())||costCardItem.getOtherCount().equals(BigDecimal.ZERO)){
+                throw SSException.get(EmenuException.TotalCountError);
+        }*/
         return true;
     }
 }

@@ -14,8 +14,8 @@ public enum ExcelExportTemplateEnums implements ExcelTemplateEnum {
     AdminSettlementSupplierList("结算中心列表",
             "classpath:template/excel/admin_storage_settlement_supplier_excel_export_template.xls"),
     AdminStorageReportList("库存单据",
-            "classpath:template/excel/admin_storage_report_excel_template.xls")
-    ;
+            "classpath:template/excel/admin_storage_report_excel_template.xls"),
+    AdminStorageList("库存原配料","classpath:template/excel/admin_storage_ingredient_excel_template.xls");
 
 
     private String name;

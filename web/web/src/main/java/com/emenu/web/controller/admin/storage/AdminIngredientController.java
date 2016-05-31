@@ -9,6 +9,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
@@ -23,9 +24,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -257,26 +260,64 @@ public class AdminIngredientController extends AbstractController{
     }
 
     @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
-    @RequestMapping(value = "ajax/update",method = RequestMethod.PUT)
-    public String update(Ingredient ingredient,
-                         RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("code", 0);
-        redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
+    @RequestMapping(value = "ajax/convert/quantity",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject convertQuantity(@RequestParam("id")Integer id ,
+                                      @RequestParam("storageUnitId")Integer storageUnitId ,
+                                      @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
-            ingredientService.updateIngredient(ingredient);
+            //Ingredient ingredient
+            Ingredient ingredientReal = ingredientService.queryById(id);
+
+            JSONObject jsonObject = new JSONObject();
+            if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }else {
+                jsonObject.put("realQuantity",ingredientReal.getRealQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("totalQuantity",ingredientReal.getTotalQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("maxStorageQuantity",ingredientReal.getMaxStorageQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("minStorageQuantity",ingredientReal.getMinStorageQuantity().divide(storageToCostCardRatio));
+            }
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            redirectAttributes.addFlashAttribute("code", 1);
-            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
         }
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/update/" + ingredient.getId();
-        return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * 编辑ingredient数量转换
+     * @param ingredient
+     *
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
+    @RequestMapping(value = "ajax/update",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject update(Ingredient ingredient,@RequestParam("isUpdated")Integer isUpdated) {
+        try {
+            ingredientService.updateIngredient(ingredient);
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = "export",method = RequestMethod.GET)
-    public void export() {
-
+    public void export(ItemAndIngredientSearchDto searchDto,
+                       HttpServletResponse response) {
+        if(searchDto==null)System.out.println("searchDto is null!!!");
+        try {
+            ingredientService.exportExcel(searchDto,response);
+            sendErrMsg("导出成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
     }
 
 }
