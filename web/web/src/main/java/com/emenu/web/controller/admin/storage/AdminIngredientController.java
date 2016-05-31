@@ -62,6 +62,25 @@ public class AdminIngredientController extends AbstractController{
     }
 
     /**
+     * 去原配料详情
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageIngredientList, extModule = ModuleEnums.AdminStorageIngredientList)
+    @RequestMapping(value = "todetails/{id}",method = RequestMethod.GET)
+    public String toList(@PathVariable("id")Integer id, Model model){
+        try {
+            Ingredient ingredient = ingredientService.queryById(id);
+            ingredientService.setQuantityFormat(ingredient);
+            model.addAttribute("ingredient",ingredient);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+        return "admin/storage/ingredient/details_home";
+    }
+    /**
      * ajax获取列表
      * @param pageNo
      * @param pageSize
