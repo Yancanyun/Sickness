@@ -8,6 +8,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
+import com.emenu.common.dto.order.OrderDishCache;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +32,6 @@ import java.util.List;
  * @author: yangch
  * @time: 2016/5/28 10:11
  */
-
 @Module(ModuleEnums.MobileDishImage)
 @Controller
 @IgnoreLogin
@@ -83,8 +84,6 @@ public class MobileDishImageController extends AbstractController {
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxDishPackageList(@RequestParam("page") Integer page,
-                                    @RequestParam("pageSize") Integer pageSize,
-                                    @RequestParam("userId") Integer userId,
                                     @RequestParam("classify") Integer classify) {
 
         try {

@@ -19,7 +19,7 @@
         // 菜品分类图片版
         Classify: [
             ['getDishList', site.website + 'mobile/dish/image/ajax/list', 'get', '获取菜品'],
-            ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品']
+            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品']
         ],
         // 搜索
         Search: [
@@ -27,7 +27,7 @@
         ],
         //菜品分类文字版
         ClassifyText: [
-            ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品'],
+            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品'],
             ['getDishList', site.website + 'mobile/dish/text/ajax/list', 'get', '获取菜品']
         ],
         //订单

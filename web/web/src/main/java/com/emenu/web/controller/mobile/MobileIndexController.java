@@ -44,7 +44,7 @@ public class MobileIndexController extends AbstractController {
             model.addAttribute("callWaiter",callWaiter);
 
             // 把TableID塞到Session里
-            session.setAttribute("tabldId", tableId);
+            session.setAttribute("tableId", tableId);
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             return MOBILE_SYS_ERR_PAGE;

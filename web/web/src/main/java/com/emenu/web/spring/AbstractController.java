@@ -8,6 +8,7 @@ import com.emenu.service.call.CallCacheService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
@@ -426,15 +427,22 @@ public class AbstractController extends Base {
     @Qualifier("ingredientService")
     protected static IngredientService ingredientService;
 
+    /**************************顾客点菜端**************************/
     //呼叫服务后台管理
     @StaticAutoWire
     @Qualifier("callWaiterService")
-    protected  static CallWaiterService callWaiterService;
+    protected static CallWaiterService callWaiterService;
 
     //呼叫服务缓存
     @StaticAutoWire
     @Qualifier("callCacheService")
-    protected  static CallCacheService callCacheService;
+    protected static CallCacheService callCacheService;
+
+    // 点餐缓存
+    @StaticAutoWire
+    @Qualifier("orderDishCacheService")
+    protected static OrderDishCacheService orderDishCacheService;
+
 }
 
 
