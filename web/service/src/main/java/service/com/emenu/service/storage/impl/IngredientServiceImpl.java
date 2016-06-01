@@ -3,6 +3,7 @@ package com.emenu.service.storage.impl;
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemDto;
 import com.emenu.common.dto.storage.StorageSupplierDto;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
@@ -116,6 +117,11 @@ public class IngredientServiceImpl implements IngredientService {
             if (Assert.isNull(ingredient)){
                 return null;
             }
+            Tag tag = commonDao.queryById(Tag.class,ingredient.getTagId());
+            if (Assert.isNull(tag)){
+                return null;
+            }
+            ingredient.setTagName(tag.getName());
             List<Unit> unitList = unitService.listAll();
             Map<Integer, String> unitMap = new HashMap<Integer, String>();
             for (Unit unit : unitList) {
@@ -376,6 +382,11 @@ public class IngredientServiceImpl implements IngredientService {
         BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
         String minStorageQuantityStr = minStorageQuantity.toString() + ingredient.getStorageUnitName();
         ingredient.setMinStorageQuantityStr(minStorageQuantityStr);
+
+        // 实际数量
+        BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
+        String realQuantityStr = realQuantity.toString() + ingredient.getStorageUnitName();
+        ingredient.setRealQuantityStr(realQuantityStr);
 
         // 总数量
         BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
