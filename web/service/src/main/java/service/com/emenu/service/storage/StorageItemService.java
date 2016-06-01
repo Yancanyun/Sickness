@@ -26,8 +26,13 @@ public interface StorageItemService {
      */
     public List<StorageItem> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
 
-
-    public List<StorageItem> exportExcelBySearchDto(ItemAndIngredientSearchDto searchDto,HttpServletResponse response) throws SSException;
+    /**
+     * 根据条件将 storageItem 的各个字段导出到excel
+     * @param searchDto
+     * @param response
+     * @throws SSException
+     */
+    public void exportExcelBySearchDto(ItemAndIngredientSearchDto searchDto,HttpServletResponse response) throws SSException;
 
     /**
      * 根据搜索查询数量

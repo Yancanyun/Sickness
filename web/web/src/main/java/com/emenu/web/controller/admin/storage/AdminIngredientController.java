@@ -329,7 +329,7 @@ public class AdminIngredientController extends AbstractController{
     @RequestMapping(value = "export",method = RequestMethod.GET)
     public void export(ItemAndIngredientSearchDto searchDto,
                        HttpServletResponse response) {
-        if(searchDto==null)System.out.println("searchDto is null!!!");
+        //if(searchDto==null)System.out.println("searchDto is null!!!");
         try {
             ingredientService.exportExcel(searchDto,response);
             sendErrMsg("导出成功");

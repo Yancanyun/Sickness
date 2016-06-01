@@ -24,9 +24,11 @@ public class ItemAndIngredientSearchDto {
 
     // 供货商ID
     private Integer supplierPartyId;
-
+    //原配料ID
+    private  Integer ingredientId;
     // 分类ID
     private List<Integer> tagIdList;
+
 
     public ItemAndIngredientSearchDto() {
         this.pageNo = -1;

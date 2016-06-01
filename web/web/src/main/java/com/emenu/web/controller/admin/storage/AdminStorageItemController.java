@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -404,8 +405,16 @@ public class AdminStorageItemController extends AbstractController {
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
-
-    public void exportExcel(){
+    @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportExcel(ItemAndIngredientSearchDto searchDto, HttpServletResponse response){
+        try {
+            storageItemService.exportExcelBySearchDto(searchDto,response);
+            sendErrMsg("导出成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
 
     }
 }
