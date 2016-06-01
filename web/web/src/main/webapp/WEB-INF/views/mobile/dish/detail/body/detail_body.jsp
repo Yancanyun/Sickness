@@ -10,10 +10,9 @@
 <div class="container">
   <div id="carousel" class="carousel slide">
     <ol class="carousel-indicators">
-      <li data-target="#carousel" data-slide-to="0" class="active"></li>
-      <li data-target="#carousel" data-slide-to="1"></li>
-      <li data-target="#carousel" data-slide-to="2"></li>
-      <li data-target="#carousel" data-slide-to="3"></li>
+      <c:forEach items="${dishDto.bigImgList}" varStatus="status">
+        <li data-target="#carousel" data-slide-to="${status.count}"></li>
+      </c:forEach>
     </ol>
     <div class="carousel-inner" role="listbox">
       <span class="tag-background"></span>

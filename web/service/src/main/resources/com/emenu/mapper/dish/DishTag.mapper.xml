@@ -37,4 +37,39 @@
         LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
         WHERE dishTag.`tag_id` = #{tagId}
     </select>
+
+    <select id="listDtoByTagIdAndPage" resultType="DishTagDto">
+        SELECT
+        dishTag.`id` AS id,
+        dishTag.`tag_id` AS tagId,
+        dishTag.`dish_id` AS dishId,
+        dish.`dish_number` AS dishNumber,
+        dish.`assistant_code` AS dishAssistantCode,
+        dish.`name` AS dishName,
+        unit.`name` AS dishUnitName,
+        dish.`price` AS dishPrice,
+        dish.`sale_price` AS dishSalePrice,
+        dish.`status` AS dishStatus,
+        dish.`category_id` AS dishCategoryId,
+        dish.`discount` AS dishDiscount
+        FROM `t_dish_tag` dishTag
+        LEFT JOIN `t_dish` dish ON dishTag.`dish_id` = dish.`id`
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        WHERE dishTag.`tag_id` = #{tagId}
+        <if test="keyword != null and keyword != ''">
+           AND dish.`name` LIKE "%"#{keyword}"%"
+        </if>
+        LIMIT #{offset},#{pageSize}
+    </select>
+
+    <select id="countByTagId" resultType="int">
+        SELECT COUNT(*)
+        FROM `t_dish_tag` dishTag
+        LEFT JOIN `t_dish` dish ON dishTag.`dish_id` = dish.`id`
+        LEFT JOIN `t_unit` unit ON dish.`unit_id` = unit.`id`
+        WHERE dishTag.`tag_id` = #{tagId}
+        <if test="keyword != null and keyword != ''">
+            AND dish.`name` LIKE "%"#{keyword}"%"
+        </if>
+    </select>
 </mapper>

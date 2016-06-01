@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -364,4 +365,41 @@ public class IngredientServiceImpl implements IngredientService {
             ingredient.setCostCardUnitName(unitMap.get(ingredient.getCostCardUnitId()));
         }
     }
+
+    public void setQuantityFormat(Ingredient ingredient) throws SSException{
+        // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+        BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+        String maxStorageQuantityStr = maxStorageQuantity.toString() + ingredient.getStorageUnitName();
+        ingredient.setMaxStorageQuantityStr(maxStorageQuantityStr);
+
+        // 最小库存
+        BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+        String minStorageQuantityStr = minStorageQuantity.toString() + ingredient.getStorageUnitName();
+        ingredient.setMinStorageQuantityStr(minStorageQuantityStr);
+
+        // 总数量
+        BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
+        String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
+        ingredient.setTotalQuantityStr(totalQuantityStr);
+    }
+
+    public void setQuantityFormat(List<Ingredient> ingredientList) throws SSException{
+        for (Ingredient ingredient : ingredientList) {
+            // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+            BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+            String maxStorageQuantityStr = maxStorageQuantity.toString() + ingredient.getStorageUnitName();
+            ingredient.setMaxStorageQuantityStr(maxStorageQuantityStr);
+
+            // 最小库存
+            BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+            String minStorageQuantityStr = minStorageQuantity.toString() + ingredient.getStorageUnitName();
+            ingredient.setMinStorageQuantityStr(minStorageQuantityStr);
+
+            // 总数量
+            BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
+            String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
+            ingredient.setTotalQuantityStr(totalQuantityStr);
+        }
+    }
+
 }

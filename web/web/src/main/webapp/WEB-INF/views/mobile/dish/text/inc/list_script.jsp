@@ -9,6 +9,7 @@
 <script type="text/template" id="dishTpl">
   {@each list as it}
   <li class="dish-item clearfix" data-dish-id="&{it.dishId}">
+
     <p class="dish-name"><i class="fa fa-circle-o"></i>&{it.name}</p>
     <p class="dish-price-sale">
       <span class="dish-price">￥&{it.price}</span>

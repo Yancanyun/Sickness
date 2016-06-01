@@ -2,8 +2,11 @@ package com.emenu.test.dish;
 
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.service.dish.DishService;
+import com.emenu.service.dish.DishTagService;
 import com.emenu.test.AbstractTestCase;
 import org.apache.commons.beanutils.BeanUtils;
 import org.junit.Test;
@@ -24,6 +27,9 @@ public class DishTest extends AbstractTestCase {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private DishTagService dishTagService;
 
     public static void main(String[] args) {
         DishDto dishDto = new DishDto();
@@ -59,4 +65,20 @@ public class DishTest extends AbstractTestCase {
             System.out.println(dishDto.getSalePrice());
         }
     }
+
+    @Test
+    public void listByTagIdAndPage() throws Exception {
+        List<DishTagDto> dishTagDtos = Collections.emptyList();
+        dishTagDtos = dishTagService.listByTagIdAndPage(TagEnum.TodayCheap.getId(), 1, 10, "");
+        int count = dishTagService.countByTagId(TagEnum.TodayCheap.getId(), "");
+        if (dishTagDtos != null) {
+            for (DishTagDto dishTagDto : dishTagDtos) {
+                if (dishTagDto != null) {
+                    System.out.print(dishTagDto.getDishName() + dishTagDto.getDishName());
+                }
+            }
+    }
+        System.out.print(count);
+    }
+
 }

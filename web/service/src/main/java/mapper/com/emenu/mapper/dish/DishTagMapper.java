@@ -42,4 +42,24 @@ public interface DishTagMapper {
      * @throws SSException
      */
     public List<DishTagDto> listDtoByTagId(@Param("tagId") int tagId) throws Exception;
+
+    /**
+     * 根据tagId分页获取DishTagDto列表
+     * @param tagId
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    public List<DishTagDto> listDtoByTagIdAndPage(@Param("tagId")int tagId,@Param("offset")int offset,@Param("pageSize")int pageSize,@Param("keyword")String keyword) throws Exception;
+
+
+    /**
+     * 计算当前节点的DishTag数
+     * @param tagId
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public int countByTagId(@Param("tagId") int tagId,@Param("keyword") String keyword) throws Exception;
 }

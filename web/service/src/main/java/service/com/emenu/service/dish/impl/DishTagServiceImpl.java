@@ -1,5 +1,6 @@
 package com.emenu.service.dish.impl;
 
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
@@ -194,6 +195,46 @@ public class DishTagServiceImpl implements DishTagService {
             throw SSException.get(EmenuException.DishTagQueryFiled, e);
         }
         return dishList;
+    }
+
+    @Override
+    public List<DishTagDto> listByTagIdAndPage(int tagId, int pageNo, int pageSize,String keyword) throws SSException {
+        List<DishTagDto> dishTagDtos = Collections.emptyList();
+        pageNo = pageNo<=0? 0:pageNo-1;
+        int offset = pageNo*pageSize;
+        try{
+            Assert.lessOrEqualZero(tagId,EmenuException.TagIdError);
+            dishTagDtos = dishTagMapper.listDtoByTagIdAndPage(tagId,offset,pageSize,keyword);
+            // 把菜品总分类名称、小类名称、小图、大图加进去
+            for (DishTagDto dishTagDto: dishTagDtos) {
+                dishTagDto.setCategoryNameStr(tagFacadeService.queryById(dishTagDto.getDishCategoryId()).getName());
+                dishTagDto.setTagNameStr(tagFacadeService.queryById(dishTagDto.getTagId()).getName());
+
+                List<DishImg> smallImgList = dishImgService.listByDishIdAndType(dishTagDto.getDishId(), DishImgTypeEnums.SmallImg);
+                if (Assert.isNotEmpty(smallImgList)) {
+                    dishTagDto.setSmallImg(smallImgList.get(0));
+                }
+                List<DishImg> bigImgList = dishImgService.listByDishIdAndType(dishTagDto.getDishId(), DishImgTypeEnums.BigImg);
+                dishTagDto.setBigImgList(bigImgList);
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListByTagIdAndPageFailed);
+        }
+        return dishTagDtos;
+    }
+
+    @Override
+    public int countByTagId(int tagId, String keyword) throws SSException {
+        int count = 0;
+        try{
+            Assert.lessOrEqualZero(tagId,EmenuException.TagIdError);
+            count = dishTagMapper.countByTagId(tagId,keyword);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountByTagIdFailed);
+        }
+        return count;
     }
 
     private boolean checkBeforeSave(DishTag dishTag) throws SSException {

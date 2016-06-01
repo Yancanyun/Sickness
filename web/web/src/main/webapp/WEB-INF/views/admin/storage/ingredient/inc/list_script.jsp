@@ -19,7 +19,7 @@
         <td>
             <a href="${website}admin/storage/ingredient/toupdate/&{it.id}" class="label-info"><i class="fa fa-pencil">&nbsp;编辑</i></a>
             <a href="javascript:;" class="label-info"><i class="fa fa-times">&nbsp;删除</i></a>
-            <a href="${website}admin/storage/ingredient/todetail/&{it.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
+            <a href="${website}admin/storage/ingredient/todetails/&{it.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
         </td>
     </tr>
     {@/each}

@@ -77,5 +77,18 @@ public interface IngredientService {
      */
     public void exportExcel(ItemAndIngredientSearchDto searchDto, HttpServletResponse response) throws SSException;
 
+    /**
+     * 设置数量格式
+     * @param ingredient
+     */
+    public void setQuantityFormat(Ingredient ingredient) throws SSException;
+
+    /**
+     * 设置数量格式
+     * @param ingredientList
+     */
+    public void setQuantityFormat(List<Ingredient> ingredientList) throws SSException;
+
+
 
 }

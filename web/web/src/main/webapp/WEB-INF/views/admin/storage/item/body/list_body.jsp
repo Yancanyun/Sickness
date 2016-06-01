@@ -10,7 +10,7 @@
             <li class="active">库存物品管理</li>
         </ol>
         <h2>库存管理-库存物品管理</h2>
-        <div class="alert alert-success J_tip">提示信息!</div>
+        <%--<div class="alert alert-success J_tip">提示信息!</div>--%>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
