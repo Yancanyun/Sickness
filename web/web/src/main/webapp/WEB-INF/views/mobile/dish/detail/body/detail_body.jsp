@@ -34,7 +34,7 @@
       </div>
   </div>
   <div class="dish-title">
-    <span class="dish-name"><i class="fa fa-circle-o"></i>${dishDto.name}</span>
+    <span class="dish-name">${dishDto.name}</span>
     <c:if test="${dishDto.price ne dishDto.salePrice}">
       <span class="dish-price">￥${dishDto.price}</span>
     </c:if>

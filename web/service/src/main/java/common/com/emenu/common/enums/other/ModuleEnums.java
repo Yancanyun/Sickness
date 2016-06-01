@@ -290,6 +290,9 @@ public enum ModuleEnums {
     // 菜品选择图片版
     MobileDishImage("Mobile:Dish:Image"),
     MobileDishImageList("Mobile:Dish:Image:List"),
+    // 菜品选择文字版
+    MobileDishText("Mobile:Dish:Text"),
+    MobileDishTextList("Mobile:Dish:Text:List"),
     //猜你喜欢
     MobileDishPrefer("Mobile:Dish:Prefer"),
 
