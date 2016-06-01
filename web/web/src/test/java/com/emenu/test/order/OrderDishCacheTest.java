@@ -6,7 +6,6 @@ import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 
 /**
  * OrderDishCacheTest
@@ -25,6 +24,6 @@ public class OrderDishCacheTest extends AbstractTestCase {
         orderDishCache.setDishId(41);
         orderDishCache.setQuantity(5);
         orderDishCache.setRemark("没有备注");
-        orderDishCacheService.newOrderDish(1, orderDishCache);
+        orderDishCacheService.newDish(1, orderDishCache);
     }
 }

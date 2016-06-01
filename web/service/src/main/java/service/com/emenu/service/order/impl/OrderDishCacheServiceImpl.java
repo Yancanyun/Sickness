@@ -28,7 +28,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     private int orderDishCacheId = 0;
 
     @Override
-    public void newOrderDish (int tableId, OrderDishCache orderDishCache) throws SSException {
+    public void newDish(int tableId, OrderDishCache orderDishCache) throws SSException {
         try {
             // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
             TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
@@ -60,5 +60,87 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.NewDishError, e);
         }
+    }
+
+    @Override
+    public void delDish(int tableId, int orderDishCacheId) throws SSException {
+        try {
+            // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
+
+            // 若缓存中不存在本餐台的TableOrderCache，则不可能进行删除操作，直接报错
+            if (tableOrderCache == null) {
+                throw SSException.get(EmenuException.TableIsNotHaveAnyDish);
+            }
+
+            // 若已被加锁，则不允许执行接下来的操作
+            if (tableOrderCache.getLock() == true) {
+                throw SSException.get(EmenuException.TableIsLock);
+            }
+
+            // 从TableOrderCache中获取本餐台中已点但仍未下单的全部菜品(OrderDishCacheList)
+            List<OrderDishCache> orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+
+            // 若本餐台的OrderDishCacheList为空，则不可能进行删除操作，直接报错
+            if (orderDishCacheList == null || orderDishCacheList.size() == 0) {
+                throw SSException.get(EmenuException.TableIsNotHaveAnyDish);
+            }
+
+
+            // 从OrderDishCacheList寻找要删除的OrderDishCache，删除之
+            for (OrderDishCache orderDishCache : orderDishCacheList) {
+                if (orderDishCache.getId().equals(orderDishCacheId)) {
+                    orderDishCacheList.remove(orderDishCache);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelDishError, e);
+        }
+    }
+
+    @Override
+    public void updateDish(int tableId, OrderDishCache orderDishCache) throws SSException {
+        try {
+            // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
+
+            // 若缓存中不存在本餐台的TableOrderCache，则不可能进行编辑操作，直接报错
+            if (tableOrderCache == null) {
+                throw SSException.get(EmenuException.TableIsNotHaveAnyDish);
+            }
+
+            // 若已被加锁，则不允许执行接下来的操作
+            if (tableOrderCache.getLock() == true) {
+                throw SSException.get(EmenuException.TableIsLock);
+            }
+
+            // 从TableOrderCache中获取本餐台中已点但仍未下单的全部菜品(OrderDishCacheList)
+            List<OrderDishCache> orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+
+            // 若本餐台的OrderDishCacheList为空，则不可能进行编辑操作，直接报错
+            if (orderDishCacheList == null || orderDishCacheList.size() == 0) {
+                throw SSException.get(EmenuException.TableIsNotHaveAnyDish);
+            }
+
+
+            // 从OrderDishCacheList寻找要编辑的OrderDishCache，编辑之
+            for (OrderDishCache orderDishCache1 : orderDishCacheList) {
+                if (orderDishCache1.getId().equals(orderDishCache)) {
+                    orderDishCacheList.remove(orderDishCache1);
+                    orderDishCacheList.add(orderDishCache);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateDishError, e);
+        }
+    }
+
+    @Override
+    public TableOrderCache listByTableId(int tableId) throws SSException {
+        return tableOrderCacheMap.get(tableId);
     }
 }

@@ -484,8 +484,10 @@ public enum EmenuException implements IBizExceptionMes {
     /****************************顾客点餐端****************************/
     // 点菜
     NewDishError("点菜失败", 10001),
-    TableIsLock("本餐台有其他顾客正在下单", 10002),
-
+    TableIsLock("该餐台有其他顾客正在下单", 10002),
+    DelDishError("删除菜品失败", 10003),
+    TableIsNotHaveAnyDish("该餐台不存在已点但未下单的菜品", 10004),
+    UpdateDishError("编辑菜品失败", 10005),
 
     ;
 

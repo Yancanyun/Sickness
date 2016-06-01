@@ -3,7 +3,7 @@ package com.emenu.common.dto.order;
 import java.util.List;
 
 /**
- * TableOrderDishCache
+ * TableOrderCache
  * 餐台点餐的缓存
  *
  * @author: yangch
