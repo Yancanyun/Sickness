@@ -1,22 +1,12 @@
-package com.emenu.test.service;
+package com.emenu.test.call;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.dto.remark.RemarkDto;
-import com.emenu.common.dto.remark.RemarkTagDto;
-import com.emenu.common.entity.remark.Remark;
-import com.emenu.common.entity.remark.RemarkTag;
-import com.emenu.common.entity.service.CallWaiter;
-import com.emenu.mapper.service.CallWaiterMapper;
-import com.emenu.service.remark.RemarkService;
-import com.emenu.service.remark.RemarkTagService;
-import com.emenu.service.service.CallWaiterService;
+import com.emenu.common.entity.call.CallWaiter;
+import com.emenu.mapper.call.CallWaiterMapper;
+import com.emenu.service.call.CallWaiterService;
 import com.emenu.test.AbstractTestCase;
-import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.ArrayList;
-import java.util.List;
+
 /**
  * CallServiceTest
  *

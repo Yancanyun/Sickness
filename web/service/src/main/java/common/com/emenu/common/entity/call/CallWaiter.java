@@ -1,4 +1,4 @@
-package com.emenu.common.entity.service;
+package com.emenu.common.entity.call;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 

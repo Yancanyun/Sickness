@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.emenu.mapper.service.CallWaiterMapper">
+<mapper namespace="com.emenu.mapper.call.CallWaiterMapper">
 
     <insert id ="newCallWaiter">
         INSERT INTO t_call_waiter(t_call_waiter.name,weight,status)
