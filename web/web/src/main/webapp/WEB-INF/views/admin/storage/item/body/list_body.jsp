@@ -30,9 +30,9 @@
                         <div class="col-sm-3">
                             <select class="form-control" name="supplierPartyId">
                                 <option value="-1">请选择</option>
-                                <option value="1">供货商11</option>
-                                <option value="2">供货商22</option>
-                                <option value="3">供货商33</option>
+                                <c:forEach var="supplier" items="${supplierList}">
+                                    <option value="${supplier.partyId}">${supplier.name}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
@@ -41,9 +41,9 @@
                         <div class="col-sm-3">
                             <select class="form-control" name="tagName">
                                 <option value="-1">请选择</option>
-                                <option value="1">土豆</option>
-                                <option value="2">牛肉</option>
-                                <option value="3">醋</option>
+                                <c:forEach var="ingredient" items="${ingredientList}">
+                                    <option value="${ingredient.id}">${ingredient.name}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
@@ -54,15 +54,11 @@
                                 <label>
                                     <input class="J_selectAll"  type="checkbox" value="1" name="tagIdList"> 全部
                                 </label>
-                                <label>
-                                    <input class="J_storeType" type="checkbox" value="11" name="tagIdList"> 分类1
-                                </label>
-                                <label>
-                                    <input class="J_storeType" type="checkbox" value="12" name="tagIdList"> 分类2
-                                </label>
-                                <label>
-                                    <input class="J_storeType" type="checkbox" value="13" name="tagIdList"> 分类3
-                                </label>
+                                <c:forEach var="tag" items="${tagList}">
+                                    <label>
+                                        <input class="J_storeType" type="checkbox" value="${tag.id}" name="tagIdList"> ${tag.name}
+                                    </label>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
