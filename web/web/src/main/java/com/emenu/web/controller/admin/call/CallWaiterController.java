@@ -2,11 +2,11 @@ package com.emenu.web.controller.admin.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.service.CallWaiter;
+import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.mapper.service.CallWaiterMapper;
-import com.emenu.service.service.CallWaiterService;
+import com.emenu.mapper.call.CallWaiterMapper;
+import com.emenu.service.call.CallWaiterService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;

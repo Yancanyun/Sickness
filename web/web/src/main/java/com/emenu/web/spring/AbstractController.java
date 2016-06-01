@@ -426,12 +426,12 @@ public class AbstractController extends Base {
     @Qualifier("ingredientService")
     protected static IngredientService ingredientService;
 
-    //成本卡原料
+    //呼叫服务后台管理
     @StaticAutoWire
     @Qualifier("callWaiterService")
     protected  static CallWaiterService callWaiterService;
 
-    //成本卡原料
+    //呼叫服务缓存
     @StaticAutoWire
     @Qualifier("callCacheService")
     protected  static CallCacheService callCacheService;

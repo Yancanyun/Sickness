@@ -237,6 +237,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryAllCallWaiterFail("查询服务类型失败", 4123),
     UpdateCallWaiterStatusFail("修改服务类型启用状态失败", 4124),
     AddCallCacheFail("呼叫服务加入缓存失败", 4125),
+    QueryCallCacheByWaiterIdFail("查询服务员的服务请求失败", 4126),
 
     //基本信息管理
     //搜索风向标

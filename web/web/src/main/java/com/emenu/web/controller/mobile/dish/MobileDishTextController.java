@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -25,7 +27,17 @@ public class MobileDishTextController extends AbstractController {
 
     @IgnoreLogin
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
-    public String toList(){
+    public String toList(Model model)
+    {
+        try
+        {
+            List<CallWaiter> callWaiter = new ArrayList<CallWaiter>();
+            callWaiter=callWaiterService.queryAllCallWaiter();
+            model.addAttribute("callWaiter",callWaiter);//呼叫服务列表
+        }
+        catch (SSException e) {
+            sendErrMsg(e.getMessage());
+        }
         return "mobile/dish/text/list_home";
     }
 

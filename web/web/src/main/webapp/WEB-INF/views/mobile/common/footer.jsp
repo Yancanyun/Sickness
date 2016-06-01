@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="footer clearfix" id="footer">
@@ -17,9 +18,13 @@
         <li class="oper J_subMenuListTrigger">
             <i class="fa fa-phone list-trigger"></i><span>呼叫服务</span>
             <ul class="call-service-list J_subMenuList">
-                <li>呼叫服务员</li>
-                <li>加水</li>
-                <li>加餐具</li>
+                <c:forEach var="callWaiter" items="${callWaiter}">
+                    <c:choose>
+                        <c:when test="${callWaiter.status eq 1}">
+                            <li>${callWaiter.name}</li>
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
             </ul>
         </li>
     </ul>
