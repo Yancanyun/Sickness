@@ -404,4 +404,8 @@ public class AdminStorageItemController extends AbstractController {
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
+
+    public void exportExcel(){
+
+    }
 }

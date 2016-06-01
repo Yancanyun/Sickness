@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,6 +61,21 @@ public class StorageItemServiceImpl implements StorageItemService {
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);
         }
         return list;
+    }
+
+    @Override
+    public List<StorageItem> exportExcelBySearchDto(ItemAndIngredientSearchDto searchDto, HttpServletResponse response) throws SSException {
+        OutputStream os = null;
+        //从数据库中获取数据
+        try {
+            List<StorageItem> StorageItemlist= storageItemMapper.listBySearchDto(searchDto);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
     }
 
     @Override

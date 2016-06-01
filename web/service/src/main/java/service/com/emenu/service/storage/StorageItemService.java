@@ -6,6 +6,7 @@ import com.emenu.common.entity.storage.StorageItem;
 import com.pandawork.core.common.exception.SSException;
 import com.sun.scenario.effect.impl.sw.sse.SSESepiaTonePeer;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -24,6 +25,9 @@ public interface StorageItemService {
      * @throws SSException
      */
     public List<StorageItem> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
+
+
+    public List<StorageItem> exportExcelBySearchDto(ItemAndIngredientSearchDto searchDto,HttpServletResponse response) throws SSException;
 
     /**
      * 根据搜索查询数量
