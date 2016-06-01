@@ -69,8 +69,7 @@ public class QrCodeServiceImpl implements QrCodeService {
 
         if (Assert.isNotNull(webDomain)) {
             //二维码的内容(每一个点餐页的地址)
-            //地址未定，暂时按照老版本的地址来
-            String qrCodeContext = webDomain + "/touch/index/" + tableId;
+            String qrCodeContext = webDomain + "/mobile/" + tableId;
 
             //获取二维码存储的文件夹
             String qrCodeSavePath = request.getSession().getServletContext().getRealPath("/resources/");

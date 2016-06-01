@@ -293,7 +293,25 @@ public class DishServiceImpl implements DishService {
             return dishDtoList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+            throw SSException.get(EmenuException.DishQueryFailed);
+        }
+    }
+
+    public int likeThisDish(int id) throws SSException {
+        try {
+            return dishMapper.likeThisDish(id);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishLikeFailed);
+        }
+    }
+
+    public int dislikeThisDish(int id) throws SSException {
+        try {
+            return dishMapper.dislikeThisDish(id);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishDislikeFailed);
         }
     }
 

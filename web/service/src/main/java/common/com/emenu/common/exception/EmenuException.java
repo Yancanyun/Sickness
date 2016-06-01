@@ -144,14 +144,16 @@ public enum EmenuException implements IBizExceptionMes {
     DishDeleteFailed("菜品删除失败", 1040),
     DishStatusIllegal("菜品状态不合法", 1041),
     DishCategoryNotNull("总分类不能为空", 1042),
-    DishTagNotNull("小类不能为空", 1049),
     DishNameNotNull("菜品名称不能为空", 1043),
     DishUnitNotNull("菜品单位不能为空", 1044),
     DishPriceNotNUll("菜品定价不能为空", 1045),
     DishSaleTypeNotNull("菜品促销方式不能为空", 1046),
     DishDiscountNotNull("菜品折扣不能为空", 1047),
     DishSalePriceNotNull("菜品售价不能为空", 1048),
+    DishTagNotNull("小类不能为空", 1049),
     DishCreatedPartyIdNotNull("创建者不能为空", 1054),
+    DishLikeFailed("点赞失败", 1055),
+    DishDislikeFailed("取消点赞失败", 1055),
 
     IsFirstTagNotNull("是否是首要分类不能为空", 1055),
     DishTagQueryFiled("菜品-分类查询失败", 1056),
@@ -477,6 +479,13 @@ public enum EmenuException implements IBizExceptionMes {
     QueryByCostCardIdFailed("根据成本卡id查询其所有原料失败",8131),
     CostCardItemTypeIsNotNull("成本卡原料类别不为空",8132),
     CostCardItemIdError("成本卡原料主键错误",8133),
+
+
+    /****************************顾客点餐端****************************/
+    // 点菜
+    NewDishError("点菜失败", 10001),
+    TableIsLock("本餐台有其他顾客正在下单", 10002),
+
 
     ;
 

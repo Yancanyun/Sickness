@@ -242,6 +242,18 @@
         ORDER BY  `status` ASC, `id` DESC
         LIMIT #{dishSearchDto.offset},#{dishSearchDto.pageSize}
     </select>
+
+    <update id="likeThisDish" parameterType="int">
+        UPDATE t_dish
+        SET like_nums = like_nums + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="dislikeThisDish" parameterType="int">
+        UPDATE t_dish
+        SET like_nums = like_nums - 1
+        WHERE id = #{id}
+    </update>
     
     <resultMap id="dishDtoResultMap" type="com.emenu.common.dto.dish.DishDto">
         <id property="id" column="id" />

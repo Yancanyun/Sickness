@@ -13,6 +13,7 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -32,8 +33,8 @@ import java.util.List;
 @RequestMapping(value = {URLConstants.MOBILE_URL, URLConstants.MOBILE_INDEX_URL})
 public class MobileIndexController extends AbstractController {
     @Module(ModuleEnums.MobileIndex)
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String toWelcome(Model model) {
+    @RequestMapping(value = "{tableId}", method = RequestMethod.GET)
+    public String toIndex(@PathVariable("tableId")Integer tableId, HttpSession session, Model model) {
         try {
             IndexImg indexImg = indexImgService.queryByState(IndexImgEnum.Using);
 
@@ -41,6 +42,9 @@ public class MobileIndexController extends AbstractController {
             callWaiter= callWaiterService.queryAllCallWaiter();
             model.addAttribute("indexImg", indexImg.getImgPath());
             model.addAttribute("callWaiter",callWaiter);
+
+            // 把TableID塞到Session里
+            session.setAttribute("tabldId", tableId);
         } catch (SSException e) {
             sendErrMsg(e.getMessage());
             return MOBILE_SYS_ERR_PAGE;
