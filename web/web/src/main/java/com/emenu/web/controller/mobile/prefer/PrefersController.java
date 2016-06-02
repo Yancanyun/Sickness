@@ -64,7 +64,9 @@ public class PrefersController extends AbstractController {
             jsonObject.put("id",dishTagDto.getId());
             jsonObject.put("dishId",dishTagDto.getDishId());
             jsonObject.put("name",dishTagDto.getDishName());
-            jsonObject.put("src",dishTagDto.getSmallImg().getImgPath());
+            if(dishTagDto.getSmallImg()!=null) {
+                jsonObject.put("src", dishTagDto.getSmallImg().getImgPath());
+            }
             jsonObject.put("price",dishTagDto.getDishPrice());
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改
@@ -98,8 +100,9 @@ public class PrefersController extends AbstractController {
             jsonObject.put("id",dishTagDto.getId());
             jsonObject.put("dishId",dishTagDto.getDishId());
             jsonObject.put("name",dishTagDto.getDishName());
-            jsonObject.put("src",dishTagDto.getSmallImg().getImgPath());
-            jsonObject.put("price",dishTagDto.getDishPrice());
+            if(dishTagDto.getSmallImg()!=null) {
+                jsonObject.put("src", dishTagDto.getSmallImg().getImgPath());
+            }
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改
             jsonArray.add(jsonObject);
@@ -132,7 +135,9 @@ public class PrefersController extends AbstractController {
             jsonObject.put("id",dishTagDto.getId());
             jsonObject.put("dishId",dishTagDto.getDishId());
             jsonObject.put("name",dishTagDto.getDishName());
-            jsonObject.put("src",dishTagDto.getSmallImg().getImgPath());
+            if(dishTagDto.getSmallImg()!=null) {
+                jsonObject.put("src", dishTagDto.getSmallImg().getImgPath());
+            }
             jsonObject.put("price",dishTagDto.getDishPrice());
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改

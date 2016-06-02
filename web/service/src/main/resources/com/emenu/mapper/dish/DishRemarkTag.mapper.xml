@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.dish.DishRemarkTagMapper">
+
+    <insert id="newDishRemarkTag" parameterType="java.util.List">
+        INSERT INTO `t_dish_remark_tag`(tag_id,remark_tag_id)
+        VALUES
+        <foreach collection="dishRemarkTags" index="index" item="item" separator=",">
+            (#{item.tagId},#{item.remarkTagId})
+        </foreach>
+    </insert>
+
+    <delete id="delByTagId">
+        DELETE
+        FROM `t_dish_remark_tag`
+        WHERE t_dish_remark_tag.`tag_id` = #{tagId}
+    </delete>
+
+</mapper>

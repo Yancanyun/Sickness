@@ -95,6 +95,11 @@ public enum EmenuException implements IBizExceptionMes {
     QueryTagFailed("查询分类失败！", 3020),
     listPathTagFailed("查询分类祖先路径失败！", 3021),
 
+    //菜品分类与备注关联
+    DelByDishTagIdFailed("根据菜品分类id删除菜品分类失败",3022),
+    NewDishRemarkTagsFailed("新增菜品分类与备注分类失败",3023),
+    DishRemarkTags("菜品分类与备注不为空",3024),
+
     //菜品口味
     ListTasteFailed("口味列表查询失败", 3040),
     NewTasteFailed("添加口味失败", 3041),

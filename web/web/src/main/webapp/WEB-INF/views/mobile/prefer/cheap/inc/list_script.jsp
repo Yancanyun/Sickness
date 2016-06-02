@@ -1,5 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<script type="text/javascript">
+  KISSY.ready(function(S){
+    S.use('module/ext, module/search-list', function(){});
+  });
+</script>
 <script type='text/template' id="dishTpl">
   {@each list as it}
   <li class="dish clearfix" data-dish-id="&{it.dishId}">
