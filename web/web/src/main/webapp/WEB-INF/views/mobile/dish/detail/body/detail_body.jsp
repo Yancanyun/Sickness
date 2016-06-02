@@ -64,13 +64,13 @@
     <div class="order-require">
       <label>口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;味</label>
     </div>
-    <div class="options J_taste">
+    <div class="options J_type">
       <input type="hidden" name="taste" value="">
       <c:forEach items="${dishDto.tasteList}" var="taste">
         <span data-type="${taste.id}"><i class="fa fa-circle-o"></i>${taste.name}</span>
       </c:forEach>
       <c:if test="${empty dishDto.tasteList}">
-        <span data-type="">暂无口味</span>
+        <div>暂无口味</div>
       </c:if>
     </div>
     <div class="order-require">
