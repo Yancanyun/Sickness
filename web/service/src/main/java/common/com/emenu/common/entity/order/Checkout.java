@@ -28,7 +28,7 @@ public class Checkout extends AbstractEntity{
     private Integer tableId;
 
     // 收款人partyId
-    @Column(name = "checer_party_id")
+    @Column(name = "checker_party_id")
     private Integer checkerPartyId;
 
     // 结账时间
