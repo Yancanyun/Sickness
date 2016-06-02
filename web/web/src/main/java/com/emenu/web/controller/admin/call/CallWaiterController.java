@@ -50,7 +50,7 @@ public class CallWaiterController extends AbstractController{
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-        return "admin/restaurant/service/call_management_home";
+        return "admin/restaurant/call/call_management_home";
     }
 
     /**

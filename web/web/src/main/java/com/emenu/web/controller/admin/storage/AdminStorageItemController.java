@@ -272,6 +272,38 @@ public class AdminStorageItemController extends AbstractController {
     }
 
     /**
+     * 编辑时数量转换
+     * @param id
+     * @param storageUnitId
+     * @param storageToCostCardRatio
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem,extModule = ModuleEnums.AdminStorageItemUpdate)
+    @RequestMapping(value = "ajax/convert/quantity",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject convertQuantity(@RequestParam("id")Integer id ,
+                                      @RequestParam("storageUnitId")Integer storageUnitId ,
+                                      @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
+        try {
+            StorageItem storageItem = storageItemService.queryById(id);
+
+            JSONObject jsonObject = new JSONObject();
+            if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }else {
+                jsonObject.put("totalQuantity",storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("maxStorageQuantity",storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("minStorageQuantity",storageItem.getMinStorageQuantity().divide(storageToCostCardRatio));
+            }
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
      * 修改提交
      *
      * @param storageItem

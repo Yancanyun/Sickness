@@ -285,7 +285,6 @@ public class AdminIngredientController extends AbstractController{
                                       @RequestParam("storageUnitId")Integer storageUnitId ,
                                       @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
-            //Ingredient ingredient
             Ingredient ingredientReal = ingredientService.queryById(id);
 
             JSONObject jsonObject = new JSONObject();

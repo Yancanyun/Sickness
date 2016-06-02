@@ -287,14 +287,21 @@ public enum ModuleEnums {
     Mobile("Mobile"),
     // 首页
     MobileIndex("Mobile:Index"),
+    // 菜品
+    MobileDish("Mobile:Dish"),
+    // 点菜
+    MobileDishNew("Mobile:Dish:New"),
     // 菜品选择图片版
     MobileDishImage("Mobile:Dish:Image"),
     MobileDishImageList("Mobile:Dish:Image:List"),
+    MobileDishImageNew("Mobile:Dish:Image:New"),
     // 菜品选择文字版
     MobileDishText("Mobile:Dish:Text"),
     MobileDishTextList("Mobile:Dish:Text:List"),
     //猜你喜欢
     MobileDishPrefer("Mobile:Dish:Prefer"),
+    //呼叫服务
+    MobileCall("Mobile:Call"),
 
 
 

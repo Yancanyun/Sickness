@@ -340,12 +340,13 @@ public class StorageItemServiceImpl implements StorageItemService {
             return null;
         }
         try {
-            StorageItem StorageItem = storageItemMapper.queryById(id);
-            if (Assert.isNull(StorageItem)){
-                return StorageItem;
+            StorageItem storageItem = storageItemMapper.queryById(id);
+            if (Assert.isNull(storageItem)){
+                return storageItem;
             }
-            setUnitName(StorageItem);
-            return StorageItem;
+            setUnitName(storageItem);
+            setQuantityFormat(storageItem);
+            return storageItem;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemQueryFailed, e);

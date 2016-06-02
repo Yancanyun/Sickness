@@ -146,6 +146,9 @@ public final class URLConstants {
     // 顾客点菜平台首页
     public static final String MOBILE_INDEX_URL = "mobile/index";
 
+    // 顾客点菜
+    public static final String MOBILE_DISH_URL = "mobile/dish";
+
     // 顾客点餐菜品文字列表
     public static final String MOBILE_DISH_TEXT_URL = "mobile/dish/text";
 

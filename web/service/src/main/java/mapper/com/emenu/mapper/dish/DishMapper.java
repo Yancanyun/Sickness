@@ -70,4 +70,20 @@ public interface DishMapper {
      * @throws Exception
      */
     public List<DishDto> listBySearchDtoInMobile(@Param("dishSearchDto") DishSearchDto dishSearchDto) throws Exception;
+
+    /**
+     * 根据ID对菜品/套餐点赞
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public int likeThisDish(@Param("id")int id) throws Exception;
+
+    /**
+     * 根据ID对菜品/套餐取消点赞
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public int dislikeThisDish(@Param("id")int id) throws Exception;
 }

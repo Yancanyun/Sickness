@@ -19,7 +19,7 @@
         // 菜品分类图片版
         Classify: [
             ['getDishList', site.website + 'mobile/dish/image/ajax/list', 'get', '获取菜品'],
-            ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品']
+            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品']
         ],
         // 搜索
         Search: [
@@ -27,7 +27,7 @@
         ],
         //菜品分类文字版
         ClassifyText: [
-            ['addDish', site.staticWebsite + 'mock/mobile/add-dish.json', 'get', '添加菜品'],
+            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品'],
             ['getDishList', site.website + 'mobile/dish/text/ajax/list', 'get', '获取菜品']
         ],
         //订单
@@ -42,27 +42,16 @@
         ],
         //为您推荐
         Recommend: [
-            ['sendDishInfo', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送用户id和菜品id'],
-            ['getRecommendDishList', site.staticWebsite + 'mock/mobile/get-recommend-dish-list.json', 'get', '获取推荐的菜品列表']
-        ],
-        //今日特价
-        Recommend: [
-        ['sendDishInfo', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送用户id和菜品id'],
-        ['getRecommendDishList', site.website + 'mobile/dish/prefer/ajax/cheap/list', 'get', '获取推荐的菜品列表']
-        ],
-        //本店特色
-        Recommend: [
         ['sendDishInfo', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送用户id和菜品id'],
-        ['getRecommendDishList', site.website + 'mobile/dish/prefer/ajax/feature/list', 'get', '获取推荐的菜品列表']
-        ],
-        //销量排行
-        Recommend: [
-        ['sendDishInfo', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送用户id和菜品id'],
-        ['getRecommendDishList',site.website + 'mobile/dish/prefer/ajax/rank/list', 'get', '获取推荐的菜品列表']
+        ['getRecommendDishList', site.staticWebsite + 'mock/mobile/get-recommend-dish-list.json', 'get', '获取推荐的菜品列表']
         ],
         HistoryRecord: [
-            ['getDishList', site.staticWebsite + 'mock/mobile/history-dish-list.json', 'get','获取历史记录中的菜品列表'],
-            ['sendDishId', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id']
+        ['getDishList', site.staticWebsite + 'mock/mobile/history-dish-list.json', 'get','获取历史记录中的菜品列表'],
+        ['sendDishId', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id']
+        ],
+        Common: [
+            ['getService', site.website + 'mobile/ajax/list/call', 'get', 'footer获取呼叫服务列表'],
+            ['callService', site.website + 'mobile/ajax/call', 'get','footer呼叫服务']
         ]
     };
 })();

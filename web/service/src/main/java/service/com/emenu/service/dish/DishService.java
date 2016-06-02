@@ -96,5 +96,21 @@ public interface DishService {
      * @throws SSException
      */
     public List<DishDto> listBySearchDtoInMobile(DishSearchDto dishSearchDto) throws SSException;
+
+    /**
+     * 根据ID对菜品/套餐点赞
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public int likeThisDish(int id) throws SSException;
+
+    /**
+     * 根据ID对菜品/套餐取消点赞
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public int dislikeThisDish(int id) throws SSException;
 }
 

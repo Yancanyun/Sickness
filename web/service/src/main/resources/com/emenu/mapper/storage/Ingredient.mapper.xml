@@ -61,8 +61,8 @@
             <if test="searchDto.keyword != null and searchDto.keyword != '' ">
                 (
                 ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
-                ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
-                ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                OR ingredient.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                OR ingredient.`ingredient_number` LIKE "%"#{searchDto.keyword}"%"
                 )
             </if>
             <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
@@ -138,8 +138,8 @@
                 <if test="searchDto.keyword != null and searchDto.keyword != '' ">
                     (
                     ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
-                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
-                    ingredient.`assistantCode` LIKE "%"#{searchDto.keyword}"%"
+                    OR ingredient.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
+                    OR ingredient.`ingredient_number` LIKE "%"#{searchDto.keyword}"%"
                     )
                 </if>
                 <if test="searchDto.tagIdList != null and searchDto.tagIdList.size > 0">
