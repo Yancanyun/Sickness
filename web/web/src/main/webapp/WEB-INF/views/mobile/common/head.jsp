@@ -9,6 +9,7 @@
 <link rel="icon" href="${staticWebsite}img/common/favicon.ico" />
 <link rel="stylesheet" href="${staticWebsite}css/base/reset.css" />
 <link rel="stylesheet" href="${staticWebsite}css/mobile/common/footer.css">
+<link rel="stylesheet" href="${staticWebsite}css/mobile/cover.css">
 <!--<link rel="stylesheet" href="/resources/tool/bootstrap/css/bootstrap.css" />-->
 <!--<link rel="stylesheet" href="/resources/css/mobile/common.css" />-->
 

@@ -46,10 +46,6 @@ public class MobileDishTextController extends AbstractController {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
             model.addAttribute("tagList", tagList);
-
-            List<CallWaiter> callWaiter = new ArrayList<CallWaiter>();
-            callWaiter=callWaiterService.queryAllCallWaiter();
-            model.addAttribute("callWaiter",callWaiter);//呼叫服务列表
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);

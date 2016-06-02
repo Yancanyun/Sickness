@@ -300,6 +300,8 @@ public enum ModuleEnums {
     MobileDishTextList("Mobile:Dish:Text:List"),
     //猜你喜欢
     MobileDishPrefer("Mobile:Dish:Prefer"),
+    //呼叫服务
+    MobileCall("Mobile:Call"),
 
 
 

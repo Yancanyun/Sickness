@@ -63,6 +63,10 @@
         HistoryRecord: [
             ['getDishList', site.staticWebsite + 'mock/mobile/history-dish-list.json', 'get','获取历史记录中的菜品列表'],
             ['sendDishId', site.staticWebsite + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id']
+        ],
+        Common: [
+            ['getService', site.website + 'mobile/ajax/list/call', 'get', 'footer获取呼叫服务列表'],
+            ['callService', site.website + 'mobile/ajax/call', 'get','footer呼叫服务']
         ]
     };
 })();
