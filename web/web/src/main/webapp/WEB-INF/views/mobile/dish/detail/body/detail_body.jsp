@@ -7,7 +7,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="container">
   <div id="carousel" class="carousel slide">
     <ol class="carousel-indicators">
@@ -32,7 +31,7 @@
               </c:otherwise>
             </c:choose>
         </c:forEach>
-        <c:if test="${dishDto.bigImgList == null || fn:length(dishDto.bigImgList) == 0}">
+        <c:if test="${empty dishDto.bigImgList}">
           <div class="item active">
             <a href="#"><img src="${staticWebsite}img/mobile/carousel/dish-pic1.gif" alt="菜品展示"></a>
           </div>
@@ -41,10 +40,10 @@
   </div>
   <div class="dish-title">
     <span class="dish-name">${dishDto.name}</span>
+    <span class="dish-sale">￥${dishDto.salePrice}</span>
     <c:if test="${dishDto.price ne dishDto.salePrice}">
       <span class="dish-price">￥${dishDto.price}</span>
     </c:if>
-    <span class="dish-sale">￥${dishDto.salePrice}</span>
   </div>
   <p class="intro intro-ellipes J_intro">
   <c:if test="${empty dishDto.description}">
@@ -70,6 +69,9 @@
       <c:forEach items="${dishDto.tasteList}" var="taste">
         <span data-type="${taste.id}"><i class="fa fa-circle-o"></i>${taste.name}</span>
       </c:forEach>
+      <c:if test="${empty dishDto.tasteList}">
+        <span data-type="">暂无口味</span>
+      </c:if>
     </div>
     <div class="order-require">
       <label>数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量：</label>
