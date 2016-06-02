@@ -298,6 +298,10 @@ public enum ModuleEnums {
     // 菜品选择文字版
     MobileDishText("Mobile:Dish:Text"),
     MobileDishTextList("Mobile:Dish:Text:List"),
+    // 菜品详情
+    MobileDishDetail("Mobile:Dish:Detail"),
+    MobileDishDetailList("Mobile:Dish:Detail:List"),
+    MobileDishDetailNew("Mobile:Dish:Detail:New"),
     //猜你喜欢
     MobileDishPrefer("Mobile:Dish:Prefer"),
     //呼叫服务

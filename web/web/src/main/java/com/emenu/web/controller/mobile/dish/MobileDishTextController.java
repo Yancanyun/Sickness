@@ -34,11 +34,9 @@ import java.util.List;
 @IgnoreLogin
 @RequestMapping(value = URLConstants.MOBILE_DISH_TEXT_URL)
 public class MobileDishTextController extends AbstractController {
-
-
     @Module(ModuleEnums.MobileDishTextList)
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
-    public String toList(Model model)
+    public String toList(HttpSession session, Model model)
     {
         try
         {
@@ -49,6 +47,24 @@ public class MobileDishTextController extends AbstractController {
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
             tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
             model.addAttribute("tagList", tagList);
+
+            // 从Session中获取TableID
+            Integer tableId = (Integer)session.getAttribute("tableId");
+            model.addAttribute("tableId", tableId);
+
+            // 从缓存中取出该餐台已点但未下单的菜品
+            TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
+            if (tableOrderCache != null) {
+                orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+            }
+            Integer dishTotalNumber = 0;
+            for (OrderDishCache orderDishCache : orderDishCacheList) {
+                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
+            }
+            if (dishTotalNumber != 0) {
+                model.addAttribute("dishTotalNumber", dishTotalNumber);
+            }
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);

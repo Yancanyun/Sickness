@@ -51,7 +51,7 @@
   </c:if>
     ${dishDto.description}
   </p>
-  <form action="" method="" class="J_form">
+  <form action="${website}mobile/dish/new/${dishDto.id}" method="POST" class="J_form">
     <input type="hidden" name="id" value="">
     <div class="order-require">
       <label>上菜方式</label>

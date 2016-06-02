@@ -43,7 +43,7 @@ public class MobileDishImageController extends AbstractController {
      */
     @Module(ModuleEnums.MobileDishImageList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model) {
+    public String toList(HttpSession session, Model model) {
         try {
             // 获取二级分类
             List<Tag> tagList = new ArrayList<Tag>();
@@ -64,6 +64,24 @@ public class MobileDishImageController extends AbstractController {
                 featureList.remove(2);
             }
             model.addAttribute("featureList", featureList);
+
+            // 从Session中获取TableID
+            Integer tableId = (Integer)session.getAttribute("tableId");
+            model.addAttribute("tableId", tableId);
+
+            // 从缓存中取出该餐台已点但未下单的菜品
+            TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
+            if (tableOrderCache != null) {
+                orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+            }
+            Integer dishTotalNumber = 0;
+            for (OrderDishCache orderDishCache : orderDishCacheList) {
+                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
+            }
+            if (dishTotalNumber != 0) {
+                model.addAttribute("dishTotalNumber", dishTotalNumber);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
