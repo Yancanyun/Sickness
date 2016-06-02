@@ -9,16 +9,16 @@
 <script type="text/template" id="dishTpl">
   {@each list as it}
   <li class="dish-item clearfix" data-dish-id="&{it.dishId}">
-    <a href="${website}mobile/dish/detail/&{it.dishId}">
-      <p class="dish-name"><i class="fa fa-circle-o"></i>&{it.name}</p>
-      <p class="dish-price-sale">
-        <span class="dish-price">￥&{it.price}</span>
-        <span class="dish-sale">￥&{it.sale}</span>
-      </p>
-      <p class="add-dish J_addDish" data-dish-number="">点&nbsp;餐
-        <span class="number-tip hidden"></span>
-      </p>
-    </a>
+  <a href="${website}mobile/dish/detail/&{it.dishId}">
+    <p class="dish-name"><i class="fa fa-circle-o"></i>&{it.name}</p>
+    <p class="dish-price-sale">
+      <span class="dish-price">￥&{it.price}</span>
+      <span class="dish-sale">￥&{it.sale}</span>
+    </p>
+  </a>
+    <p class="add-dish J_addDish" data-dish-number="&{it.number}">点&nbsp;餐
+      <span class="number-tip hidden"></span>
+    </p>
   </li>
   {@/each}
 </script>

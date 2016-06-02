@@ -46,14 +46,49 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             // 从TableOrderCache中获取本餐台中已点但仍未下单的全部菜品(OrderDishCacheList)
             List<OrderDishCache> orderDishCacheList = tableOrderCache.getOrderDishCacheList();
 
-            // 设置OrderDishCache中的ID
-            orderDishCache.setId(++orderDishCacheId);
-
-            // 把点的菜加入缓存中
-            if (orderDishCacheList == null) {
-                orderDishCacheList = new ArrayList<OrderDishCache>();
+            // 若OrderDishCache中没有数量，则是快捷点餐
+            Boolean isQuickly = false;
+            if (orderDishCache.getQuantity() == null) {
+                isQuickly = true;
+                orderDishCache.setQuantity(1); // 把快捷点餐的菜品数量设为1
             }
-            orderDishCacheList.add(orderDishCache);
+
+            // 如果本餐台的点菜缓存是空的，则不需要接下来的判断，直接把数据放缓存里
+            if (orderDishCacheList == null) {
+                orderDishCache.setId(++orderDishCacheId); // 设置OrderDishCache中的ID
+                orderDishCacheList = new ArrayList<OrderDishCache>();
+                orderDishCacheList.add(orderDishCache);
+            } else {
+                // 若不是快捷点餐，直接将本次点餐加入缓存
+                if (isQuickly == false) {
+                    orderDishCache.setId(++orderDishCacheId); // 设置OrderDishCache中的ID
+                    orderDishCacheList.add(orderDishCache);
+                }
+                // 若本次点餐是快捷点餐，则寻找OrderDishCacheList中同DishID的快捷点餐记录
+                // (口味、备注、上菜方式均为空的记录即为快捷点餐)，有的话直接修改原有的记录
+                else {
+                    Boolean isAdded = false; // 是否已将本次快捷点餐与之前的快捷点餐进行了合并
+                    for (OrderDishCache orderDishCache1 : orderDishCacheList) {
+                        if (orderDishCache1.getDishId().equals(orderDishCache.getDishId())
+                                && orderDishCache1.getTasteId() == null
+                                && orderDishCache1.getServeType() == null
+                                && orderDishCache1.getRemark() == null) {
+                            orderDishCache.setId(orderDishCache1.getId());
+                            orderDishCache.setQuantity(orderDishCache1.getQuantity() + 1);
+                            orderDishCacheList.remove(orderDishCache1);
+                            orderDishCacheList.add(orderDishCache);
+                            isAdded = true; // 已将本次快捷点餐与之前的快捷点餐进行了合并
+                            break;
+                        }
+                    }
+                    // 若OrderDishCacheList中不存在同DishID的快捷点餐记录，则将本次快捷点餐加入缓存
+                    if (isAdded == false) {
+                        orderDishCache.setId(++orderDishCacheId); // 设置OrderDishCache中的ID
+                        orderDishCacheList.add(orderDishCache);
+                    }
+                }
+            }
+
             tableOrderCache.setOrderDishCacheList(orderDishCacheList);
             tableOrderCacheMap.put(tableId, tableOrderCache);
         } catch (Exception e) {

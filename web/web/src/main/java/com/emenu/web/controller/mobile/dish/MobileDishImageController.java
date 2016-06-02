@@ -9,7 +9,7 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.dto.order.OrderDishCache;
-import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.dto.order.TableOrderCache;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -83,7 +82,8 @@ public class MobileDishImageController extends AbstractController {
     @Module(value = ModuleEnums.MobileDishImageList)
     @RequestMapping(value = "ajax/list", method = RequestMethod.GET)
     @ResponseBody
-    public JSON ajaxDishPackageList(@RequestParam("page") Integer page,
+    public JSON ajaxDishPackageList(HttpSession session,
+                                    @RequestParam("page") Integer page,
                                     @RequestParam("classify") Integer classify) {
 
         try {
@@ -93,6 +93,14 @@ public class MobileDishImageController extends AbstractController {
             dishSearchDto.setPageSize(8);
             List<DishDto> dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
 
+            // 从缓存中取出该餐台已点但未下单的菜品
+            Integer tableId = (Integer)session.getAttribute("tableId");
+            TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
+            if (tableOrderCache != null) {
+                orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+            }
+
             JSONArray jsonArray = new JSONArray();
             for (DishDto dishDto : dishDtoList) {
                 JSONObject jsonObject = new JSONObject();
@@ -101,6 +109,17 @@ public class MobileDishImageController extends AbstractController {
                 if (dishDto.getSmallImg() != null) {
                     jsonObject.put("src", dishDto.getSmallImg().getImgPath());
                 }
+                // 从OrderDishCacheList中找dishId相同的菜品，把数量加起来发给前台
+                Integer number = 0;
+                for (OrderDishCache orderDishCache : orderDishCacheList) {
+                    if (orderDishCache.getDishId() != null && orderDishCache.getDishId().equals(dishDto.getId())) {
+                        number = number + orderDishCache.getQuantity();
+                    }
+                }
+                if (number != 0) {
+                    jsonObject.put("number", number);
+                }
+
                 jsonObject.put("price", dishDto.getPrice().toString());
                 jsonObject.put("sale", dishDto.getSalePrice().toString());
                 jsonArray.add(jsonObject);
