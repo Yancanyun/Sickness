@@ -437,6 +437,12 @@ public class AdminStorageItemController extends AbstractController {
 
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
+
+    /**
+     * 导出excel
+     * @param searchDto
+     * @param response
+     */
     @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = "export",method = RequestMethod.GET)
     public void exportExcel(ItemAndIngredientSearchDto searchDto, HttpServletResponse response){

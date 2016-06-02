@@ -78,8 +78,11 @@ public class StorageItemServiceImpl implements StorageItemService {
         //从数据库中获取数据
         try {
             List<StorageItem> storageItemlist= storageItemMapper.listBySearchDto(searchDto);
+
             for (StorageItem storageItem :storageItemlist) {
                 EntityUtil.setNullFieldDefault(storageItem);
+                setUnitName(storageItem);
+                setQuantityFormat(storageItem);
             }
             // 设置输出流
             // 设置excel文件名和sheetName
@@ -462,7 +465,7 @@ public class StorageItemServiceImpl implements StorageItemService {
         storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
 
         // 总数量
-        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio());
         String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
         storageItem.setTotalStockInQuantityStr(totalQuantityStr);
     }

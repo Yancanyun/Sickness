@@ -201,6 +201,7 @@ public class IngredientServiceImpl implements IngredientService {
 
             for (Ingredient ingredient :ingredientList) {
                 EntityUtil.setNullFieldDefault(ingredient);
+                setQuantityFormat(ingredient);
             }
             // 设置输出流
             // 设置excel文件名和sheetName
@@ -267,11 +268,11 @@ public class IngredientServiceImpl implements IngredientService {
                 sheet.addCell(CostCardUnitName);
 
              //库存预警上限
-                Label MaxStorageQuantity = new Label(10, row,ingredient.getMaxStorageQuantity().intValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                Label MaxStorageQuantity = new Label(10, row,ingredient.getMaxStorageQuantityStr());
                 MaxStorageQuantity.setCellFormat(cellFormat);
                 sheet.addCell(MaxStorageQuantity);
              //库存预警下限
-                Label MinStorageQuantity = new Label(11, row,ingredient.getMinStorageQuantity().intValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                Label MinStorageQuantity = new Label(11, row,ingredient.getMinStorageQuantityStr());
                 MinStorageQuantity.setCellFormat(cellFormat);
                 sheet.addCell(MinStorageQuantity);
              //均价
@@ -279,7 +280,7 @@ public class IngredientServiceImpl implements IngredientService {
                 AveragePrice.setCellFormat(cellFormat);
                 sheet.addCell(AveragePrice);
               //数量
-                Label RealQuantity = new Label(13, row,ingredient.getRealQuantity().doubleValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                Label RealQuantity = new Label(13, row,ingredient.getRealQuantityStr());
                 RealQuantity.setCellFormat(cellFormat);
                 sheet.addCell(RealQuantity);
 
@@ -289,7 +290,7 @@ public class IngredientServiceImpl implements IngredientService {
                 sheet.addCell(RealMoney);
 
                 //总数量
-                Label TotalQuantity = new Label(15, row,ingredient.getTotalQuantity().doubleValue()/ingredient.getStorageToCostCardRatio().intValue()+ingredient.getStorageUnitName());
+                Label TotalQuantity = new Label(15, row,ingredient.getTotalQuantityStr());
                 TotalQuantity.setCellFormat(cellFormat);
                 sheet.addCell(TotalQuantity);
 
@@ -309,6 +310,7 @@ public class IngredientServiceImpl implements IngredientService {
             tplStream.close();
             os.close();
         } catch (Exception e) {
+            System.out.println();
             LogClerk.errLog.error(e);
             response.setContentType("text/html");
             response.setHeader("Content-Type", "text/html");
@@ -389,9 +391,13 @@ public class IngredientServiceImpl implements IngredientService {
         ingredient.setRealQuantityStr(realQuantityStr);
 
         // 总数量
-        BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
+
+        BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio());
         String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
         ingredient.setTotalQuantityStr(totalQuantityStr);
+
+
+
     }
 
     public void setQuantityFormat(List<Ingredient> ingredientList) throws SSException{
@@ -410,6 +416,11 @@ public class IngredientServiceImpl implements IngredientService {
             BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
             String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
             ingredient.setTotalQuantityStr(totalQuantityStr);
+
+            //数量
+            BigDecimal realStockInQuantityStr = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
+            String realQuantityStr = realStockInQuantityStr.toString() + ingredient.getStorageUnitName();
+            ingredient.setRealQuantityStr(realQuantityStr);
         }
     }
 
