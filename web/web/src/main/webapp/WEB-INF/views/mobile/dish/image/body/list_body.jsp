@@ -14,7 +14,7 @@
 
       <div class="carousel-inner" role="listbox">
         <div class="item active">
-          <a href="#"><img src="${tinyWebsite}${todayCheapActive.bigImgList[0].imgPath}" alt="今日特价"></a>
+          <a href="${website}mobile/dish/detail/${todayCheapActive.dishId}"><img src="${tinyWebsite}${todayCheapActive.bigImgList[0].imgPath}" alt="今日特价"></a>
           <div class="carousel-caption">
             <p class="dish-title">今日特价</p>
             <p class="dish-name">${todayCheapActive.dishName}</p>
@@ -22,16 +22,16 @@
               <span class="dish-price">￥${todayCheapActive.dishPrice}</span>
               <span class="dish-sale">￥${todayCheapActive.dishSalePrice}</span>
             </p>
-            <div class="add-dish J_addDishTrigger" data-dish-number="">
-              点餐
-              <span class="dish-number J_dishNumber hidden"></span>
-            </div>
+            <%--<div class="add-dish J_addDishTrigger" data-dish-number="">--%>
+              <%--点餐--%>
+              <%--<span class="dish-number J_dishNumber hidden"></span>--%>
+            <%--</div>--%>
             <img src="${staticWebsite}img/mobile/classify-img/empty-circle.gif" alt="" class="empty-circle">
           </div>
         </div>
 
           <div class="item">
-            <a href="#"><img src="${tinyWebsite}${todayCheapSecond.bigImgList[0].imgPath}" alt="今日特价"></a>
+            <a href="${website}mobile/dish/detail/${todayCheapSecond.dishId}"><img src="${tinyWebsite}${todayCheapSecond.bigImgList[0].imgPath}" alt="今日特价"></a>
             <div class="carousel-caption">
               <p class="dish-title">今日特价</p>
               <p class="dish-name">${todayCheapSecond.dishName}</p>
@@ -39,17 +39,17 @@
                 <span class="dish-price">￥${todayCheapSecond.dishPrice}</span>
                 <span class="dish-sale">￥${todayCheapSecond.dishSalePrice}</span>
               </p>
-              <div class="add-dish J_addDishTrigger" data-dish-number="">
-                点餐
-                <span class="dish-number J_dishNumber hidden"></span>
-              </div>
+              <%--<div class="add-dish J_addDishTrigger" data-dish-number="">--%>
+                <%--点餐--%>
+                <%--<span class="dish-number J_dishNumber hidden"></span>--%>
+              <%--</div>--%>
               <img src="${staticWebsite}img/mobile/classify-img/empty-circle.gif" alt="" class="empty-circle">
             </div>
           </div>
 
         <c:forEach var="feature" items="${featureList}">
           <div class="item">
-            <a href="#"><img src="${tinyWebsite}${feature.bigImgList[0].imgPath}" alt="本店特色"></a>
+            <a href="${website}mobile/dish/detail/${feature.dishId}"><img src="${tinyWebsite}${feature.bigImgList[0].imgPath}" alt="本店特色"></a>
             <div class="carousel-caption">
               <p class="dish-title">本店特色</p>
               <p class="dish-name">${feature.dishName}</p>
@@ -57,10 +57,10 @@
                 <span class="dish-price">￥${feature.dishPrice}</span>
                 <span class="dish-sale">￥${feature.dishSalePrice}</span>
               </p>
-              <div class="add-dish J_addDishTrigger" data-dish-number="">
-                点餐
-                <span class="dish-number J_dishNumber hidden"></span>
-              </div>
+              <%--<div class="add-dish J_addDishTrigger" data-dish-number="">--%>
+                <%--点餐--%>
+                <%--<span class="dish-number J_dishNumber hidden"></span>--%>
+              <%--</div>--%>
               <img src="${staticWebsite}img/mobile/classify-img/empty-circle.gif" alt="" class="empty-circle">
             </div>
           </div>

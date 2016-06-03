@@ -4,8 +4,6 @@ import com.emenu.common.dto.order.OrderDishCache;
 import com.emenu.common.dto.order.TableOrderCache;
 import com.pandawork.core.common.exception.SSException;
 
-import java.util.List;
-
 /**
  * OrderDishCacheService
  * 点餐缓存(已点但仍未下单的菜品)
@@ -45,4 +43,12 @@ public interface OrderDishCacheService {
      * @throws SSException
      */
     public TableOrderCache listByTableId(int tableId) throws SSException;
+
+    /**
+     * 根据餐台ID清空餐台
+     * @param tableId
+     * @return
+     * @throws SSException
+     */
+    public void cleanCacheByTableId(int tableId) throws SSException;
 }

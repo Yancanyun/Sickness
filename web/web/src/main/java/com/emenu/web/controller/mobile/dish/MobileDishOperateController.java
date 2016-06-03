@@ -54,14 +54,23 @@ public class MobileDishOperateController extends AbstractController {
         }
     }
 
-
+    /**
+     * 点菜提交
+     * @param session
+     * @param id
+     * @param type
+     * @param number
+     * @param remarks
+     * @return
+     */
     @Module(ModuleEnums.MobileDishNew)
     @RequestMapping(value = "new/{id}", method = RequestMethod.POST)
     public String newDish(HttpSession session,
                           @PathVariable("id") Integer id,
                           @RequestParam("type") Integer type,
                           @RequestParam("number") Integer number,
-                          @RequestParam("remarks") String  remarks) {
+                          @RequestParam("taste") Integer taste,
+                          @RequestParam("remarks") String remarks) {
         try {
             // 从Session中获取餐台ID
             Integer tableId = (Integer)session.getAttribute("tableId");
@@ -71,6 +80,7 @@ public class MobileDishOperateController extends AbstractController {
             orderDishCache.setDishId(id);
             orderDishCache.setServeType(type);
             orderDishCache.setQuantity(number);
+            orderDishCache.setTasteId(taste);
             orderDishCache.setRemark(remarks);
             orderDishCacheService.newDish(tableId, orderDishCache);
 
@@ -81,5 +91,4 @@ public class MobileDishOperateController extends AbstractController {
             return MOBILE_SYS_ERR_PAGE;
         }
     }
-
 }

@@ -11,13 +11,13 @@
       <span class="dish-number J_dishNumber hidden"></span>
     </div>
     <div class="dish-info clearfix">
-      <p class="dish-star">
-        <i class="fa fa-star active"></i>
-        <i class="fa fa-star active"></i>
-        <i class="fa fa-star active"></i>
-        <i class="fa fa-star active"></i>
-        <i class="fa fa-star"></i>
-      </p>
+      <%--<p class="dish-star">--%>
+        <%--<i class="fa fa-star active"></i>--%>
+        <%--<i class="fa fa-star active"></i>--%>
+        <%--<i class="fa fa-star active"></i>--%>
+        <%--<i class="fa fa-star active"></i>--%>
+        <%--<i class="fa fa-star"></i>--%>
+      <%--</p>--%>
       <p class="dish-price-sale">
         <span class="dish-price">￥&{it.price}</span>
         <span class="dish-sale">￥&{it.sale}</span>

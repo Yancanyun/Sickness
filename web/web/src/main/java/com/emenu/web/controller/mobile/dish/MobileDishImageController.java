@@ -43,14 +43,19 @@ public class MobileDishImageController extends AbstractController {
      */
     @Module(ModuleEnums.MobileDishImageList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(HttpSession session, Model model) {
+    public String toList(@RequestParam(required = false) Integer classifyId,
+                         HttpSession session, Model model) {
         try {
+            // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
+            if (classifyId != null) {
+                model.addAttribute("classifyId", classifyId);
+            }
             // 获取二级分类
             List<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Dishes.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Goods.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Drinks.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Package.getId()));
             model.addAttribute("tagList", tagList);
 
             // 从今日特价中获取前两个
@@ -59,9 +64,13 @@ public class MobileDishImageController extends AbstractController {
             model.addAttribute("todayCheapSecond", todayCheapList.get(1));
 
             // 从本店特色中获取前两个
-            List<DishTagDto> featureList = dishTagService.listDtoByTagId(TagEnum.Feature.getId());
-            if (featureList.size() > 2) {
-                featureList.remove(2);
+            List<DishTagDto> featureListAll = dishTagService.listDtoByTagId(TagEnum.Feature.getId());
+            List<DishTagDto> featureList = new ArrayList<DishTagDto>();
+            if (featureListAll.size() > 2) {
+                featureList.add(featureListAll.get(0));
+                featureList.add(featureListAll.get(1));
+            } else {
+                featureList = featureListAll;
             }
             model.addAttribute("featureList", featureList);
 
@@ -105,10 +114,15 @@ public class MobileDishImageController extends AbstractController {
                                     @RequestParam("classify") Integer classify) {
 
         try {
-            // 从菜品中获取接下来的菜品
+            // 根据分类ID从菜品中获取接下来的菜品
             DishSearchDto dishSearchDto = new DishSearchDto();
             dishSearchDto.setPageNo(page);
             dishSearchDto.setPageSize(8);
+            if (classify != null) {
+                List<Integer> tagIdList = new ArrayList<Integer>();
+                tagIdList.add(classify);
+                dishSearchDto.setTagIdList(tagIdList);
+            }
             List<DishDto> dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
 
             // 从缓存中取出该餐台已点但未下单的菜品

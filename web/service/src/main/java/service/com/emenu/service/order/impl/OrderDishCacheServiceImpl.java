@@ -159,7 +159,6 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
                 throw SSException.get(EmenuException.TableIsNotHaveAnyDish);
             }
 
-
             // 从OrderDishCacheList寻找要编辑的OrderDishCache，编辑之
             for (OrderDishCache orderDishCache1 : orderDishCacheList) {
                 if (orderDishCache1.getId().equals(orderDishCache)) {
@@ -176,6 +175,29 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
 
     @Override
     public TableOrderCache listByTableId(int tableId) throws SSException {
-        return tableOrderCacheMap.get(tableId);
+        try {
+            return tableOrderCacheMap.get(tableId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDishError, e);
+        }
+    }
+
+    @Override
+    public void cleanCacheByTableId(int tableId) throws SSException {
+        try {
+            // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
+
+            // 若已被加锁，则不允许执行接下来的操作
+            if (tableOrderCache != null && tableOrderCache.getLock() == true) {
+                throw SSException.get(EmenuException.TableIsLock);
+            }
+
+            tableOrderCacheMap.remove(tableId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CleanTableCacheError, e);
+        }
     }
 }

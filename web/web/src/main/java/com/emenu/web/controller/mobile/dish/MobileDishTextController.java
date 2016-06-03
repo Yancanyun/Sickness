@@ -36,16 +36,22 @@ import java.util.List;
 public class MobileDishTextController extends AbstractController {
     @Module(ModuleEnums.MobileDishTextList)
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
-    public String toList(HttpSession session, Model model)
+    public String toList(@RequestParam(required = false) Integer classifyId,
+                         HttpSession session, Model model)
     {
         try
         {
+            // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
+            if (classifyId != null) {
+                model.addAttribute("classifyId", classifyId);
+            }
+
             // 获取二级分类
             List<Tag> tagList = new ArrayList<Tag>();
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Dishes.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Goods.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Drinks.getId()));
-            tagList.addAll(tagFacadeService.listAllByTagId(TagEnum.Package.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Dishes.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Goods.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Drinks.getId()));
+            tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Package.getId()));
             model.addAttribute("tagList", tagList);
 
             // 从Session中获取TableID
@@ -90,6 +96,11 @@ public class MobileDishTextController extends AbstractController {
             dishSearchDto.setPageNo(page);
             dishSearchDto.setPageSize(pageSize);
             dishSearchDto.setKeyword(keyword);
+            if (classify != null) {
+                List<Integer> tagIdList = new ArrayList<Integer>();
+                tagIdList.add(classify);
+                dishSearchDto.setTagIdList(tagIdList);
+            }
             dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
             dataCount = dishService.countBySearchDto(dishSearchDto);
 

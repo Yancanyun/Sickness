@@ -3,7 +3,7 @@
 
 <!--这个是带有分类搜索的头部-->
 <div class="header clearfix" id="header">
-    <div class="classify-group J_classify" data-classify-id="111">
+    <div class="classify-group J_classify" data-classify-id="${classifyId}">
         <!--将分类刷到这里,方便分类菜单的排布-->
         <c:forEach var="tag" items="${tagList}">
             <div class="J_classifyInfo">
@@ -20,7 +20,12 @@
         <a href="${website}mobile/dish/text">文</a>
     </div>
 </div>
-
+<script type="text/template" id="tpl">
+    <div class="classify-container J_classifyContainer">
+        <div class="classify-list">{@each list as it}<a href="${website}mobile/dish/image" class="classify J_classifyCeil" data-classify-id="&{it.classifyId}">&{it.classifyName}</a>{@/each}
+        </div>
+    </div>;
+</script>
 <script type="text/javascript">
     KISSY.ready(function(S){
         S.use('module/ext, module/classify', function(){});
