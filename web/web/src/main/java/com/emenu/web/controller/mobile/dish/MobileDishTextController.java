@@ -75,7 +75,7 @@ public class MobileDishTextController extends AbstractController {
         catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            return MOBILE_SYS_ERR_PAGE;
         }
         return "mobile/dish/text/list_home";
     }

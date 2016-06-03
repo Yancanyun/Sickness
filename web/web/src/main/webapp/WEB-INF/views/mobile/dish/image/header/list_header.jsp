@@ -5,6 +5,9 @@
 <div class="header clearfix" id="header">
     <div class="classify-group J_classify" data-classify-id="${classifyId}">
         <!--将分类刷到这里,方便分类菜单的排布-->
+        <div class="J_classifyInfo">
+            <input type="hidden" name="classifyName" value="全部分类">
+        </div>
         <c:forEach var="tag" items="${tagList}">
             <div class="J_classifyInfo">
                 <input type="hidden" name="classifyName" value="${tag.name}">
