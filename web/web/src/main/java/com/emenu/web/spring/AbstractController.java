@@ -443,6 +443,11 @@ public class AbstractController extends Base {
     @Qualifier("orderDishCacheService")
     protected static OrderDishCacheService orderDishCacheService;
 
+    //菜品大类和备注大类关联service
+    @StaticAutoWire
+    @Qualifier("dishRemarkTagService")
+    protected static DishRemarkTagService dishRemarkTagService;
+
 }
 
 

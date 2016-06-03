@@ -78,6 +78,14 @@ public class Checkout extends AbstractEntity{
     @Column(name = "free_remark_id")
     private Integer freeRemarkId;
 
+    // 创建时间
+    @Column(name = "created_time")
+    private Date createdTime;
+
+    // 最近修改时间
+    @Column(name = "last_modified_time")
+    private Date lastModifiedTime;
+
 
     // setter、getter
     public Integer getId() {
@@ -199,5 +207,20 @@ public class Checkout extends AbstractEntity{
 
     public void setFreeRemarkId(Integer freeRemarkId) {
         this.freeRemarkId = freeRemarkId;
+    }
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
     }
 }

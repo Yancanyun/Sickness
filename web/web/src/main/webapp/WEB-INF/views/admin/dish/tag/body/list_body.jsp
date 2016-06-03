@@ -143,3 +143,11 @@
         </div>
     </div>
 </div>
+<!-- 存放备注的div -->
+<div class="checkbox block hidden J_remarkHidden">
+    <c:forEach items="${remarkTags}" var="remarkTag">
+    <label><input type="checkbox" class="J_selectAll"name="remarkId" value="${remarkTag.id}">${remarkTag.name}</label>
+    </c:forEach>
+   <%-- <label><input type="checkbox" class="J_select" name="remarkId" value="2">多辣</label>
+    <label><input type="checkbox" class="J_select" name="remarkId" value="3">少辣</label>--%>
+</div>

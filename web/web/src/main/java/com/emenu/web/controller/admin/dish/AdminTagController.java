@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.tag.TagDto;
+import com.emenu.common.dto.remark.RemarkDto;
+import com.emenu.common.entity.dish.DishRemarkTag;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -39,6 +42,8 @@ public class AdminTagController extends AbstractController{
         List<TagDto> tagDtoList = tagFacadeService.listDishByCurrentId(0);
         Map<TagDto, Integer> tagDtoMap = new LinkedHashMap<TagDto, Integer>();
         Map<TagDto, Integer> childrenTagDtoMap = new LinkedHashMap<TagDto, Integer>();
+        List<RemarkTag> remarkTags = Collections.emptyList();
+        remarkTags = remarkTagService.listAll();
         for(TagDto tagDto : tagDtoList){
             //获取打印机实体判断是否存在
             Printer printer = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
@@ -62,6 +67,7 @@ public class AdminTagController extends AbstractController{
         model.addAttribute("tagDtoMap", tagDtoMap);
         model.addAttribute("childrenTagDtoMap", childrenTagDtoMap);
         model.addAttribute("printerList", printerList);
+        model.addAttribute("remarkTags",remarkTags);
         return "admin/dish/tag/list_home";
     }
 
@@ -130,9 +136,24 @@ public class AdminTagController extends AbstractController{
     @Module(ModuleEnums.AdminDishTagNew)
     @RequestMapping(value = "ajax", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject ajaxNewTag(Tag tag, Integer printerId){
+    public JSONObject ajaxNewTag(Tag tag, Integer printerId,@RequestParam(required = false,value = "remarkId")String remarkId){
         try{
             Tag newTag = tagFacadeService.newTagPrinter(tag, printerId);
+            if(remarkId!=null) {
+                String[] remarkIds = remarkId.split(",");
+                int[] remarks = new int[remarkIds.length];
+                for (int i = 0; i < remarkIds.length; i++) {
+                    remarks[i] = Integer.valueOf(remarkIds[i]).intValue();
+                }
+                List<DishRemarkTag> dishRemarkTagList = new ArrayList<DishRemarkTag>();
+                for (int i = 0; i < remarks.length; i++) {
+                    DishRemarkTag dishRemarkTag = new DishRemarkTag();
+                    dishRemarkTag.setRemarkTagId(remarks[i]);
+                    dishRemarkTag.setTagId(newTag.getId());
+                    dishRemarkTagList.add(dishRemarkTag);
+                }
+                dishRemarkTagService.newDishRemarkTags(dishRemarkTagList);
+            }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", newTag.getId());
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
@@ -153,9 +174,25 @@ public class AdminTagController extends AbstractController{
     @Module(ModuleEnums.AdminDishTagUpdate)
     @RequestMapping(value = "ajax",method = RequestMethod.PUT)
     @ResponseBody
-    public JSONObject ajaxUpdateTag(Tag tag, Integer printerId){
+    public JSONObject ajaxUpdateTag(Tag tag, Integer printerId,@RequestParam(required = false,value = "remarkId") String remarkId){
         try{
             tagFacadeService.updateTagPrinter(tag, printerId);
+            if(remarkId!=null) {
+                String[] remarkIds = remarkId.split(",");
+                int[] remarks = new int[remarkIds.length];
+                for (int i = 0; i < remarkIds.length; i++) {
+                    remarks[i] = Integer.valueOf(remarkIds[i]).intValue();
+                }
+                List<DishRemarkTag> dishRemarkTagList = new ArrayList<DishRemarkTag>();
+                for (int i = 0; i < remarks.length; i++) {
+                    DishRemarkTag dishRemarkTag = new DishRemarkTag();
+                    dishRemarkTag.setRemarkTagId(remarks[i]);
+                    dishRemarkTag.setTagId(tag.getId());
+                    dishRemarkTagList.add(dishRemarkTag);
+                }
+                dishRemarkTagService.delBytTagId(tag.getId());
+                dishRemarkTagService.newDishRemarkTags(dishRemarkTagList);
+            }
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);

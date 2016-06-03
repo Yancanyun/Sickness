@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.order.OrderMapper">
+   <select id="listByTableIdAndStatus" resultMap="pw.Order">
+       SELECT id,checkout_id,table_id,employee_party_id,vip_party_id,
+               status,order_remark,order_serve_type,login_type,created_time,last_modified_time
+       FROM `t_order`
+       WHERE t_order.`table_id` = #{tableId} AND t_order.`status` = #{status}
+   </select>
+
+</mapper>

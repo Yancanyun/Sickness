@@ -496,6 +496,36 @@ public enum EmenuException implements IBizExceptionMes {
     QueryDishError("查询已点菜品失败", 10006),
     CleanTableCacheError("清空该餐台已点菜品失败", 10007),
 
+    //订单菜品模块
+    OrderIdError("订单id错误",10030),
+    ListOrderDishByOrderIdFailed("根据订单id查询订单菜品列表失败",10031),
+    OrderDishIdError("订单菜品id错误",10032),
+    QueryOrderDishByIdFailed("根据主键id查询订单菜品错误",10033),
+    OrderDishStatusError("订单菜品状态错误",10034),
+    UpdateDishStatusFailed("修改订单菜品状态失败",10035),
+    OrderServeTypeError("订单服务方式错误",10036),
+    UpdateServeTypeFailed("修改订单服务状态失败",10037),
+    UpdatePresentedDishFailed("确定菜品是否赠送失败",10038),
+    OrderDishIsNotNull("订单菜品不为空",10039),
+    UpdateOrderDishFailed("修改订单菜品失败",10040),
+    NewOrderDishFailed("添加订单菜品失败",10041),
+    OrderdishsIsNotEmpty("订单菜品集合元素不为空",10042),
+    NewOrderDishsFailed("批量添加订单菜品失败",10043),
+
+    //订单模块
+    TableIdError("桌号id错误",10044),
+    OrderStatusError("订单状态错误",10045),
+    ListByTableIdAndStatusFailed("根据桌号和订单状态查询订单列表失败",10046),
+    OrderIsNotNull("订单不为空",10047),
+    NewOrderFailed("添加一个订单失败",10048),
+    UpdateOrderFailed("修改订单失败",10049),
+
+    //结账单模块
+    QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10053),
+    CheckoutIsNotNull("结账单不为空",10054),
+    NewCheckoutFailed("添加结账单失败",10055),
+    UpdateCheckoutFailed("修改结账单失败",10056),
+
     ;
 
 

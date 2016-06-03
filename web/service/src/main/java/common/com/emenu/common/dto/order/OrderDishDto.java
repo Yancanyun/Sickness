@@ -1,67 +1,60 @@
-package com.emenu.common.entity.order;
-
-import com.pandawork.core.common.entity.AbstractEntity;
+package com.emenu.common.dto.order;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author chenyuting
- * @date 2016/6/1 16:29
+ * OrderDishDto
+ *
+ * @author xubaorong
+ * @date 2016/6/3.
  */
-@Entity
-@Table(name = "t_order_dish")
-public class OrderDish extends AbstractEntity {
-
+public class OrderDishDto {
     // 主键
-    @Id
     private Integer id;
 
     // 订单id
-    @Column(name = "order_id")
     private Integer orderId;
 
     // 套餐id
-    @Column(name = "package_id")
     private Integer packageId;
 
     // 菜品id
-    @Column(name = "dish_id")
     private Integer dishId;
 
+    //菜品名称
+    private String dishName;
+
     // 套餐数量
-    @Column(name = "package_quantity")
     private Integer packageQuantity;
 
     // 菜品数量
-    @Column(name = "dish_quantity")
     private Float dishQuantity;
 
     // 菜品口味id
-    @Column(name = "taste_id")
     private Integer tasteId;
+
+    //菜品口味名称
+    private String tasteName;
+
+    //菜品口味关联收费
+    private  BigDecimal relatedCharge;
 
     // 菜品（套餐）备注
     private String remark;
 
     // 备注总价格
-    @Column(name = "remark_price")
     private BigDecimal remarkPrice;
 
     // 菜品（套餐）售价
-    @Column(name = "sale_price")
     private BigDecimal salePrice;
 
     // 菜品（套餐）会员价
-    @Column(name = "vip_dish_price")
     private BigDecimal vipDishPrice;
 
     // 是否为套餐：0-非套餐；1-套餐
-    @Column(name = "is_package")
     private Integer isPackage;
 
     // 菜品（套餐）折扣
@@ -71,35 +64,34 @@ public class OrderDish extends AbstractEntity {
     private Integer status;
 
     // 下单时间
-    @Column(name = "order_time")
     private Date orderTime;
 
     // 上菜方式：1-即起；2-叫起
-    @Column(name = "serve_type")
     private Integer serveType;
 
     // 是否赠送：0-非赠送；1-赠送
-    @Column(name = "is_presented_dish")
     private Integer isPresentedDish;
 
     // 赠送备注
-    @Column(name = "presented_remark_id")
     private Integer presentedRemarkId;
 
-    // 创建时间
-    @Column(name = "created_time")
-    private Date createdTime;
+    //赠送备注名称
+    private String presentedRemarkName;
 
-    // 最近修改时间
-    @Column(name = "last_modified_time")
-    private Date lastModifiedTime;
+    /********************getter and setter***************/
 
-    // setter、getter
+    public String getPresentedRemarkName() {
+        return presentedRemarkName;
+    }
+
+    public void setPresentedRemarkName(String presentedRemarkName) {
+        this.presentedRemarkName = presentedRemarkName;
+    }
+
     public Integer getId() {
         return id;
     }
 
-    @Override
     public void setId(Integer id) {
         this.id = id;
     }
@@ -128,6 +120,14 @@ public class OrderDish extends AbstractEntity {
         this.dishId = dishId;
     }
 
+    public String getDishName() {
+        return dishName;
+    }
+
+    public void setDishName(String dishName) {
+        this.dishName = dishName;
+    }
+
     public Integer getPackageQuantity() {
         return packageQuantity;
     }
@@ -150,6 +150,22 @@ public class OrderDish extends AbstractEntity {
 
     public void setTasteId(Integer tasteId) {
         this.tasteId = tasteId;
+    }
+
+    public String getTasteName() {
+        return tasteName;
+    }
+
+    public void setTasteName(String tasteName) {
+        this.tasteName = tasteName;
+    }
+
+    public BigDecimal getRelatedCharge() {
+        return relatedCharge;
+    }
+
+    public void setRelatedCharge(BigDecimal relatedCharge) {
+        this.relatedCharge = relatedCharge;
     }
 
     public String getRemark() {
@@ -239,19 +255,5 @@ public class OrderDish extends AbstractEntity {
     public void setPresentedRemarkId(Integer presentedRemarkId) {
         this.presentedRemarkId = presentedRemarkId;
     }
-    public Date getCreatedTime() {
-        return createdTime;
-    }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Date getLastModifiedTime() {
-        return lastModifiedTime;
-    }
-
-    public void setLastModifiedTime(Date lastModifiedTime) {
-        this.lastModifiedTime = lastModifiedTime;
-    }
 }
