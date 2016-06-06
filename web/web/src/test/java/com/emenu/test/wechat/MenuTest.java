@@ -17,7 +17,7 @@ public class MenuTest {
                 "     {\t\n" +
                 "          \"type\":\"view\",\n" +
                 "          \"name\":\"获取OpenId测试\",\n" +
-                "          \"url\":\"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbfb878a797b866cf&redirect_uri=http%3A%2F%2Femenu2.pandawork.net%2Fwechat%2Ftest&response_type=code&scope=snsapi_base&state=123#wechat_redirect\"\n" +
+                "          \"url\":\"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbfb878a797b866cf&redirect_uri=http://emenu2.pandawork.net/wechat/test&response_type=code&scope=snsapi_base&state=123#wechat_redirect\"\n" +
                 "      },\n" +
                 "      {\n" +
                 "           \"name\":\"菜单\",\n" +
@@ -36,9 +36,9 @@ public class MenuTest {
                 " }";
 
         try {
+            WeChatMenuUtil.create(menuJson);
             JSONObject jsonObject = WeChatMenuUtil.get();
             System.out.println(jsonObject);
-//            WeChatMenuUtil.create(menuJson);
         } catch (WeChatException e) {
             e.printStackTrace();
         }

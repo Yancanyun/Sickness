@@ -33,6 +33,7 @@ import com.emenu.service.vip.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
+import com.pandawork.wechat.WeChatService;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
@@ -448,6 +449,11 @@ public class AbstractController extends Base {
     @Qualifier("dishRemarkTagService")
     protected static DishRemarkTagService dishRemarkTagService;
 
+
+    /**************************微信**************************/
+    @StaticAutoWire
+    @Qualifier("weChatService")
+    protected static WeChatService weChatService;
 }
 
 
