@@ -32,9 +32,15 @@
 
             <i class="fa fa-heart-o list-trigger"></i><span>猜你喜欢</span>
             <ul class="call-service-list J_subMenuList">
-                <li><a href="${website}mobile/dish/prefer/cheap/list">今日特价</a></li>
-                <li><a href="${website}mobile/dish/prefer/rank/list">销量排行</a></li>
-                <li><a href="${website}mobile/dish/prefer/feature/list">本店特色</a></li>
+                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Cheap:List'}">class="active"</c:if>>
+                    <a href="${website}mobile/dish/prefer/cheap/list">今日特价</a>
+                </li>
+                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Rank:List'}">class="active"</c:if>>
+                <a href="${website}mobile/dish/prefer/rank/list">销量排行</a></li>
+                </li>
+                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Feature:List'}">class="active"</c:if>>
+                <a href="${website}mobile/dish/prefer/feature/list">本店特色</a></li>
+                </li>
                 <li><a href="">为您推荐</a></li>
                 <li><a href="#">历史消费</a></li>
             </ul>

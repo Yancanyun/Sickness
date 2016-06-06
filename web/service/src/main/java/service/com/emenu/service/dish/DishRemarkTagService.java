@@ -1,6 +1,7 @@
 package com.emenu.service.dish;
 
 import com.emenu.common.entity.dish.DishRemarkTag;
+import com.emenu.common.entity.remark.Remark;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,6 +20,13 @@ public interface DishRemarkTagService {
      * @throws Exception
      */
     public void delBytTagId(int tagId) throws SSException;
+
+    /**
+     * 根据菜品分类id查询与之关联的备注列表
+     * @param tagId
+     * @throws SSException
+     */
+    public List<Remark> queryByTagId(int tagId) throws SSException;
 
     /**
      * 增加菜品分类与备注分类关联表

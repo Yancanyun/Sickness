@@ -18,4 +18,12 @@
         WHERE t_dish_remark_tag.`tag_id` = #{tagId}
     </delete>
 
+    <select id="queryByTagId" resultMap="pw.Remark">
+        SELECT t_remark.`id`, t_remark.`name`, t_remark.`remark_tag_id`, t_remark.`weight`, t_remark.`is_common`, t_remark.`related_charge`, t_remark.`status`,
+        t_remark.`created_time`, t_remark.`last_modified_time`
+        FROM t_dish_remark_tag LEFT JOIN t_remark_tag ON t_dish_remark_tag.`remark_tag_id` = t_remark_tag.`id`
+                               LEFT  JOIN  t_remark ON t_remark_tag.`id` = t_remark.`remark_tag_id`
+        WHERE t_dish_remark_tag.`tag_id` = #{tagId}
+    </select>
+
 </mapper>

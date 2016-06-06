@@ -156,6 +156,7 @@
             <input type="hidden" name="maxPrintNum" value="&{maxPrintNum}" />
             <input class="J_printId" type="hidden" name="printerId" value="&{printerId}" />
             <input type="hidden" name="timeLimit" value="&{timeLimit}" />
+            <input class="J_remarkIds" type="hidden" name="remarkId" value="&{remarkId}" />
             <input type="hidden" name="type" value="1" />
         </div>
         <span class="root-tag">[&{rootClassifyName}]</span>

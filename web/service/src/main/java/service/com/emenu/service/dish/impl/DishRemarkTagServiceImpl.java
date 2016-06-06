@@ -1,6 +1,7 @@
 package com.emenu.service.dish.impl;
 
 import com.emenu.common.entity.dish.DishRemarkTag;
+import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishRemarkTagMapper;
 import com.emenu.service.dish.DishRemarkTagService;
@@ -10,6 +11,7 @@ import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,6 +37,21 @@ public class DishRemarkTagServiceImpl implements DishRemarkTagService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelByDishTagIdFailed);
         }
+    }
+
+    @Override
+    public List<Remark> queryByTagId(int tagId) throws SSException {
+        List<Remark> remarkList = Collections.emptyList();
+        try {
+            if(Assert.lessOrEqualZero(tagId)){
+                throw SSException.get(EmenuException.TagIdError);
+            }
+            remarkList = dishRemarkTagMapper.queryByTagId(tagId);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelByDishTagIdFailed);
+        }
+        return remarkList;
     }
 
     @Override

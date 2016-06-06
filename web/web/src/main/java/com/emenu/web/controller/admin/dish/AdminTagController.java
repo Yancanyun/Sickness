@@ -8,6 +8,7 @@ import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.dish.DishRemarkTag;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.printer.Printer;
+import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
@@ -177,6 +178,11 @@ public class AdminTagController extends AbstractController{
     public JSONObject ajaxUpdateTag(Tag tag, Integer printerId,@RequestParam(required = false,value = "remarkId") String remarkId){
         try{
             tagFacadeService.updateTagPrinter(tag, printerId);
+            List<Remark> remarkList = null;
+            remarkList = dishRemarkTagService.queryByTagId(tag.getId());
+            if(remarkList!=null&&!remarkList.isEmpty()) {
+                dishRemarkTagService.delBytTagId(tag.getId());
+            }
             if(remarkId!=null) {
                 String[] remarkIds = remarkId.split(",");
                 int[] remarks = new int[remarkIds.length];
@@ -190,7 +196,6 @@ public class AdminTagController extends AbstractController{
                     dishRemarkTag.setTagId(tag.getId());
                     dishRemarkTagList.add(dishRemarkTag);
                 }
-                dishRemarkTagService.delBytTagId(tag.getId());
                 dishRemarkTagService.newDishRemarkTags(dishRemarkTagList);
             }
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -214,6 +219,7 @@ public class AdminTagController extends AbstractController{
     public JSONObject ajaxDelTag(@PathVariable("id") Integer id){
         try{
             tagFacadeService.delTagPrinter(id);
+            dishRemarkTagService.delBytTagId(id);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e){
             LogClerk.errLog.error(e);
