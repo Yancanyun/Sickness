@@ -50,6 +50,7 @@ public class MobileDishImageController extends AbstractController {
             if (classifyId != null) {
                 model.addAttribute("classifyId", classifyId);
             }
+
             // 获取二级分类
             List<Tag> tagList = new ArrayList<Tag>();
             tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Dishes.getId()));

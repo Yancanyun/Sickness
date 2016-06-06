@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.pandawork</groupId>
             <artifactId>wechat</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- json -->
