@@ -304,6 +304,9 @@ public enum ModuleEnums {
     MobileDishDetailNew("Mobile:Dish:Detail:New"),
     //猜你喜欢
     MobileDishPrefer("Mobile:Dish:Prefer"),
+    MobileDishPreferCheapList("Mobile:Dish:Prefer:Cheap:List"),
+    MobileDishPreferFeatureList("Mobile:Dish:Prefer:Feature:List"),
+    MobileDishPreferRankList("Mobile:Dish:Prefer:Rank:List"),
     //呼叫服务
     MobileCall("Mobile:Call"),
 

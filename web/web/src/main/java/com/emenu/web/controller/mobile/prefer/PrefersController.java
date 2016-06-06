@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,13 +42,16 @@ import java.util.List;
 public class PrefersController extends AbstractController {
 
     //去今日特价页
+    @Module(ModuleEnums.MobileDishPreferCheapList)
     @RequestMapping(value = "cheap/list",method = RequestMethod.GET)
     public String toTodayCheap(Model model) throws SSException{
         return "mobile/prefer/cheap/list_home";
     }
 
+    @Module(ModuleEnums.MobileDishPreferCheapList)
     @RequestMapping(value = "ajax/cheap/list",method = RequestMethod.GET)
-    public JSON ajaxGetCheapList(@Param("page")int page,@Param("pageSize")int pageSize,@Param("userId")int userId,
+    @ResponseBody
+    public JSON ajaxGetCheapList(@Param("page")int page,@Param("pageSize")int pageSize,@RequestParam(required=false,value="userId")Integer userId,
                                   @RequestParam(required = false,value = "keyword")String keyword) throws SSException{
         List<DishTagDto> dishTagDtos = Collections.emptyList();
         int dataCount= 0;
@@ -70,6 +74,7 @@ public class PrefersController extends AbstractController {
             jsonObject.put("price",dishTagDto.getDishPrice());
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改
+            jsonObject.put("rankNumber",14);
             jsonArray.add(jsonObject);
         }
 
@@ -77,13 +82,16 @@ public class PrefersController extends AbstractController {
     }
 
     //去销量排行页
+    @Module(ModuleEnums.MobileDishPreferRankList)
     @RequestMapping(value = "rank/list",method = RequestMethod.GET)
     public String toRankList(Model model) throws SSException{
         return "mobile/prefer/rank/list_home";
     }
 
+    @Module(ModuleEnums.MobileDishPreferRankList)
     @RequestMapping(value = "ajax/rank/list",method = RequestMethod.GET)
-    public JSON ajaxGetRankList(@Param("page")int page,@Param("pageSize")int pageSize,@Param("userId")int userId,
+    @ResponseBody
+    public JSON ajaxGetRankList(@Param("page")int page,@Param("pageSize")int pageSize,@RequestParam(required=false,value="userId")Integer userId,
                                  @RequestParam(required = false,value = "keyword")String keyword) throws SSException{
         List<DishTagDto> dishTagDtos = Collections.emptyList();
         int dataCount= 0;
@@ -105,6 +113,7 @@ public class PrefersController extends AbstractController {
             }
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改
+            jsonObject.put("rankNumber",14);
             jsonArray.add(jsonObject);
         }
 
@@ -112,13 +121,16 @@ public class PrefersController extends AbstractController {
     }
 
     //去本店特色页
+    @Module(ModuleEnums.MobileDishPreferFeatureList)
     @RequestMapping(value = "feature/list",method = RequestMethod.GET)
     public String toFeatureList(Model model) throws SSException{
         return "mobile/prefer/feature/list_home";
     }
 
+    @Module(ModuleEnums.MobileDishPreferFeatureList)
+    @ResponseBody
     @RequestMapping(value = "ajax/feature/list",method = RequestMethod.GET)
-    public JSON ajaxGetFeatureList(@Param("page")int page,@Param("pageSize")int pageSize,@Param("userId")int userId,
+    public JSON ajaxGetFeatureList(@Param("page")int page,@Param("pageSize")int pageSize,@RequestParam(required=false,value="userId")Integer userId,
                                  @RequestParam(required = false,value = "keyword")String keyword) throws SSException{
         List<DishTagDto> dishTagDtos = Collections.emptyList();
         int dataCount= 0;
@@ -141,6 +153,7 @@ public class PrefersController extends AbstractController {
             jsonObject.put("price",dishTagDto.getDishPrice());
             jsonObject.put("sale",dishTagDto.getDishSalePrice());
             jsonObject.put("number",5);//测试用，以后有订单再修改
+            jsonObject.put("rankNumber",14);
             jsonArray.add(jsonObject);
         }
 

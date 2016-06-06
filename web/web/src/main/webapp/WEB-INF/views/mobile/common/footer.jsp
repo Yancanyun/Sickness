@@ -27,14 +27,16 @@
         </c:choose>
         <li <c:choose>
             <c:when test="${PWModule eq 'Mobile:Dish:Perfer'}">class="active oper J_subMenuListTrigger"</c:when>
-            <c:otherwise>class="oper J_subMenuListTrigger"</c:otherwise></c:choose>>
+            <c:otherwise>class="oper J_subMenuListTrigger"</c:otherwise>
+        </c:choose>>
+
             <i class="fa fa-heart-o list-trigger"></i><span>猜你喜欢</span>
             <ul class="call-service-list J_subMenuList">
-                <li><a href="">为您推荐</a></li>
-                <li><a href="#">历史消费</a></li>
                 <li><a href="${website}mobile/dish/prefer/cheap/list">今日特价</a></li>
                 <li><a href="${website}mobile/dish/prefer/rank/list">销量排行</a></li>
                 <li><a href="${website}mobile/dish/prefer/feature/list">本店特色</a></li>
+                <li><a href="">为您推荐</a></li>
+                <li><a href="#">历史消费</a></li>
             </ul>
         </li>
         <li class="my-order J_myOrder oper"><a href="#"><i class="fa fa-file-text-o list-trigger"></i><span>我的订单</span><em class="dish-total-number J_dishTotalNumber hidden" data-dish-total-number="${dishTotalNumber}"></em></a></li>
