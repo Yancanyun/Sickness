@@ -9,7 +9,9 @@
 	<bean class="com.pandawork.core.framework.bean.StaticAutoWireBeanPostProcessor" />
 
     <!-- 微信 -->
-    <bean id="weChatService" class="com.pandawork.wechat.DefaultWeChatService" />
+    <bean id="weChatService" class="com.pandawork.wechat.DefaultWeChatService">
+        <property name="adapter" ref="weChatMessageAdapter" />
+    </bean>
 
     <!-- 加载配置文件 -->
     <context:property-placeholder location="classpath*:pandawork_custom.properties" />

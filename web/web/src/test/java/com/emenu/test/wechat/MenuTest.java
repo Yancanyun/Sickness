@@ -17,8 +17,7 @@ public class MenuTest {
                 "     {\t\n" +
                 "          \"type\":\"view\",\n" +
                 "          \"name\":\"获取OpenId测试\",\n" +
-                "          \"url\":\"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbfb878a797b866cf&redirect_uri=http://emenu2.pandawork.net/wechat/test&response_type=code&scope=snsapi_base&state=123#wechat_redirect\"\n" +
-                "      },\n" +
+                "          \"url\":\"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbfb878a797b866cf&redirect_uri=http%3a%2f%2femenu2.pandawork.net%2ftest&response_type=code&scope=snsapi_base&state=123#wechat_redirect\"\n" +                "      },\n" +
                 "      {\n" +
                 "           \"name\":\"菜单\",\n" +
                 "           \"sub_button\":[\n" +

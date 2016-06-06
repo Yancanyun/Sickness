@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @IgnoreAuthorization
 @IgnoreLogin
 @Controller
-@RequestMapping(value = URLConstants.WECHAT_URL)
+@RequestMapping("")
 public class WechatTestController extends AbstractController {
     @RequestMapping(value = "test", method = RequestMethod.GET)
     public String test(@RequestParam("code") String code,
