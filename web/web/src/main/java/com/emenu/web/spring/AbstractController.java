@@ -451,9 +451,9 @@ public class AbstractController extends Base {
 
 
     /**************************微信**************************/
-    @StaticAutoWire
-    @Qualifier("weChatService")
-    protected static WeChatService weChatService;
+//    @StaticAutoWire
+//    @Qualifier("weChatService")
+//    protected static WeChatService weChatService;
 }
 
 
