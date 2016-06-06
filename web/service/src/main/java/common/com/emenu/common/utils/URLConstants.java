@@ -187,4 +187,8 @@ public final class URLConstants {
 
     //吧台客户端清台
     public static final String BAR_TABLE_CLEAN_URL = "bar/table/clean";
+
+
+    /**********************微信*************************/
+    public static final String WECHAT_URL = "wechat";
 }
