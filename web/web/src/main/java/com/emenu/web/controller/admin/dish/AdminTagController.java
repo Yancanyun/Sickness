@@ -43,7 +43,7 @@ public class AdminTagController extends AbstractController{
         Map<TagDto, Integer> tagDtoMap = new LinkedHashMap<TagDto, Integer>();
         Map<TagDto, Integer> childrenTagDtoMap = new LinkedHashMap<TagDto, Integer>();
         List<RemarkTag> remarkTags = Collections.emptyList();
-        remarkTags = remarkTagService.listAll();
+        remarkTags = remarkTagService.listByParentId(1);
         for(TagDto tagDto : tagDtoList){
             //获取打印机实体判断是否存在
             Printer printer = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
