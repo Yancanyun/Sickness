@@ -1,6 +1,8 @@
 package com.emenu.web.controller.wechat;
 
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.IgnoreAuthorization;
+import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.log.LogClerk;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author: yangch
  * @time: 2016/6/6 15:29
  */
+@IgnoreAuthorization
+@IgnoreLogin
 @Controller
 @RequestMapping(value = URLConstants.WECHAT_URL)
 public class WechatTestController extends AbstractController {

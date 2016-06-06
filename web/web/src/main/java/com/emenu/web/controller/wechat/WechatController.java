@@ -1,5 +1,7 @@
 package com.emenu.web.controller.wechat;
 
+import com.emenu.common.annotation.IgnoreAuthorization;
+import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.log.LogClerk;
@@ -19,6 +21,8 @@ import java.io.PrintWriter;
  * @author: yangch
  * @time: 2016/6/6 15:55
  */
+@IgnoreAuthorization
+@IgnoreLogin
 @Controller
 @RequestMapping(value = URLConstants.WECHAT_URL)
 public class WechatController extends AbstractController {
