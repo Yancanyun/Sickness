@@ -1,6 +1,7 @@
 package com.emenu.test.wechat;
 
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.utils.WechatUtils;
 import com.pandawork.wechat.exception.WeChatException;
 import com.pandawork.wechat.utils.WeChatMenuUtil;
 
@@ -12,19 +13,22 @@ import com.pandawork.wechat.utils.WeChatMenuUtil;
  */
 public class MenuTest {
     public static void main(String[] args) {
+        String openIdUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/test", true);
+        String tableUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
+
         String menuJson = "{\n" +
                 "     \"button\":[\n" +
                 "     {\t\n" +
                 "          \"type\":\"view\",\n" +
                 "          \"name\":\"获取OpenId测试\",\n" +
-                "          \"url\":\"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbfb878a797b866cf&redirect_uri=http%3a%2f%2femenu2.pandawork.net%2fwechat%2ftest&response_type=code&scope=snsapi_base&state=123#wechat_redirect\"\n" +                "      },\n" +
+                "          \"url\":\"" + openIdUrl + "\"\n" +                "      },\n" +
                 "      {\n" +
-                "           \"name\":\"菜单\",\n" +
+                "           \"name\":\"餐饮测试\",\n" +
                 "           \"sub_button\":[\n" +
                 "           {\t\n" +
                 "               \"type\":\"view\",\n" +
-                "               \"name\":\"搜索\",\n" +
-                "               \"url\":\"http://www.soso.com/\"\n" +
+                "               \"name\":\"跳转到点餐页面测试\",\n" +
+                "               \"url\":\"" + tableUrl + "\"\n" +                "      },\n" +
                 "            },\n" +
                 "            {\n" +
                 "               \"type\":\"click\",\n" +

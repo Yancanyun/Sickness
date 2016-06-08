@@ -1,9 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>OpenId</title>
+    <title>微信获取信息测试</title>
 </head>
 <body>
-${openId}
+openId: ${openId}<br>
+accessToken: ${accessToken}<br>
+nickname: ${nickname}<br>
+sex: ${sex}<br>
+country: ${country}<br>
+province: ${province}<br>
+city: ${city}<br>
+<img src="${headImgUrl}">
 </body>
 </html>
