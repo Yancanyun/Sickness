@@ -5,12 +5,11 @@
 </head>
 <body>
 openId: ${openId}<br>
-accessToken: ${accessToken}<br>
 nickname: ${nickname}<br>
 sex: ${sex}<br>
 country: ${country}<br>
 province: ${province}<br>
 city: ${city}<br>
-<img src="${headImgUrl}">
+<img src="${headImgUrl}" width="100" height="100" />
 </body>
 </html>

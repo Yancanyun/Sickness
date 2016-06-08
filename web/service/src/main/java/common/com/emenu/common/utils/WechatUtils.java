@@ -48,7 +48,7 @@ public class WechatUtils {
                 replaceAll("REDIRECT_URI", url);
 
         // 根据不同授权方式生成不同网址
-        if (base = true) {
+        if (base == true) {
             authorizationUrl = authorizationUrl.replaceAll("SCOPE", "snsapi_base");
         } else {
             authorizationUrl = authorizationUrl.replaceAll("SCOPE", "snsapi_userinfo");

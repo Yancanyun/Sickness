@@ -43,7 +43,6 @@ public class WechatTestController extends AbstractController {
             String headImgUrl = userInfoJsonObject.getString("headimgurl");
 
             model.addAttribute("openId", openId);
-            model.addAttribute("accessToken", accessToken);
             model.addAttribute("nickname", nickname);
             model.addAttribute("sex", sex);
             model.addAttribute("country", country);
