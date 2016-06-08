@@ -55,17 +55,4 @@ public class WechatController extends AbstractController {
             }
         }
     }
-
-    /**
-     * 微信服务器的消息推送
-     */
-//    @RequestMapping(value = "", method = RequestMethod.POST)
-//    public void weChatPost() {
-//        try {
-//            weChatService.process(getRequest().getInputStream(),getResponse().getOutputStream());
-//            weChatService.close();
-//        } catch (IOException e) {
-//            LogClerk.errLog.error(e);
-//        }
-//    }
 }

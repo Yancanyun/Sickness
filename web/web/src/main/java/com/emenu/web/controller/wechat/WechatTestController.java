@@ -23,23 +23,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 @IgnoreAuthorization
 @IgnoreLogin
 @Controller
-@RequestMapping("")
+@RequestMapping(URLConstants.WECHAT_URL)
 public class WechatTestController extends AbstractController {
-    @RequestMapping(value = "test", method = RequestMethod.GET)
-    public String test(@RequestParam("code") String code,
-                       Model model) {
-        try {
-            String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
-            url = url.replaceAll("APPID", WeChatConfig.appid).
-                    replaceAll("SECRET", WeChatConfig.secret).
-                    replaceAll("CODE", code);
+    /**
+     * 通过Code换取网页授权Access_Token
+     * 今后可以加到core包中
+     * @author yangch
+     * @param code
+     * @return
+     */
+    public JSONObject getAccessTokenByCode(String code) {
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code";
+        url = url.replaceAll("APPID", WeChatConfig.appid).
+                replaceAll("SECRET", WeChatConfig.secret).
+                replaceAll("CODE", code);
 
-            JSONObject jsonObject = HttpsUtil.sendRequest(url, HttpsUtil.GET, null);
-            String openId = jsonObject.getString("openid");
+        JSONObject jsonObject = HttpsUtil.sendRequest(url, HttpsUtil.GET, null);
 //            Integer errCode = jsonObject.getInt("errcode");
 //            if (errCode.compareTo(0) != 0) {
 //                throw new WeChatException(errCode);
 //            }
+
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public String test(@RequestParam("code") String code,
+                       Model model) {
+        try {
+            JSONObject jsonObject = getAccessTokenByCode(code);
+            String openId = jsonObject.getString("openid");
 
             model.addAttribute("openId", openId);
         } catch (Exception e) {
