@@ -13,5 +13,6 @@
   <tiles:putAttribute name="header" value="/WEB-INF/views/mobile/dish/detail/header/detail_header.jsp"/>
   <tiles:putAttribute name="body" value="/WEB-INF/views/mobile/dish/detail/body/detail_body.jsp"/>
   <tiles:putAttribute name="script" value="/WEB-INF/views/mobile/dish/detail/inc/detail_script.jsp"/>
-  <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/mobile/order-details.css'>"/>
+  <tiles:putAttribute name="extendHead" value="<link rel='stylesheet' href='${staticWebsite}css/mobile/order-details.css'>
+                                                <link rel='stylesheet' href='${staticWebsite}tool/pui2/assets/carousel/css/style.css'>"/>
 </tiles:insertDefinition>

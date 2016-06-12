@@ -383,7 +383,9 @@ public class DishServiceImpl implements DishService {
                 smallTagIdList.add(smallTag.getId());
             }
 
-            dishSearchDto.setTagIdList(smallTagIdList);
+            if (smallTagIdList.size() != 0) {
+                dishSearchDto.setTagIdList(smallTagIdList);
+            }
         }
 
         return dishSearchDto;

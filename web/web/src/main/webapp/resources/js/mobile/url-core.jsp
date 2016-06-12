@@ -23,7 +23,7 @@
         ],
         // 搜索
         Search: [
-            ['search', site.staticWebsite + 'mock/mobile/list.json', 'get', '搜索获取菜品列表']
+            ['search', site.website + 'mobile/dish/ajax/search', 'get', '搜索获取菜品列表']
         ],
         //菜品分类文字版
         ClassifyText: [

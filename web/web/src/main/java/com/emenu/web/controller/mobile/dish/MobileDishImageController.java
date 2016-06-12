@@ -44,11 +44,17 @@ public class MobileDishImageController extends AbstractController {
     @Module(ModuleEnums.MobileDishImageList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(@RequestParam(required = false) Integer classifyId,
+                         @RequestParam(required = false) String keyword,
                          HttpSession session, Model model) {
         try {
             // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
             if (classifyId != null) {
                 model.addAttribute("classifyId", classifyId);
+            }
+
+            // 把参数中传来的搜索关键词传到页面上，前端发Ajax请求需要用到
+            if (keyword != null) {
+                model.addAttribute("keyword", keyword);
             }
 
             // 获取二级分类
@@ -102,9 +108,9 @@ public class MobileDishImageController extends AbstractController {
 
     /**
      * Ajax 获取分页数据
-     * @param pageNo
-     * @param pageSize
-     * @param searchDto
+     * @param session
+     * @param page
+     * @param classify
      * @return
      */
     @Module(value = ModuleEnums.MobileDishImageList)
@@ -112,7 +118,8 @@ public class MobileDishImageController extends AbstractController {
     @ResponseBody
     public JSON ajaxDishPackageList(HttpSession session,
                                     @RequestParam("page") Integer page,
-                                    @RequestParam("classify") Integer classify) {
+                                    @RequestParam(value = "classify", required = false) Integer classify,
+                                    @RequestParam(value = "keyword", required = false) String keyword) {
 
         try {
             // 根据分类ID从菜品中获取接下来的菜品
@@ -123,6 +130,9 @@ public class MobileDishImageController extends AbstractController {
                 List<Integer> tagIdList = new ArrayList<Integer>();
                 tagIdList.add(classify);
                 dishSearchDto.setTagIdList(tagIdList);
+            }
+            if (keyword != null) {
+                dishSearchDto.setKeyword(keyword);
             }
             List<DishDto> dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
 
