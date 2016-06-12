@@ -434,11 +434,6 @@ public class AbstractController extends Base {
     @Qualifier("callWaiterService")
     protected static CallWaiterService callWaiterService;
 
-    //呼叫服务缓存
-    @StaticAutoWire
-    @Qualifier("callCacheService")
-    protected static CallCacheService callCacheService;
-
     // 点餐缓存
     @StaticAutoWire
     @Qualifier("orderDishCacheService")

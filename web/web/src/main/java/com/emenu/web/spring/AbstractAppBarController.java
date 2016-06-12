@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.call.CallCacheService;
+import com.emenu.service.call.CallWaiterService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
@@ -314,4 +316,14 @@ public class AbstractAppBarController extends Base {
     @StaticAutoWire
     @Qualifier("dishTagService")
     protected static DishTagService dishTagService;
+
+    //呼叫服务客户端,呼叫服务缓存
+    @StaticAutoWire
+    @Qualifier("callCacheService")
+    protected static CallCacheService callCacheService;
+
+    //呼叫服务后台管理
+    @StaticAutoWire
+    @Qualifier("callWaiterService")
+    protected static CallWaiterService callWaiterService;
 }

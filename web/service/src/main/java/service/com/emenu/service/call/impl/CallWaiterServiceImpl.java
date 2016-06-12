@@ -36,8 +36,16 @@ public class CallWaiterServiceImpl implements CallWaiterService {
                     &&!Assert.lessOrEqualZero(callWaiter.getWeight())
                     &&!Assert.lessZero(callWaiter.getStatus()))
             {
-                callWaiterMapper.newCallWaiter(callWaiter);
-                return 1;
+                int ok = callWaiterMapper.countCallWaiterByName(callWaiter.getName());
+                if(ok==0)//不存在同名服务
+                {
+                    callWaiterMapper.newCallWaiter(callWaiter);
+                    return 1;
+                }
+                else
+                {
+                    throw SSException.get(EmenuException.CallWaiterNameSameFail);
+                }
             }
             else
                 return 0;

@@ -71,7 +71,7 @@ public class CallWaiterController extends AbstractController{
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            String failedUrl = "/" + URLConstants.ADMIN_MEAL_PERIOD_URL;
+            String failedUrl = "/" + URLConstants.ADMIN_CALL_WAITER_URL;
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
             return "redirect:"+failedUrl;
         }

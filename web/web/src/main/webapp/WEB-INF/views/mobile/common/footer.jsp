@@ -45,7 +45,16 @@
                 <li><a href="#">历史消费</a></li>
             </ul>
         </li>
-        <li class="my-order J_myOrder oper"><a href="#"><i class="fa fa-file-text-o list-trigger"></i><span>我的订单</span><em class="dish-total-number J_dishTotalNumber hidden" data-dish-total-number="${dishTotalNumber}"></em></a></li>
+
+        <li  class="active my-order J_myOrder oper" >
+            <a href="${website}mobile/order">
+                <i class="fa fa-file-text-o list-trigger"></i>
+                <span>我的订单</span>
+                <em class="dish-total-number J_dishTotalNumber hidden" data-dish-total-number="${dishTotalNumber}">
+            </em>
+            </a>
+        </li>
+
         <li class="oper J_subMenuListTrigger J_getServiceList">
             <i class="fa fa-phone list-trigger"></i><span>呼叫服务</span>
             <ul class="call-service-list J_subMenuList">

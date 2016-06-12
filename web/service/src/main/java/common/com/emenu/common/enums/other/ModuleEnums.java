@@ -309,8 +309,11 @@ public enum ModuleEnums {
     MobileDishPreferRankList("Mobile:Dish:Prefer:Rank:List"),
     //呼叫服务
     MobileCall("Mobile:Call"),
-
-
+    //我的订单
+    MobileMyOrder("Mobile:Order"),
+    MobileMyOrderList("Mobile:Order:List"),
+    MobileMyOrderDel("Mobile:Order:Del"),
+    MobileMyOrderQuantityChange("Mobile:Order:Quantity:Change"),
 
 
     //服务员模块

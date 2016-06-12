@@ -3,6 +3,7 @@ package com.emenu.test.call;
 import com.emenu.common.cache.call.CallCache;
 import com.emenu.service.call.CallCacheService;
 import com.emenu.test.AbstractTestCase;
+import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,5 +33,11 @@ public class CallCacheTest extends AbstractTestCase {
     public void testQueryCallCache() throws Exception
     {
         callCacheService.queryCallCacheByWaiterId(1);
+    }
+
+    @Test
+    public void testDelTableCallCache()throws Exception
+    {
+        callCacheService.delTableCallCache(1);
     }
 }

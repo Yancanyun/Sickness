@@ -1,8 +1,10 @@
 package com.emenu.service.call;
 
 import com.emenu.common.cache.call.CallCache;
+import com.emenu.common.cache.call.TableCallCache;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -14,16 +16,24 @@ import java.util.List;
 public interface CallCacheService {
 
     /**
-     * 把呼叫服务加入缓存
+     * 呼叫服务加入缓存
      * @param callCache
-     * @throws Exception
+     * @throws SSException
      */
     public void addCallCache(Integer tableId,CallCache callCache)throws SSException;
 
     /**
      * 获取服务员对应餐桌的所有服务请求
-     * @param waiterId
-     * @throws Exception
+     * @param partyId
+     * @throws SSException
      */
-    public List<CallCache> queryCallCacheByWaiterId(Integer waiterId)throws SSException;
+    public List<TableCallCache> queryCallCacheByWaiterId(Integer partyId)throws SSException;
+
+    /**
+     * 清除餐桌的呼叫服务缓存
+     * @param tableId
+     * @throws SSException
+     */
+
+    public void delTableCallCache(Integer tableId) throws SSException;
 }

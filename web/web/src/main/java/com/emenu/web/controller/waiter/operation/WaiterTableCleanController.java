@@ -85,7 +85,7 @@ public class WaiterTableCleanController extends AbstractAppBarController {
     public JSONObject cleanTable(@RequestParam("tableId") Integer tableId) {
         try {
             tableService.cleanTable(tableId);
-
+            callCacheService.delTableCallCache(tableId);//清台操作还要把相应的呼叫服务缓存清除
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

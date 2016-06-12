@@ -62,4 +62,5 @@ public interface WaiterTableService {
      * @throws SSException
      */
     public List<AreaDto> queryAreaDto() throws SSException;
+
 }
