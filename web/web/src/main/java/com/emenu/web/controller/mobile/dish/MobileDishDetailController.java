@@ -6,7 +6,10 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.remark.RemarkDto;
+import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -36,20 +39,19 @@ public class MobileDishDetailController extends AbstractController{
     public String toDishDetail(@PathVariable("dishId") Integer dishId,
                                HttpSession session,
                                Model model){
-        List<RemarkDto> remarkDtoList = new ArrayList<RemarkDto>();
+        List<Remark> remarkList = new ArrayList<Remark>();
+        //List<Tag> tagList = new ArrayList<Tag>();
         try{
+            // 获取菜品所有分类
+            /*tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Dishes.getId())));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Drinks.getId())));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Goods.getId())));*/
+
             DishDto dishDto = dishService.queryById(dishId);
-            // 获取备注信息（普通备注类型为1）
-            List<RemarkTag> childTagList = remarkTagService.listByParentId(1);
-            for (RemarkTag remarkTag : childTagList){
-                // 获取该子分类下的所有备注
-                List<RemarkDto> childRemarkDtoList = remarkService.listRemarkDtoByRemarkTagId(remarkTag.getId());
-                for (RemarkDto remarkDto: childRemarkDtoList){
-                    remarkDtoList.add(remarkDto);
-                }
-            }
+            // 获取到菜品的小类信息
+            remarkList = dishService.queryDishRemarkByDishId(dishId);
             model.addAttribute("dishDto",dishDto);
-            model.addAttribute("remarkDtoList",remarkDtoList);
+            model.addAttribute("remarkList",remarkList);
 
             // 从Session中获取TableID
             Integer tableId = (Integer)session.getAttribute("tableId");

@@ -7,6 +7,7 @@ import com.emenu.common.utils.WebConstants;
 import com.emenu.service.call.CallCacheService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
+import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.service.other.ConstantService;
@@ -280,6 +281,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("tagFacadeService")
     protected static TagFacadeService tagFacadeService;
+
+    @StaticAutoWire
+    @Qualifier("tagService")
+    protected static TagService tagService;
 
     @StaticAutoWire
     @Qualifier("waiterTableService")

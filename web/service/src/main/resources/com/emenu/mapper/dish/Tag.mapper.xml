@@ -51,4 +51,10 @@
         WHERE p_id = #{id}
     </select>
 
+    <select id="queryDishTagByDishId" resultMap="pw.Tag">
+        SELECT *
+        FROM t_tag tag
+        LEFT JOIN t_dish dish ON dish.`tag_id` = tag.`id`
+        WHERE dish.`status` != 3 AND dish.`id` = #{dishId}
+    </select>
 </mapper>

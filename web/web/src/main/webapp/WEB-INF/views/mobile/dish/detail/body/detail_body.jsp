@@ -84,9 +84,9 @@
     <div class="order-require">
       <label>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</label>
       <div class="set-remarks J_remarks">
-        <c:forEach items="${remarkDtoList}" var="remarkDto">
-          <input name="remarkId" value="${remarkDto.remark.id}" hidden="hidden">
-          <span>${remarkDto.remark.name}</span>
+        <c:forEach items="${remarkDto}" var="remark">
+          <input name="remarkId" value="${remark.id}" hidden="hidden">
+          <span>${remark.name}</span>
         </c:forEach>
         <textarea name="remarks" rows="2"></textarea>
         <button type="submit" class="J_submit">点菜</button>

@@ -2,11 +2,13 @@ package com.emenu.service.dish.impl;
 
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.printer.DishTagPrinter;
+import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.emenu.common.enums.dish.SaleTypeEnums;
@@ -15,11 +17,9 @@ import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishMapper;
-import com.emenu.service.dish.DishImgService;
-import com.emenu.service.dish.DishMealPeriodService;
-import com.emenu.service.dish.DishService;
-import com.emenu.service.dish.DishTasteService;
+import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
+import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.printer.DishTagPrinterService;
@@ -67,7 +67,13 @@ public class DishServiceImpl implements DishService {
     private ConstantService constantService;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
     private TagFacadeService tagFacadeService;
+
+    @Autowired
+    private DishRemarkTagService dishRemarkTagService;
 
     @Autowired
     private DishMapper dishMapper;
@@ -309,6 +315,17 @@ public class DishServiceImpl implements DishService {
     public int dislikeThisDish(int id) throws SSException {
         try {
             return dishMapper.dislikeThisDish(id);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishDislikeFailed);
+        }
+    }
+
+    public List<Remark> queryDishRemarkByDishId(int dishId) throws SSException{
+        try{
+            Tag tag = tagService.queryLayer2TagByDishId(dishId);
+            List<Remark> remarkList = dishRemarkTagService.queryByTagId(tag.getId());
+            return remarkList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishDislikeFailed);
