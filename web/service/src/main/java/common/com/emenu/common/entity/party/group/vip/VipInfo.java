@@ -48,6 +48,10 @@ public class VipInfo extends AbstractEntity{
     //邮箱
     private String email;
 
+    // 微信OpenId
+    @Column(name = "open_id")
+    private String openId;
+
     //帐号状态(1-启用,2-停用,3-删除)
     private Integer status;
 
@@ -131,6 +135,14 @@ public class VipInfo extends AbstractEntity{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public Integer getStatus() {

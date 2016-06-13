@@ -1,6 +1,6 @@
 package com.emenu.test.order;
 
-import com.emenu.common.dto.order.OrderDishCache;
+import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;

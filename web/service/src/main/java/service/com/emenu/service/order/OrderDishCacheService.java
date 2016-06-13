@@ -1,7 +1,7 @@
 package com.emenu.service.order;
 
-import com.emenu.common.dto.order.OrderDishCache;
-import com.emenu.common.dto.order.TableOrderCache;
+import com.emenu.common.cache.order.OrderDishCache;
+import com.emenu.common.cache.order.TableOrderCache;
 import com.pandawork.core.common.exception.SSException;
 
 /**

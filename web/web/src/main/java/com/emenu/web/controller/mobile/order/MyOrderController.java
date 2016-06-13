@@ -1,24 +1,16 @@
 package com.emenu.web.controller.mobile.order;
 
 import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.MyOrderDto;
-import com.emenu.common.dto.order.OrderDishCache;
-import com.emenu.common.dto.order.TableOrderCache;
-import com.emenu.common.dto.table.AreaDto;
-import com.emenu.common.entity.dish.Dish;
-import com.emenu.common.entity.dish.Tag;
+import com.emenu.common.cache.order.OrderDishCache;
+import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.entity.dish.Unit;
-import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.dish.DishService;
-import com.emenu.service.dish.UnitService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -28,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.java2d.opengl.OGLDrawImage;
+
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
