@@ -72,6 +72,13 @@ public class AbstractController extends Base {
     // 顾客点餐平台无法找到404页面
     protected final static String MOBILE_NOT_FOUND_PAGE = "mobile/404";
 
+    // 微信异常返回页面
+    protected final static String WECHAT_SYS_ERR_PAGE = "wechat/500";
+    // 微信禁止访问返回页面
+    protected final static String WECHAT_FORBIDDEN_PAGE = "wechat/403";
+    // 微信无法找到404页面
+    protected final static String WECHAT_NOT_FOUND_PAGE = "wechat/404";
+
     // 系统异常返回页面
     protected final static String VIP_SYS_ERR_PAGE = "forward:/500.jsp";
     // 禁止访问返回页面

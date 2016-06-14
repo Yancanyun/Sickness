@@ -97,7 +97,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfoMapper.listByKeyword(keyword, offset, pageSize);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
     }
 
@@ -163,7 +163,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertVipInfoFail);
+            throw SSException.get(EmenuException.InsertVipInfoFail, e);
         }
     }
 
@@ -185,7 +185,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             }
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.VipInfoPhoneExist);
+            throw SSException.get(EmenuException.VipInfoPhoneExist, e);
         }
         return count > 0;
     }
@@ -209,7 +209,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             commonDao.update(vipInfo);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipInfoFail);
+            throw SSException.get(EmenuException.UpdateVipInfoFail, e);
         }
     }
 
@@ -241,7 +241,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             vipInfoMapper.updateStatusById(id, stateType);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateVipInfoFail);
+            throw SSException.get(EmenuException.UpdateVipInfoFail, e);
         }
     }
 
@@ -253,7 +253,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfo;
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
     }
 
@@ -267,7 +267,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             count = vipInfoMapper.countByGradeId(gradeId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
         return count;
     }
@@ -282,7 +282,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             vipInfoList = vipInfoMapper.searchByNameOrPhone(keyword);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListVipInfoFail);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
         return vipInfoList;
     }
@@ -293,17 +293,23 @@ public class VipInfoServiceImpl implements VipInfoService{
             if (Assert.isNull(openId)) {
                 throw SSException.get(EmenuException.OpenIdError);
             }
-            if (countByOpenId(openId) != 0) {
+            if (Assert.lessOrEqualZero(vipInfoMapper.countByPhone(phone))) {
+                throw SSException.get(EmenuException.PhoneIsNotExist);
+            }
+            if (Assert.lessOrEqualZero(vipInfoMapper.countNoOpenIdByPhone(phone))) {
+                throw SSException.get(EmenuException.PhoneIsBonded);
+            }
+            if (countByOpenId(openId) > 0) {
                 throw SSException.get(EmenuException.WechatIsBonded);
             }
-
             if (countByPhoneAndPassword(phone, password) != 1) {
                 throw SSException.get(EmenuException.PhoneIsNotMatchPassword);
             }
+
             vipInfoMapper.bondWechat(openId, phone);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.bondWechatError);
+            throw SSException.get(EmenuException.bondWechatError, e);
         }
     }
 
@@ -320,7 +326,17 @@ public class VipInfoServiceImpl implements VipInfoService{
             vipInfoMapper.unbondWechat(openId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.unbondWechatError);
+            throw SSException.get(EmenuException.unbondWechatError, e);
+        }
+    }
+
+    @Override
+    public int countByOpenId(String openId) throws SSException {
+        try {
+            return vipInfoMapper.countByOpenId(openId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.OpenIdError, e);
         }
     }
 
@@ -330,7 +346,7 @@ public class VipInfoServiceImpl implements VipInfoService{
      * @return
      * @throws SSException
      */
-    private boolean checkBeforeSave(VipInfo vipInfo)throws SSException{
+    private boolean checkBeforeSave(VipInfo vipInfo) throws SSException{
         if (Assert.isNull(vipInfo)){
             return false;
         }
@@ -357,13 +373,6 @@ public class VipInfoServiceImpl implements VipInfoService{
         return securityUserId;
     }
 
-    /**
-     * 根据手机号与密码统计有几个匹配
-     * @param phone
-     * @param password
-     * @return
-     * @throws SSException
-     */
     private int countByPhoneAndPassword(String phone, String password) throws SSException {
         try {
             int partyId = vipInfoMapper.queryPartyIdByPhone(phone);
@@ -372,22 +381,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             return vipInfoMapper.countByPartyIdAndPassword(partyId, password);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.PhoneIsNotMatchPassword);
-        }
-    }
-
-    /**
-     * 根据OpenId统计有几个匹配
-     * @param openId
-     * @return
-     * @throws SSException
-     */
-    private int countByOpenId(String openId) throws SSException {
-        try {
-            return vipInfoMapper.countByOpenId(openId);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.OpenIdError);
+            throw SSException.get(EmenuException.PhoneIsNotMatchPassword, e);
         }
     }
 }

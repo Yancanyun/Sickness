@@ -114,13 +114,20 @@
     </select>
 
     <select id="countByPartyIdAndPassword" resultType="int">
-        SELECT count(1) FROM `t_party_security_user`
+        SELECT COUNT(1) FROM `t_party_security_user`
         WHERE `party_id` = #{partyId}
         AND `password` = #{password}
     </select>
 
-    <update id="countByOpenId">
-        SELECT count(1) FROM `t_party_vip_info`
+    <select id="countByOpenId" resultType="int">
+        SELECT COUNT(1) FROM `t_party_vip_info`
         WHERE `open_id` = #{openId}
-    </update>
+    </select>
+
+    <select id="countNoOpenIdByPhone" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_party_vip_info`
+        WHERE `phone` = #{phone}
+        AND `open_id` = ''
+    </select>
 </mapper>

@@ -3,10 +3,13 @@ package com.emenu.web.controller.wechat;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WechatUtils;
 import com.emenu.web.spring.AbstractController;
+import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WechatBondController extends AbstractController {
     /**
      * 去绑定页
-     * @param code
+//     * @param code
      * @param model
      * @return
      */
@@ -37,11 +40,19 @@ public class WechatBondController extends AbstractController {
             // 获取OpenId
             JSONObject accessTokenJsonObject = WechatUtils.getAccessTokenByCode(code);
             String openId = accessTokenJsonObject.getString("openid");
+
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+            if (vipInfoService.countByOpenId(openId) > 0) {
+                throw SSException.get(EmenuException.WechatIsBonded);
+            }
+
             model.addAttribute("openId", openId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            return WECHAT_SYS_ERR_PAGE;
         }
 
         return "wechat/bond";
@@ -54,7 +65,7 @@ public class WechatBondController extends AbstractController {
      * @param password
      */
     @RequestMapping(value = "bond", method = RequestMethod.POST)
-    public void bondWechat(@RequestParam("openId") String openId,
+    public String  bondWechat(@RequestParam("openId") String openId,
                            @RequestParam("phone") String phone,
                            @RequestParam("password") String password) {
         try {
@@ -62,6 +73,9 @@ public class WechatBondController extends AbstractController {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
+            return WECHAT_SYS_ERR_PAGE;
         }
+
+        return "wechat/bondok";
     }
 }
