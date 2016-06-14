@@ -1,16 +1,25 @@
 package com.emenu.web.controller.mobile.order;
 
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.MyOrderDto;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
+import com.emenu.common.dto.table.AreaDto;
+import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.remark.Remark;
+import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.service.dish.DishService;
+import com.emenu.service.dish.UnitService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -20,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import sun.java2d.opengl.OGLDrawImage;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -49,6 +58,7 @@ public class MyOrderController  extends AbstractController {
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
     public String toMyOrder(Model model,HttpSession httpSession)
     {
+        List<Remark> remark = new ArrayList<Remark>();//备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的全部订单缓存
         List<MyOrderDto> myOrderDto = new ArrayList<MyOrderDto>();//数据传输对象
@@ -59,9 +69,12 @@ public class MyOrderController  extends AbstractController {
         try
         {
             table=tableService.queryById(tableId);//查询出餐台信息
+            //remark=remarkService.listAll();//查询出菜品的备注，不是全部备注
+           // model.addAttribute("remark",remark);
             model.addAttribute("personNum",table.getPersonNum());//餐台实际人数
             model.addAttribute("seatPrice",table.getSeatFee());//餐位费用
             model.addAttribute("tablePrice",table.getTableFee());//餐台费用
+            model.addAttribute("tableName",table.getName());//餐桌的名称
             tableOrderCache=orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)//若对应桌的订单缓存不为空
             {
@@ -84,8 +97,8 @@ public class MyOrderController  extends AbstractController {
                     temp.setImgPath(dishDto.getSmallImg().getImgPath());//菜品小图路径
                     temp.setUnitName(unit.getName());//菜品单位名称
                     temp.setTasteList(dishDto.getTasteList());//菜品口味
-                    totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getPrice().intValue()));//菜品数量乘以菜品单价
-                    myOrderDto.add(temp);
+                    totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getPrice().doubleValue()));//菜品数量乘以菜品单价
+                    myOrderDto.add(temp);                                   //price要转换成double类型
                 }
             }
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的菜品
@@ -109,8 +122,8 @@ public class MyOrderController  extends AbstractController {
     @Module(ModuleEnums.MobileMyOrderDel)
     @RequestMapping(value = "/ajax/del/order/cache",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxDelOrderCache(@RequestParam("orderDishCacheId") Integer orderDishCacheId
-            ,HttpSession httpSession)
+    public JSONObject ajaxDelOrderCache(@RequestParam("deleteDishId") Integer orderDishCacheId
+            ,HttpSession httpSession)//传过来的deleteDishId实际上是菜品缓存的Id
     {
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);

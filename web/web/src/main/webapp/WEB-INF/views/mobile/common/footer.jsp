@@ -36,10 +36,10 @@
                     <a href="${website}mobile/dish/prefer/cheap/list">今日特价</a>
                 </li>
                 <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Rank:List'}">class="active"</c:if>>
-                <a href="${website}mobile/dish/prefer/rank/list">销量排行</a></li>
+                <a href="${website}mobile/dish/prefer/rank/list">销量排行</a>
                 </li>
                 <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Feature:List'}">class="active"</c:if>>
-                <a href="${website}mobile/dish/prefer/feature/list">本店特色</a></li>
+                <a href="${website}mobile/dish/prefer/feature/list">本店特色</a>
                 </li>
                 <li><a href="">为您推荐</a></li>
                 <li><a href="#">历史消费</a></li>
@@ -69,6 +69,8 @@
         </li>
     </ul>
     <input type="hidden" class="J_tableId" name="tableId" value="${tableId}">
+       <!-- 后端套cover页的资源地址 -->
+    <input type="hidden" class="J_coverImgSrc" href="/resources/img/mobile/cover/center-icon.jpg">
 </div>
 <script type="text/javascript">
     KISSY.ready(function(S){

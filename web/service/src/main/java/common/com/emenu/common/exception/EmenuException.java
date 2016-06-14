@@ -247,6 +247,9 @@ public enum EmenuException implements IBizExceptionMes {
     QueryCallCacheByWaiterIdFail("查询服务员的服务请求失败", 4126),
     DelTableCallCacheFail("删除呼叫服务缓存失败", 4127),
     CallWaiterNameSameFail("不能添加已存在的服务类型", 4128),
+    CallCacheSendTimeLimit("两次相同服务请求间隔不得小于1分钟", 4129),
+    CallCacheNotHandle("此请求还未被处理,请稍等哦！", 4130),
+    TableNotAvailable("该餐桌已停用或已被删除!", 4131),
 
     //基本信息管理
     //搜索风向标
