@@ -45,7 +45,7 @@
       <span class="dish-price">￥${dishDto.price}</span>
     </c:if>
   </div>
-  <p class="intro intro-ellipes J_intro">
+  <p class="intro J_intro" data-ellipsis="40|...">
   <c:if test="${empty dishDto.description}">
     暂无简介
   </c:if>
@@ -84,8 +84,8 @@
     <div class="order-require">
       <label>备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</label>
       <div class="set-remarks J_remarks">
-        <c:forEach items="${remarkDto}" var="remark">
-          <input name="remarkId" value="${remark.id}" hidden="hidden">
+        <input type="hidden" value="">
+        <c:forEach items="${remarkList}" var="remark">
           <span>${remark.name}</span>
         </c:forEach>
         <textarea name="remarks" rows="2"></textarea>
