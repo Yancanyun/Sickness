@@ -287,6 +287,43 @@ public class VipInfoServiceImpl implements VipInfoService{
         return vipInfoList;
     }
 
+    @Override
+    public void bondWechat(String openId, String phone, String password) throws SSException {
+        try {
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+            if (countByOpenId(openId) != 0) {
+                throw SSException.get(EmenuException.WechatIsBonded);
+            }
+
+            if (countByPhoneAndPassword(phone, password) != 1) {
+                throw SSException.get(EmenuException.PhoneIsNotMatchPassword);
+            }
+            vipInfoMapper.bondWechat(openId, phone);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.bondWechatError);
+        }
+    }
+
+    @Override
+    public void unbondWechat(String openId) throws SSException {
+        try {
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+            if (countByOpenId(openId) == 0) {
+                throw SSException.get(EmenuException.WechatIsNotBonded);
+            }
+
+            vipInfoMapper.unbondWechat(openId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.unbondWechatError);
+        }
+    }
+
     /**
      * 保存前检查用户名和电话是否为空
      * @param vipInfo
@@ -320,4 +357,37 @@ public class VipInfoServiceImpl implements VipInfoService{
         return securityUserId;
     }
 
+    /**
+     * 根据手机号与密码统计有几个匹配
+     * @param phone
+     * @param password
+     * @return
+     * @throws SSException
+     */
+    private int countByPhoneAndPassword(String phone, String password) throws SSException {
+        try {
+            int partyId = vipInfoMapper.queryPartyIdByPhone(phone);
+            password = CommonUtil.md5(password);
+
+            return vipInfoMapper.countByPartyIdAndPassword(partyId, password);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.PhoneIsNotMatchPassword);
+        }
+    }
+
+    /**
+     * 根据OpenId统计有几个匹配
+     * @param openId
+     * @return
+     * @throws SSException
+     */
+    private int countByOpenId(String openId) throws SSException {
+        try {
+            return vipInfoMapper.countByOpenId(openId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.OpenIdError);
+        }
+    }
 }

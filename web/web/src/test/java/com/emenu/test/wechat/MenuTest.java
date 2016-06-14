@@ -16,6 +16,7 @@ public class MenuTest {
         String userInfoUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/test", false);
         String tableUrl1 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
         String tableUrl2 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/2", true);
+        String bondUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
 
         String menuJson = "{\n" +
                 "     \"button\":[\n" +
@@ -29,8 +30,13 @@ public class MenuTest {
                 "           \"sub_button\":[\n" +
                 "           {\t\n" +
                 "               \"type\":\"view\",\n" +
+                "               \"name\":\"绑定会员\",\n" +
+                "               \"url\":\"" + bondUrl + "\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"view\",\n" +
                 "               \"name\":\"餐台1\",\n" +
-                "               \"url\":\"" + tableUrl1 + "\"\n" +
+                "               \"url\":\"" + bondUrl + "\"\n" +
                 "            },\n" +
                 "            {\n" +
                 "               \"type\":\"view\",\n" +

@@ -107,4 +107,41 @@ public interface VipInfoMapper {
      * @throws Exception
      */
     public List<VipInfo> searchByNameOrPhone(@Param("keyword") String keyword) throws Exception;
+
+    /**
+     * 根据OpenId、手机号、绑定微信
+     * @param openId
+     * @param phone
+     * @throws Exception
+     */
+    public void bondWechat(@Param("openId")String openId, @Param("phone")String phone) throws Exception;
+
+    /**
+     * 根据OpenId解绑微信
+     * @param openId
+     * @throws Exception
+     */
+    public void unbondWechat(@Param("openId")String openId) throws Exception;
+
+    /**
+     * 根据OpenId统计有几个匹配
+     * @param openId
+     * @throws Exception
+     */
+    public int countByOpenId(@Param("openId")String openId) throws Exception;
+
+    /**
+     * 根据手机号查询对应的PartyId
+     * @param phone
+     * @throws Exception
+     */
+    public int queryPartyIdByPhone(@Param("phone")String phone) throws Exception;
+
+    /**
+     * 根据PartyId、密码统计有几个匹配
+     * @param partyId
+     * @param password
+     * @throws Exception
+     */
+    public int countByPartyIdAndPassword(@Param("partyId")int partyId, @Param("password")String password) throws Exception;
 }

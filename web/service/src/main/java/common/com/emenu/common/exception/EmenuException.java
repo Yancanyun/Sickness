@@ -385,7 +385,6 @@ public enum EmenuException implements IBizExceptionMes {
     VipInfoIdError("会员ID为空或者小于0",8010),
     SearchSecurityUserIdFail("获取用户登录id失败",8011),
     DeleteVipInfoFail("删除会员失败",8012),
-    CountVipByGradeIdFail("计算会员数量失败",8028),
 
     ListVipDishPricePlanFail("获取会员价方案列表失败",8013),
     QueryVipDishPricePlanFail("获取会员价方案失败",8014),
@@ -403,6 +402,13 @@ public enum EmenuException implements IBizExceptionMes {
     InputDiscountOrDifferenceNotNull("折扣或差价为空",8025),
     InputDiscountOrDifferenceError("输入折扣或差价不合法",8026),
     VipDishPriceIdError("会员价ID为空或者小于0",8027),
+    CountVipByGradeIdFail("计算会员数量失败",8028),
+    OpenIdError("微信OpenId不合法", 8029),
+    bondWechatError("绑定微信失败", 8030),
+    PhoneIsNotMatchPassword("手机号与密码不匹配", 8031),
+    unbondWechatError("解绑微信失败", 8032),
+    WechatIsBonded("您的微信已绑定会员，请勿重复绑定", 8033),
+    WechatIsNotBonded("您的微信尚未绑定会员，无法进行解绑操作", 8034),
     //QueryVipDishPriceFail("获取会员价失败",8021),
     //VipDishPriceNameNotNull("会员价名称不能为空",8022),
     //
