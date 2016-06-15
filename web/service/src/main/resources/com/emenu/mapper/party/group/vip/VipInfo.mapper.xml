@@ -116,13 +116,6 @@
         AND `status` = 1
     </select>
 
-    <select id="countByPartyIdAndPassword" resultType="int">
-        SELECT COUNT(1) FROM `t_party_security_user`
-        WHERE `party_id` = #{partyId}
-        AND `password` = #{password}
-        AND `status` = 1
-    </select>
-
     <select id="countByOpenId" resultType="int">
         SELECT COUNT(1) FROM `t_party_vip_info`
         WHERE `open_id` = #{openId}

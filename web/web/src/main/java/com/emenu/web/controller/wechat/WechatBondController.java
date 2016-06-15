@@ -16,6 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * WechatBondController
@@ -59,28 +63,57 @@ public class WechatBondController extends AbstractController {
         return "wechat/bond";
     }
 
+
     /**
      * 绑定微信
      * @param openId
-     * @param phone
-     * @param password
+     * @param validCode
      */
     @RequestMapping(value = "bond", method = RequestMethod.POST)
     public String bondWechat(@RequestParam("openId") String openId,
-                             @RequestParam("phone") String phone,
-                             @RequestParam("password") String password,
+                             @RequestParam("validCode") String validCode,
+                             HttpSession session,
                              Model model) {
         try {
-            vipInfoService.bondWechat(openId, phone, password);
+            if (!validCode.equals(session.getAttribute("validCode"))) {
+                throw SSException.get(EmenuException.ValidCodeWrong);
+            }
 
+            String phone = (String)session.getAttribute("phone");
+            if (Assert.isNull(phone)) {
+                throw SSException.get(EmenuException.PhoneError);
+            }
+
+            vipInfoService.bondWechat(openId, phone);
             model.addAttribute("msg", "绑定成功!");
+
+            return "wechat/info";
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return WECHAT_SYS_ERR_PAGE;
         }
+    }
 
-        return "wechat/info";
+    /**
+     * Ajax 发送验证码
+     * @param phone
+     * @return
+     */
+    @RequestMapping(value = "ajax/valid", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxSendSms(@RequestParam("phone") String phone,
+                                  HttpSession session) {
+        try {
+            session.setAttribute("phone", phone);
+            smsService.sendSms(phone, session);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendJsonObject(AJAX_FAILURE_CODE);
+        }
     }
 
     /**

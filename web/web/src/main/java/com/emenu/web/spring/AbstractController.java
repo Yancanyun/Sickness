@@ -28,6 +28,7 @@ import com.emenu.service.printer.PrinterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.call.CallWaiterService;
+import com.emenu.service.sms.SmsService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
@@ -440,6 +441,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("ingredientService")
     protected static IngredientService ingredientService;
+
+    // 发送短信
+    @StaticAutoWire
+    @Qualifier("smsService")
+    protected static SmsService smsService;
 
     /**************************顾客点菜端**************************/
     //呼叫服务后台管理

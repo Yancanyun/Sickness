@@ -138,14 +138,6 @@ public interface VipInfoMapper {
     public int queryPartyIdByPhone(@Param("phone")String phone) throws Exception;
 
     /**
-     * 根据PartyId、密码统计有几个匹配
-     * @param partyId
-     * @param password
-     * @throws Exception
-     */
-    public int countByPartyIdAndPassword(@Param("partyId")int partyId, @Param("password")String password) throws Exception;
-
-    /**
      * 根据手机号码统计有多少个不存在OpenId的记录
      * @param phone
      * @return

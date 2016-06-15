@@ -288,7 +288,7 @@ public class VipInfoServiceImpl implements VipInfoService{
     }
 
     @Override
-    public void bondWechat(String openId, String phone, String password) throws SSException {
+    public void bondWechat(String openId, String phone) throws SSException {
         try {
             if (Assert.isNull(openId)) {
                 throw SSException.get(EmenuException.OpenIdError);
@@ -301,9 +301,6 @@ public class VipInfoServiceImpl implements VipInfoService{
             }
             if (countByOpenId(openId) > 0) {
                 throw SSException.get(EmenuException.WechatIsBonded);
-            }
-            if (countByPhoneAndPassword(phone, password) != 1) {
-                throw SSException.get(EmenuException.PhoneIsNotMatchPassword);
             }
 
             vipInfoMapper.bondWechat(openId, phone);
@@ -389,17 +386,5 @@ public class VipInfoServiceImpl implements VipInfoService{
             throw SSException.get(EmenuException.SearchSecurityUserIdFail);
         }
         return securityUserId;
-    }
-
-    private int countByPhoneAndPassword(String phone, String password) throws SSException {
-        try {
-            int partyId = vipInfoMapper.queryPartyIdByPhone(phone);
-            password = CommonUtil.md5(password);
-
-            return vipInfoMapper.countByPartyIdAndPassword(partyId, password);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.PhoneIsNotMatchPassword, e);
-        }
     }
 }

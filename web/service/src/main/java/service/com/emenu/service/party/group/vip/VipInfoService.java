@@ -114,13 +114,12 @@ public interface VipInfoService {
     public List<VipInfo> searchByNameOrPhone(String keyword) throws SSException;
 
     /**
-     * 根据OpenId、手机号、密码绑定微信
+     * 根据OpenId、手机号绑定微信
      * @param openId
      * @param phone
-     * @param password
      * @throws SSException
      */
-    public void bondWechat(String openId, String phone, String password) throws SSException;
+    public void bondWechat(String openId, String phone) throws SSException;
 
     /**
      * 根据OpenId解绑微信
