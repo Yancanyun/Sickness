@@ -5,7 +5,7 @@
 <div class="container">
   <div id="wrapper" class="scroll">
     <div class="order-service">
-      <form action="" method="">
+      <form >
         <label>上菜方式 ：</label>
         <input class='J_restoreValue' type="hidden" value="即起">
         <input class="J_serviceWay" type="radio" value= '0' name="serviceWay" checked/><span>即起</span>

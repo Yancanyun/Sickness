@@ -17,7 +17,7 @@ public interface CheckoutServcie {
      * @return
      * @throws Exception
      */
-    public Checkout queryByTableId(int tableId,int status) throws SSException;
+    public Checkout queryByTableId(Integer tableId,Integer status) throws SSException;
 
     /**
      * 添加结账单

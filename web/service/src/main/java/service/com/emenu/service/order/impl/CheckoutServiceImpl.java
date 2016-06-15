@@ -22,7 +22,7 @@ import java.util.List;
  * @author xubaorong
  * @date 2016/6/3.
  */
-@Service("checkoutServcie")
+@Service("checkoutService")
 public class CheckoutServiceImpl implements CheckoutServcie{
 
     @Autowired
@@ -35,7 +35,7 @@ public class CheckoutServiceImpl implements CheckoutServcie{
     private CommonDao commonDao;
 
     @Override
-    public Checkout queryByTableId(int tableId,int status) throws SSException {
+    public Checkout queryByTableId(Integer tableId,Integer status) throws SSException {
         Checkout checkout = null;
         try {
             Assert.lessOrEqualZero(tableId,EmenuException.TableIdError);

@@ -12,6 +12,9 @@ import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.order.Checkout;
+import com.emenu.common.entity.order.Order;
+import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.TagEnum;
@@ -32,6 +35,7 @@ import sun.java2d.opengl.OGLDrawImage;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -174,7 +178,7 @@ public class MyOrderController  extends AbstractController {
      * @param
      * @return
      */
-  /*  @Module(ModuleEnums.MobileMyOrderList)
+   @Module(ModuleEnums.MobileMyOrderList)
     @RequestMapping(value = "mobile/confirm/order" ,method = RequestMethod.POST)
     public String confirmOrder (@RequestParam("confirmDishId")List<Integer> confirmDishId
             ,@RequestParam("confirmDishNumber")List<Integer> confirmDishNumber
@@ -182,15 +186,77 @@ public class MyOrderController  extends AbstractController {
             ,@RequestParam("confirmOrderRemark") String confirmOrderRemark
             ,HttpSession httpSession)
     {
-        String str = httpSession.getAttribute("tableId").toString();
-        Integer tableId = Integer.parseInt(str);
+        String tableIdStr = httpSession.getAttribute("tableId").toString();
+        Integer tableId = Integer.parseInt(tableIdStr);
         try
         {
+            Checkout checkout =checkoutServcie.queryByTableId(tableId,0);
+            //新增结账单到数据表
+            if(checkout==null)
+            {
+                checkout=new Checkout();
+                checkout.setTableId(tableId);
+                //checkout.setCheckerPartyId();
+                //checkout.setCheckoutTime();
+                //checkout.setConsumptionMoney();
+                //checkout.setConsumptionType();
+                checkout.setCreatedTime(new Date());
+                //checkout.setFreeRemarkId();
+                //checkout.setIsFreeOrder();
+                //checkout.setIsInvoiced();
+                //checkout.setLastModifiedTime();
+                //checkout.setPrepayMoney();
+                //checkout.setShouldPayMoney();
+                checkout.setStatus(0);
+                //checkout.setTotalPayMoney();
+                //checkout.setWipeZeroMoney();
+                checkout.setTableName("please give me a boyfriend");
+                checkoutServcie.newCheckout(checkout);
+            }
+
+
+
+           //新增订单到数据表
+            Order order=new Order();
+            order.setCheckoutId(checkout.getId());
+            order.setCreatedTime(new Date());
+            //order.setEmployeePartyId();
+            //order.setLastModifiedTime();
+            //order.setLoginType();
+            order.setOrderRemark(confirmOrderRemark);
+            order.setOrderServeType(serviceWay);
+            order.setStatus(1);
+            order.setTableId(tableId);
+            //order.setVipPartyId();
+            order.setTableName("please give me a good job");
+            orderService.newOrder(order);
+
+            //新增订单菜品到数据表
+            OrderDish orderDish=new OrderDish();
+
+            for(int i=0;i<confirmDishId.size();i++){
+            //
+            orderDish.setCreatedTime(new Date());
+            orderDish.setDishId(confirmDishId.get(i));
+            //设置菜品数量
+            Integer temp = confirmDishNumber.get(i);
+            String dishQuantityStr=temp+"";
+            Float dishQuantity=Float.parseFloat(dishQuantityStr);
+
+            orderDish.setDishQuantity(dishQuantity);
+            orderDish.setOrderId(order.getId());
+            orderDish.setServeType(serviceWay);
+            //orderDish.setRemark();
+             orderDish.setTableName("please give me a healthy heart");
+                orderDishService.newOrderDish(orderDish);
+        }
 
         }
-        catch (SSException e) {
+        catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
         }
-    }*/
+        return "mobile/order/body/order_list_body";
+    }
+
 }

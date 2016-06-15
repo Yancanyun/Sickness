@@ -8,7 +8,10 @@ import com.emenu.service.call.CallCacheService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.CheckoutServcie;
 import com.emenu.service.order.OrderDishCacheService;
+import com.emenu.service.order.OrderDishService;
+import com.emenu.service.order.OrderService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
@@ -35,6 +38,7 @@ import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
 import com.pandawork.wechat.WeChatService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -438,6 +442,20 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("orderDishCacheService")
     protected static OrderDishCacheService orderDishCacheService;
+
+    // 点餐
+    @StaticAutoWire
+    @Qualifier("orderDishService")
+    protected static OrderDishService orderDishService;
+
+    // 结账单
+    @StaticAutoWire
+    @Qualifier("checkoutService")
+    protected static CheckoutServcie checkoutServcie;
+    // 订单
+    @StaticAutoWire
+    @Qualifier("orderService")
+    protected static OrderService orderService;
 
     //菜品大类和备注大类关联service
     @StaticAutoWire
