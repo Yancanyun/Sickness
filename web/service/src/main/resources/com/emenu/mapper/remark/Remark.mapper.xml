@@ -48,7 +48,7 @@
     </update>
 
     <select id = "queryDishRemarkByDishId" resultType="Remark">
-        SELECT name
+        SELECT t_remark.name
         FROM t_dish,t_dish_remark_tag,t_remark
         WHERE t_dish.tag_id=t_dish_remark_tag.tag_id
         AND t_dish_remark_tag.remark_tag_id=t_remark.remark_tag_id

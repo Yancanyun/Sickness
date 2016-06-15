@@ -58,7 +58,7 @@ public class MyOrderController  extends AbstractController {
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
     public String toMyOrder(Model model,HttpSession httpSession)
     {
-        List<Remark> remark = new ArrayList<Remark>();//备注
+        List<String> remark = new ArrayList<String>();//备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的全部订单缓存
         List<MyOrderDto> myOrderDto = new ArrayList<MyOrderDto>();//数据传输对象
@@ -101,9 +101,9 @@ public class MyOrderController  extends AbstractController {
                     myOrderDto.add(temp);                                   //price要转换成double类型
                 }
             }
-            model.addAttribute("myOrderDto",myOrderDto);//已经点了的菜品
+            model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号
-            model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额,问一下学姐这个是否包含餐位费和餐台费
+            model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -142,15 +142,15 @@ public class MyOrderController  extends AbstractController {
     /**
      * ajax修改单个菜品数量
      *
-     * @param orderDishCacheId,quantity
+     * @param changeStatus,id
      *
      * @return
      */
     @Module(ModuleEnums.MobileMyOrderQuantityChange)
     @RequestMapping(value = "/ajax/dish/quantity/change",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject ajaxDishQuantityChange(@RequestParam("orderDishCacheId") Integer orderDishCacheId
-            ,@RequestParam("quantity")Integer quantity,HttpSession httpSession)
+    public JSONObject ajaxDishQuantityChange(@RequestParam("changeStatus") Integer changeStatus
+            ,@RequestParam("id")Integer id,HttpSession httpSession)
     {
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);
@@ -161,8 +161,15 @@ public class MyOrderController  extends AbstractController {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
             orderDishCache = tableOrderCache.getOrderDishCacheList();
             OrderDishCache temp = new OrderDishCache();//临时变量
-            temp=orderDishCache.get(orderDishCacheId);
-            temp.setQuantity(quantity);//修改菜品数量
+            temp=orderDishCache.get(id-1);//
+            Integer quantity = temp.getQuantity();//菜品数量
+            if(changeStatus==1)//改变状态为1的话为增加,为0的话为减少
+            temp.setQuantity(quantity+1);//修改菜品数量
+            else
+            {
+                if(temp.getQuantity()>1)//数量为1的话没办法再减少,但是可以删除
+                    temp.setQuantity(quantity-1);
+            }
             orderDishCacheService.updateDish(tableId,temp);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         }

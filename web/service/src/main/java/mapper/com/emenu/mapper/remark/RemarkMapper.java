@@ -57,5 +57,5 @@ public interface RemarkMapper {
      * @return int
      * @throws Exception
      */
-    public List<Remark> queryDishRemarkByDishId(@Param("dishId")int dishId) throws Exception;
+    public List<String> queryDishRemarkByDishId(@Param("dishId")int dishId) throws Exception;
 }

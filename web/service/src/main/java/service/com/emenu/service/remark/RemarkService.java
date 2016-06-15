@@ -104,5 +104,5 @@ public interface RemarkService {
      * @return int
      * @throws SSException
      */
-    /*public List<Remark> queryDishRemarkByDishId(int dishId) throws SSException;*/
+    public List<String> queryDishRemarkByDishId(int dishId) throws SSException;
 }

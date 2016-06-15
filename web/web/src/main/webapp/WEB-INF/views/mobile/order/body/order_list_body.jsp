@@ -40,7 +40,14 @@
                 <input type="hidden" name="dishTaste" value="无">
             </c:otherwise>
           </c:choose>
-          <input type="hidden" name="dishRemark" value="${dto.remark}">
+          <c:choose>
+            <c:when test="${not empty dto.remark}">
+              <input type="hidden" name="dishRemark" value="${dto.remark}">
+            </c:when>
+            <c:otherwise>
+              <input type="hidden" name="dishRemark" value="无">
+            </c:otherwise>
+          </c:choose>
           <img class="ordering-dish-img" src="${dto.imgPath}" alt="暂无菜品展示图片">
           <div class="ordering-dish-info">
             <p class="info-text">
@@ -48,11 +55,11 @@
               <!-- 后端控制原价没有改变时，不显示price span -->
               <c:choose>
                 <c:when test="${dto.price eq dto.salePrice}">
-                  <span class="ordering-dish-sale">${dto.salePrice}</span>
+                  <span class="ordering-dish-sale">￥${dto.salePrice}</span>
                 </c:when>
                 <c:otherwise>
-                  <span class="ordering-dish-price">${dto.price}</span>
-                  <span class="ordering-dish-sale">${dto.salePrice}</span>
+                  <span class="ordering-dish-price">￥${dto.price}</span>
+                  <span class="ordering-dish-sale">￥${dto.salePrice}</span>
                 </c:otherwise>
               </c:choose>
 
@@ -71,7 +78,7 @@
       </c:if>
     </ul>
     <!--默认刷页时后端返回本单消费的总金额，若客户在订单中调整菜品的数量，前端再其总计金额的基础上再进行计算-->
-    <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥200.335</span></p>
+    <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
     <!-- 已下订单菜品列表 -->
     <ul class="ordered-dish-list clearfix J_scroll">
       <li class="ordered-dish">
@@ -99,7 +106,7 @@
         <label>餐位费用 ：</label><span class="J_seatPrice">${seatPrice}</span>/人
         <label>餐台费用 ：</label><span class="J_tablePrice">${tablePrice}</span>元
       </li>
-      <li><label>已下单消费 ：</label><span class="J_orderedPrice">${totalMoney}</span></li>
+      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${totalMoney}</span></li>
     </ul>
   </div>
 </div>
