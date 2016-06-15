@@ -136,4 +136,12 @@ public interface VipInfoService {
      * @throws SSException
      */
     public int countByOpenId(String openId) throws SSException;
+
+    /**
+     * 根据OpenId获取会员信息
+     * @param openId
+     * @return
+     * @throws SSException
+     */
+    public VipInfo queryByOpenId(String openId) throws SSException;
 }

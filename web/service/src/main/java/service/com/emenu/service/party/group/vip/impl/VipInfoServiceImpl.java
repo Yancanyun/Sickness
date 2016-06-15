@@ -333,10 +333,28 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     public int countByOpenId(String openId) throws SSException {
         try {
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+
             return vipInfoMapper.countByOpenId(openId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.OpenIdError, e);
+        }
+    }
+
+    @Override
+    public VipInfo queryByOpenId(String openId) throws SSException {
+        try {
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+
+            return vipInfoMapper.queryByOpenId(openId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
     }
 

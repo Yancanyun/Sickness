@@ -100,28 +100,33 @@
         UPDATE `t_party_vip_info`
         SET `open_id` = #{openId}
         WHERE `phone` = #{phone}
+        AND `status` = 1
     </update>
 
     <update id="unbondWechat">
         UPDATE `t_party_vip_info`
         SET `open_id` = ''
         WHERE `open_id` = #{openId}
+        AND `status` = 1
     </update>
 
     <select id="queryPartyIdByPhone" resultType="int">
         SELECT `party_id` FROM `t_party_vip_info`
         WHERE `phone` = #{phone}
+        AND `status` = 1
     </select>
 
     <select id="countByPartyIdAndPassword" resultType="int">
         SELECT COUNT(1) FROM `t_party_security_user`
         WHERE `party_id` = #{partyId}
         AND `password` = #{password}
+        AND `status` = 1
     </select>
 
     <select id="countByOpenId" resultType="int">
         SELECT COUNT(1) FROM `t_party_vip_info`
         WHERE `open_id` = #{openId}
+        AND `status` = 1
     </select>
 
     <select id="countNoOpenIdByPhone" resultType="int">
@@ -129,5 +134,12 @@
         FROM `t_party_vip_info`
         WHERE `phone` = #{phone}
         AND `open_id` = ''
+        AND `status` = 1
+    </select>
+
+    <select id="queryByOpenId" resultMap="pw.VipInfo">
+        SELECT * FROM `t_party_vip_info`
+        WHERE `open_id` = #{openId}
+        AND `status` = 1
     </select>
 </mapper>

@@ -151,4 +151,13 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public int countNoOpenIdByPhone(@Param("phone") String phone) throws Exception;}
+    public int countNoOpenIdByPhone(@Param("phone") String phone) throws Exception;
+
+    /**
+     * 根据OpenId获取会员信息
+     * @param openId
+     * @return
+     * @throws Exception
+     */
+    public VipInfo queryByOpenId(@Param("openId") String openId) throws Exception;
+}

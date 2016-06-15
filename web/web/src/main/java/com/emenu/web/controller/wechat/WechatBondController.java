@@ -3,6 +3,7 @@ package com.emenu.web.controller.wechat;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WechatUtils;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WechatBondController extends AbstractController {
     /**
      * 去绑定页
-//     * @param code
+     * @param code
      * @param model
      * @return
      */
@@ -65,17 +66,75 @@ public class WechatBondController extends AbstractController {
      * @param password
      */
     @RequestMapping(value = "bond", method = RequestMethod.POST)
-    public String  bondWechat(@RequestParam("openId") String openId,
-                           @RequestParam("phone") String phone,
-                           @RequestParam("password") String password) {
+    public String bondWechat(@RequestParam("openId") String openId,
+                             @RequestParam("phone") String phone,
+                             @RequestParam("password") String password,
+                             Model model) {
         try {
             vipInfoService.bondWechat(openId, phone, password);
+
+            model.addAttribute("msg", "绑定成功!");
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return WECHAT_SYS_ERR_PAGE;
         }
 
-        return "wechat/bondok";
+        return "wechat/info";
+    }
+
+    /**
+     * 去解绑页
+     * @param code
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "unbond", method = RequestMethod.GET)
+    public String ToUnbondWechat(@RequestParam("code") String code,
+                                 Model model) {
+        try {
+            // 获取OpenId
+            JSONObject accessTokenJsonObject = WechatUtils.getAccessTokenByCode(code);
+            String openId = accessTokenJsonObject.getString("openid");
+
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+            if (vipInfoService.countByOpenId(openId) == 0) {
+                throw SSException.get(EmenuException.WechatIsNotBonded);
+            }
+
+            // 获取会员信息
+            VipInfo vipInfo = vipInfoService.queryByOpenId(openId);
+
+            model.addAttribute("openId", openId);
+            model.addAttribute("vipInfo", vipInfo);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return WECHAT_SYS_ERR_PAGE;
+        }
+
+        return "wechat/unbond";
+    }
+
+    /**
+     * 解绑微信
+     * @param openId
+     */
+    @RequestMapping(value = "unbond", method = RequestMethod.POST)
+    public String unbondWechat(@RequestParam("openId") String openId,
+                               Model model) {
+        try {
+            vipInfoService.unbondWechat(openId);
+
+            model.addAttribute("msg", "解绑成功!");
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return WECHAT_SYS_ERR_PAGE;
+        }
+
+        return "wechat/info";
     }
 }
