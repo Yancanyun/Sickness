@@ -3,7 +3,9 @@ package com.emenu.service.party.group.vip;
 
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
 
 import java.util.List;
 
@@ -110,4 +112,28 @@ public interface VipInfoService {
      * @throws SSException
      */
     public List<VipInfo> searchByNameOrPhone(String keyword) throws SSException;
+
+    /**
+     * 根据OpenId、手机号、密码绑定微信
+     * @param openId
+     * @param phone
+     * @param password
+     * @throws SSException
+     */
+    public void bondWechat(String openId, String phone, String password) throws SSException;
+
+    /**
+     * 根据OpenId解绑微信
+     * @param openId
+     * @throws SSException
+     */
+    public void unbondWechat(String openId) throws SSException;
+
+    /**
+     * 根据OpenId统计有几个匹配
+     * @param openId
+     * @return
+     * @throws SSException
+     */
+    public int countByOpenId(String openId) throws SSException;
 }

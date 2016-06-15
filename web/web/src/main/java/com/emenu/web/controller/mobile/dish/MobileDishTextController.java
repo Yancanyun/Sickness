@@ -6,10 +6,8 @@ import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
-import com.emenu.common.dto.order.OrderDishCache;
-import com.emenu.common.dto.order.TableOrderCache;
-import com.emenu.common.entity.call.CallWaiter;
-import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.cache.order.OrderDishCache;
+import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -37,6 +35,7 @@ public class MobileDishTextController extends AbstractController {
     @Module(ModuleEnums.MobileDishTextList)
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
     public String toList(@RequestParam(required = false) Integer classifyId,
+                         @RequestParam(required = false) String keyword,
                          HttpSession session, Model model)
     {
         try
@@ -44,6 +43,11 @@ public class MobileDishTextController extends AbstractController {
             // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
             if (classifyId != null) {
                 model.addAttribute("classifyId", classifyId);
+            }
+
+            // 把参数中传来的搜索关键词传到页面上，前端发Ajax请求需要用到
+            if (keyword != null) {
+                model.addAttribute("keyword", keyword);
             }
 
             // 获取二级分类
@@ -87,8 +91,7 @@ public class MobileDishTextController extends AbstractController {
                                          @RequestParam("page") Integer page,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam (value = "keyword",required = false) String keyword,
-                                         @RequestParam("classify") Integer classify,
-                                         @RequestParam("userId") Integer userId) {
+                                         @RequestParam("classify") Integer classify) {
         List<DishDto> dishDtoList = new ArrayList<DishDto>();
         DishSearchDto dishSearchDto = new DishSearchDto();
         Integer dataCount = 0;
@@ -100,6 +103,9 @@ public class MobileDishTextController extends AbstractController {
                 List<Integer> tagIdList = new ArrayList<Integer>();
                 tagIdList.add(classify);
                 dishSearchDto.setTagIdList(tagIdList);
+            }
+            if (keyword != null) {
+                dishSearchDto.setKeyword(keyword);
             }
             dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
             dataCount = dishService.countBySearchDto(dishSearchDto);

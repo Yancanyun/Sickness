@@ -119,4 +119,9 @@ public class RemarkTest extends AbstractTestCase {
     public void countByRemarkTagId() throws SSException{
         System.out.println(remarkService.countByRemarkTagId(6));
     }
+
+    @Test
+    public void testQueryDishRemark() throws SSException{
+        System.out.println(remarkService.queryDishRemarkByDishId(1));
+    }
 }

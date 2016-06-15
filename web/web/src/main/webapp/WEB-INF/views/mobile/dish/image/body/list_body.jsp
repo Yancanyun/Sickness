@@ -12,7 +12,7 @@
         <li data-target="#carousel" data-slide-to="3"></li>
       </ol>
 
-      <c:if test="${classifyId eq null}">
+      <c:if test="${classifyId eq null and keyword eq null}">
       <div class="carousel-inner" role="listbox">
         <div class="item active">
           <a href="${website}mobile/dish/detail/${todayCheapActive.dishId}"><img src="${tinyWebsite}${todayCheapActive.bigImgList[0].imgPath}" alt="今日特价"></a>

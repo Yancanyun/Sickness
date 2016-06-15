@@ -8,6 +8,7 @@ import com.emenu.common.cache.call.CallCache;
 import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -39,7 +40,6 @@ public class MobileCallController  extends AbstractAppBarController {
      *
      * @return
      */
-
     @RequestMapping(value = "/mobile/ajax/list/call",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject ajaxListCall()
@@ -89,11 +89,14 @@ public class MobileCallController  extends AbstractAppBarController {
             {
                 callCache.setCallTime(new Date());//发出时间
                 callCache.setStatus(1);//服务员未响应为1 响应了为0
+                callCache.setTableId(tableId);
                 callCacheService.addCallCache(tableId,callCache);
                 return sendJsonObject(AJAX_SUCCESS_CODE);
             }
            else
-                return sendJsonObject(AJAX_FAILURE_CODE);
+            {
+                return sendErrMsgAndErrCode(SSException.get(EmenuException.TableNotAvailable));
+            }
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);

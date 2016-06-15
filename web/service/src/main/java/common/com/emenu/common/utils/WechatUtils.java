@@ -44,7 +44,7 @@ public class WechatUtils {
     public static String createAuthorizationUrl(String url, Boolean base) {
         String authorizationUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
         authorizationUrl = authorizationUrl.replaceAll("APPID", WeChatConfig.appid).
-                replaceAll("STATE", "123"). // snsapi_base为简易授权，仅能获取OpenId
+                replaceAll("STATE", "123").
                 replaceAll("REDIRECT_URI", url);
 
         // 根据不同授权方式生成不同网址

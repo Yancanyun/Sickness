@@ -50,4 +50,12 @@ public interface RemarkMapper {
      * @throws Exception
      */
     public void updateStatus(@Param("id") int id, @Param("status") int status) throws Exception;
+
+    /**
+     * 根据菜品ID来查询菜品备注
+     * @param dishId
+     * @return int
+     * @throws Exception
+     */
+    public List<String> queryDishRemarkByDishId(@Param("dishId")int dishId) throws Exception;
 }

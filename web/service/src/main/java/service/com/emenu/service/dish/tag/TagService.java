@@ -82,4 +82,12 @@ public interface TagService {
      */
     public int countAll() throws SSException;
 
+    /**
+     * 根据菜品id获取菜品二级分类
+     * @param dishId
+     * @return
+     * @throws SSException
+     */
+    public Tag queryLayer2TagByDishId(int dishId) throws SSException;
+
 }

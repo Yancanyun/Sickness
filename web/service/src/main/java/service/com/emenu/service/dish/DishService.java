@@ -3,7 +3,9 @@ package com.emenu.service.dish;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishTagDto;
+import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 
@@ -112,5 +114,13 @@ public interface DishService {
      * @throws SSException
      */
     public int dislikeThisDish(int id) throws SSException;
+
+    /**
+     * 根据菜品id获取菜品备注列表
+     * @param dishId
+     * @return
+     * @throws SSException
+     */
+    public List<Remark> queryDishRemarkByDishId(int dishId) throws SSException;
 }
 

@@ -17,10 +17,21 @@
         <a href="javascript:;" class="classify-trigger">分类</a><i class="fa fa-angle-right J_classifyIcon classify-icon"></i>
     </div>
     <div class="search-group">
-        <input type="text" placeholder="搜索..." class="search form-control"><i class="fa fa-search search-img"></i>
+        <input type="text" placeholder="搜索..." class="search form-control J_searchInput" autocomplete="off" ><i class="fa fa-search search-img J_searchIcon"></i>
+        <input type="hidden" class="J_keyword" name="keyword" value="${keyword}"/>
     </div>
     <div class="text-trigger">
-        <a href="${website}mobile/dish/text">文</a>
+    <c:choose>
+        <c:when test="${classifyId ne null}">
+            <a href="${website}mobile/dish/text?classifyId=${classifyId}">文</a>
+        </c:when>
+        <c:when test="${keyword ne null}">
+            <a href="${website}mobile/dish/text?keyword=${keyword}">文</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${website}mobile/dish/text">文</a>
+        </c:otherwise>
+    </c:choose>
     </div>
 </div>
 <script type="text/template" id="tpl">

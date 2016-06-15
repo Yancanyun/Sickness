@@ -19,8 +19,19 @@ public class CallCache {
     //服务员响应时间
     private Date responseTime;
 
+    //对应的桌子Id
+    private Integer tableId;
+
     //服务应答状态  0为应答了 1为未应答
     private  Integer status;
+
+    public Integer getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(Integer tableId) {
+        this.tableId = tableId;
+    }
 
     public String getName() {
         return name;

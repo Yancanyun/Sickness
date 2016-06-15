@@ -96,4 +96,38 @@
         </where>
     </select>
 
+    <update id="bondWechat">
+        UPDATE `t_party_vip_info`
+        SET `open_id` = #{openId}
+        WHERE `phone` = #{phone}
+    </update>
+
+    <update id="unbondWechat">
+        UPDATE `t_party_vip_info`
+        SET `open_id` = ''
+        WHERE `open_id` = #{openId}
+    </update>
+
+    <select id="queryPartyIdByPhone" resultType="int">
+        SELECT `party_id` FROM `t_party_vip_info`
+        WHERE `phone` = #{phone}
+    </select>
+
+    <select id="countByPartyIdAndPassword" resultType="int">
+        SELECT COUNT(1) FROM `t_party_security_user`
+        WHERE `party_id` = #{partyId}
+        AND `password` = #{password}
+    </select>
+
+    <select id="countByOpenId" resultType="int">
+        SELECT COUNT(1) FROM `t_party_vip_info`
+        WHERE `open_id` = #{openId}
+    </select>
+
+    <select id="countNoOpenIdByPhone" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_party_vip_info`
+        WHERE `phone` = #{phone}
+        AND `open_id` = ''
+    </select>
 </mapper>

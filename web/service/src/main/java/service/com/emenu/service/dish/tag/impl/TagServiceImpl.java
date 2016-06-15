@@ -113,7 +113,7 @@ public class TagServiceImpl implements TagService{
             if (Assert.isNull(filedName)) {
                 throw SSException.get(EmenuException.TagFiledIsNull);
             }
-            commonDao.updateFieldsById(tag,filedName);
+            commonDao.updateFieldsById(tag, filedName);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateTagFailed, e);
@@ -172,5 +172,46 @@ public class TagServiceImpl implements TagService{
             throw SSException.get(EmenuException.ListTagFailed, e);
         }
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public Tag queryLayer2TagByDishId(int dishId) throws SSException{
+        Tag tag = new Tag();
+        try{
+            if (Assert.lessOrEqualZero(dishId)) {
+                throw SSException.get(EmenuException.DishIdNotNull);
+            }
+            tag = tagMapper.queryDishTagByDishId(dishId);
+            // 如果不是二级分类，则一直查找它的父分类
+            while (this.isLayer2Tag(tag) == false){
+                tag = this.queryById(tag.getpId());
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
+        return tag;
+    }
+
+    /**
+     * 私有方法
+     * 判断是否是二级分类
+     *
+     * @param tag
+     * @return
+     * @throws SSException
+     */
+    private Boolean isLayer2Tag(Tag tag) throws SSException{
+        try{
+            if (tag.getpId() < 3 || tag.getpId() > 6){
+                return false;
+            }else {
+                return true;
+            }
+        }
+        catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
     }
 }

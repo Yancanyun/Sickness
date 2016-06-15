@@ -23,7 +23,7 @@
         ],
         // 搜索
         Search: [
-            ['search', site.staticWebsite + 'mock/mobile/list.json', 'get', '搜索获取菜品列表']
+            ['search', site.website + 'mobile/dish/ajax/search', 'get', '搜索获取菜品列表']
         ],
         //菜品分类文字版
         ClassifyText: [
@@ -33,10 +33,9 @@
         //订单
         Order: [
             ['getOrderList', site.staticWebsite + 'mock/mobile/order-list.json', 'get', '获取订单列表'],
-            ['deleteOrderingDish', site.staticWebsite + 'mock/mobile/delete-order-dish.json', '删除订单中菜品id'],
-            ['sendConfirmOrderInfo', site.staticWebsite + 'mock/mobile/two-return-value.json', 'get', ''],
-['sendConfirmOrderInfo', site.website + 'mobile/order/mobile/confirm/order', 'get', '发送确认订单信息'],
-['sendDishNumChangeInfo',site.website + 'mock/mobile/two-return-value.json', 'get', '发送菜品数量改变状态和菜品id']
+            ['deleteOrderingDish', site.website + 'mobile/order/ajax/del/order/cache', '根据缓存id删除订单中菜品缓存'],
+            ['sendConfirmOrderInfo', site.staticWebsite + 'mock/mobile/two-return-value.json', 'get', '发送确认订单信息'],
+            ['sendDishNumChangeInfo', site.website + 'mobile/order/ajax/dish/quantity/change', 'get', '发送菜品数量改变状态和菜品id']
         ],
         //测试
         Test: [

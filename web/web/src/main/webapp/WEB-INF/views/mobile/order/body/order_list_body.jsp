@@ -4,13 +4,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="container">
   <div id="wrapper" class="scroll">
+    <!-- 后端刷菜品备注 -->
+      <div class="J_remarkHidden hidden">
+        <c:forEach var="remark" items="${remark}">
+          <span>${remark.name}</span>
+        </c:forEach>
+      </div>
     <div class="order-service">
       <form >
         <label>上菜方式 ：</label>
         <input class='J_restoreValue' type="hidden" value="即起">
         <input class="J_serviceWay" type="radio" value= '0' name="serviceWay" checked/><span>即起</span>
         <input class="J_serviceWay" type="radio" value='1' name="serviceWay"/><span>叫起</span>
-        <a class="order-dish J_orderDish" href="#">点菜</a>
+        <a class="order-dish J_orderDish" href="#">确认下单</a>
       </form>
     </div>
     <!-- 正在下单菜品列表 -->
@@ -24,13 +30,24 @@
           <input type="hidden" name="dishPrice" value="${dto.salePrice}">
           <!-- 菜品的最终售价 -->
           <input type="hidden" name="dishUnit" value="${dto.unitName}">
-          <input type="hidden" name="dishNumber" value="${dto.count}">
-          <c:if test="${not empty dto.tasteList}">
-            <c:forEach var="tasteList" items="${dto.tasteList}">
-              <input type="hidden" name="dishTaste" value="${tasteList.name}">
-            </c:forEach>
-          </c:if>
-          <input type="hidden" name="dishRemark" value="${dto.remark}">
+          <c:choose>
+            <c:when test="${not empty dto.tasteList}">
+              <c:forEach var="tasteList" items="${dto.tasteList}">
+                <input type="hidden" name="dishTaste" value="${tasteList.name}">
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <input type="hidden" name="dishTaste" value="无">
+            </c:otherwise>
+          </c:choose>
+          <c:choose>
+            <c:when test="${not empty dto.remark}">
+              <input type="hidden" name="dishRemark" value="${dto.remark}">
+            </c:when>
+            <c:otherwise>
+              <input type="hidden" name="dishRemark" value="无">
+            </c:otherwise>
+          </c:choose>
           <img class="ordering-dish-img" src="${dto.imgPath}" alt="暂无菜品展示图片">
           <div class="ordering-dish-info">
             <p class="info-text">
@@ -38,26 +55,20 @@
               <!-- 后端控制原价没有改变时，不显示price span -->
               <c:choose>
                 <c:when test="${dto.price eq dto.salePrice}">
-                  <span class="ordering-dish-sale">${dto.salePrice}</span>
+                  <span class="ordering-dish-sale">￥${dto.salePrice}</span>
                 </c:when>
                 <c:otherwise>
-                  <span class="ordering-dish-price">${dto.price}</span>
-                  <span class="ordering-dish-sale">${dto.salePrice}</span>
+                  <span class="ordering-dish-price">￥${dto.price}</span>
+                  <span class="ordering-dish-sale">￥${dto.salePrice}</span>
                 </c:otherwise>
               </c:choose>
 
             </p>
             <p class="ordering-number">
               <button class="J_redudeButton"><i class="fa fa-minus"></i></button>
-              <c:choose>
-                <c:when test="${not empty dto.count}">
-                  <input class="ordering-dish-number" type="tel" value="${dto.count}" readonly>
-                </c:when>
-                <c:otherwise>
-                  <input class="ordering-dish-number" type="tel" value="0" readonly>
-                </c:otherwise>
-              </c:choose>
+              <input class="ordering-dish-number" type="tel" value="${dto.count}" readonly></input>
               <button class="J_plusButton"><i class="fa fa-plus"></i></button>
+              <span class="ordering-dish-unit">${dto.unitName}</span>
             </p>
             <p class="ordering-remark-info J_remarks">${dto.remark}</p>
           </div>
@@ -65,6 +76,24 @@
         </li>
         </c:forEach>
       </c:if>
+    </ul>
+    <!--默认刷页时后端返回本单消费的总金额，若客户在订单中调整菜品的数量，前端再其总计金额的基础上再进行计算-->
+    <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
+    <!-- 已下订单菜品列表 -->
+    <ul class="ordered-dish-list clearfix J_scroll">
+      <li class="ordered-dish">
+        <img class="ordered-dish-img" src="/resources/img/mobile/order/order-dish-img.gif" alt="暂无菜品展示图片">
+        <div class="ordered-dish-info">
+          <p class="info-text">
+            <span class="ordered-dish-name">黑胡椒牛排</span>
+            <span class="ordered-dish-price">￥32</span>
+            <span class="ordered-dish-sale">￥28</span>
+          </p>
+          <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">5</span></p>
+          <p class="ordered-remark-info J_remarks">辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒</p>
+        </div>
+        <button class="J_delete">删除</button>
+      </li>
     </ul>
     <ul class="table-info">
       <!-- 套页需套以下input -->
@@ -77,7 +106,7 @@
         <label>餐位费用 ：</label><span class="J_seatPrice">${seatPrice}</span>/人
         <label>餐台费用 ：</label><span class="J_tablePrice">${tablePrice}</span>元
       </li>
-      <li><label>已下单消费 ：</label><span class="J_orderedPrice">${totalMoney}</span></li>
+      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${totalMoney}</span></li>
     </ul>
   </div>
 </div>

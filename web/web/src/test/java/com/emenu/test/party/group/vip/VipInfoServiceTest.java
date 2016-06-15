@@ -106,4 +106,20 @@ public class VipInfoServiceTest extends AbstractTestCase {
             System.out.println("****************");
         }
     }
+
+    @Test
+    public void bondWechat() throws SSException {
+        String phone = "18643063480";
+        String password = "123456";
+        String openId = "123";
+
+        vipInfoService.bondWechat(openId, phone, password);
+    }
+
+    @Test
+    public void unbondWechat() throws SSException {
+        String openId = "123";
+
+        vipInfoService.unbondWechat(openId);
+    }
 }

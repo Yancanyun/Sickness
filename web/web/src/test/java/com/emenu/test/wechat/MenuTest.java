@@ -14,26 +14,34 @@ import com.pandawork.wechat.utils.WeChatMenuUtil;
 public class MenuTest {
     public static void main(String[] args) {
         String userInfoUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/test", false);
-        String tableUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
+        String tableUrl1 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
+        String tableUrl2 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/2", true);
+        String bondUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
 
         String menuJson = "{\n" +
                 "     \"button\":[\n" +
                 "     {\t\n" +
                 "          \"type\":\"view\",\n" +
                 "          \"name\":\"获取用户信息测试\",\n" +
-                "          \"url\":\"" + userInfoUrl + "\"\n" +                "      },\n" +
+                "          \"url\":\"" + userInfoUrl + "\"\n" +
+                "      },\n" +
                 "      {\n" +
                 "           \"name\":\"餐饮测试\",\n" +
                 "           \"sub_button\":[\n" +
                 "           {\t\n" +
                 "               \"type\":\"view\",\n" +
-                "               \"name\":\"跳转到点餐页面测试\",\n" +
-                "               \"url\":\"" + tableUrl + "\"\n" +                "      },\n" +
+                "               \"name\":\"绑定会员\",\n" +
+                "               \"url\":\"" + bondUrl + "\"\n" +
                 "            },\n" +
                 "            {\n" +
-                "               \"type\":\"click\",\n" +
-                "               \"name\":\"绑定pin\",\n" +
-                "               \"key\":\"V1001_GOOD\"\n" +
+                "               \"type\":\"view\",\n" +
+                "               \"name\":\"餐台1\",\n" +
+                "               \"url\":\"" + bondUrl + "\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"view\",\n" +
+                "               \"name\":\"餐台2\",\n" +
+                "               \"url\":\"" + tableUrl2 + "\"\n" +
                 "            }]\n" +
                 "       }]\n" +
                 " }";

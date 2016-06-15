@@ -247,6 +247,9 @@ public enum EmenuException implements IBizExceptionMes {
     QueryCallCacheByWaiterIdFail("查询服务员的服务请求失败", 4126),
     DelTableCallCacheFail("删除呼叫服务缓存失败", 4127),
     CallWaiterNameSameFail("不能添加已存在的服务类型", 4128),
+    CallCacheSendTimeLimit("两次相同服务请求间隔不得小于1分钟", 4129),
+    CallCacheNotHandle("此请求还未被处理,请稍等哦！", 4130),
+    TableNotAvailable("该餐桌已停用或已被删除!", 4131),
 
     //基本信息管理
     //搜索风向标
@@ -382,7 +385,6 @@ public enum EmenuException implements IBizExceptionMes {
     VipInfoIdError("会员ID为空或者小于0",8010),
     SearchSecurityUserIdFail("获取用户登录id失败",8011),
     DeleteVipInfoFail("删除会员失败",8012),
-    CountVipByGradeIdFail("计算会员数量失败",8028),
 
     ListVipDishPricePlanFail("获取会员价方案列表失败",8013),
     QueryVipDishPricePlanFail("获取会员价方案失败",8014),
@@ -400,6 +402,16 @@ public enum EmenuException implements IBizExceptionMes {
     InputDiscountOrDifferenceNotNull("折扣或差价为空",8025),
     InputDiscountOrDifferenceError("输入折扣或差价不合法",8026),
     VipDishPriceIdError("会员价ID为空或者小于0",8027),
+    CountVipByGradeIdFail("计算会员数量失败",8028),
+    OpenIdError("微信OpenId不合法", 8029),
+    bondWechatError("绑定微信失败", 8030),
+    PhoneIsNotMatchPassword("手机号码与密码不匹配", 8031),
+    unbondWechatError("解绑微信失败", 8032),
+    WechatIsBonded("您的微信已绑定会员，请勿重复绑定", 8033),
+    WechatIsNotBonded("您的微信尚未绑定会员，无法进行解绑操作", 8034),
+    PhoneIsNotExist("该手机号码尚未注册成为会员", 8035),
+    PhoneIsBonded("该手机号码已被绑定", 8036),
+    PhoneError("手机号码不合法", 8037),
     //QueryVipDishPriceFail("获取会员价失败",8021),
     //VipDishPriceNameNotNull("会员价名称不能为空",8022),
     //

@@ -52,4 +52,11 @@ public interface TagMapper {
      */
     public int countChildrenById(@Param("id") int id) throws Exception;
 
+    /**
+     * 根据菜品id获取菜品分类
+     * @param dishId
+     * @return
+     * @throws Exception
+     */
+    public Tag queryDishTagByDishId(@Param("dishId") int dishId) throws Exception;
 }

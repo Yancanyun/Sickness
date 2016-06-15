@@ -1,7 +1,7 @@
 package com.emenu.service.order.impl;
 
-import com.emenu.common.dto.order.OrderDishCache;
-import com.emenu.common.dto.order.TableOrderCache;
+import com.emenu.common.cache.order.OrderDishCache;
+import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.order.OrderDishCacheService;
 import com.pandawork.core.common.exception.SSException;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * OrderDishCacheServiceImpl
@@ -22,7 +23,7 @@ import java.util.Map;
 @Service("orderDishCacheService")
 public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     // 餐台点餐缓存的Map
-    private Map<Integer, TableOrderCache> tableOrderCacheMap = new HashMap<Integer, TableOrderCache>();
+    private Map<Integer, TableOrderCache> tableOrderCacheMap = new ConcurrentHashMap<Integer, TableOrderCache>();
 
     // 点的菜品存入OrderDishCache中的ID
     private int orderDishCacheId = 0;

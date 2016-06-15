@@ -97,4 +97,12 @@ public interface RemarkService {
      * @throws SSException
      */
     public int countByRemarkTagId(int remarkTagId) throws SSException;
+
+    /**
+     * 根据菜品ID来查询菜品备注
+     * @param dishId
+     * @return int
+     * @throws SSException
+     */
+    public List<String> queryDishRemarkByDishId(int dishId) throws SSException;
 }

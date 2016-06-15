@@ -242,4 +242,17 @@ public class RemarkServiceImpl implements RemarkService {
             throw SSException.get(EmenuException.SystemException, e);
         }
     }
+
+    @Override
+    public List<String> queryDishRemarkByDishId(int dishId) throws SSException
+    {
+        if(Assert.lessOrEqualZero(dishId))
+            return null;
+        try {
+            return remarkMapper.queryDishRemarkByDishId(dishId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+    }
 }
