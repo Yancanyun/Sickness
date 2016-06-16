@@ -201,4 +201,44 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             throw SSException.get(EmenuException.CleanTableCacheError, e);
         }
     }
+
+    @Override
+    public void tableLock(int tableId) throws SSException
+    {
+        try {
+            // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
+            // 加上锁
+            if(tableOrderCache!=null)
+            {
+                tableOrderCache.setLock(true);
+                tableOrderCacheMap.put(tableId,tableOrderCache);
+            }
+
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.TableLockFail, e);
+        }
+    }
+
+    @Override
+    public void tableLockRemove(int tableId) throws SSException
+    {
+        try {
+            // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
+            // 解除锁
+            if(tableOrderCache!=null)
+            {
+                tableOrderCache.setLock(false);
+                tableOrderCacheMap.put(tableId,tableOrderCache);
+            }
+
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.TableLockRemoveFail, e);
+        }
+    }
 }

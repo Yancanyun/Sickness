@@ -519,6 +519,8 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateDishError("编辑已点菜品失败", 10005),
     QueryDishError("查询已点菜品失败", 10006),
     CleanTableCacheError("清空该餐台已点菜品失败", 10007),
+    TableLockFail("餐台加锁失败", 10008),
+    TableLockRemoveFail("餐台解锁失败", 10009),
 
     //订单菜品模块
     OrderIdError("订单id错误",10030),
@@ -543,6 +545,7 @@ public enum EmenuException implements IBizExceptionMes {
     OrderIsNotNull("订单不为空",10047),
     NewOrderFailed("添加一个订单失败",10048),
     UpdateOrderFailed("修改订单失败",10049),
+    OrderDishCacheIsNull("订单中不存在任何菜品",10050),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10053),

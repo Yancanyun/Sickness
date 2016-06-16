@@ -6,9 +6,11 @@
   <div id="wrapper" class="scroll">
     <!-- 后端刷菜品备注 -->
       <div class="J_remarkHidden hidden">
-        <c:forEach var="remark" items="${remark}">
-          <span>${remark.name}</span>
-        </c:forEach>
+        <c:if test="${not empty uniqueRemark}">
+          <c:forEach var="remark" items="${uniqueRemark}">
+            <span>${remark}</span>
+          </c:forEach>
+        </c:if>
       </div>
     <div class="order-service">
       <form action="" method="">
@@ -96,10 +98,10 @@
       </li>
     </ul>
     <ul class="table-info">
-      <!-- 套页需套以下input -->
+      <!-- 套页需套以下name为tableNumberinput和peopleNumber的input -->
       <input type="hidden" name="tableNumber" value="${tableId}">
       <input type="hidden" name="peopleNumber" value="${personNum}">
-      <input type="hidden" name="customPrice" value="${totalMoney}">
+      <input class="J_returnPrice" type="hidden" name="customPrice" value="">
       <li>当前餐桌 : <span class="table-number">${tableId}</span>号桌</li>
       <li>
         <label>餐位人数 ：</label><span class="J_peopleNum">${personNum}</span>人

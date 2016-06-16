@@ -312,6 +312,7 @@ public enum ModuleEnums {
     MobileMyOrderList("Mobile:Order:List"),
     MobileMyOrderDel("Mobile:Order:Del"),
     MobileMyOrderQuantityChange("Mobile:Order:Quantity:Change"),
+    MobileMyOrderTotalMoney("Mobile:Order:Money"),
 
 
     //服务员模块
