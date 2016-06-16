@@ -1,8 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script type="text/template" id="orderMainInfoTpl">
-  <p class="choosed-service"><label>上菜方式 ：</label>&{serviceWay}</p>
+  <p class="choosed-service"><label>上菜方式 ：</label><span>&{serviceWay}</span></p>
   <p class="confirm-order-remark J_remarkBlocks"><label>备注 ：</label>
-    <textarea class="J_orderRemarkText" type="text" name="confirmOrderRemark" value="" placeholder='请输入备注内容（可不填）' onkeyup="this.value=this.value.substr(0,80)" ></textarea>
+    <input class='J_saveRemarks' type="hidden" value="">
+    <textarea class="J_orderRemarkText" type="text" name="confirmOrderRemark" value="" placeholder='请输入备注内容（可不填）' onkeyup="this.value = this.value.substr(0,80)" ></textarea>
   </p>
   <div class="orderMainInfo">
     <p class="confirm-table-number"><label>餐桌 ：</label>&{order.tableNumber}号</p>

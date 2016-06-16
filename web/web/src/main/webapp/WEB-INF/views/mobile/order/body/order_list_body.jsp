@@ -5,7 +5,7 @@
 <div class="container">
   <div id="wrapper" class="scroll">
     <!-- 后端刷菜品备注 -->
-      <div class="J_remarkHidden hidden">
+     <div class="J_remarkHidden">
         <c:if test="${not empty uniqueRemark}">
           <c:forEach var="remark" items="${uniqueRemark}">
             <span>${remark}</span>
@@ -83,19 +83,30 @@
     <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
     <!-- 已下订单菜品列表 -->
     <ul class="ordered-dish-list clearfix J_scroll">
-      <li class="ordered-dish">
-        <img class="ordered-dish-img" src="/resources/img/mobile/order/order-dish-img.gif" alt="暂无菜品展示图片">
-        <div class="ordered-dish-info">
-          <p class="info-text">
-            <span class="ordered-dish-name">黑胡椒牛排</span>
-            <span class="ordered-dish-price">￥32</span>
-            <span class="ordered-dish-sale">￥28</span>
-          </p>
-          <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">5</span></p>
-          <p class="ordered-remark-info J_remarks">辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒,辣辣辣辣辣辣多辣椒少放盐，多放辣椒</p>
-        </div>
-        <button class="J_delete">删除</button>
-      </li>
+      <c:if test="${not empty orderDishDto}">
+         <c:forEach var="dto" items="${orderDishDto}">
+            <li class="ordered-dish">
+                  <img class="ordered-dish-img" src="${orderDishDto.imgPath}" alt="暂无菜品展示图片">
+                  <div class="ordered-dish-info">
+                  <p class="info-text">
+                    <span class="ordered-dish-name">${dto.dishName}</span>
+                    <span class="ordered-dish-price">${dto.price}</span>
+                    <span class="ordered-dish-sale">￥${dto.salePrice}</span>
+                  </p>
+                    <c:choose>
+                      <c:when test="${dto.isPackage eq 0} ">
+                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span></p>
+                       </c:when>
+                      <c:otherwise>
+                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span></p>
+                      </c:otherwise>
+                     </c:choose>
+                  <p class="ordered-remark-info J_remarks">${dto.remark}</p>
+                </div>
+                  <button class="J_delete">删除</button>
+            </li>
+         </c:forEach>
+        </c:if>
     </ul>
     <ul class="table-info">
       <!-- 套页需套以下name为tableNumberinput和peopleNumber的input -->

@@ -462,24 +462,23 @@ public class AbstractController extends Base {
     @Qualifier("orderDishCacheService")
     protected static OrderDishCacheService orderDishCacheService;
 
-    // 点餐
-    @StaticAutoWire
-    @Qualifier("orderDishService")
-    protected static OrderDishService orderDishService;
 
-    // 结账单
-    @StaticAutoWire
-    @Qualifier("checkoutService")
-    protected static CheckoutServcie checkoutServcie;
-    // 订单
-    @StaticAutoWire
-    @Qualifier("orderService")
-    protected static OrderService orderService;
 
     //菜品大类和备注大类关联service
     @StaticAutoWire
     @Qualifier("dishRemarkTagService")
     protected static DishRemarkTagService dishRemarkTagService;
+
+
+    //订单service
+    @StaticAutoWire
+    @Qualifier("orderService")
+    protected static OrderService orderService;
+
+    //订单菜品service
+    @StaticAutoWire
+    @Qualifier("orderDishService")
+    protected static OrderDishService orderDishService;
 
 
     /**************************微信**************************/

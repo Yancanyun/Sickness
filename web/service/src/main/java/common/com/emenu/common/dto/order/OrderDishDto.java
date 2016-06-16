@@ -27,6 +27,9 @@ public class OrderDishDto {
     //菜品名称
     private String dishName;
 
+    //菜品图片路径
+    private String imgPath;
+
     // 套餐数量
     private Integer packageQuantity;
 
@@ -50,6 +53,9 @@ public class OrderDishDto {
 
     // 菜品（套餐）售价
     private BigDecimal salePrice;
+
+    //菜品(套餐)定价
+    private BigDecimal price;
 
     // 菜品（套餐）会员价
     private BigDecimal vipDishPrice;
@@ -79,6 +85,28 @@ public class OrderDishDto {
     private String presentedRemarkName;
 
     /********************getter and setter***************/
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    // 设置定价，定价等于售价加上折扣
+    public void setPrice()
+    {
+        BigDecimal temp = new BigDecimal(0);
+        temp=temp.add(this.getDiscount());
+        temp=temp.add(this.getSalePrice());
+        this.price =temp;
+    }
 
     public String getPresentedRemarkName() {
         return presentedRemarkName;
