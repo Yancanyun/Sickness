@@ -51,4 +51,20 @@ public interface OrderDishCacheService {
      * @throws SSException
      */
     public void cleanCacheByTableId(int tableId) throws SSException;
+
+    /**
+     * 根据餐台ID加上锁
+     * @param tableId
+     * @return
+     * @throws SSException
+     */
+    public void tableLock(int tableId) throws SSException;
+
+    /**
+     * 根据餐台ID解除锁
+     * @param tableId
+     * @return
+     * @throws SSException
+     */
+    public void tableLockRemove(int tableId) throws SSException;
 }

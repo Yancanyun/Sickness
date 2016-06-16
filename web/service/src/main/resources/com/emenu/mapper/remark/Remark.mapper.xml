@@ -47,7 +47,7 @@
         WHERE `id` = #{id}
     </update>
 
-    <select id = "queryDishRemarkByDishId" resultType="Remark">
+    <select id = "queryDishRemarkByDishId" resultType="String">
         SELECT t_remark.name
         FROM t_dish,t_dish_remark_tag,t_remark
         WHERE t_dish.tag_id=t_dish_remark_tag.tag_id

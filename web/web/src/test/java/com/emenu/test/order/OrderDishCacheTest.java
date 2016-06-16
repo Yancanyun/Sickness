@@ -26,4 +26,14 @@ public class OrderDishCacheTest extends AbstractTestCase {
         orderDishCache.setRemark("没有备注");
         orderDishCacheService.newDish(1, orderDishCache);
     }
+
+    @Test
+        public void tableLock() throws SSException {
+        orderDishCacheService.tableLock(1);
+    }
+
+    @Test
+    public void tableLockRemove() throws SSException {
+        orderDishCacheService.tableLock(1);
+    }
 }

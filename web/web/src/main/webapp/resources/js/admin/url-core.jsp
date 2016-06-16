@@ -103,7 +103,10 @@
             // 库存物品管理
             ['delStoreItem', site.website + 'admin/storage/item/ajax/&{id}', 'delete','删除库存物品'],
             ['editStoreItemConversionRatio', site.website + 'admin/storage/item/unit/conversion/ajax', 'put','编辑换算比例'],
-
+            ['getStorageUnitRelatedSettings', site.website + 'admin/storage/item/ajax/convert/quantity', 'get','获取库存预警、总数量'],
+            ['submitStorageItem', site.website  + 'admin/storage/item/ajax/new', 'post', '提交添加的库存物品'],
+            ['submitEditedStorageItem', site.website  + 'admin/storage/item/ajax/update', 'put', '提交编辑的库存物品'],
+            ['getCostCardUnit', site.website + 'admin/storage/item/ajax/getcostcardunit', 'get', '获取成本卡单位'],
             //存放点管理
             ['delDepot', site.staticWebsite + 'admin/storage/depot/ajax/&{id}', 'delete', '删除存放点'],
 
@@ -190,14 +193,14 @@
             ['delAuthorityGroup', site.staticWebsite + 'mock/admin/del-authority-group.json', 'get', '删除权限组时，发送当前权限组的id和当前用户的id'],
 
             //base-config.html
-            ['saveAuthority', site.website + 'admin/party/security/permission/ajax', 'put', '保存编辑后的权限'],
-            ['saveNewAuthority', site.website + 'admin/party/security/permission/ajax', 'post', '保存新添加的权限'],
-            ['delAuthority', site.website + 'admin/party/security/permission/ajax', 'delete', '删除权限时，发送权限id'],
+            ['saveAuthority', site.website + 'admin/party/security/permission/ajax/update', 'put', '保存编辑后的权限'],
+            ['saveNewAuthority', site.website + 'admin/party/security/permission/ajax/new', 'post', '保存新添加的权限'],
+            ['delAuthority', site.website + 'admin/party/security/permission/ajax/del', 'delete', '删除权限时，发送权限id'],
 
             //authority-group-list.html
-            ['saveAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax', 'put', '保存编辑后的权限组'],
-            ['saveNewAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax', 'post', '保存新添加的权限组'],
-            ['deleteAuthorityGroup', site.staticWebsite + 'admin/party/security/group/ajax/&{id}', 'delete', '删除权限时，发送权限组id'],
+            ['saveAuthorityGroup', site.website + 'admin/party/security/group/ajax/update', 'put', '保存编辑后的权限组'],
+            ['saveNewAuthorityGroup', site.website + 'admin/party/security/group/ajax/new', 'post', '保存新添加的权限组'],
+            ['deleteAuthorityGroup', site.website + 'admin/party/security/group/ajax/del/&{id}', 'delete', '删除权限时，发送权限组id'],
 
             //authority-group-config.html
             ['delAuthorityOfGroup', site.website + 'admin/party/security/group/permission/ajax/&{id}', 'delete', '权限组配置页面，删除权限']

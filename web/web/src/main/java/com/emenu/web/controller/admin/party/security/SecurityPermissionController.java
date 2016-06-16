@@ -86,7 +86,7 @@ public class SecurityPermissionController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityPermissionNew)
-    @RequestMapping(value = "ajax", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
     public JSON ajaxNew(SecurityPermission securityPermission) {
         try {
@@ -106,7 +106,7 @@ public class SecurityPermissionController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityPermissionUpdate)
-    @RequestMapping(value = "ajax/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax/update", method = RequestMethod.PUT)
     @ResponseBody
     public JSON ajaxUpdate(SecurityPermission securityPermission) {
         try {
@@ -126,7 +126,7 @@ public class SecurityPermissionController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityPermissionDelete)
-    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/del/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSON ajaxDelete(@PathVariable("id") Integer id) {
         try {

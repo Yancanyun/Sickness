@@ -83,6 +83,7 @@
         WHERE `report_id` = #{reportId}
     </select>
 
+    <!--新-->
     <delete id="delByReportId" parameterType="int">
             DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
         </delete>

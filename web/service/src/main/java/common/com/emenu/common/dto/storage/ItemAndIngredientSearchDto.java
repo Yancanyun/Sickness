@@ -24,6 +24,20 @@ public class ItemAndIngredientSearchDto {
 
     // 供货商ID
     private Integer supplierPartyId;
+
+    // 供货商list
+    private List<Integer> supplierPartyIdList;
+
+    // 存放点
+    private Integer depotId;
+
+    // 存放点IdList
+    private Integer deportIdList;
+
+    private Integer isSettlemented;
+
+    private Integer isAudited;
+
     //原配料ID
     private  Integer ingredientId;
     // 分类ID

@@ -27,7 +27,7 @@ public interface StorageSettlementService {
     public void newSettlement() throws SSException;
 
     /**
-     * 库存盘点（库存物品）
+     * 库存盘点（库存物品）获取截止时间时的库存统计结果
      * @param startDate
      * @param endDate
      * @Param supplierId

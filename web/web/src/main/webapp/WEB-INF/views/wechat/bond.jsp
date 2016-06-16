@@ -2,14 +2,45 @@
 <html>
 <head>
     <title>绑定微信</title>
+    <script src="http://libs.baidu.com/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function() {
+
+            $(".J_sendValidCode").click(function() { //按钮单击事件
+                var phoneValue = $('.J_phone').val();
+                $.ajax({
+                    data: {"phone":phoneValue},
+                    type: "GET",
+                    url: '${website}wechat/ajax/valid',
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.code == 0){
+                            alert("发送成功");
+                        }
+                        if(data.code == 1){
+                            alert(data.errMsg);
+                        }
+                    },
+                    error: function() {
+                        alert(data.errMsg);
+                    }
+                });
+            });
+        });
+
+    </script>
 </head>
 <body>
-<form name="input" action="${website}wechat/bond" method="POST">
+
     手机号码:
-    <input type="text" name="phone" />
-    <br />密码:
-    <input type="password" name="password" /> <input type="hidden" name="openId" value="${openId}" />
-    <br /><input type="submit" value="绑定" />
+    <input class="J_phone" type="text" name="phone" value=""/> <button class="J_sendValidCode" >发送验证码</button>
+    <br/>
+
+<form action="${website}wechat/bond" method="POST">
+    验证码:
+    <input type="text" name="validCode" />
+    <br/>
+    <input type="hidden" name="openId" value="${openId}" /> <input type="submit" value="绑定" />
 </form>
 </body>
 </html>

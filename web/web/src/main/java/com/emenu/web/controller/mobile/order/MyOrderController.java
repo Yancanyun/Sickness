@@ -1,5 +1,6 @@
 package com.emenu.web.controller.mobile.order;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
@@ -17,6 +18,7 @@ import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.UnitService;
@@ -32,8 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sun.java2d.opengl.OGLDrawImage;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * MyOrderController
@@ -58,19 +59,18 @@ public class MyOrderController  extends AbstractController {
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
     public String toMyOrder(Model model,HttpSession httpSession)
     {
-        List<String> remark = new ArrayList<String>();//备注
+        Set<String> uniqueRemark = new HashSet<String>();//去除重复后的备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的全部订单缓存
         List<MyOrderDto> myOrderDto = new ArrayList<MyOrderDto>();//数据传输对象
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);
         BigDecimal totalMoney = new BigDecimal(0);//已点菜品的总金额
+        Map<String,Integer> stringMap = new HashMap<String, Integer>();//用来存放已经有的菜品关联备注
         Table table = new Table();
         try
         {
             table=tableService.queryById(tableId);//查询出餐台信息
-            //remark=remarkService.listAll();//查询出菜品的备注，不是全部备注
-           // model.addAttribute("remark",remark);
             model.addAttribute("personNum",table.getPersonNum());//餐台实际人数
             model.addAttribute("seatPrice",table.getSeatFee());//餐位费用
             model.addAttribute("tablePrice",table.getTableFee());//餐台费用
@@ -83,6 +83,19 @@ public class MyOrderController  extends AbstractController {
                 {
                     DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
                     Unit unit = unitService.queryById(dishDto.getUnitId());//查询出菜品的单位
+                    if(remarkService.queryDishRemarkByDishId(dto.getDishId())!=null)//查询出的菜品相关备注不为空
+                    {
+                        List<String> tempStr = new ArrayList<String>();//临时变量
+                        tempStr=remarkService.queryDishRemarkByDishId(dto.getDishId());//查询菜品关联的菜品备注
+                        for(String remarkStr : tempStr)
+                        {
+                            if(stringMap.get(remarkStr)==null)//不存在这个备注则加到集合中去
+                            {
+                                stringMap.put(remarkStr,1);
+                                uniqueRemark.add(remarkStr);//将菜品的相关备注加入到集合中
+                            }
+                        }
+                    }
                     MyOrderDto temp = new MyOrderDto();//临时变量
                     temp.setDishId(dto.getDishId());//菜品id
                     temp.setName(dishDto.getName());//菜品名称
@@ -101,6 +114,7 @@ public class MyOrderController  extends AbstractController {
                     myOrderDto.add(temp);                                   //price要转换成double类型
                 }
             }
+            model.addAttribute("uniqueRemark",uniqueRemark);//菜品关联的菜品备注
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号
             model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额
@@ -161,14 +175,27 @@ public class MyOrderController  extends AbstractController {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
             orderDishCache = tableOrderCache.getOrderDishCacheList();
             OrderDishCache temp = new OrderDishCache();//临时变量
-            temp=orderDishCache.get(id-1);//
+            for(OrderDishCache dto :orderDishCache)
+            {
+                if(dto.getId()==id)//id为缓存id,遍历找到对应的菜品缓存
+                {
+                    temp=dto;
+                    break;
+                }
+            }
             Integer quantity = temp.getQuantity();//菜品数量
             if(changeStatus==1)//改变状态为1的话为增加,为0的话为减少
-            temp.setQuantity(quantity+1);//修改菜品数量
+            {
+                temp.setQuantity(quantity+1);//修改菜品数量
+                orderDishCacheService.updateDish(tableId,temp);//更新相应的菜品缓存
+            }
             else
             {
                 if(temp.getQuantity()>1)//数量为1的话没办法再减少,但是可以删除
+                {
                     temp.setQuantity(quantity-1);
+                    orderDishCacheService.updateDish(tableId,temp);
+                }
             }
             orderDishCacheService.updateDish(tableId,temp);
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -178,6 +205,61 @@ public class MyOrderController  extends AbstractController {
             sendErrMsg(e.getMessage());
             return sendErrMsgAndErrCode(e);
         }
+    }
+
+    /**
+     * ajax返回确认下单的菜品的总金额
+     * 同时把缓存锁死
+     * @param orderStatus
+     *
+     * @return
+     */
+    @Module(ModuleEnums.MobileMyOrderTotalMoney)
+    @RequestMapping(value = "/ajax/return/money",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxReturnMoney(@RequestParam("orderStatus") Integer orderStatus
+            ,HttpSession httpSession
+            ,Model mOdel)
+    {
+        String str = httpSession.getAttribute("tableId").toString();
+        Integer tableId = Integer.parseInt(str);
+        List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
+        TableOrderCache tableOrderCache = new TableOrderCache();
+        BigDecimal totalMoney = new BigDecimal(0);//总金额
+        JSONObject jsonObject = new JSONObject();
+        try
+        {
+            tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            if(tableOrderCache!=null)
+            orderDishCache = tableOrderCache.getOrderDishCacheList();//已点菜品缓存
+            else//菜品缓存为空,则没有必要展示给用户空的列表
+            {
+                return sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishCacheIsNull));
+            }
+            if(tableOrderCache.getLock()==true)//已经加上了锁，即存在其他人正在下单
+                return sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
+            for(OrderDishCache dto :orderDishCache)
+            {
+                DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
+                totalMoney=totalMoney.add(new BigDecimal(dto.getQuantity()*dishDto.getSalePrice().doubleValue()));
+            }
+            if(orderStatus==1)//锁死菜品缓存
+            {
+                orderDishCacheService.tableLock(tableId);
+                jsonObject.put("customPrice", totalMoney);
+            }
+            else//若点击了返回则解除锁死
+            {
+                orderDishCacheService.tableLockRemove(tableId);
+                return sendJsonObject(AJAX_SUCCESS_CODE);
+            }
+        }
+        catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(jsonObject,0);
     }
 
     /**

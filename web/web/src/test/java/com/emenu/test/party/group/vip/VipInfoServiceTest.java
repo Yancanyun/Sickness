@@ -113,7 +113,7 @@ public class VipInfoServiceTest extends AbstractTestCase {
         String password = "123456";
         String openId = "123";
 
-        vipInfoService.bondWechat(openId, phone, password);
+        vipInfoService.bondWechat(openId, phone);
     }
 
     @Test

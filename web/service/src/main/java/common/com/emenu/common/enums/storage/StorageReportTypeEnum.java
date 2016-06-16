@@ -13,7 +13,8 @@ public enum StorageReportTypeEnum {
     StockInReport(1 , "入库单"),
     StockOutReport(2 , "出库单"),
     IncomeOnReport(3 , "盘盈单"),
-    LossOnReport(4 , "盘亏单");
+    LossOnReport(4 , "盘亏单"),
+    AllocationReport(5,"调拨单");
 
     private Integer id;
     private String name;

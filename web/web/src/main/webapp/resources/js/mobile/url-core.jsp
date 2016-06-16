@@ -35,7 +35,10 @@
             ['getOrderList', site.staticWebsite + 'mock/mobile/order-list.json', 'get', '获取订单列表'],
             ['deleteOrderingDish', site.website + 'mobile/order/ajax/del/order/cache', '根据缓存id删除订单中菜品缓存'],
             ['sendConfirmOrderInfo', site.staticWebsite + 'mock/mobile/two-return-value.json', 'get', '发送确认订单信息'],
-            ['sendDishNumChangeInfo', site.website + 'mobile/order/ajax/dish/quantity/change', 'get', '发送菜品数量改变状态和菜品id']
+            ['sendDishNumChangeInfo', site.website + 'mobile/order/ajax/dish/quantity/change', 'get', '发送菜品数量改变状态和菜品id'],
+            ['sendOrderStatus', site.website + 'mobile/order/ajax/return/money', 'get', '发送用户下单状态，后端返回计算当前下单的消费金额'],
+            ['sendDeblockingStatus', site.website + 'mobile/order/ajax/return/money', 'get', '发送用户取消下单状态，和上面的ajax请求地址为同一个']
+
         ],
         //测试
         Test: [

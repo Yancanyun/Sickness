@@ -9,7 +9,7 @@ import java.util.Date;
  * StorageReportItemDto
  * 库存单据物品dto，供库存单据dto使用
  *
- * @author Wang Liming
+ * @author xiaozl
  * @date 2016/1/20 18:35
  */
 public class StorageReportItemDto {
@@ -25,8 +25,17 @@ public class StorageReportItemDto {
     //助记码
     private String assistantCode;
 
-    //入库数量、出库数量、盘盈数量、盘亏数量
+    //入库数量(订货单位）
     private BigDecimal quantity;
+
+    //订货单位名
+    private String orderUnitName;
+
+    //成本卡单位数量
+    private BigDecimal costCardQuantity;
+
+    //成本卡单位名
+    private String costCardUnitName;
 
     //计数
     private BigDecimal count;
@@ -110,5 +119,29 @@ public class StorageReportItemDto {
 
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
+    public BigDecimal getCostCardQuantity() {
+        return costCardQuantity;
+    }
+
+    public void setCostCardQuantity(BigDecimal costCardQuantity) {
+        this.costCardQuantity = costCardQuantity;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
     }
 }

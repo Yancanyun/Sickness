@@ -70,7 +70,7 @@
     </ul>
     <input type="hidden" class="J_tableId" name="tableId" value="${tableId}">
        <!-- 后端套cover页的资源地址 -->
-    <input type="hidden" class="J_coverImgSrc" href="/resources/img/mobile/cover/center-icon.jpg">
+    <input type="hidden" class="J_coverImgSrc" href="${staticWebsite}img/mobile/cover/center-icon.jpg">
 </div>
 <script type="text/javascript">
     KISSY.ready(function(S){

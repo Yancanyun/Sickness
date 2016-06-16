@@ -46,6 +46,8 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemUnitRatioNotNull("物品的单位换算关系不能为空", 1028),
     StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
     StorageItemIdNotNull("物品的ID不能为空", 1030),
+    StorageItemIngredientIdNotNull("库存物品原配料ID不能为空",1031),
+    StorageItemNotExist("库存物品不存在",1032),
 
     // 库存结算
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
@@ -69,7 +71,7 @@ public enum EmenuException implements IBizExceptionMes {
     IngredientMinStorageQuantityIsNotNull("最大库存量不能为空",3110),
     IngredientUpdateFailed("更新原配料失败",31101),
     IngredientInserFailed("新增原配料失败",31102),
-
+    IngredientNotExist("原配料不存在",31103),
 
     // 菜品管理模块
     // 分类管理
@@ -353,6 +355,12 @@ public enum EmenuException implements IBizExceptionMes {
     QueryReportDtoFail("查询单据和单据详情失败",7028),
     StorageReportItemListIsNotNull("单据详情list不能为空",7029),
     ExportReportFail("导出库存单据失败",7030),
+    IsAuditedIllegal("审核状态不合法",7031),
+    ReportIsNotExist("单据不存在",7032),
+    ReportStatusIsNull("单据状态不能为空",7033),
+    ReportIngredientIsNot("单据原配料不能为空",7034),
+    InsertReportIngredientFail("添加单据原配料失败",7035),
+    ReportIdOrStatusIdError("单据id或者状态错误",7036),
 
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7024),
@@ -405,13 +413,15 @@ public enum EmenuException implements IBizExceptionMes {
     CountVipByGradeIdFail("计算会员数量失败",8028),
     OpenIdError("微信OpenId不合法", 8029),
     bondWechatError("绑定微信失败", 8030),
-    PhoneIsNotMatchPassword("手机号码与密码不匹配", 8031),
+    SendSmsError("发送验证码失败", 8031),
     unbondWechatError("解绑微信失败", 8032),
     WechatIsBonded("您的微信已绑定会员，请勿重复绑定", 8033),
     WechatIsNotBonded("您的微信尚未绑定会员，无法进行解绑操作", 8034),
     PhoneIsNotExist("该手机号码尚未注册成为会员", 8035),
     PhoneIsBonded("该手机号码已被绑定", 8036),
     PhoneError("手机号码不合法", 8037),
+    ValidCodeWrong("验证码不正确", 8038),
+    SendTooFrequently("两次获取验证码之间不可少于120秒，请稍后再试", 8039),
     //QueryVipDishPriceFail("获取会员价失败",8021),
     //VipDishPriceNameNotNull("会员价名称不能为空",8022),
     //
@@ -509,6 +519,8 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateDishError("编辑已点菜品失败", 10005),
     QueryDishError("查询已点菜品失败", 10006),
     CleanTableCacheError("清空该餐台已点菜品失败", 10007),
+    TableLockFail("餐台加锁失败", 10008),
+    TableLockRemoveFail("餐台解锁失败", 10009),
 
     //订单菜品模块
     OrderIdError("订单id错误",10030),
@@ -533,6 +545,7 @@ public enum EmenuException implements IBizExceptionMes {
     OrderIsNotNull("订单不为空",10047),
     NewOrderFailed("添加一个订单失败",10048),
     UpdateOrderFailed("修改订单失败",10049),
+    OrderDishCacheIsNull("订单中不存在任何菜品",10050),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10053),

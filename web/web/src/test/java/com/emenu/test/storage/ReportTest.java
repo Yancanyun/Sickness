@@ -47,13 +47,13 @@ public class ReportTest extends AbstractTestCase {
 
         StorageReport storageReport = new StorageReport();
 
-        storageReport.setStatus(0);
+        storageReport.setIsSettlemented(0);
         storageReport.setComment("来一个");
         storageReport.setCreatedPartyId(6);
         storageReport.setDepotId(4);
         storageReport.setHandlerPartyId(5);
         storageReport.setSerialNumber("kdl-201510120001");
-        storageReport.setStatus(1);
+        storageReport.setIsSettlemented(1);
 
         BigDecimal money = new BigDecimal("35.55");
 
@@ -75,7 +75,7 @@ public class ReportTest extends AbstractTestCase {
         BigDecimal quantity = new BigDecimal("0.00");
 
 
-        storageReportItem.setCost(count);
+        storageReportItem.setCount(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);
@@ -99,7 +99,7 @@ public class ReportTest extends AbstractTestCase {
 
         String setSerialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.StockInSerialNum);
 
-        storageReportItem.setCost(count);
+        storageReportItem.setCount(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);
@@ -107,13 +107,13 @@ public class ReportTest extends AbstractTestCase {
 
         StorageReport storageReport = new StorageReport();
 
-        storageReport.setStatus(0);
+        storageReport.setIsSettlemented(0);
         storageReport.setComment("来两个");
         storageReport.setCreatedPartyId(2);
         storageReport.setDepotId(2);
         storageReport.setHandlerPartyId(2);
         storageReport.setSerialNumber(setSerialNumber);
-        storageReport.setStatus(1);
+        storageReport.setIsSettlemented(1);
 
         BigDecimal money = new BigDecimal("35.55");
 
@@ -165,7 +165,7 @@ public class ReportTest extends AbstractTestCase {
 
         endTime = DateUtils.getTodayEndTime();
 
-        StorageReportDtoList = storageReportService.ListReportDtoUnsettledByEndTime(endTime);
+       // StorageReportDtoList = storageReportService.listReportDtoUnsettledByEndTime(endTime);
 
         for (StorageReportDto storageReportDto : StorageReportDtoList) {
             List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
@@ -271,7 +271,7 @@ public class ReportTest extends AbstractTestCase {
 
     @Test
     public void updateStatusById() throws SSException {
-        storageReportService.updateStatusById(2, StorageReportStatusEnum.Settled);
+        storageReportService.updateIsSettlementedById(2, StorageReportStatusEnum.Settled);
     }
 
     @Test
@@ -332,13 +332,13 @@ public class ReportTest extends AbstractTestCase {
 
         StorageReport storageReport = new StorageReport();
         storageReport.setId(4);
-        storageReport.setStatus(0);
+        storageReport.setIsSettlemented(0);
         storageReport.setComment("你好杜哥");
         storageReport.setCreatedPartyId(6);
         storageReport.setDepotId(4);
         storageReport.setHandlerPartyId(5);
         storageReport.setSerialNumber("kdl-201510120001");
-        storageReport.setStatus(1);
+        storageReport.setIsSettlemented(1);
 
 
         BigDecimal money = new BigDecimal("35.55");
@@ -358,7 +358,7 @@ public class ReportTest extends AbstractTestCase {
         BigDecimal quantity = new BigDecimal("0.00");
 
 
-        storageReportItem.setCost(count);
+        storageReportItem.setCount(count);
         storageReportItem.setItemId(1);
         storageReportItem.setPrice(price);
         storageReportItem.setQuantity(quantity);

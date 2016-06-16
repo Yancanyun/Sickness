@@ -4,6 +4,7 @@
 
 <mapper namespace="com.emenu.mapper.storage.StorageReportMapper">
 
+    <!--新-->
     <select id="listAll" resultMap="pw.StorageReport">
         SELECT `id` AS id,
         `serial_number` AS serialNumber,
@@ -11,13 +12,69 @@
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
         FROM `t_storage_report` ORDER BY `created_time` DESC
     </select>
+
+    <!--新-->
+    <select id="listByReportSerachDto" resultMap="pw.StorageReport">
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report` AS report
+        <where>
+            <if test="reportSerachDto != null">
+                <if test="reportSerachDto.depotId != null and depotId >0">
+                    report.`depot_id` = #{reportSerachDto.depotId}
+                </if>
+                <if test="reportSerachDto.isSettlemented != null and isSettlemented >= 0">
+                    AND report.`depot_id` = #{reportSerachDto.depotId}
+                </if>
+                <if test="reportSerachDto.isAudited != null and isAudited >= 0">
+                    AND report.`depot_id` = #{reportSerachDto.depotId}
+                </if>
+                <if test="startTime != null">
+                    AND `created_time` &gt;= #{startTime}
+                </if>
+                <if test="endTime != null">
+                    AND `created_time` &lt;= #{endTime}
+                </if>
+            </if>
+        </where>
+        ORDER BY `created_time` DESC
+        <if test="reportSerachDto != null and reportSerachDto.offset >= 0 and reportSerachDto.pageSize >= 0">
+            LIMIT #{reportSerachDto.offset},#{reportSerachDto.pageSize}
+        </if>
+    </select>
+
+    <!--新-->
+    <update id="updateIsAudited">
+        UPDATE `t_storage_report`
+        SET `is_audited` = #{isAudited} WHERE `id` = #{reportId}
+    </update>
+
+    <!--新-->
+    <update id="updateIsSettlemented">
+        UPDATE `t_storage_report`
+        SET `is_settlemented` = #{isSettlemented}
+        WHERE `id` = #{reportId}
+    </update>
 
     <select id="listByPage" resultMap="pw.StorageReport">
         SELECT `id` AS id,
@@ -26,8 +83,10 @@
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
@@ -43,8 +102,10 @@
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
@@ -83,8 +144,10 @@
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
@@ -101,6 +164,18 @@
             </if>
             <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
                 AND `handler_party_id` = #{report.handlerPartyId}
+            </if>
+            <if test="report.auditPartyId>0 and report.auditPartyId != null">
+                AND `audit_party_id` = #{report.auditPartyId}
+            </if>
+            <if test="report.isAudited>-1 and report.isAudited != null">
+                AND `is_audited` = #{report.isAudited}
+            </if>
+            <if test="report.isSettlemented>-1 and report.isSettlemented != null">
+                AND `is_settlemented` = #{report.isSettlemented}
+            </if>
+            <if test="report.serialNumber != null">
+                AND `serial_number` LIKE '%${report.serialNumber}'
             </if>
             <if test="startTime != null">
                 AND `created_time` &gt;= #{startTime}
@@ -167,6 +242,18 @@
             <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
                 AND `handler_party_id` = #{report.handlerPartyId}
             </if>
+            <if test="report.auditPartyId>0 and report.auditPartyId != null">
+                AND `audit_party_id` = #{report.auditPartyId}
+            </if>
+            <if test="report.isAudited>-1 and report.isAudited != null">
+                AND `is_audited` = #{report.isAudited}
+            </if>
+            <if test="report.isSettlemented>-1 and report.isSettlemented != null">
+                AND `is_settlemented` = #{report.isSettlemented}
+            </if>
+            <if test="report.serialNumber != null">
+                AND `serial_number` LIKE '%${report.serialNumber}'
+            </if>
             <if test="startTime != null">
                 AND `created_time` &gt;= #{startTime}
             </if>
@@ -177,47 +264,17 @@
         ORDER BY `created_time` DESC;
     </select>
 
-  <!--  <select id="listStorageReportByCondition1" resultMap="pw.StorageReport">
-
+    <select id="listStorageReportUnsettled" parameterType="date" resultMap="pw.StorageReport">
         SELECT `id` AS id,
         `serial_number` AS serialNumber,
         `comment` AS comment,
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
-        `type` AS type,
-        `created_time` AS createdTime,
-        `last_modified_time` AS lastModifiedTime
-        FROM `t_storage_report`
-        <where>
-            <if test="report.id>0 and report.id != null">
-                AND `id` = #{report.id}
-            </if>
-            <if test="report.createdPartyId>0 and report.createdPartyId != null">
-                AND `created_party_id` = #{report.createdPartyId}
-            </if>
-            <if test="report.depotId>0 and report.depotId != null">
-                AND `depot_id` = #{report.depotId}
-            </if>
-            <if test="report.handlerPartyId>0 and report.handlerPartyId != null">
-                AND `handler_party_id` = #{report.handlerPartyId}
-            </if>
-        </where>
-        ORDER BY `created_time` DESC
-        LIMIT #{offset}, #{pageSize}
-    </select>-->
-
-    <select id="ListStorageReportUnsettled" parameterType="date" resultMap="pw.StorageReport">
-        SELECT `id` AS id,
-        `serial_number` AS serialNumber,
-        `comment` AS comment,
-        `depot_id` AS depotId,
-        `handler_party_id` AS handlerPartyId,
-        `created_party_id` AS createdPartyId,
-        `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
@@ -226,7 +283,28 @@
         ORDER BY `created_time` DESC
     </select>
 
-    <update id="updateStatusById" >
+    <select id="listUnsettleAndAuditedStorageReportByEndTime" parameterType="date" resultMap="pw.StorageReport">
+         SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
+        WHERE `created_time` &lt;= #{endTime}
+              AND `is_audited` = 1
+              AND `is_settlemented` = 0
+        ORDER BY `created_time` DESC
+    </select>
+
+    <update id="updateIsSettlementedById" >
         UPDATE `t_storage_report` SET `status` = #{status} WHERE `id` = #{id}
     </update>
 
@@ -237,11 +315,14 @@
         `depot_id` AS depotId,
         `handler_party_id` AS handlerPartyId,
         `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
         `money` AS money,
-        `status` AS status,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
         `type` AS type,
         `created_time` AS createdTime,
-        `last_modified_time` AS lastModifiedTime FROM t_storage_report
+        `last_modified_time` AS lastModifiedTime
+        FROM t_storage_report
         <where>
             <if test="depotIdList != null and depotIdList.size()>0">
             `depot_id` IN
@@ -259,6 +340,7 @@
         ORDER BY `created_time` DESC;
     </select>
 
+    <!--新-->
     <delete id="delById" parameterType="int" >
         DELETE FROM `t_storage_report` WHERE `id` = #{id}
     </delete>

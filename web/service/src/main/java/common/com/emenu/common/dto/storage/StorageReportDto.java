@@ -1,6 +1,7 @@
 package com.emenu.common.dto.storage;
 
 import com.emenu.common.entity.storage.StorageReport;
+import com.emenu.common.entity.storage.StorageReportIngredient;
 import com.emenu.common.entity.storage.StorageReportItem;
 
 import java.util.List;
@@ -13,16 +14,14 @@ import java.util.List;
  */
 public class StorageReportDto {
 
-    //单据实体
+    // 单据实体
     private StorageReport storageReport;
 
-    //单据详情
+    // 单据物品详情
     private List<StorageReportItem> storageReportItemList;
 
-    //单据详情dto，用于显示数据
-    private List<StorageReportItemDto> storageReportItemDtoList;
-
-    /********************getter and setter ********************/
+    // 单据原配料
+    private List<StorageReportIngredient> storageReportIngredientList;
 
     public StorageReport getStorageReport() {
         return storageReport;
@@ -40,11 +39,11 @@ public class StorageReportDto {
         this.storageReportItemList = storageReportItemList;
     }
 
-    public List<StorageReportItemDto> getStorageReportItemDtoList() {
-        return storageReportItemDtoList;
+    public List<StorageReportIngredient> getStorageReportIngredientList() {
+        return storageReportIngredientList;
     }
 
-    public void setStorageReportItemDtoList(List<StorageReportItemDto> storageReportItemDtoList) {
-        this.storageReportItemDtoList = storageReportItemDtoList;
+    public void setStorageReportIngredientList(List<StorageReportIngredient> storageReportIngredientList) {
+        this.storageReportIngredientList = storageReportIngredientList;
     }
 }

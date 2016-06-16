@@ -11,6 +11,7 @@ import com.lowagie.text.ChapterAutoNumber;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -156,6 +157,11 @@ public class CallCacheServiceImpl implements CallCacheService {
         {
             if(!Assert.lessZero(tableId))
             tableCallCacheMap.put(tableId,new TableCallCache());
+            for(CallCache dto : allCallCaches)//后加的list集合中也要把相应的缓存删掉
+            {
+                if(dto.getTableId()==tableId)
+                    allCallCaches.remove(dto);
+            }
         }
         catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -13,6 +13,7 @@ import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -159,13 +160,13 @@ public class AdminStorageItemController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminStorageItem ,extModule = ModuleEnums.AdminStorageItemNew)
-    @RequestMapping(value = "new", method = RequestMethod.GET)
+    @RequestMapping(value = "tonew", method = RequestMethod.GET)
     public String toNew(Model model) {
         try {
             List<Supplier> supplierList = supplierService.listAll();
             List<Tag> tagList = storageTagService.listAllSmallTag();
             List<Unit> unitList = unitService.listAll();
-
+            List<Ingredient> ingredientList = ingredientService.listAll();
             List<Unit> weightUnit = new ArrayList<Unit>();
             List<Unit> quantityUnit = new ArrayList<Unit>();
             for (Unit unit : unitList) {
@@ -175,11 +176,11 @@ public class AdminStorageItemController extends AbstractController {
                     quantityUnit.add(unit);
                 }
             }
-
             model.addAttribute("weightUnit", weightUnit);
             model.addAttribute("quantityUnit", quantityUnit);
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("tagList", tagList);
+            model.addAttribute("ingredientList", ingredientList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -191,27 +192,21 @@ public class AdminStorageItemController extends AbstractController {
 
     /**
      * 添加提交
-     *
      * @param storageItem
-     * @param model
      * @return
      */
     @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemNew)
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public String newStorageItem(StorageItem storageItem,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
-        try {
+    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
+    @ResponseBody
+    public JSON newStorageItem(StorageItem storageItem) {
+        try{
             storageItemService.newStorageItem(storageItem);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return toNew(model);
+            return sendErrMsgAndErrCode(e);
         }
-
-        redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/list";
-        return "redirect:" + redirectUrl;
     }
 
     /**
@@ -230,7 +225,7 @@ public class AdminStorageItemController extends AbstractController {
             List<Supplier> supplierList = supplierService.listAll();
             List<Tag> tagList = storageTagService.listAllSmallTag();
             List<Unit> unitList = unitService.listAll();
-
+            List<Ingredient> ingredientList = ingredientService.listAll();
             List<Unit> weightUnit = new ArrayList<Unit>();
             List<Unit> quantityUnit = new ArrayList<Unit>();
             int orderUnitType = 1, storageUnitType = 1, costCardUnitType = 1, countOrderType = 1;
@@ -262,6 +257,8 @@ public class AdminStorageItemController extends AbstractController {
             model.addAttribute("quantityUnit", quantityUnit);
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("tagList", tagList);
+            model.addAttribute("ingredientList", ingredientList);
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -269,6 +266,47 @@ public class AdminStorageItemController extends AbstractController {
         }
 
         return "admin/storage/item/update_home";
+    }
+
+    /**
+     * 修改提交
+     * @param storageItem
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule= ModuleEnums.AdminStorageItemUpdate)
+    @RequestMapping(value = "ajax/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public JSON updateStorageItem(StorageItem storageItem) {
+        try{
+            System.out.println("xiaozl");
+            storageItemService.updateStorageItem(storageItem);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * 返回成卡单位
+     * @param ingredientId
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageItem, extModule= ModuleEnums.AdminStorageItemNew)
+    @RequestMapping(value = "ajax/getcostcardunit", method = RequestMethod.GET)
+    @ResponseBody
+    public JSON unit(@RequestParam("ingredientId")Integer ingredientId) {
+        try{
+            Ingredient ingredient = ingredientService.queryById(ingredientId);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("costCardUnitName",ingredient.getCostCardUnitName());
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     /**
@@ -281,7 +319,7 @@ public class AdminStorageItemController extends AbstractController {
     @Module(value = ModuleEnums.AdminStorageItem,extModule = ModuleEnums.AdminStorageItemUpdate)
     @RequestMapping(value = "ajax/convert/quantity",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject convertQuantity(@RequestParam("id")Integer id ,
+    public JSON convertQuantity(@RequestParam("id")Integer id ,
                                       @RequestParam("storageUnitId")Integer storageUnitId ,
                                       @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
@@ -303,31 +341,7 @@ public class AdminStorageItemController extends AbstractController {
         }
     }
 
-    /**
-     * 修改提交
-     *
-     * @param storageItem
-     * @param redirectAttributes
-     * @return
-     */
-    @Module(value = ModuleEnums.AdminStorageItem, extModule= ModuleEnums.AdminStorageItemUpdate)
-    @RequestMapping(value = "", method = RequestMethod.PUT)
-    public String updateStorageItem(StorageItem storageItem,
-                                    RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("code", 0);
-        redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
 
-        try {
-            storageItemService.updateStorageItem(storageItem);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            redirectAttributes.addFlashAttribute("code", 1);
-            redirectAttributes.addFlashAttribute("msg", e.getMessage());
-        }
-
-        String redirectUrl = "/" + URLConstants.ADMIN_STORAGE_ITEM_URL + "/update/" + storageItem.getId();
-        return "redirect:" + redirectUrl;
-    }
 
     /**
      * ajax删除
