@@ -7,62 +7,44 @@
         <ol class="breadcrumb">
             <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">库存管理</a></li>
-            <li class="active">库存物品管理</li>
+            <li class="active">库存物品添加</li>
         </ol>
-        <h2>库存物品管理-添加库存物品</h2>
+        <h2>库存物品添加</h2>
     </div>
-    <div class="col-sm-12 margin-bottom-30">
-        <form class="form-horizontal J_operForm" action="${website}admin/storage/item" method="post">
-            <c:if test="${!empty msg}">
-                <div class="alert alert-danger J_tip" role="alert">提示信息!</div>
-            </c:if>
-
+    <div class="col-sm-12">
+        <div class="alert hidden J_tip" role="alert">保存成功！</div>
+        <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h4>添加库存物品</h4>
+                    <h4>添加</h4>
                 </div>
                 <div class="panel-body">
-
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
-
                         <div class="col-sm-6">
-                            <input class="w180 J_name" type="text" data-valid-rule="notNull"
-                                   data-valid-tip="请输入库存物品名称|名称不能为空,请重新输入" value="" name="name"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">编号</label>
-
-                        <div class="col-sm-6">
-                            <input class="w180" type="text" value="" name="itemNumber"/>
+                            <input type="text" class="w180" placeholder="请输入原配料名称" data-valid-rule="length(1,30,1)" data-valid-tip="请输入1-30个字符|输入有误，请重新填写" name="name" value="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">助记码</label>
-
                         <div class="col-sm-6">
-                            <input class="w180 J_assistantCode" type="text" value="" name="assistantCode"/>
+                            <input type="text" class="w180" placeholder="请输入助记码" name="assistantCode" value="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label"><span class="requires">*</span>供货商</label>
-
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>原配料</label>
                         <div class="col-sm-6">
-                            <select class="form-control w180" data-valid-rule="notNull" data-valid-tip="请选择供货商|供货商不能为空,请重新选择"
-                                    name="supplierPartyId">
-                                <c:forEach var="supplier" items="${supplierList}">
-                                    <option value="${supplier.partyId}">${supplier.name}</option>
+                            <select class="w180 form-control J_ingredient" name="ingredientId">
+                                <c:forEach var="ingredient" items="${ingredientList}">
+                                    <option value="${ingredient.id}">${ingredient.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
-
                         <div class="col-sm-6">
-                            <select class="form-control w180" data-valid-rule="notNull" data-valid-tip="请选择所属分类|分类不能为空,请重新选择"
-                                    name="tagId">
+                            <select class="w180 form-control" name="tagId">
                                 <c:forEach var="tag" items="${tagList}">
                                     <option value="${tag.id}">${tag.name}</option>
                                 </c:forEach>
@@ -70,127 +52,91 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>供货商</label>
+                        <div class="col-sm-6">
+                            <select class="w180 form-control" name="supplierPartyId">
+                                <c:forEach var="supplier" items="${supplierList}">
+                                    <option value="${supplier.partyId}">${supplier.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位</label>
-
-                        <div class="col-sm-9">
-                            <select class="form-control J_orderUnitType w180">
+                        <div class="col-sm-6">
+                            <select class="w180 form-control J_unitType J_orderUnitType">
                                 <option value="1">重量单位</option>
                                 <option value="2">数量单位</option>
                             </select>
-                            <select class="form-control w180" name="orderUnitId">
+                            <select class="w180 form-control J_orderUnit" name="orderUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden w180" name="orderUnitId" disabled="disabled">
+                            <select class="w180 form-control hidden J_orderUnit" name="orderUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位与库存换算关系</label>
-
                         <div class="col-sm-6">
-                            <input class="w180" type="text" data-valid-tip="请输入订货单位与库存换算关系|换算关系有误，请重新输入"
-                                   data-valid-rule="isFloat" value="1" name="orderToStorageRatio"/>
+                            <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位</label>
-
-                        <div class="col-sm-9">
-                            <select class="form-control J_orderUnitType w180">
+                        <div class="col-sm-6">
+                            <select class="w180 form-control J_unitType J_storageUnitType">
                                 <option value="1">重量单位</option>
                                 <option value="2">数量单位</option>
                             </select>
-                            <select class="form-control w180" name="storageUnitId">
+                            <select class="w180 form-control J_storageUnit" name="storageUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="form-control hidden w180" name="storageUnitId" disabled="disabled">
+                            <select class="w180 form-control hidden J_storageUnit" name="storageUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
+                                    <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位与成本卡换算关系</label>
-
                         <div class="col-sm-6">
-                            <input class="w180" type="text" data-valid-tip="请输入库存单位与成本卡换算关系|换算关系有误，请重新输入"
-                                   data-valid-rule="isFloat" value="1" name="storageToCostCardRatio"/>
+                            <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>成本卡单位</label>
-
+                        <div class="col-sm-6">
+                            <input type="hidden" name="costCardUnitId" value="">
+                            <input type="text" class="w180 J_costCardUnit" value="" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>计数单位</label>
+                        <div class="col-sm-6">
+                            <input type="hidden" name="countUnitId" value="">
+                            <input type="text" class="w180 J_countUnit" value="" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>库存预警上限</label>
                         <div class="col-sm-9">
-                            <select class="form-control J_orderUnitType w180">
-                                <option value="1">重量单位</option>
-                                <option value="2">数量单位</option>
-                            </select>
-                            <select class="form-control w180" name="costCardUnitId">
-                                <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
-                                </c:forEach>
-                            </select>
-                            <select class="form-control hidden w180" name="costCardUnitId" disabled="disabled">
-                                <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
-                                </c:forEach>
-                            </select>
+                            <input type="text" class="w180 J_storageWarning" data-valid-rule="isFloat" data-valid-tip="请输入库存预警上限|输入有误，请重新填写" name="maxStorageQuantity" value="">
+                            <input type="text" class="w50 J_storageWarningUnit" readonly>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">计数单位</label>
-
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>库存预警下限</label>
                         <div class="col-sm-9">
-                            <select class="form-control J_orderUnitType w180">
-                                <option value="1">重量单位</option>
-                                <option value="2">数量单位</option>
-                            </select>
-                            <select class="form-control w180" name="countUnitId">
-                                <option value="0">请选择</option>
-                                <c:forEach var="unit" items="${weightUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
-                                </c:forEach>
-                            </select>
-                            <select class="form-control hidden w180" name="countUnitId" disabled="disabled">
-                                <option value="0">请选择</option>
-                                <c:forEach var="unit" items="${quantityUnit}">
-                                    <option value="${unit.id}">${unit.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span class="requires">*</span>最大库存量</label>
-
-                        <div class="col-sm-6">
-                            <input class="w180" type="text" data-valid-tip="请输入最大库存量|最大库存量有误，请重新输入"
-                                   data-valid-rule="isFloat" value="0" name="maxStorageQuantity"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label"><span class="requires">*</span>最小库存量</label>
-
-                        <div class="col-sm-6">
-                            <input class="w180" type="text" data-valid-tip="请输入最大库存量|最大库存量有误，请重新输入"
-                                   data-valid-rule="isFloat" value="0" name="minStorageQuantity"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">出库方式</label>
-
-                        <div class="col-sm-6">
-                            <select class="form-control w180" name="stockOutType">
-                                <option value="1" selected="selected">加权平均(自动)</option>
-                                <option value="2">手动</option>
-                            </select>
+                            <input type="text" class="w180 J_storageWarning" data-valid-rule="isFloat" data-valid-tip="请输入库存预警下限|输入有误，请重新填写" name="minStorageQuantity" value="">
+                            <input type="text" class="w50 J_storageWarningUnit" readonly>
                         </div>
                     </div>
                 </div>
@@ -198,14 +144,8 @@
                     <div class="row">
                         <div class="col-sm-6 col-sm-offset-3">
                             <div class="btn-toolbar">
-                                <button class="btn-primary btn J_submitBtn" type="submit" data-btn-type="loading"
-                                        data-btn-loading-text="正在保存，请稍后...">
-                                    <i class="fa fa-save"></i>
-                                    &nbsp;保存
-                                </button>
-                                <button class="btn-default btn" type="reset"><i class="fa fa-undo"></i>&nbsp;重置</button>
-                                <!--编辑用下面这个-->
-                                <!--<button class="btn-default btn" type="button" onclick="history.go(-1);"><i class="fa fa-undo"></i>&nbsp;返回</button>-->
+                                <button class="btn btn-primary J_submit" type="button"><i class="fa fa-save"></i>&nbsp;保存</button>
+                                <button type="reset" class="btn btn-default"><i class="fa fa-undo"></i>&nbsp;重置</button>
                             </div>
                         </div>
                     </div>

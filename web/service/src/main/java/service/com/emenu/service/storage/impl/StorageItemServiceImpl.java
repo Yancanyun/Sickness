@@ -5,12 +5,16 @@ import com.emenu.common.dto.storage.StorageItemSearchDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.storage.StorageItemStatusEnums;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.StringUtils;
 import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.storage.StorageItemMapper;
 import com.emenu.service.dish.UnitService;
+import com.emenu.service.other.SerialNumService;
+import com.emenu.service.storage.IngredientService;
 import com.emenu.service.storage.StorageItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -50,6 +54,12 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Autowired
     private UnitService unitService;
+
+    @Autowired
+    private IngredientService ingredientService;
+
+    @Autowired
+    private SerialNumService serialNumService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -265,6 +275,16 @@ public class StorageItemServiceImpl implements StorageItemService {
             if (!checkBeforeSave(storageItem)) {
                 return ;
             }
+            // 设置编号和助记码
+            // 助记码
+            if (Assert.isNull(storageItem.getAssistantCode())
+                    || storageItem.getAssistantCode().equals("")){
+                String assistantCode = StringUtils.str2Pinyin(storageItem.getName(),"headChar");
+                storageItem.setAssistantCode(assistantCode);
+            }
+            Ingredient ingredient = ingredientService.queryById(storageItem.getIngredientId());
+            storageItem.setCostCardUnitId(ingredient.getCostCardUnitId());
+            storageItem.setItemNumber(serialNumService.generateSerialNum(SerialNumTemplateEnums.StorageItemNum));
             commonDao.insert(storageItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -393,11 +413,11 @@ public class StorageItemServiceImpl implements StorageItemService {
         }
 
         Assert.isNotNull(storageItem.getName(), EmenuException.StorageItemNameNotNull);
+        Assert.isNotNull(storageItem.getIngredientId(), EmenuException.StorageItemIngredientIdNotNull);
         Assert.isNotNull(storageItem.getSupplierPartyId(), EmenuException.StorageItemSupplierNotNull);
         Assert.isNotNull(storageItem.getTagId(), EmenuException.StorageItemTagNotNull);
         Assert.isNotNull(storageItem.getOrderUnitId(), EmenuException.StorageItemUnitNotNull);
         Assert.isNotNull(storageItem.getStorageUnitId(), EmenuException.StorageItemUnitNotNull);
-        Assert.isNotNull(storageItem.getCostCardUnitId(), EmenuException.StorageItemUnitNotNull);
         Assert.isNotNull(storageItem.getOrderToStorageRatio(), EmenuException.StorageItemUnitRatioNotNull);
         Assert.isNotNull(storageItem.getStorageToCostCardRatio(), EmenuException.StorageItemUnitRatioNotNull);
         Assert.isNotNull(storageItem.getMaxStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);

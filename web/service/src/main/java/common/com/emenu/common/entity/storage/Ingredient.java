@@ -340,4 +340,6 @@ public class Ingredient extends AbstractEntity{
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
     }
+
+
 }

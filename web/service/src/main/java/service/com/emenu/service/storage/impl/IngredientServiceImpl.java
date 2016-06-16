@@ -141,9 +141,17 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public List<Ingredient> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException {
         List<Ingredient> ingredientList = Collections.emptyList();
-        int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo()-1;
-        int offset = pageNo * searchDto.getPageSize();
-        searchDto.setOffset(offset);
+        int pageNo = 0;
+        int offset = 0;
+        if (Assert.isNotNull(searchDto)){
+            if (Assert.isNotNull(searchDto.getPageNo())) {
+                pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
+            }
+            if (Assert.isNotNull(searchDto.getPageSize())) {
+                offset = pageNo * searchDto.getPageSize();
+                searchDto.setOffset(offset);
+            }
+        }
         try {
             ingredientList = ingredientMapper.listBySearchDto(searchDto);
             //设置单位名称

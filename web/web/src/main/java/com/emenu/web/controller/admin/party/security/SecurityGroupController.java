@@ -86,7 +86,7 @@ public class SecurityGroupController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupNew)
-    @RequestMapping(value = "ajax", method = RequestMethod.POST)
+    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject ajaxNewSecurityGroup(SecurityGroup securityGroup){
         try{
@@ -104,7 +104,7 @@ public class SecurityGroupController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupUpdate)
-    @RequestMapping(value = "ajax",method = RequestMethod.PUT)
+    @RequestMapping(value = "ajax/update",method = RequestMethod.PUT)
     @ResponseBody
     public JSONObject ajaxUpdateSecurityGroup(SecurityGroup securityGroup){
         try{
@@ -122,7 +122,7 @@ public class SecurityGroupController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityGroupDel)
-    @RequestMapping(value = "ajax/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/del/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject ajaxDelSecurityGroup(@PathVariable("id") Integer id){
         try{

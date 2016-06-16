@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.storage.StorageReportIngredientMapper">
+
+    <select id="listByReportId">
+        SELECT `id` ,
+        `ingredient_id` ,
+        `quantity` ,
+        `report_id`,
+        `comment`,
+        `created_time`,
+        `last_modified_time`
+        FROM `t_storage_report_ingredient`
+        WHERE report_id = #{reportId};
+    </select>
+
+    <delete id="delByReportId">
+        DELETE FROM `t_storage_report_ingredient`
+        WHERE  report_id = #{reportId};
+    </delete>
+
+</mapper>

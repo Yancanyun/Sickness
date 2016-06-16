@@ -1,6 +1,8 @@
 package com.emenu.mapper.storage;
 
+import com.emenu.common.dto.storage.ReportSerachDto;
 import com.emenu.common.entity.storage.StorageReport;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -15,11 +17,41 @@ import java.util.List;
 public interface StorageReportMapper {
 
     /**
+     * 新
      * 获取所有单据信息
      * @return
      * @throws Exception
      */
     public List<StorageReport> listAll() throws Exception;
+
+    /**
+     * 新
+     * 根据查询条件获取单据信息
+     * @param reportSerachDto
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listByReportSerachDto(ReportSerachDto reportSerachDto) throws Exception;
+
+    /**
+     * 新
+     * 根据reportId 修改 审核状态
+     * @param reportId
+     * @param isAudited
+     * @return
+     * @throws Exception
+     */
+    public void updateIsAudited(@Param("reportId") int reportId, @Param("isAudited") int isAudited) throws Exception;
+
+    /**
+     * 新
+     * 根据reportId 修改 结算状态
+     * @param reportId
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public boolean updateIsSettlemented(@Param("reportId") int reportId, @Param("isSettlemented") int isSettlemented) throws Exception;
 
     /**
      * 分页获取单据信息
@@ -65,25 +97,22 @@ public interface StorageReportMapper {
                                                       @Param("endTime")Date endTime) throws Exception;
 
 
- /*   *//**
-     *
-     * @param report
-     * @param offset
-     * @param pageSize
-     * @return
-     * @throws Exception
-     *//*
-    public List<StorageReport> listStorageReportByCondition1(@Param("report")StorageReport report,
-                                                             @Param("offset")int offset,
-                                                             @Param("pageSize")int pageSize) throws Exception;
-*/
+
     /**
      * 获取指定时间之前未结算的订单
      * @param endTime
      * @return
      * @throws Exception
      */
-    public List<StorageReport> ListStorageReportUnsettled(@Param("endTime")Date endTime) throws Exception;
+    public List<StorageReport> listStorageReportUnsettled(@Param("endTime")Date endTime) throws Exception;
+
+    /**
+     * 获取指定时间之前未结算已经审核通过的单据
+     * @param endTime
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listUnsettleAndAuditedStorageReportByEndTime(@Param("endTime")Date endTime)throws Exception;
 
     /**
      * 根据单据id修改单据状态
@@ -92,7 +121,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public boolean updateStatusById(@Param("id")int id, @Param("status")int status) throws Exception;
+    public boolean updateIsSettlementedById(@Param("id")int id, @Param("status")int status) throws Exception;
 
     /**
      * 根据存放点IdList获取单据信息
@@ -105,6 +134,7 @@ public interface StorageReportMapper {
                                                  @Param("depotIdList")List<Integer> depotIdList) throws Exception;
 
     /**
+     * 新
      * 根据单据id删除单据
      * @param id
      * @return
@@ -123,7 +153,7 @@ public interface StorageReportMapper {
     /**
      * 根据条件查询记录数
      * @param report
-     * @param depots
+     * @param depotIdList
      * @param endTime
      * @param startTime
      * @return

@@ -46,6 +46,8 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemUnitRatioNotNull("物品的单位换算关系不能为空", 1028),
     StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
     StorageItemIdNotNull("物品的ID不能为空", 1030),
+    StorageItemIngredientIdNotNull("库存物品原配料ID不能为空",1031),
+    StorageItemNotExist("库存物品不存在",1032),
 
     // 库存结算
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
@@ -69,7 +71,7 @@ public enum EmenuException implements IBizExceptionMes {
     IngredientMinStorageQuantityIsNotNull("最大库存量不能为空",3110),
     IngredientUpdateFailed("更新原配料失败",31101),
     IngredientInserFailed("新增原配料失败",31102),
-
+    IngredientNotExist("原配料不存在",31103),
 
     // 菜品管理模块
     // 分类管理
@@ -353,6 +355,12 @@ public enum EmenuException implements IBizExceptionMes {
     QueryReportDtoFail("查询单据和单据详情失败",7028),
     StorageReportItemListIsNotNull("单据详情list不能为空",7029),
     ExportReportFail("导出库存单据失败",7030),
+    IsAuditedIllegal("审核状态不合法",7031),
+    ReportIsNotExist("单据不存在",7032),
+    ReportStatusIsNull("单据状态不能为空",7033),
+    ReportIngredientIsNot("单据原配料不能为空",7034),
+    InsertReportIngredientFail("添加单据原配料失败",7035),
+    ReportIdOrStatusIdError("单据id或者状态错误",7036),
 
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7024),

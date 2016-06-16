@@ -28,6 +28,10 @@ public class StorageSettlementItem extends AbstractEntity{
     @Column(name = "item_id")
     private Integer itemId;
 
+    //存放点id
+    @Column(name = "depot_id")
+    private Integer depotId;
+
     //入库数量
     @Column(name = "stock_in_quantity")
     private BigDecimal stockInQuantity;
@@ -225,5 +229,13 @@ public class StorageSettlementItem extends AbstractEntity{
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public Integer getDepotId() {
+        return depotId;
+    }
+
+    public void setDepotId(Integer depotId) {
+        this.depotId = depotId;
     }
 }

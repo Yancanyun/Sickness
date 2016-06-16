@@ -1,5 +1,7 @@
 package com.emenu.common.enums.other;
 
+import com.emenu.common.entity.storage.StorageItem;
+
 /**
  * 流水号枚举
  * 对系统中所有的流水号格式进行管理
@@ -17,8 +19,8 @@ public enum SerialNumTemplateEnums {
     LossOnSerialNum("盘亏单流水号", "PKD-|yyyyMMdd|####"),
     SettlementSerialNum("结算表流水号", "JSD-|yyyyMMdd|####"),
     IngredientNum("原配料编号","IDG-|yyyyMMdd|####"),
-    StorageItemNum("原配料编号","SI-|yyyyMMdd|####"),
-    CostCardSerialNum("成本卡流水号", "CBK-|yyyyMMdd|####")
+    CostCardSerialNum("成本卡流水号", "CBK-|yyyyMMdd|####"),
+    StorageItemNum("库存物品编号","KCI-|yyyyMMdd|####"),
     ;
 
     private String name;

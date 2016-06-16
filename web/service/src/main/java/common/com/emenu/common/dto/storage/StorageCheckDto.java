@@ -28,6 +28,9 @@ public class StorageCheckDto {
     // 最近入库单价
     private BigDecimal lastStockInPrice;
 
+    // 存放点名称
+    private String depotName;
+
     //期初数量
      private BigDecimal beginQuantity;
 
@@ -217,5 +220,13 @@ public class StorageCheckDto {
 
     public void setMinStorageQuantity(BigDecimal minStorageQuantity) {
         this.minStorageQuantity = minStorageQuantity;
+    }
+
+    public String getDepotName() {
+        return depotName;
+    }
+
+    public void setDepotName(String depotName) {
+        this.depotName = depotName;
     }
 }

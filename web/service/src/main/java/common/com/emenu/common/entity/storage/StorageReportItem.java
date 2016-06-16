@@ -2,10 +2,7 @@ package com.emenu.common.entity.storage;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -27,11 +24,30 @@ public class StorageReportItem extends AbstractEntity{
     @Column(name = "item_id")
     private Integer itemId;
 
-    //入库数量、出库数量、盘盈数量、盘亏数量
+    //原料名称
+    @Transient
+    private String itemName;
+
+    @Transient
+    private String itemNumber;
+
+    //入库数量
     private BigDecimal quantity;
 
+    //订货单位名
+    @Transient
+    private String orderUnitName;
+
+    //成本卡单位数量
+    @Transient
+    private BigDecimal costCardUnitQuantity;
+
+    //成本卡单位名
+    @Transient
+    private String costCardUnitName;
+
     //计数
-    private BigDecimal cost;
+    private BigDecimal count;
 
     //成本价
     private BigDecimal price;
@@ -55,7 +71,6 @@ public class StorageReportItem extends AbstractEntity{
         return id;
     }
 
-    /********************getter and setter ********************/
     @Override
     public void setId(Integer id) {
         this.id = id;
@@ -77,12 +92,12 @@ public class StorageReportItem extends AbstractEntity{
         this.quantity = quantity;
     }
 
-    public BigDecimal getCost() {
-        return cost;
+    public BigDecimal getCount() {
+        return count;
     }
 
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
+    public void setCount(BigDecimal count) {
+        this.count = count;
     }
 
     public BigDecimal getPrice() {
@@ -123,5 +138,45 @@ public class StorageReportItem extends AbstractEntity{
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
+    public String getItemNumber() {
+        return itemNumber;
+    }
+
+    public void setItemNumber(String itemNumber) {
+        this.itemNumber = itemNumber;
+    }
+
+    public BigDecimal getCostCardUnitQuantity() {
+        return costCardUnitQuantity;
+    }
+
+    public void setCostCardUnitQuantity(BigDecimal costCardUnitQuantity) {
+        this.costCardUnitQuantity = costCardUnitQuantity;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
     }
 }

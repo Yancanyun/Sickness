@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 
 /**
@@ -73,7 +74,8 @@ public class AdminController extends AbstractController {
     @ResponseBody
     public JSON ajaxLogin(@RequestParam("loginName") String loginName,
                           @RequestParam("password") String password,
-                          @RequestParam(value = "isRememberMe", required = false) Integer isRemember) {
+                          @RequestParam(value = "isRememberMe", required = false) Integer isRemember,
+                          HttpSession httpSession) {
         UsernamePasswordToken token = new UsernamePasswordToken(loginName, password);
         if (!Assert.isNull(isRemember)
                 && TrueEnums.True.equals(TrueEnums.valueOf(isRemember))) {
@@ -81,6 +83,7 @@ public class AdminController extends AbstractController {
         }
         try {
             loginManageService.validLogin(token, getRequest(), getResponse());
+            httpSession.setAttribute("userName",loginName);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
