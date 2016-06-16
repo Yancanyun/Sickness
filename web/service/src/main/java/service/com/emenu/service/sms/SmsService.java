@@ -2,9 +2,6 @@ package com.emenu.service.sms;
 
 import com.pandawork.core.common.exception.SSException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 /**
  * SmsService
  * 发送短信验证码
@@ -16,9 +13,9 @@ public interface SmsService {
     /**
      * 发送短信验证码
      * @param phone
-     * @param session
+     * @param text
      * @return
      * @throws SSException
      */
-    public void sendSms(String phone, HttpSession session) throws SSException;
+    public void sendSms(String phone, String text) throws SSException;
 }

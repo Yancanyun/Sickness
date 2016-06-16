@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * WechatBondController
@@ -105,14 +105,50 @@ public class WechatBondController extends AbstractController {
     public JSONObject ajaxSendSms(@RequestParam("phone") String phone,
                                   HttpSession session) {
         try {
+            if (Assert.isNull(phone)) {
+                throw SSException.get(EmenuException.PhoneError);
+            }
+
+            // 120秒内只可发送一次
+            Boolean canSend = false;
+            Date nowTime = new Date();
+            if (session.getAttribute("sendTime") == null || session.getAttribute("sendTime") == "") {
+                canSend = true;
+            } else {
+                Date sendTime = (Date)session.getAttribute("sendTime");
+                long diff = (nowTime.getTime() - sendTime.getTime()) / 1000;
+                if (diff > 120) {
+                    canSend = true;
+                }
+            }
+
+            if (!canSend) {
+                throw SSException.get(EmenuException.SendTooFrequently);
+            }
+
+            // 生成四位验证码
+            int[] validCode = new int[4];
+            for (int i = 0; i < 4; i++) {
+                validCode[i] = (int)(Math.random() * 10);
+            }
+            String validCodeStr = "" + validCode[0] + validCode[1] + validCode[2] + validCode[3];
+
+            String text = "【聚客多】您正在进行绑定微信操作，验证码为：" + validCodeStr;
+
+            // 把验证码塞入Session中
+            session.setAttribute("validCode", validCodeStr);
+            // 把电话号码塞入Session中
             session.setAttribute("phone", phone);
-            smsService.sendSms(phone, session);
+            // 把发送时间塞入Session中
+            session.setAttribute("sendTime", nowTime);
+
+            smsService.sendSms(phone, text);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
-        } catch (Exception e) {
+        } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return sendJsonObject(AJAX_FAILURE_CODE);
+            return sendErrMsgAndErrCode(e);
         }
     }
 

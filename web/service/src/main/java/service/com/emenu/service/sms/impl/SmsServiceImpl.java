@@ -16,8 +16,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,20 +39,8 @@ public class SmsServiceImpl implements SmsService {
     private static String apikey = "b519e83e1c1468add1c0531fa195ce95";
 
     @Override
-    public void sendSms(String phone, HttpSession session) throws SSException {
+    public void sendSms(String phone, String text) throws SSException {
         try {
-            // 生成四位验证码
-            int[] validCode = new int[4];
-            for (int i = 0; i < 4; i++) {
-                validCode[i] = (int)(Math.random() * 10);
-            }
-            String validCodeStr = "" + validCode[0] + validCode[1] + validCode[2] + validCode[3];
-
-            String text = "【聚客多】您正在进行绑定微信操作，验证码为：" + validCodeStr;
-
-            // 把验证码塞入Session中
-            session.setAttribute("validCode", validCodeStr);
-
             if(Assert.isNull(phone)) {
                 throw SSException.get(EmenuException.PhoneError);
             }

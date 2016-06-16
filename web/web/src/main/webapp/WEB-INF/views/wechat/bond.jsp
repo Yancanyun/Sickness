@@ -18,11 +18,11 @@
                             alert("发送成功");
                         }
                         if(data.code == 1){
-                            alert("发送失败");
+                            alert(data.errMsg);
                         }
                     },
                     error: function() {
-                        alert("发送失败");
+                        alert(data.errMsg);
                     }
                 });
             });
