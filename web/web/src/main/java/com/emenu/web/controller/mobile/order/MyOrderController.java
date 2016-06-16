@@ -64,7 +64,7 @@ public class MyOrderController  extends AbstractController {
     {
         List<String> remark = new ArrayList<String>();//备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
-        TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的全部订单缓存
+        TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的全部缓存
         List<MyOrderDto> myOrderDto = new ArrayList<MyOrderDto>();//数据传输对象
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);
