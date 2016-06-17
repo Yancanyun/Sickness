@@ -136,6 +136,11 @@ public class MobileDishImageController extends AbstractController {
             }
             List<DishDto> dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
 
+            // 看完之后禁止再次下拉
+            if (dishDtoList.size() == 0) {
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }
+
             // 从缓存中取出该餐台已点但未下单的菜品
             Integer tableId = (Integer)session.getAttribute("tableId");
             TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);
@@ -149,6 +154,7 @@ public class MobileDishImageController extends AbstractController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dishId", dishDto.getId());
                 jsonObject.put("name", dishDto.getName());
+                jsonObject.put("likeNums", dishDto.getLikeNums());
                 if (dishDto.getSmallImg() != null) {
                     jsonObject.put("src", dishDto.getSmallImg().getImgPath());
                 }

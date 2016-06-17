@@ -19,7 +19,8 @@
         // 菜品分类图片版
         Classify: [
             ['getDishList', site.website + 'mobile/dish/image/ajax/list', 'get', '获取菜品'],
-            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品']
+            ['addDish', site.website + 'mobile/dish/ajax/new/quickly', 'get', '添加菜品'],
+            ['sendActiveDishId', site.website + 'mobile/dish/ajax/like', 'get', '点赞']
         ],
         // 搜索
         Search: [

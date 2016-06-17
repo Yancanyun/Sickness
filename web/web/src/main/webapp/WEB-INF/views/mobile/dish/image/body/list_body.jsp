@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<!-- 后端套轮播的默认图片资源地址 -->
+<input type="hidden" class="J_carouselDefaultImg" href="${website}img/mobile/common/default-img.png">
 <div class="container">
   <div id="wrapper" class="scroll">
     <div id="carousel" class="carousel slide">

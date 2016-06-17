@@ -110,6 +110,11 @@ public class MobileDishTextController extends AbstractController {
             dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
             dataCount = dishService.countBySearchDto(dishSearchDto);
 
+            // TODO: 看完之后禁止再次下拉，前台还没做
+            if (dishDtoList.size() == 0) {
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }
+
             // 从缓存中取出该餐台已点但未下单的菜品
             Integer tableId = (Integer)session.getAttribute("tableId");
             TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);

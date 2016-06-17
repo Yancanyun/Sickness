@@ -291,6 +291,8 @@ public enum ModuleEnums {
     MobileDish("Mobile:Dish"),
     // 点菜
     MobileDishNew("Mobile:Dish:New"),
+    // 点赞
+    MobileDishLike("Mobile:Dish:Like"),
     // 菜品选择图片版
     MobileDishImage("Mobile:Dish:Image"),
     MobileDishImageList("Mobile:Dish:Image:List"),

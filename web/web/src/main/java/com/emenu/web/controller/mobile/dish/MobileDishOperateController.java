@@ -127,4 +127,24 @@ public class MobileDishOperateController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
+
+    /**
+     * Ajax 点赞
+     * @param dishId
+     * @return
+     */
+    @Module(ModuleEnums.MobileDishLike)
+    @RequestMapping(value = "ajax/like", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxNewDish(@RequestParam("dishId") Integer dishId) {
+        try {
+            dishService.likeThisDish(dishId);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
 }

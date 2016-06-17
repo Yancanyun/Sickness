@@ -5,7 +5,7 @@
   <li class="dish clearfix"  data-dish-id="&{it.dishId}">
     <a href="${website}mobile/dish/detail/&{it.dishId}" class="dish-img"><img class="lazy-load" src="${staticWebsite}img/mobile/common/default-img.png" data-original="${tinyWebsite}&{it.src}" data-lazy-container=".dish-list" alt="&{it.name}"></a>
     <p class="dish-name">&{it.name}</p>
-    <p class="dish-like"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="dish-like-number">146</span></p>
+    <p class="dish-like"><i class="fa fa-thumbs-up"></i>&nbsp;<span class="dish-like-number">&{it.likeNums}</span></p>
     <div class="add-dish J_addDishTrigger" data-dish-number="&{it.number}">
       点餐
       <span class="dish-number J_dishNumber hidden"></span>
