@@ -288,28 +288,110 @@ public class MyOrderController  extends AbstractController {
     }
 
     /**
-     * ajax确认下单
+     * 表单提交进行下单
      *
      * @param
      * @return
      */
-  /*  @Module(ModuleEnums.MobileMyOrderList)
+    @Module(ModuleEnums.MobileMyOrderList)
     @RequestMapping(value = "mobile/confirm/order" ,method = RequestMethod.POST)
-    public String confirmOrder (@RequestParam("confirmDishId")List<Integer> confirmDishId
+    public JSONObject confirmOrder (@RequestParam("confirmDishId")List<Integer> confirmDishId
             ,@RequestParam("confirmDishNumber")List<Integer> confirmDishNumber
             ,@RequestParam("serviceWay")Integer serviceWay
             ,@RequestParam("confirmOrderRemark") String confirmOrderRemark
             ,HttpSession httpSession)
-    {
-        String str = httpSession.getAttribute("tableId").toString();
-        Integer tableId = Integer.parseInt(str);
-        try
-        {
+    {   //下单时间
+        Date orderTime=new Date();
+        //获取桌子号
+        String tableIdStr = httpSession.getAttribute("tableId").toString();
+        Integer tableId = Integer.parseInt(tableIdStr);
 
-        }
-        catch (SSException e) {
+        Checkout checkout = null;
+        try {
+            checkout = checkoutServcie.queryByTableId(tableId,0);
+        } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
         }
-    }*/
+        //新增结账单到数据表
+        if(checkout==null)
+        {
+            checkout=new Checkout();
+            checkout.setTableId(tableId);
+            //checkout.setCheckerPartyId();
+            //checkout.setCheckoutTime();
+            //checkout.setConsumptionMoney();
+            //checkout.setConsumptionType();
+            checkout.setCreatedTime(new Date());
+            //checkout.setFreeRemarkId();
+            //checkout.setIsFreeOrder();
+            //checkout.setIsInvoiced();
+            //checkout.setLastModifiedTime();
+            //checkout.setPrepayMoney();
+            //checkout.setShouldPayMoney();
+            checkout.setStatus(0);
+            //checkout.setTotalPayMoney();
+            //checkout.setWipeZeroMoney();
+
+            try {
+                checkoutServcie.newCheckout(checkout);
+            } catch (SSException e) {
+                LogClerk.errLog.error(e);
+                sendErrMsg(e.getMessage());
+                return sendErrMsgAndErrCode(e);
+            }
+        }
+
+
+
+        //新增订单到数据表
+        Order order=new Order();
+        order.setCheckoutId(checkout.getId());
+        order.setCreatedTime(new Date());
+        //order.setEmployeePartyId();
+        //order.setLastModifiedTime();
+        //order.setLoginType();
+        order.setOrderRemark(confirmOrderRemark);
+        order.setOrderServeType(serviceWay);
+        order.setStatus(1);
+        order.setTableId(tableId);
+        //order.setVipPartyId();
+
+
+        try {
+            orderService.newOrder(order);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+
+        //新增订单菜品到数据表
+        OrderDish orderDish=new OrderDish();
+
+        for(int i=0;i<confirmDishId.size();i++){
+            //
+            orderDish.setCreatedTime(new Date());
+            orderDish.setDishId(confirmDishId.get(i));
+            //设置菜品数量
+            Integer temp = confirmDishNumber.get(i);
+            String dishQuantityStr=temp+"";
+            Float dishQuantity=Float.parseFloat(dishQuantityStr);
+
+            orderDish.setDishQuantity(dishQuantity);
+            orderDish.setOrderId(order.getId());
+            orderDish.setServeType(serviceWay);
+            orderDish.setOrderTime(orderTime);
+            //orderDish.setRemark();
+            try {
+                orderDishService.newOrderDish(orderDish);
+            } catch (SSException e) {
+                LogClerk.errLog.error(e);
+                sendErrMsg(e.getMessage());
+                return sendErrMsgAndErrCode(e);
+            }
+        }
+        return    sendJsonObject(AJAX_SUCCESS_CODE);
+    }
 }

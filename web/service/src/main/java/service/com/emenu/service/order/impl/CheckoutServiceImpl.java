@@ -52,6 +52,7 @@ public class CheckoutServiceImpl implements CheckoutServcie{
         Checkout checkout1 = null;
         try{
             Assert.isNotNull(checkout, EmenuException.CheckoutIsNotNull);
+
             checkout1= commonDao.insert(checkout);
             Assert.isNotNull(checkout,EmenuException.CheckoutIsNotNull);
             List<Order> orderList = orderService.listByTableIdAndStatus(checkout.getTableId(), OrderStatusEnums.IsBooked.getId());
