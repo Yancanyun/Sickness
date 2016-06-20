@@ -35,7 +35,7 @@ public class WechatController extends AbstractController {
      * @param echostr
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public void weChatGet(@RequestParam(value = "signature") String signature,
+    public void wechatGet(@RequestParam(value = "signature") String signature,
                           @RequestParam(value = "timestamp") String timestamp,
                           @RequestParam(value = "nonce") String nonce,
                           @RequestParam(value = "echostr") String echostr) {
@@ -53,6 +53,19 @@ public class WechatController extends AbstractController {
                     printWriter.close();
                 }
             }
+        }
+    }
+
+    /**
+     * 微信服务器的消息推送
+     */
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public void wechatPost() {
+        try {
+            wechatService.process(getRequest().getInputStream(),getResponse().getOutputStream());
+            wechatService.close();
+        } catch (IOException e) {
+            LogClerk.errLog.error(e);
         }
     }
 }

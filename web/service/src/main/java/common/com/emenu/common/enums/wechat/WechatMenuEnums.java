@@ -10,7 +10,6 @@ import java.util.Map;
  * @time: 2016/6/20 14:14
  */
 public enum WechatMenuEnums {
-
     MenuNull("null", "M_NULL"),
     QueryPoint("查询积分","QUERY_POINT"),
     ;
