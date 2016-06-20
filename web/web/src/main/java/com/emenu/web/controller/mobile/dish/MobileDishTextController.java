@@ -68,7 +68,7 @@ public class MobileDishTextController extends AbstractController {
             if (tableOrderCache != null) {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
-            Integer dishTotalNumber = 0;
+            Float dishTotalNumber = new Float(0);
             for (OrderDishCache orderDishCache : orderDishCacheList) {
                 dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
             }
@@ -132,7 +132,7 @@ public class MobileDishTextController extends AbstractController {
                 jsonObject.put("sale",dishDto.getSalePrice());
 
                 // 从OrderDishCacheList中找dishId相同的菜品，把数量加起来发给前台
-                Integer number = 0;
+                Float number = new Float(0);
                 for (OrderDishCache orderDishCache : orderDishCacheList) {
                     if (orderDishCache.getDishId() != null && orderDishCache.getDishId().equals(dishDto.getId())) {
                         number = number + orderDishCache.getQuantity();

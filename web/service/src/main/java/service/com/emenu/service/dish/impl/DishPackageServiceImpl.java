@@ -292,4 +292,20 @@ public class DishPackageServiceImpl implements DishPackageService{
         }
         return list;
     }
+
+    @Override
+    public int judgeIsOrNotPackage(int dishId)throws  SSException
+    {
+        int packageId;
+        try {
+            if(dishPackageMapper.judgeIsOrNotPackage(dishId)!=null)
+                packageId=dishPackageMapper.judgeIsOrNotPackage(dishId);
+            else
+                packageId=0;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishQueryFailed, e);
+        }
+        return packageId;
+    }
 }

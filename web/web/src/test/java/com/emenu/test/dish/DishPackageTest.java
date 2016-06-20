@@ -77,4 +77,9 @@ public class DishPackageTest extends AbstractTestCase {
             System.out.println(dishDto.getName());
         }
     }
+
+    @Test
+    public void testJudegeIsOrNotPackage() throws SSException {
+       System.out.println(dishPackageService.judgeIsOrNotPackage(1));
+    }
 }

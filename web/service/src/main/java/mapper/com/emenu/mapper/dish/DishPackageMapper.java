@@ -47,4 +47,12 @@ public interface DishPackageMapper {
      * @throws Exception
      */
     public List<Dish> listAll() throws Exception;
+
+    /**
+     * 根据菜品Id来判断这个菜品是否是套餐
+     *
+     * @return
+     * @throws Exception
+     */
+    public Integer judgeIsOrNotPackage(@Param("dishId") Integer dishId) throws Exception;
 }

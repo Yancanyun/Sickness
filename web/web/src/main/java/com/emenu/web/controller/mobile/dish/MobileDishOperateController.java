@@ -80,7 +80,7 @@ public class MobileDishOperateController extends AbstractController {
             OrderDishCache orderDishCache = new OrderDishCache();
             orderDishCache.setDishId(id);
             orderDishCache.setServeType(type);
-            orderDishCache.setQuantity(number);
+            orderDishCache.setQuantity(new Float(number));
             orderDishCache.setTasteId(taste);
             orderDishCache.setRemark(remarks);
             orderDishCacheService.newDish(tableId, orderDishCache);

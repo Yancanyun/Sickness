@@ -83,4 +83,13 @@ public interface DishPackageService {
      * @throws SSException
      */
     public List<Dish> listAll() throws SSException;
+
+
+    /**
+     * 根据菜品Id来判断这个菜品是否属于套餐
+     *
+     * @return
+     * @throws SSException
+     */
+    public int judgeIsOrNotPackage(int dishId) throws SSException;
 }

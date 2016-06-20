@@ -64,7 +64,6 @@
                   <span class="ordering-dish-sale">￥${dto.salePrice}</span>
                 </c:otherwise>
               </c:choose>
-
             </p>
             <p class="ordering-number">
               <button class="J_redudeButton"><i class="fa fa-minus"></i></button>

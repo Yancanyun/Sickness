@@ -63,7 +63,7 @@ public class MobileDishDetailController extends AbstractController{
             if (tableOrderCache != null) {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
-            Integer dishTotalNumber = 0;
+            Float dishTotalNumber = new Float(0);
             for (OrderDishCache orderDishCache : orderDishCacheList) {
                 dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
             }

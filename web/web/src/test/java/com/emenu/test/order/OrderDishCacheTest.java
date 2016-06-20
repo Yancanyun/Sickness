@@ -22,7 +22,7 @@ public class OrderDishCacheTest extends AbstractTestCase {
         OrderDishCache orderDishCache = new OrderDishCache();
         orderDishCache.setId(0);
         orderDishCache.setDishId(41);
-        orderDishCache.setQuantity(5);
+        orderDishCache.setQuantity(new Float(5));
         orderDishCache.setRemark("没有备注");
         orderDishCacheService.newDish(1, orderDishCache);
     }

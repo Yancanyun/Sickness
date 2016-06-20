@@ -222,7 +222,7 @@ public class MyOrderController  extends AbstractController {
                     break;
                 }
             }
-            Integer quantity = temp.getQuantity();//菜品数量
+            Float quantity = temp.getQuantity();//菜品数量
             if(changeStatus==1)//改变状态为1的话为增加,为0的话为减少
             {
                 temp.setQuantity(quantity+1);//修改菜品数量
@@ -303,15 +303,15 @@ public class MyOrderController  extends AbstractController {
     }
 
     /**
-     * 表单提交进行下单
+     * ajax确认下单
      *
      * @param
      * @return
      */
     @Module(ModuleEnums.MobileMyOrderList)
-    @RequestMapping(value = "mobile/confirm/order" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/ajax/confirm/order" ,method = RequestMethod.POST)
     public JSONObject confirmOrder (@RequestParam("confirmDishId")List<Integer> confirmDishId
-            ,@RequestParam("confirmDishNumber")List<Integer> confirmDishNumber
+            ,@RequestParam("confirmDishNumber")List<Float> confirmDishNumber
             ,@RequestParam("serviceWay")Integer serviceWay
             ,@RequestParam("confirmOrderRemark") String confirmOrderRemark
             ,HttpSession httpSession)
@@ -320,93 +320,91 @@ public class MyOrderController  extends AbstractController {
         //获取桌子号
         String tableIdStr = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(tableIdStr);
-
-        Checkout checkout = null;
         try {
-            checkout = checkoutServcie.queryByTableId(tableId,0);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return sendErrMsgAndErrCode(e);
-        }
-        //新增结账单到数据表
-        if(checkout==null)
-        {
-            checkout=new Checkout();
-            checkout.setTableId(tableId);
-            //checkout.setCheckerPartyId();
-            //checkout.setCheckoutTime();
-            //checkout.setConsumptionMoney();
-            //checkout.setConsumptionType();
-            checkout.setCreatedTime(new Date());
-            //checkout.setFreeRemarkId();
-            //checkout.setIsFreeOrder();
-            //checkout.setIsInvoiced();
-            //checkout.setLastModifiedTime();
-            //checkout.setPrepayMoney();
-            //checkout.setShouldPayMoney();
-            checkout.setStatus(0);
-            //checkout.setTotalPayMoney();
-            //checkout.setWipeZeroMoney();
-
-            try {
-                checkoutServcie.newCheckout(checkout);
-            } catch (SSException e) {
-                LogClerk.errLog.error(e);
-                sendErrMsg(e.getMessage());
-                return sendErrMsgAndErrCode(e);
+            Checkout checkout = new Checkout();
+            checkout = checkoutServcie.queryByTableId(tableId, 0);
+            //新增结账单到数据表
+            if (checkout == null) {
+                checkout = new Checkout();
+                checkout.setTableId(tableId);
+                //checkout.setCheckerPartyId();
+                //checkout.setCheckoutTime();
+                //checkout.setConsumptionMoney();
+                //checkout.setConsumptionType();
+                checkout.setCreatedTime(new Date());
+                //checkout.setFreeRemarkId();
+                //checkout.setIsFreeOrder();
+                //checkout.setIsInvoiced();
+                //checkout.setLastModifiedTime();
+                //checkout.setPrepayMoney();
+                //checkout.setShouldPayMoney();
+                checkout.setStatus(0);
+                //checkout.setTotalPayMoney();
+                //checkout.setWipeZeroMoney();
+                checkoutServcie.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
             }
-        }
 
-
-
-        //新增订单到数据表
-        Order order=new Order();
-        order.setCheckoutId(checkout.getId());
-        order.setCreatedTime(new Date());
-        //order.setEmployeePartyId();
-        //order.setLastModifiedTime();
-        //order.setLoginType();
-        order.setOrderRemark(confirmOrderRemark);
-        order.setOrderServeType(serviceWay);
-        order.setStatus(1);
-        order.setTableId(tableId);
-        //order.setVipPartyId();
-
-
-        try {
+            //新增订单到数据表
+            Order order = new Order();
+            order.setCheckoutId(checkout.getId());
+            order.setCreatedTime(new Date());
+            //order.setEmployeePartyId();
+            //order.setLastModifiedTime();
+            //order.setLoginType();
+            order.setOrderRemark(confirmOrderRemark);
+            order.setOrderServeType(serviceWay);
+            order.setStatus(1);
+            order.setTableId(tableId);
+            //order.setVipPartyId();
             orderService.newOrder(order);
-        } catch (SSException e) {
+
+            //新增订单菜品到数据表
+            TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
+            List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
+            tableOrderCache=orderDishCacheService.listByTableId(tableId);
+            if(tableOrderCache!=null)//若对应桌的订单缓存不为空
+            {
+                orderDishCache=tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部订单缓存
+            }
+            for(OrderDishCache dto :orderDishCache)
+            {
+                DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
+                OrderDish orderDish=new OrderDish();
+                orderDish.setCreatedTime(new Date());
+                orderDish.setDishId(dto.getDishId());
+                //设置菜品数量
+                Float temp = dto.getQuantity();
+                //判断是否为套餐,0不是套餐,1是套餐
+                if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐
+                {
+                    orderDish.setIsPackage(1);
+                    orderDish.setPackageId(dishPackageService.judgeIsOrNotPackage(dto.getDishId()));
+                    orderDish.setPackageQuantity(temp.intValue());
+                }
+                else
+                {
+                    orderDish.setDishQuantity(temp);
+                    orderDish.setIsPackage(0);
+                }
+
+                orderDish.setOrderId(order.getId());
+                orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
+                orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
+                orderDish.setSalePrice(dishDto.getSalePrice());
+                orderDish.setServeType(dto.getServeType());
+                orderDish.setOrderTime(orderTime);
+                //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
+                orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
+                orderDishService.newOrderDish(orderDish);
+            }
+            //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
+            orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
+            orderDishCacheService.cleanCacheByTableId(tableId);//最后清除掉菜品缓存
+        }catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return sendErrMsgAndErrCode(e);
         }
-
-        //新增订单菜品到数据表
-        OrderDish orderDish=new OrderDish();
-
-        for(int i=0;i<confirmDishId.size();i++){
-            //
-            orderDish.setCreatedTime(new Date());
-            orderDish.setDishId(confirmDishId.get(i));
-            //设置菜品数量
-            Integer temp = confirmDishNumber.get(i);
-            String dishQuantityStr=temp+"";
-            Float dishQuantity=Float.parseFloat(dishQuantityStr);
-
-            orderDish.setDishQuantity(dishQuantity);
-            orderDish.setOrderId(order.getId());
-            orderDish.setServeType(serviceWay);
-            orderDish.setOrderTime(orderTime);
-            //orderDish.setRemark();
-            try {
-                orderDishService.newOrderDish(orderDish);
-            } catch (SSException e) {
-                LogClerk.errLog.error(e);
-                sendErrMsg(e.getMessage());
-                return sendErrMsgAndErrCode(e);
-            }
-        }
-        return    sendJsonObject(AJAX_SUCCESS_CODE);
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }

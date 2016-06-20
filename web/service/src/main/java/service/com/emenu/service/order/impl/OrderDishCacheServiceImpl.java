@@ -51,7 +51,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             Boolean isQuickly = false;
             if (orderDishCache.getQuantity() == null) {
                 isQuickly = true;
-                orderDishCache.setQuantity(1); // 把快捷点餐的菜品数量设为1
+                orderDishCache.setQuantity(new Float(1)); // 把快捷点餐的菜品数量设为1
             }
 
             // 如果本餐台的点菜缓存是空的，则不需要接下来的判断，直接把数据放缓存里

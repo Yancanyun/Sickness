@@ -15,7 +15,7 @@ public class OrderDishCache {
     private Integer dishId;
 
     // 菜品数量
-    private Integer quantity;
+    private Float quantity;
 
     // 菜品口味ID
     private Integer tasteId;
@@ -42,11 +42,11 @@ public class OrderDishCache {
         this.dishId = dishId;
     }
 
-    public Integer getQuantity() {
+    public Float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Float quantity) {
         this.quantity = quantity;
     }
 

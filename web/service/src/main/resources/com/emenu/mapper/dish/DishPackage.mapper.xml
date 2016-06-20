@@ -50,4 +50,10 @@
         AND dish.`category_id` = 6
         ORDER BY dish.`id` DESC
     </select>
+
+    <select id="judgeIsOrNotPackage" resultType="int">
+        SELECT package_id
+        FROM t_dish_package
+        WHERE dish_id=#{dishId}
+    </select>
 </mapper>

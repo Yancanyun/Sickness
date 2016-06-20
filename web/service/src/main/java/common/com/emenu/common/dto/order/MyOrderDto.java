@@ -49,7 +49,7 @@ public class MyOrderDto {
     private String remark;
 
     //菜品数量
-    private Integer count;
+    private Float count;
 
     // 菜品口味
     private List<Taste> tasteList;
@@ -86,11 +86,11 @@ public class MyOrderDto {
         this.orderDishCacheId = orderDishCacheId;
     }
 
-    public Integer getCount() {
+    public Float getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Float count) {
         this.count = count;
     }
 
