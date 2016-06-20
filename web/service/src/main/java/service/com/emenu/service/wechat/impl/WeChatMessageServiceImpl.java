@@ -3,6 +3,7 @@ package com.emenu.service.wechat.impl;
 import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.enums.wechat.WeChatMenuEnums;
+import com.emenu.common.utils.WeChatUtils;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
 import com.emenu.service.wechat.WeChatMessageService;
@@ -28,6 +29,8 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
     @Autowired
     private VipAccountInfoService vipAccountInfoService;
 
+    private String bondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
+
     @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
         WeChatMenuEnums wechatMenuEnums = WeChatMenuEnums.valueOfByKey(msg4Event.getEventKey());
@@ -48,7 +51,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您尚未绑定会员，请先进行绑定";
+            msg = "您尚未绑定会员，请先进行 <a href =\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取积分
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
@@ -70,7 +73,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您尚未绑定会员，请先进行绑定";
+            msg = "您尚未绑定会员，请先进行 <a href =\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取余额
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
