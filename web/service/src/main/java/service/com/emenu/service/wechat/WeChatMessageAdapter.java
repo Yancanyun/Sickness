@@ -36,10 +36,19 @@ public class WeChatMessageAdapter implements HandleMessageAdapter {
     @Override
     public Msg onEventMsg(Msg4Event msg) {
         Msg respMsg = null;
-        // 菜单点击事件
+        // 点击菜单事件
         if (Msg4Event.CLICK.equals(msg.getEvent())) {
             try {
                 respMsg = wechatMessageService.doMenuClickEventMessage(msg);
+            } catch (SSException e) {
+                LogClerk.errLog.error(e);
+            }
+        }
+
+        // 关注事件
+        else if (Msg4Event.SUBSCRIBE.equals(msg.getEvent())) {
+            try {
+                respMsg = wechatMessageService.doSubscribeEventMessage(msg);
             } catch (SSException e) {
                 LogClerk.errLog.error(e);
             }

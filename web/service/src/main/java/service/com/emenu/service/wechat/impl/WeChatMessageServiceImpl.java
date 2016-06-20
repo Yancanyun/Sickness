@@ -33,6 +33,20 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
     private String unbondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/unbond", true);
 
     @Override
+    public Msg doSubscribeEventMessage(Msg4Event msg4Event) throws SSException {
+        if (Msg4Event.SUBSCRIBE.equals(msg4Event.getEvent())) { // 添加关注
+            Msg4Text msg4Text = new Msg4Text();
+            msg4Text.setFromUserName(msg4Event.getToUserName());
+            msg4Text.setToUserName(msg4Event.getFromUserName());
+            msg4Text.setContent("欢迎关注聚客多电子点餐系统!");
+            msg4Text.setFuncFlag("0");
+
+            return msg4Text;
+        }
+        return null;
+    }
+
+    @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
         WeChatMenuEnums wechatMenuEnums = WeChatMenuEnums.valueOfByKey(msg4Event.getEventKey());
         Msg msg = null;
