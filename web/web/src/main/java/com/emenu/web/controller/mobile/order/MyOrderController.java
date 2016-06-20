@@ -12,6 +12,7 @@ import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Checkout;
@@ -75,6 +76,7 @@ public class MyOrderController  extends AbstractController {
         Table table = new Table();
         List<Order> orders = new ArrayList<Order>();//订单
         List<OrderDishDto> orderDishDtos= new ArrayList<OrderDishDto>();//所有的订单菜品
+        BigDecimal orderTotalMoney = new BigDecimal(0);//已下单未结账订单菜品的总金额
         try
         {
             table=tableService.queryById(tableId);//查询出餐台信息
@@ -82,6 +84,7 @@ public class MyOrderController  extends AbstractController {
             model.addAttribute("seatPrice",table.getSeatFee());//餐位费用
             model.addAttribute("tablePrice",table.getTableFee());//餐台费用
             model.addAttribute("tableName",table.getName());//餐桌的名称
+
             orders = orderService.listByTableIdAndStatus(tableId,1);//查询出对应餐桌所有已下单的订单,已结账的订单不显示
             if(orders!=null)//存在对应餐桌已下单的订单
             {
@@ -93,12 +96,23 @@ public class MyOrderController  extends AbstractController {
             }
             for(OrderDishDto tempOrderDishDto :orderDishDtos)
             {
+                if(tempOrderDishDto.getIsPackage()==0)//非套餐
+                orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getDishQuantity()));
+                else//套餐
+                orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getPackageQuantity()));
+
                 //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
                 tempOrderDishDto.setPrice();
+
                 //设置一下图片路径,宝荣写的里面没有图片路径
-                tempOrderDishDto.setImgPath(dishService.queryById(tempOrderDishDto.getDishId()).getSmallImg().getImgPath());
+                DishImg dishImg =  new DishImg();
+                dishImg=dishService.queryById(tempOrderDishDto.getDishId()).getSmallImg();
+                if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
+                tempOrderDishDto.setImgPath(dishImg.getImgPath());
             }
+            model.addAttribute("orderTotalMoney",orderTotalMoney);//已下单订单菜品总金额
             model.addAttribute("orderDishDto",orderDishDtos);//已下单的订单菜品
+
             tableOrderCache=orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)//若对应桌的订单缓存不为空
             {
@@ -138,6 +152,7 @@ public class MyOrderController  extends AbstractController {
                     myOrderDto.add(temp);                                   //price要转换成double类型
                 }
             }
+
             model.addAttribute("uniqueRemark",uniqueRemark);//菜品关联的菜品备注
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号

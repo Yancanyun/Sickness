@@ -86,15 +86,15 @@
       <c:if test="${not empty orderDishDto}">
          <c:forEach var="dto" items="${orderDishDto}">
             <li class="ordered-dish">
-                  <img class="ordered-dish-img" src="${orderDishDto.imgPath}" alt="暂无菜品展示图片">
+                  <img class="ordered-dish-img" src="${dto.imgPath}" alt="暂无菜品展示图片">
                   <div class="ordered-dish-info">
                   <p class="info-text">
                     <span class="ordered-dish-name">${dto.dishName}</span>
-                    <span class="ordered-dish-price">${dto.price}</span>
+                    <span class="ordered-dish-price">￥${dto.price}</span>
                     <span class="ordered-dish-sale">￥${dto.salePrice}</span>
                   </p>
                     <c:choose>
-                      <c:when test="${dto.isPackage eq 0} ">
+                      <c:when test="${dto.isPackage eq 0}">
                         <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span></p>
                        </c:when>
                       <c:otherwise>
@@ -119,7 +119,7 @@
         <label>餐位费用 ：</label><span class="J_seatPrice">${seatPrice}</span>/人
         <label>餐台费用 ：</label><span class="J_tablePrice">${tablePrice}</span>元
       </li>
-      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${totalMoney}</span></li>
+      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${orderTotalMoney}</span></li>
     </ul>
   </div>
 </div>
