@@ -31,6 +31,8 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
 
     private String bondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
     private String unbondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/unbond", true);
+    private String updateVipInfoUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/vipinfo", true);
+    private String updatePhoneUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/phone", true);
 
     @Override
     public Msg doSubscribeEventMessage(Msg4Event msg4Event) throws SSException {
@@ -53,6 +55,10 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         switch (wechatMenuEnums) {
             // 绑定/解绑
             case Bond: msg = bond(msg4Event); break;
+            // 修改会员信息
+            case UpdateVipInfo: msg = updateVipInfo(msg4Event); break;
+            // 修改绑定手机
+            case UpdatePhone: msg = updatePhone(msg4Event); break;
             // 查询积分
             case QueryPoint: msg = queryPoint(msg4Event); break;
             // 查询余额
@@ -62,6 +68,12 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         return msg;
     }
 
+    /**
+     * 绑定/解绑
+     * @param msg4Event
+     * @return
+     * @throws SSException
+     */
     private Msg bond(Msg4Event msg4Event) throws SSException {
         String msg = "";
 
@@ -82,6 +94,64 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         return msg4Text;
     }
 
+    /**
+     * 修改会员信息
+     * @param msg4Event
+     * @return
+     * @throws SSException
+     */
+    private Msg updateVipInfo(Msg4Event msg4Event) throws SSException {
+        String msg = "";
+
+        // 检查是否已经绑定
+        String openId = msg4Event.getFromUserName();
+        if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
+            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
+        } else {
+            msg = "<a href =\"" + updateVipInfoUrl + "\">修改会员信息</a>";
+        }
+
+        Msg4Text msg4Text = new Msg4Text();
+        msg4Text.setFromUserName(msg4Event.getToUserName());
+        msg4Text.setToUserName(msg4Event.getFromUserName());
+        msg4Text.setContent(msg);
+        msg4Text.setFuncFlag("0");
+
+        return msg4Text;
+    }
+
+    /**
+     * 修改绑定手机
+     * @param msg4Event
+     * @return
+     * @throws SSException
+     */
+    private Msg updatePhone(Msg4Event msg4Event) throws SSException {
+        String msg = "";
+
+        // 检查是否已经绑定
+        String openId = msg4Event.getFromUserName();
+        if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
+            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
+        } else {
+            msg = "<a href =\"" + updatePhoneUrl + "\">修改绑定手机</a>";
+        }
+
+        Msg4Text msg4Text = new Msg4Text();
+        msg4Text.setFromUserName(msg4Event.getToUserName());
+        msg4Text.setToUserName(msg4Event.getFromUserName());
+        msg4Text.setContent(msg);
+        msg4Text.setFuncFlag("0");
+
+        return msg4Text;
+    }
+
+    /**
+     * 查询积分
+     * @param msg4Event
+     * @return
+     * @throws SSException
+     */
     private Msg queryPoint(Msg4Event msg4Event) throws SSException {
         String msg = "";
 
@@ -104,6 +174,12 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         return msg4Text;
     }
 
+    /**
+     * 查询余额
+     * @param msg4Event
+     * @return
+     * @throws SSException
+     */
     private Msg queryBalance(Msg4Event msg4Event) throws SSException {
         String msg = "";
 

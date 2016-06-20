@@ -421,7 +421,7 @@ public enum EmenuException implements IBizExceptionMes {
     PhoneIsBonded("该手机号码已被绑定", 8036),
     PhoneError("手机号码不合法", 8037),
     ValidCodeWrong("验证码不正确", 8038),
-    SendTooFrequently("两次获取验证码之间不可少于120秒，请稍后再试", 8039),
+    SendTooFrequently("两次获取验证码之间不可少于60秒，请稍后再试", 8039),
     //QueryVipDishPriceFail("获取会员价失败",8021),
     //VipDishPriceNameNotNull("会员价名称不能为空",8022),
     //

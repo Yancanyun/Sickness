@@ -35,6 +35,16 @@ public class MenuTest {
                 "            },\n" +
                 "            {\n" +
                 "               \"type\":\"click\",\n" +
+                "               \"name\":\"修改会员信息\",\n" +
+                "               \"key\":\"UPDATE_VIP_INFO\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"click\",\n" +
+                "               \"name\":\"修改绑定手机\",\n" +
+                "               \"key\":\"UPDATE_PHONE\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"click\",\n" +
                 "               \"name\":\"查询余额\",\n" +
                 "               \"key\":\"QUERY_BALANCE\"\n" +
                 "            },\n" +

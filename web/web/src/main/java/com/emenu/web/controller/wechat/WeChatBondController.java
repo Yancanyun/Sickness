@@ -39,7 +39,7 @@ public class WeChatBondController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "bond", method = RequestMethod.GET)
-    public String ToBondWechat(@RequestParam("code") String code,
+    public String ToBondWeChat(@RequestParam("code") String code,
                                Model model) {
         try {
             // 获取OpenId
@@ -63,14 +63,13 @@ public class WeChatBondController extends AbstractController {
         return "wechat/bond";
     }
 
-
     /**
      * 绑定微信
      * @param openId
      * @param validCode
      */
     @RequestMapping(value = "bond", method = RequestMethod.POST)
-    public String bondWechat(@RequestParam("openId") String openId,
+    public String bondWeChat(@RequestParam("openId") String openId,
                              @RequestParam("validCode") String validCode,
                              HttpSession session,
                              Model model) {
@@ -109,7 +108,7 @@ public class WeChatBondController extends AbstractController {
                 throw SSException.get(EmenuException.PhoneError);
             }
 
-            // 120秒内只可发送一次
+            // 60秒内只可发送一次
             Boolean canSend = false;
             Date nowTime = new Date();
             if (session.getAttribute("sendTime") == null || session.getAttribute("sendTime") == "") {
@@ -117,7 +116,7 @@ public class WeChatBondController extends AbstractController {
             } else {
                 Date sendTime = (Date)session.getAttribute("sendTime");
                 long diff = (nowTime.getTime() - sendTime.getTime()) / 1000;
-                if (diff > 120) {
+                if (diff > 60) {
                     canSend = true;
                 }
             }
@@ -159,7 +158,7 @@ public class WeChatBondController extends AbstractController {
      * @return
      */
     @RequestMapping(value = "unbond", method = RequestMethod.GET)
-    public String ToUnbondWechat(@RequestParam("code") String code,
+    public String ToUnbondWeChat(@RequestParam("code") String code,
                                  Model model) {
         try {
             // 获取OpenId
@@ -192,7 +191,7 @@ public class WeChatBondController extends AbstractController {
      * @param openId
      */
     @RequestMapping(value = "unbond", method = RequestMethod.POST)
-    public String unbondWechat(@RequestParam("openId") String openId,
+    public String unbondWeChat(@RequestParam("openId") String openId,
                                Model model) {
         try {
             vipInfoService.unbondWeChat(openId);
