@@ -3,6 +3,7 @@ package com.emenu.service.wechat.impl;
 import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.enums.wechat.WeChatMenuEnums;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
 import com.emenu.service.wechat.WeChatMessageService;
 import com.pandawork.core.common.exception.SSException;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Service;
 @Service("weChatMessageService")
 public class WeChatMessageServiceImpl implements WeChatMessageService {
     @Autowired
+    private VipInfoService vipInfoService;
+
+    @Autowired
     private VipAccountInfoService vipAccountInfoService;
 
     @Override
@@ -39,14 +43,15 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
     }
 
     private Msg queryPoint(Msg4Event msg4Event) throws SSException {
-        // 根据OpenId获取积分
-        String openId = msg4Event.getFromUserName();
-        VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
-
         String msg = "";
-        if (Assert.isNull(vipAccountInfoDto)) {
+
+        // 检查是否已经绑定
+        String openId = msg4Event.getFromUserName();
+        if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
             msg = "您尚未绑定会员，请先进行绑定";
         } else {
+            // 根据OpenId获取积分
+            VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
             msg = "您当前积分为: " + vipAccountInfoDto.getIntegral();
         }
 
@@ -60,14 +65,15 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
     }
 
     private Msg queryBalance(Msg4Event msg4Event) throws SSException {
-        // 根据OpenId获取余额
-        String openId = msg4Event.getFromUserName();
-        VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
-
         String msg = "";
-        if (Assert.isNull(vipAccountInfoDto)) {
+
+        // 检查是否已经绑定
+        String openId = msg4Event.getFromUserName();
+        if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
             msg = "您尚未绑定会员，请先进行绑定";
         } else {
+            // 根据OpenId获取余额
+            VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
             msg = "您当前余额为: " + vipAccountInfoDto.getBalance();
         }
 
