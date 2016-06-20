@@ -30,12 +30,15 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
     private VipAccountInfoService vipAccountInfoService;
 
     private String bondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
+    private String unbondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/unbond", true);
 
     @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
         WeChatMenuEnums wechatMenuEnums = WeChatMenuEnums.valueOfByKey(msg4Event.getEventKey());
         Msg msg = null;
         switch (wechatMenuEnums) {
+            // 绑定/解绑
+            case Bond: msg = bond(msg4Event); break;
             // 查询积分
             case QueryPoint: msg = queryPoint(msg4Event); break;
             // 查询余额
@@ -45,13 +48,33 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         return msg;
     }
 
+    private Msg bond(Msg4Event msg4Event) throws SSException {
+        String msg = "";
+
+        // 检查是否已经绑定
+        String openId = msg4Event.getFromUserName();
+        if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
+            msg = "您的微信尚未绑定会员，请<a href =\"" + bondUrl + "\">绑定</a>";
+        } else {
+            msg = "您的微信已绑定会员，如需解绑请<a href =\"" + unbondUrl + "\">解绑</a>";
+        }
+
+        Msg4Text msg4Text = new Msg4Text();
+        msg4Text.setFromUserName(msg4Event.getToUserName());
+        msg4Text.setToUserName(msg4Event.getFromUserName());
+        msg4Text.setContent(msg);
+        msg4Text.setFuncFlag("0");
+
+        return msg4Text;
+    }
+
     private Msg queryPoint(Msg4Event msg4Event) throws SSException {
         String msg = "";
 
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您尚未绑定会员，请先进行 <a href =\"" + bondUrl + "\">绑定</a>";
+            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取积分
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
@@ -73,7 +96,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您尚未绑定会员，请先进行 <a href =\"" + bondUrl + "\">绑定</a>";
+            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取余额
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
