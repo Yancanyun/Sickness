@@ -11,7 +11,7 @@ import com.pandawork.wechat.msg.Msg4Event;
  * @author: yangch
  * @time: 2016/6/20 14:16
  */
-public interface WechatMessageService {
+public interface WeChatMessageService {
     /**
      * 点击菜单中"Click"类型按钮时返回的消息
      * @param msg4Event

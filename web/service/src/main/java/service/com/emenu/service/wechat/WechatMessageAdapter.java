@@ -3,10 +3,7 @@ package com.emenu.service.wechat;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.wechat.HandleMessageAdapter;
-import com.pandawork.wechat.exception.WeChatException;
 import com.pandawork.wechat.msg.*;
-import com.pandawork.wechat.utils.en.ENOAuth2Util;
-import com.pandawork.wechat.utils.en.ENWeChatMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,12 +16,12 @@ import org.springframework.stereotype.Service;
  * @author: yangch
  * @time: 2016/6/20 14:21
  */
-@Service("wechatMessageAdapter")
-public class WechatMessageAdapter implements HandleMessageAdapter {
+@Service("weChatMessageAdapter")
+public class WeChatMessageAdapter implements HandleMessageAdapter {
 
     @Autowired
-    @Qualifier("wechatMessageService")
-    private WechatMessageService wechatMessageService;
+    @Qualifier("weChatMessageService")
+    private WeChatMessageService wechatMessageService;
 
     @Override
     public Msg onTextMsg(Msg4Text msg) {

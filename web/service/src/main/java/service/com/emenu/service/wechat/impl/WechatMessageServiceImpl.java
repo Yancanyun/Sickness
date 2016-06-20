@@ -1,7 +1,7 @@
 package com.emenu.service.wechat.impl;
 
-import com.emenu.common.enums.wechat.WechatMenuEnums;
-import com.emenu.service.wechat.WechatMessageService;
+import com.emenu.common.enums.wechat.WeChatMenuEnums;
+import com.emenu.service.wechat.WeChatMessageService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.wechat.msg.Msg;
 import com.pandawork.wechat.msg.Msg4Event;
@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
  * @author: yangch
  * @time: 2016/6/20 14:17
  */
-@Service("wechatMessageService")
-public class WechatMessageServiceImpl implements WechatMessageService {
+@Service("weChatMessageService")
+public class WeChatMessageServiceImpl implements WeChatMessageService {
     @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
-        WechatMenuEnums wechatMenuEnums = WechatMenuEnums.valueOfByKey(msg4Event.getEventKey());
+        WeChatMenuEnums wechatMenuEnums = WeChatMenuEnums.valueOfByKey(msg4Event.getEventKey());
         Msg msg = null;
         switch (wechatMenuEnums) {
             // 查询积分

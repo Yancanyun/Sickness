@@ -13,7 +13,7 @@ import com.pandawork.wechat.utils.HttpsUtil;
  * @author: yangch
  * @time: 2016/6/8 15:37
  */
-public class WechatUtils {
+public class WeChatUtils {
     /**
      * 通过Code获取网页授权AccessToken
      * @param code

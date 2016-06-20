@@ -9,7 +9,7 @@ import java.util.Map;
  * @author: yangch
  * @time: 2016/6/20 14:14
  */
-public enum WechatMenuEnums {
+public enum WeChatMenuEnums {
     MenuNull("null", "M_NULL"),
     QueryPoint("查询积分","QUERY_POINT"),
     ;
@@ -18,18 +18,18 @@ public enum WechatMenuEnums {
 
     private String key;
 
-    WechatMenuEnums(String name, String key) {
+    WeChatMenuEnums(String name, String key) {
         this.name = name;
         this.key = key;
     }
 
-    private static Map<String, WechatMenuEnums> map = new HashMap<String, WechatMenuEnums>();
+    private static Map<String, WeChatMenuEnums> map = new HashMap<String, WeChatMenuEnums>();
 
     // 回复消息map
     private static Map<String, ConstantKeyEnums> respMsgMap = new HashMap<String, ConstantKeyEnums>();
 
     static {
-        for (WechatMenuEnums enums : WechatMenuEnums.values()) {
+        for (WeChatMenuEnums enums : WeChatMenuEnums.values()) {
             map.put(enums.getKey(), enums);
         }
         initRespMsgMap();
@@ -47,12 +47,12 @@ public enum WechatMenuEnums {
         return respMsgMap.get(key);
     }
 
-    public static WechatMenuEnums valueOfByKey(String key) {
+    public static WeChatMenuEnums valueOfByKey(String key) {
         return valueOfByKey(key, MenuNull);
     }
 
-    public static WechatMenuEnums valueOfByKey(String key, WechatMenuEnums defaultValue) {
-        WechatMenuEnums weChatMenuEnums = map.get(key);
+    public static WeChatMenuEnums valueOfByKey(String key, WeChatMenuEnums defaultValue) {
+        WeChatMenuEnums weChatMenuEnums = map.get(key);
 
         return weChatMenuEnums == null ? defaultValue : weChatMenuEnums;
     }

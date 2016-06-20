@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 @IgnoreLogin
 @Controller
 @RequestMapping(value = URLConstants.WECHAT_URL)
-public class WechatController extends AbstractController {
+public class WeChatController extends AbstractController {
     /**
      * 微信服务器的Get验证
      *
@@ -35,7 +35,7 @@ public class WechatController extends AbstractController {
      * @param echostr
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public void wechatGet(@RequestParam(value = "signature") String signature,
+    public void weChatGet(@RequestParam(value = "signature") String signature,
                           @RequestParam(value = "timestamp") String timestamp,
                           @RequestParam(value = "nonce") String nonce,
                           @RequestParam(value = "echostr") String echostr) {
@@ -60,10 +60,10 @@ public class WechatController extends AbstractController {
      * 微信服务器的消息推送
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public void wechatPost() {
+    public void weChatPost() {
         try {
-            wechatService.process(getRequest().getInputStream(),getResponse().getOutputStream());
-            wechatService.close();
+            weChatService.process(getRequest().getInputStream(),getResponse().getOutputStream());
+            weChatService.close();
         } catch (IOException e) {
             LogClerk.errLog.error(e);
         }

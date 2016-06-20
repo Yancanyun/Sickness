@@ -6,7 +6,7 @@ import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.common.utils.WechatUtils;
+import com.emenu.common.utils.WeChatUtils;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -31,7 +31,7 @@ import java.util.Date;
 @IgnoreLogin
 @Controller
 @RequestMapping(value = URLConstants.WECHAT_URL)
-public class WechatBondController extends AbstractController {
+public class WeChatBondController extends AbstractController {
     /**
      * 去绑定页
      * @param code
@@ -43,7 +43,7 @@ public class WechatBondController extends AbstractController {
                                Model model) {
         try {
             // 获取OpenId
-            JSONObject accessTokenJsonObject = WechatUtils.getAccessTokenByCode(code);
+            JSONObject accessTokenJsonObject = WeChatUtils.getAccessTokenByCode(code);
             String openId = accessTokenJsonObject.getString("openid");
 
             if (Assert.isNull(openId)) {
@@ -163,7 +163,7 @@ public class WechatBondController extends AbstractController {
                                  Model model) {
         try {
             // 获取OpenId
-            JSONObject accessTokenJsonObject = WechatUtils.getAccessTokenByCode(code);
+            JSONObject accessTokenJsonObject = WeChatUtils.getAccessTokenByCode(code);
             String openId = accessTokenJsonObject.getString("openid");
 
             if (Assert.isNull(openId)) {

@@ -1,7 +1,7 @@
 package com.emenu.test.wechat;
 
 import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.utils.WechatUtils;
+import com.emenu.common.utils.WeChatUtils;
 import com.pandawork.wechat.exception.WeChatException;
 import com.pandawork.wechat.utils.WeChatMenuUtil;
 
@@ -13,12 +13,12 @@ import com.pandawork.wechat.utils.WeChatMenuUtil;
  */
 public class MenuTest {
     public static void main(String[] args) {
-        String userInfoUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/test", false);
-        String tableUrl1 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
-        String tableUrl2 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/2", true);
-        String tableUrl3 = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/3", true);
-        String bondUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
-        String unbondUrl = WechatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/unbond", true);
+        String userInfoUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/test", false);
+        String tableUrl1 = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/1", true);
+        String tableUrl2 = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/2", true);
+        String tableUrl3 = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/mobile/3", true);
+        String bondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/bond", true);
+        String unbondUrl = WeChatUtils.createAuthorizationUrl("http://emenu2.pandawork.net/wechat/unbond", true);
 
         String menuJson = "{\n" +
                 "     \"button\":[\n" +
