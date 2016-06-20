@@ -39,10 +39,15 @@ public class MenuTest {
                 "               \"type\":\"view\",\n" +
                 "               \"name\":\"解绑会员\",\n" +
                 "               \"url\":\"" + unbondUrl + "\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"click\",\n" +
+                "               \"name\":\"查询积分\",\n" +
+                "               \"key\":\"QUERY_POINT\"\n" +
                 "            }]\n" +
                 "       },\n" +
                 "      {\n" +
-                "           \"name\":\"餐饮测试\",\n" +
+                "           \"name\":\"进入餐台\",\n" +
                 "           \"sub_button\":[\n" +
                 "           {\t\n" +
                 "               \"type\":\"view\",\n" +
