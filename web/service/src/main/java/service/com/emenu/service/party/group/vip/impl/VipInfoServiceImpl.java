@@ -288,7 +288,7 @@ public class VipInfoServiceImpl implements VipInfoService{
     }
 
     @Override
-    public void bondWechat(String openId, String phone) throws SSException {
+    public void bondWeChat(String openId, String phone) throws SSException {
         try {
             if (Assert.isNull(openId)) {
                 throw SSException.get(EmenuException.OpenIdError);
@@ -300,30 +300,30 @@ public class VipInfoServiceImpl implements VipInfoService{
                 throw SSException.get(EmenuException.PhoneIsBonded);
             }
             if (countByOpenId(openId) > 0) {
-                throw SSException.get(EmenuException.WechatIsBonded);
+                throw SSException.get(EmenuException.WeChatIsBonded);
             }
 
             vipInfoMapper.bondWechat(openId, phone);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.bondWechatError, e);
+            throw SSException.get(EmenuException.bondWeChatError, e);
         }
     }
 
     @Override
-    public void unbondWechat(String openId) throws SSException {
+    public void unbondWeChat(String openId) throws SSException {
         try {
             if (Assert.isNull(openId)) {
                 throw SSException.get(EmenuException.OpenIdError);
             }
             if (countByOpenId(openId) == 0) {
-                throw SSException.get(EmenuException.WechatIsNotBonded);
+                throw SSException.get(EmenuException.WeChatIsNotBonded);
             }
 
             vipInfoMapper.unbondWechat(openId);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.unbondWechatError, e);
+            throw SSException.get(EmenuException.unbondWeChatError, e);
         }
     }
 

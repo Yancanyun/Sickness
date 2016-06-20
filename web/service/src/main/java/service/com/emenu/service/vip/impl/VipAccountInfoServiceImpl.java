@@ -1,10 +1,12 @@
 package com.emenu.service.vip.impl;
 
 import com.emenu.common.dto.vip.VipAccountInfoDto;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.enums.vip.StatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipAccountInfoMapper;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -30,6 +32,9 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private VipInfoService vipInfoService;
 
     @Autowired
     private VipAccountInfoMapper vipAccountInfoMapper;
@@ -128,6 +133,27 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
         } catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipAccountInfoStatusFail);
+        }
+    }
+
+    @Override
+    public VipAccountInfoDto queryByOpenId(String openId) throws SSException {
+        try {
+            if (Assert.isNull(openId)) {
+                throw SSException.get(EmenuException.OpenIdError);
+            }
+
+            // 获取会员信息
+            VipInfo vipInfo = vipInfoService.queryByOpenId(openId);
+            if (Assert.isNull(vipInfo)) {
+                throw SSException.get(EmenuException.WeChatIsNotBonded);
+            }
+
+            // 获取会员账户信息
+            return vipAccountInfoMapper.queryByPartyId(vipInfo.getPartyId());
+        } catch(Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipAccountFailed);
         }
     }
 }

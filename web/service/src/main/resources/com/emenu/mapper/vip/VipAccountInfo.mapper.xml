@@ -39,4 +39,10 @@
         SET `status` = #{status}
         WHERE `id` = #{id}
     </update>
+
+    <select id="queryByPartyId" resultType="com.emenu.common.dto.vip.VipAccountInfoDto">
+        SELECT * FROM `t_vip_account_info`
+        WHERE `party_id` = #{partyId}
+        AND `status` = 1
+    </select>
 </mapper>

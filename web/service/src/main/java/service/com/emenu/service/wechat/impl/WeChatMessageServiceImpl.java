@@ -1,11 +1,16 @@
 package com.emenu.service.wechat.impl;
 
+import com.emenu.common.dto.vip.VipAccountInfoDto;
+import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.enums.wechat.WeChatMenuEnums;
+import com.emenu.service.vip.VipAccountInfoService;
 import com.emenu.service.wechat.WeChatMessageService;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import com.pandawork.wechat.msg.Msg;
 import com.pandawork.wechat.msg.Msg4Event;
 import com.pandawork.wechat.msg.Msg4Text;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +21,9 @@ import org.springframework.stereotype.Service;
  */
 @Service("weChatMessageService")
 public class WeChatMessageServiceImpl implements WeChatMessageService {
+    @Autowired
+    private VipAccountInfoService vipAccountInfoService;
+
     @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
         WeChatMenuEnums wechatMenuEnums = WeChatMenuEnums.valueOfByKey(msg4Event.getEventKey());
@@ -23,18 +31,52 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         switch (wechatMenuEnums) {
             // 查询积分
             case QueryPoint: msg = queryPoint(msg4Event); break;
+            // 查询余额
+            case QueryBalance: msg = queryBalance(msg4Event); break;
             default:
         }
         return msg;
     }
 
     private Msg queryPoint(Msg4Event msg4Event) throws SSException {
-        String msgTemp = "您当前积分为：";
+        // 根据OpenId获取积分
+        String openId = msg4Event.getFromUserName();
+        VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
+
+        String msg = "";
+        if (Assert.isNull(vipAccountInfoDto)) {
+            msg = "您尚未绑定会员，请先进行绑定";
+        } else {
+            msg = "您当前积分为: " + vipAccountInfoDto.getIntegral();
+        }
+
         Msg4Text msg4Text = new Msg4Text();
         msg4Text.setFromUserName(msg4Event.getToUserName());
         msg4Text.setToUserName(msg4Event.getFromUserName());
-        msg4Text.setContent(msgTemp);
+        msg4Text.setContent(msg);
         msg4Text.setFuncFlag("0");
+
+        return msg4Text;
+    }
+
+    private Msg queryBalance(Msg4Event msg4Event) throws SSException {
+        // 根据OpenId获取余额
+        String openId = msg4Event.getFromUserName();
+        VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
+
+        String msg = "";
+        if (Assert.isNull(vipAccountInfoDto)) {
+            msg = "您尚未绑定会员，请先进行绑定";
+        } else {
+            msg = "您当前余额为: " + vipAccountInfoDto.getBalance();
+        }
+
+        Msg4Text msg4Text = new Msg4Text();
+        msg4Text.setFromUserName(msg4Event.getToUserName());
+        msg4Text.setToUserName(msg4Event.getFromUserName());
+        msg4Text.setContent(msg);
+        msg4Text.setFuncFlag("0");
+
         return msg4Text;
     }
 }

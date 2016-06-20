@@ -50,7 +50,7 @@ public class WeChatBondController extends AbstractController {
                 throw SSException.get(EmenuException.OpenIdError);
             }
             if (vipInfoService.countByOpenId(openId) > 0) {
-                throw SSException.get(EmenuException.WechatIsBonded);
+                throw SSException.get(EmenuException.WeChatIsBonded);
             }
 
             model.addAttribute("openId", openId);
@@ -84,7 +84,7 @@ public class WeChatBondController extends AbstractController {
                 throw SSException.get(EmenuException.PhoneError);
             }
 
-            vipInfoService.bondWechat(openId, phone);
+            vipInfoService.bondWeChat(openId, phone);
             model.addAttribute("msg", "绑定成功!");
 
             return "wechat/info";
@@ -170,7 +170,7 @@ public class WeChatBondController extends AbstractController {
                 throw SSException.get(EmenuException.OpenIdError);
             }
             if (vipInfoService.countByOpenId(openId) == 0) {
-                throw SSException.get(EmenuException.WechatIsNotBonded);
+                throw SSException.get(EmenuException.WeChatIsNotBonded);
             }
 
             // 获取会员信息
@@ -195,7 +195,7 @@ public class WeChatBondController extends AbstractController {
     public String unbondWechat(@RequestParam("openId") String openId,
                                Model model) {
         try {
-            vipInfoService.unbondWechat(openId);
+            vipInfoService.unbondWeChat(openId);
 
             model.addAttribute("msg", "解绑成功!");
         } catch (Exception e) {

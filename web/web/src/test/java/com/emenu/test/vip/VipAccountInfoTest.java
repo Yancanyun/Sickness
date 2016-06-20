@@ -70,4 +70,10 @@ public class VipAccountInfoTest extends AbstractTestCase {
     public void updateVipAccountStatus() throws SSException {
         vipAccountInfoService.updateStatusById(5, StatusEnums.valueOf(0));
     }
+
+    @Test
+    public void queryByOpenId() throws SSException {
+        VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId("oFizls4L71GcsOzCjEMrOLkH77A0");
+        System.out.println(vipAccountInfoDto.getIntegral());
+    }
 }

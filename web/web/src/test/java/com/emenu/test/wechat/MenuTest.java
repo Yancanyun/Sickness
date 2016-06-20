@@ -42,6 +42,11 @@ public class MenuTest {
                 "            },\n" +
                 "            {\n" +
                 "               \"type\":\"click\",\n" +
+                "               \"name\":\"查询余额\",\n" +
+                "               \"key\":\"QUERY_BALANCE\"\n" +
+                "            },\n" +
+                "            {\n" +
+                "               \"type\":\"click\",\n" +
                 "               \"name\":\"查询积分\",\n" +
                 "               \"key\":\"QUERY_POINT\"\n" +
                 "            }]\n" +

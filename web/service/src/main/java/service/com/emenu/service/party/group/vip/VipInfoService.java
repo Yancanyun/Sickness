@@ -119,14 +119,14 @@ public interface VipInfoService {
      * @param phone
      * @throws SSException
      */
-    public void bondWechat(String openId, String phone) throws SSException;
+    public void bondWeChat(String openId, String phone) throws SSException;
 
     /**
      * 根据OpenId解绑微信
      * @param openId
      * @throws SSException
      */
-    public void unbondWechat(String openId) throws SSException;
+    public void unbondWeChat(String openId) throws SSException;
 
     /**
      * 根据OpenId统计有几个匹配

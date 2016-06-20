@@ -8,7 +8,7 @@ import com.pandawork.core.common.exception.SSException;
 import java.util.List;
 
 /**
- * Vip=AccountInfoService
+ * VipAccountInfoService
  * 会员账户信息Service层
  *
  * @author xubr
@@ -67,4 +67,11 @@ public interface VipAccountInfoService {
      */
     public void updateStatusById(int id, StatusEnums status) throws SSException;
 
+    /**
+     * 根据openId获取会员账户信息
+     * @param openId
+     * @return
+     * @throws SSException
+     */
+    public VipAccountInfoDto queryByOpenId(String openId) throws SSException;
 }

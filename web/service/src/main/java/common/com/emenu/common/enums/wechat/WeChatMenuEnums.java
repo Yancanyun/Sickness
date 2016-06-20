@@ -12,6 +12,7 @@ import java.util.Map;
 public enum WeChatMenuEnums {
     MenuNull("null", "M_NULL"),
     QueryPoint("查询积分","QUERY_POINT"),
+    QueryBalance("查询余额","QUERY_BALANCE"),
     ;
 
     private String name;

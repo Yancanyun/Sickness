@@ -1,6 +1,5 @@
 package com.emenu.test.party.group.vip;
 
-import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.service.party.group.vip.VipInfoService;
@@ -9,7 +8,6 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -113,13 +111,13 @@ public class VipInfoServiceTest extends AbstractTestCase {
         String password = "123456";
         String openId = "123";
 
-        vipInfoService.bondWechat(openId, phone);
+        vipInfoService.bondWeChat(openId, phone);
     }
 
     @Test
     public void unbondWechat() throws SSException {
         String openId = "123";
 
-        vipInfoService.unbondWechat(openId);
+        vipInfoService.unbondWeChat(openId);
     }
 }
