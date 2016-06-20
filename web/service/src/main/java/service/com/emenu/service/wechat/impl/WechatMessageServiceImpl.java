@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 public class WechatMessageServiceImpl implements WechatMessageService {
     @Override
     public Msg doMenuClickEventMessage(Msg4Event msg4Event) throws SSException {
-        WechatMenuEnums weChatMenuEnums = WechatMenuEnums.valueOfByKey(msg4Event.getEventKey());
+        WechatMenuEnums wechatMenuEnums = WechatMenuEnums.valueOfByKey(msg4Event.getEventKey());
         Msg msg = null;
-        switch (weChatMenuEnums) {
+        switch (wechatMenuEnums) {
             // 查询积分
             case QueryPoint: msg = queryPoint(msg4Event); break;
             default:
