@@ -80,9 +80,9 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您的微信尚未绑定会员，请<a href =\"" + bondUrl + "\">绑定</a>";
+            msg = "您的微信尚未绑定会员，请<a href=\"" + bondUrl + "\">绑定</a>";
         } else {
-            msg = "您的微信已绑定会员，如需解绑请<a href =\"" + unbondUrl + "\">解绑</a>";
+            msg = "您的微信已绑定会员，如需解绑请<a href=\"" + unbondUrl + "\">解绑</a>";
         }
 
         Msg4Text msg4Text = new Msg4Text();
@@ -108,7 +108,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
             msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
         } else {
-            msg = "<a href =\"" + updateVipInfoUrl + "\">修改会员信息</a>";
+            msg = "<a href=\"" + updateVipInfoUrl + "\">修改会员信息</a>";
         }
 
         Msg4Text msg4Text = new Msg4Text();
@@ -134,7 +134,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
             msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
         } else {
-            msg = "<a href =\"" + updatePhoneUrl + "\">修改绑定手机</a>";
+            msg = "<a href=\"" + updatePhoneUrl + "\">修改绑定手机</a>";
         }
 
         Msg4Text msg4Text = new Msg4Text();
@@ -158,7 +158,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
+            msg = "您的微信尚未绑定会员，请先进行<a href=\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取积分
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
@@ -186,7 +186,7 @@ public class WeChatMessageServiceImpl implements WeChatMessageService {
         // 检查是否已经绑定
         String openId = msg4Event.getFromUserName();
         if (Assert.lessOrEqualZero(vipInfoService.countByOpenId(openId))) {
-            msg = "您的微信尚未绑定会员，请先进行<a href =\"" + bondUrl + "\">绑定</a>";
+            msg = "您的微信尚未绑定会员，请先进行<a href=\"" + bondUrl + "\">绑定</a>";
         } else {
             // 根据OpenId获取余额
             VipAccountInfoDto vipAccountInfoDto = vipAccountInfoService.queryByOpenId(openId);
