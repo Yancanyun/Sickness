@@ -11,7 +11,6 @@ import java.util.Map;
  */
 public enum WeChatMenuEnums {
     MenuNull("null", "M_NULL"),
-    Bond("绑定/解绑","BOND"),
     UpdateVipInfo("修改会员信息","UPDATE_VIP_INFO"),
     UpdatePhone("修改绑定手机","UPDATE_PHONE"),
     QueryPoint("查询积分","QUERY_POINT"),

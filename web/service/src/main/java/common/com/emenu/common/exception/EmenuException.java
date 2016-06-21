@@ -201,6 +201,7 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteAreaFail("删除区域失败", 4005),
     AreaHasTableExist("区域中有餐台存在，不允许删除", 4006),
     AreaNameIsNull("区域名称不能为空", 4007),
+    AreaIdError("区域ID为空或者小于0", 4008),
     //餐台
     QueryTableFail("查询餐台失败", 4020),
     TableNameExist("餐台名称已存在", 4021),
@@ -554,6 +555,11 @@ public enum EmenuException implements IBizExceptionMes {
     NewCheckoutFailed("添加结账单失败",10055),
     UpdateCheckoutFailed("修改结账单失败",10056),
 
+
+
+    /****************************服务员APP****************************/
+    // 获取餐台信息
+    OperateStatusIsNotLegal("请求状态不合法", 20001)
     ;
 
 

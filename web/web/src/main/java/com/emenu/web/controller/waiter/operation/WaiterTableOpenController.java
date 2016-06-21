@@ -58,6 +58,7 @@ public class WaiterTableOpenController extends AbstractAppBarController {
                     JSONObject tableJsonObject = new JSONObject();
                     tableJsonObject.put("tableId", table.getId());
                     tableJsonObject.put("tableName", table.getName());
+                    tableJsonObject.put("seatNum", table.getSeatNum());
 
                     tableList.add(tableJsonObject);
                 }
