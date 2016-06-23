@@ -2,12 +2,16 @@ package com.emenu.service.table.impl;
 
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.entity.order.Order;
+import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMealPeriod;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.OrderDishService;
+import com.emenu.service.order.OrderService;
 import com.emenu.service.table.AreaService;
 import com.emenu.service.table.QrCodeService;
 import com.emenu.service.table.TableMealPeriodService;
@@ -35,6 +39,13 @@ import java.util.List;
  */
 @Service("tableService")
 public class TableServiceImpl implements TableService {
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private OrderDishService orderDishService;
+
     @Autowired
     private TableMapper tableMapper;
 
@@ -700,6 +711,24 @@ public class TableServiceImpl implements TableService {
             newTableDto.getTable().setPersonNum(oldTableDto.getTable().getPersonNum());
             newTableDto.getTable().setOpenTime(oldTableDto.getTable().getOpenTime());
             newTableDto.getTable().setStatus(TableStatusEnums.Uncheckouted.getId());
+
+            //换台后订单对应的tableId也要改变,并且要把ordeDish的isChange字段设置为1
+            List<Order> orders = new ArrayList<Order>();
+            List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+
+            //查询出旧餐桌未结账但是已下单的订单
+            orders=orderService.listByTableIdAndStatus(oldTableDto.getTable().getId(),1);
+            for(Order dto :orders)
+            {
+                dto.setTableId(newTableDto.getTable().getId());//订单要改变成新的桌号
+                orderDishs=orderDishService.listByOrderId(dto.getId());//获取订单菜品
+                for(OrderDish orderDish : orderDishs)
+                {
+                    orderDish.setIsChange(1);//数据库新增的字段
+                    orderDishService.updateOrderDish(orderDish);
+                }
+                orderService.updateOrder(dto);
+            }
 
             updateTable(newTableId, newTableDto);
 

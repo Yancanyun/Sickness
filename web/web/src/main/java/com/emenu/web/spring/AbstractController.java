@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.call.CallCacheService;
+import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
@@ -84,6 +85,8 @@ public class AbstractController extends Base {
     // 微信无法找到404页面
     protected final static String WECHAT_NOT_FOUND_PAGE = "wechat/404";
 
+    //后厨管理端无法找到404页面
+    protected final static String COOK_NOT_FOUND_PAGE = "cook/404";
 
     // 系统异常返回页面
     protected final static String VIP_SYS_ERR_PAGE = "forward:/500.jsp";
@@ -483,6 +486,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("orderDishService")
     protected static OrderDishService orderDishService;
+
+    //后厨管理service
+    @StaticAutoWire
+    @Qualifier("cookTableCacheService")
+    protected static CookTableCacheService cookTableCacheService;
 
 
     /**************************微信**************************/

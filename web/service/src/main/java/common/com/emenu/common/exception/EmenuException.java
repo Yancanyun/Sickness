@@ -201,7 +201,6 @@ public enum EmenuException implements IBizExceptionMes {
     DeleteAreaFail("删除区域失败", 4005),
     AreaHasTableExist("区域中有餐台存在，不允许删除", 4006),
     AreaNameIsNull("区域名称不能为空", 4007),
-    AreaIdError("区域ID为空或者小于0", 4008),
     //餐台
     QueryTableFail("查询餐台失败", 4020),
     TableNameExist("餐台名称已存在", 4021),
@@ -217,6 +216,7 @@ public enum EmenuException implements IBizExceptionMes {
     OpenTableFail("开台失败", 4031),
     ChangeTableFail("换台失败", 4032),
     CleanTableFail("清台失败", 4033),
+    OperateStatusIsNotLegal("操作餐台不合法",4034),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4040),
     //餐台-餐段管理
@@ -556,10 +556,10 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateCheckoutFailed("修改结账单失败",10056),
 
 
-
-    /****************************服务员APP****************************/
-    // 获取餐台信息
-    OperateStatusIsNotLegal("请求状态不合法", 20001)
+    //后厨管理模块
+    QueryIsHaveOrderDishFailed("查询餐桌是否有未上的菜品失败",10090),
+    InitCookTableCacheFail("初始化餐桌版本号失败",10091),
+    ListAllTableVersionFail("获取所有桌子的版本号失败",10092),
     ;
 
 

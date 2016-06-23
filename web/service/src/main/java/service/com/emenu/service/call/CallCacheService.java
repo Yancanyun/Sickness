@@ -27,10 +27,11 @@ public interface CallCacheService {
      * @param partyId
      * @throws SSException
      */
-    public TableCallCache queryCallCacheByWaiterId(Integer partyId)throws SSException;
+    public TableCallCache queryCallCacheByPartyId(Integer partyId)throws SSException;
 
     /**
      * 清除对应餐桌的呼叫服务缓存
+     * 无论应答与否都删除掉
      * @param tableId
      * @throws SSException
      */
@@ -38,9 +39,10 @@ public interface CallCacheService {
     public void delTableCallCache(Integer tableId) throws SSException;
 
     /**
-     * 清除所有餐桌的呼叫服务缓存
+     * 清除服务员服务餐桌的呼叫缓存
+     * 只能删除已经应答的呼叫服务缓存
      * @param
      * @throws SSException
      */
-    public void delAllCallCaches() throws SSException;
+    public void delCallCachesByPartyId(Integer partyId) throws SSException;
 }

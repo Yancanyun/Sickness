@@ -77,7 +77,6 @@ public class CallCacheServiceImpl implements CallCacheService {
                                 {
                                     temp.setCallTime(new Date());
                                     temp.setStatus(1);
-                                    //把所有的呼叫服务缓存排序
                                     break;
                                 }
                             }
@@ -102,7 +101,7 @@ public class CallCacheServiceImpl implements CallCacheService {
     }
 
     @Override
-    public TableCallCache queryCallCacheByWaiterId(Integer partyId) throws SSException
+    public TableCallCache queryCallCacheByPartyId(Integer partyId) throws SSException
     {
         TableCallCache tableCallCache = new TableCallCache();
         List<Integer> tableId = new ArrayList<Integer>();//
@@ -155,6 +154,7 @@ public class CallCacheServiceImpl implements CallCacheService {
     {
         try
         {
+            //不管服务员应答与否,都删除掉
             if(!Assert.lessZero(tableId))
             tableCallCacheMap.put(tableId,new TableCallCache());
             for(CallCache dto : allCallCaches)//后加的list集合中也要把相应的缓存删掉
@@ -170,16 +170,38 @@ public class CallCacheServiceImpl implements CallCacheService {
     }
 
     @Override
-    public void delAllCallCaches() throws SSException
+    public void delCallCachesByPartyId(Integer partyId) throws SSException
     {
+        List<Integer> tableId = new ArrayList<Integer>();//
         try
         {
-            tableCallCacheMap = new ConcurrentHashMap<Integer, TableCallCache>();
-            allCallCaches = new ArrayList<CallCache>();
+            tableId = waiterTableService.queryByPartyId(partyId);//查询出了服务员服务的餐桌,
+            for(Integer dto :tableId)
+            {
+                for(CallCache temp : allCallCaches)
+                {
+                    //0为服务员已经应答,1为服务员未应答,未应答的不能删除
+                    if(temp.getTableId()==dto&&temp.getStatus()==0)
+                    {
+                        allCallCaches.remove(temp);//删除掉这个缓存
+                    }
+                }
+                TableCallCache tableCallCache = tableCallCacheMap.get(dto);
+                List<CallCache> callCaches = new ArrayList<CallCache>();
+                if(tableCallCache!=null)
+                    callCaches=tableCallCache.getCallCacheList();
+                for(CallCache callCache : callCaches)
+                {
+                    if(callCache.getStatus()==0)
+                    {
+                        callCaches.remove(callCache);
+                    }
+                }
+            }
         }
         catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.DelTableCallCacheFail, e);
+            throw SSException.get(EmenuException.QueryCallCacheByWaiterIdFail, e);
         }
     }
 }

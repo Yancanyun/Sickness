@@ -131,6 +131,10 @@ public class OrderDishTest extends AbstractTestCase {
 
         orderDish.setIsCall(0);
         orderDish.setIsChange(1);
-
+    }
+    @Test
+    public void testIsTableHaveOrderDish() throws SSException
+    {
+        System.out.println(orderDishService.isTableHaveOrderDish(1));
     }
 }

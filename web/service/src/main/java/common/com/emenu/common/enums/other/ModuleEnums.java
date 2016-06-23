@@ -328,8 +328,8 @@ public enum ModuleEnums {
     WaiterTableChange("Waiter:Table:Change"),
     //服务员清台
     WaiterTableClean("Waiter:Table:Clean"),
-
-
+    //服务员查看所有呼叫服务
+    WaiterCallList("Waiter:Call:List"),
 
 
     //吧台客户端模块
@@ -341,6 +341,13 @@ public enum ModuleEnums {
     BarTableChange("Bar:Table:Change"),
     //吧台客户端清台
     BarTableClean("Bar:Table:Clean"),
+
+
+
+    //后厨管理模块
+    Cook("Cook"),
+    CookOrderList("Cook:Order:List"),
+    CookOrderTableList("Cook:Order:Table:List"),
     ;
 
     private String name;

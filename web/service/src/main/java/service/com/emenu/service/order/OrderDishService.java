@@ -94,4 +94,11 @@ public interface OrderDishService {
      * @throws SSException
      */
     public void newOrderDishs(List<OrderDish> orderDishs) throws SSException;
+
+    /**
+     * 判断一个餐桌是否有未上的菜
+     * @param tableId
+     * @throws SSException
+     */
+    public int isTableHaveOrderDish(Integer tableId) throws SSException;
 }

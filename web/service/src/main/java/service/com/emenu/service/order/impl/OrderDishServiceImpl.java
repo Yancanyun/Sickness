@@ -41,7 +41,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishDtoList = orderDishMapper.listDtoByOrderId(orderId);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed);
+            throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed,e);
         }
         return orderDishDtoList;
     }
@@ -54,7 +54,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishList = orderDishMapper.listByOrderId(orderId);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed);
+            throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed,e);
         }
         return orderDishList;
     }
@@ -67,7 +67,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishDto = orderDishMapper.queryDtoById(id);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryOrderDishByIdFailed);
+            throw SSException.get(EmenuException.QueryOrderDishByIdFailed,e);
         }
         return orderDishDto;
     }
@@ -80,7 +80,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDish = orderDishMapper.queryById(id);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryOrderDishByIdFailed);
+            throw SSException.get(EmenuException.QueryOrderDishByIdFailed,e);
         }
         return orderDish;
     }
@@ -99,7 +99,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishMapper.updateDishStatus(id,status);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateDishStatusFailed);
+            throw SSException.get(EmenuException.UpdateDishStatusFailed,e);
         }
     }
 
@@ -117,7 +117,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishMapper.updateServeType(id,serveType);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateServeTypeFailed);
+            throw SSException.get(EmenuException.UpdateServeTypeFailed,e);
         }
     }
 
@@ -128,7 +128,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             orderDishMapper.updatePresentedDish(id,isPresentedDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdatePresentedDishFailed);
+            throw SSException.get(EmenuException.UpdatePresentedDishFailed,e);
         }
     }
 
@@ -139,7 +139,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             commonDao.update(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateOrderDishFailed);
+            throw SSException.get(EmenuException.UpdateOrderDishFailed,e);
         }
     }
 
@@ -150,7 +150,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             commonDao.insert(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewOrderDishFailed);
+            throw SSException.get(EmenuException.NewOrderDishFailed,e);
         }
 
     }
@@ -163,7 +163,21 @@ public class OrderDishServiceImpl implements OrderDishService{
             commonDao.insertAll(orderDishs);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewOrderDishsFailed);
+            throw SSException.get(EmenuException.NewOrderDishsFailed,e);
         }
+    }
+
+    @Override
+    public int isTableHaveOrderDish(Integer tableId) throws SSException
+    {
+        int count = 0;
+        try{
+            if(!Assert.lessOrEqualZero(tableId))
+                count = orderDishMapper.isTableHaveOrderDish(tableId);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryIsHaveOrderDishFailed,e);
+        }
+        return count;
     }
 }

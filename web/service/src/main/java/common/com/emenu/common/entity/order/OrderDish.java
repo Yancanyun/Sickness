@@ -102,6 +102,7 @@ public class OrderDish extends AbstractEntity {
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
 
+
     // setter、getter
     public Integer getId() {
         return id;

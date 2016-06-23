@@ -391,7 +391,9 @@ public class MyOrderController  extends AbstractController {
                 orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
                 orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
                 orderDish.setSalePrice(dishDto.getSalePrice());
-                orderDish.setServeType(dto.getServeType());
+                if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                orderDish.setServeType(serviceWay);
+                else orderDish.setServeType(dto.getServeType());
                 orderDish.setOrderTime(orderTime);
                 orderDish.setIsCall(0);
                 orderDish.setIsChange(0);

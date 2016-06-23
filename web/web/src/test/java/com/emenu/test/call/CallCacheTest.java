@@ -32,7 +32,7 @@ public class CallCacheTest extends AbstractTestCase {
     @Test
     public void testQueryCallCache() throws Exception
     {
-        callCacheService.queryCallCacheByWaiterId(1);
+        callCacheService.queryCallCacheByPartyId(1);
     }
 
     @Test

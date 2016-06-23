@@ -5,7 +5,7 @@
 <div class="container">
   <div id="wrapper" class="scroll">
     <!-- 后端刷菜品备注 -->
-     <div class="J_remarkHidden">
+     <div class="J_remarkHidden hidden">
         <c:if test="${not empty uniqueRemark}">
           <c:forEach var="remark" items="${uniqueRemark}">
             <span>${remark}</span>
@@ -67,7 +67,7 @@
             </p>
             <p class="ordering-number">
               <button class="J_redudeButton"><i class="fa fa-minus"></i></button>
-              <input class="ordering-dish-number" type="tel" value="${dto.count}" readonly></input>
+              <input class="ordering-dish-number" type="tel" value="${dto.count}" readonly>
               <button class="J_plusButton"><i class="fa fa-plus"></i></button>
               <span class="ordering-dish-unit">${dto.unitName}</span>
             </p>

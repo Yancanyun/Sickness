@@ -70,4 +70,11 @@ public interface OrderDishMapper {
      */
     public void updatePresentedDish(@Param("id")int id,@Param("isPresentedDish")int isPresentedDish) throws Exception;
 
+    /**
+     * 根据tableId来查询出对应餐桌的订单菜品中是否存在未上菜的菜品
+     * 订单菜品状态1.已下单  2.正在做  3.已上菜
+     * @param tableId
+     * @throws Exception
+     */
+    public int isTableHaveOrderDish(@Param("tableId") Integer tableId) throws Exception;
 }

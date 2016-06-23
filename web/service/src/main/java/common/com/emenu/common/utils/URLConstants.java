@@ -180,6 +180,9 @@ public final class URLConstants {
     //服务员清台
     public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
 
+    //服务员查看所有呼叫服务
+    public static final String WAITER_CALL_LIST_URL = "waiter/call";
+
 
     /**********************吧台客户端*************************/
     //吧台客户端餐台列表
@@ -197,4 +200,8 @@ public final class URLConstants {
 
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
+
+    /**********************后厨管理端*************************/
+
+    public static final String COOK_ORDER_MANAGEMETN_URL = "cook/ordermanage";
 }
