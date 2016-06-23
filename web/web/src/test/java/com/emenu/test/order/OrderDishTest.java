@@ -56,6 +56,8 @@ public class OrderDishTest extends AbstractTestCase {
             orderDish1.setSalePrice(new BigDecimal(18.00));
             orderDish1.setServeType(2);
             orderDish1.setTasteId(i);
+            orderDish1.setIsCall(1);
+            orderDish1.setIsChange(0);
             orderDishs.add(orderDish1);
         }
         orderDishService.newOrderDishs(orderDishs);
@@ -126,5 +128,9 @@ public class OrderDishTest extends AbstractTestCase {
         orderDish.setSalePrice(new BigDecimal(18.00));
         orderDish.setServeType(2);
         orderDish.setTasteId(2);
+
+        orderDish.setIsCall(0);
+        orderDish.setIsChange(1);
+
     }
 }

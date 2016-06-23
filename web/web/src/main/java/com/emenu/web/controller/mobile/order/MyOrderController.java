@@ -393,6 +393,8 @@ public class MyOrderController  extends AbstractController {
                 orderDish.setSalePrice(dishDto.getSalePrice());
                 orderDish.setServeType(dto.getServeType());
                 orderDish.setOrderTime(orderTime);
+                orderDish.setIsCall(0);
+                orderDish.setIsChange(0);
                 //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                 orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                 orderDishService.newOrderDish(orderDish);

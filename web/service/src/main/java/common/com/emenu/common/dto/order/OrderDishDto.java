@@ -84,6 +84,14 @@ public class OrderDishDto {
     //赠送备注名称
     private String presentedRemarkName;
 
+    //是否催菜
+
+    private Integer isCall;
+
+    //是否换台
+
+    private Integer isChange;
+
     /********************getter and setter***************/
 
     public String getImgPath() {
@@ -284,4 +292,23 @@ public class OrderDishDto {
         this.presentedRemarkId = presentedRemarkId;
     }
 
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Integer getIsCall() {
+        return isCall;
+    }
+
+    public void setIsCall(Integer isCall) {
+        this.isCall = isCall;
+    }
+
+    public Integer getIsChange() {
+        return isChange;
+    }
+
+    public void setIsChange(Integer isChange) {
+        this.isChange = isChange;
+    }
 }

@@ -86,6 +86,14 @@ public class OrderDish extends AbstractEntity {
     @Column(name = "presented_remark_id")
     private Integer presentedRemarkId;
 
+    //是否催菜
+    @Column(name = "is_call")
+    private Integer isCall;
+
+    //是否换台
+    @Column(name = "is_change")
+    private Integer isChange;
+
     // 创建时间
     @Column(name = "created_time")
     private Date createdTime;
@@ -253,5 +261,21 @@ public class OrderDish extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public Integer getIsCall() {
+        return isCall;
+    }
+
+    public void setIsCall(Integer isCall) {
+        this.isCall = isCall;
+    }
+
+    public Integer getIsChange() {
+        return isChange;
+    }
+
+    public void setIsChange(Integer isChange) {
+        this.isChange = isChange;
     }
 }
