@@ -37,8 +37,11 @@ public class WaiterTableOpenController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
+    public JSONObject toOpenTable(@RequestParam("partyId") Integer partyId,
+                                  @RequestParam("tableId") Integer tableId) {
         try {
+            // TODO: 根据PartyId检查服务员是否可开台
+
             // 根据ID检查餐台是否可开台
             Integer status = tableService.queryStatusById(tableId);
             if (status != TableStatusEnums.Enabled.getId()) {

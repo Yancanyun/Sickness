@@ -203,4 +203,11 @@ public interface TableService {
      * @throws SSException
      */
     public void cleanTable(int id) throws SSException;
+
+    /**
+     * 并台
+     * @param tableIdList
+     * @throws SSException
+     */
+    public void mergeTable(List<Integer> tableIdList) throws SSException;
 }

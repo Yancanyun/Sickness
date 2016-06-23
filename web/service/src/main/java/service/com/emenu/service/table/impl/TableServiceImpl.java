@@ -10,6 +10,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.table.*;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
 import com.emenu.service.table.AreaService;
@@ -63,6 +64,9 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     private MealPeriodService mealPeriodService;
+
+    @Autowired
+    private TableMergeCacheService mergeTableCacheService;
 
     @Override
     public List<TableDto> listAllTableDto() throws SSException {
@@ -762,6 +766,40 @@ public class TableServiceImpl implements TableService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CleanTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void mergeTable(List<Integer> tableIdList) throws SSException {
+        try {
+            if (Assert.isNull(tableIdList) || tableIdList.size() < 2) {
+                throw SSException.get(EmenuException.MergeTableNumLessThanTwo);
+            }
+
+            for (int tableId : tableIdList) {
+                // 检查是否所有餐台均为可用、占用未结账、已并桌、占用已结账状态
+                if (queryStatusById(tableId) != TableStatusEnums.Enabled.getId() &&
+                        queryStatusById(tableId) != TableStatusEnums.Uncheckouted.getId() &&
+                        queryStatusById(tableId) != TableStatusEnums.Merged.getId() &&
+                        queryStatusById(tableId) != TableStatusEnums.Checkouted.getId()) {
+                    throw SSException.get(EmenuException.TableIsNotEnabled);
+                }
+            }
+
+            // 更新餐台信息
+            for (int tableId : tableIdList) {
+                TableDto tableDto = queryTableDtoById(tableId);
+                tableDto.getTable().setOpenTime(new Date());
+                tableDto.getTable().setStatus(TableStatusEnums.Merged.getId());
+                updateTable(tableId, tableDto);
+
+                // 加入到并台表
+            }
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.MergeTableFail, e);
         }
     }
 }

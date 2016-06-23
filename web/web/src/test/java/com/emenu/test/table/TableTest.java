@@ -148,4 +148,9 @@ public class TableTest extends AbstractTestCase {
     public void cleanTable() throws SSException {
         tableService.cleanTable(2);
     }
+
+    @Test
+    public void mergeTable() throws SSException {
+        tableService.cleanTable(2);
+    }
 }

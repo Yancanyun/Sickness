@@ -217,8 +217,13 @@ public enum EmenuException implements IBizExceptionMes {
     ChangeTableFail("换台失败", 4032),
     CleanTableFail("清台失败", 4033),
     OperateStatusIsNotLegal("操作餐台不合法",4034),
+    MergeTableFail("并台失败", 4034),
+    DelMergeTableFail("删除原有并台信息失败", 4035),
+    MergeTableNumLessThanTwo("选择的并台餐台数量小于两个", 4036),
+    MergeTableStatusError("选择的并台餐台中有处于不可并台状态的餐台", 4037),
+    MergeIdError("并台ID不合法", 4038),
     //餐台二维码
-    DownloadQrCodeFail("下载二维码失败", 4040),
+    DownloadQrCodeFail("下载二维码失败", 4050),
     //餐台-餐段管理
     QueryTableMealPeriodFail("查询餐台-区域失败", 4060),
     InsertTableMealPeriodFail("添加餐台失败", 4061),
@@ -560,6 +565,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryIsHaveOrderDishFailed("查询餐桌是否有未上的菜品失败",10090),
     InitCookTableCacheFail("初始化餐桌版本号失败",10091),
     ListAllTableVersionFail("获取所有桌子的版本号失败",10092),
+
     ;
 
 

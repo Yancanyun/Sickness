@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.table.TableMergeMapper">
+    <select id="listByMergeId" resultMap="pw.TableMerge">
+        SELECT *
+        FROM `t_table_merge`
+        WHERE `merge_id` = #{mergeId}
+        AND `status` = 1
+    </select>
+
+    <select id="queryByTableId" resultMap="pw.TableMerge">
+        SELECT *
+        FROM `t_table_merge`
+        WHERE `table_id` = #{tableId}
+        AND `status` = 1
+    </select>
+
+    <select id="countTableMerge" resultType="int">
+        SELECT count(1)
+        FROM `t_table_merge`
+    </select>
+
+    <select id="queryLastMergeId" resultType="int">
+        SELECT `merge_id`
+        FROM `t_table_merge`
+        ORDER BY `created_time` DESC
+        LIMIT 1
+    </select>
+
+    <update id="delTableMergeByTableId">
+        UPDATE `t_table_merge`
+        SET `status` = 2
+        WHERE `table_id` = #{tableId}
+        AND `status` = 1
+    </update>
+
+    <update id="delTableMergeByMergeId">
+        UPDATE `t_table_merge`
+        SET `status` = 2
+        WHERE `merge_id` = #{mergeId}
+        AND `status` = 1
+    </update>
+</mapper>
