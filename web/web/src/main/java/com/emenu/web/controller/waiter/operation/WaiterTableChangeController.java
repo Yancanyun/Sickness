@@ -2,11 +2,14 @@ package com.emenu.web.controller.waiter.operation;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.IgnoreAuthorization;
+import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.pandawork.core.common.exception.SSException;
@@ -25,59 +28,14 @@ import java.util.List;
  * @author: yangch
  * @time: 2015/12/9 13:38
  */
+@IgnoreLogin
+@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterTableChange)
 @RequestMapping(value = URLConstants.WAITER_TABLE_CHANGE_URL)
 public class WaiterTableChangeController extends AbstractAppBarController {
     /**
-     * Ajax 获取换台首页的数据
-     * @param partyId
-     * @return
-     */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    @ResponseBody
-    public JSONObject tableList(@RequestParam("partyId") Integer partyId) {
-        try {
-            //根据PartyId获取餐桌状态为占用未结账的AreaDto
-            List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Uncheckouted.getId());
-
-            JSONArray jsonArray = new JSONArray();
-
-            for (AreaDto areaDto : areaDtoList) {
-                JSONObject jsonObject = new JSONObject();
-
-                jsonObject.put("areaId", areaDto.getArea().getId());
-                jsonObject.put("areaName", areaDto.getArea().getName());
-
-                //获取AreaDto中的Table列表
-                List<Table> tables = areaDto.getTableList();
-
-                JSONArray tableList = new JSONArray();
-
-                int t = 0;
-                for (Table table : tables) {
-                    JSONObject tableJsonObject = new JSONObject();
-                    tableJsonObject.put("tableId", tables.get(t).getId());
-                    tableJsonObject.put("tableName", tables.get(t).getName());
-                    tableJsonObject.put("personNum", tables.get(t).getPersonNum());
-
-                    tableList.add(tableJsonObject);
-                    t++;
-                }
-
-                jsonObject.put("tableList", tableList);
-                jsonArray.add(jsonObject);
-            }
-
-            return sendJsonArray(jsonArray);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax 获取要更换的餐台的数据
+     * Ajax 获取要换台的餐台的数据
      * @param tableId
      * @return
      */
@@ -85,9 +43,13 @@ public class WaiterTableChangeController extends AbstractAppBarController {
     @ResponseBody
     public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
         try {
-            Table table = tableService.queryById(tableId);
+            // 根据ID检查餐台是否可换台
+            Integer status = tableService.queryStatusById(tableId);
+            if (status != TableStatusEnums.Uncheckouted.getId()) {
+                throw SSException.get(EmenuException.ChangeTableFail);
+            }
 
-            JSONArray jsonArray = new JSONArray();
+            Table table = tableService.queryById(tableId);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tableId", tableId);
@@ -96,56 +58,8 @@ public class WaiterTableChangeController extends AbstractAppBarController {
             jsonObject.put("seatNum",table.getSeatNum());
             jsonObject.put("seatFee",table.getSeatFee());
             jsonObject.put("tableFee",table.getTableFee());
-            jsonObject.put("minCost",table.getMinCost());
-            jsonArray.add(jsonObject);
 
-            return sendJsonArray(jsonArray);
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-    }
-
-    /**
-     * Ajax 获取选择可以换至的餐台列表
-     * @param partyId
-     * @return
-     */
-    @RequestMapping(value = "area_list", method = RequestMethod.GET)
-    @ResponseBody
-    public JSONObject enabledTableList(@RequestParam("partyId") Integer partyId) {
-        try {
-            //根据PartyId获取餐桌状态为可用的AreaDto
-            List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Enabled.getId());
-
-            JSONArray jsonArray = new JSONArray();
-
-            for (AreaDto areaDto : areaDtoList) {
-                JSONObject jsonObject = new JSONObject();
-
-                jsonObject.put("areaId", areaDto.getArea().getId());
-                jsonObject.put("areaName", areaDto.getArea().getName());
-
-                //获取AreaDto中的Table列表
-                List<Table> tables = areaDto.getTableList();
-
-                JSONArray tableList = new JSONArray();
-
-                int t = 0;
-                for (Table table : tables) {
-                    JSONObject tableJsonObject = new JSONObject();
-                    tableJsonObject.put("tableId", tables.get(t).getId());
-                    tableJsonObject.put("tableName", tables.get(t).getName());
-
-                    tableList.add(tableJsonObject);
-                    t++;
-                }
-
-                jsonObject.put("tableList", tableList);
-                jsonArray.add(jsonObject);
-            }
-
-            return sendJsonArray(jsonArray);
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -160,9 +74,19 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      */
     @RequestMapping(value = "confirm", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject confirmChange(@RequestParam("oldTableId") Integer oldTableId,
-                                    @RequestParam("newTableId") Integer newTableId) {
+    public JSONObject toConfirmChange(@RequestParam("oldTableId") Integer oldTableId,
+                                      @RequestParam("newTableId") Integer newTableId) {
         try {
+            // 根据ID检查新旧餐台是否均处于可换台的状态
+            Integer oldStatus = tableService.queryStatusById(oldTableId);
+            if (oldStatus != TableStatusEnums.Uncheckouted.getId()) {
+                throw SSException.get(EmenuException.ChangeTableFail);
+            }
+            Integer newStatus = tableService.queryStatusById(newTableId);
+            if (newStatus != TableStatusEnums.Enabled.getId()) {
+                throw SSException.get(EmenuException.ChangeTableFail);
+            }
+
             Table oldTable = tableService.queryById(oldTableId);
             Table newTable = tableService.queryById(newTableId);
 
@@ -175,7 +99,6 @@ public class WaiterTableChangeController extends AbstractAppBarController {
             jsonObject.put("seatNum", newTable.getSeatNum());
             jsonObject.put("seatFee", newTable.getSeatFee());
             jsonObject.put("tableFee", newTable.getTableFee());
-            jsonObject.put("minCost", newTable.getMinCost());
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -192,9 +115,12 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
+    public JSONObject changeTable(@RequestParam("partyId") Integer partyId,
+                                  @RequestParam("oldTableId") Integer oldTableId,
                                   @RequestParam("newTableId") Integer newTableId) {
         try {
+            // TODO: 根据PartyId记录哪个服务员换的台
+
             tableService.changeTable(oldTableId, newTableId);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
