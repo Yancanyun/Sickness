@@ -99,7 +99,7 @@ public enum ModuleEnums {
     AdminRestaurantCallWaiterUpdate("Admin:Restaurant:CallWaiter:Update"),
 
     // 菜品管理
-    AdminDishManagement("Admin:DishManagement"),
+    AdminDishManagement("Admin:DishManagementAdmin:DishManagement"),
     // 菜品
     AdminDish("Admin:DishManagement:Dish"),
     AdminDishList("Admin:DishManagement:Dish:List"),

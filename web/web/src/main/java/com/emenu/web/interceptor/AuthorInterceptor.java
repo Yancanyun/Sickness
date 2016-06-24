@@ -109,7 +109,9 @@ public class AuthorInterceptor extends HandlerInterceptorAdapter {
 
     private void forwardToForbidden(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         RequestDispatcher dispatcher;
-        int partyType = (Integer) request.getAttribute(WebConstants.WEB_PARTY_TYPE);
+        String str = (String)request.getAttribute("xiaozl");
+        Integer partyType = (Integer) request.getAttribute(WebConstants.WEB_PARTY_TYPE);
+        System.out.println("xiaozl");
         if (PartyTypeEnums.Employee.getId().equals(partyType)) {
           dispatcher =request.getRequestDispatcher("/WEB-INF/views/admin/403.jsp");
         } else {

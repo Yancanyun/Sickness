@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://shiro.pandawork.net/tags" prefix="shiro"%>
 
 <!-- <div class="row">
 <div class="col-sm-12"> -->
@@ -10,6 +11,7 @@
     <a class="pull-left logo-text menu-list-logo" href="${website}admin"><i class="fa fa-cutlery"></i>&nbsp;餐饮后台管理</a>
     <a class="pull-right header-menu" href="javascript:;"><i class="fa fa-bars"></i>&nbsp;</a>
     <ul class="nav navbar-nav">
+        <shiro:checkPermission name="Admin:BasicInfo">
         <li
                 <c:if test="${PWModule eq 'Admin:BasicInfo'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="1" href="javascript:;">基本信息管理</a>
@@ -22,7 +24,9 @@
                 <li><a class="J_menu" href="javascript:;">全局设置</a></li>
             </ul>
         </li>
+        </shiro:checkPermission>
         <li>
+        <shiro:checkPermission name="Admin:Restaurant:Table">
         <li <c:if test="${PWModule eq 'Admin:Restaurant:Table'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="2" href="javascript:;">饭店管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
@@ -34,6 +38,8 @@
                 <li><a class="J_menu" href="${website}admin/restaurant/call/waiter">呼叫服务类型管理</a></li>
             </ul>
         </li>
+        </shiro:checkPermission>
+        <shiro:checkPermission name="Admin:DishManagement">
         <li <c:if test="${PWModule eq 'Admin:DishManagement'}">class="active" </c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="3" href="javascript:;">菜品管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
@@ -48,7 +54,9 @@
                 <li><a class="J_menu" href="${website}admin/dish/sale/ranking">销量排行</a></li>
             </ul>
         </li>
-        <li>
+        </shiro:checkPermission>
+        <shiro:checkPermission name="Admin:User:Management">
+        <li <c:if test="${PWModule eq 'Admin:User:Management'}">class="active" </c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="5" href="javascript:;">用户信息管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a></li>
@@ -61,6 +69,8 @@
                 <li><a class="J_menu" href="${website}admin/vip/card">会员卡管理</a></li>
             </ul>
         </li>
+        </shiro:checkPermission>
+        <shiro:checkPermission name="Admin:Storage">
         <li <c:if test="${PWModule eq 'Admin:Storage'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="6" href="javascript:;">库存管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
@@ -76,6 +86,7 @@
                 <li><a class="J_menu" href="${website}admin/storage/depot">存放点管理</a></li>
             </ul>
         </li>
+        </shiro:checkPermission>
         <li>
             <a class="menu-list J_layer_1_menu" data-menu-id="7" href="javascript:;">营收统计</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
@@ -93,7 +104,8 @@
                 <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
             </ul>
         </li>
-        <li <c:if test="${PWModule eq 'Admin:SAdmin'}">class="active"</c:if>>
+        <shiro:checkPermission name="Admin:SAdmin">
+        <li <c:if test="${PWModule eq 'Admin:SAdmin'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="9" href="javascript:;">超级管理</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/party/security/permission">权限管理</a></li>
@@ -103,6 +115,7 @@
                 <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
             </ul>
         </li>
+        </shiro:checkPermission>
     </ul>
     <ul class="nav navbar-nav hello-administrator pull-right">
         <li>

@@ -20,7 +20,7 @@
         <!-- Module拦截器 -->
         <bean class="com.emenu.web.interceptor.ModuleInterceptor" />
         <bean class="com.emenu.web.interceptor.LoginInterceptor" />
-        <!--<bean class="com.pandawork.web.interceptor.AuthorInterceptor" />-->
+        <!--<bean class="com.emenu.web.interceptor.AuthorInterceptor" />-->
         <bean class="com.emenu.web.interceptor.ErrorInterceptor" />
     </mvc:interceptors>
     <bean id="exceptionHandler" class="com.emenu.web.interceptor.ExceptionHandler" />

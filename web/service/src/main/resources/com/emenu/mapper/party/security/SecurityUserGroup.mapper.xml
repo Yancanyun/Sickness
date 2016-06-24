@@ -30,7 +30,7 @@
         WHERE userGroup.user_id = #{userId}
     </select>
 
-    <select id="listSecurityGroupByLoginName" resultMap="pw.SecurityGroup">>
+    <select id="listSecurityGroupByLoginName" resultMap="pw.SecurityGroup">
         SELECT
             securityGroup.*
         FROM `t_party_security_user_group` userGroup

@@ -19,4 +19,12 @@ public interface PartyService {
      * @throws SSException
      */
     public Party newParty(Party party) throws SSException;
+
+    /**
+     * 获取partyType
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Integer queryPartyTypeById(int id) throws SSException;
 }

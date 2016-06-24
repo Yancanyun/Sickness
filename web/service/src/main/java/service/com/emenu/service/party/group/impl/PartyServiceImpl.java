@@ -33,4 +33,14 @@ public class PartyServiceImpl implements PartyService {
         }
     }
 
+    @Override
+    public Integer queryPartyTypeById(int id) throws SSException {
+        try {
+            return commonDao.queryById(Party.class,id).getPartyTypeId();
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+    }
+
 }

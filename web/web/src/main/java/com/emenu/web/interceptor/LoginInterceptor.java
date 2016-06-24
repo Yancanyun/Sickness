@@ -1,8 +1,10 @@
 package com.emenu.web.interceptor;
 
 import com.emenu.common.annotation.IgnoreLogin;
+import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.pandawork.core.common.log.LogClerk;
@@ -31,6 +33,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private SecurityUserService securityUserService;
+
+    @Autowired
+    private PartyService partyService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -119,12 +124,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         return basePath;
     }
 
-    private void setRequestAttribute(SecurityUser user, HttpServletRequest request) {
+    private void setRequestAttribute(SecurityUser user, HttpServletRequest request) throws Exception {
         // 用户的userId
         request.setAttribute(WebConstants.WEB_SECURITY_USER_ID, user.getId());
         // 用户partyId
         request.setAttribute(WebConstants.WEB_PARTY_ID, user.getPartyId());
         // 登录名 loginName
         request.setAttribute(WebConstants.WEB_USER_LOGIN_NAME, user.getLoginName());
+        // 用户类型 partyType
+        Integer partyType = partyService.queryPartyTypeById(user.getPartyId());
+        request.setAttribute(WebConstants.WEB_PARTY_TYPE,partyType);
     }
 }

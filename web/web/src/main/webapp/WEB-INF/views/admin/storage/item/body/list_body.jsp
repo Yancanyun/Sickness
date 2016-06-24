@@ -77,10 +77,8 @@
                 <h4>库存物品列表</h4>
             </div>
             <div class="panel-body">
-                <a class="btn btn-success margin-bottom-15" href="#"><i class="fa fa-plus"></i>&nbsp;添加库存物品</a>
-                <a href="${website}admin/storage/item/export" class="btn btn-warning pull-right J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
-
                 <a class="btn btn-success margin-bottom-15" href="${website}/admin/storage/item/tonew"><i class="fa fa-plus"></i>&nbsp;添加库存物品</a>
+                <a href="${website}admin/storage/item/export" class="btn btn-warning pull-right J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 <form class="J_operForm">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">

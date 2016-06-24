@@ -2,6 +2,7 @@ package com.emenu.web.controller.admin;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.TrueEnums;
@@ -33,7 +34,8 @@ import java.io.PrintWriter;
 @RequestMapping(value = URLConstants.ADMIN_URL)
 public class AdminController extends AbstractController {
 
-    @Module(ModuleEnums.AdminIndex)
+    //@Module(ModuleEnums.AdminIndex)
+    @IgnoreAuthorization
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toIndex() {
         return "admin/index/index_home";
@@ -45,6 +47,7 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String toLogin() {
         try {
@@ -70,6 +73,7 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "ajax/login", method = RequestMethod.POST)
     @ResponseBody
     public JSON ajaxLogin(@RequestParam("loginName") String loginName,
@@ -98,11 +102,17 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public String login() {
         return "redirect:/admin";
     }
 
+    /**
+     * 退出登录
+     * @return
+     */
+    @IgnoreAuthorization
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public String logout() {
         try {
@@ -121,6 +131,7 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "404", method = RequestMethod.GET)
     public String to404() {
         return ADMIN_NOT_FOUND_PAGE;
@@ -132,6 +143,7 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "403", method = RequestMethod.GET)
     public String to403() {
         return ADMIN_FORBIDDEN_PAGE;
@@ -143,6 +155,7 @@ public class AdminController extends AbstractController {
      * @return
      */
     @IgnoreLogin
+    @IgnoreAuthorization
     @RequestMapping(value = "500", method = RequestMethod.GET)
     public String to500() {
         int statusCode = getResponse().getStatus();
