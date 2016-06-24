@@ -1,5 +1,6 @@
 package com.emenu.service.party.login;
 
+import com.emenu.common.enums.party.LoginTypeEnums;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -26,16 +27,17 @@ public interface LoginManageService {
 
     /**
      * 验证用户是否具有合法的身份进入
-     *
      * @param token
+     * @param loginType
      * @param request
      * @param response
      * @return null表示非法用户；如果返回非空值，则说明是验证通过。
      * @throws SSException
      */
     public Subject validLogin(UsernamePasswordToken token,
-                               HttpServletRequest request,
-                               HttpServletResponse response) throws SSException;
+                              LoginTypeEnums loginType,
+                              HttpServletRequest request,
+                              HttpServletResponse response) throws SSException;
 
     /**
      * 登出

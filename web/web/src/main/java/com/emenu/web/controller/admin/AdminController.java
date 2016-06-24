@@ -7,6 +7,7 @@ import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.party.LoginTypeEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -86,7 +87,8 @@ public class AdminController extends AbstractController {
             token.setRememberMe(true);
         }
         try {
-            loginManageService.validLogin(token, getRequest(), getResponse());
+
+            loginManageService.validLogin(token, LoginTypeEnums.BackgroundLogin,getRequest(), getResponse());
             httpSession.setAttribute("userName",loginName);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

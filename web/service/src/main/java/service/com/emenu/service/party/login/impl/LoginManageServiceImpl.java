@@ -2,6 +2,7 @@ package com.emenu.service.party.login.impl;
 
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.enums.party.EnableEnums;
+import com.emenu.common.enums.party.LoginTypeEnums;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.service.party.login.LoginManageService;
@@ -120,7 +121,7 @@ public class LoginManageServiceImpl implements LoginManageService {
     }
 
     @Override
-    public Subject validLogin(UsernamePasswordToken token, HttpServletRequest request, HttpServletResponse response) throws SSException {
+    public Subject validLogin(UsernamePasswordToken token, LoginTypeEnums loginType, HttpServletRequest request, HttpServletResponse response) throws SSException {
         Assert.isNotNull(token, PartyException.LoginTokenNotNull);
         Assert.isNotNull(token.getUsername(), PartyException.LoginNameNotNull);
         String password = String.valueOf(token.getPassword());
@@ -153,9 +154,10 @@ public class LoginManageServiceImpl implements LoginManageService {
 
         // 添加到缓存中
         this.addSubject(subject);
+        if (loginType == LoginTypeEnums.BackgroundLogin){
         // 生成T票
         this.generateTGT(subject.getSession().getId().toString(), request, response, token.isRememberMe());
-
+        }
         return subject;
     }
 
