@@ -21,7 +21,7 @@ public interface TableMergeCacheService {
     public void newTable(int partyId, int tableId) throws SSException;
 
     /**
-     * 添加要并台的餐台
+     * 删除要并台的餐台
      * @param partyId
      * @param tableId
      * @throws SSException

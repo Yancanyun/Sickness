@@ -326,4 +326,13 @@ public class AbstractAppBarController extends Base {
     @StaticAutoWire
     @Qualifier("callWaiterService")
     protected static CallWaiterService callWaiterService;
+
+    // 并台
+    @StaticAutoWire
+    @Qualifier("tableMergeService")
+    protected static TableMergeService tableMergeService;
+
+    @StaticAutoWire
+    @Qualifier("tableMergeCacheService")
+    protected static TableMergeCacheService tableMergeCacheService;
 }

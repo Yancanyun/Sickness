@@ -328,6 +328,8 @@ public enum ModuleEnums {
     WaiterTableChange("Waiter:Table:Change"),
     //服务员清台
     WaiterTableClean("Waiter:Table:Clean"),
+    //服务员并台
+    WaiterTableMerge("Waiter:Table:Merge"),
     //服务员查看所有呼叫服务
     WaiterCallList("Waiter:Call:List"),
 

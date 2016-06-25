@@ -180,6 +180,9 @@ public final class URLConstants {
     //服务员清台
     public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
 
+    //服务员并台
+    public static final String WAITER_TABLE_MERGE_URL = "waiter/table/merge";
+
     //服务员查看所有呼叫服务
     public static final String WAITER_CALL_LIST_URL = "waiter/call";
 

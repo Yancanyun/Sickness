@@ -173,13 +173,20 @@ public class WaiterTableServiceImpl implements WaiterTableService {
     }
 
     @Override
-    public AreaDto queryAreaDtoByPartyIdAndAreaIdAndStatus(int partyId, int areaId, int status) throws SSException {
+    public AreaDto queryAreaDtoByPartyIdAndAreaIdAndStatusList(int partyId, int areaId, List<Integer> statusList) throws SSException {
         try {
-            // 根据状态查询服务员负责的餐台ID
-            List<Integer> tableIdList = queryByPartyIdAndStatus(partyId, status);
-            List<Table> tableList = new ArrayList<Table>();
+            if (Assert.isNull(statusList)) {
+                throw SSException.get(EmenuException.SystemException);
+            }
+
+            // 根据状态List查询服务员负责的餐台ID
+            List<Integer> tableIdList = new ArrayList<Integer>();
+            for(int status : statusList) {
+                tableIdList.addAll(queryByPartyIdAndStatus(partyId, status));
+            }
 
             // 查询服务员负责餐台的详细信息
+            List<Table> tableList = new ArrayList<Table>();
             for(int tid : tableIdList) {
                 tableList.add(tableService.queryById(tid));
             }
