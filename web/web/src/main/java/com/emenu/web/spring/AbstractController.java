@@ -77,6 +77,10 @@ public class AbstractController extends Base {
     protected final static String MOBILE_FORBIDDEN_PAGE = "mobile/403";
     // 顾客点餐平台无法找到404页面
     protected final static String MOBILE_NOT_FOUND_PAGE = "mobile/404";
+    // 顾客点餐平台Session过期页面
+    protected final static String MOBILE_SESSION_OVERDUE_PAGE = "mobile/session";
+    // 顾客点餐平台未开台页面
+    protected final static String MOBILE_NOT_OPEN_PAGE = "mobile/notopen";
 
     // 微信异常返回页面
     protected final static String WECHAT_SYS_ERR_PAGE = "wechat/500";

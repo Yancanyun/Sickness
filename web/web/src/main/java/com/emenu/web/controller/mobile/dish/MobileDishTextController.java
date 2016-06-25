@@ -11,10 +11,12 @@ import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +38,23 @@ public class MobileDishTextController extends AbstractController {
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
     public String toList(@RequestParam(required = false) Integer classifyId,
                          @RequestParam(required = false) String keyword,
-                         HttpSession session, Model model)
-    {
-        try
-        {
+                         HttpSession session, Model model) {
+        try {
+            // 检查Session中是否存在TableId
+            if (Assert.isNull(session.getAttribute("tableId"))) {
+                return MOBILE_SESSION_OVERDUE_PAGE;
+            }
+
+            // 从Session中获取TableID
+            Integer tableId = (Integer)session.getAttribute("tableId");
+            model.addAttribute("tableId", tableId);
+
+            // 检查餐台是否已开台
+            if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                    || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+                return MOBILE_NOT_OPEN_PAGE;
+            }
+
             // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
             if (classifyId != null) {
                 model.addAttribute("classifyId", classifyId);
@@ -57,10 +72,6 @@ public class MobileDishTextController extends AbstractController {
             tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Drinks.getId()));
             tagList.addAll(tagFacadeService.listChildrenByTagId(TagEnum.Package.getId()));
             model.addAttribute("tagList", tagList);
-
-            // 从Session中获取TableID
-            Integer tableId = (Integer)session.getAttribute("tableId");
-            model.addAttribute("tableId", tableId);
 
             // 从缓存中取出该餐台已点但未下单的菜品
             TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);

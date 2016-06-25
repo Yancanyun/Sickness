@@ -12,10 +12,12 @@ import com.emenu.common.entity.dish.DishTag;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.apache.ibatis.annotations.Param;
 import org.bouncycastle.ocsp.Req;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +47,22 @@ public class PrefersController extends AbstractController {
     //去今日特价页
     @Module(ModuleEnums.MobileDishPreferCheapList)
     @RequestMapping(value = "cheap/list",method = RequestMethod.GET)
-    public String toTodayCheap(Model model) throws SSException{
+    public String toTodayCheap(Model model, HttpSession session) throws SSException{
+        // 检查Session中是否存在TableId
+        if (Assert.isNull(session.getAttribute("tableId"))) {
+            return MOBILE_SESSION_OVERDUE_PAGE;
+        }
+
+        // 从Session中获取TableID
+        Integer tableId = (Integer)session.getAttribute("tableId");
+        model.addAttribute("tableId", tableId);
+
+        // 检查餐台是否已开台
+        if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+            return MOBILE_NOT_OPEN_PAGE;
+        }
+
         return "mobile/prefer/cheap/list_home";
     }
 
@@ -84,7 +102,22 @@ public class PrefersController extends AbstractController {
     //去销量排行页
     @Module(ModuleEnums.MobileDishPreferRankList)
     @RequestMapping(value = "rank/list",method = RequestMethod.GET)
-    public String toRankList(Model model) throws SSException{
+    public String toRankList(Model model, HttpSession session) throws SSException{
+        // 检查Session中是否存在TableId
+        if (Assert.isNull(session.getAttribute("tableId"))) {
+            return MOBILE_SESSION_OVERDUE_PAGE;
+        }
+
+        // 从Session中获取TableID
+        Integer tableId = (Integer)session.getAttribute("tableId");
+        model.addAttribute("tableId", tableId);
+
+        // 检查餐台是否已开台
+        if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+            return MOBILE_NOT_OPEN_PAGE;
+        }
+
         return "mobile/prefer/rank/list_home";
     }
 
@@ -123,7 +156,22 @@ public class PrefersController extends AbstractController {
     //去本店特色页
     @Module(ModuleEnums.MobileDishPreferFeatureList)
     @RequestMapping(value = "feature/list",method = RequestMethod.GET)
-    public String toFeatureList(Model model) throws SSException{
+    public String toFeatureList(Model model, HttpSession session) throws SSException{
+        // 检查Session中是否存在TableId
+        if (Assert.isNull(session.getAttribute("tableId"))) {
+            return MOBILE_SESSION_OVERDUE_PAGE;
+        }
+
+        // 从Session中获取TableID
+        Integer tableId = (Integer)session.getAttribute("tableId");
+        model.addAttribute("tableId", tableId);
+
+        // 检查餐台是否已开台
+        if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+            return MOBILE_NOT_OPEN_PAGE;
+        }
+
         return "mobile/prefer/feature/list_home";
     }
 

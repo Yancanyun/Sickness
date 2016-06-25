@@ -11,9 +11,11 @@ import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +44,21 @@ public class MobileDishDetailController extends AbstractController{
         List<Remark> remarkList = new ArrayList<Remark>();
         //List<Tag> tagList = new ArrayList<Tag>();
         try{
+            // 检查Session中是否存在TableId
+            if (Assert.isNull(session.getAttribute("tableId"))) {
+                return MOBILE_SESSION_OVERDUE_PAGE;
+            }
+
+            // 从Session中获取TableID
+            Integer tableId = (Integer)session.getAttribute("tableId");
+            model.addAttribute("tableId", tableId);
+
+            // 检查餐台是否已开台
+            if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                    || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+                return MOBILE_NOT_OPEN_PAGE;
+            }
+
             // 获取菜品所有分类
             /*tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Dishes.getId())));
             tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Drinks.getId())));
@@ -52,10 +69,6 @@ public class MobileDishDetailController extends AbstractController{
             remarkList = dishService.queryDishRemarkByDishId(dishId);
             model.addAttribute("dishDto",dishDto);
             model.addAttribute("remarkList",remarkList);
-
-            // 从Session中获取TableID
-            Integer tableId = (Integer)session.getAttribute("tableId");
-            model.addAttribute("tableId", tableId);
 
             // 从缓存中取出该餐台已点但未下单的菜品
             TableOrderCache tableOrderCache = orderDishCacheService.listByTableId(tableId);

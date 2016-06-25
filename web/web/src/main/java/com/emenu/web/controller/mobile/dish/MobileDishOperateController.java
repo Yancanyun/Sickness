@@ -9,10 +9,12 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,8 +75,19 @@ public class MobileDishOperateController extends AbstractController {
                           @RequestParam("taste") Integer taste,
                           @RequestParam("remarks") String remarks) {
         try {
-            // 从Session中获取餐台ID
+            // 检查Session中是否存在TableId
+            if (Assert.isNull(session.getAttribute("tableId"))) {
+                return MOBILE_SESSION_OVERDUE_PAGE;
+            }
+
+            // 从Session中获取TableID
             Integer tableId = (Integer)session.getAttribute("tableId");
+
+            // 检查餐台是否已开台
+            if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                    || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+                return MOBILE_NOT_OPEN_PAGE;
+            }
 
             // 添加菜品至缓存
             OrderDishCache orderDishCache = new OrderDishCache();
@@ -146,5 +159,4 @@ public class MobileDishOperateController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
 }

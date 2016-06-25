@@ -23,6 +23,7 @@ import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.service.dish.DishService;
@@ -31,6 +32,7 @@ import com.emenu.service.order.CheckoutServcie;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,22 +65,33 @@ public class MyOrderController  extends AbstractController {
      */
     @Module(ModuleEnums.MobileMyOrderList)
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
-    public String toMyOrder(Model model,HttpSession httpSession)
-    {
+    public String toMyOrder(Model model,HttpSession httpSession) {
         Set<String> uniqueRemark = new HashSet<String>();//去除重复后的备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的订单缓存
         List<MyOrderDto> myOrderDto = new ArrayList<MyOrderDto>();//数据传输对象
-        String str = httpSession.getAttribute("tableId").toString();
-        Integer tableId = Integer.parseInt(str);
         BigDecimal totalMoney = new BigDecimal(0);//已点菜品的总金额
         Map<String,Integer> stringMap = new HashMap<String, Integer>();//用来存放已经有的菜品关联备注
         Table table = new Table();
         List<Order> orders = new ArrayList<Order>();//订单
         List<OrderDishDto> orderDishDtos= new ArrayList<OrderDishDto>();//所有的订单菜品
         BigDecimal orderTotalMoney = new BigDecimal(0);//已下单未结账订单菜品的总金额
-        try
-        {
+        try {
+            // 检查Session中是否存在TableId
+            if (Assert.isNull(httpSession.getAttribute("tableId"))) {
+                return MOBILE_SESSION_OVERDUE_PAGE;
+            }
+
+            // 从Session中获取TableID
+            String str = httpSession.getAttribute("tableId").toString();
+            Integer tableId = Integer.parseInt(str);
+
+            // 检查餐台是否已开台
+            if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
+                    || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
+                return MOBILE_NOT_OPEN_PAGE;
+            }
+
             table=tableService.queryById(tableId);//查询出餐台信息
             model.addAttribute("personNum",table.getPersonNum());//餐台实际人数
             model.addAttribute("seatPrice",table.getSeatFee());//餐位费用
