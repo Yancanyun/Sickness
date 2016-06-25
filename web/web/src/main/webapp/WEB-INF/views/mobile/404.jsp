@@ -19,7 +19,7 @@
 		</ul>
 	</div>
 	<div class="link">
-		<%--<a href="javascript:;"><i class="fa fa-refresh"></i>&nbsp刷新</a>--%>
+		<a href="javascript:location.reload();"><i class="fa fa-refresh"></i>&nbsp刷新</a>
 		<a href="${website}mobile/dish/image"><i class="fa fa-angle-left"></i>&nbsp返回首页</a>
 	</div>
 </div>

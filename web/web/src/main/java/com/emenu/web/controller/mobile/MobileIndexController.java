@@ -57,19 +57,21 @@ public class MobileIndexController extends AbstractController {
     }
 
     /**
-     * 去404
+     * 去404页
+     * 用*来拦截所有请求，这样便可以不走web.xml的404
      *
+     * @author: yangch
      * @return
      */
     @IgnoreLogin
     @IgnoreAuthorization
-    @RequestMapping(value = "404", method = RequestMethod.GET)
+    @RequestMapping(value = "*", method = RequestMethod.GET)
     public String to404() {
         return MOBILE_NOT_FOUND_PAGE;
     }
 
     /**
-     * 去500
+     * 去500页
      *
      * @return
      */
@@ -101,6 +103,7 @@ public class MobileIndexController extends AbstractController {
                 getRequest().setAttribute("javax.servlet.error.request_uri", url);
             }
         }
+
         return MOBILE_SYS_ERR_PAGE;
     }
 }

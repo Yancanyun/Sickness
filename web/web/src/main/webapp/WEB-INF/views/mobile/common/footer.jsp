@@ -46,7 +46,7 @@
             </ul>
         </li>
 
-        <li  class="active my-order J_myOrder oper" >
+        <li class="<c:if test="${PWModule eq 'Mobile:Order'}">active</c:if> my-order J_myOrder oper">
             <a href="${website}mobile/order">
                 <i class="fa fa-file-text-o list-trigger"></i>
                 <span>我的订单</span>

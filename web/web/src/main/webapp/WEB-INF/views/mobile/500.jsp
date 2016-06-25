@@ -15,12 +15,12 @@
 	<div class="error-note clearfix">
 		<p class="note clearfix">500：</p>
 		<ul class="reason">
-			<li>您所请求的网页出现了些问题！我们正在努力修复中,请耐心等候。</li>
+			<li>您所请求的网页出现了些问题！</li>
 			<li>${eMsg}</li>
 		</ul>
 	</div>
 	<div class="link">
-		<%--<a href="javascript:;"><i class="fa fa-refresh"></i>&nbsp刷新</a>--%>
+		<a href="javascript:location.reload();"><i class="fa fa-refresh"></i>&nbsp刷新</a>
 		<a href="${website}mobile/dish/image"><i class="fa fa-angle-left"></i>&nbsp返回首页</a>
 	</div>
 </div>
