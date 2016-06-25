@@ -2,7 +2,7 @@
 <script type='text/template' id="dishTpl">
   {@each list as it}
   <li class="dish clearfix" data-dish-id="&{it.dishId}">
-    <a href="${website}mobile/dish/detail/&{it.dishId}" class="dish-img"><img class="lazy-load" src="/resources/img/mobile/common/default-img.png" data-original="&{it.src}" data-lazy-container=".dish-list" alt="菜品图片"></a>
+    <a href="${website}mobile/dish/detail/&{it.dishId}" class="dish-img"><img class="lazy-load" src="${staticWebsite}img/mobile/common/default-img.png" data-original="${tinyWebsite}&{it.src}" data-lazy-container=".dish-list" alt="菜品图片"></a>
     <p class="dish-name">&{it.name}</p>
     <p class="dish-sales">销&nbsp;<span>&{it.rankNumber}</span></p>
     <div class="add-dish J_addDishTrigger" data-dish-number="&{it.number}">

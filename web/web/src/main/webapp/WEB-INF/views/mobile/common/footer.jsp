@@ -25,21 +25,18 @@
                 </li>
             </c:otherwise>
         </c:choose>
-        <li <c:choose>
-            <c:when test="${PWModule eq 'Mobile:Dish:Perfer'}">class="active oper J_subMenuListTrigger"</c:when>
-            <c:otherwise>class="oper J_subMenuListTrigger"</c:otherwise>
-        </c:choose>>
 
+        <li class="oper J_subMenuListTrigger">
             <i class="fa fa-heart-o list-trigger"></i><span>猜你喜欢</span>
             <ul class="call-service-list J_subMenuList">
-                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Cheap:List'}">class="active"</c:if>>
+                <li>
                     <a href="${website}mobile/dish/prefer/cheap/list">今日特价</a>
                 </li>
-                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Rank:List'}">class="active"</c:if>>
-                <a href="${website}mobile/dish/prefer/rank/list">销量排行</a>
+                <li>
+                    <a href="${website}mobile/dish/prefer/rank/list">销量排行</a>
                 </li>
-                <li <c:if test="${MethodModule eq 'Mobile:Dish:Perfer:Feature:List'}">class="active"</c:if>>
-                <a href="${website}mobile/dish/prefer/feature/list">本店特色</a>
+                <li>
+                    <a href="${website}mobile/dish/prefer/feature/list">本店特色</a>
                 </li>
                 <li><a href="">为您推荐</a></li>
                 <li><a href="#">历史消费</a></li>

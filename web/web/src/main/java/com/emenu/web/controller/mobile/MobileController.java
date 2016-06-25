@@ -35,7 +35,7 @@ import java.util.List;
 @IgnoreAuthorization
 @IgnoreLogin
 @RequestMapping(value = {URLConstants.MOBILE_URL, URLConstants.MOBILE_INDEX_URL})
-public class MobileIndexController extends AbstractController {
+public class MobileController extends AbstractController {
     @Module(ModuleEnums.MobileIndex)
     @RequestMapping(value = "{tableId}", method = RequestMethod.GET)
     public String toIndex(@PathVariable("tableId")Integer tableId, HttpSession session, Model model) {
