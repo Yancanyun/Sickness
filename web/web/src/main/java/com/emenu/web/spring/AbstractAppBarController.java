@@ -9,6 +9,7 @@ import com.emenu.service.call.CallWaiterService;
 import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
@@ -335,4 +336,9 @@ public class AbstractAppBarController extends Base {
     @StaticAutoWire
     @Qualifier("tableMergeCacheService")
     protected static TableMergeCacheService tableMergeCacheService;
+
+    // 点餐缓存
+    @StaticAutoWire
+    @Qualifier("orderDishCacheService")
+    protected static OrderDishCacheService orderDishCacheService;
 }

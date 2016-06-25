@@ -165,6 +165,9 @@ public final class URLConstants {
     public static final String MOBILE_MY_ORDER_URL = "mobile/order";
 
     /**********************服务员APP*************************/
+    // 服务员登录
+    public static final String WAITER_LOGIN_URL = "waiter/login";
+
     // 餐台
     public static final String WAITER_TABLE_URL = "waiter/table";
 
@@ -179,6 +182,9 @@ public final class URLConstants {
 
     //服务员清台
     public static final String WAITER_TABLE_CLEAN_URL = "waiter/table/clean";
+
+    // 服务员点菜
+    public static final String WAITER_ORDER_DISH_URL = "waiter/order/dish";
 
     //服务员并台
     public static final String WAITER_TABLE_MERGE_URL = "waiter/table/merge";

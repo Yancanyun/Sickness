@@ -42,7 +42,7 @@ public class MobileDishDetailController extends AbstractController{
                                HttpSession session,
                                Model model){
         List<Remark> remarkList = new ArrayList<Remark>();
-        //List<Tag> tagList = new ArrayList<Tag>();
+        List<Tag> tagList = new ArrayList<Tag>();
         try{
             // 检查Session中是否存在TableId
             if (Assert.isNull(session.getAttribute("tableId"))) {
@@ -60,9 +60,10 @@ public class MobileDishDetailController extends AbstractController{
             }
 
             // 获取菜品所有分类
-            /*tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Dishes.getId())));
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Dishes.getId())));
             tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Drinks.getId())));
-            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Goods.getId())));*/
+            tagList.addAll(tagFacadeService.listChildrenByTagId((TagEnum.Goods.getId())));
+            model.addAttribute("tagList", tagList);
 
             DishDto dishDto = dishService.queryById(dishId);
             // 获取到菜品的小类信息

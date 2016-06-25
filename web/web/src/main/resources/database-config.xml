@@ -13,6 +13,7 @@
         <property name="username" value="root"/>
         <property name="password" value="mysql"/>
         <property name="jdbcUrl" value="jdbc:mysql://192.168.1.25:3306/db_emenu?defaultFetchSize=25&amp;useLocalSessionState=true&amp;elideSetAutoCommit=true&amp;useUsageAdvisor=false&amp;useReadAheadInput=false&amp;useUnbufferedInput=false&amp;cacheServerConfiguration=true&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull" />
+        <!--<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1/db_emenu20150527?defaultFetchSize=25&amp;useLocalSessionState=true&amp;elideSetAutoCommit=true&amp;useUsageAdvisor=false&amp;useReadAheadInput=false&amp;useUnbufferedInput=false&amp;cacheServerConfiguration=true&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull" />-->
         <property name="driverClass" value="com.mysql.jdbc.Driver" />
         <property name="idleConnectionTestPeriodInMinutes" value="60"/>
         <property name="idleMaxAgeInMinutes" value="240"/>

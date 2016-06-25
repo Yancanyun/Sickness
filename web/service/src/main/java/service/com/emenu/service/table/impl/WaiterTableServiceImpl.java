@@ -4,6 +4,7 @@ import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.WaiterTable;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.WaiterTableMapper;
 import com.emenu.service.table.AreaService;
@@ -135,7 +136,7 @@ public class WaiterTableServiceImpl implements WaiterTableService {
     @Override
     public List<AreaDto> queryAreaDtoByPartyIdAndStatus(int partyId, int status) throws SSException {
         try {
-            //根据状态查询服务员负责的餐台的id，查t_wariter_table
+            //根据状态查询服务员负责的餐台的id，查t_waiter_table
             List<Integer> tableIdList = queryByPartyIdAndStatus(partyId, status);
             List<Table> tableList = new ArrayList<Table>();
 

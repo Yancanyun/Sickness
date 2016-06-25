@@ -240,7 +240,9 @@
         </where>
         GROUP BY dish.`id`
         ORDER BY  `status` ASC, `id` DESC
-        LIMIT #{dishSearchDto.offset},#{dishSearchDto.pageSize}
+        <if test="dishSearchDto.offset >= 0 and dishSearchDto.pageSize >= 0">
+            LIMIT #{dishSearchDto.offset},#{dishSearchDto.pageSize}
+        </if>
     </select>
 
     <update id="likeThisDish" parameterType="int">
