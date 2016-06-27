@@ -728,8 +728,12 @@ public class TableServiceImpl implements TableService {
                 orderDishs=orderDishService.listByOrderId(dto.getId());//获取订单菜品
                 for(OrderDish orderDish : orderDishs)
                 {
-                    orderDish.setIsChange(1);//数据库新增的字段
-                    orderDishService.updateOrderDish(orderDish);
+                    //订单菜品已下单或者正在做再设置换台属性,已上菜了的话没有必要把isChange属性设为1
+                    if(orderDish.getStatus()==1||orderDish.getStatus()==2)
+                    {
+                        orderDish.setIsChange(1);
+                        orderDishService.updateOrderDish(orderDish);
+                    }
                 }
                 orderService.updateOrder(dto);
             }

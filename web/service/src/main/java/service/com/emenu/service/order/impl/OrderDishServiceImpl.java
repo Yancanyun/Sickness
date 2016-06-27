@@ -170,7 +170,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Override
     public int isTableHaveOrderDish(Integer tableId) throws SSException
     {
-        int count = 0;
+        int count = 0;//未上菜的菜品个数
         try{
             if(!Assert.lessOrEqualZero(tableId))
                 count = orderDishMapper.isTableHaveOrderDish(tableId);
@@ -179,5 +179,19 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException.QueryIsHaveOrderDishFailed,e);
         }
         return count;
+    }
+
+    @Override
+    public int queryOrderDishTableId(Integer orderDishId) throws SSException
+    {
+        Integer tableId = new Integer(0);
+        try{
+            if(!Assert.lessOrEqualZero(orderDishId))
+            tableId = orderDishMapper.queryOrderDishTableId(orderDishId);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishTableIdFail,e);
+        }
+        return tableId;
     }
 }

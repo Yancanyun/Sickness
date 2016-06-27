@@ -137,4 +137,10 @@ public class OrderDishTest extends AbstractTestCase {
     {
         System.out.println(orderDishService.isTableHaveOrderDish(1));
     }
+
+    @Test
+    public void testQueryOrderDishTableId() throws SSException
+    {
+        System.out.println(orderDishService.queryOrderDishTableId(1));
+    }
 }

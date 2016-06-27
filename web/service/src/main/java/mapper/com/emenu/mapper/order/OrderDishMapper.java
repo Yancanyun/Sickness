@@ -77,4 +77,11 @@ public interface OrderDishMapper {
      * @throws Exception
      */
     public int isTableHaveOrderDish(@Param("tableId") Integer tableId) throws Exception;
+
+    /**
+     * 根据订单菜品Id来查询出订单菜品对应的tableId
+     * @param orderDishId
+     * @throws Exception
+     */
+    public int queryOrderDishTableId(@Param("orderDishId") Integer orderDishId) throws Exception;
 }

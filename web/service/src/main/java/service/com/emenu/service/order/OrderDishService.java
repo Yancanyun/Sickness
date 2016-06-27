@@ -101,4 +101,11 @@ public interface OrderDishService {
      * @throws SSException
      */
     public int isTableHaveOrderDish(Integer tableId) throws SSException;
+
+    /**
+     * 根据订单菜品Id来查询出订单菜品对应的tableId
+     * @param orderDishId
+     * @throws Exception
+     */
+    public int queryOrderDishTableId(Integer orderDishId) throws SSException;
 }

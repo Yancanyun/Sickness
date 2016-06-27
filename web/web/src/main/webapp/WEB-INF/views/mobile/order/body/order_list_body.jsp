@@ -50,7 +50,7 @@
               <input type="hidden" name="dishRemark" value="无">
             </c:otherwise>
           </c:choose>
-          <img class="ordering-dish-img" src="${dto.imgPath}" alt="暂无菜品展示图片">
+          <img class="ordering-dish-img" src="http://static.emenu2.net/uploads${dto.imgPath}" alt="暂无菜品展示图片">
           <div class="ordering-dish-info">
             <p class="info-text">
               <span class="ordering-dish-name">${dto.name}</span>
@@ -85,7 +85,7 @@
       <c:if test="${not empty orderDishDto}">
          <c:forEach var="dto" items="${orderDishDto}">
             <li class="ordered-dish">
-                  <img class="ordered-dish-img" src="${dto.imgPath}" alt="暂无菜品展示图片">
+                  <img class="ordered-dish-img" src="http://static.emenu2.net/uploads${dto.imgPath}" alt="暂无菜品展示图片">
                   <div class="ordered-dish-info">
                   <p class="info-text">
                     <span class="ordered-dish-name">${dto.dishName}</span>

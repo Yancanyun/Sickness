@@ -25,7 +25,7 @@
           {@each orders as order, index}
           <!--{单个订单 Start}-->
           <div class="order-container">
-            <a href="javascript:;" class="badge time" data-order-time="&{order.time}">-</a>
+            <a href="javascript:;" class="badge time" data-order-time="&{order.time}">&{order.time}</a>
             <h5 class="order-brief-info">
               <span>订单&{order.id}</span>
             </h5>

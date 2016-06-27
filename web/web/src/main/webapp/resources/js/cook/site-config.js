@@ -1,7 +1,7 @@
 (function(){
     var   
         $libUrl = 'http://pui.pandawork.net/resources/',
-        $staticWebsite = '/',
+        $staticWebsite = 'http://static.emenu2.net/',
         $website = '/';
         
     PW_CONFIG = {
@@ -45,7 +45,7 @@
             connector: {
                 debug: true,
                 //测试数据的地址前缀
-                debugUrlPrefix: $staticWebsite,
+                debugUrlPrefix: $website,
                 // debugUrlPrefix: $staticWebsite + 'test/api-data/',
                 //线上发布数据的地址前缀
                 // deployUrlPrefix: $website

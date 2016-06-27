@@ -565,7 +565,9 @@ public enum EmenuException implements IBizExceptionMes {
     QueryIsHaveOrderDishFailed("查询餐桌是否有未上的菜品失败",10090),
     InitCookTableCacheFail("初始化餐桌版本号失败",10091),
     ListAllTableVersionFail("获取所有桌子的版本号失败",10092),
-
+    QueryOrderDishTableIdFail("查询订单菜品所对应的餐桌Id失败",10093),
+    ListPrintOrderDishDtoFail("获取订单菜品打印详细信息失败",10094),
+    PrintOrderDishFail("打印订单菜品失败",10095),
     ;
 
 

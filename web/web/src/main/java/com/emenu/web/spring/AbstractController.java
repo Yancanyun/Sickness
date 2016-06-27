@@ -10,10 +10,7 @@ import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.dish.tag.TagService;
 import com.emenu.service.meal.MealPeriodService;
-import com.emenu.service.order.CheckoutServcie;
-import com.emenu.service.order.OrderDishCacheService;
-import com.emenu.service.order.OrderDishService;
-import com.emenu.service.order.OrderService;
+import com.emenu.service.order.*;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
@@ -495,6 +492,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("cookTableCacheService")
     protected static CookTableCacheService cookTableCacheService;
+
+    //后厨管理打印菜品service
+    @StaticAutoWire
+    @Qualifier("orderDishPrintService")
+    protected static OrderDishPrintService orderDishPrintService;
 
 
     /**************************微信**************************/
