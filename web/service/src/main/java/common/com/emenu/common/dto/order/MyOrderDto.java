@@ -51,15 +51,15 @@ public class MyOrderDto {
     //菜品数量
     private Float count;
 
-    // 菜品口味
-    private List<Taste> tasteList;
+    // 菜品口味,菜品详情页选择的菜品口味只能选择一个
+    private Taste taste;
 
-    public List<Taste> getTasteList() {
-        return tasteList;
+    public Taste getTaste() {
+        return taste;
     }
 
-    public void setTasteList(List<Taste> tasteList) {
-        this.tasteList = tasteList;
+    public void setTaste(Taste taste) {
+        this.taste = taste;
     }
 
     public String getUnitName() {

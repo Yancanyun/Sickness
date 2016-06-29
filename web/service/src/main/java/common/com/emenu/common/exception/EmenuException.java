@@ -553,6 +553,7 @@ public enum EmenuException implements IBizExceptionMes {
     NewOrderFailed("添加一个订单失败",10048),
     UpdateOrderFailed("修改订单失败",10049),
     OrderDishCacheIsNull("订单中不存在任何菜品",10050),
+    UpdateOrderDishCacheFail("修改订单菜品失败,存在其他用户正在确认下单",10051),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10053),

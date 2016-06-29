@@ -33,13 +33,11 @@
           <!-- 菜品的最终售价 -->
           <input type="hidden" name="dishUnit" value="${dto.unitName}">
           <c:choose>
-            <c:when test="${not empty dto.tasteList}">
-              <c:forEach var="tasteList" items="${dto.tasteList}">
-                <input type="hidden" name="dishTaste" value="${tasteList.name}">
-              </c:forEach>
+            <c:when test="${not empty dto.taste}">
+                <input type="hidden" name="dishTaste" value="${dto.taste.name}">
             </c:when>
             <c:otherwise>
-                <input type="hidden" name="dishTaste" value="无">
+                <input type="hidden" name="dishTaste" value="菜品口味：默认">
             </c:otherwise>
           </c:choose>
           <c:choose>

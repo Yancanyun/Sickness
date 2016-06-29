@@ -160,9 +160,10 @@ public class MyOrderController  extends AbstractController {
                     if(temp.getSmallImg()!=null)//存在小图则设置小图的路径
                     temp.setImgPath(dishDto.getSmallImg().getImgPath());//菜品小图路径
                     temp.setUnitName(unit.getName());//菜品单位名称
-                    temp.setTasteList(dishDto.getTasteList());//菜品口味
+                    if(dto.getTasteId()!=null)//选择的菜品口味,没有选择菜品口味的话传递的是null值会报错
+                    temp.setTaste(tasteService.queryById(dto.getTasteId()));//菜品口味,菜品详情页选择的菜品口味只能选择一个
                     totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getPrice().doubleValue()));//菜品数量乘以菜品单价
-                    myOrderDto.add(temp);                                   //price要转换成double类型
+                    myOrderDto.add(temp);//price要转换成double类型
                 }
             }
 
@@ -181,7 +182,7 @@ public class MyOrderController  extends AbstractController {
 
     /**
      * ajax删除单个菜品缓存
-     *
+     * 若正在下单则即餐桌锁死的情况不允许操作
      * @param orderDishCacheId
      * @return
      */
@@ -193,9 +194,14 @@ public class MyOrderController  extends AbstractController {
     {
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);
+        TableOrderCache tableOrderCache = new TableOrderCache();
         try
         {
+            tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            if(tableOrderCache.getLock()==false)//餐桌未锁死
             orderDishCacheService.delDish(tableId,orderDishCacheId);
+            else
+            sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
             return sendJsonObject(AJAX_SUCCESS_CODE);
         }
         catch (SSException e) {
@@ -207,7 +213,7 @@ public class MyOrderController  extends AbstractController {
 
     /**
      * ajax修改单个菜品数量
-     *
+     * 若正在下单则即餐桌锁死的情况不允许操作
      * @param changeStatus,id
      *
      * @return
@@ -225,31 +231,44 @@ public class MyOrderController  extends AbstractController {
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            if(tableOrderCache!=null)
             orderDishCache = tableOrderCache.getOrderDishCacheList();
-            OrderDishCache temp = new OrderDishCache();//临时变量
-            for(OrderDishCache dto :orderDishCache)
+            if(orderDishCache!=null)
             {
-                if(dto.getId()==id)//id为缓存id,遍历找到对应的菜品缓存
+                if(tableOrderCache.getLock()==false)//餐桌未锁死
                 {
-                    temp=dto;
-                    break;
-                }
-            }
-            Float quantity = temp.getQuantity();//菜品数量
-            if(changeStatus==1)//改变状态为1的话为增加,为0的话为减少
-            {
-                temp.setQuantity(quantity+1);//修改菜品数量
-                orderDishCacheService.updateDish(tableId,temp);//更新相应的菜品缓存
-            }
-            else
-            {
-                if(temp.getQuantity()>1)//数量为1的话没办法再减少,但是可以删除
-                {
-                    temp.setQuantity(quantity-1);
+
+                    OrderDishCache temp = new OrderDishCache();//临时变量
+                    for(OrderDishCache dto :orderDishCache)
+                    {
+                        if(dto.getId()==id)//id为缓存id,遍历找到对应的菜品缓存
+                        {
+                            temp=dto;
+                            break;
+                        }
+                    }
+                    if(temp==null)//该菜品可能被其它用户删除掉了
+                    sendErrMsgAndErrCode(SSException.get(EmenuException.UpdateOrderDishFailed));
+                    Float quantity = temp.getQuantity();//菜品数量
+                    if(changeStatus==1)//改变状态为1的话为增加,为0的话为减少
+                    {
+                        temp.setQuantity(quantity+1);//修改菜品数量
+                        orderDishCacheService.updateDish(tableId,temp);//更新相应的菜品缓存
+                    }
+                    else
+                    {
+                        if(temp.getQuantity()>1)//数量为1的话没办法再减少,但是可以删除
+                        {
+                            temp.setQuantity(quantity-1);
+                            orderDishCacheService.updateDish(tableId,temp);
+                        }
+                    }
                     orderDishCacheService.updateDish(tableId,temp);
                 }
+                else sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
             }
-            orderDishCacheService.updateDish(tableId,temp);
+            else sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishCacheIsNull));
+
             return sendJsonObject(AJAX_SUCCESS_CODE);
         }
         catch (SSException e) {
@@ -335,7 +354,7 @@ public class MyOrderController  extends AbstractController {
         Integer tableId = Integer.parseInt(tableIdStr);
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutServcie.queryByTableId(tableId, 0);
+            checkout = checkoutServcie.queryByTableId(tableId, 0);//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
