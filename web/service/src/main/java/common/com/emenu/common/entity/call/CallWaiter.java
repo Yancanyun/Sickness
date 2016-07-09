@@ -46,6 +46,7 @@ public class CallWaiter extends AbstractEntity {
         return id;
     }
 
+
     @Override
     public void setId(Integer id) {
         this.id = id;

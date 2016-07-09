@@ -48,8 +48,8 @@ public class MyOrderDto {
     //菜品备注
     private String remark;
 
-    //菜品数量
-    private Float count;
+    //菜品数量,前端页面显示的时候要显示成整数
+    private int count;
 
     // 菜品口味,菜品详情页选择的菜品口味只能选择一个
     private Taste taste;
@@ -86,11 +86,11 @@ public class MyOrderDto {
         this.orderDishCacheId = orderDishCacheId;
     }
 
-    public Float getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(Float count) {
+    public void setCount(int count) {
         this.count = count;
     }
 

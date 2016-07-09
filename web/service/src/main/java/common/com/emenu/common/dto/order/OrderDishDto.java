@@ -92,7 +92,20 @@ public class OrderDishDto {
 
     private Integer isChange;
 
+    //菜品单位
+    private  String unitName;
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
     /********************getter and setter***************/
+
+
 
     public String getImgPath() {
         return imgPath;

@@ -67,4 +67,20 @@ public interface OrderDishCacheService {
      * @throws SSException
      */
     public void tableLockRemove(int tableId) throws SSException;
+
+    /**
+     * 设置正在下单顾客的Ip
+     * @param Ip
+     * @return
+     * @throws SSException
+     */
+    public void setCurrentOperateCustomerIp(String Ip) throws SSException;
+
+    /**
+     * 获取正在下单顾客的Ip
+     * @param
+     * @return
+     * @throws SSException
+     */
+    public String getCurrentOperateCustomerIp() throws SSException;
 }

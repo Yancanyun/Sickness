@@ -77,7 +77,9 @@
       </c:if>
     </ul>
     <!--默认刷页时后端返回本单消费的总金额，若客户在订单中调整菜品的数量，前端再其总计金额的基础上再进行计算-->
-    <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
+     <c:if test="${not empty orderDishDto}">
+       <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
+     </c:if>
     <!-- 已下订单菜品列表 -->
     <ul class="ordered-dish-list clearfix J_scroll">
       <c:if test="${not empty orderDishDto}">
@@ -92,12 +94,15 @@
                   </p>
                     <c:choose>
                       <c:when test="${dto.isPackage eq 0}">
-                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span></p>
+                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
+                        <span class =ordered-dish-unit>${dto.dishQuantity}</span>${dto.unitName}</p>
                        </c:when>
                       <c:otherwise>
-                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span></p>
+                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
+                          <span class =ordered-dish-unit>${dto.dishQuantity}</span>${dto.unitName}</p>
                       </c:otherwise>
                      </c:choose>
+
                   <p class="ordered-remark-info J_remarks">${dto.remark}</p>
                 </div>
                   <button class="J_delete">删除</button>

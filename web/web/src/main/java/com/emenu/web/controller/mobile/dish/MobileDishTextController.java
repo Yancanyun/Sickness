@@ -79,9 +79,9 @@ public class MobileDishTextController extends AbstractController {
             if (tableOrderCache != null) {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
-            Float dishTotalNumber = new Float(0);
+            int dishTotalNumber=0;
             for (OrderDishCache orderDishCache : orderDishCacheList) {
-                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
+                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity().intValue();
             }
             if (dishTotalNumber != 0) {
                 model.addAttribute("dishTotalNumber", dishTotalNumber);

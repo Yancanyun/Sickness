@@ -19,6 +19,7 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +65,6 @@ public class MobileDishImageController extends AbstractController {
                 return MOBILE_NOT_OPEN_PAGE;
             }
 
-
             // 把参数中传来的分类ID传到页面上，前端发Ajax请求需要用到
             if (classifyId != null) {
                 model.addAttribute("classifyId", classifyId);
@@ -105,9 +105,9 @@ public class MobileDishImageController extends AbstractController {
             if (tableOrderCache != null) {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
-            Float dishTotalNumber = new Float(0);
+            int dishTotalNumber =0;
             for (OrderDishCache orderDishCache : orderDishCacheList) {
-                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity();
+                dishTotalNumber = dishTotalNumber + orderDishCache.getQuantity().intValue();
             }
             if (dishTotalNumber != 0) {
                 model.addAttribute("dishTotalNumber", dishTotalNumber);

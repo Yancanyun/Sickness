@@ -36,4 +36,16 @@ public class OrderDishCacheTest extends AbstractTestCase {
     public void tableLockRemove() throws SSException {
         orderDishCacheService.tableLock(1);
     }
+
+    @Test
+    public void testSetIp() throws SSException
+    {
+        orderDishCacheService.setCurrentOperateCustomerIp("1.1.1");
+    }
+
+    @Test
+    public void testGetIp() throws SSException
+    {
+        orderDishCacheService.getCurrentOperateCustomerIp();
+    }
 }

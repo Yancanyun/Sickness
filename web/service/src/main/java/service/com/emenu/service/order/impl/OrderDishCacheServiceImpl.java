@@ -6,6 +6,7 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.service.order.OrderDishCacheService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
 
     // 点的菜品存入OrderDishCache中的ID
     private int orderDishCacheId = 0;
+
+    //当前正在下单的用户的Ip,用来判断如果是这个用户在确认订单的时候刷新了页面,要解除缓存的锁
+    private String currentOperateCustomerIp;
 
     @Override
     public void newDish(int tableId, OrderDishCache orderDishCache) throws SSException {
@@ -239,6 +243,28 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.TableLockRemoveFail, e);
+        }
+    }
+
+    @Override
+    public void setCurrentOperateCustomerIp(String Ip) throws SSException
+    {
+        try {
+                this.currentOperateCustomerIp=Ip;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SetCurrentOperateCustomerIpFail, e);
+        }
+    }
+
+    @Override
+    public String getCurrentOperateCustomerIp() throws SSException
+    {
+        try {
+                return this.currentOperateCustomerIp;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.GetCurrentOperateCustomerIpFail, e);
         }
     }
 }

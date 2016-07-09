@@ -40,6 +40,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sun.java2d.opengl.OGLDrawImage;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.*;
@@ -65,7 +68,8 @@ public class MyOrderController  extends AbstractController {
      */
     @Module(ModuleEnums.MobileMyOrderList)
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
-    public String toMyOrder(Model model,HttpSession httpSession) {
+    public String toMyOrder(Model model,HttpSession httpSession
+            ,HttpServletRequest request) {
         Set<String> uniqueRemark = new HashSet<String>();//去除重复后的备注
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的订单缓存
@@ -91,7 +95,14 @@ public class MyOrderController  extends AbstractController {
                     || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
                 return MOBILE_NOT_OPEN_PAGE;
             }
-
+            String customerIp = request.getRemoteAddr();//获取当前的用户Ip
+            String currentOperateCustomerIp = orderDishCacheService.getCurrentOperateCustomerIp();
+            if(currentOperateCustomerIp!=null&&customerIp.equals(currentOperateCustomerIp))
+            {
+                //有人正在进行确认下单操作且该用户刷新了页面,则解除锁
+                orderDishCacheService.tableLockRemove(tableId);
+                orderDishCacheService.setCurrentOperateCustomerIp(new String());//清空原来的Ip
+            }
             table=tableService.queryById(tableId);//查询出餐台信息
             model.addAttribute("personNum",table.getPersonNum());//餐台实际人数
             model.addAttribute("seatPrice",table.getSeatFee());//餐位费用
@@ -116,6 +127,10 @@ public class MyOrderController  extends AbstractController {
 
                 //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
                 tempOrderDishDto.setPrice();
+                DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getDishId());//通过dishId查询出菜品的信息
+                Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
+                if(unitTemp!=null)//若菜品单位不为空
+                tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
 
                 //设置一下图片路径,宝荣写的里面没有图片路径
                 DishImg dishImg =  new DishImg();
@@ -150,7 +165,7 @@ public class MyOrderController  extends AbstractController {
                     MyOrderDto temp = new MyOrderDto();//临时变量
                     temp.setDishId(dto.getDishId());//菜品id
                     temp.setName(dishDto.getName());//菜品名称
-                    temp.setCount(dto.getQuantity());//缓存中的单个菜品数量
+                    temp.setCount(dto.getQuantity().intValue());//缓存中的单个菜品数量
                     temp.setOrderDishCacheId(dto.getId());//缓存id
                     temp.setPrice(dishDto.getPrice());//菜品定价
                     temp.setSalePrice(dishDto.getSalePrice());//菜品售价
@@ -162,7 +177,7 @@ public class MyOrderController  extends AbstractController {
                     temp.setUnitName(unit.getName());//菜品单位名称
                     if(dto.getTasteId()!=null)//选择的菜品口味,没有选择菜品口味的话传递的是null值会报错
                     temp.setTaste(tasteService.queryById(dto.getTasteId()));//菜品口味,菜品详情页选择的菜品口味只能选择一个
-                    totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getPrice().doubleValue()));//菜品数量乘以菜品单价
+                    totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getSalePrice().doubleValue()));//菜品数量乘以菜品单价
                     myOrderDto.add(temp);//price要转换成double类型
                 }
             }
@@ -281,6 +296,7 @@ public class MyOrderController  extends AbstractController {
     /**
      * ajax返回确认下单的菜品的总金额
      * 同时把缓存锁死
+     * 存在问题(已解决)刷新页面后餐台的锁没有被解除
      * @param orderStatus
      *
      * @return
@@ -290,7 +306,8 @@ public class MyOrderController  extends AbstractController {
     @ResponseBody
     public JSONObject ajaxReturnMoney(@RequestParam("orderStatus") Integer orderStatus
             ,HttpSession httpSession
-            ,Model mOdel)
+            ,Model model
+            ,HttpServletRequest request)
     {
         String str = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(str);
@@ -317,6 +334,8 @@ public class MyOrderController  extends AbstractController {
             }
             if(orderStatus==1)//锁死菜品缓存
             {
+                //把当前正在操作的顾客的Ip地址记录下
+                orderDishCacheService.setCurrentOperateCustomerIp(request.getRemoteAddr());
                 orderDishCacheService.tableLock(tableId);
                 jsonObject.put("customPrice", totalMoney);
             }
@@ -418,7 +437,6 @@ public class MyOrderController  extends AbstractController {
                     orderDish.setDishQuantity(temp);
                     orderDish.setIsPackage(0);
                 }
-
                 orderDish.setOrderId(order.getId());
                 orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
                 orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
@@ -427,8 +445,8 @@ public class MyOrderController  extends AbstractController {
                 orderDish.setServeType(serviceWay);
                 else orderDish.setServeType(dto.getServeType());
                 orderDish.setOrderTime(orderTime);
-                orderDish.setIsCall(0);
-                orderDish.setIsChange(0);
+                orderDish.setIsCall(0);//是否被催菜
+                orderDish.setIsChange(0);//是否换了桌
                 //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                 orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                 orderDishService.newOrderDish(orderDish);

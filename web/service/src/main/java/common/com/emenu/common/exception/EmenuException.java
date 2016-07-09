@@ -528,6 +528,8 @@ public enum EmenuException implements IBizExceptionMes {
     CleanTableCacheError("清空该餐台已点菜品失败", 10007),
     TableLockFail("餐台加锁失败", 10008),
     TableLockRemoveFail("餐台解锁失败", 10009),
+    SetCurrentOperateCustomerIpFail("设置正在下单的顾客的Ip失败",10010),
+    GetCurrentOperateCustomerIpFail("获取正在下单的顾客的Ip失败",10011),
 
     //订单菜品模块
     OrderIdError("订单id错误",10030),
