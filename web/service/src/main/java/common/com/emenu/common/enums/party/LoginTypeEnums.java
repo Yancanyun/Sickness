@@ -12,8 +12,9 @@ import java.util.Map;
 public enum LoginTypeEnums {
 
     BackgroundLogin(1,"后台登录"),
-    WariterLogin(2,"服务员端登录"),
-    BackKitchenLogin(3,"后厨登录")
+    WaiterLogin(2,"服务员端登录"),
+    BackKitchenLogin(3,"后厨登录"),
+    BarLogin(4, "吧台客户端登录"),
     ;
 
     private Integer id;

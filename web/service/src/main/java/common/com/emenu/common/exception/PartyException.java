@@ -30,6 +30,7 @@ public enum PartyException implements IBizExceptionMes {
     UserDisabled("用户被禁用!", 1017),
     UserNotNull("用户不能为空",1018),
     WaiterLoginFail("用户登录失败",1019),
+    BarLoginFail("吧台登录失败",1020),
 
     SecurityGroupInsertFailed("添加安全组失败", 1025),
     SecurityGroupQueryFailed("查询安全组失败", 1026),

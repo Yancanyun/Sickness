@@ -194,17 +194,20 @@ public final class URLConstants {
 
 
     /**********************吧台客户端*************************/
-    //吧台客户端餐台列表
+    // 吧台客户端餐台列表
     public static final String BAR_TABLE_URL = "bar/table";
 
-    //吧台客户端开台
+    // 吧台客户端开台
     public static final String BAR_TABLE_OPEN_URL = "bar/table/open";
 
-    //吧台客户端换台
+    // 吧台客户端换台
     public static final String BAR_TABLE_CHANGE_URL = "bar/table/change";
 
-    //吧台客户端清台
+    // 吧台客户端清台
     public static final String BAR_TABLE_CLEAN_URL = "bar/table/clean";
+
+    // 吧台登录
+    public static final String BAR_LOGIN = "bar/login";
 
 
     /**********************微信*************************/

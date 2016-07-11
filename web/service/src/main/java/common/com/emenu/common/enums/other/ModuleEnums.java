@@ -345,6 +345,8 @@ public enum ModuleEnums {
     BarTableChange("Bar:Table:Change"),
     //吧台客户端清台
     BarTableClean("Bar:Table:Clean"),
+    //吧台客户端登录
+    BarLogin("Bar:Login"),
 
 
 
