@@ -216,6 +216,42 @@ public class WaiterTableServiceImpl implements WaiterTableService {
     }
 
     @Override
+    public AreaDto queryAreaDtoByPartyIdAndAreaId(int partyId, int areaId) throws SSException {
+        try {
+            // 根据状态List查询服务员负责的餐台ID
+            List<Integer> tableIdList = new ArrayList<Integer>();
+            tableIdList = queryByPartyId(partyId);
+
+            // 查询服务员负责餐台的详细信息
+            List<Table> tableList = new ArrayList<Table>();
+            for(int tid : tableIdList) {
+                tableList.add(tableService.queryById(tid));
+            }
+
+            // 根据AreaId把餐台封装到AreaDto中
+            Area area = areaService.queryById(areaId);
+            AreaDto areaDto = new AreaDto();
+            areaDto.setArea(area);
+
+            List<Table> tables = new ArrayList<Table>();
+            for(Table table : tableList) {
+                if(table.getAreaId().equals(area.getId())) {
+                    tables.add(table);
+                }
+            }
+            if(Assert.isNotNull(tables) && tables.size() != 0) {
+                //把区域和对应的餐台加入到areaDto里面
+                areaDto.setTableList(tables);
+            }
+
+            return areaDto;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryWaiterTableFail, e);
+        }
+    }
+
+    @Override
     public List<AreaDto> queryAreaDto() throws SSException {
         try {
             //获取所有餐桌

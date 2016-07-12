@@ -26,16 +26,15 @@ import java.util.List;
  * @author: yangch
  * @time: 2016/6/21 17:13
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
-@Module(ModuleEnums.WaiterTableAreaList)
+@Module(ModuleEnums.WaiterTable)
 @RequestMapping(value = URLConstants.WAITER_TABLE_AREA_URL)
 public class WaiterTableAreaController extends AbstractAppBarController {
     /**
      * Ajax 获取可管理餐台区域列表
      * @return
      */
+    @Module(ModuleEnums.WaiterTableAreaList)
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject areaList(HttpSession httpSession) {

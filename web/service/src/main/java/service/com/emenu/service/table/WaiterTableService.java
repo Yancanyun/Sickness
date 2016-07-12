@@ -67,6 +67,15 @@ public interface WaiterTableService {
     public AreaDto queryAreaDtoByPartyIdAndAreaIdAndStatusList(int partyId, int areaId, List<Integer> statusList) throws SSException;
 
     /**
+     * 根据区域ID、PartyId查询服务员负责全部餐桌
+     * @param partyId
+     * @param areaId
+     * @return
+     * @throws SSException
+     */
+    public AreaDto queryAreaDtoByPartyIdAndAreaId(int partyId, int areaId) throws SSException;
+
+    /**
      * 查询所有区域和餐桌
      * @return
      * @throws SSException

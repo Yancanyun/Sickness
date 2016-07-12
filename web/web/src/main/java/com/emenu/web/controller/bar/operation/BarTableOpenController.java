@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.pandawork.core.common.exception.SSException;
@@ -33,6 +35,12 @@ public class BarTableOpenController extends AbstractAppBarController {
     @ResponseBody
     public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
         try {
+            // 根据ID检查餐台是否可开台
+            Integer status = tableService.queryStatusById(tableId);
+            if (status != TableStatusEnums.Enabled.getId()) {
+                throw SSException.get(EmenuException.OpenTableFail);
+            }
+
             Table table = tableService.queryById(tableId);
 
             JSONObject jsonObject = new JSONObject();
@@ -41,7 +49,6 @@ public class BarTableOpenController extends AbstractAppBarController {
             jsonObject.put("seatNum", table.getSeatNum());
             jsonObject.put("seatFee", table.getSeatFee());
             jsonObject.put("tableFee", table.getTableFee());
-            jsonObject.put("minCost", table.getMinCost());
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -60,6 +67,12 @@ public class BarTableOpenController extends AbstractAppBarController {
     public JSONObject openTable(@RequestParam("tableId") Integer tableId,
                                 @RequestParam("personNum") Integer personNum) {
         try {
+            // 根据ID检查餐台是否可开台
+            Integer status = tableService.queryStatusById(tableId);
+            if (status != TableStatusEnums.Enabled.getId()) {
+                throw SSException.get(EmenuException.OpenTableFail);
+            }
+
             tableService.openTable(tableId, personNum);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);

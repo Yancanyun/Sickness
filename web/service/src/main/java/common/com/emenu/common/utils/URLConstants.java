@@ -213,7 +213,7 @@ public final class URLConstants {
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 
-    /**********************后厨管理端*************************/
 
+    /**********************后厨管理端*************************/
     public static final String COOK_ORDER_MANAGEMETN_URL = "cook/ordermanage";
 }

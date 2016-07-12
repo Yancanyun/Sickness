@@ -10,6 +10,7 @@ import java.util.Map;
  * @time: 2016/6/21 17:15
  */
 public enum WaiterTableStatusEnums {
+    All(0, "全部状态"),
     OpenTable(1, "开台"),
     CleanTable(2, "清台"),
     ChangeTable(3, "换台"),

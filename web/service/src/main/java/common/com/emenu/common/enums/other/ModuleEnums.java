@@ -318,6 +318,9 @@ public enum ModuleEnums {
 
 
     //服务员模块
+    Waiter("Waiter"),
+    //服务员餐台模块
+    WaiterTable("Waiter:Table"),
     //服务员查看餐台区域列表
     WaiterTableAreaList("Waiter:Table:Area:List"),
     //服务员查看餐台列表

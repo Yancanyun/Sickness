@@ -32,8 +32,6 @@ import java.util.List;
  * @author: yangch
  * @time: 2015/12/8 10:01
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterTableList)
 @RequestMapping(value = URLConstants.WAITER_TABLE_URL)
@@ -84,6 +82,10 @@ public class WaiterTableController extends AbstractAppBarController {
             List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
             WaiterTableStatusEnums waiterTableStatusEnums = WaiterTableStatusEnums.valueOf(status);
             switch (waiterTableStatusEnums) {
+                // 全部状态 根据PartyId获取所有AreaDtoList
+                case All:
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyId(partyId);
+                    break;
                 // 开台 根据PartyId获取餐台状态为可用的AreaDtoList
                 case OpenTable:
                     areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Enabled.getId());
@@ -133,6 +135,10 @@ public class WaiterTableController extends AbstractAppBarController {
             WaiterTableStatusEnums waiterTableStatusEnums = WaiterTableStatusEnums.valueOf(status);
             List<Integer> statusList = new ArrayList<Integer>();
             switch (waiterTableStatusEnums) {
+                // 全部状态 根据PartyId获取所有AreaDto
+                case All:
+                    areaDto = waiterTableService.queryAreaDtoByPartyIdAndAreaId(partyId, areaId);
+                    break;
                 // 开台 根据PartyId获取餐台状态为可用的AreaDto
                 case OpenTable:
                     statusList = new ArrayList<Integer>();
