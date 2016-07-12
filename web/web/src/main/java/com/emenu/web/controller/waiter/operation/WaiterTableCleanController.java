@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author: yangch
  * @time: 2015/12/9 14:53
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterTableClean)
 @RequestMapping(value = URLConstants.WAITER_TABLE_CLEAN_URL)
@@ -36,10 +34,9 @@ public class WaiterTableCleanController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject cleanTable(@RequestParam("partyId") Integer partyId,
-                                 @RequestParam("tableId") Integer tableId) {
+    public JSONObject cleanTable(@RequestParam("tableId") Integer tableId) {
         try {
-            // TODO: 根据PartyId记录哪个服务员清的台
+            // TODO: 记录哪个服务员清的台
 
             tableService.cleanTable(tableId);
             callCacheService.delTableCallCache(tableId); // 清台操作还要把相应的呼叫服务缓存清除

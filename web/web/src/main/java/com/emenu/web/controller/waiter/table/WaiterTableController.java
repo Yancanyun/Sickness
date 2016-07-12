@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ import java.util.List;
 @RequestMapping(value = URLConstants.WAITER_TABLE_URL)
 public class WaiterTableController extends AbstractAppBarController {
     /**
-     * Ajax 根据PartyId、AreaId(可选)、操作状态(开台、清台、换台、并台等)返回餐台数据
+     * Ajax 根据AreaId(可选)、操作状态(开台、清台、换台、并台等)返回餐台数据
      * @param partyId
      * @param areaId
      * @param status
@@ -46,10 +47,12 @@ public class WaiterTableController extends AbstractAppBarController {
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject tableList(@RequestParam("partyId") Integer partyId,
-                                @RequestParam(value = "areaId", required = false) Integer areaId,
-                                @RequestParam("status") Integer status) {
+    public JSONObject tableList(@RequestParam(value = "areaId", required = false) Integer areaId,
+                                @RequestParam("status") Integer status,
+                                HttpSession httpSession) {
         try {
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+
             if (Assert.isNull(status) || Assert.lessOrEqualZero(status)) {
                 throw SSException.get(EmenuException.OperateStatusIsNotLegal);
             }

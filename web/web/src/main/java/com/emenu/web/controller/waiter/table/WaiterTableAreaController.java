@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -32,14 +33,15 @@ import java.util.List;
 @RequestMapping(value = URLConstants.WAITER_TABLE_AREA_URL)
 public class WaiterTableAreaController extends AbstractAppBarController {
     /**
-     * Ajax 根据PartyId获取可管理餐台区域列表
-     * @param partyId
+     * Ajax 获取可管理餐台区域列表
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject areaList(@RequestParam("partyId") Integer partyId) {
+    public JSONObject areaList(HttpSession httpSession) {
         try {
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+
             //根据PartyId获取所有的AreaDto
             List<AreaDto> areaDtoList = waiterTableService.queryAreaDtoByPartyId(partyId);
 

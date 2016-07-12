@@ -31,16 +31,12 @@ import java.util.List;
  * @author chenyuting
  * @date 2016/6/24 10:16
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterOrderDish)
 @RequestMapping(value = URLConstants.WAITER_ORDER_DISH_URL)
 public class WaiterOrderDishController extends AbstractAppBarController {
-
     /**
      * 去菜品展示页面
-     * @param partyId
      * @param tableId
      * @param tagId
      * @param keyword
@@ -48,13 +44,12 @@ public class WaiterOrderDishController extends AbstractAppBarController {
      */
     @RequestMapping(value = "",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject toOrderDish(@RequestParam("partyId") Integer partyId,
-                                  @RequestParam("tableId") Integer tableId,
+    public JSONObject toOrderDish(@RequestParam("tableId") Integer tableId,
                                   @RequestParam(required = false) Integer tagId,
                                   @RequestParam(required = false) String keyword){
         try{
 
-            // TODO: 根据PartyId检查服务员是否可点菜
+            // TODO: 检查服务员是否可点菜
 
             // 根据ID检查餐台是否可以点菜
             Integer status = tableService.queryStatusById(tableId);
@@ -119,11 +114,4 @@ public class WaiterOrderDishController extends AbstractAppBarController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
-    /*@RequestMapping(value = "order",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject addDish(){
-
-    }*/
-
 }

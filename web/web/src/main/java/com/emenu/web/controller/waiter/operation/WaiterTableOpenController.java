@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author: yangch
  * @time: 2015/12/8 10:01
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterTableOpen)
 @RequestMapping(value = URLConstants.WAITER_TABLE_OPEN_URL)
@@ -37,10 +35,9 @@ public class WaiterTableOpenController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject toOpenTable(@RequestParam("partyId") Integer partyId,
-                                  @RequestParam("tableId") Integer tableId) {
+    public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
         try {
-            // TODO: 根据PartyId检查服务员是否可开台
+            // TODO: 检查服务员是否可开台
 
             // 根据ID检查餐台是否可开台
             Integer status = tableService.queryStatusById(tableId);
@@ -71,11 +68,10 @@ public class WaiterTableOpenController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject openTable(@RequestParam("partyId") Integer partyId,
-                                @RequestParam("tableId") Integer tableId,
+    public JSONObject openTable(@RequestParam("tableId") Integer tableId,
                                 @RequestParam("personNum") Integer personNum) {
         try {
-            // TODO: 根据PartyId记录哪个服务员开的台
+            // TODO: 记录哪个服务员开的台
 
             // 根据ID检查餐台是否可开台
             Integer status = tableService.queryStatusById(tableId);

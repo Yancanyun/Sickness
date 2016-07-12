@@ -334,6 +334,8 @@ public enum ModuleEnums {
     WaiterTableMerge("Waiter:Table:Merge"),
     //服务员查看所有呼叫服务
     WaiterCallList("Waiter:Call:List"),
+    // 服务员登录
+    WaiterLogin("Waiter:Login"),
 
 
     //吧台客户端模块
@@ -346,7 +348,7 @@ public enum ModuleEnums {
     //吧台客户端清台
     BarTableClean("Bar:Table:Clean"),
     //吧台客户端登录
-    BarLogin("Bar:Login"),
+    BarLogin("Bar:login"),
 
 
 

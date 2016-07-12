@@ -28,8 +28,6 @@ import java.util.List;
  * @author: yangch
  * @time: 2015/12/9 13:38
  */
-@IgnoreLogin
-@IgnoreAuthorization
 @Controller
 @Module(ModuleEnums.WaiterTableChange)
 @RequestMapping(value = URLConstants.WAITER_TABLE_CHANGE_URL)
@@ -41,10 +39,9 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject toChangeTable(@RequestParam("partyId") Integer partyId,
-                                    @RequestParam("tableId") Integer tableId) {
+    public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
         try {
-            // TODO: 根据PartyId检查服务员是否可换台
+            // TODO: 检查服务员是否可换台
 
             // 根据ID检查餐台是否可换台
             Integer status = tableService.queryStatusById(tableId);
@@ -77,11 +74,10 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      */
     @RequestMapping(value = "confirm", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject toConfirmChange(@RequestParam("partyId") Integer partyId,
-                                      @RequestParam("oldTableId") Integer oldTableId,
+    public JSONObject toConfirmChange(@RequestParam("oldTableId") Integer oldTableId,
                                       @RequestParam("newTableId") Integer newTableId) {
         try {
-            // TODO: 根据PartyId检查服务员是否可换台
+            // TODO: 检查服务员是否可换台
 
             // 根据ID检查新旧餐台是否均处于可换台的状态
             Integer oldStatus = tableService.queryStatusById(oldTableId);
@@ -121,11 +117,10 @@ public class WaiterTableChangeController extends AbstractAppBarController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject changeTable(@RequestParam("partyId") Integer partyId,
-                                  @RequestParam("oldTableId") Integer oldTableId,
+    public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
                                   @RequestParam("newTableId") Integer newTableId) {
         try {
-            // TODO: 根据PartyId记录哪个服务员换的台
+            // TODO: 记录哪个服务员换的台
 
             tableService.changeTable(oldTableId, newTableId);
 

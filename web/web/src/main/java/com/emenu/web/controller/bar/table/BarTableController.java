@@ -98,7 +98,6 @@ public class BarTableController extends AbstractAppBarController {
     @ResponseBody
     public JSONObject tableDetail(@RequestParam("tableId") int tableId) {
         try {
-            //将该区域内所有餐台存入tableList
             Table table = tableService.queryById(tableId);
 
             JSONObject jsonObject = new JSONObject();
