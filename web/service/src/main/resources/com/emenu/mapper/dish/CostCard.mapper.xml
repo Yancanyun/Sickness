@@ -99,4 +99,8 @@
         </where>
     </select>
 
+    <select id = "queryCostCardByDishId" resultType="CostCard">
+        SELECT * FROM t_cost_card
+        WHERE dish_id = #{dishId}
+           </select>
 </mapper>

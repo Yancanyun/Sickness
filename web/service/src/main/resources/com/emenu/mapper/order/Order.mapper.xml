@@ -5,9 +5,22 @@
 <mapper namespace="com.emenu.mapper.order.OrderMapper">
    <select id="listByTableIdAndStatus" resultMap="pw.Order">
        SELECT id,checkout_id,table_id,employee_party_id,vip_party_id,
-               status,order_remark,order_serve_type,login_type,created_time,last_modified_time
+               status,order_remark,order_serve_type,login_type,is_settlemented,
+               created_time,last_modified_time
        FROM `t_order`
        WHERE t_order.`table_id` = #{tableId} AND t_order.`status` = #{status}
    </select>
 
+   <select id = "listOrderByStatusAndIsCheckAndDate" resultMap="pw.Order">
+       SELECT *
+       FROM t_order
+       where t_order.status=#{status}
+       and is_settlemented=#{isSettlemented}
+       and  #{date}>=t_order.created_time
+           </select>
+    <select id="queryOrderById" resultMap="pw.Order">
+        SELECT *
+        FROM t_order
+        WHERE id=#{id}
+    </select>
 </mapper>

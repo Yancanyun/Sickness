@@ -68,4 +68,12 @@ public interface CostCardService {
      * @throws SSException
      */
     public int countBySearchDto(DishSearchDto searchDto) throws SSException;
+
+    /**
+     * 根据dishId获取成本卡信息
+     *
+     * @return
+     * @throws SSException
+     */
+    public CostCard queryCostCardByDishId(Integer dishId) throws SSException;
 }

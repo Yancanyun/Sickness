@@ -70,4 +70,10 @@ public class CostCardTest extends AbstractTestCase {
     {
         System.out.println(costCardService.countBySearchDto(new DishSearchDto()));
     }
+
+    @Test
+    public void testQueryCostCardByDishId()throws SSException
+    {
+        System.out.println(costCardService.queryCostCardByDishId(2));
+    }
 }

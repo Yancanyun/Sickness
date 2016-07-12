@@ -143,4 +143,10 @@ public class OrderDishTest extends AbstractTestCase {
     {
         System.out.println(orderDishService.queryOrderDishTableId(1));
     }
+
+    @Test
+    public void testWipeOrderDish() throws SSException
+    {
+        orderDishService.wipeOrderDish(55);
+    }
 }

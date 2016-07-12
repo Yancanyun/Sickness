@@ -72,4 +72,13 @@ public interface CostCardMapper {
      * @throws SSException
      */
     public int countBySearchDto(@Param("searchDto")DishSearchDto searchDto) throws Exception;
+
+    /**
+     * 根据dishId获取成本卡
+     *
+     * @param dishId
+     * @return
+     * @throws SSException
+     */
+    public CostCard queryCostCardByDishId(@Param("dishId") Integer dishId) throws Exception;
 }

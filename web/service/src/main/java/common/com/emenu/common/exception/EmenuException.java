@@ -556,12 +556,15 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateOrderFailed("修改订单失败",10049),
     OrderDishCacheIsNull("订单中不存在任何菜品",10050),
     UpdateOrderDishCacheFail("修改订单菜品失败,存在其他用户正在确认下单",10051),
+    QueryCheckOrderDtoFail("查询订单盘点所需要的信息失败",10052),
+    OrderNotExist("不存在该订单",10053),
+    UpdateOrderIsSettlementedFail("修改订单盘点状态失败",10054),
 
     //结账单模块
-    QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10053),
-    CheckoutIsNotNull("结账单不为空",10054),
-    NewCheckoutFailed("添加结账单失败",10055),
-    UpdateCheckoutFailed("修改结账单失败",10056),
+    QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),
+    CheckoutIsNotNull("结账单不为空",10071),
+    NewCheckoutFailed("添加结账单失败",10072),
+    UpdateCheckoutFailed("修改结账单失败",10073),
 
 
     //后厨管理模块
@@ -571,6 +574,10 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderDishTableIdFail("查询订单菜品所对应的餐桌Id失败",10093),
     ListPrintOrderDishDtoFail("获取订单菜品打印详细信息失败",10094),
     PrintOrderDishFail("打印订单菜品失败",10095),
+    OrderDishStatusWrong("只有已经打印出来的菜品才可进行划单！",10096),
+    OrderDishWipeIsFinsh("该订单菜品已被划单",10097),
+    OrderDishNotExist("该订单菜品不存在",10098),
+    WipeOrderDishFail("菜品划单失败",10099),
     ;
 
 

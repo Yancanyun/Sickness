@@ -3,6 +3,7 @@ package com.emenu.mapper.order;
 import com.emenu.common.entity.order.Order;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,4 +21,22 @@ public interface OrderMapper {
      * @throws Exception
      */
     public List<Order> listByTableIdAndStatus(@Param("tableId")int tableId,@Param("status")int status) throws Exception;
+
+    /**
+     * 根据订单状态,盘点状态和当前时间之前查询订单列表
+     * @param status,isCheck,date
+     * @return
+     * @throws Exception
+     */
+    public List<Order> listOrderByStatusAndIsCheckAndDate(@Param("status")Integer status
+            ,@Param("isSettlemented")Integer isSettlemented
+            ,@Param("date")Date date) throws Exception;
+
+    /**
+     * 根据订单Id查询订单
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public Order queryOrderById(@Param("id")Integer id) throws Exception;
 }

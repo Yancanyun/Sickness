@@ -355,6 +355,7 @@ public enum ModuleEnums {
     CookOrderList("Cook:Order:List"),
     CookOrderTableList("Cook:Order:Table:List"),
     CookPrintOrderDish("Cook:Order:Print"),
+    CookOrderDishWipe("Cook:Order:Wipe"),
     ;
 
     private String name;

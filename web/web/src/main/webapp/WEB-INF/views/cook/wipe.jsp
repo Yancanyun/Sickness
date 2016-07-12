@@ -11,10 +11,10 @@
   <link rel="stylesheet" href="${staticWebsite}css/cook/common/bootstrap.min.css">
   <link rel="stylesheet" href="${staticWebsite}css/cook/common/bootstrap-theme.min.css">
   <link rel="stylesheet" href="${staticWebsite}css/cook/pages/style.css">
-  <script src="${staticWebsite}tool/jquery/1.10.2/jquery.min.js"></script>
-  <script src="${staticWebsite}tool/bootstrap/bootstrap.min.js"></script>
-  <script src="${staticWebsite}js/cook/site-config.js"></script>
-  <script src="${puiWebsite}resources/js/base/lib/kissy/seed.js"></script>
+  <script src="http://pui.pandawork.net/resources/js/base/lib/thirdparty/jquery-min.js"></script>
+  <script src="${staticWebsite}tool/bootstrap/js/bootstrap.min.js"></script>
+  <script src="${website}resources/js/cook/site-config.js"></script>
+  <script src="http://pui.pandawork.net/resources/js/base/lib/kissy/seed.js"></script>
 
   <!--[if lt IE 9]>
   <script src="${staticWebsite}js/cook/app/page/common/respond.min.js"></script>

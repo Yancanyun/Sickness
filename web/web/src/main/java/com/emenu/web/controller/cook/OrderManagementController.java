@@ -68,10 +68,19 @@ public class OrderManagementController extends AbstractController {
     }
 
     /**
+     * 去上菜扫码页（划单）
+     * @return
+     */
+    @Module(ModuleEnums.CookOrderDishWipe)
+    @RequestMapping(value = "/wipe",method = RequestMethod.GET)
+    public String toWipePage(){
+        return "cook/wipe";
+    }
+
+    /**
      * ajax获取所有餐台的信息
      * @return
      */
-
     @Module(ModuleEnums.CookOrderTableList)
     @RequestMapping(value = "/ajax/tables/version",method = RequestMethod.GET)
     @ResponseBody
@@ -81,9 +90,10 @@ public class OrderManagementController extends AbstractController {
         try {
            jsonObject = cookTableCacheService.getAllTableVersion();
         } catch (SSException e) {
+            LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonObject,0);
+        return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -143,9 +153,10 @@ public class OrderManagementController extends AbstractController {
             }
             jsonObject.put("orders",all);//所有订单
         } catch (SSException e) {
+            LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonObject,0);
+        return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -160,8 +171,38 @@ public class OrderManagementController extends AbstractController {
         try {
             orderDishPrintService.printOrderDishById(orderDishId);
         } catch (SSException e) {
+            LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(0);
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 上菜扫码(划单)
+     * @param orderDishId
+     * @return
+     */
+    @Module(ModuleEnums.CookOrderDishWipe)
+    @RequestMapping(value = "/ajax/wipe" ,method = RequestMethod.POST)
+    @ResponseBody
+    public  JSONObject ajaxWipe(@RequestParam("orderDishId") Integer orderDishId){
+        try {
+            orderDishService.wipeOrderDish(orderDishId);
+            //划单后要对餐桌是否还有未上的菜品进行判断
+            if(orderDishService.isTableHaveOrderDish(orderDishService.queryOrderDishTableId(orderDishId))==0)
+            {
+                //判断这个餐桌是否还有菜品,没有的话餐台版本号清空
+                cookTableCacheService.deleteTable(orderDishService.queryOrderDishTableId(orderDishId));
+            }
+            else
+            {
+                //否则更新餐桌版本号
+                cookTableCacheService.updateTableVersion(orderDishService.queryOrderDishTableId(orderDishId));
+            }
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }

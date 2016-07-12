@@ -6,7 +6,9 @@ import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderDishMapper;
+import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.order.OrderDishService;
+import com.emenu.service.order.OrderService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -14,6 +16,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -193,5 +197,37 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException.QueryOrderDishTableIdFail,e);
         }
         return tableId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void wipeOrderDish(Integer orderDishId) throws SSException
+    {
+        try{
+            if(!Assert.lessOrEqualZero(orderDishId))
+            {
+                OrderDish orderDish = new OrderDish();
+                orderDish = this.queryById(orderDishId);//查询出菜品信息
+                if(orderDish==null)//不存在该订单菜品
+                {
+                    throw SSException.get(EmenuException.OrderDishNotExist);
+                }
+                else
+                {
+                    if(orderDish.getStatus()==1)//划单的菜品状态必须是2.正在做 1为已下单,打印了菜品的话菜品的状态会从1变为2
+                        throw SSException.get(EmenuException.OrderDishStatusWrong);
+                    else if(orderDish.getStatus()==3)
+                        throw SSException.get(EmenuException.OrderDishWipeIsFinsh);
+                    else//修改订单菜品状态
+                    {
+                        orderDish.setStatus(3);
+                        this.updateOrderDish(orderDish);
+                    }
+                }
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.WipeOrderDishFail,e);
+        }
     }
 }

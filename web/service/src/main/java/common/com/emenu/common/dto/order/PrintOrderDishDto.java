@@ -29,7 +29,7 @@ public class PrintOrderDishDto {
     private String remark;
 
     //口味
-    private List<String> taste;
+    private String taste;
 
     // 上菜方式
     private String serverType;
@@ -80,8 +80,12 @@ public class PrintOrderDishDto {
         this.remark = remark;
     }
 
-    public List<String> getTaste() {
+    public String getTaste() {
         return taste;
+    }
+
+    public void setTaste(String taste) {
+        this.taste = taste;
     }
 
     public String getServerType() {
@@ -98,10 +102,6 @@ public class PrintOrderDishDto {
 
     public void setDishBigTagName(String dishBigTagName) {
         this.dishBigTagName = dishBigTagName;
-    }
-
-    public void setTaste(List<String> taste) {
-        this.taste = taste;
     }
 
     public String getPrinterIp() {

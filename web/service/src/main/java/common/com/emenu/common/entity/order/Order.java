@@ -53,6 +53,10 @@ public class Order extends AbstractEntity {
     @Column(name = "login_type")
     private Integer loginType;
 
+    //该订单是否被盘点过
+    @Column(name = "is_settlemented")
+    private Integer isSettlemented;
+
     // 创建时间
     @Column(name = "created_time")
     private Date createdTime;
@@ -146,7 +150,16 @@ public class Order extends AbstractEntity {
         return lastModifiedTime;
     }
 
+    public Integer getIsSettlemented() {
+        return isSettlemented;
+    }
+
+    public void setIsSettlemented(Integer isSettlemented) {
+        this.isSettlemented = isSettlemented;
+    }
+
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+
     }
 }

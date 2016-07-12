@@ -108,4 +108,13 @@ public interface OrderDishService {
      * @throws Exception
      */
     public int queryOrderDishTableId(Integer orderDishId) throws SSException;
+
+    /**
+     * 根据订单菜品主键进行上菜扫码(划单)
+     * 扫单后要判断这个餐桌是否还存在菜品,不存在的话清除餐桌版本号
+     * 这个判断要在controller方法里面进行,在service方法里进行的话会报错
+     * @param orderDishId
+     * @throws SSException
+     */
+    public void wipeOrderDish(Integer orderDishId) throws SSException;
 }

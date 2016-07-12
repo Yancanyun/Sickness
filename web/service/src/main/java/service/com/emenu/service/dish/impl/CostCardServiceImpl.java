@@ -141,4 +141,19 @@ public class CostCardServiceImpl implements CostCardService {
         return count;
     }
 
+    @Override
+    public CostCard queryCostCardByDishId(Integer dishId) throws SSException
+    {
+        CostCard costCard = new CostCard();
+        try {
+          if(!Assert.lessOrEqualZero(dishId))
+          {
+              costCard = costCardMapper.queryCostCardByDishId(dishId);
+          }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCostCardFailed, e);
+        }
+        return costCard;
+    }
 }

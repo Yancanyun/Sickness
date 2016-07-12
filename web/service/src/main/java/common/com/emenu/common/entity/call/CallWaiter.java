@@ -15,7 +15,7 @@ import java.util.Date;
  * @date: 2016/5/23
  */
 @Entity
-@Table(name = "t_call_service")
+@Table(name = "t_call_waiter")
 public class CallWaiter extends AbstractEntity {
 
     // 主键

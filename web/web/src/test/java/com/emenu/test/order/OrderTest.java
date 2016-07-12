@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.CollectionFactory;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,5 +52,17 @@ public class OrderTest extends AbstractTestCase {
         for(Order order:orderList){
             System.out.print(order.getOrderRemark());
         }
+    }
+
+    @Test
+    public void testListCheckOrderDtoForCheck()throws SSException
+    {
+        System.out.println(orderService.listCheckOrderDtoForCheck(2, 0, new Date()));
+    }
+
+    @Test
+    public void testUpdateIsSettlement()throws SSException
+    {
+        orderService.updateOrderIsSettlementedById(29,1);
     }
 }

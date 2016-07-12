@@ -109,6 +109,12 @@ public class DishDto {
     // 若为套餐中的菜品，则此处为此菜品在某套餐中对应的DishPackage。
     private DishPackage dishPackage;
 
+    // 顾客端点菜时选择的单个口味ID
+    private Integer tasteId;
+
+    // 顾客端点菜时口味的名称
+    private String tasteName;
+
     public Integer getId() {
         return id;
     }
@@ -355,5 +361,21 @@ public class DishDto {
 
     public void setDishPackage(DishPackage dishPackage) {
         this.dishPackage = dishPackage;
+    }
+
+    public Integer getTasteId() {
+        return tasteId;
+    }
+
+    public void setTasteId(Integer tasteId) {
+        this.tasteId = tasteId;
+    }
+
+    public String getTasteName() {
+        return tasteName;
+    }
+
+    public void setTasteName(String tasteName) {
+        this.tasteName = tasteName;
     }
 }

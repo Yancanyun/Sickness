@@ -38,4 +38,6 @@ public interface OrderDishPrintService {
      * @throws com.pandawork.core.common.exception.SSException
      */
     public void printOrderDish(PrintOrderDishDto printOrderDishDto) throws SSException;
+
+
 }

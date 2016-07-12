@@ -120,17 +120,11 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setServerType(ServeTypeEnums.valueOf(orderDish.getServeType()).getType());//上菜方式
                 temp.setTableName(tableService.queryById(orderDishService.queryOrderDishTableId(orderDishId)).getName());//点菜餐桌的名称
 
-                List<String> tasteList = new ArrayList<String>();//菜品口味名称集合
-                Integer size = 0;
-                if(dishDto.getTasteIdList()!=null)
-                    size = dishDto.getTasteIdList().size();
-                for(int i = 0;i < size;i++)
-                {
-                    tasteList.add(tasteService.queryById(dishDto.getTasteIdList().get(i)).getName());
-                }
-
-                if(tasteList!=null)
-                temp.setTaste(tasteList);//菜品口味集合
+                String tasteName = new String();//菜品口味名称
+                if(orderDish.getTasteId()!=null)
+                    tasteName=tasteService.queryById(dishDto.getTasteId()).getName();
+                if(tasteName!=null)
+                    temp.setTaste(tasteName);//菜品口味
                 //菜品大类对应的打印机的ip地址
                 if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
                 {
@@ -159,17 +153,11 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                     temp.setServerType(ServeTypeEnums.valueOf(orderDish.getServeType()).getType());//上菜方式
                     temp.setTableName(tableService.queryById(orderDishService.queryOrderDishTableId(orderDishId)).getName());//点菜餐桌的名称
 
-                    List<String> tasteList = new ArrayList<String>();//菜品口味名称集合
-                    Integer size = 0;
-                    if(dishDto.getTasteIdList()!=null)
-                        size = dishDto.getTasteIdList().size();
-                    for(int i = 0;i <size;i++)
-                    {
-                        tasteList.add(tasteService.queryById(dto.getTasteIdList().get(i)).getName());
-                    }
-
-                    if(tasteList!=null)
-                    temp.setTaste(tasteList);//菜品口味集合
+                    String tasteName = new String();//菜品口味名称
+                    if(dishDto.getTasteId()!=null)
+                        tasteName=tasteService.queryById(dishDto.getTasteId()).getName();
+                    if(tasteName!=null)
+                    temp.setTaste(tasteName);//菜品口味
                     //菜品大类对应的打印机的ip地址
                     if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
                     {
@@ -208,17 +196,14 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 str += "桌名: " + printOrderDishDto.getTableName() + "\n";
                 str += "菜品名称: " + printOrderDishDto.getDishName() + "\n";
                 str += "数量: " + String.valueOf(printOrderDishDto.getNum()) + "\n";
+                str += " 口味: ";
                 if (printOrderDishDto.getTaste() != null)
                 {
-                    str += " 口味: ";
-                    for(int i = 0; i <printOrderDishDto.getTaste().size();i++)
-                    {
-                        if(i!=printOrderDishDto.getTaste().size()-1)
-                            str+=printOrderDishDto.getTaste().get(i)+",";//每两个口味之间用逗号分隔开
-                        else
-                            str+=printOrderDishDto.getTaste().get(i);
-                    }
-                    str+="\n";//换行
+                    str+=printOrderDishDto.getTaste()+"\n";
+                }
+                else//没有选择菜品口味
+                {
+                    str+="正常\n";
                 }
                 str += "上菜方式: " + printOrderDishDto.getServerType()+ "\n";
                 if (printOrderDishDto.getRemark() != null && !printOrderDishDto.getRemark().equals(""))

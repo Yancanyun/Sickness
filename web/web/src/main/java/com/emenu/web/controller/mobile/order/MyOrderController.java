@@ -185,6 +185,9 @@ public class MyOrderController  extends AbstractController {
             model.addAttribute("uniqueRemark",uniqueRemark);//菜品关联的菜品备注
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号
+            java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+            String totalMoneyTemp = myformat.format(totalMoney);
+            totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
             model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额
         }
         catch (SSException e) {
@@ -400,12 +403,12 @@ public class MyOrderController  extends AbstractController {
             order.setCheckoutId(checkout.getId());
             order.setCreatedTime(new Date());
             //order.setEmployeePartyId();
-            //order.setLastModifiedTime();
             //order.setLoginType();
             order.setOrderRemark(confirmOrderRemark);
             order.setOrderServeType(serviceWay);
             order.setStatus(1);
             order.setTableId(tableId);
+            order.setIsSettlemented(0);//订单是否被盘点过
             //order.setVipPartyId();
             orderService.newOrder(order);
 
@@ -449,12 +452,14 @@ public class MyOrderController  extends AbstractController {
                 orderDish.setIsChange(0);//是否换了桌
                 //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                 orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
+                if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
+                orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
                 orderDishService.newOrderDish(orderDish);
             }
             //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
             orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
             orderDishCacheService.cleanCacheByTableId(tableId);//清除掉菜品缓存
-            cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新
+            cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新页面
         }catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
