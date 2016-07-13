@@ -77,7 +77,7 @@
       </c:if>
     </ul>
     <!--默认刷页时后端返回本单消费的总金额，若客户在订单中调整菜品的数量，前端再其总计金额的基础上再进行计算-->
-     <c:if test="${not empty orderDishDto}">
+     <c:if test="${totalMoney >0}">
        <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
      </c:if>
     <!-- 已下订单菜品列表 -->

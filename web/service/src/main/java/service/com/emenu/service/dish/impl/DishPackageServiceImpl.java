@@ -119,9 +119,12 @@ public class DishPackageServiceImpl implements DishPackageService{
             for(DishPackage dishPackage : dishPackageList){
                 childDishDtoList.add(dishService.queryById(dishPackage.getDishId()));
                 // 依次添加套餐下的菜品的DishPackage至childDishDtoList中的DishDto
-                for (DishDto childDishDto : childDishDtoList) {
+                childDishDtoList.get(childDishDtoList.size()-1).setDishPackage(dishPackage);
+                //底下这个是学姐写的方法,有错误,二重循环设置的DishPackage的话最后全部都一样（就相当于最后一次操作把前面已经设置的值全部覆盖了）
+                // 所有的DishPackage都是最后一次设置的同一个对象
+                /*for (DishDto childDishDto : childDishDtoList) {
                     childDishDto.setDishPackage(dishPackage);
-                }
+                }*/
             }
             dishPackageDto.setChildDishDtoList(childDishDtoList);
             return dishPackageDto;
@@ -296,16 +299,14 @@ public class DishPackageServiceImpl implements DishPackageService{
     @Override
     public int judgeIsOrNotPackage(int dishId)throws  SSException
     {
-        int packageId;
         try {
-            if(dishPackageMapper.judgeIsOrNotPackage(dishId)!=null)
-                packageId=dishPackageMapper.judgeIsOrNotPackage(dishId);
+            if(dishPackageMapper.judgeIsOrNotPackage(dishId)>0)
+                return 1;
             else
-                packageId=0;
+                return 0;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishQueryFailed, e);
         }
-        return packageId;
     }
 }

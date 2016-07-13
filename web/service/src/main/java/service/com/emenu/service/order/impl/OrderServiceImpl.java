@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService{
             orderList = orderMapper.listByTableIdAndStatus(tableId,status);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.ListByTableIdAndStatusFailed);
+            throw SSException.get(EmenuException.ListByTableIdAndStatusFailed,e);
         }
         return orderList;
     }
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService{
             commonDao.insert(order);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewOrderFailed);
+            throw SSException.get(EmenuException.NewOrderFailed,e);
         }
     }
 
@@ -76,7 +76,7 @@ public class OrderServiceImpl implements OrderService{
             commonDao.update(order);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateOrderFailed);
+            throw SSException.get(EmenuException.UpdateOrderFailed,e);
         }
     }
 
@@ -88,8 +88,7 @@ public class OrderServiceImpl implements OrderService{
         List<CheckOrderDto> checkOrderDtos = new ArrayList<CheckOrderDto>();
         List<Order> orders = new ArrayList<Order>();
         try{
-            if(!Assert.lessOrEqualZero(status)
-                    &&Assert.isNotNull(isSettlemented)
+            if(Assert.isNotNull(isSettlemented)
                     &&Assert.isNotNull(date))
             {
                 //查询出对应的订单
@@ -103,7 +102,7 @@ public class OrderServiceImpl implements OrderService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryCheckOrderDtoFail);
+            throw SSException.get(EmenuException.QueryCheckOrderDtoFail,e);
         }
         return checkOrderDtos;
     }
@@ -123,7 +122,47 @@ public class OrderServiceImpl implements OrderService{
                 throw SSException.get(EmenuException.OrderNotExist);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateOrderIsSettlementedFail);
+            throw SSException.get(EmenuException.UpdateOrderIsSettlementedFail,e);
         }
+    }
+
+    @Override
+    public List<Order> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException
+    {
+        List<Order> orders = new ArrayList<Order>();
+        try{
+          if(Assert.isNotNull(startTime)
+                  &&Assert.isNotNull(endTime))
+          {
+              if(startTime.getTime()<endTime.getTime())//开始时间不能大于结束时间
+              orders=orderMapper.queryOrderByTimePeroid1(startTime,endTime);
+              else
+              throw SSException.get(EmenuException.TimeUnreasonable1);
+          }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException
+    {
+        List<Order> orders = new ArrayList<Order>();
+        try{
+            if(Assert.isNotNull(startTime)
+                    &&Assert.isNotNull(endTime))
+            {
+                if(startTime.getTime()<=endTime.getTime())//开始时间不能大于结束时间
+                orders=orderMapper.queryOrderByTimePeroid2(startTime,endTime);
+                else
+                    throw SSException.get(EmenuException.TimeUnreasonable2);
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
+        }
+        return orders;
     }
 }

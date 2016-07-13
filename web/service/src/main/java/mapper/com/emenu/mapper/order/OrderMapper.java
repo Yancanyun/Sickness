@@ -38,5 +38,24 @@ public interface OrderMapper {
      * @return
      * @throws Exception
      */
+
     public Order queryOrderById(@Param("id")Integer id) throws Exception;
+
+    /**
+     * 查询一个时间段内的订单,不包活起始时间和结束时间
+     * @param startTime,endTime
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrderByTimePeroid1(@Param("startTime") Date startTime
+            ,@Param("endTime") Date endTime) throws Exception;
+
+    /**
+     * 查询一个时间段内的订单,包活起始时间和结束时间
+     * @param startTime,endTime
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrderByTimePeroid2(@Param("startTime") Date startTime
+            ,@Param("endTime") Date endTime) throws Exception;
 }

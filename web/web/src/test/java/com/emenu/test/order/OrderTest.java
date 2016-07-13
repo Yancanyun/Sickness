@@ -57,12 +57,27 @@ public class OrderTest extends AbstractTestCase {
     @Test
     public void testListCheckOrderDtoForCheck()throws SSException
     {
-        System.out.println(orderService.listCheckOrderDtoForCheck(2, 0, new Date()));
+        Integer status = null;
+        System.out.println(orderService.listCheckOrderDtoForCheck(status, 0, new Date()));
     }
 
     @Test
     public void testUpdateIsSettlement()throws SSException
     {
         orderService.updateOrderIsSettlementedById(29,1);
+    }
+
+    @Test
+    public void testQueryOrderByTime2()throws SSException
+    {
+        orderService.queryOrderByTimePeroid2(new Date(), new Date());
+    }
+
+    @Test
+    public void testQueryOrderByTime1()throws SSException
+    {
+        Date startTime = new Date();
+        startTime.setTime(9999);
+        orderService.queryOrderByTimePeroid1(startTime,new Date());
     }
 }

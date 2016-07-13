@@ -52,8 +52,8 @@
     </select>
 
     <select id="judgeIsOrNotPackage" resultType="int">
-        SELECT package_id
+        SELECT COUNT(*)
         FROM t_dish_package
-        WHERE dish_id=#{dishId}
+        WHERE package_id=#{dishId}
     </select>
 </mapper>

@@ -14,13 +14,30 @@
    <select id = "listOrderByStatusAndIsCheckAndDate" resultMap="pw.Order">
        SELECT *
        FROM t_order
-       where t_order.status=#{status}
-       and is_settlemented=#{isSettlemented}
-       and  #{date}>=t_order.created_time
-           </select>
+       where  is_settlemented=#{isSettlemented}
+       and #{date}>=t_order.created_time
+       <if test="status != null">
+       and t_order.status=#{status}
+       </if>
+   </select>
+
     <select id="queryOrderById" resultMap="pw.Order">
         SELECT *
         FROM t_order
         WHERE id=#{id}
+    </select>
+
+    <select id="queryOrderByTimePeroid1" resultMap="pw.Order">
+       SELECT *
+       FROM t_order
+       where  t_order.created_time>#{startTime}
+       AND #{endTime}>t_order.created_time
+    </select>
+
+    <select id = "queryOrderByTimePeroid2" resultMap="pw.Order">
+       SELECT *
+       FROM t_order
+       where  t_order.created_time>=#{startTime}
+       AND #{endTime}>=t_order.created_time
     </select>
 </mapper>
