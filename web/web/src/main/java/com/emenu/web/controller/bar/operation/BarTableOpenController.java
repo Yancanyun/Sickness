@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @time: 2015/12/10 16:52
  */
 @Controller
-@Module(ModuleEnums.BarTableOpen)
+@Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_OPEN_URL)
 public class BarTableOpenController extends AbstractAppBarController {
     /**
@@ -31,6 +31,7 @@ public class BarTableOpenController extends AbstractAppBarController {
      * @param tableId
      * @return
      */
+    @Module(ModuleEnums.BarTableOpen)
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject toOpenTable(@RequestParam("tableId") Integer tableId) {
@@ -62,6 +63,7 @@ public class BarTableOpenController extends AbstractAppBarController {
      * @param tableId
      * @return
      */
+    @Module(ModuleEnums.BarTableOpen)
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject openTable(@RequestParam("tableId") Integer tableId,

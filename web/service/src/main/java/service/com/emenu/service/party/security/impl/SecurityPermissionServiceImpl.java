@@ -1,6 +1,7 @@
 package com.emenu.service.party.security.impl;
 
 import com.emenu.common.entity.party.security.SecurityPermission;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.mapper.party.security.SecurityPermissionMapper;
 import com.emenu.service.party.security.SecurityPermissionService;
@@ -14,6 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -161,6 +167,44 @@ public class SecurityPermissionServiceImpl implements SecurityPermissionService 
             throw SSException.get(PartyException.PermissionQueryFailed, e);
         }
         return count == null ? 0 : count;
+    }
+
+    @Override
+    public void importFromText(String filePath) throws Exception {
+        try {
+            File file = new File(filePath);
+
+            if (!file.isFile() || !file.exists()) {
+                throw SSException.get(EmenuException.SystemException);
+            }
+            InputStreamReader read = new InputStreamReader(new FileInputStream(file));
+            BufferedReader bufferedReader = new BufferedReader(read);
+            String lineTxt = null;
+
+            // 根据每一行的内容生成SecurityPermission实体，然后插入至数据库
+            while ((lineTxt = bufferedReader.readLine()) != null) {
+                lineTxt.substring(0, lineTxt.length() - 2);
+                String[] permissionStr = lineTxt.split(",");
+                for (int i = 0; i < permissionStr.length; i++) {
+                    permissionStr[i] = permissionStr[i].replaceAll("\"", "");
+                    permissionStr[i] = permissionStr[i].replaceAll("\\(", "");
+                    permissionStr[i] = permissionStr[i].replaceAll("\\)", "");
+                }
+                String expression = permissionStr[0];
+                String description = permissionStr[1];
+
+                SecurityPermission securityPermission = new SecurityPermission();
+                securityPermission.setExpression(expression);
+                securityPermission.setDescription(description);
+
+                if (!queryExpressionIsExist(securityPermission.getExpression())) {
+                    newPermission(securityPermission);
+                }
+            }
+        } catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
     }
 
 

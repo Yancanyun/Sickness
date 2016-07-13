@@ -136,7 +136,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void openTable() throws SSException {
-        tableService.openTable(2, 22);
+        tableService.openTable(1, 5);
     }
 
     @Test

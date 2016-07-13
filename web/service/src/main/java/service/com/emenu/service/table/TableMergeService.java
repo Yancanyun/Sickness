@@ -1,5 +1,6 @@
 package com.emenu.service.table;
 
+import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMerge;
 import com.pandawork.core.common.exception.SSException;
 
@@ -49,4 +50,12 @@ public interface TableMergeService {
      * @throws SSException
      */
     public void delTableMerge(int tableId) throws SSException;
+
+    /**
+     * 根据TableId查询与该餐台并台的其它餐台
+     * @param tableId
+     * @return
+     * @throws SSException
+     */
+    public List<Table> listOtherTableByTableId(int tableId) throws SSException;
 }

@@ -342,8 +342,16 @@ public enum ModuleEnums {
 
 
     //吧台客户端模块
+    //吧台
+    Bar("Bar"),
     //吧台客户端餐台
     BarTable("Bar:Table"),
+    //吧台客户端餐台区域列表
+    BarTableAreaList("Bar:Table:Area:List"),
+    //吧台客户端餐台列表
+    BarTableList("Bar:Table:List"),
+    //吧台客户端餐台详细信息
+    BarTableDetail("Bar:Table:Detail"),
     //吧台客户端开台
     BarTableOpen("Bar:Table:Open"),
     //吧台客户端换台

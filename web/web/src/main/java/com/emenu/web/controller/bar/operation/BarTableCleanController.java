@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @time: 2015/12/10 17:03
  */
 @Controller
-@Module(ModuleEnums.BarTableClean)
+@Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_CLEAN_URL)
 public class BarTableCleanController extends AbstractAppBarController {
     /**
@@ -28,6 +28,7 @@ public class BarTableCleanController extends AbstractAppBarController {
      * @param tableId
      * @return
      */
+    @Module(ModuleEnums.BarTableClean)
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject cleanTable(@RequestParam("tableId") Integer tableId) {

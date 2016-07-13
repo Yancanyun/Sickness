@@ -31,6 +31,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.Serializable;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * LoginManageServiceImpl
@@ -64,6 +67,17 @@ public class LoginManageServiceImpl implements LoginManageService {
 
     @Override
     public Subject isLogined(HttpServletRequest request) throws SSException {
+        // 从Request中的Header中的set-cookie中获取tgt，然后放入subjectId中。
+        // 仅C#客户端需要使用，Web端可以直接从Cookie中获取。
+        // @author: yangch
+        // @time: 2016/7/13 17:09
+        String setCookie = request.getHeader("set-cookie");
+        if (setCookie != null && setCookie.length() > 0) {
+            String[] strings = setCookie.split(";");
+            String tgt = strings[0].substring(4);
+            request.setAttribute("subjectId", tgt);
+        }
+
         Subject subject = null;
         String uidStr = this.queryCookieValue(request, USER_ID_COOKIE_NAME);
         if (Assert.isNull(uidStr)) {
@@ -75,7 +89,7 @@ public class LoginManageServiceImpl implements LoginManageService {
         }
 
         subject = this.querySubject(request);
-        // 没有找到TGT，说明用户没有登录
+        // 没有找到TGT，并且，说明用户没有登录
         if (Assert.isNull(subject)) {
             return subject;
         }
@@ -107,7 +121,7 @@ public class LoginManageServiceImpl implements LoginManageService {
             return null;
         }
         Integer uid = user.getId();
-        EnableEnums statusEnums = EnableEnums.valueOf(user.getId());
+        EnableEnums statusEnums = EnableEnums.valueOf(user.getStatus());
         if (Assert.isNull(uid)
                 || !uid.toString().equals(uidStr)
                 || Assert.isNull(statusEnums)
@@ -154,9 +168,10 @@ public class LoginManageServiceImpl implements LoginManageService {
 
         // 添加到缓存中
         this.addSubject(subject);
-        if (loginType == LoginTypeEnums.BackgroundLogin){
-        // 生成T票
-        this.generateTGT(subject.getSession().getId().toString(), request, response, token.isRememberMe());
+        if (loginType == LoginTypeEnums.BackgroundLogin || loginType == LoginTypeEnums.WaiterLogin
+                || loginType == LoginTypeEnums.BarLogin){
+            // 生成T票
+            this.generateTGT(subject.getSession().getId().toString(), request, response, token.isRememberMe());
         }
         return subject;
     }
@@ -217,6 +232,10 @@ public class LoginManageServiceImpl implements LoginManageService {
         // 如果cookie没有，判断是否在参数中
         if (Assert.isNull(subjectId)) {
             subjectId = request.getParameter(subjectId);
+        }
+        // 如果参数中还没有，判断是否在Attribute中
+        if (Assert.isNull(subjectId)) {
+            subjectId = (String)request.getAttribute("subjectId");
         }
         // tgt为空,说明用户没有登录过
         if (Assert.isNull(subjectId)) {

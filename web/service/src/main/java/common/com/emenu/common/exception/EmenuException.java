@@ -222,6 +222,7 @@ public enum EmenuException implements IBizExceptionMes {
     MergeTableNumLessThanTwo("选择的并台餐台数量小于两个", 4036),
     MergeTableStatusError("选择的并台餐台中有处于不可并台状态的餐台", 4037),
     MergeIdError("并台ID不合法", 4038),
+    QueryMergeTableFail("查询并台信息失败", 4039),
     TableNotOpen("餐台暂未开台",4039),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4050),

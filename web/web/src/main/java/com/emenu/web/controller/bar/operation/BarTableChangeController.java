@@ -25,7 +25,7 @@ import java.util.List;
  * @time: 2015/12/10 16:54
  */
 @Controller
-@Module(ModuleEnums.BarTableChange)
+@Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_CHANGE_URL)
 public class BarTableChangeController extends AbstractAppBarController {
     /**
@@ -33,6 +33,7 @@ public class BarTableChangeController extends AbstractAppBarController {
      *
      * @return
      */
+    @Module(ModuleEnums.BarTableChange)
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
@@ -79,6 +80,7 @@ public class BarTableChangeController extends AbstractAppBarController {
      * @param newTableId
      * @return
      */
+    @Module(ModuleEnums.BarTableChange)
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
