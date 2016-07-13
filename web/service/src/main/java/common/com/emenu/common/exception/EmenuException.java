@@ -56,6 +56,9 @@ public enum EmenuException implements IBizExceptionMes {
     CountStorageSettlementCheckFailed("库存盘点统计总数失败", 3033),
     ExportStorageSettlementCheckFailed("库存盘点导出EXCEL失败", 3034),
     ExportStorageSettlementSupplierFailed("库存结算中心导出EXCEL失败", 3035),
+    InitSettlementCacheFail("初始化盘点缓存失败",3036),
+    UpdateSettlementCacheFail("更新盘点缓存失败",3037),
+    SettlementCacheKeyError("缓存key不合法",3038),
 
     // 原配料
     IngredientTagIdIsNotNull("原配料分类id不能为空",3100),
@@ -72,6 +75,7 @@ public enum EmenuException implements IBizExceptionMes {
     IngredientUpdateFailed("更新原配料失败",31101),
     IngredientInserFailed("新增原配料失败",31102),
     IngredientNotExist("原配料不存在",31103),
+    IngredientQueryFailed("原配料查询失败",31104),
 
     // 菜品管理模块
     // 分类管理
@@ -367,6 +371,10 @@ public enum EmenuException implements IBizExceptionMes {
     ReportIngredientIsNot("单据原配料不能为空",7034),
     InsertReportIngredientFail("添加单据原配料失败",7035),
     ReportIdOrStatusIdError("单据id或者状态错误",7036),
+    ReportSearchDtoError("查询dto错误",7037),
+    STorageReportDeatil("单据详情不能为空",7098),
+    KeywordError("关键字不合法",7099),
+    TimeIsNotNUll("时间不能为空",70100),
 
     // 存放点管理
     ListDepotPageFailed("分页存放点列表查询失败", 7024),

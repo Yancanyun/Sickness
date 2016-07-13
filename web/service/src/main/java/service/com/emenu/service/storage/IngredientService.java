@@ -47,6 +47,14 @@ public interface IngredientService {
     public List<Ingredient> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException;
 
     /**
+     * 根据keyword获取原配料
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public Ingredient queryByKeyword(String keyword) throws SSException;
+
+    /**
      * 获取所有原配料
      * @return
      * @throws SSException

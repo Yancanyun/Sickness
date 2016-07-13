@@ -2,6 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.storage.StorageSettlementMapper">
 
+    <!--新-->
+    <select id="listSettlementIngredientBySettlementId" resultType="pw.StorageSettlementIngredient">
+         SELECT `id`,
+        `settlement_id`,
+        `ingredient_id`,
+        `stock_in_quantity`,
+        `stock_out_quantity`,
+        `income_on_quantity`,
+        `loss_on_quantity`,
+        `real_quantity`,
+        `total_quantity`,
+        `created_time`,
+        `last_modified_time`
+        FROM t_storage_settlement_ingredient
+        WHERE `settlement_id` = #{settlementId}
+    </select>
+
     <select id="listByDate" resultMap="pw.StorageSettlementItem">
         SELECT *
         FROM t_storage_settlement_item
@@ -30,18 +47,26 @@
         AND t_storage_settlement_item.item_id=#{itemId}
     </select>
     
-    <select id="queryByDateAndIngredientId" resultMap="pw.StorageSettlementIngredient">
-         SELECT `id`,`settlement_id`,`ingredient_id`,`stock_in_quantity`,`stock_in_money`,`stock_out_quantity`,
-        `stock_out_money`,`income_on_quantity`,`income_on_money`,`loss_on_quantity`,
-        `loss_on_money`,`real_quantity`,`real_money`,`total_quantity`,`total_money`,`created_time`,`last_modified_time`
+    <select id="queryBySettlementIdAndIngredientId" resultMap="pw.StorageSettlementIngredient">
+        SELECT `id`,
+        `settlement_id`,
+        `ingredient_id`,
+        `stock_in_quantity`,
+        `stock_in_money`,
+        `stock_out_quantity`,
+        `stock_out_money`,
+        `income_on_quantity`,
+        `income_on_money`,
+        `loss_on_quantity`,
+        `loss_on_money`,
+        `real_quantity`,
+        `real_money`,
+        `total_quantity`,
+        `total_money`,
+        `created_time`,
+        `last_modified_time`
         FROM t_storage_settlement_ingredient
-        WHERE t_storage_settlement_item.`settlement_id`=
-        (
-        SELECT id FROM t_storage_settlement
-        WHERE t_storage_settlement.`created_time`&lt;#{settlementDate}
-        ORDER BY t_storage_settlement.`created_time` DESC
-        LIMIT 1
-        )
+        WHERE t_storage_settlement_item.`settlement_id`= #{settlementId}
         AND t_storage_settlement_ingredient.`ingredient_id`=#{ingredientId}
     </select>
 

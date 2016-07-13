@@ -32,16 +32,19 @@
         </select>
 
         <select id="listByReportId" parameterType="int" resultMap="pw.StorageReportItem">
-            SELECT `id` AS id,
-            `item_id` AS itemId,
-            `quantity` AS quantity,
-            `count` AS count,
-            `price` As price,
-            `comment` AS comment,
-            `report_id` AS reportId,
-            `created_time` AS createdTime,
-            `last_modified_time` AS lastModifiedTime
-            FROM `t_storage_report_item`
+            SELECT reportItem.`id` AS id,
+            reportItem.`item_id` AS itemId,
+            reportItem.`quantity` AS quantity,
+            reportItem.`count` AS count,
+            reportItem.`price` As price,
+            reportItem.`comment` AS comment,
+            reportItem.`report_id` AS reportId,
+            reportItem.`created_time` AS createdTime,
+            reportItem.`last_modified_time` AS lastModifiedTime,
+            item.`name` AS itemNumber,
+            item.`item_number` AS itemName
+            FROM `t_storage_report_item` AS reportItem
+            INNER JOIN `t_storage_item` AS item ON `t_storage_report_item`.`item_id` = `t_storage_item`.`id`
             WHERE `report_id` = #{reportId}
         </select>
 

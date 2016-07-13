@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 public class StorageCheckDto {
 
     //名称
-    private String itemName;
+    private String ingredientName;
 
-    // 物品编号
-    private String itemNumber;
+    // 原配料编号
+    private String ingredientNumber;
 
     // 分类名称
     private String tagName;
@@ -25,35 +25,20 @@ public class StorageCheckDto {
     // 库存单位
     private String storageUnitName;
 
-    // 最近入库单价
-    private BigDecimal lastStockInPrice;
-
     // 存放点名称
     private String depotName;
 
     //期初数量
      private BigDecimal beginQuantity;
 
-    //期初金额
-    private BigDecimal beginMoney;
-
     //入库数量
     private BigDecimal stockInQuantity;
-
-    //入库金额
-    private BigDecimal stockInMoney;
 
     //出库数量
     private BigDecimal stockOutQuantity;
 
-    //出库金额
-    private BigDecimal stockOutMoney;
-
     //盈亏数量
     private BigDecimal incomeLossQuantity;
-
-    //盈亏金额
-    private BigDecimal incomeLossMoney;
 
     //结存数量
     private BigDecimal totalQuantity;
@@ -70,20 +55,20 @@ public class StorageCheckDto {
     //库存报警值下限
     private BigDecimal minStorageQuantity;
 
-    public String getItemName() {
-        return itemName;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 
-    public String getItemNumber() {
-        return itemNumber;
+    public String getIngredientNumber() {
+        return ingredientNumber;
     }
 
-    public void setItemNumber(String itemNumber) {
-        this.itemNumber = itemNumber;
+    public void setIngredientNumber(String ingredientNumber) {
+        this.ingredientNumber = ingredientNumber;
     }
 
     public String getTagName() {
@@ -110,12 +95,12 @@ public class StorageCheckDto {
         this.storageUnitName = storageUnitName;
     }
 
-    public BigDecimal getLastStockInPrice() {
-        return lastStockInPrice;
+    public String getDepotName() {
+        return depotName;
     }
 
-    public void setLastStockInPrice(BigDecimal lastStockInPrice) {
-        this.lastStockInPrice = lastStockInPrice;
+    public void setDepotName(String depotName) {
+        this.depotName = depotName;
     }
 
     public BigDecimal getBeginQuantity() {
@@ -126,28 +111,12 @@ public class StorageCheckDto {
         this.beginQuantity = beginQuantity;
     }
 
-    public BigDecimal getBeginMoney() {
-        return beginMoney;
-    }
-
-    public void setBeginMoney(BigDecimal beginMoney) {
-        this.beginMoney = beginMoney;
-    }
-
     public BigDecimal getStockInQuantity() {
         return stockInQuantity;
     }
 
     public void setStockInQuantity(BigDecimal stockInQuantity) {
         this.stockInQuantity = stockInQuantity;
-    }
-
-    public BigDecimal getStockInMoney() {
-        return stockInMoney;
-    }
-
-    public void setStockInMoney(BigDecimal stockInMoney) {
-        this.stockInMoney = stockInMoney;
     }
 
     public BigDecimal getStockOutQuantity() {
@@ -158,28 +127,12 @@ public class StorageCheckDto {
         this.stockOutQuantity = stockOutQuantity;
     }
 
-    public BigDecimal getStockOutMoney() {
-        return stockOutMoney;
-    }
-
-    public void setStockOutMoney(BigDecimal stockOutMoney) {
-        this.stockOutMoney = stockOutMoney;
-    }
-
     public BigDecimal getIncomeLossQuantity() {
         return incomeLossQuantity;
     }
 
     public void setIncomeLossQuantity(BigDecimal incomeLossQuantity) {
         this.incomeLossQuantity = incomeLossQuantity;
-    }
-
-    public BigDecimal getIncomeLossMoney() {
-        return incomeLossMoney;
-    }
-
-    public void setIncomeLossMoney(BigDecimal incomeLossMoney) {
-        this.incomeLossMoney = incomeLossMoney;
     }
 
     public BigDecimal getTotalQuantity() {
@@ -220,13 +173,5 @@ public class StorageCheckDto {
 
     public void setMinStorageQuantity(BigDecimal minStorageQuantity) {
         this.minStorageQuantity = minStorageQuantity;
-    }
-
-    public String getDepotName() {
-        return depotName;
-    }
-
-    public void setDepotName(String depotName) {
-        this.depotName = depotName;
     }
 }

@@ -5,14 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
+import com.emenu.common.dto.storage.ReportSerachDto;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.dto.storage.StorageReportItemDto;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.party.security.SecurityUser;
-import com.emenu.common.entity.storage.StorageDepot;
-import com.emenu.common.entity.storage.StorageItem;
-import com.emenu.common.entity.storage.StorageReport;
+import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.DateUtils;
@@ -46,8 +47,10 @@ import java.util.List;
 @Controller
 @RequestMapping(URLConstants.ADMIN_STORAGE_REPORT_URL)
 public class AdminStorageReportController extends AbstractController {
+
     /**
-     * 单据信息list
+     * 新
+     * 去单据管理页
      * @return
      */
     @Module(ModuleEnums.AdminStorageReportList)
@@ -55,13 +58,10 @@ public class AdminStorageReportController extends AbstractController {
     public String toList(Model model){
         try {
             //存放点
-            List<StorageDepot> depotList = Collections.emptyList();
+            List<StorageDepot> depotList = depotList = storageDepotService.listAll();
             //经手人、操作人、审核人
-            List<EmployeeDto> employeeDtoList = Collections.emptyList();
-            List<StorageItem> itemList = Collections.emptyList();
-            depotList = storageDepotService.listAll();
-            employeeDtoList = employeeService.listAll();
-            itemList = storageItemService.listAll();
+            List<EmployeeDto> employeeDtoList = employeeDtoList = employeeService.listAll();
+            List<StorageItem> itemList = itemList = storageItemService.listAll();
             model.addAttribute("depotList", depotList);
             model.addAttribute("handlerList", employeeDtoList);
             model.addAttribute("createdList", employeeDtoList);
@@ -80,46 +80,29 @@ public class AdminStorageReportController extends AbstractController {
         }
     }
 
+
     /**
+     * 新
      * 分页获取单据信息
-     * @param curPage
+     * @param pageNo
      * @param pageSize
+     * @param reportSerachDto
      * @return
      */
     @Module(ModuleEnums.AdminStorageReportList)
     @RequestMapping(value = "ajax/list/{curPage}",method = RequestMethod.GET)
     @ResponseBody
-    public JSON ajaxSearch(@PathVariable("curPage") Integer curPage,
+    public JSON ajaxSearch(@PathVariable("pageNo")Integer pageNo,
                            @RequestParam("pageSize") Integer pageSize,
-                           @RequestParam("createdPartyId") Integer createdPartyId,
-                           @RequestParam(value = "depotId", required = false) Integer[] depotId,
-                           @RequestParam("endTime") Date endTime,
-                           @RequestParam("handlerPartyId") Integer handlerPartyId,
-                           @RequestParam("auditPartyId ") Integer auditPartyId,
-                           @RequestParam("isAudited") Integer isAudited,
-                           @RequestParam("isSettlemented") Integer isSettlemented,
-                           @RequestParam("serialNumber") String serialNumber,
-                           @RequestParam("startTime") Date startTime) {
+                           ReportSerachDto reportSerachDto) {
 
-
+        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        reportSerachDto.setPageNo(pageNo);
+        reportSerachDto.setPageSize(pageSize);
         int dataCount = 0;
-        // 将查询条件设入report
-        StorageReport report = new StorageReport();
-        report.setHandlerPartyId(handlerPartyId);
-        report.setCreatedPartyId(createdPartyId);
-        report.setIsAudited(isAudited);
-        report.setIsSettlemented(isSettlemented);
-        report.setAuditPartyId(auditPartyId);
-        report.setSerialNumber(serialNumber);
-        List<Integer> depots = new ArrayList<Integer>();
-        if (depotId != null && depotId.length > 0) {
-            for (int i = 0; i < depotId.length; i++) {
-                depots.add(depotId[i]);
-            }
-        }
         try {
             //总数据数
-            dataCount = storageReportService.countByContition(report, depots, startTime, endTime);
+            dataCount = storageReportService.countByReportSerachDto(reportSerachDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -127,7 +110,7 @@ public class AdminStorageReportController extends AbstractController {
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         try {
             //分页获取单据和单据详情
-            storageReportDtoList = storageReportService.listReportDtoByCondition1(report,curPage,pageSize, depots,startTime,endTime);
+            storageReportDtoList = storageReportService.listReportDtoBySerachDto(reportSerachDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -136,20 +119,24 @@ public class AdminStorageReportController extends AbstractController {
         try{
             for (StorageReportDto storageReportDto : storageReportDtoList) {
                 JSONObject jsonObject = new JSONObject();
-                String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                // 单据
+                jsonObject.put("storageReport", storageReportDto.getStorageReport());
+                if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                    jsonObject.put("depotName", deportName);
+                    List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();
+                    jsonObject.put("storageReportItemDtoList", storageReportItemList);
+                } else {
+                    jsonObject.put("depotName", "");
+                    jsonObject.put("storageReportIngredientList", storageReportDto.getStorageReportIngredientList());
+                }
+
                 String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
                 String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getCreatedPartyId()).getName();
                 String createdTime = DateUtils.yearMonthDayFormat(storageReportDto.getStorageReport().getCreatedTime());
-
-                jsonObject.put("storageReport", storageReportDto.getStorageReport());
-                jsonObject.put("depotName", deportName);
                 jsonObject.put("handlerName", handlerName);
                 jsonObject.put("createdName", createdName);
                 jsonObject.put("createdTime", createdTime);
-
-//                List<StorageReportItemDto> storageReportItemDtoList = storageReportDto.getStorageReportItemDtoList();
-                List<StorageReportItemDto> storageReportItemDtoList =  null;
-                jsonObject.put("storageReportItemDtoList", storageReportItemDtoList);
                 jsonArray.add(jsonObject);
             }
         }catch (SSException e){
@@ -159,6 +146,13 @@ public class AdminStorageReportController extends AbstractController {
         return sendJsonArray(jsonArray, dataCount, pageSize);
     }
 
+    /**
+     * 新
+     * 添加单据
+     * @param storageReportDto
+     * @param httpSession
+     * @return
+     */
     @Module(ModuleEnums.AdminStorageReportNew)
     @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
@@ -182,10 +176,12 @@ public class AdminStorageReportController extends AbstractController {
     }
 
     /**
+     * 新
      * ajax删除单据和单据详情
      * @param id
      * @return
      */
+    @Module(ModuleEnums.AdminStorageReportDelete)
     @RequestMapping(value = "ajax/del/{id}",method = RequestMethod.DELETE)
     @ResponseBody
     public
@@ -200,6 +196,12 @@ public class AdminStorageReportController extends AbstractController {
     }
 
 
+    /**
+     * 新
+     * 编辑单据
+     * @param storageReportDto
+     * @return
+     */
     @Module(ModuleEnums.AdminStorageReportUpdate)
     @RequestMapping(value = "ajax/update",method = RequestMethod.POST)
     @ResponseBody
@@ -221,6 +223,7 @@ public class AdminStorageReportController extends AbstractController {
      * @param id
      * @return
      */
+    @Module(ModuleEnums.AdminStorageReportNew)
     @RequestMapping(value = "ajax/bill", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject calculateTotalPrice(@RequestParam("price")BigDecimal price, @RequestParam("quantity")BigDecimal quantity,
@@ -228,6 +231,96 @@ public class AdminStorageReportController extends AbstractController {
         JSONObject jsonObject = new JSONObject();
         BigDecimal money = price.multiply(quantity);
         jsonObject.put("money", money);
+        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 新
+     * 添加单据时获取原配料
+     * @param keyword
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageReportNew)
+    @RequestMapping(value = "ajax/getingredient", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getReportIngredient(@RequestParam("keyword")String keyword){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Ingredient ingredient = ingredientService.queryByKeyword(keyword);
+            jsonObject.put("ingredient", ingredient);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 新
+     * 添加单据时获取库存物品
+     * @param keyword
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageReportNew)
+    @RequestMapping(value = "ajax/getitem", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getReportItem(@RequestParam("keyword")String keyword){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            StorageItem storageItem = storageItemService.queryByKeyword(keyword);
+            jsonObject.put("Item", storageItem);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 添加是获取单据物品成本卡单位数量
+     * @param storageReportItem
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageReportNew)
+    @RequestMapping(value = "ajax/convertitem", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject convertItem(StorageReportItem storageReportItem){
+        JSONObject jsonObject = new JSONObject();
+        if (Assert.isNull(storageReportItem)){
+            sendMsgAndCode(1,"添加失败");
+        }
+        try {
+            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+            jsonObject.put("storageReportItem", storageReportItem);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+
+}
+    /**
+     * 获取库存单位原配料数量
+     * @param reportIngredient
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageReportNew)
+    @RequestMapping(value = "ajax/convertingredient", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject convertIngredient(StorageReportIngredient reportIngredient){
+        JSONObject jsonObject = new JSONObject();
+        if (Assert.isNull(reportIngredient)){
+            sendMsgAndCode(1,"添加失败");
+        }
+        try {
+            Ingredient ingredient = ingredientService.queryById(reportIngredient.getIngredientId());
+            reportIngredient.setStorageUnitQuantity(reportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+            jsonObject.put("reportIngredient", reportIngredient);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
         return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
     }
 

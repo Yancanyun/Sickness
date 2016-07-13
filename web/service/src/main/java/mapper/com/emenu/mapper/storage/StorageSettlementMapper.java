@@ -20,6 +20,14 @@ import java.util.List;
 public interface StorageSettlementMapper {
 
     /**
+     * 根据结算id获取结算详情
+     * @param settlementId
+     * @return
+     * @throws Exception
+     */
+    public List<StorageSettlementIngredient> listSettlementIngredientBySettlementId(@Param("settlementId") int settlementId) throws Exception;
+
+    /**
      * 根据时间取出结算表最新的一次结算库存数据
      * @param settlementDate
      * @return
@@ -38,13 +46,14 @@ public interface StorageSettlementMapper {
                                                       @Param("itemId") int itemId) throws Exception;
 
     /**
+     * 新
      * 根据时间取出某一原配料在结算表最新的一次结算库存数据
-     * @param settlementDate
+     * @param settlementId
      * @param ingredientId
      * @return
      * @throws Exception
      */
-    public StorageSettlementIngredient queryByDateAndIngredientId(@Param("settlementDate") Date settlementDate,
+    public StorageSettlementIngredient queryBySettlementIdAndIngredientId(@Param("settlementId") int settlementId,
                                                                   @Param("ingredientId") int ingredientId) throws Exception;
 
 

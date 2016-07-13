@@ -35,5 +35,21 @@ public interface StorageReportIngredientService{
      * @return
      * @throws SSException
      */
-    public boolean delByReportId(Integer reportId) throws SSException;
+    public boolean delByReportId(int reportId) throws SSException;
+
+    /**
+     * 根据id删除单据原配料
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public boolean delById(int id) throws SSException;
+
+    /**
+     * 修改单据原料
+     * @param reportIngredient
+     * @throws SSException
+     */
+    public void updateById(StorageReportIngredient reportIngredient) throws SSException;
+
 }

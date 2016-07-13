@@ -489,4 +489,19 @@ public class StorageItemServiceImpl implements StorageItemService {
         String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
         storageItem.setTotalStockInQuantityStr(totalQuantityStr);
     }
+
+    @Override
+    public StorageItem queryByKeyword(String keyword) throws SSException {
+        StorageItem storageItem = null;
+        if (Assert.isNull(keyword)){
+            throw SSException.get(EmenuException.KeywordError);
+        }
+        try {
+            storageItem = storageItemMapper.queryByKeyword(keyword);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemQueryFailed, e);
+        }
+        return storageItem;
+    }
 }

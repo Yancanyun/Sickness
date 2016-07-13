@@ -24,7 +24,7 @@ public class StorageReportItem extends AbstractEntity{
     @Column(name = "item_id")
     private Integer itemId;
 
-    //原料名称
+    //库存物品
     @Transient
     private String itemName;
 

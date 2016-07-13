@@ -96,6 +96,8 @@ public class StorageReportServiceImpl implements StorageReportService {
                    Assert.lessOrEqualZero(reportDto.getStorageReport().getType())){
                throw SSException.get(EmenuException.ReportTypeError);
            }
+
+           // 获取单据编号
            String serialNumber = "";
            switch (reportDto.getStorageReport().getType()){
                case 1:
@@ -117,15 +119,20 @@ public class StorageReportServiceImpl implements StorageReportService {
                default:  throw SSException.get(EmenuException.ReportTypeError);
            }
 
-
            if(Assert.isNull(reportDto.getStorageReport())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
            if(Assert.isEmpty(reportDto.getStorageReportItemList()) ||Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
                throw SSException.get(EmenuException.ReportItemListIsNotNull);
            }
+           if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+               BigDecimal reportMoney = new BigDecimal("0.00");
+               for (StorageReportItem storageReportItem : reportDto.getStorageReportItemList()){
+                   reportMoney = reportMoney.add(storageReportItem.getCount());
+               }
+               reportDto.getStorageReport().setMoney(reportMoney);
+           }
            StorageReport storageReport = this.newReport(reportDto.getStorageReport());
-
            if (reportDto.getStorageReport().getType() == 1){
                for (StorageReportItem reportItem : reportDto.getStorageReportItemList()) {
                    reportItem.setReportId(storageReport.getId());
@@ -162,7 +169,7 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public List<StorageReport> listByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException {
+    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws SSException {
         // 新
         List<StorageReport> reportList = Collections.emptyList();
         // 分页设置
@@ -177,17 +184,204 @@ public class StorageReportServiceImpl implements StorageReportService {
                     offset = pageNo * reportSerachDto.getPageSize();
                     reportSerachDto.setOffset(offset);
                 }
+                reportList = storageReportMapper.listReportBySerachDto(reportSerachDto);
+                // 设置经手人、操作人、审核人名字
+                for (StorageReport storageReport : reportList){
+                    setReportRelatedName(storageReport);
+                }
+            } else {
+                throw  SSException.get(EmenuException.ReportSearchDtoError);
             }
-            reportList = storageReportMapper.listByReportSerachDto(reportSerachDto);
-            // 设置经手人、操作人、审核人名字
-            for (StorageReport storageReport : reportList){
-                setReportRelatedName(storageReport);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+
+        return reportList;
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoBySerachDto(ReportSerachDto reportSerachDto) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        List<StorageReportDto> reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            reportList = listReportBySerachDto(reportSerachDto);
+            if (Assert.isNull(reportList)
+                    || Assert.lessOrEqualZero(reportList.size())){
+                return reportDtoList;
+            } else {
+                for (StorageReport report : reportList){
+                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                        // 入库单物品详情
+                        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+                        for (StorageReportItem storageReportItem : storageReportItemList){
+                            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                            storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
+                            storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportItemList(storageReportItemList);
+                        reportDtoList.add(storageReportDto);
+                    } else {
+                        // 其他单据原配料详情
+                        List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                        for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                            Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                            storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
+                            storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportIngredientList(storageReportIngredientList);
+                        reportDtoList.add(storageReportDto);
+                    }
+                }
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
+        return reportDtoList;
+    }
 
+    @Override
+    public List<StorageReportDto> listReportDtoByTime(Date startTime, Date endTime) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        List<StorageReportDto> reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            reportList = listStorageReportByTime(startTime,endTime);
+            if (Assert.isNull(reportList)
+                    || Assert.lessOrEqualZero(reportList.size())){
+                return reportDtoList;
+            } else {
+                for (StorageReport report : reportList){
+                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                        // 入库单物品详情
+                        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+                        for (StorageReportItem storageReportItem : storageReportItemList){
+                            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                            storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
+                            storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportItemList(storageReportItemList);
+                        reportDtoList.add(storageReportDto);
+                    } else {
+                        // 其他单据原配料详情
+                        List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                        for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                            Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                            storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
+                            storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportIngredientList(storageReportIngredientList);
+                        reportDtoList.add(storageReportDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return reportDtoList;
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        List<StorageReportDto> reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            reportList = listReportByTimeAndIsAudited(startTime,endTime,isAudited);
+            if (Assert.isNull(reportList)
+                    || Assert.lessOrEqualZero(reportList.size())){
+                return reportDtoList;
+            } else {
+                for (StorageReport report : reportList){
+                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                        // 入库单物品详情
+                        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+                        for (StorageReportItem storageReportItem : storageReportItemList){
+                            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                            storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
+                            storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportItemList(storageReportItemList);
+                        reportDtoList.add(storageReportDto);
+                    } else {
+                        // 其他单据原配料详情
+                        List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                        for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                            Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                            storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
+                            storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportIngredientList(storageReportIngredientList);
+                        reportDtoList.add(storageReportDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return reportDtoList;
+    }
+
+    @Override
+    public List<StorageReport> listReportByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            if (Assert.isNull(endTime)){
+                throw SSException.get(EmenuException.TimeIsNotNUll);
+            }
+            if (Assert.lessZero(isAudited)){
+                throw SSException.get(EmenuException.IsAuditedIllegal);
+            }
+            reportList = storageReportMapper.listReportByTimeAndIsAudited(startTime,endTime,isAudited);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryReportFail, e);
+        }
+        return reportList;
+    }
+
+    @Override
+    public List<StorageReport> listStorageReportByTime(Date startTime, Date endTime) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            if (Assert.isNull(endTime)){
+                throw SSException.get(EmenuException.TimeIsNotNUll);
+            }
+            reportList = storageReportMapper.listStorageReportByTime(startTime,endTime);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryReportFail, e);
+        }
         return reportList;
     }
 
@@ -363,6 +557,9 @@ public class StorageReportServiceImpl implements StorageReportService {
         List<StorageReportDto> reportDtoList = Collections.emptyList();
         List<StorageReport> reportList = Collections.emptyList();
         try {
+            if (Assert.isNull(endTime)){
+                throw SSException.get(EmenuException.TimeIsNotNUll);
+            }
             //获取单据信息
             reportList = storageReportMapper.listUnsettleAndAuditedStorageReportByEndTime(endTime);
             if (Assert.isEmpty(reportList)){
@@ -593,48 +790,92 @@ public class StorageReportServiceImpl implements StorageReportService {
             if (Assert.isNull(reportDto.getStorageReport())){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
-            if (Assert.isEmpty(reportDto.getStorageReportItemList())){
-                throw SSException.get(EmenuException.StorageReportItemListIsNotNull);
+            if (Assert.isEmpty(reportDto.getStorageReportItemList())
+                    || Assert.isEmpty(reportDto.getStorageReportIngredientList())){
+                throw SSException.get(EmenuException.STorageReportDeatil);
             }
             //更新后的单据
             StorageReport reportNew = reportDto.getStorageReport();
             //数据库中原始未修改的单据
             StorageReportDto reportDtoOld = queryReportDtoById(reportNew.getId());
+            if (reportNew.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                BigDecimal reportMoney = new BigDecimal("0.00");
+                for (StorageReportItem storageReportItem : reportDto.getStorageReportItemList()){
+                    reportMoney = reportMoney.add(storageReportItem.getCount());
+                }
+                reportNew.setMoney(reportMoney);
+            }
+
             //更新单据
             updateById(reportNew);
-
-            List<StorageReportItem> reportItemListNew = reportDto.getStorageReportItemList();
-            List<StorageReportItem> reportItemListOld = reportDtoOld.getStorageReportItemList();
-
-            //判断更新后的单据是否存在数据
-            if (reportItemListNew.size() > 0){
-                //判断以前的单据是否存在数据，若不存在，则直接到下一个if处添加物品
-                if (reportItemListOld.size() > 0){
-                    //判断新单据和老单据中每条物品id是否一致，若一致，则修改老单据的相应物品
-                    for (StorageReportItem itemOld : reportItemListOld){
-                        for (StorageReportItem itemNew : reportItemListNew){
-                            if (!Assert.isNull(itemNew.getId()) && itemOld.getId().equals(itemNew.getId())){
-                                itemNew.setReportId(reportNew.getId());
-                                storageReportItemService.updateById(itemNew);
-                                //删除新单据中已修改的物品，最后剩下的物品为老单据中没有的，即需要被添加的物品
-                                reportItemListNew.remove(itemNew);
-                                //删除老单据中已修改的物品，最后剩下的物品为新单据中没有的，即需要被删掉的物品
-                                reportItemListOld.remove(itemOld);
+            if (reportNew.getType() == StorageReportTypeEnum.IncomeOnReport.getId()) {
+                List<StorageReportItem> reportItemListNew = reportDto.getStorageReportItemList();
+                List<StorageReportItem> reportItemListOld = reportDtoOld.getStorageReportItemList();
+                //判断更新后的单据是否存在数据
+                if (reportItemListNew.size() > 0) {
+                    //判断以前的单据是否存在数据，若不存在，则直接到下一个if处添加物品
+                    if (reportItemListOld.size() > 0) {
+                        //判断新单据和老单据中每条物品id是否一致，若一致，则修改老单据的相应物品
+                        for (StorageReportItem itemOld : reportItemListOld) {
+                            for (StorageReportItem itemNew : reportItemListNew) {
+                                if (!Assert.isNull(itemNew.getId()) && itemOld.getId().equals(itemNew.getId())) {
+                                    itemNew.setReportId(reportNew.getId());
+                                    storageReportItemService.updateById(itemNew);
+                                    //删除新单据中已修改的物品，最后剩下的物品为老单据中没有的，即需要被添加的物品
+                                    reportItemListNew.remove(itemNew);
+                                    //删除老单据中已修改的物品，最后剩下的物品为新单据中没有的，即需要被删掉的物品
+                                    reportItemListOld.remove(itemOld);
+                                }
+                            }
+                        }
+                        //删除物品
+                        if (reportItemListOld.size() > 0) {
+                            for (StorageReportItem itemOld : reportItemListOld) {
+                                storageReportItemService.delById(itemOld.getId());
                             }
                         }
                     }
-                    //删除物品
-                    if (reportItemListOld.size() > 0){
-                        for (StorageReportItem itemOld : reportItemListOld){
-                            storageReportItemService.delById(itemOld.getId());
+                    //添加物品
+                    if (reportItemListNew.size() > 0) {
+                        for (StorageReportItem itemNew : reportItemListNew) {
+                            itemNew.setReportId(reportNew.getId());
+                            storageReportItemService.newReportItem(itemNew);
                         }
                     }
                 }
-                //添加物品
-                if (reportItemListNew.size() > 0){
-                    for (StorageReportItem itemNew : reportItemListNew){
-                        itemNew.setReportId(reportNew.getId());
-                        storageReportItemService.newReportItem(itemNew);
+            } else {
+                List<StorageReportIngredient> reportIngredientListNew = reportDto.getStorageReportIngredientList();
+                List<StorageReportIngredient> reportIngredientListOld = reportDtoOld.getStorageReportIngredientList();
+                //判断更新后的单据是否存在数据
+                if (reportIngredientListNew.size() > 0) {
+                    //判断以前的单据是否存在数据，若不存在，则直接到下一个if处添加物品
+                    if (reportIngredientListOld.size() > 0) {
+                        //判断新单据和老单据中每条物品id是否一致，若一致，则修改老单据的相应物品
+                        for (StorageReportIngredient reportIngredientOld : reportIngredientListOld) {
+                            for (StorageReportIngredient reportIngredientNew : reportIngredientListNew) {
+                                if (!Assert.isNull(reportIngredientNew.getId()) && reportIngredientOld.getId().equals(reportIngredientNew.getId())) {
+                                    reportIngredientNew.setReportId(reportNew.getId());
+                                    storageReportIngredientService.updateById(reportIngredientNew);
+                                    //删除新单据中已修改的物品，最后剩下的物品为老单据中没有的，即需要被添加的物品
+                                    reportIngredientListNew.remove(reportIngredientNew);
+                                    //删除老单据中已修改的物品，最后剩下的物品为新单据中没有的，即需要被删掉的物品
+                                    reportIngredientListOld.remove(reportIngredientOld);
+                                }
+                            }
+                        }
+                        //删除物品
+                        if (reportIngredientListOld.size() > 0) {
+                            for (StorageReportIngredient reportIngredientOld : reportIngredientListOld) {
+                                storageReportIngredientService.delById(reportIngredientOld.getId());
+                            }
+                        }
+                    }
+                    //添加物品
+                    if (reportIngredientListNew.size() > 0) {
+                        for (StorageReportIngredient reportIngredientNew : reportIngredientListNew) {
+                            reportIngredientNew.setReportId(reportNew.getId());
+                            storageReportIngredientService.newReportIngredient(reportIngredientNew);
+                        }
                     }
                 }
             }
@@ -657,15 +898,24 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public int countByContition(StorageReport report, List<Integer> depotIdList, Date startTime, Date endTime) throws SSException {
+    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
         Integer count = 0;
-        if (endTime != null) {
-            endTime.setHours(23);
-            endTime.setMinutes(59);
-            endTime.setSeconds(59);
-        }
         try {
-            count = storageReportMapper.countByCondition(report, depotIdList, startTime, endTime);
+            if (reportSerachDto.getEndTime() != null) {
+                reportSerachDto.getEndTime().setHours(23);
+                reportSerachDto.getEndTime().setMinutes(59);
+                reportSerachDto.getEndTime().setSeconds(59);
+            }
+            reportList = listReportBySerachDto(reportSerachDto);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+
+        try {
+            count = storageReportMapper.countByReportSerachDto(reportSerachDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountReportFail, e);
@@ -753,6 +1003,7 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     /**
+     * 新
      * 根据单据id删除单据
      * @param id
      * @return
@@ -903,4 +1154,6 @@ public class StorageReportServiceImpl implements StorageReportService {
             }
         }
     }
+
+
 }

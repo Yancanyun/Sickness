@@ -2,6 +2,7 @@ package com.emenu.mapper.storage;
 
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.Ingredient;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -59,8 +60,17 @@ public interface IngredientMapper {
      * @throws Exception
      */
     public int coutByName(@Param("name") String name) throws Exception;
+
     /**
      *
      */
     public List<Ingredient> listByKeywordAndTagids(String keyword, List<Integer> tagIdList)throws Exception;
+
+    /**
+     * 根据keyword获取原配料
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public Ingredient queryByKeyword(@Param("keyword") String keyword) throws Exception;
 }

@@ -31,7 +31,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listByReportSerachDto(ReportSerachDto reportSerachDto) throws Exception;
+    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws Exception;
 
     /**
      * 新
@@ -52,6 +52,35 @@ public interface StorageReportMapper {
      * @throws SSException
      */
     public boolean updateIsSettlemented(@Param("reportId") int reportId, @Param("isSettlemented") int isSettlemented) throws Exception;
+
+    /**
+     * 新
+     * 根据时间获取单据，不包括startTime和endTime
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listStorageReportByTime(Date startTime, Date endTime) throws Exception;
+
+    /**
+     * 新
+     * 根据审核条件获取时间段之间的单据，包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws Exception
+     */
+    public List<StorageReport> listReportByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws Exception;
+
+    /**
+     * 根据查询条件统计记录数
+     * @param reportSerachDto
+     * @return
+     * @throws Exception
+     */
+    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws Exception;
 
     /**
      * 分页获取单据信息
@@ -149,19 +178,13 @@ public interface StorageReportMapper {
      */
     public int count() throws Exception;
 
-
     /**
      * 根据条件查询记录数
-     * @param report
-     * @param depotIdList
-     * @param endTime
-     * @param startTime
+     * @param reportSerachDto
      * @return
+     * @throws Exception
      */
-    public int countByCondition(@Param("report")StorageReport report,
-                                @Param("depotIdList")List<Integer> depotIdList,
-                                @Param("startTime")Date startTime,
-                                @Param("endTime")Date endTime) throws Exception;
+    public int countByCondition(ReportSerachDto reportSerachDto) throws Exception;
 
     /**
      *

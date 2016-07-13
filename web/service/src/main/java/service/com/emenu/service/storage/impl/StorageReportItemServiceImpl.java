@@ -83,11 +83,11 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
         List<StorageReportItem> reportItemList =  Collections.emptyList();
         try {
             reportItemList = storageReportItemMapper.listByReportId(reportId);
-            return reportItemList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryReportItemFail, e);
         }
+        return reportItemList;
     }
 
     @Override

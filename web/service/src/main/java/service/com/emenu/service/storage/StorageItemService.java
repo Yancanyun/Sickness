@@ -135,4 +135,12 @@ public interface StorageItemService {
      */
     public void setQuantityFormat(StorageItem storageItem) throws SSException;
 
+    /**
+     * 根据关键字获取库存物品
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public StorageItem queryByKeyword(String keyword) throws SSException;
+
 }

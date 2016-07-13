@@ -14,12 +14,13 @@ import java.util.List;
 /**
  * StorageSettlementService
  * 库存结算
- * @author dujuan
+ * @author xiaozl
  * @date 2015/11/15
  */
 public interface StorageSettlementService {
 
     /**
+     * 新
      * 添加结算
      * 根据结算周期数，定期结算
      * @throws SSException
@@ -28,29 +29,8 @@ public interface StorageSettlementService {
 
     /**
      * 库存盘点（库存物品）获取截止时间时的库存统计结果
-     * @param startDate
-     * @param endDate
-     * @Param supplierId
-     * @param depotIds
-     * @param tagIds
-     * @param keyword
-     * @return List<StorageCheckDto>
-     * @throws SSException
-     */
-    //套页的时候注意前端传过来的时间是什么格式的
-    public List<StorageCheckDto> listSettlementCheck(Date startDate,
-                                                     Date endDate,
-                                                     Integer supplierId,
-                                                     List<Integer> depotIds,
-                                                     List<Integer> tagIds,
-                                                     String keyword,
-                                                     Integer curPage,
-                                                     Integer pageSize) throws SSException;
-
-    /**
-     * 库存盘点（原配料）
-     * @param startDate
-     * @param endDate
+     * @param startTime
+     * @param endTime
      * @param tagIds
      * @param keyword
      * @param curPage
@@ -58,30 +38,21 @@ public interface StorageSettlementService {
      * @return
      * @throws SSException
      */
-    public List<StorageCheckDto> listSettlementIngredientCheck(Date startDate,
-                                                     Date endDate,
-                                                     List<Integer> tagIds,
-                                                     String keyword,
-                                                     Integer curPage,
-                                                     Integer pageSize) throws SSException;
+    public List<StorageCheckDto>  listSettlementCheck(Date startTime,
+                                                      Date endTime,
+                                                      List<Integer> tagIds,
+                                                      String keyword,
+                                                      Integer curPage,
+                                                      Integer pageSize) throws SSException;
 
     /**
      * 计算库存盘点总数
-     * @param startDate
-     * @param endDate
-     * @Param supplierId
-     * @param depotIds
      * @param tagIds
      * @param keyword
      * @return
      * @throws SSException
      */
-    public int countSettlementCheck(Date startDate,
-                                    Date endDate,
-                                    Integer supplierId,
-                                    List<Integer> depotIds,
-                                    List<Integer> tagIds,
-                                    String keyword) throws SSException;
+    public int countSettlementCheck(List<Integer> tagIds, String keyword) throws SSException;
 
     /**
      * 结算中心

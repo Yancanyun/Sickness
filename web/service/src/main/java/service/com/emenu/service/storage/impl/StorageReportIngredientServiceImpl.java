@@ -65,10 +65,9 @@ public class StorageReportIngredientServiceImpl implements StorageReportIngredie
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean delByReportId(Integer reportId) throws SSException {
+    public boolean delByReportId(int reportId) throws SSException {
         try {
-             if (Assert.isNull(reportId) ||
-                     Assert.lessOrEqualZero(reportId)){
+             if (Assert.lessOrEqualZero(reportId)){
                  throw SSException.get(EmenuException.ReportIdError);
              }
             storageReportIngredientMapper.delByReportId(reportId);
@@ -76,7 +75,37 @@ public class StorageReportIngredientServiceImpl implements StorageReportIngredie
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
         }
+        return true;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean delById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.ReportIdError);
+            }
+            commonDao.deleteById(StorageReportIngredient.class,id);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
         return false;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateById(StorageReportIngredient reportIngredient) throws SSException {
+        try {
+            if(Assert.isNull(reportIngredient)){
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            } else {
+                commonDao.update(reportIngredient);
+            }
+            } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStorageReportItemFail, e);
+        }
     }
 
     private boolean checkBeforeSave(StorageReportIngredient reportIngredient) throws SSException{

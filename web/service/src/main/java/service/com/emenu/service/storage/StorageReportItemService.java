@@ -15,6 +15,7 @@ import java.util.List;
 public interface StorageReportItemService {
 
     /**
+     * 新
      * 添加单据详情
      * @param reportItem
      * @return
@@ -23,6 +24,7 @@ public interface StorageReportItemService {
     public StorageReportItem newReportItem(StorageReportItem reportItem) throws SSException;
 
     /**
+     * 新
      * 获取所有单据详情信息
      * @return
      * @throws SSException

@@ -43,7 +43,6 @@ public class StorageDepotServiceImpl implements StorageDepotService {
     @Override
     public List<StorageDepot> listAll() throws SSException {
         List<StorageDepot> list = Collections.<StorageDepot>emptyList();
-
         try {
             list = storageDepotMapper.listAll();
         } catch(Exception e) {

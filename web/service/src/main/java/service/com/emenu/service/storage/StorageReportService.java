@@ -41,7 +41,58 @@ public interface StorageReportService {
      * @return
      * @throws SSException
      */
-    public List<StorageReport> listByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException;
+    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws SSException;
+
+    /**
+     * 新
+     * 根据查询条件获取单据和单据详情
+     * @param reportSerachDto
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listReportDtoBySerachDto(ReportSerachDto reportSerachDto) throws SSException;
+
+    /**
+     * 新
+     * 获取时间段之间的单据和单据详情，不包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listReportDtoByTime(Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 新
+     * 根据审核条件获取时间段之间的单据和单据详情，包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listReportDtoByTimeAndIsAudited(Date startTime,Date endTime,int isAudited) throws SSException;
+
+    /**
+     * 新
+     * 根据审核条件获取时间段之间的单据，包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReport> listReportByTimeAndIsAudited(Date startTime,Date endTime,int isAudited) throws SSException;
+
+
+    /**
+     * 新
+     * 获取时间段之间的单据，不包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReport> listStorageReportByTime(Date startTime,Date endTime) throws SSException;
 
     /**
      * 新
@@ -90,6 +141,15 @@ public interface StorageReportService {
     public boolean updateIsSettlemented(int reportId,int isSettlemented) throws SSException;
 
     /**
+     * 新
+     * 根据查询条件统计记录数
+     * @param reportSerachDto
+     * @return
+     * @throws SSException
+     */
+    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException;
+
+    /**
      * 获取所有单据和单据详情
      * @return
      * @throws SSException
@@ -97,7 +157,7 @@ public interface StorageReportService {
     public List<StorageReportDto> listReportDto() throws  SSException;
 
     /**
-     * 获取指定时间之前审核通过且未结算的单据和单据详情
+     * 获取指定时间之前审核通过且未结算的单据和单据详情,如果endTime为空，时间不作为查询条件
      * @param endTime
      * @return
      * @throws SSException
@@ -192,16 +252,6 @@ public interface StorageReportService {
     public int count() throws SSException;
 
 
-
-    /**
-     * 根据查询条件统计记录数
-     * @param report
-     * @param depotIdList
-     * @param endTime
-     * @param startTime
-     * @return
-     */
-    public int countByContition(StorageReport report,List<Integer> depotIdList,Date startTime,Date endTime) throws SSException;
 
     /**
      * 导出到Excel

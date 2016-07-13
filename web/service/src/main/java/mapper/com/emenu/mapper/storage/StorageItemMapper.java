@@ -89,4 +89,12 @@ public interface StorageItemMapper {
      * @throws SSException
      */
     public List<Integer> listIdsByIngredientId(@Param("ingredientId") Integer ingredientId) throws Exception;
+
+    /**
+     * 根据关键字获取库存物品
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public StorageItem queryByKeyword(String keyword) throws Exception;
 }
