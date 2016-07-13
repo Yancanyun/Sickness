@@ -226,6 +226,7 @@ public enum EmenuException implements IBizExceptionMes {
     MergeTableNumLessThanTwo("选择的并台餐台数量小于两个", 4036),
     MergeTableStatusError("选择的并台餐台中有处于不可并台状态的餐台", 4037),
     MergeIdError("并台ID不合法", 4038),
+    TableNotOpen("餐台暂未开台",4039),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4050),
     //餐台-餐段管理
@@ -570,6 +571,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderByTimePeroidFail("查询该时间段内的订单信息失败",10055),
     TimeUnreasonable1("开始时间不能大于等于结束时间",10056),
     TimeUnreasonable2("开始时间不能大于结束时间",10057),
+    QueryMaxFalgFail("获取最大的套餐标识失败",10058),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

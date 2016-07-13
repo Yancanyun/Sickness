@@ -2,6 +2,7 @@ package com.emenu.common.entity.order;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
+import javax.naming.ldap.PagedResultsControl;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -94,6 +95,10 @@ public class OrderDish extends AbstractEntity {
     @Column(name = "is_change")
     private Integer isChange;
 
+    //套餐标识,相同的标记值属于同一个套餐
+    @Column(name="package_flag")
+    private Integer packageFlag;
+
     // 创建时间
     @Column(name = "created_time")
     private Date createdTime;
@@ -101,7 +106,6 @@ public class OrderDish extends AbstractEntity {
     // 最近修改时间
     @Column(name = "last_modified_time")
     private Date lastModifiedTime;
-
 
     // setter、getter
     public Integer getId() {
@@ -278,5 +282,13 @@ public class OrderDish extends AbstractEntity {
 
     public void setIsChange(Integer isChange) {
         this.isChange = isChange;
+    }
+
+    public Integer getPackageFlag() {
+        return packageFlag;
+    }
+
+    public void setPackageFlag(Integer packageFlag) {
+        this.packageFlag = packageFlag;
     }
 }

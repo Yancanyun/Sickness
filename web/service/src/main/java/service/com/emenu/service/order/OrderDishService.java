@@ -117,4 +117,11 @@ public interface OrderDishService {
      * @throws SSException
      */
     public void wipeOrderDish(Integer orderDishId) throws SSException;
+
+    /**
+     * 获取到套餐标识的最大值
+     * @param
+     * @throws Exception
+     */
+    public int queryMaxPackageFlag() throws SSException;
 }

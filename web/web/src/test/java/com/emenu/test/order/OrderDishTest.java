@@ -149,4 +149,10 @@ public class OrderDishTest extends AbstractTestCase {
     {
         orderDishService.wipeOrderDish(55);
     }
+
+    @Test
+    public void testQueryMaxFlag()throws SSException
+    {
+        orderDishService.queryMaxPackageFlag();
+    }
 }

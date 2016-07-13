@@ -84,4 +84,12 @@ public interface OrderDishMapper {
      * @throws Exception
      */
     public int queryOrderDishTableId(@Param("orderDishId") Integer orderDishId) throws Exception;
+
+
+    /**
+     * 获取到套餐标识的最大值
+     * @param
+     * @throws Exception
+     */
+    public List<Integer> queryMaxPackageFlag() throws Exception;
 }
