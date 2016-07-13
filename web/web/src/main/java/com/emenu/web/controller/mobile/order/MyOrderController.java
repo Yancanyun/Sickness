@@ -427,7 +427,7 @@ public class MyOrderController  extends AbstractController {
             for(OrderDishCache dto :orderDishCache)
             {
                 DishDto dishDto = new DishDto();
-                if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐
+                if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐,把套餐拆成一个一个的菜品存到书库库里
                 {
                     DishPackageDto dishPackageDto = new DishPackageDto();
                     //根据套餐Id查询出套餐具体信息,是套餐的话dishId就是对应的套餐Id
@@ -435,6 +435,9 @@ public class MyOrderController  extends AbstractController {
                     List<DishDto> dishDtos = new ArrayList<DishDto>();
                     dishDtos=dishPackageDto.getChildDishDtoList();//获得套餐所有的子菜品
                     //将套餐拆成单个菜品存到数据库里
+                    Integer packageFlag;
+                    packageFlag = orderDishService.queryMaxPackageFlag();//获取套餐标识最大值
+                    packageFlag+=1;//新增的套餐的套餐标识为最大值加1
                     for(DishDto packageDto :dishDtos)
                     {
                         OrderDish orderDish = new OrderDish();

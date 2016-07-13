@@ -8,7 +8,7 @@
        `dish_quantity`,`taste_id`,`remark`,`remark_price`,`sale_price`,
        `vip_dish_price`,`is_package`,`discount`,`status`,`order_time`,
        `serve_type`,`is_presented_dish`,`presented_remark_id`,`created_time`,`last_modified_time`,
-       `is_call`,`is_change`
+       `is_call`,`is_change`,`package_flag`
         FROM t_order_dish
         WHERE t_order_dish.`order_id` = #{orderId}
     </select>
@@ -18,7 +18,7 @@
        `dish_quantity`,`taste_id`,`remark`,`remark_price`,`sale_price`,
        `vip_dish_price`,`is_package`,`discount`,`status`,`order_time`,
        `serve_type`,`is_presented_dish`,`presented_remark_id`,`created_time`,`last_modified_time`,
-       `is_call`,`is_change`
+       `is_call`,`is_change`,`package_flag`
         FROM t_order_dish
         WHERE t_order_dish.`id` = #{id}
     </select>
@@ -44,6 +44,7 @@
                 orderdish.`presented_remark_id` AS presentedRemarkId,
                 orderdish.`is_call`AS isCall,
                 orderdish.`is_change`AS isChange,
+                orderdish.`package_flag`AS packageFlag,
                 dish.`name` AS dishName,
                 taste.`name` AS tasteName,
                 taste.`related_charge` AS relatedCharge,
@@ -118,4 +119,10 @@
         WHERE t_order.id=t_order_dish.order_id
         AND t_order_dish.id=#{orderDishId}
             </select>
+
+    <select id="queryMaxPackageFlag" resultType="Integer">
+        SELECT package_flag
+        FROM t_order_dish
+        ORDER BY package_flag ASC
+    </select>
 </mapper>

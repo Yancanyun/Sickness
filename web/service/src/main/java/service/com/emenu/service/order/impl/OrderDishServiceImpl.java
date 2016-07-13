@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -228,6 +229,22 @@ public class OrderDishServiceImpl implements OrderDishService{
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.WipeOrderDishFail,e);
+        }
+    }
+
+    @Override
+    public int queryMaxPackageFlag() throws SSException
+    {
+        List<Integer> packageFlagList = new ArrayList<Integer>();
+        try{
+            packageFlagList=orderDishMapper.queryMaxPackageFlag();
+            if(packageFlagList==null||packageFlagList.isEmpty())
+            return 0;
+            else
+                return packageFlagList.get(packageFlagList.size()-1);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
         }
     }
 }

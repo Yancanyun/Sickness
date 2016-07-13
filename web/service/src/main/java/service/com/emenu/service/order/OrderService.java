@@ -65,7 +65,7 @@ public interface OrderService {
      * @return
      * @throws Exception
      */
-    public List<Order> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException;
+    public List<CheckOrderDto> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException;
 
     /**
      * 查询一个时间段内的订单,包活起始时间和结束时间
@@ -73,5 +73,5 @@ public interface OrderService {
      * @return
      * @throws Exception
      */
-    public List<Order> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException;
+    public List<CheckOrderDto> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException;
 }

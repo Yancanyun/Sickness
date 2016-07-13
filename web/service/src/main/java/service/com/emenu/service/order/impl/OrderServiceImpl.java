@@ -98,6 +98,7 @@ public class OrderServiceImpl implements OrderService{
                     CheckOrderDto checkOrderDto = new CheckOrderDto();
                     checkOrderDto.setOrder(dto);
                     checkOrderDto.setOrderDishs(orderDishService.listByOrderId(dto.getId()));
+                    checkOrderDtos.add(checkOrderDto);
                 }
             }
         }catch (Exception e){
@@ -127,15 +128,25 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException
+    public List<CheckOrderDto> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException
     {
+        List<CheckOrderDto> checkOrderDtos = new ArrayList<CheckOrderDto>();
         List<Order> orders = new ArrayList<Order>();
         try{
           if(Assert.isNotNull(startTime)
                   &&Assert.isNotNull(endTime))
           {
               if(startTime.getTime()<endTime.getTime())//开始时间不能大于结束时间
-              orders=orderMapper.queryOrderByTimePeroid1(startTime,endTime);
+              {
+                  orders=orderMapper.queryOrderByTimePeroid1(startTime,endTime);
+                  for(Order dto : orders)
+                  {
+                      CheckOrderDto checkOrderDto = new CheckOrderDto();
+                      checkOrderDto.setOrder(dto);
+                      checkOrderDto.setOrderDishs(orderDishService.listByOrderId(dto.getId()));
+                      checkOrderDtos.add(checkOrderDto);
+                  }
+              }
               else
               throw SSException.get(EmenuException.TimeUnreasonable1);
           }
@@ -143,19 +154,29 @@ public class OrderServiceImpl implements OrderService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
         }
-        return orders;
+        return checkOrderDtos;
     }
 
     @Override
-    public List<Order> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException
+    public List<CheckOrderDto> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException
     {
+        List<CheckOrderDto> checkOrderDtos = new ArrayList<CheckOrderDto>();
         List<Order> orders = new ArrayList<Order>();
         try{
             if(Assert.isNotNull(startTime)
                     &&Assert.isNotNull(endTime))
             {
                 if(startTime.getTime()<=endTime.getTime())//开始时间不能大于结束时间
-                orders=orderMapper.queryOrderByTimePeroid2(startTime,endTime);
+                {
+                    orders=orderMapper.queryOrderByTimePeroid2(startTime,endTime);
+                    for(Order dto : orders)
+                    {
+                        CheckOrderDto checkOrderDto = new CheckOrderDto();
+                        checkOrderDto.setOrder(dto);
+                        checkOrderDto.setOrderDishs(orderDishService.listByOrderId(dto.getId()));
+                        checkOrderDtos.add(checkOrderDto);
+                    }
+                }
                 else
                     throw SSException.get(EmenuException.TimeUnreasonable2);
             }
@@ -163,6 +184,6 @@ public class OrderServiceImpl implements OrderService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
         }
-        return orders;
+        return checkOrderDtos;
     }
 }

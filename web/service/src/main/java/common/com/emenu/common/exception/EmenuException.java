@@ -562,6 +562,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderByTimePeroidFail("查询该时间段内的订单信息失败",10055),
     TimeUnreasonable1("开始时间不能大于等于结束时间",10056),
     TimeUnreasonable2("开始时间不能大于结束时间",10057),
+    QueryMaxFalgFail("获取最大的套餐标识失败",10058),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

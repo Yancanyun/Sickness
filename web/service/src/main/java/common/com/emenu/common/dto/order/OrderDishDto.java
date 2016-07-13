@@ -92,8 +92,19 @@ public class OrderDishDto {
 
     private Integer isChange;
 
+    //套餐标识
+    private Integer packageFlag;
+
     //菜品单位
     private  String unitName;
+
+    public Integer getPackageFlag() {
+        return packageFlag;
+    }
+
+    public void setPackageFlag(Integer packageFlag) {
+        this.packageFlag = packageFlag;
+    }
 
     public String getUnitName() {
         return unitName;
