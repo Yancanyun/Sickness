@@ -559,6 +559,9 @@ public enum EmenuException implements IBizExceptionMes {
     QueryCheckOrderDtoFail("查询订单盘点所需要的信息失败",10052),
     OrderNotExist("不存在该订单",10053),
     UpdateOrderIsSettlementedFail("修改订单盘点状态失败",10054),
+    QueryOrderByTimePeroidFail("查询该时间段内的订单信息失败",10055),
+    TimeUnreasonable1("开始时间不能大于等于结束时间",10056),
+    TimeUnreasonable2("开始时间不能大于结束时间",10057),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

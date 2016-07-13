@@ -6,6 +6,7 @@ import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.order.MyOrderDto;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
@@ -138,6 +139,10 @@ public class MyOrderController  extends AbstractController {
                 if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
                 tempOrderDishDto.setImgPath(dishImg.getImgPath());
             }
+
+            java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+            String orderTotalMoneyTemp = myformat.format(orderTotalMoney);
+            orderTotalMoney=new BigDecimal(orderTotalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
             model.addAttribute("orderTotalMoney",orderTotalMoney);//已下单订单菜品总金额
             model.addAttribute("orderDishDto",orderDishDtos);//已下单的订单菜品
 
@@ -185,7 +190,6 @@ public class MyOrderController  extends AbstractController {
             model.addAttribute("uniqueRemark",uniqueRemark);//菜品关联的菜品备注
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号
-            java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
             String totalMoneyTemp = myformat.format(totalMoney);
             totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
             model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额
@@ -422,39 +426,69 @@ public class MyOrderController  extends AbstractController {
             }
             for(OrderDishCache dto :orderDishCache)
             {
-                DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
-                OrderDish orderDish=new OrderDish();
-                orderDish.setCreatedTime(new Date());
-                orderDish.setDishId(dto.getDishId());
-                //设置菜品数量
-                Float temp = dto.getQuantity();
-                //判断是否为套餐,0不是套餐,1是套餐
+                DishDto dishDto = new DishDto();
                 if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐
                 {
-                    orderDish.setIsPackage(1);
-                    orderDish.setPackageId(dishPackageService.judgeIsOrNotPackage(dto.getDishId()));
-                    orderDish.setPackageQuantity(temp.intValue());
+                    DishPackageDto dishPackageDto = new DishPackageDto();
+                    //根据套餐Id查询出套餐具体信息,是套餐的话dishId就是对应的套餐Id
+                    dishPackageDto=dishPackageService.queryDishPackageById(dto.getDishId());
+                    List<DishDto> dishDtos = new ArrayList<DishDto>();
+                    dishDtos=dishPackageDto.getChildDishDtoList();//获得套餐所有的子菜品
+                    //将套餐拆成单个菜品存到数据库里
+                    for(DishDto packageDto :dishDtos)
+                    {
+                        OrderDish orderDish = new OrderDish();
+                        orderDish.setCreatedTime(new Date());
+                        orderDish.setDishId(packageDto.getDishPackage().getDishId());
+                        Float temp = dto.getQuantity();
+                        orderDish.setIsPackage(1);
+                        orderDish.setPackageId(dto.getDishId());
+                        orderDish.setPackageQuantity(temp.intValue());
+                        //套餐菜品数量为单个套餐中单个菜品的数量*套餐数量
+                        orderDish.setDishQuantity(packageDto.getDishPackage().getDishQuantity().floatValue()*temp.floatValue());
+                        orderDish.setOrderId(order.getId());
+                        //根据套餐的子菜品的Id来获取菜品信息
+                        dishDto = dishService.queryById(dto.getDishId());//应该查询的是套餐的信息
+                        orderDish.setSalePrice(dishDto.getSalePrice());//整体套餐售价,而不是套餐中单个菜品售价
+                        orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
+                        orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
+                        if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                            orderDish.setServeType(serviceWay);
+                        else orderDish.setServeType(dto.getServeType());
+                        orderDish.setOrderTime(orderTime);
+                        orderDish.setIsCall(0);//是否被催菜
+                        orderDish.setIsChange(0);//是否换了桌
+                        orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
+                        if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
+                            orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
+                        orderDishService.newOrderDish(orderDish);
+                    }
                 }
                 else
                 {
+                    OrderDish orderDish=new OrderDish();
+                    orderDish.setCreatedTime(new Date());
+                    orderDish.setDishId(dto.getDishId());
+                    Float temp = dto.getQuantity(); //设置菜品数量
                     orderDish.setDishQuantity(temp);
                     orderDish.setIsPackage(0);
+                    dishDto = dishService.queryById(dto.getDishId());
+                    orderDish.setOrderId(order.getId());
+                    orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
+                    orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
+                    orderDish.setSalePrice(dishDto.getSalePrice());
+                    if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                        orderDish.setServeType(serviceWay);
+                    else orderDish.setServeType(dto.getServeType());
+                    orderDish.setOrderTime(orderTime);
+                    orderDish.setIsCall(0);//是否被催菜
+                    orderDish.setIsChange(0);//是否换了桌
+                    //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
+                    orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
+                    if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
+                        orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
+                    orderDishService.newOrderDish(orderDish);
                 }
-                orderDish.setOrderId(order.getId());
-                orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
-                orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
-                orderDish.setSalePrice(dishDto.getSalePrice());
-                if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
-                orderDish.setServeType(serviceWay);
-                else orderDish.setServeType(dto.getServeType());
-                orderDish.setOrderTime(orderTime);
-                orderDish.setIsCall(0);//是否被催菜
-                orderDish.setIsChange(0);//是否换了桌
-                //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
-                orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
-                if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
-                orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
-                orderDishService.newOrderDish(orderDish);
             }
             //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
             orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜

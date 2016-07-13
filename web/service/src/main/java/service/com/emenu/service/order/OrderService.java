@@ -41,6 +41,7 @@ public interface OrderService {
 
     /**
      * 根据订单状态,盘点状态和当前时间之前查询订单盘点dto
+     * 订单状态可以为空
      * 订单dto包括order和对应的orderDish
      * @param status,isSettlemented,date
      * @return
@@ -57,4 +58,20 @@ public interface OrderService {
      * @throws Exception
      */
     public void updateOrderIsSettlementedById(int id , int isSettlemented) throws SSException;
+
+    /**
+     * 查询一个时间段内的订单,不包活起始时间和结束时间
+     * @param startTime,endTime
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrderByTimePeroid1(Date startTime ,Date endTime) throws SSException;
+
+    /**
+     * 查询一个时间段内的订单,包活起始时间和结束时间
+     * @param startTime,endTime
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException;
 }
