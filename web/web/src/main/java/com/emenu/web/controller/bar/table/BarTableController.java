@@ -100,7 +100,6 @@ public class BarTableController extends AbstractAppBarController {
         }
     }
 
-
     /**
      * Ajax 获取某餐台的具体信息
      *

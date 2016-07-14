@@ -152,4 +152,18 @@ public class SecurityUserGroupServiceImpl implements SecurityUserGroupService {
             throw SSException.get(PartyException.SystemException, e);
         }
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void delByUserId(int userId) throws SSException {
+        if (Assert.lessOrEqualZero(userId)) {
+            return ;
+        }
+        try {
+            securityUserGroupMapper.delByUserId(userId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+    }
 }
