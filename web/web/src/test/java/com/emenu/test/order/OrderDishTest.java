@@ -155,4 +155,10 @@ public class OrderDishTest extends AbstractTestCase {
     {
         orderDishService.queryMaxPackageFlag();
     }
+
+    @Test
+    public void testIsOrderHaveOrderDish() throws SSException
+    {
+        orderDishService.isOrderHaveOrderDish(1);
+    }
 }

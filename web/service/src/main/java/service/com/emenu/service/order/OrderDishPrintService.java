@@ -25,12 +25,13 @@ public interface OrderDishPrintService {
 
     /**
      * 根据订单菜品Id获取打印信息
-     * 如果为套餐的话可能包含多个菜品
+     * 这个版本的话套餐的话拆成单个菜品存了
+     * 不用考虑一个套餐包含多个菜品
      * @param orderDishId
      * @param
      * @throws com.pandawork.core.common.exception.SSException
      */
-    public List<PrintOrderDishDto> getPrintOrderDishDtoById(Integer orderDishId) throws SSException;
+    public PrintOrderDishDto getPrintOrderDishDtoById(Integer orderDishId) throws SSException;
 
     /**
      * 打印一个订单菜品

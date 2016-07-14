@@ -95,11 +95,11 @@
                     <c:choose>
                       <c:when test="${dto.isPackage eq 0}">
                         <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
-                        <span class =ordered-dish-unit>${dto.dishQuantity}</span>${dto.unitName}</p>
+                        <span class =ordered-dish-unit>${dto.unitName}</span></p>
                        </c:when>
                       <c:otherwise>
                         <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
-                          <span class =ordered-dish-unit>${dto.dishQuantity}</span>${dto.unitName}</p>
+                          <span class =ordered-dish-unit>${dto.unitName}</span></p>
                       </c:otherwise>
                      </c:choose>
 

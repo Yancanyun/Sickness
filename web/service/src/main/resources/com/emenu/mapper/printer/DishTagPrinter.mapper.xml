@@ -74,4 +74,12 @@
         AND `printer_id` = #{dishTagPrinter.printerId}
         AND `type` = #{dishTagPrinter.type}
     </select>
+
+    <select id="queryByTagIdAndType" resultMap="pw.Printer">
+        SELECT `t_printer`.*
+        FROM `t_printer`,`t_dish_tag_printer`
+        WHERE `t_dish_tag_printer`.`dish_tag_id` = #{id}
+        AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
+        AND `t_dish_tag_printer`.`type` = #{type}
+    </select>
 </mapper>

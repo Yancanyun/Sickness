@@ -247,4 +247,20 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException. QueryMaxFalgFail,e);
         }
     }
+
+    @Override
+    public int isOrderHaveOrderDish(Integer orderId) throws SSException
+    {
+        int count = 0;
+        try{
+            if(!Assert.lessOrEqualZero(orderId))
+            {
+                count=orderDishMapper.isOrderHaveOrderDish(orderId);
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
+        }
+        return count;
+    }
 }

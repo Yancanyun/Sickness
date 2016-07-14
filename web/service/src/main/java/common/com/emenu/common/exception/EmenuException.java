@@ -584,6 +584,8 @@ public enum EmenuException implements IBizExceptionMes {
     OrderDishWipeIsFinsh("该订单菜品已被划单",10097),
     OrderDishNotExist("该订单菜品不存在",10098),
     WipeOrderDishFail("菜品划单失败",10099),
+    PrinterIpIsNull("打印机Ip地址未设置",10100),
+    ConnectPrinterFail("连接打印机失败",10101),
     ;
 
 

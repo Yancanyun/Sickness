@@ -169,6 +169,22 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
         }
     }
 
+    @Override
+    public Printer queryByTagIdAndType(Integer id,Integer type) throws SSException
+    {
+        Printer printer = new Printer();
+        try {
+           if(!Assert.lessOrEqualZero(id)&&Assert.isNotNull(type))
+           {
+               printer=dishTagPrinterMapper.queryByTagIdAndType(id,type);
+           }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryPrinterFail, e);
+        }
+        return printer;
+    }
+
     /**
      * 检查实体及其关键字段是否为空
      *

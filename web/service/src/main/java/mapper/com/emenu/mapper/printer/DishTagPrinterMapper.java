@@ -99,4 +99,15 @@ public interface DishTagPrinterMapper {
      * @throws Exception
      */
     public int countPrinterDish(@Param("dishTagPrinter") DishTagPrinter dishTagPrinter) throws Exception;
+
+
+    /**
+     * 根据tye和dishTagId查询打印机
+     * type:1-菜品类别，2-具体某一个菜
+     * 若是具体菜品的话dishTagId为dishId否则为分类Id
+     * @param type,dishTagId
+     * @throws Exception
+     */
+    public Printer queryByTagIdAndType(@Param("id") Integer id
+            ,@Param("type")Integer type) throws Exception;
 }
