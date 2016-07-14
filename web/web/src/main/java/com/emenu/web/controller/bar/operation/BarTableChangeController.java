@@ -25,14 +25,14 @@ import java.util.List;
  * @time: 2015/12/10 16:54
  */
 @Controller
-@Module(ModuleEnums.BarTableChange)
+@Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_CHANGE_URL)
 public class BarTableChangeController extends AbstractAppBarController {
     /**
-     * Ajax 获取换台页的数据
-     *
+     * Ajax 获取换台对话框中的数据
      * @return
      */
+    @Module(ModuleEnums.BarTableChange)
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject toChangeTable(@RequestParam("tableId") Integer tableId) {
@@ -48,11 +48,9 @@ public class BarTableChangeController extends AbstractAppBarController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("oldTableId", tableId);
             jsonObject.put("oldTableName", table.getName());
-            jsonObject.put("seatNum", table.getSeatNum());
-            jsonObject.put("seatFee", table.getSeatFee());
-            jsonObject.put("tableFee", table.getTableFee());
-            jsonObject.put("minCost", table.getMinCost());
-            jsonArray.add(jsonObject);
+            jsonObject.put("oldSeatNum", table.getSeatNum());
+            jsonObject.put("oldSeatFee", table.getSeatFee());
+            jsonObject.put("oldTableFee", table.getTableFee());
 
             JSONArray newTableList = new JSONArray();
             for (Table newTable : tableList) {
@@ -79,6 +77,7 @@ public class BarTableChangeController extends AbstractAppBarController {
      * @param newTableId
      * @return
      */
+    @Module(ModuleEnums.BarTableChange)
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,

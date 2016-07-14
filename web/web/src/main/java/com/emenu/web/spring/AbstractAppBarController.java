@@ -10,6 +10,8 @@ import com.emenu.service.dish.*;
 import com.emenu.service.dish.tag.TagFacadeService;
 import com.emenu.service.meal.MealPeriodService;
 import com.emenu.service.order.OrderDishCacheService;
+import com.emenu.service.order.OrderDishService;
+import com.emenu.service.order.OrderService;
 import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.page.IndexImgService;
@@ -341,4 +343,15 @@ public class AbstractAppBarController extends Base {
     @StaticAutoWire
     @Qualifier("orderDishCacheService")
     protected static OrderDishCacheService orderDishCacheService;
+
+    // Order
+    @StaticAutoWire
+    @Qualifier("orderService")
+    protected static OrderService orderService;
+
+    // OrderDish
+    @StaticAutoWire
+    @Qualifier("orderDishService")
+    protected static OrderDishService orderDishService;
+
 }

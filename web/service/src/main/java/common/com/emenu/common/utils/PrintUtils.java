@@ -159,4 +159,36 @@ public class PrintUtils {
         }
         return null;
     }
+
+    /**
+     * 旧版餐饮项目中的打印条形码
+     * 用上面的打印条码的话扫码枪读不出来
+     * @param str
+     * @return
+     */
+
+    public static byte[] newPrintBarCode(String str) {
+        // 不足4位的补零
+        // 使用code39时，必须大于4位，扫码枪才能读出来
+        int len = str.length() >= 4 ? str.length() : 4;
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0;i < 4 - str.length(); ++i) {
+            sb.append('0');
+        }
+        sb.append(str);
+        str = sb.toString();
+
+        byte[] bytes = new byte[len + 4];
+        // 采用code 39
+        bytes[0] = 0x1D;  bytes[1] = 0x6B;
+        bytes[2] = (byte)69;
+        bytes[3] = (byte) (len);
+        byte[] strBytes = str.getBytes();
+        int i = 0;
+        int j = 4;
+        for (i = 0;i < strBytes.length; ++i) {
+            bytes[j ++] = strBytes[i];
+        }
+        return bytes;
+    }
 }

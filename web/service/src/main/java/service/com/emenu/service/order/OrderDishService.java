@@ -124,4 +124,12 @@ public interface OrderDishService {
      * @throws Exception
      */
     public int queryMaxPackageFlag() throws SSException;
+
+    /**
+     * 判断具体订单是否存在未上菜的菜品
+     * 未上菜包括已下单和正在做
+     * @param
+     * @throws Exception
+     */
+    public int isOrderHaveOrderDish(Integer orderId) throws SSException;
 }

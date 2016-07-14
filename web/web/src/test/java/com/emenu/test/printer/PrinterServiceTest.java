@@ -9,6 +9,7 @@ import com.emenu.service.printer.PrinterService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -148,5 +149,11 @@ public class PrinterServiceTest extends AbstractTestCase{
     @Test
     public void delDishTagPrinter() throws SSException{
         dishTagPrinterService.delPrinterDish(1,1);
+    }
+
+    @Test
+    public void testQueryByIdAndType() throws SSException
+    {
+        dishTagPrinterService.queryByTagIdAndType(1,1);
     }
 }

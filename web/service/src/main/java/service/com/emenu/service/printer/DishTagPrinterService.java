@@ -90,4 +90,13 @@ public interface DishTagPrinterService {
      * @throws SSException
      */
     public void unBindAllDishTag(int printerId) throws SSException;
+
+    /**
+     * 根据tye和dishTagId查询打印机
+     * type:1-菜品类别，2-具体某一个菜
+     * 若是具体菜品的话dishTagId为dishId否则为分类Id
+     * @param type,dishTagId
+     * @throws SSException
+     */
+    public Printer queryByTagIdAndType(Integer id,Integer type) throws SSException;
 }

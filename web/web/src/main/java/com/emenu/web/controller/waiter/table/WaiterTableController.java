@@ -46,7 +46,7 @@ public class WaiterTableController extends AbstractAppBarController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject tableList(@RequestParam(value = "areaId", required = false) Integer areaId,
-                                @RequestParam("status") Integer status,
+                                @RequestParam(value = "status") Integer status,
                                 HttpSession httpSession) {
         try {
             Integer partyId = (Integer)httpSession.getAttribute("partyId");

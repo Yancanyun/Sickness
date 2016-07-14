@@ -7,6 +7,7 @@ import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.order.PrintOrderDishDto;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
@@ -118,38 +119,41 @@ public class OrderManagementController extends AbstractController {
             JSONArray all = new JSONArray();
             for(Order order : orders)
             {
-                orderDishs = orderDishService.listByOrderId(order.getId());//获取订单菜品
                 JSONArray jsonArray = new JSONArray();//存放订单的所有菜品
-                for(OrderDish orderDish :orderDishs)
+                if(orderDishService.isOrderHaveOrderDish(order.getId())>0)//订单中有未上的菜则显示订单
                 {
-                    if(orderDish.getStatus()==1||orderDish.getStatus()==2)//显示已经下单和正在做的菜品
+                    orderDishs = orderDishService.listByOrderId(order.getId());//获取订单菜品
+                    for(OrderDish orderDish :orderDishs)
                     {
-                        JSONObject temp = new JSONObject();
-                        DishDto dishDto = dishService.queryById(orderDish.getDishId());//查询出菜品信息
-                        Unit unit = unitService.queryById(dishDto.getUnitId());//查询菜品单位信息
-                        temp.put("id",orderDish.getId());
-                        temp.put("name",dishDto.getName());
-                        temp.put("state",orderDish.getStatus());//菜品状态,问下学姐以上菜的菜品显示不显示
-                        if(orderDish.getIsPackage()==1)//是套餐
-                            temp.put("num",orderDish.getPackageQuantity());//数量
-                        else
+                        if(orderDish.getStatus()==1||orderDish.getStatus()==2)//显示已经下单和正在做的菜品
+                        {
+                            JSONObject temp = new JSONObject();
+                            DishDto dishDto = dishService.queryById(orderDish.getDishId());//查询出菜品信息
+                            Unit unit = unitService.queryById(dishDto.getUnitId());//查询菜品单位信息
+                            temp.put("id",orderDish.getId());
+                            temp.put("name",dishDto.getName());
+                            temp.put("state",orderDish.getStatus());//菜品状态,问下学姐以上菜的菜品显示不显示
                             temp.put("num",orderDish.getDishQuantity());
-                        temp.put("unitName",unit.getName());//菜品单位名称
-                        temp.put("bigTagName",tagService.queryLayer2TagByDishId(orderDish.getDishId()).getName());//菜品二级分类,菜品的大类
-                        temp.put("isCall",orderDish.getIsCall());
-                        temp.put("isChange",orderDish.getIsChange());
-                        temp.put("serveType",orderDish.getServeType());
+                            temp.put("unitName",unit.getName());//菜品单位名称
+                            if(orderDish.getIsPackage()==0)
+                                temp.put("bigTagName",tagService.queryLayer2TagByDishId(orderDish.getDishId()).getName());//菜品二级分类,菜品的大类
+                            else//是套餐
+                                temp.put("bigTagName",tagService.queryLayer2TagByDishId(orderDish.getPackageId()).getName());//菜品二级分类,菜品的大类
+                            temp.put("isCall",orderDish.getIsCall());
+                            temp.put("isChange",orderDish.getIsChange());
+                            temp.put("serveType",orderDish.getServeType());
 
-                        jsonArray.add(temp);
+                            jsonArray.add(temp);
+                        }
                     }
+                    JSONObject temp = new JSONObject();
+                    temp.put("orderDishes",jsonArray);
+                    temp.put("id",order.getId());//订单id
+                    //现在时间和订单创建时间的差值,为毫秒数,再除以1000转换成秒,再除以60换算成分钟数
+                    temp.put("time",((int)(new Date().getTime() - order.getCreatedTime().getTime())/1000/60));
+                    temp.put("remark",order.getOrderRemark());//订单备注
+                    all.add(temp);//作为一个订单的整体放到JSONArray里面
                 }
-                JSONObject temp = new JSONObject();
-                temp.put("orderDishes",jsonArray);
-                temp.put("id",order.getId());//订单id
-                //现在时间和订单创建时间的差值,为毫秒数,再除以1000转换成秒,再除以60换算成分钟数
-                temp.put("time",((int)(new Date().getTime() - order.getCreatedTime().getTime())/1000/60));
-                temp.put("remark",order.getOrderRemark());//订单备注
-                all.add(temp);//作为一个订单的整体放到JSONArray里面
             }
             jsonObject.put("orders",all);//所有订单
         } catch (SSException e) {
@@ -168,8 +172,10 @@ public class OrderManagementController extends AbstractController {
     @RequestMapping(value = "/ajax/print" ,method = RequestMethod.POST)
     @ResponseBody
     public  JSONObject ajaxPrintOrderDishById(@RequestParam("orderDishId") Integer orderDishId){
+
         try {
             orderDishPrintService.printOrderDishById(orderDishId);
+            //orderDishPrintService.getPrintOrderDishDtoById(orderDishId);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

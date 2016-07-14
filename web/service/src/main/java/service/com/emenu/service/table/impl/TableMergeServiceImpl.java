@@ -47,7 +47,7 @@ public class TableMergeServiceImpl implements TableMergeService {
             return tableMergeMapper.listByMergeId(mergeId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.MergeTableFail, e);
+            throw SSException.get(EmenuException.QueryMergeTableFail, e);
         }
     }
 
@@ -61,7 +61,7 @@ public class TableMergeServiceImpl implements TableMergeService {
             return tableMergeMapper.queryByTableId(tableId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.MergeTableFail, e);
+            throw SSException.get(EmenuException.QueryMergeTableFail, e);
         }
     }
 
@@ -75,7 +75,7 @@ public class TableMergeServiceImpl implements TableMergeService {
             return tableMergeMapper.queryLastMergeId();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.MergeTableFail, e);
+            throw SSException.get(EmenuException.QueryMergeTableFail, e);
         }
     }
 
@@ -171,5 +171,27 @@ public class TableMergeServiceImpl implements TableMergeService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.MergeTableFail, e);
         }
+    }
+
+    @Override
+    public List<Table> listOtherTableByTableId(int tableId) throws SSException {
+        List<Table> tableList = new ArrayList<Table>();
+
+        try {
+            TableMerge tableMerge = queryByTableId(tableId);
+            if (tableMerge != null) {
+                List<TableMerge> tableMergeList = listByMergeId(tableMerge.getMergeId());
+                for (TableMerge tm : tableMergeList) {
+                    if (tm.getTableId() != tableId) {
+                        tableList.add(tableService.queryById(tm.getTableId()));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryMergeTableFail, e);
+        }
+
+        return tableList;
     }
 }

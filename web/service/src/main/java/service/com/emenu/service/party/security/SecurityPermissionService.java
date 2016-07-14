@@ -82,4 +82,14 @@ public interface SecurityPermissionService {
      * @throws SSException
      */
     public int count() throws SSException;
+
+
+    /**
+     * 从TXT文件中导入权限
+     *
+     * @param filePath
+     * @throws Exception
+     */
+    public void importFromText(String filePath) throws Exception;
+
 }

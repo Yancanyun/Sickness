@@ -5,6 +5,7 @@ import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.group.employee.EmployeeRole;
 import com.emenu.common.entity.party.security.SecurityUser;
+import com.emenu.common.entity.party.security.SecurityUserGroup;
 import com.emenu.common.entity.table.WaiterTable;
 import com.emenu.common.enums.party.EnableEnums;
 import com.emenu.common.enums.party.PartyTypeEnums;
@@ -16,6 +17,7 @@ import com.emenu.common.utils.CommonUtil;
 import com.emenu.mapper.party.group.employee.EmployeeMapper;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.group.employee.EmployeeService;
+import com.emenu.service.party.security.SecurityUserGroupService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.table.WaiterTableService;
 import com.pandawork.core.common.exception.SSException;
@@ -54,6 +56,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private SecurityUserService securityUserService;
 
+    @Autowired
+    private SecurityUserGroupService securityUserGroupService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -197,7 +201,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             if(employeeMapper.queryByNumber(employeeNumber)!= null) {
                 return true;
             } else {
-                return  false;
+                return false;
             }
         }catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -211,7 +215,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             if(employeeMapper.queryByPhone(phone) != null) {
                 return true;
             } else {
-                return  false;
+                return false;
             }
         }catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -280,6 +284,17 @@ public class EmployeeServiceImpl implements EmployeeService{
                     waiterTableService.insertWaiterTable(waiterTables);
                 }
             }
+
+            // 向SecurityUserGroup中插入信息
+            List<Integer> roleIdList = employeeDto.getRole();
+            for (Integer roleId : roleIdList) {
+                SecurityUserGroup securityUserGroup = new SecurityUserGroup();
+                securityUserGroup.setGroupId(roleId);
+                securityUserGroup.setUserId(securityUser.getId());
+
+                securityUserGroupService.newSecurityUserGroup(securityUserGroup);
+            }
+
             return employee;
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -355,13 +370,22 @@ public class EmployeeServiceImpl implements EmployeeService{
                 }
             }
 
+            // 向SecurityUserGroup中先删除再插入信息
+            securityUserGroupService.delByUserId(securityUser.getId());
+            List<Integer> roleIdList = employeeDto.getRole();
+            for (Integer roleId : roleIdList) {
+                SecurityUserGroup securityUserGroup = new SecurityUserGroup();
+                securityUserGroup.setGroupId(roleId);
+                securityUserGroup.setUserId(securityUser.getId());
+
+                securityUserGroupService.newSecurityUserGroup(securityUserGroup);
+            }
+
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
     }
-
-
 
     /**
      * 修改密码时检查原密码是否正确
@@ -442,6 +466,9 @@ public class EmployeeServiceImpl implements EmployeeService{
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
             securityUser.setStatus(EnableEnums.Disabled.getId());
             securityUserService.updateSecurityUser(securityUser);
+
+            // 从SecurityUserGroup中删除信息
+            securityUserGroupService.delByUserId(securityUser.getId());
 
         } catch (Exception e) {
             LogClerk.errLog.error(e);

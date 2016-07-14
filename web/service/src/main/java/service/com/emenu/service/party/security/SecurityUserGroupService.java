@@ -67,4 +67,12 @@ public interface SecurityUserGroupService {
      * @throws SSException
      */
     public void delByGroupId(int groupId) throws SSException;
+
+    /**
+     * 根据UserID删除用户-权限组关联
+     *
+     * @param userId
+     * @throws SSException
+     */
+    public void delByUserId(int userId) throws SSException;
 }

@@ -283,9 +283,12 @@ public class EmployeeController  extends AbstractController {
             }
 
             List<Integer> tableList = new ArrayList<Integer>();
-            for (int i = 0; i < tables.length; i++) {
-                tableList.add(tables[i]);
+            if (Assert.isNotNull(tables) && !Assert.lessOrEqualZero(tables.length)) {
+                for (int i = 0; i < tables.length; i++) {
+                    tableList.add(tables[i]);
+                }
             }
+
             employeeDto.setRole(roleList);
             employeeDto.setTables(tableList);
             employeeService.update(employeeDto, partyId, loginName, CommonUtil.md5(password));

@@ -43,4 +43,9 @@
         DELETE FROM `t_party_security_user_group`
         WHERE `group_id` = #{groupId}
     </delete>
+
+    <delete id="delByUserId">
+        DELETE FROM `t_party_security_user_group`
+        WHERE `user_id` = #{userId}
+    </delete>
 </mapper>

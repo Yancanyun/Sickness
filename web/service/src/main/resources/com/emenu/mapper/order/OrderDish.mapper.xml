@@ -125,4 +125,12 @@
         FROM t_order_dish
         ORDER BY package_flag ASC
     </select>
+
+    <select id = "isOrderHaveOrderDish" resultType="int">
+        SELECT COUNT(*)
+         FROM t_order,t_order_dish
+         WHERE t_order.id=#{orderId}
+         AND t_order.id=t_order_dish.order_id
+         and (t_order_dish.status=1 OR t_order_dish.status=2)
+            </select>
 </mapper>

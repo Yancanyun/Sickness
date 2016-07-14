@@ -57,4 +57,12 @@ public interface SecurityUserGroupMapper {
      * @throws Exception
      */
     public void delByGroupId(@Param("groupId") int groupId) throws Exception;
+
+    /**
+     * 根据用户ID删除
+     *
+     * @param userId
+     * @throws Exception
+     */
+    public void delByUserId(@Param("userId") int userId) throws Exception;
 }

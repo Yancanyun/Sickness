@@ -226,6 +226,7 @@ public enum EmenuException implements IBizExceptionMes {
     MergeTableNumLessThanTwo("选择的并台餐台数量小于两个", 4036),
     MergeTableStatusError("选择的并台餐台中有处于不可并台状态的餐台", 4037),
     MergeIdError("并台ID不合法", 4038),
+    QueryMergeTableFail("查询并台信息失败", 4039),
     TableNotOpen("餐台暂未开台",4039),
     //餐台二维码
     DownloadQrCodeFail("下载二维码失败", 4050),
@@ -591,6 +592,8 @@ public enum EmenuException implements IBizExceptionMes {
     OrderDishWipeIsFinsh("该订单菜品已被划单",10097),
     OrderDishNotExist("该订单菜品不存在",10098),
     WipeOrderDishFail("菜品划单失败",10099),
+    PrinterIpIsNull("打印机Ip地址未设置",10100),
+    ConnectPrinterFail("连接打印机失败",10101),
     ;
 
 

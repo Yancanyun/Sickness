@@ -119,32 +119,69 @@ public class MyOrderController  extends AbstractController {
                     orderDishDtos.addAll(orderDishService.listDtoByOrderId(orderId));
                 }
             }
+            HashMap<Integer,Integer> packageFlagMap = new HashMap<Integer, Integer>();//用来判断套餐标识是否出现过
             for(OrderDishDto tempOrderDishDto :orderDishDtos)
             {
                 if(tempOrderDishDto.getIsPackage()==0)//非套餐
-                orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getDishQuantity()));
-                else//套餐
-                orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getPackageQuantity()));
+                {
+                    orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getDishQuantity()));
+                    //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
+                    tempOrderDishDto.setPrice();
+                    DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getDishId());//通过dishId查询出菜品的信息
+                    Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
+                    if(unitTemp!=null)//若菜品单位不为空
+                        tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
 
-                //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
-                tempOrderDishDto.setPrice();
-                DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getDishId());//通过dishId查询出菜品的信息
-                Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
-                if(unitTemp!=null)//若菜品单位不为空
-                tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
+                    //设置一下图片路径,宝荣写的里面没有图片路径
+                    DishImg dishImg =  new DishImg();
+                    dishImg=dishService.queryById(tempOrderDishDto.getDishId()).getSmallImg();
+                    if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
+                        tempOrderDishDto.setImgPath(dishImg.getImgPath());
+                }
+                else//套餐的话会有重复，在数据库里套餐被拆成菜品
+                {
+                    if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)
+                    {
+                        orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getPackageQuantity()));
+                        packageFlagMap.put(tempOrderDishDto.getPackageFlag(),1);//标记为出现过
+                        //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
+                        tempOrderDishDto.setPrice();
+                        DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getPackageId());//通过packageId查询出菜品的信息
+                        tempOrderDishDto.setDishName(dishDtoTemp.getName());//原本的话套餐显示是单个菜品名字,这里要重新设置一下,设置成显示套餐的名字
+                        Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
+                        if(unitTemp!=null)//若菜品单位不为空
+                            tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
 
-                //设置一下图片路径,宝荣写的里面没有图片路径
-                DishImg dishImg =  new DishImg();
-                dishImg=dishService.queryById(tempOrderDishDto.getDishId()).getSmallImg();
-                if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
-                tempOrderDishDto.setImgPath(dishImg.getImgPath());
+                        //设置一下图片路径,宝荣写的里面没有图片路径
+                        DishImg dishImg =  new DishImg();
+                        //套餐的话packageId对应的才是数据库t_dish表里面的主键
+                        dishImg=dishService.queryById(tempOrderDishDto.getPackageId()).getSmallImg();
+                        if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
+                            tempOrderDishDto.setImgPath(dishImg.getImgPath());
+                    }
+                }
             }
-
+            //一个套餐只留下一条记录,例如一个套餐包含三个菜,给前端传递过去的时候只给传一个菜
+            List<OrderDishDto> sendOrderDishDtos = new ArrayList<OrderDishDto>();
+            int ok = -1;//记录套餐的packageFlag
+            for(OrderDishDto tempOrderDishDto :orderDishDtos)
+            {
+                if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())!=null
+                        &&tempOrderDishDto.getPackageFlag()>0&&ok!=tempOrderDishDto.getPackageFlag())
+                {
+                    ok = tempOrderDishDto.getPackageFlag();
+                    sendOrderDishDtos.add(tempOrderDishDto);
+                }
+                else if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)
+                {
+                    sendOrderDishDtos.add(tempOrderDishDto);
+                }
+            }
             java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
             String orderTotalMoneyTemp = myformat.format(orderTotalMoney);
             orderTotalMoney=new BigDecimal(orderTotalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
             model.addAttribute("orderTotalMoney",orderTotalMoney);//已下单订单菜品总金额
-            model.addAttribute("orderDishDto",orderDishDtos);//已下单的订单菜品
+            model.addAttribute("orderDishDto",sendOrderDishDtos);//已下单的订单菜品
 
             tableOrderCache=orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)//若对应桌的订单缓存不为空
@@ -427,6 +464,7 @@ public class MyOrderController  extends AbstractController {
             for(OrderDishCache dto :orderDishCache)
             {
                 DishDto dishDto = new DishDto();
+                //是套餐,把套餐拆成一个一个的菜品存到书库库里
                 if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐,把套餐拆成一个一个的菜品存到书库库里
                 {
                     DishPackageDto dishPackageDto = new DishPackageDto();
@@ -464,6 +502,7 @@ public class MyOrderController  extends AbstractController {
                         orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                         if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
                             orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
+                        orderDish.setPackageFlag(packageFlag);//设置套餐标识
                         orderDishService.newOrderDish(orderDish);
                     }
                 }

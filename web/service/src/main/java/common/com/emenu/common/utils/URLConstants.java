@@ -206,6 +206,9 @@ public final class URLConstants {
     // 吧台客户端清台
     public static final String BAR_TABLE_CLEAN_URL = "bar/table/clean";
 
+    // 吧台客户端并台
+    public static final String BAR_TABLE_MERGE_URL = "bar/table/merge";
+
     // 吧台登录
     public static final String BAR_LOGIN = "bar/login";
 
