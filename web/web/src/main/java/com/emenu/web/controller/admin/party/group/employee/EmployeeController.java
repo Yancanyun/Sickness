@@ -283,7 +283,7 @@ public class EmployeeController  extends AbstractController {
             }
 
             List<Integer> tableList = new ArrayList<Integer>();
-            if (Assert.isNotNull(tables) && !Assert.lessOrEqualZero(0)) {
+            if (Assert.isNotNull(tables) && !Assert.lessOrEqualZero(tables.length)) {
                 for (int i = 0; i < tables.length; i++) {
                     tableList.add(tables[i]);
                 }
