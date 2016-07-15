@@ -187,8 +187,10 @@ public class WaiterOrderDishController extends AbstractAppBarController {
             }
             jsonObject.put("tasteList", tasteJsonArray);
 
+
+            // TODO 服务员端暂不显示快捷备注
             // 菜品备注信息放入json中
-            JSONArray remarkJsonArray = new JSONArray();
+            /*JSONArray remarkJsonArray = new JSONArray();
             List<Remark> remarkList = dishService.queryDishRemarkByDishId(dishId);
             for (Remark remark: remarkList){
                 JSONObject remarkJsonObject = new JSONObject();
@@ -196,7 +198,7 @@ public class WaiterOrderDishController extends AbstractAppBarController {
                 remarkJsonObject.put("remarkName",remark.getName());
                 remarkJsonArray.add(remarkJsonObject);
             }
-            jsonObject.put("remarkList",remarkJsonArray);
+            jsonObject.put("remarkList",remarkJsonArray);*/
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -249,4 +251,27 @@ public class WaiterOrderDishController extends AbstractAppBarController {
             return sendErrMsgAndErrCode(e);
         }
     }
+
+    /**
+     * 快捷点餐
+     * @param tableId
+     * @param dishId
+     * @return
+     */
+    @RequestMapping(value = "new/quickly", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject orderDishQuickly(@RequestParam("tableId") Integer tableId,
+                                       @RequestParam("dishId") Integer dishId){
+        try{
+            OrderDishCache orderDishCache = new OrderDishCache();
+            orderDishCache.setDishId(dishId);
+            orderDishCacheService.newDish(tableId, orderDishCache);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+
 }

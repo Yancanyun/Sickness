@@ -2,6 +2,7 @@ package com.emenu.service.order.impl;
 
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
@@ -215,13 +216,13 @@ public class OrderDishServiceImpl implements OrderDishService{
                 }
                 else
                 {
-                    if(orderDish.getStatus()==1)//划单的菜品状态必须是2.正在做 1为已下单,打印了菜品的话菜品的状态会从1变为2
+                    if(orderDish.getStatus()== OrderDishStatusEnums.IsBooked.getId())//划单的菜品状态必须是2.正在做 1为已下单,打印了菜品的话菜品的状态会从1变为2
                         throw SSException.get(EmenuException.OrderDishStatusWrong);
-                    else if(orderDish.getStatus()==3)
+                    else if(orderDish.getStatus()==OrderDishStatusEnums.IsFinsh.getId())
                         throw SSException.get(EmenuException.OrderDishWipeIsFinsh);
                     else//修改订单菜品状态
                     {
-                        orderDish.setStatus(3);
+                        orderDish.setStatus(OrderDishStatusEnums.IsFinsh.getId());
                         this.updateOrderDish(orderDish);
                     }
                 }

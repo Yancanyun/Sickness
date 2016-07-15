@@ -22,7 +22,10 @@ import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.checkout.CheckOutStatusEnums;
+import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.dish.TagEnum;
+import com.emenu.common.enums.order.*;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
@@ -110,7 +113,7 @@ public class MyOrderController  extends AbstractController {
             model.addAttribute("tablePrice",table.getTableFee());//餐台费用
             model.addAttribute("tableName",table.getName());//餐桌的名称
 
-            orders = orderService.listByTableIdAndStatus(tableId,1);//查询出对应餐桌所有已下单的订单,已结账的订单不显示
+            orders = orderService.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());//查询出对应餐桌所有已下单的订单,已结账的订单不显示
             if(orders!=null)//存在对应餐桌已下单的订单
             {
                 for(Order orderDto:orders)
@@ -122,7 +125,8 @@ public class MyOrderController  extends AbstractController {
             HashMap<Integer,Integer> packageFlagMap = new HashMap<Integer, Integer>();//用来判断套餐标识是否出现过
             for(OrderDishDto tempOrderDishDto :orderDishDtos)
             {
-                if(tempOrderDishDto.getIsPackage()==0)//非套餐
+                if(tempOrderDishDto.getIsPackage()== PackageStatusEnums.IsNotPackage.getId()
+                        &&tempOrderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId())//非套餐，status为4的时候为退菜,退了的菜不做处理
                 {
                     orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getDishQuantity()));
                     //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
@@ -138,9 +142,10 @@ public class MyOrderController  extends AbstractController {
                     if(dishImg!=null)//图片可能为空，为空的话则没有图片路径，否则直接取出图片路径回是空指针异常
                         tempOrderDishDto.setImgPath(dishImg.getImgPath());
                 }
-                else//套餐的话会有重复，在数据库里套餐被拆成菜品
+                else if(tempOrderDishDto.getIsPackage()==PackageStatusEnums.IsPackage.getId()
+                        &&tempOrderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//套餐的话会有重复，在数据库里套餐被拆成菜品
                 {
-                    if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)
+                    if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)//没有出现过的套餐
                     {
                         orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getPackageQuantity()));
                         packageFlagMap.put(tempOrderDishDto.getPackageFlag(),1);//标记为出现过
@@ -167,12 +172,15 @@ public class MyOrderController  extends AbstractController {
             for(OrderDishDto tempOrderDishDto :orderDishDtos)
             {
                 if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())!=null
-                        &&tempOrderDishDto.getPackageFlag()>0&&ok!=tempOrderDishDto.getPackageFlag())
+                        &&tempOrderDishDto.getPackageFlag()>0
+                        &&ok!=tempOrderDishDto.getPackageFlag()
+                        &&tempOrderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//为4的话为退了的菜
                 {
                     ok = tempOrderDishDto.getPackageFlag();
                     sendOrderDishDtos.add(tempOrderDishDto);
                 }
-                else if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)
+                else if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null
+                        &&tempOrderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//为4的话为退了的菜
                 {
                     sendOrderDishDtos.add(tempOrderDishDto);
                 }
@@ -394,7 +402,7 @@ public class MyOrderController  extends AbstractController {
             sendErrMsg(e.getMessage());
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonObject,0);
+        return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -417,7 +425,7 @@ public class MyOrderController  extends AbstractController {
         Integer tableId = Integer.parseInt(tableIdStr);
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutServcie.queryByTableId(tableId, 0);//是否存在未结账的结账单
+            checkout = checkoutServcie.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
@@ -433,7 +441,7 @@ public class MyOrderController  extends AbstractController {
                 //checkout.setLastModifiedTime();
                 //checkout.setPrepayMoney();
                 //checkout.setShouldPayMoney();
-                checkout.setStatus(0);
+                checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
                 //checkout.setTotalPayMoney();
                 //checkout.setWipeZeroMoney();
                 checkoutServcie.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
@@ -447,9 +455,9 @@ public class MyOrderController  extends AbstractController {
             //order.setLoginType();
             order.setOrderRemark(confirmOrderRemark);
             order.setOrderServeType(serviceWay);
-            order.setStatus(1);
+            order.setStatus(OrderStatusEnums.IsBooked.getId());
             order.setTableId(tableId);
-            order.setIsSettlemented(0);//订单是否被盘点过
+            order.setIsSettlemented(OrderSettlementStatusEnums.IsNotSettlement.getId());//订单是否被盘点过
             //order.setVipPartyId();
             orderService.newOrder(order);
 
@@ -482,7 +490,7 @@ public class MyOrderController  extends AbstractController {
                         orderDish.setCreatedTime(new Date());
                         orderDish.setDishId(packageDto.getDishPackage().getDishId());
                         Float temp = dto.getQuantity();
-                        orderDish.setIsPackage(1);
+                        orderDish.setIsPackage(PackageStatusEnums.IsPackage.getId());
                         orderDish.setPackageId(dto.getDishId());
                         orderDish.setPackageQuantity(temp.intValue());
                         //套餐菜品数量为单个套餐中单个菜品的数量*套餐数量
@@ -491,14 +499,15 @@ public class MyOrderController  extends AbstractController {
                         //根据套餐的子菜品的Id来获取菜品信息
                         dishDto = dishService.queryById(dto.getDishId());//应该查询的是套餐的信息
                         orderDish.setSalePrice(dishDto.getSalePrice());//整体套餐售价,而不是套餐中单个菜品售价
-                        orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
+                        orderDish.setStatus(OrderDishStatusEnums.IsBooked.getId());//菜品状态：1-已下单；2-正在做；3-已上菜
                         orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
-                        if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                        if(dto.getServeType()==null
+                                ||dto.getServeType()== ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
                             orderDish.setServeType(serviceWay);
                         else orderDish.setServeType(dto.getServeType());
                         orderDish.setOrderTime(orderTime);
-                        orderDish.setIsCall(0);//是否被催菜
-                        orderDish.setIsChange(0);//是否换了桌
+                        orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
+                        orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
                         orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                         if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
                             orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
@@ -513,18 +522,19 @@ public class MyOrderController  extends AbstractController {
                     orderDish.setDishId(dto.getDishId());
                     Float temp = dto.getQuantity(); //设置菜品数量
                     orderDish.setDishQuantity(temp);
-                    orderDish.setIsPackage(0);
+                    orderDish.setIsPackage(PackageStatusEnums.IsNotPackage.getId());
                     dishDto = dishService.queryById(dto.getDishId());
                     orderDish.setOrderId(order.getId());
-                    orderDish.setStatus(1);//菜品状态：1-已下单；2-正在做；3-已上菜
+                    orderDish.setStatus(OrderDishStatusEnums.IsBooked.getId());//菜品状态：1-已下单；2-正在做；3-已上菜
                     orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
                     orderDish.setSalePrice(dishDto.getSalePrice());
-                    if(dto.getServeType()==null||dto.getServeType()==0)//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                    if(dto.getServeType()==null
+                            ||dto.getServeType()==ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
                         orderDish.setServeType(serviceWay);
                     else orderDish.setServeType(dto.getServeType());
                     orderDish.setOrderTime(orderTime);
-                    orderDish.setIsCall(0);//是否被催菜
-                    orderDish.setIsChange(0);//是否换了桌
+                    orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
+                    orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
                     //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                     orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                     if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味

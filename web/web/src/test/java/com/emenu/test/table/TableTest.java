@@ -141,7 +141,7 @@ public class TableTest extends AbstractTestCase {
 
     @Test
     public void changeTable() throws SSException {
-        tableService.changeTable(2, 1);
+        tableService.changeTable(4, 1);
     }
 
     @Test

@@ -129,7 +129,7 @@ public class CallCacheServiceImpl implements CallCacheService {
                     }
                     if(o1.getStatus() == o2.getStatus())
                     {
-                        //若状态值相同则按照时间的升序进行排序
+                        //若状态值相同则按照时间的升序进行排序,呼叫时间小的靠前
                         if(o1.getCallTime().getTime() > o2.getCallTime().getTime()){
                             return 1;
                         }
@@ -192,7 +192,7 @@ public class CallCacheServiceImpl implements CallCacheService {
                     callCaches=tableCallCache.getCallCacheList();
                 for(CallCache callCache : callCaches)
                 {
-                    if(callCache.getStatus()==0)
+                    if(callCache.getStatus()==0)//0为应答了,1为未应答
                     {
                         callCaches.remove(callCache);
                     }

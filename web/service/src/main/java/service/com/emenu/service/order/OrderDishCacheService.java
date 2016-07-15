@@ -45,7 +45,7 @@ public interface OrderDishCacheService {
     public TableOrderCache listByTableId(int tableId) throws SSException;
 
     /**
-     * 根据餐台ID清空餐台
+     * 根据餐台ID清空餐台点菜的缓存
      * @param tableId
      * @return
      * @throws SSException
@@ -83,4 +83,12 @@ public interface OrderDishCacheService {
      * @throws SSException
      */
     public String getCurrentOperateCustomerIp() throws SSException;
+
+    /**
+     * 交换两个餐台中的缓存
+     * @param oldTableId
+     * @param newTableId
+     * @throws SSException
+     */
+    public void changeCache(int oldTableId, int newTableId) throws SSException;
 }

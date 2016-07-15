@@ -155,7 +155,6 @@ public class TableMergeServiceImpl implements TableMergeService {
             tableDto.setTable(table);
             tableService.forceUpdateTable(tableId, tableDto);
 
-
             tableMergeMapper.delTableMergeByTableId(tableId);
 
             // 若删除并台信息后，此并台剩余少于2个餐台，则把另一个并台信息也删除掉

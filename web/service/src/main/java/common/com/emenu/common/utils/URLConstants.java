@@ -186,6 +186,9 @@ public final class URLConstants {
     // 服务员点菜
     public static final String WAITER_ORDER_DISH_URL = "waiter/order/dish";
 
+    // 服务员退菜
+    public static final String WAITER_BACK_DISH_URL = "waiter/back/dish";
+
     //服务员并台
     public static final String WAITER_TABLE_MERGE_URL = "waiter/table/merge";
 
@@ -194,7 +197,7 @@ public final class URLConstants {
 
 
     /**********************吧台客户端*************************/
-    // 吧台客户端餐台列表
+    // 吧台客户端餐台
     public static final String BAR_TABLE_URL = "bar/table";
 
     // 吧台客户端开台
@@ -211,7 +214,6 @@ public final class URLConstants {
 
     // 吧台登录
     public static final String BAR_LOGIN = "bar/login";
-
 
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";

@@ -8,6 +8,8 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     private String currentOperateCustomerIp;
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void newDish(int tableId, OrderDishCache orderDishCache) throws SSException {
         try {
             // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
@@ -103,6 +106,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void delDish(int tableId, int orderDishCacheId) throws SSException {
         try {
             // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
@@ -141,6 +145,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateDish(int tableId, OrderDishCache orderDishCache) throws SSException {
         try {
             // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
@@ -189,6 +194,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void cleanCacheByTableId(int tableId) throws SSException {
         try {
             // 从缓存中取出本餐台的餐台点餐缓存(TableOrderCache)
@@ -207,6 +213,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void tableLock(int tableId) throws SSException
     {
         try {
@@ -227,6 +234,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void tableLockRemove(int tableId) throws SSException
     {
         try {
@@ -265,6 +273,34 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.GetCurrentOperateCustomerIpFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void changeCache(int oldTableId, int newTableId) throws SSException {
+        try {
+            // 从缓存中取出旧餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache oldTableOrderCache = tableOrderCacheMap.get(oldTableId);
+
+            // 从缓存中取出新餐台的餐台点餐缓存(TableOrderCache)
+            TableOrderCache newTableOrderCache = tableOrderCacheMap.get(newTableId);
+
+            // 若已被加锁，则不允许执行接下来的操作
+            if (oldTableOrderCache != null && oldTableOrderCache.getLock() == true) {
+                throw SSException.get(EmenuException.TableIsLock);
+            }
+            if (newTableOrderCache != null && newTableOrderCache.getLock() == true) {
+                throw SSException.get(EmenuException.TableIsLock);
+            }
+
+            tableOrderCacheMap.remove(oldTableId);
+            tableOrderCacheMap.remove(newTableId);
+            tableOrderCacheMap.put(oldTableId, newTableOrderCache);
+            tableOrderCacheMap.put(newTableId, oldTableOrderCache);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CleanTableCacheError, e);
         }
     }
 }

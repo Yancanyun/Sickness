@@ -10,6 +10,8 @@ import java.util.Map;
  * @time: 2015/11/2 15:22
  */
 public enum ServeTypeEnums {
+
+    NotSet(0,"未设置"),
     Instant(1, "即起"),
     Later(2, "叫起");
 

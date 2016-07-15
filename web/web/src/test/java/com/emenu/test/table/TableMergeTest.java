@@ -49,9 +49,8 @@ public class TableMergeTest extends AbstractTestCase {
 //        tableIdList.add(4);
 //        tableIdList.add(5);
 //        tableIdList.add(6);
-        tableIdList.add(1);
-        tableIdList.add(2);
-        tableIdList.add(3);
+        tableIdList.add(17);
+        tableIdList.add(18);
 
         List<TableMerge> tableMergeList = tableMergeService.mergeTable(tableIdList);
 
