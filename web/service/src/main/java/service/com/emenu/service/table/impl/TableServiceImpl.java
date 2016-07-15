@@ -10,6 +10,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.service.table.*;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
@@ -67,6 +68,9 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     private TableMergeCacheService mergeTableCacheService;
+
+    @Autowired
+    private OrderDishCacheService orderDishCacheService;
 
     @Override
     public List<TableDto> listAllTableDto() throws SSException {
@@ -746,6 +750,10 @@ public class TableServiceImpl implements TableService {
             oldTableDto.getTable().setStatus(TableStatusEnums.Enabled.getId());
 
             forceUpdateTable(oldTableId, oldTableDto);
+
+            // 把新旧餐台的缓存交换
+
+
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ChangeTableFail, e);

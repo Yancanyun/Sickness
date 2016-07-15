@@ -362,6 +362,8 @@ public enum ModuleEnums {
     BarTableClean("Bar:Table:Clean"),
     //吧台客户端并台
     BarTableMerge("Bar:Table:Merge"),
+    //吧台客户端餐台中的订单菜品
+    BarTableOrderDish("Bar:Table:Order:Dish"),
     //吧台客户端登录
     BarLogin("Bar:Login"),
 

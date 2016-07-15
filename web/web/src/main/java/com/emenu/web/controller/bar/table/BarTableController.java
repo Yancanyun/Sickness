@@ -17,6 +17,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -118,14 +119,14 @@ public class BarTableController extends AbstractAppBarController {
             List<Order> orderList = new ArrayList<Order>(); // 订单List
             List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>(); // 所有的订单菜品
             orderList = orderService.listByTableIdAndStatus(tableId, 1);// 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
-            if(orderList != null) {
-                for(Order order : orderList) {
+            if (Assert.isNotNull(orderList)) {
+                for (Order order : orderList) {
                     Integer orderId = order.getId(); // 订单Id
                     orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
                 }
             }
             for (OrderDishDto orderDishDto : orderDishDtoList) {
-                if(orderDishDto.getIsPackage() == 0) {
+                if (orderDishDto.getIsPackage() == 0) {
                     totalCost = totalCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getDishQuantity()));
                 } else {
                     totalCost = totalCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getPackageQuantity()));
@@ -150,18 +151,83 @@ public class BarTableController extends AbstractAppBarController {
             jsonObject.put("tableName", table.getName());
             jsonObject.put("status", table.getStatus());
             jsonObject.put("tableFee", table.getTableFee());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            if (table.getOpenTime() != null) {
-                jsonObject.put("openTime", dateFormat.format(table.getOpenTime()));
+            if (Assert.isNotNull(table.getOpenTime())) {
+                jsonObject.put("openTime", DateUtils.formatDatetime(table.getOpenTime()));
                 jsonObject.put("takesTime", DateUtils.calculateDiffTime(table.getOpenTime(), new Date()));
+            } else {
+                jsonObject.put("openTime", "");
+                jsonObject.put("takesTime", "");
             }
             jsonObject.put("totalCost", totalCost);
-            if (role != "") {
-                jsonObject.put("role", role);
-            }
+            jsonObject.put("role", role);
             jsonObject.put("seatFee", table.getSeatFee());
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * Ajax 根据餐台ID获取该餐台下的所有订单-菜品
+     * @param tableId
+     * @return
+     */
+    @Module(ModuleEnums.BarTableOrderDish)
+    @RequestMapping(value = "orderdishlist", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject orderDishList(@RequestParam("tableId") int tableId) {
+        try {
+
+            JSONArray jsonArray = new JSONArray();
+
+            // 查询本餐台所有的订单菜品
+            List<Order> orderList = new ArrayList<Order>();
+            List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
+            orderList = orderService.listByTableIdAndStatus(tableId, 1);// 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
+            if (Assert.isNotNull(orderList)) {
+                for (Order order : orderList) {
+                    Integer orderId = order.getId();
+                    orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
+                }
+            }
+
+            if (Assert.isNotNull(orderDishDtoList)) {
+                for(OrderDishDto orderDishDto : orderDishDtoList) {
+                    JSONObject jsonObject = new JSONObject();
+
+                    jsonObject.put("id", orderDishDto.getId());
+                    jsonObject.put("dishName", orderDishDto.getDishName());
+                    String assistantCode = "";
+                    DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                    assistantCode = dishDto.getAssistantCode();
+                    jsonObject.put("assistantCode", assistantCode);
+                    jsonObject.put("discount", orderDishDto.getDiscount());
+                    jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
+                    String unitName = "";
+                    unitName = dishDto.getUnitName();
+                    jsonObject.put("unitName", unitName);
+                    jsonObject.put("salePrice", orderDishDto.getSalePrice());
+                    if (orderDishDto.getTasteName() == null) {
+                        jsonObject.put("tasteName", "");
+                    } else {
+                        jsonObject.put("tasteName", orderDishDto.getTasteName());
+                    }
+                    jsonObject.put("serveType", orderDishDto.getServeType());
+                    jsonObject.put("status", orderDishDto.getStatus());
+                    if (Assert.isNotNull(orderDishDto.getOrderTime())) {
+                        jsonObject.put("orderTime", DateUtils.formatDatetime(orderDishDto.getOrderTime()));
+                    } else {
+                        jsonObject.put("orderTime", "");
+                    }
+                    jsonObject.put("remark", orderDishDto.getRemark());
+
+                    jsonArray.add(jsonObject);
+                }
+            }
+
+            return sendJsonArray(jsonArray);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
