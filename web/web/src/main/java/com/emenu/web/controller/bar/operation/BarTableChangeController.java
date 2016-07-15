@@ -43,11 +43,10 @@ public class BarTableChangeController extends AbstractAppBarController {
             //获取当前餐台的信息
             Table table = tableService.queryById(tableId);
 
-            JSONArray jsonArray = new JSONArray();
-
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("oldTableId", tableId);
             jsonObject.put("oldTableName", table.getName());
+            jsonObject.put("oldPersonNum", table.getPersonNum());
             jsonObject.put("oldSeatNum", table.getSeatNum());
             jsonObject.put("oldSeatFee", table.getSeatFee());
             jsonObject.put("oldTableFee", table.getTableFee());
@@ -57,14 +56,16 @@ public class BarTableChangeController extends AbstractAppBarController {
                 JSONObject childJsonObject = new JSONObject();
                 childJsonObject.put("newTableId", newTable.getId());
                 childJsonObject.put("newTableName", newTable.getName());
+                childJsonObject.put("newSeatNum", newTable.getSeatNum());
+                childJsonObject.put("newSeatFee", newTable.getSeatFee());
+                childJsonObject.put("newTableFee", newTable.getTableFee());
 
                 newTableList.add(childJsonObject);
             }
 
             jsonObject.put("newTableList", newTableList);
-            jsonArray.add(jsonObject);
 
-            return sendJsonArray(jsonArray);
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

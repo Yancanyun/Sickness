@@ -278,6 +278,10 @@ public class AbstractAppBarController extends Base {
     @Qualifier("dishService")
     protected static DishService dishService;
 
+    @StaticAutoWire
+    @Qualifier("dishPackageService")
+    protected static DishPackageService dishPackageService;
+
     //会员价方案管理
     @StaticAutoWire
     @Qualifier("vipDishPricePlanService")
