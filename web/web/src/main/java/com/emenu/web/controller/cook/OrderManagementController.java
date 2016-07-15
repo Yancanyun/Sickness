@@ -14,6 +14,9 @@ import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
+import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
@@ -115,7 +118,7 @@ public class OrderManagementController extends AbstractController {
             table=tableService.queryById(tableId);//获取餐桌信息
             jsonObject.put("name",table.getName());//餐桌名称
             jsonObject.put("version",cookTableCacheService.getVersionByTableId(tableId));//餐桌版本
-            orders=orderService.listByTableIdAndStatus(tableId,1);//获取到已下单未结账的订单
+            orders=orderService.listByTableIdAndStatus(tableId, OrderStatusEnums.IsBooked.getId());//获取到已下单未结账的订单
             JSONArray all = new JSONArray();
             for(Order order : orders)
             {
@@ -125,7 +128,8 @@ public class OrderManagementController extends AbstractController {
                     orderDishs = orderDishService.listByOrderId(order.getId());//获取订单菜品
                     for(OrderDish orderDish :orderDishs)
                     {
-                        if(orderDish.getStatus()==1||orderDish.getStatus()==2)//显示已经下单和正在做的菜品
+                        if(orderDish.getStatus()== OrderDishStatusEnums.IsBooked.getId()
+                                ||orderDish.getStatus()==OrderDishStatusEnums.IsMake.getId())//显示已经下单和正在做的菜品
                         {
                             JSONObject temp = new JSONObject();
                             DishDto dishDto = dishService.queryById(orderDish.getDishId());//查询出菜品信息
@@ -135,7 +139,7 @@ public class OrderManagementController extends AbstractController {
                             temp.put("state",orderDish.getStatus());//菜品状态,问下学姐以上菜的菜品显示不显示
                             temp.put("num",orderDish.getDishQuantity());
                             temp.put("unitName",unit.getName());//菜品单位名称
-                            if(orderDish.getIsPackage()==0)
+                            if(orderDish.getIsPackage()== PackageStatusEnums.IsNotPackage.getId())
                                 temp.put("bigTagName",tagService.queryLayer2TagByDishId(orderDish.getDishId()).getName());//菜品二级分类,菜品的大类
                             else//是套餐
                                 temp.put("bigTagName",tagService.queryLayer2TagByDishId(orderDish.getPackageId()).getName());//菜品二级分类,菜品的大类

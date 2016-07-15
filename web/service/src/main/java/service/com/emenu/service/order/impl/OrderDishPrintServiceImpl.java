@@ -8,7 +8,10 @@ import com.emenu.common.entity.dish.DishTaste;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
+import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.CommonUtil;
 import com.emenu.common.utils.DateUtils;
@@ -108,7 +111,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
         try{
             orderDish = orderDishService.queryById(orderDishId);//查询出订单菜品
             //非套餐
-            if(orderDish.getIsPackage()==0)
+            if(orderDish.getIsPackage()== PackageStatusEnums.IsNotPackage.getId())
             {
                 dishDto = dishService.queryById(orderDish.getDishId());//查询出菜品详细信息
                 PrintOrderDishDto temp = new PrintOrderDishDto();//临时变量
@@ -132,7 +135,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 }
                 //菜品大类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 Printer printer = new Printer();
-                printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),2);//根据dishId查,看能否查到
+                printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
                 if(printer!=null &&printer.getIpAddress()!=null)//1-菜品类别，2-具体某一个菜
                 {
                     //菜品直接关联的打印机要比大类关联的打印机优先
@@ -143,7 +146,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                     if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
                     {
                         Integer layer2TagId = tagService.queryLayer2TagByDishId(dishDto.getId()).getId();//菜品的二级分类Id
-                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId,1);
+                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId,PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
@@ -174,7 +177,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 }
                 //菜品大类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 Printer printer = new Printer();
-                printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),2);//根据dishId查,看能否查到
+                printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
                 if(printer!=null &&printer.getIpAddress()!=null)//1-菜品类别，2-具体某一个菜
                 {
                     //菜品直接关联的打印机要比大类关联的打印机优先
@@ -185,7 +188,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                     if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
                     {
                         Integer layer2TagId = tagService.queryLayer2TagByDishId(dishDto.getId()).getId();//菜品的二级分类Id
-                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId,1);
+                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId, PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
@@ -260,7 +263,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 //修改订单菜品的状态
                 OrderDish orderDish = new OrderDish();
                 orderDish=orderDishService.queryById(printOrderDishDto.getOrderDishId());//查询出订单菜品
-                orderDish.setStatus(2);//订单菜品状态：1.已下单  2.正在做  3.已上菜
+                orderDish.setStatus(OrderDishStatusEnums.IsMake.getId());//订单菜品状态：1.已下单  2.正在做  3.已上菜
                 orderDishService.updateOrderDish(orderDish);//更新订单菜品的状态
 
                 //修改餐台版本号
