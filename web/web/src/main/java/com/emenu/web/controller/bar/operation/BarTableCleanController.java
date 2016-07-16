@@ -5,6 +5,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_CLEAN_URL)
-public class BarTableCleanController extends AbstractAppBarController {
+public class BarTableCleanController extends AbstractController {
     /**
      * Ajax 执行清台操作
      * @param tableId

@@ -7,6 +7,7 @@ import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_MERGE_URL)
-public class BarTableMergeController extends AbstractAppBarController {
+public class BarTableMergeController extends AbstractController {
     /**
      * Ajax 获取某区域下可并台的餐台列表
      * @param areaId

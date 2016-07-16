@@ -20,6 +20,7 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -45,10 +46,9 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_URL)
-public class BarTableController extends AbstractAppBarController {
+public class BarTableController extends AbstractController {
     /**
      * Ajax 获取区域列表
-     *
      * @return
      */
     @Module(ModuleEnums.BarTableAreaList)
@@ -77,7 +77,6 @@ public class BarTableController extends AbstractAppBarController {
 
     /**
      * Ajax 获取某区域下的餐台列表
-     *
      * @param areaId
      * @return
      */
@@ -283,7 +282,6 @@ public class BarTableController extends AbstractAppBarController {
                             jsonArray.add(jsonObject);
                         }
                     }
-
                 }
             }
 
@@ -293,4 +291,34 @@ public class BarTableController extends AbstractAppBarController {
             return sendErrMsgAndErrCode(e);
         }
     }
+
+    /**
+     * Ajax 搜索餐台
+     * @param keywords
+     * @return
+     */
+    @Module(ModuleEnums.BarTableSearch)
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject search(@RequestParam("keywords") String keywords) {
+        try {
+            Table table = tableService.queryByKeywords(keywords);
+
+            JSONObject jsonObject = new JSONObject();
+
+            if (Assert.isNull(table)) {
+                jsonObject.put("areaId", "");
+                jsonObject.put("tableId", "");
+            } else {
+                jsonObject.put("areaId", table.getAreaId());
+                jsonObject.put("tableId", table.getId());
+            }
+
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
 }

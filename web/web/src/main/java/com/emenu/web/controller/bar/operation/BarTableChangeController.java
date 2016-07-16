@@ -8,6 +8,7 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_CHANGE_URL)
-public class BarTableChangeController extends AbstractAppBarController {
+public class BarTableChangeController extends AbstractController {
     /**
      * Ajax 获取换台对话框中的数据
      * @return

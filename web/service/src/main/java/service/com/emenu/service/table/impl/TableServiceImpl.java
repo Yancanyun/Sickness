@@ -814,4 +814,54 @@ public class TableServiceImpl implements TableService {
             throw SSException.get(EmenuException.MergeTableFail, e);
         }
     }
+
+    @Override
+    public Table queryByKeywords(String keywords) throws SSException {
+        //检查keywords是否合法
+        if (Assert.isNull(keywords)) {
+            return null;
+        }
+        try {
+            Table table = new Table();
+            table = tableMapper.queryByKeywords(keywords);
+            return table;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTableFail, e);
+        }
+    }
+
+    @Override
+    public TableDto queryTableDtoByKeywords(String keywords) throws SSException {
+        //检查keywords是否合法
+        if (Assert.isNull(keywords)) {
+            return null;
+        }
+        try {
+            TableDto tableDto = new TableDto();
+            Table table = queryByKeywords(keywords);
+
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.QueryTableFail);
+            }
+
+            tableDto.setTable(table);
+            tableDto.setAreaName(areaService.queryById(table.getAreaId()).getName());
+
+            //查询餐台对应的餐段ID
+            List<Integer> mealPeriodIdList = tableMealPeriodService.listMealPeriodIdByTableId(table.getId());
+            //将餐段List存入TableDto
+            List<MealPeriod> mealPeriodList = new ArrayList<MealPeriod>();
+            for (int mealPeriodId : mealPeriodIdList) {
+                MealPeriod mealPeriod = mealPeriodService.queryById(mealPeriodId);
+                mealPeriodList.add(mealPeriod);
+            }
+            tableDto.setMealPeriodList(mealPeriodList);
+
+            return tableDto;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTableFail, e);
+        }
+    }
 }

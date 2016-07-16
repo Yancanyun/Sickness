@@ -10,6 +10,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Module(ModuleEnums.WaiterTableOpen)
 @RequestMapping(value = URLConstants.WAITER_TABLE_OPEN_URL)
-public class WaiterTableOpenController extends AbstractAppBarController {
+public class WaiterTableOpenController extends AbstractController {
     /**
      * Ajax 获取要开台的餐台的数据
      * @param tableId

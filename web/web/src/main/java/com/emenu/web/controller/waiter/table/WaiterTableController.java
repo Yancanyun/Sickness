@@ -13,6 +13,7 @@ import com.emenu.common.enums.waiter.WaiterTableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -35,7 +36,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.WaiterTableList)
 @RequestMapping(value = URLConstants.WAITER_TABLE_URL)
-public class WaiterTableController extends AbstractAppBarController {
+public class WaiterTableController extends AbstractController {
     /**
      * Ajax 根据AreaId(可选)、操作状态(开台、清台、换台、并台等)返回餐台数据
      * @param partyId

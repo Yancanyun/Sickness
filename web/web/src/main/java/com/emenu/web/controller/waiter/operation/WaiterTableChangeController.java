@@ -12,6 +12,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.WaiterTableChange)
 @RequestMapping(value = URLConstants.WAITER_TABLE_CHANGE_URL)
-public class WaiterTableChangeController extends AbstractAppBarController {
+public class WaiterTableChangeController extends AbstractController {
     /**
      * Ajax 获取要换台的餐台的数据
      * @param tableId

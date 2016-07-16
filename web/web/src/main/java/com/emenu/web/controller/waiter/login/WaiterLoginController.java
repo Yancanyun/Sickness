@@ -10,6 +10,7 @@ import com.emenu.common.enums.party.LoginTypeEnums;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -30,7 +31,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @Module(ModuleEnums.WaiterLogin)
 @RequestMapping(value = URLConstants.WAITER_LOGIN_URL)
-public class WaiterLoginController extends AbstractAppBarController {
+public class WaiterLoginController extends AbstractController {
     /**
      * Ajax 登录提交
      * @param loginName

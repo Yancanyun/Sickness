@@ -354,6 +354,8 @@ public enum ModuleEnums {
     BarTableList("Bar:Table:List"),
     //吧台客户端餐台详细信息
     BarTableDetail("Bar:Table:Detail"),
+    //吧台客户端餐台搜索
+    BarTableSearch("Bar:Table:Search"),
     //吧台客户端开台
     BarTableOpen("Bar:Table:Open"),
     //吧台客户端换台
