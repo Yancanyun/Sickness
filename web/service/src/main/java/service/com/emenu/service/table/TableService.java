@@ -210,4 +210,20 @@ public interface TableService {
      * @throws SSException
      */
     public void mergeTable(List<Integer> tableIdList) throws SSException;
+
+    /**
+     * 根据搜索关键字餐台（仅餐台表本身的信息）
+     * @param keywords
+     * @return Table
+     * @throws SSException
+     */
+    public Table queryByKeywords(String keywords) throws SSException;
+
+    /**
+     * 根据搜索关键字餐台（包含区域表、餐段表中的信息）
+     * @param keywords
+     * @return TableDto
+     * @throws SSException
+     */
+    public TableDto queryTableDtoByKeywords(String keywords) throws SSException;
 }

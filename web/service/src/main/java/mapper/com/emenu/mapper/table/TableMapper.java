@@ -93,4 +93,12 @@ public interface TableMapper {
      * @throws Exception
      */
     public void updateOpenTime(@Param("id") int id, @Param("openTime") Date openTime) throws Exception;
+
+    /**
+     * 根据搜索关键字餐台
+     * @param keywords
+     * @return Table
+     * @throws Exception
+     */
+    public Table queryByKeywords(@Param("keywords") String keywords) throws Exception;
 }

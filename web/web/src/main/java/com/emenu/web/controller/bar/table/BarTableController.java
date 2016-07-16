@@ -2,19 +2,25 @@ package com.emenu.web.controller.bar.table;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.DoubleArraySerializer;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.dish.DishImg;
+import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMerge;
+import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -28,6 +34,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,10 +46,9 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.BarTable)
 @RequestMapping(value = URLConstants.BAR_TABLE_URL)
-public class BarTableController extends AbstractAppBarController {
+public class BarTableController extends AbstractController {
     /**
      * Ajax 获取区域列表
-     *
      * @return
      */
     @Module(ModuleEnums.BarTableAreaList)
@@ -71,7 +77,6 @@ public class BarTableController extends AbstractAppBarController {
 
     /**
      * Ajax 获取某区域下的餐台列表
-     *
      * @param areaId
      * @return
      */
@@ -146,6 +151,9 @@ public class BarTableController extends AbstractAppBarController {
                     role += area.getName() + " " + t.getName();
                 }
             }
+            if (role == "") {
+                role = "无";
+            }
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tableName", table.getName());
@@ -153,7 +161,7 @@ public class BarTableController extends AbstractAppBarController {
             jsonObject.put("tableFee", table.getTableFee());
             if (Assert.isNotNull(table.getOpenTime())) {
                 jsonObject.put("openTime", DateUtils.formatDatetime(table.getOpenTime()));
-                jsonObject.put("takesTime", DateUtils.calculateDiffTime(table.getOpenTime(), new Date()));
+                jsonObject.put("takesTime", DateUtils.calculateDiffTimeAndFormat(table.getOpenTime(), new Date()));
             } else {
                 jsonObject.put("openTime", "");
                 jsonObject.put("takesTime", "");
@@ -192,38 +200,88 @@ public class BarTableController extends AbstractAppBarController {
                     orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
                 }
             }
+            // 用来判断套餐标识是否出现过
+            HashMap<Integer, Integer> packageFlagMap = new HashMap<Integer, Integer>();
 
             if (Assert.isNotNull(orderDishDtoList)) {
-                for(OrderDishDto orderDishDto : orderDishDtoList) {
-                    JSONObject jsonObject = new JSONObject();
+                for (OrderDishDto orderDishDto : orderDishDtoList) {
+                    // 非套餐且不为退菜时，按如下方法发数据
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsNotPackage.getId() &&
+                            orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId()) {
+                        JSONObject jsonObject = new JSONObject();
 
-                    jsonObject.put("id", orderDishDto.getId());
-                    jsonObject.put("dishName", orderDishDto.getDishName());
-                    String assistantCode = "";
-                    DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
-                    assistantCode = dishDto.getAssistantCode();
-                    jsonObject.put("assistantCode", assistantCode);
-                    jsonObject.put("discount", orderDishDto.getDiscount());
-                    jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
-                    String unitName = "";
-                    unitName = dishDto.getUnitName();
-                    jsonObject.put("unitName", unitName);
-                    jsonObject.put("salePrice", orderDishDto.getSalePrice());
-                    if (orderDishDto.getTasteName() == null) {
-                        jsonObject.put("tasteName", "");
-                    } else {
-                        jsonObject.put("tasteName", orderDishDto.getTasteName());
-                    }
-                    jsonObject.put("serveType", orderDishDto.getServeType());
-                    jsonObject.put("status", orderDishDto.getStatus());
-                    if (Assert.isNotNull(orderDishDto.getOrderTime())) {
-                        jsonObject.put("orderTime", DateUtils.formatDatetime(orderDishDto.getOrderTime()));
-                    } else {
-                        jsonObject.put("orderTime", "");
-                    }
-                    jsonObject.put("remark", orderDishDto.getRemark());
+                        jsonObject.put("id", orderDishDto.getId());
+                        jsonObject.put("dishName", orderDishDto.getDishName());
+                        String assistantCode = "";
+                        DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                        assistantCode = dishDto.getAssistantCode();
+                        jsonObject.put("assistantCode", assistantCode);
+                        jsonObject.put("discount", orderDishDto.getDiscount());
+                        jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
+                        String unitName = "";
+                        unitName = dishDto.getUnitName();
+                        jsonObject.put("unitName", unitName);
+                        jsonObject.put("salePrice", orderDishDto.getSalePrice());
+                        if (orderDishDto.getTasteName() == null) {
+                            jsonObject.put("tasteName", "");
+                        } else {
+                            jsonObject.put("tasteName", orderDishDto.getTasteName());
+                        }
+                        jsonObject.put("serveType", orderDishDto.getServeType());
+                        jsonObject.put("status", orderDishDto.getStatus());
+                        if (Assert.isNotNull(orderDishDto.getOrderTime())) {
+                            jsonObject.put("orderTime", DateUtils.formatDatetime(orderDishDto.getOrderTime()));
+                        } else {
+                            jsonObject.put("orderTime", "");
+                        }
+                        jsonObject.put("remark", orderDishDto.getRemark());
 
-                    jsonArray.add(jsonObject);
+                        jsonArray.add(jsonObject);
+                    }
+
+                    // 是套餐且不为退菜时，按如下方法发数据(在数据库里套餐被拆成菜品，因而要做特殊处理)
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId() &&
+                            orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId()) {
+                        JSONObject jsonObject = new JSONObject();
+
+                        // 没有出现过的套餐
+                        if(packageFlagMap.get(orderDishDto.getPackageFlag()) == null) {
+                            // 标记为出现过
+                            packageFlagMap.put(orderDishDto.getPackageFlag(), 1);
+
+                            // 通过packageId查询出菜品的信息
+                            DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
+                            // 原本的话套餐显示是单个菜品名字,这里要重新设置一下，设置成显示套餐的名字
+                            orderDishDto.setDishName(dishDto.getName());
+
+                            jsonObject.put("id", orderDishDto.getId());
+                            jsonObject.put("dishName", orderDishDto.getDishName());
+                            String assistantCode = "";
+                            assistantCode = dishDto.getAssistantCode();
+                            jsonObject.put("assistantCode", assistantCode);
+                            jsonObject.put("discount", orderDishDto.getDiscount());
+                            jsonObject.put("dishQuantity", orderDishDto.getPackageQuantity());
+                            String unitName = "";
+                            unitName = dishDto.getUnitName();
+                            jsonObject.put("unitName", unitName);
+                            jsonObject.put("salePrice", orderDishDto.getSalePrice());
+                            if (orderDishDto.getTasteName() == null) {
+                                jsonObject.put("tasteName", "");
+                            } else {
+                                jsonObject.put("tasteName", orderDishDto.getTasteName());
+                            }
+                            jsonObject.put("serveType", orderDishDto.getServeType());
+                            jsonObject.put("status", orderDishDto.getStatus());
+                            if (Assert.isNotNull(orderDishDto.getOrderTime())) {
+                                jsonObject.put("orderTime", DateUtils.formatDatetime(orderDishDto.getOrderTime()));
+                            } else {
+                                jsonObject.put("orderTime", "");
+                            }
+                            jsonObject.put("remark", orderDishDto.getRemark());
+
+                            jsonArray.add(jsonObject);
+                        }
+                    }
                 }
             }
 
@@ -233,4 +291,34 @@ public class BarTableController extends AbstractAppBarController {
             return sendErrMsgAndErrCode(e);
         }
     }
+
+    /**
+     * Ajax 搜索餐台
+     * @param keywords
+     * @return
+     */
+    @Module(ModuleEnums.BarTableSearch)
+    @RequestMapping(value = "search", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject search(@RequestParam("keywords") String keywords) {
+        try {
+            Table table = tableService.queryByKeywords(keywords);
+
+            JSONObject jsonObject = new JSONObject();
+
+            if (Assert.isNull(table)) {
+                jsonObject.put("areaId", "");
+                jsonObject.put("tableId", "");
+            } else {
+                jsonObject.put("areaId", table.getAreaId());
+                jsonObject.put("tableId", table.getId());
+            }
+
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
 }

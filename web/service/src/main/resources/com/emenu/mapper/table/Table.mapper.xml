@@ -107,4 +107,10 @@
         SET `open_time` = #{openTime}
         WHERE `id` = #{id}
     </update>
+
+    <select id="queryByKeywords" resultMap="pw.Table">
+        SELECT *
+        FROM `t_table`
+        WHERE `name` = #{keywords}
+    </select>
 </mapper>

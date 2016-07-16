@@ -9,6 +9,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @Module(ModuleEnums.WaiterTableClean)
 @RequestMapping(value = URLConstants.WAITER_TABLE_CLEAN_URL)
-public class WaiterTableCleanController extends AbstractAppBarController {
+public class WaiterTableCleanController extends AbstractController {
     /**
      * Ajax 执行清台操作
      * @param tableId

@@ -9,6 +9,7 @@ import com.emenu.common.dto.table.AreaDto;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.WaiterTable)
 @RequestMapping(value = URLConstants.WAITER_TABLE_AREA_URL)
-public class WaiterTableAreaController extends AbstractAppBarController {
+public class WaiterTableAreaController extends AbstractController {
     /**
      * Ajax 获取可管理餐台区域列表
      * @return

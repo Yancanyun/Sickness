@@ -90,6 +90,27 @@ public class DateUtils {
         return (hour + ":" + min);
     }
 
+    /**
+     * 计算时间差，并转换为"X天X小时X分钟"的格式
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static String calculateDiffTimeAndFormat(Date beginTime, Date endTime) {
+        long between = 0;
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        try {
+            between = (endTime.getTime() - beginTime.getTime());// 得到两者的毫秒数
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        day = (between / (60 * 60 * 1000 * 24));
+        hour = (between / (60 * 60 * 1000) - day * 24);
+        min = ((between / (60 * 1000)) - (day * 24 + hour) * 60);
+        return (day + "天" + hour + "小时" + min + "分钟");
+    }
 
     public static Date getTodayStartTime() {
         Calendar calendar = new GregorianCalendar();

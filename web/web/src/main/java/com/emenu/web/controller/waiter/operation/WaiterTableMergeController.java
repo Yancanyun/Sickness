@@ -7,6 +7,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.WaiterTableMerge)
 @RequestMapping(value = URLConstants.WAITER_TABLE_MERGE_URL)
-public class WaiterTableMergeController extends AbstractAppBarController {
+public class WaiterTableMergeController extends AbstractController {
     /**
      * TODO: 暂时不做服务员跨区域并台，这块代码暂时注释掉
      */

@@ -503,6 +503,16 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("weChatService")
     protected static WeChatService weChatService;
+
+    /**************************吧台**************************/
+    // 并台
+    @StaticAutoWire
+    @Qualifier("tableMergeService")
+    protected static TableMergeService tableMergeService;
+
+    @StaticAutoWire
+    @Qualifier("callCacheService")
+    protected static CallCacheService callCacheService;
 }
 
 
