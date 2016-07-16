@@ -2,24 +2,17 @@ package com.emenu.web.controller.bar.table;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.DoubleArraySerializer;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
-import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.order.OrderDishDto;
-import com.emenu.common.entity.dish.DishImg;
-import com.emenu.common.entity.dish.DishPackage;
-import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
-import com.emenu.common.entity.table.TableMerge;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -31,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -307,8 +299,8 @@ public class BarTableController extends AbstractController {
             JSONObject jsonObject = new JSONObject();
 
             if (Assert.isNull(table)) {
-                jsonObject.put("areaId", "");
-                jsonObject.put("tableId", "");
+                jsonObject.put("areaId", null);
+                jsonObject.put("tableId", null);
             } else {
                 jsonObject.put("areaId", table.getAreaId());
                 jsonObject.put("tableId", table.getId());
@@ -320,5 +312,4 @@ public class BarTableController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
 }

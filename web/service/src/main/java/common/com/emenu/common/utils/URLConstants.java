@@ -218,6 +218,9 @@ public final class URLConstants {
     // 吧台登录
     public static final String BAR_LOGIN = "bar/login";
 
+    // 吧台餐段
+    public static final String BAR_MEAL_PERIOD_URL = "bar/meal/period";
+
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 

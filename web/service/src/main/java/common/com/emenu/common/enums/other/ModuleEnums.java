@@ -377,6 +377,8 @@ public enum ModuleEnums {
     BarTableOrderDish("Bar:Table:Order:Dish"),
     //吧台客户端登录
     BarLogin("Bar:Login"),
+    //吧台餐段
+    BarMealPeriod("Bar:Meal:Period"),
 
 
 

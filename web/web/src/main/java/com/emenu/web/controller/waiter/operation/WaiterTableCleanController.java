@@ -37,8 +37,6 @@ public class WaiterTableCleanController extends AbstractController {
     @ResponseBody
     public JSONObject cleanTable(@RequestParam("tableId") Integer tableId) {
         try {
-            // TODO: 记录哪个服务员清的台
-
             tableService.cleanTable(tableId);
             callCacheService.delTableCallCache(tableId); // 清台操作还要把相应的呼叫服务缓存清除
 

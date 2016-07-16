@@ -121,8 +121,6 @@ public class WaiterTableChangeController extends AbstractController {
     public JSONObject changeTable(@RequestParam("oldTableId") Integer oldTableId,
                                   @RequestParam("newTableId") Integer newTableId) {
         try {
-            // TODO: 记录哪个服务员换的台
-
             tableService.changeTable(oldTableId, newTableId);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
