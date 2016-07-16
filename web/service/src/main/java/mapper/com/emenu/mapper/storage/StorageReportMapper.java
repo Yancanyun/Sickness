@@ -1,6 +1,6 @@
 package com.emenu.mapper.storage;
 
-import com.emenu.common.dto.storage.ReportSerachDto;
+import com.emenu.common.dto.storage.ReportSearchDto;
 import com.emenu.common.entity.storage.StorageReport;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -27,11 +27,11 @@ public interface StorageReportMapper {
     /**
      * 新
      * 根据查询条件获取单据信息
-     * @param reportSerachDto
+     * @param reportSearchDto
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws Exception;
+    public List<StorageReport> listReportBySerachDto(@Param("reportSearchDto") ReportSearchDto reportSearchDto) throws Exception;
 
     /**
      * 新
@@ -75,12 +75,25 @@ public interface StorageReportMapper {
     public List<StorageReport> listReportByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws Exception;
 
     /**
-     * 根据查询条件统计记录数
-     * @param reportSerachDto
+     * 新
+     * 根据审核条件获取时间段之间的单据，不包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @param isAudited
      * @return
      * @throws Exception
      */
-    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws Exception;
+    public List<StorageReport> listReportByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws Exception;
+
+
+    /**
+     * 新
+     * 根据查询条件统计记录数
+     * @param reportSearchDto
+     * @return
+     * @throws Exception
+     */
+    public int countByReportSerachDto(@Param("reportSearchDto") ReportSearchDto reportSearchDto) throws Exception;
 
     /**
      * 分页获取单据信息
@@ -180,11 +193,11 @@ public interface StorageReportMapper {
 
     /**
      * 根据条件查询记录数
-     * @param reportSerachDto
+     * @param reportSearchDto
      * @return
      * @throws Exception
      */
-    public int countByCondition(ReportSerachDto reportSerachDto) throws Exception;
+    public int countByCondition(ReportSearchDto reportSearchDto) throws Exception;
 
     /**
      *

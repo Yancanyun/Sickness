@@ -109,13 +109,15 @@ public class StorageReportIngredientServiceImpl implements StorageReportIngredie
     }
 
     private boolean checkBeforeSave(StorageReportIngredient reportIngredient) throws SSException{
+        System.out.println("xiao");
         if (Assert.isNull(reportIngredient)){
             throw SSException.get(EmenuException.ReportIngredientIsNot);
         }
         if (Assert.isNull(reportIngredient.getIngredientId()) ||
-                Assert.lessOrEqualZero(reportIngredient.getId())){
+                Assert.lessOrEqualZero(reportIngredient.getIngredientId())){
             throw SSException.get(EmenuException.IngredientIdError);
         }
+        reportIngredient.setQuantity(reportIngredient.getCostCardQuantity());
         if (Assert.isNull(reportIngredient.getQuantity())){
             throw SSException.get(EmenuException.QuantityError);
         }

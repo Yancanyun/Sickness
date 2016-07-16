@@ -4,7 +4,7 @@
 
 <mapper namespace="com.emenu.mapper.storage.StorageReportIngredientMapper">
 
-    <select id="listByReportId">
+    <select id="listByReportId" resultMap="pw.StorageReportIngredient">
         SELECT `id` ,
         `ingredient_id` ,
         `quantity` ,

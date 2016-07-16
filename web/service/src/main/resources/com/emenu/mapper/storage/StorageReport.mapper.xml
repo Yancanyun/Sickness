@@ -39,36 +39,36 @@
         `last_modified_time` AS lastModifiedTime
         FROM `t_storage_report` AS report
         <where>
-            <if test="reportSerachDto != null">
-                <if test="reportSerachDto.depotId != null and depotId >0">
-                    report.`depot_id` = #{reportSerachDto.depotId}
+            <if test="reportSearchDto != null">
+                <if test="reportSearchDto.depotId != null and reportSearchDto.depotId >0">
+                    report.`depot_id` = #{reportSearchDto.depotId}
                 </if>
-                <if test="reportSerachDto.auditPartyId != null and auditPartyId >= 0">
-                    AND report.`audit_party_id` = #{reportSerachDto.auditPartyId}
+                <if test="reportSearchDto.auditPartyId != null and reportSearchDto.auditPartyId >= 0">
+                    AND report.`audit_party_id` = #{reportSearchDto.auditPartyId}
                 </if>
-                <if test="reportSerachDto.handlerPartyId != null and handlerPartyId >= 0">
-                    AND report.`handler_party_id` = #{reportSerachDto.handlerPartyId}
+                <if test="reportSearchDto.handlerPartyId != null and reportSearchDto.handlerPartyId >= 0">
+                    AND report.`handler_party_id` = #{reportSearchDto.handlerPartyId}
                 </if>
-                <if test="reportSerachDto.createdPartyId != null and createdPartyId >= 0">
-                    AND report.`created_party_id` = #{reportSerachDto.createdPartyId}
+                <if test="reportSearchDto.createdPartyId != null and reportSearchDto.createdPartyId >= 0">
+                    AND report.`created_party_id` = #{reportSearchDto.createdPartyId}
                 </if>
-                <if test="reportSerachDto.isSettlemented != null and isSettlemented >= 0">
-                    AND report.`depot_id` = #{reportSerachDto.depotId}
+                <if test="reportSearchDto.isSettlemented != null and reportSearchDto.isSettlemented >= 0">
+                    AND report.`is_settlemented` = #{reportSearchDto.isSettlemented}
                 </if>
-                <if test="reportSerachDto.isAudited != null and isAudited >= 0">
-                    AND report.`is_audited` = #{reportSerachDto.isAudited}
+                <if test="reportSearchDto.isAudited != null and reportSearchDto.isAudited >= 0">
+                    AND report.`is_audited` = #{reportSearchDto.isAudited}
                 </if>
-                <if test="startTime != null">
-                    AND `created_time` &gt;= #{startTime}
+                <if test="reportSearchDto.startTime != null">
+                    AND report.`last_modified_time` &gt;= #{reportSearchDto.startTime}
                 </if>
-                <if test="endTime != null">
-                    AND `created_time` &lt;= #{endTime}
+                <if test="reportSearchDto.endTime != null">
+                    AND report.`last_modified_time` &lt;= #{reportSearchDto.endTime}
                 </if>
             </if>
         </where>
         ORDER BY `created_time` DESC
-        <if test="reportSerachDto != null and reportSerachDto.offset >= 0 and reportSerachDto.pageSize >= 0">
-            LIMIT #{reportSerachDto.offset},#{reportSerachDto.pageSize}
+        <if test="reportSearchDto != null and reportSearchDto.offset >= 0 and reportSearchDto.pageSize >= 0">
+            LIMIT #{reportSearchDto.offset},#{reportSearchDto.pageSize}
         </if>
     </select>
 
@@ -86,35 +86,34 @@
     </update>
 
     <!--新-->
-
-    <select id="countByCondition" resultType="int">
+    <select id="countByReportSerachDto" resultType="int">
         SELECT count(1)
-        FROM t_storage_report
+        FROM t_storage_report AS report
         <where>
-            <if test="reportSerachDto != null">
-                <if test="reportSerachDto.depotId != null and depotId >0">
-                    report.`depot_id` = #{reportSerachDto.depotId}
+            <if test="reportSearchDto != null">
+                <if test="reportSearchDto.depotId != null and reportSearchDto.depotId >0">
+                    report.`depot_id` = #{reportSearchDto.depotId}
                 </if>
-                <if test="reportSerachDto.auditPartyId != null and auditPartyId >= 0">
-                    AND report.`audit_party_id` = #{reportSerachDto.auditPartyId}
+                <if test="reportSearchDto.auditPartyId != null and reportSearchDto.auditPartyId >= 0">
+                    AND report.`audit_party_id` = #{reportSearchDto.auditPartyId}
                 </if>
-                <if test="reportSerachDto.handlerPartyId != null and handlerPartyId >= 0">
-                    AND report.`handler_party_id` = #{reportSerachDto.handlerPartyId}
+                <if test="reportSearchDto.handlerPartyId != null and reportSearchDto.handlerPartyId >= 0">
+                    AND report.`handler_party_id` = #{reportSearchDto.handlerPartyId}
                 </if>
-                <if test="reportSerachDto.createdPartyId != null and createdPartyId >= 0">
-                    AND report.`created_party_id` = #{reportSerachDto.createdPartyId}
+                <if test="reportSearchDto.createdPartyId != null and reportSearchDto.createdPartyId >= 0">
+                    AND report.`created_party_id` = #{reportSearchDto.createdPartyId}
                 </if>
-                <if test="reportSerachDto.isSettlemented != null and isSettlemented >= 0">
-                    AND report.`depot_id` = #{reportSerachDto.depotId}
+                <if test="reportSearchDto.isSettlemented != null and reportSearchDto.isSettlemented >= 0">
+                    AND report.`is_settlemented` = #{reportSearchDto.isSettlemented}
                 </if>
-                <if test="reportSerachDto.isAudited != null and isAudited >= 0">
-                    AND report.`is_audited` = #{reportSerachDto.isAudited}
+                <if test="reportSearchDto.isAudited != null and reportSearchDto.isAudited >= 0">
+                    AND report.`is_audited` = #{reportSearchDto.isAudited}
                 </if>
-                <if test="startTime != null">
-                    AND `created_time` &gt;= #{startTime}
+                <if test="reportSearchDto.startTime != null">
+                    AND report.`created_time` &gt;= #{reportSearchDto.startTime}
                 </if>
-                <if test="endTime != null">
-                    AND `created_time` &lt;= #{endTime}
+                <if test="reportSearchDto.endTime != null">
+                    AND report.`last_modified_time` &lt;= #{reportSearchDto.endTime}
                 </if>
             </if>
         </where>
@@ -166,13 +165,37 @@
         FROM `t_storage_report`
         <where>
             <if test="startTime != null">
+                `created_time` &gt;= #{startTime}
+            </if>
+            AND `created_time` &lt;= #{endTime}
+            AND `is_audited` = #{isAudited};
+        </where>
+    </select>
+
+
+    <select id="listReportByTimeAndIsAudited1" resultMap="pw.StorageReport">
+        SELECT `id` AS id,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `depot_id` AS depotId,
+        `handler_party_id` AS handlerPartyId,
+        `created_party_id` AS createdPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settlemented` AS isSettlemented,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_storage_report`
+        <where>
+            <if test="startTime != null">
                 `created_time` &gt; #{startTime}
             </if>
             AND `created_time` &lt; #{endTime}
             AND `is_audited` = #{isAudited};
         </where>
     </select>
-
 
     <select id="listByPage" resultMap="pw.StorageReport">
         SELECT `id` AS id,
@@ -347,6 +370,7 @@
         ORDER BY `created_time` DESC
     </select>
 
+    <!--新-->
     <select id="listUnsettleAndAuditedStorageReportByEndTime" parameterType="date" resultMap="pw.StorageReport">
          SELECT `id` AS id,
         `serial_number` AS serialNumber,
@@ -362,7 +386,7 @@
         `created_time` AS createdTime,
         `last_modified_time` AS lastModifiedTime
         FROM `t_storage_report`
-             `created_time` &lt;= #{endTime}
+        WHERE `created_time` &lt;= #{endTime}
               AND `is_audited` = 1
               AND `is_settlemented` = 0
         ORDER BY `created_time` DESC

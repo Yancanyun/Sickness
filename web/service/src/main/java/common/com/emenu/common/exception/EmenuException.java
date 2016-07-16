@@ -374,7 +374,7 @@ public enum EmenuException implements IBizExceptionMes {
     InsertReportIngredientFail("添加单据原配料失败",7035),
     ReportIdOrStatusIdError("单据id或者状态错误",7036),
     ReportSearchDtoError("查询dto错误",7037),
-    STorageReportDeatil("单据详情不能为空",7098),
+    StorageReportDeatilIsNotNull("单据详情不能为空",7098),
     KeywordError("关键字不合法",7099),
     TimeIsNotNUll("时间不能为空",70100),
 

@@ -38,9 +38,13 @@ public class StorageReportItem extends AbstractEntity{
     @Transient
     private String orderUnitName;
 
+    //订货单位数量
+    @Transient
+    private BigDecimal orderQuantity;
+
     //成本卡单位数量
     @Transient
-    private BigDecimal costCardUnitQuantity;
+    private BigDecimal costCardQuantity;
 
     //成本卡单位名
     @Transient
@@ -84,12 +88,60 @@ public class StorageReportItem extends AbstractEntity{
         this.itemId = itemId;
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getItemNumber() {
+        return itemNumber;
+    }
+
+    public void setItemNumber(String itemNumber) {
+        this.itemNumber = itemNumber;
+    }
+
     public BigDecimal getQuantity() {
         return quantity;
     }
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
+    public BigDecimal getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(BigDecimal orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
+    public BigDecimal getCostCardQuantity() {
+        return costCardQuantity;
+    }
+
+    public void setCostCardQuantity(BigDecimal costCardQuantity) {
+        this.costCardQuantity = costCardQuantity;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
     }
 
     public BigDecimal getCount() {
@@ -138,45 +190,5 @@ public class StorageReportItem extends AbstractEntity{
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public String getOrderUnitName() {
-        return orderUnitName;
-    }
-
-    public void setOrderUnitName(String orderUnitName) {
-        this.orderUnitName = orderUnitName;
-    }
-
-    public String getItemNumber() {
-        return itemNumber;
-    }
-
-    public void setItemNumber(String itemNumber) {
-        this.itemNumber = itemNumber;
-    }
-
-    public BigDecimal getCostCardUnitQuantity() {
-        return costCardUnitQuantity;
-    }
-
-    public void setCostCardUnitQuantity(BigDecimal costCardUnitQuantity) {
-        this.costCardUnitQuantity = costCardUnitQuantity;
-    }
-
-    public String getCostCardUnitName() {
-        return costCardUnitName;
-    }
-
-    public void setCostCardUnitName(String costCardUnitName) {
-        this.costCardUnitName = costCardUnitName;
     }
 }

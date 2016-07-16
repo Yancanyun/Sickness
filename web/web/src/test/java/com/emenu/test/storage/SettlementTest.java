@@ -131,9 +131,9 @@ public class SettlementTest extends AbstractTestCase{
 //        tagIds.add(34);
 //        tagIds.add(70);
 //        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,depotIds,tagIds,null,1,20);
-        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(null,null,null,depotIds,tagIds,"1",1,10);
+        List<StorageCheckDto> storageCheckDtoList = storageSettlementService.listSettlementCheck(null,null,tagIds,"1",1,10);
         for(StorageCheckDto storageCheckDto : storageCheckDtoList){
-            System.out.println(storageCheckDto.getItemName());
+            System.out.println(storageCheckDto.getIngredientName());
         }
 
 //        List<StorageSettlementItem> storageSettlementItemList = storageSettlementService.listSettlementItemByDate(startDate,depotIds,tagIds,null,null,null);

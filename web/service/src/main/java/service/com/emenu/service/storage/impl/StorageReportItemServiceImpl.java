@@ -44,9 +44,11 @@ public class StorageReportItemServiceImpl implements StorageReportItemService {
             if(Assert.isNull(reportItem)){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
+            reportItem.setQuantity(reportItem.getOrderQuantity());
             if(!checkStorageReportItemBeforeSave(reportItem)){
                 return null;
             }
+
             return commonDao.insert(reportItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -1,10 +1,8 @@
 package com.emenu.service.storage;
 
-import com.emenu.common.dto.storage.ReportSerachDto;
+import com.emenu.common.dto.storage.ReportSearchDto;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
-import com.emenu.common.enums.storage.StorageItemStatusEnums;
-import com.emenu.common.enums.storage.StorageReportIsAuditedEnum;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.pandawork.core.common.exception.SSException;
 
@@ -37,20 +35,20 @@ public interface StorageReportService {
     /**
      * 新
      * 根据查询条件获取单据
-     * @param reportSerachDto
+     * @param reportSearchDto
      * @return
      * @throws SSException
      */
-    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws SSException;
+    public List<StorageReport> listReportBySerachDto(ReportSearchDto reportSearchDto) throws SSException;
 
     /**
      * 新
      * 根据查询条件获取单据和单据详情
-     * @param reportSerachDto
+     * @param reportSearchDto
      * @return
      * @throws SSException
      */
-    public List<StorageReportDto> listReportDtoBySerachDto(ReportSerachDto reportSerachDto) throws SSException;
+    public List<StorageReportDto> listReportDtoBySerachDto(ReportSearchDto reportSearchDto) throws SSException;
 
     /**
      * 新
@@ -82,6 +80,30 @@ public interface StorageReportService {
      * @throws SSException
      */
     public List<StorageReport> listReportByTimeAndIsAudited(Date startTime,Date endTime,int isAudited) throws SSException;
+
+
+    /**
+     * 新
+     * 根据审核条件获取时间段之间的单据和单据详情，包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReportDto> listReportDtoByTimeAndIsAudited1(Date startTime,Date endTime,int isAudited) throws SSException;
+
+
+    /**
+     * 新
+     * 根据审核条件获取时间段之间的单据，不包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<StorageReport> listReportByTimeAndIsAudited1(Date startTime,Date endTime,int isAudited) throws SSException;
+
 
 
     /**
@@ -143,11 +165,11 @@ public interface StorageReportService {
     /**
      * 新
      * 根据查询条件统计记录数
-     * @param reportSerachDto
+     * @param reportSearchDto
      * @return
      * @throws SSException
      */
-    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException;
+    public int countByReportSerachDto(ReportSearchDto reportSearchDto) throws SSException;
 
     /**
      * 获取所有单据和单据详情
@@ -157,6 +179,7 @@ public interface StorageReportService {
     public List<StorageReportDto> listReportDto() throws  SSException;
 
     /**
+     * 新
      * 获取指定时间之前审核通过且未结算的单据和单据详情,如果endTime为空，时间不作为查询条件
      * @param endTime
      * @return

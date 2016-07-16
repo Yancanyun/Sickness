@@ -40,6 +40,7 @@ public class StorageReport extends AbstractEntity {
     private Integer handlerPartyId;
 
     //经手人姓名
+    @Transient
     private String handlerName;
 
     //当事人id/操作人id
@@ -47,6 +48,7 @@ public class StorageReport extends AbstractEntity {
     private Integer createdPartyId;
 
     //当事人姓名
+    @Transient
     private String createdName;
 
     // 审核人partyid
@@ -54,6 +56,7 @@ public class StorageReport extends AbstractEntity {
     private Integer auditPartyId;
 
     // 审核人姓名
+    @Transient
     private String auditName;
 
     //单据金额

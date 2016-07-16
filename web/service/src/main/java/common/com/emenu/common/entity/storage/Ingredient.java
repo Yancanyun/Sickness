@@ -47,6 +47,10 @@ public class Ingredient extends AbstractEntity{
     @Transient
     private String orderUnitName;
 
+    // 库存单位数量
+    @Transient
+    private BigDecimal orderQuantity;
+
     // 库存单位id
     @Column(name = "storage_unit_id")
     private Integer storageUnitId;
@@ -59,7 +63,12 @@ public class Ingredient extends AbstractEntity{
     private Integer costCardUnitId;
 
     // 成本卡单位名称
+    @Transient
     private String costCardUnitName;
+
+    // 成卡单位数量
+    @Transient
+    private BigDecimal costCardQuantity;
 
     // 订货单位到库存单位转换比例
     @Column(name = "order_to_storage_ratio")
@@ -181,6 +190,14 @@ public class Ingredient extends AbstractEntity{
         this.orderUnitName = orderUnitName;
     }
 
+    public BigDecimal getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(BigDecimal orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
     public Integer getStorageUnitId() {
         return storageUnitId;
     }
@@ -211,6 +228,14 @@ public class Ingredient extends AbstractEntity{
 
     public void setCostCardUnitName(String costCardUnitName) {
         this.costCardUnitName = costCardUnitName;
+    }
+
+    public BigDecimal getCostCardQuantity() {
+        return costCardQuantity;
+    }
+
+    public void setCostCardQuantity(BigDecimal costCardQuantity) {
+        this.costCardQuantity = costCardQuantity;
     }
 
     public BigDecimal getOrderToStorageRatio() {
@@ -340,6 +365,4 @@ public class Ingredient extends AbstractEntity{
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
     }
-
-
 }

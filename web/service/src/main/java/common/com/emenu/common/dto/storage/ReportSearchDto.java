@@ -5,11 +5,11 @@ import java.util.Date;
 
 /**
  * 查询单据的Dto
- * ReportSerachDto
+ * ReportSearchDto
  * @author xiaozl
  * @date: 2016/6/14
  */
-public class ReportSerachDto{
+public class ReportSearchDto {
 
     // 开始时间
     private Date startTime;

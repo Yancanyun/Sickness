@@ -118,6 +118,8 @@
             ['delStoreBill', site.website + 'admin/storage/report/ajax/del/&{id}', 'delete', '删除库存单据'],
             ['addStoreBill', site.website + 'admin/storage/report/ajax/new', 'post', '添加库存单据', 'json'],
             ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'post', '编辑库存单据', 'json'],
+            ['checkEnableAdd', site.website + 'admin/storage/report/ajax/convertingredient', 'get', '验证是否能合理添加'],
+            ['checkStoreBill', site.website + 'admin/storage/report/ajax/update/isaudited', 'put', '审核库存单据'],
 
             //原配料管理
             ['hasName', site.website + 'admin/storage/ingredient/ajax/checkname', 'get', 'yuanpeil判断原配料名称是否重复'],

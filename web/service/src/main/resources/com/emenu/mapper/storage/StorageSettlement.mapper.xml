@@ -3,7 +3,7 @@
 <mapper namespace="com.emenu.mapper.storage.StorageSettlementMapper">
 
     <!--新-->
-    <select id="listSettlementIngredientBySettlementId" resultType="pw.StorageSettlementIngredient">
+    <select id="listSettlementIngredientBySettlementId" resultMap="pw.StorageSettlementIngredient">
          SELECT `id`,
         `settlement_id`,
         `ingredient_id`,

@@ -32,6 +32,7 @@ import java.util.List;
 public class AdminSettlementCheckController extends AbstractController{
 
     /**
+     * 新
      * 去库存盘点列表页
      * @return
      */
@@ -40,14 +41,8 @@ public class AdminSettlementCheckController extends AbstractController{
     public String toList(Model model,
                          @RequestParam(value = "eMsg", required = false) String eMsg){
         try {
-            //获取供货商列表
-            List<Supplier> supplierList = supplierService.listAll();
-            //获取存放点列表
-            List<StorageDepot> storageDepotList = storageDepotService.listAll();
             //获取分类列表
             List<Tag> tagList = storageTagService.listAllSmallTag();
-            model.addAttribute("supplierList", supplierList);
-            model.addAttribute("storageDepotList", storageDepotList);
             model.addAttribute("tagList", tagList);
             model.addAttribute("eMsg", eMsg);
         }catch (SSException e){
@@ -68,15 +63,13 @@ public class AdminSettlementCheckController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxList(@PathVariable("curPage") Integer curPage,
                                @RequestParam("pageSize") Integer pageSize,
-                               @RequestParam(value = "startDate", required = false) Date startDate,
-                               @RequestParam(value = "endDate", required = false) Date endDate,
-                               @RequestParam(value = "supplierId", required = false) Integer supplierId,
-                               @RequestParam(value = "itemName", required = false) String keyword,
-                               @RequestParam(value = "depotIds", required = false) List<Integer> depotIds,
+                               @RequestParam(value = "startTime", required = false) Date startTime,
+                               @RequestParam(value = "endTime", required = false) Date endTime,
+                               @RequestParam(value = "ingredient", required = false) String keyword,
                                @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
         List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
         try {
-            storageCheckDtoList = storageSettlementService.listSettlementCheck(startDate,endDate,supplierId,depotIds,tagIds,keyword,curPage,pageSize);
+            storageCheckDtoList = storageSettlementService.listSettlementCheck(startTime,endTime,tagIds,keyword,curPage,pageSize);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -85,31 +78,39 @@ public class AdminSettlementCheckController extends AbstractController{
         JSONArray jsonArray = new JSONArray();
         for (StorageCheckDto storageCheckDto : storageCheckDtoList){
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("ingredientName",storageCheckDto.getIngredientName());
+            jsonObject.put("ingredientNumber",storageCheckDto.getIngredientNumber());
             jsonObject.put("tagName", storageCheckDto.getTagName());
-            jsonObject.put("itemNumber", storageCheckDto.getItemNumber());
-            jsonObject.put("itemName", storageCheckDto.getItemName());
-            jsonObject.put("lastStockInPrice", storageCheckDto.getLastStockInPrice());
             jsonObject.put("orderUnitName", storageCheckDto.getOrderUnitName());
             jsonObject.put("storageUnitName", storageCheckDto.getStorageUnitName());
-            jsonObject.put("beginQuantity", storageCheckDto.getBeginQuantity());
-            jsonObject.put("beginMoney", storageCheckDto.getBeginMoney());
-            jsonObject.put("stockInQuantity", storageCheckDto.getStockInQuantity());
-            jsonObject.put("stockInMoney", storageCheckDto.getStockInMoney());
-            jsonObject.put("stockOutQuantity", storageCheckDto.getStockOutQuantity());
-            jsonObject.put("stockOutMoney", storageCheckDto.getStockOutMoney());
-            jsonObject.put("IncomeLossQuantity", storageCheckDto.getIncomeLossQuantity());
-            jsonObject.put("IncomeLossMoney", storageCheckDto.getIncomeLossMoney());
-            jsonObject.put("totalQuantity", storageCheckDto.getTotalQuantity());
-            jsonObject.put("totalAveragePrice", storageCheckDto.getTotalAveragePrice());
-            jsonObject.put("totalMoney", storageCheckDto.getTotalMoney());
-            jsonObject.put("maxStorageQuantity", storageCheckDto.getMaxStorageQuantity());
-            jsonObject.put("minStorageQuantity", storageCheckDto.getMinStorageQuantity());
+            jsonObject.put("costCardUnitName",storageCheckDto.getCostCardUnitName());
+
+            String beginQuantityStr = storageCheckDto.getBeginQuantity().toString()+storageCheckDto.getCostCardUnitName();
+            jsonObject.put("beginQuantityStr", beginQuantityStr);
+
+            String stockInQuantityStr = storageCheckDto.getStockInQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("stockInQuantityStr", stockInQuantityStr);
+
+            String stockOutQuantityStr = storageCheckDto.getStockOutQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("stockOutQuantityStr", stockOutQuantityStr);
+
+            String incomeLossQuantityStr = storageCheckDto.getIncomeLossQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("incomeLossQuantityStr", incomeLossQuantityStr);
+
+            String totalQuantityStr = storageCheckDto.getTotalQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("totalQuantityStr", totalQuantityStr);
+
+            String maxStorageQuantityStr = storageCheckDto.getMaxStorageQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
+
+            String minStorageQuantityStr = storageCheckDto.getMinStorageQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
             jsonArray.add(jsonObject);
         }
 
         int dataCount = 0;
         try {
-            dataCount = storageSettlementService.countSettlementCheck(startDate,endDate,supplierId,depotIds,tagIds,keyword);
+            dataCount = storageSettlementService.countSettlementCheck(tagIds,keyword);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

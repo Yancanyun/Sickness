@@ -2,11 +2,10 @@ package com.emenu.service.storage.impl;
 
 import com.emenu.common.dto.storage.*;
 import com.emenu.common.entity.dish.Unit;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
-import com.emenu.common.enums.storage.StorageItemStatusEnums;
-import com.emenu.common.enums.storage.StorageReportIsAuditedEnum;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
 import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
@@ -18,13 +17,12 @@ import com.emenu.service.dish.UnitService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.storage.*;
+import com.mchange.util.AssertException;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.IOUtil;
 import com.pandawork.core.framework.dao.CommonDao;
-import com.pandawork.core.framework.dao.repository.SimpelNameToClassRepository;
-import com.pandawork.core.pweio.excel.DataType;
 import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
@@ -122,10 +120,11 @@ public class StorageReportServiceImpl implements StorageReportService {
            if(Assert.isNull(reportDto.getStorageReport())){
                throw SSException.get(EmenuException.ReportIsNotNull);
            }
-           if(Assert.isEmpty(reportDto.getStorageReportItemList()) ||Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
-               throw SSException.get(EmenuException.ReportItemListIsNotNull);
-           }
-           if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+
+           if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
+               if(Assert.isEmpty(reportDto.getStorageReportItemList()) ||Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
+                   throw SSException.get(EmenuException.ReportItemListIsNotNull);
+               }
                BigDecimal reportMoney = new BigDecimal("0.00");
                for (StorageReportItem storageReportItem : reportDto.getStorageReportItemList()){
                    reportMoney = reportMoney.add(storageReportItem.getCount());
@@ -133,12 +132,18 @@ public class StorageReportServiceImpl implements StorageReportService {
                reportDto.getStorageReport().setMoney(reportMoney);
            }
            StorageReport storageReport = this.newReport(reportDto.getStorageReport());
-           if (reportDto.getStorageReport().getType() == 1){
+           if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
+               if (Assert.isNull(reportDto.getStorageReportItemList())){
+                   throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
+               }
                for (StorageReportItem reportItem : reportDto.getStorageReportItemList()) {
                    reportItem.setReportId(storageReport.getId());
                    storageReportItemService.newReportItem(reportItem);
                }
            } else {
+               if (Assert.isNull(reportDto.getStorageReportIngredientList())){
+                   throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
+               }
                for (StorageReportIngredient reportIngredient : reportDto.getStorageReportIngredientList()) {
                    reportIngredient.setReportId(storageReport.getId());
                    storageReportIngredientService.newReportIngredient(reportIngredient);
@@ -169,22 +174,22 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public List<StorageReport> listReportBySerachDto(ReportSerachDto reportSerachDto) throws SSException {
+    public List<StorageReport> listReportBySerachDto(ReportSearchDto reportSearchDto) throws SSException {
         // 新
         List<StorageReport> reportList = Collections.emptyList();
         // 分页设置
         int pageNo = 0;
         int offset = 0;
         try {
-            if (Assert.isNotNull(reportSerachDto)){
-                if (Assert.isNotNull(reportSerachDto.getPageNo())) {
-                    pageNo = reportSerachDto.getPageNo() <= 0 ? 0 : reportSerachDto.getPageNo() - 1;
+            if (Assert.isNotNull(reportSearchDto)){
+                if (Assert.isNotNull(reportSearchDto.getPageNo())) {
+                    pageNo = reportSearchDto.getPageNo() <= 0 ? 0 : reportSearchDto.getPageNo() - 1;
                 }
-                if (Assert.isNotNull(reportSerachDto.getPageSize())) {
-                    offset = pageNo * reportSerachDto.getPageSize();
-                    reportSerachDto.setOffset(offset);
+                if (Assert.isNotNull(reportSearchDto.getPageSize())) {
+                    offset = pageNo * reportSearchDto.getPageSize();
+                    reportSearchDto.setOffset(offset);
                 }
-                reportList = storageReportMapper.listReportBySerachDto(reportSerachDto);
+                reportList = storageReportMapper.listReportBySerachDto(reportSearchDto);
                 // 设置经手人、操作人、审核人名字
                 for (StorageReport storageReport : reportList){
                     setReportRelatedName(storageReport);
@@ -201,26 +206,30 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public List<StorageReportDto> listReportDtoBySerachDto(ReportSerachDto reportSerachDto) throws SSException {
+    public List<StorageReportDto> listReportDtoBySerachDto(ReportSearchDto reportSearchDto) throws SSException {
         // 新
         List<StorageReport> reportList = Collections.emptyList();
         List<StorageReportDto> reportDtoList = new ArrayList<StorageReportDto>();
         try {
-            reportList = listReportBySerachDto(reportSerachDto);
+            reportList = listReportBySerachDto(reportSearchDto);
             if (Assert.isNull(reportList)
                     || Assert.lessOrEqualZero(reportList.size())){
                 return reportDtoList;
             } else {
                 for (StorageReport report : reportList){
-                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+
                         for (StorageReportItem storageReportItem : storageReportItemList){
                             StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
                             storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
                             storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            storageReportItem.setItemNumber(storageItem.getItemNumber());
+                            storageReportItem.setItemName(storageItem.getName());
                             // 获取成卡单位数量
-                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                            storageReportItem.setOrderQuantity(storageReportItem.getQuantity());
+                            storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -233,8 +242,12 @@ public class StorageReportServiceImpl implements StorageReportService {
                             Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity());
+                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setIngredientName(ingredient.getName());
+                            storageReportIngredient.setIngredientNumber(ingredient.getIngredientNumber());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -270,7 +283,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
                             storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                            storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -284,7 +297,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -320,7 +333,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
                             storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportItem.setCostCardUnitQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                            storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -334,7 +347,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageUnitQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -362,6 +375,75 @@ public class StorageReportServiceImpl implements StorageReportService {
                 throw SSException.get(EmenuException.IsAuditedIllegal);
             }
             reportList = storageReportMapper.listReportByTimeAndIsAudited(startTime,endTime,isAudited);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryReportFail, e);
+        }
+        return reportList;
+    }
+
+    @Override
+    public List<StorageReportDto> listReportDtoByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws SSException {
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        List<StorageReportDto> reportDtoList = new ArrayList<StorageReportDto>();
+        try {
+            reportList = listReportByTimeAndIsAudited1(startTime,endTime,isAudited);
+            if (Assert.isNull(reportList)
+                    || Assert.lessOrEqualZero(reportList.size())){
+                return reportDtoList;
+            } else {
+                for (StorageReport report : reportList){
+                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                        // 入库单物品详情
+                        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+                        for (StorageReportItem storageReportItem : storageReportItemList){
+                            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                            storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
+                            storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportItemList(storageReportItemList);
+                        reportDtoList.add(storageReportDto);
+                    } else {
+                        // 其他单据原配料详情
+                        List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                        for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                            Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                            storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
+                            storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportIngredientList(storageReportIngredientList);
+                        reportDtoList.add(storageReportDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return reportDtoList;
+    }
+
+
+    public List<StorageReport> listReportByTimeAndIsAudited1(Date startTime,Date endTime,int isAudited) throws SSException{
+        // 新
+        List<StorageReport> reportList = Collections.emptyList();
+        try {
+            if (Assert.isNull(endTime)){
+                throw SSException.get(EmenuException.TimeIsNotNUll);
+            }
+            if (Assert.lessZero(isAudited)){
+                throw SSException.get(EmenuException.IsAuditedIllegal);
+            }
+            reportList = storageReportMapper.listReportByTimeAndIsAudited1(startTime,endTime,isAudited);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryReportFail, e);
@@ -404,7 +486,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 reportItemList = storageReportItemService.listByReportId(report.getId());
                 for (StorageReportItem reportItem : reportItemList){
                     // 设置物品名称
-                    StorageItem item = storageItemService.queryById(id);
+                    StorageItem item = storageItemService.queryById(reportItem.getItemId());
                     if (Assert.isNull(item)){
                         throw SSException.get(EmenuException.StorageItemNotExist);
                     }
@@ -417,7 +499,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                     reportItem.setCostCardUnitName(costCardUnit.getName());
                     // 设置成卡单位数量
                     BigDecimal costCardUnitQuantity =  reportItem.getQuantity().multiply(item.getOrderToStorageRatio()).multiply(item.getStorageToCostCardRatio());
-                    reportItem.setCostCardUnitQuantity(costCardUnitQuantity);
+                    reportItem.setCostCardQuantity(costCardUnitQuantity);
                 }
             } else {
                 reportIngredientList = storageReportIngredientService.listByReportId(report.getId());
@@ -437,7 +519,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                     reportIngredient.setStorageUnitName(storageUnit.getName());
                     // 设置库存单位数量
                     BigDecimal storageQuantity = reportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio());
-                    reportIngredient.setStorageUnitQuantity(storageQuantity);
+                    reportIngredient.setStorageQuantity(storageQuantity);
                 }
             }
             reportDto.setStorageReportItemList(reportItemList);
@@ -562,19 +644,29 @@ public class StorageReportServiceImpl implements StorageReportService {
             }
             //获取单据信息
             reportList = storageReportMapper.listUnsettleAndAuditedStorageReportByEndTime(endTime);
-            if (Assert.isEmpty(reportList)){
+            if (Assert.isEmpty(reportList)
+                    || Assert.lessOrEqualZero(reportDtoList.size())){
                 return reportDtoList;
             }
             reportDtoList = new ArrayList<StorageReportDto>();
             for (StorageReport report : reportList){
                 StorageReportDto reportDto = new StorageReportDto();
-                List<StorageReportItem> reportItemList = Collections.emptyList();
-                //根据单据id获取单据详情信息
-                reportItemList = storageReportItemService.listByReportId(report.getId());
-                //数据存入reportDto
-                reportDto.setStorageReport(report);
-                reportDto.setStorageReportItemList(reportItemList);
+                if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
 
+                    List<StorageReportItem> reportItemList = Collections.emptyList();
+                    //根据单据id获取单据详情信息
+                    reportItemList = storageReportItemService.listByReportId(report.getId());
+                    //数据存入reportDto
+                    reportDto.setStorageReport(report);
+                    reportDto.setStorageReportItemList(reportItemList);
+                } else {
+                    List<StorageReportIngredient> reportIngredientList = Collections.emptyList();
+                    //根据单据id获取单据详情信息
+                    reportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                    //数据存入reportDto
+                    reportDto.setStorageReport(report);
+                    reportDto.setStorageReportIngredientList(reportIngredientList);
+                }
                 reportDtoList.add(reportDto);
             }
             return reportDtoList;
@@ -790,15 +882,24 @@ public class StorageReportServiceImpl implements StorageReportService {
             if (Assert.isNull(reportDto.getStorageReport())){
                 throw SSException.get(EmenuException.ReportIsNotNull);
             }
-            if (Assert.isEmpty(reportDto.getStorageReportItemList())
-                    || Assert.isEmpty(reportDto.getStorageReportIngredientList())){
-                throw SSException.get(EmenuException.STorageReportDeatil);
+            // 考虑单据类型,单据详情不能为空，大小不能为0
+            if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
+                if (Assert.isEmpty(reportDto.getStorageReportItemList())
+                        || Assert.lessOrEqualZero(reportDto.getStorageReportItemList().size())){
+                    throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
+                }
+            } else {
+                if (Assert.isNull(reportDto.getStorageReportIngredientList())
+                        || Assert.lessOrEqualZero(reportDto.getStorageReportIngredientList().size())){
+                    throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
+                }
             }
+
             //更新后的单据
             StorageReport reportNew = reportDto.getStorageReport();
             //数据库中原始未修改的单据
             StorageReportDto reportDtoOld = queryReportDtoById(reportNew.getId());
-            if (reportNew.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+            if (reportNew.getType() == StorageReportTypeEnum.StockInReport.getId()){
                 BigDecimal reportMoney = new BigDecimal("0.00");
                 for (StorageReportItem storageReportItem : reportDto.getStorageReportItemList()){
                     reportMoney = reportMoney.add(storageReportItem.getCount());
@@ -808,7 +909,7 @@ public class StorageReportServiceImpl implements StorageReportService {
 
             //更新单据
             updateById(reportNew);
-            if (reportNew.getType() == StorageReportTypeEnum.IncomeOnReport.getId()) {
+            if (reportNew.getType() == StorageReportTypeEnum.StockInReport.getId()) {
                 List<StorageReportItem> reportItemListNew = reportDto.getStorageReportItemList();
                 List<StorageReportItem> reportItemListOld = reportDtoOld.getStorageReportItemList();
                 //判断更新后的单据是否存在数据
@@ -898,24 +999,24 @@ public class StorageReportServiceImpl implements StorageReportService {
     }
 
     @Override
-    public int countByReportSerachDto(ReportSerachDto reportSerachDto) throws SSException {
+    public int countByReportSerachDto(ReportSearchDto reportSearchDto) throws SSException {
         // 新
         List<StorageReport> reportList = Collections.emptyList();
         Integer count = 0;
         try {
-            if (reportSerachDto.getEndTime() != null) {
-                reportSerachDto.getEndTime().setHours(23);
-                reportSerachDto.getEndTime().setMinutes(59);
-                reportSerachDto.getEndTime().setSeconds(59);
+            if (reportSearchDto.getEndTime() != null) {
+                reportSearchDto.getEndTime().setHours(23);
+                reportSearchDto.getEndTime().setMinutes(59);
+                reportSearchDto.getEndTime().setSeconds(59);
             }
-            reportList = listReportBySerachDto(reportSerachDto);
+            reportList = listReportBySerachDto(reportSearchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
 
         try {
-            count = storageReportMapper.countByReportSerachDto(reportSerachDto);
+            count = storageReportMapper.countByReportSerachDto(reportSearchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountReportFail, e);
@@ -933,9 +1034,24 @@ public class StorageReportServiceImpl implements StorageReportService {
      */
     private void setReportRelatedName(StorageReport storageReport) throws SSException{
         // 设置经手人、操作人、审核人名字
-        storageReport.setCreatedName(employeeService.queryByPartyId(storageReport.getCreatedPartyId()).getName());
-        storageReport.setAuditName(employeeService.queryByPartyId(storageReport.getAuditPartyId()).getName());
-        storageReport.setHandlerName(employeeService.queryByPartyId(storageReport.getHandlerPartyId()).getName());
+        Employee createdEmployee = employeeService.queryByPartyId(storageReport.getCreatedPartyId());
+        if (Assert.isNull(createdEmployee)){
+            throw SSException.get(EmenuException.SystemException);
+        }
+        storageReport.setCreatedName(createdEmployee.getName());
+
+        Employee auditEmployee = employeeService.queryByPartyId(storageReport.getAuditPartyId());
+        if (Assert.isNull(auditEmployee)){
+            storageReport.setAuditName("");
+        } else {
+            storageReport.setAuditName(auditEmployee.getName());
+        }
+        Employee handlerEmployee = employeeService.queryByPartyId(storageReport.getHandlerPartyId());
+        if (Assert.isNull(handlerEmployee)){
+            throw SSException.get(EmenuException.SystemException);
+        } else {
+            storageReport.setHandlerName(handlerEmployee.getName());
+        }
     }
 
     /**

@@ -44,8 +44,8 @@
             item.`name` AS itemNumber,
             item.`item_number` AS itemName
             FROM `t_storage_report_item` AS reportItem
-            INNER JOIN `t_storage_item` AS item ON `t_storage_report_item`.`item_id` = `t_storage_item`.`id`
-            WHERE `report_id` = #{reportId}
+            INNER JOIN `t_storage_item` AS item ON reportItem.`item_id` = item.`id`
+            WHERE reportItem.`report_id` = #{reportId}
         </select>
 
         <select id="listByReportIdAndItemIdList" resultMap="pw.StorageReportItem">

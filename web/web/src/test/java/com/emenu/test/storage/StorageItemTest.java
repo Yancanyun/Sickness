@@ -3,7 +3,9 @@ package com.emenu.test.storage;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.service.storage.StorageItemService;
+import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
@@ -22,6 +24,9 @@ public class StorageItemTest extends AbstractTestCase{
     @Autowired
     StorageItemService storageItemService;
 
+    @Autowired
+    StorageReportItemService storageReportItemService;
+
     @Test
     public void listBySearchDto() throws SSException{
         ItemAndIngredientSearchDto searchDto = new ItemAndIngredientSearchDto();
@@ -35,7 +40,15 @@ public class StorageItemTest extends AbstractTestCase{
 
     @Test
     public void queryById() throws SSException{
-        StorageItem item = storageItemService.queryById(1);
+        StorageItem item = storageItemService.queryById(37);
         System.out.println(item.getName());
+    }
+
+    @Test
+    public void listByReportId() throws SSException{
+        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(37);
+        for (StorageReportItem storageReportItem : storageReportItemList) {
+            System.out.println(storageReportItem.getCreatedTime());
+        }
     }
 }

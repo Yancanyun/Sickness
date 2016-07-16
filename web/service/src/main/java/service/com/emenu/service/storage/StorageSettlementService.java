@@ -28,6 +28,7 @@ public interface StorageSettlementService {
     public void newSettlement() throws SSException;
 
     /**
+     * 新
      * 库存盘点（库存物品）获取截止时间时的库存统计结果
      * @param startTime
      * @param endTime
@@ -46,6 +47,7 @@ public interface StorageSettlementService {
                                                       Integer pageSize) throws SSException;
 
     /**
+     * 新
      * 计算库存盘点总数
      * @param tagIds
      * @param keyword
@@ -55,6 +57,7 @@ public interface StorageSettlementService {
     public int countSettlementCheck(List<Integer> tagIds, String keyword) throws SSException;
 
     /**
+     * 新
      * 结算中心
      * @param supplierId
      * @param startDate

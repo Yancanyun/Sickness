@@ -27,6 +27,10 @@ public class StorageReportIngredient extends AbstractEntity{
     @Transient
     private String ingredientName;
 
+    // 原配料名称
+    @Transient
+    private String ingredientNumber;
+
     // 出库、盘盈、盘亏数量 成卡单位数量
     private BigDecimal quantity;
 
@@ -34,13 +38,17 @@ public class StorageReportIngredient extends AbstractEntity{
     @Transient
     private String costCardUnitName;
 
+    // 库存单位数量
+    @Transient
+    private BigDecimal costCardQuantity;
+
     // 库存单位名
     @Transient
     private String storageUnitName;
 
     // 库存单位数量
     @Transient
-    private BigDecimal storageUnitQuantity;
+    private BigDecimal storageQuantity;
 
     // 备注
     private String comment;
@@ -74,12 +82,52 @@ public class StorageReportIngredient extends AbstractEntity{
         this.ingredientId = ingredientId;
     }
 
+    public String getIngredientName() {
+        return ingredientName;
+    }
+
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
+    }
+
     public BigDecimal getQuantity() {
         return quantity;
     }
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
+    }
+
+    public BigDecimal getCostCardQuantity() {
+        return costCardQuantity;
+    }
+
+    public void setCostCardQuantity(BigDecimal costCardQuantity) {
+        this.costCardQuantity = costCardQuantity;
+    }
+
+    public String getStorageUnitName() {
+        return storageUnitName;
+    }
+
+    public void setStorageUnitName(String storageUnitName) {
+        this.storageUnitName = storageUnitName;
+    }
+
+    public BigDecimal getStorageQuantity() {
+        return storageQuantity;
+    }
+
+    public void setStorageQuantity(BigDecimal storageQuantity) {
+        this.storageQuantity = storageQuantity;
     }
 
     public String getComment() {
@@ -114,35 +162,11 @@ public class StorageReportIngredient extends AbstractEntity{
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public String getCostCardUnitName() {
-        return costCardUnitName;
+    public String getIngredientNumber() {
+        return ingredientNumber;
     }
 
-    public void setCostCardUnitName(String costCardUnitName) {
-        this.costCardUnitName = costCardUnitName;
-    }
-
-    public String getStorageUnitName() {
-        return storageUnitName;
-    }
-
-    public void setStorageUnitName(String storageUnitName) {
-        this.storageUnitName = storageUnitName;
-    }
-
-    public BigDecimal getStorageUnitQuantity() {
-        return storageUnitQuantity;
-    }
-
-    public void setStorageUnitQuantity(BigDecimal storageUnitQuantity) {
-        this.storageUnitQuantity = storageUnitQuantity;
-    }
-
-    public String getIngredientName() {
-        return ingredientName;
-    }
-
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
+    public void setIngredientNumber(String ingredientNumber) {
+        this.ingredientNumber = ingredientNumber;
     }
 }
