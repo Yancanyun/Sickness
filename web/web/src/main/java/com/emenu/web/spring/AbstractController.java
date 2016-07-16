@@ -464,6 +464,7 @@ public class AbstractController extends Base {
     // 点餐缓存
     @StaticAutoWire
     @Qualifier("orderDishCacheService")
+
     protected static OrderDishCacheService orderDishCacheService;
     //结账单
     @StaticAutoWire

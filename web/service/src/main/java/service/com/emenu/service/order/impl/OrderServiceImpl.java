@@ -1,7 +1,13 @@
 package com.emenu.service.order.impl;
 
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.CheckOrderDto;
+import com.emenu.common.entity.dish.DishImg;
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
+import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderMapper;
@@ -15,10 +21,8 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * OrderServiceImpl
@@ -185,5 +189,48 @@ public class OrderServiceImpl implements OrderService{
             throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
         }
         return checkOrderDtos;
+    }
+
+    @Override
+    public BigDecimal returnOrderTotalMoney(Integer tabldId) throws SSException
+    {
+        List<Order> orders = new ArrayList<Order>();
+        List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+        BigDecimal totalMoney = new BigDecimal(0);
+        try{
+            orders=this.listByTableIdAndStatus(tabldId,OrderStatusEnums.IsBooked.getId());//获取餐桌的未结账的订单
+            if(orders!=null)
+            {
+                for(Order dto : orders)
+                {
+                    orderDishs.addAll(orderDishService.listByOrderId(dto.getId()));//获取订单菜品
+                }
+            }
+            if(orderDishs!=null)
+            {
+                HashMap<Integer,Integer> packageFlagMap = new HashMap<Integer, Integer>();//用来判断套餐标识是否出现过
+                for(OrderDish orderDishDto :orderDishs)
+                {
+                    if(orderDishDto.getIsPackage()== PackageStatusEnums.IsNotPackage.getId()
+                            &&orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId())//非套餐，status为4的时候为退菜,退了的菜不做处理
+                    {
+                        totalMoney= totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getDishQuantity()));
+                    }
+                    else if(orderDishDto.getIsPackage()==PackageStatusEnums.IsPackage.getId()
+                            &&orderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//套餐的话会有重复，在数据库里套餐被拆成菜品
+                    {
+                        if(packageFlagMap.get(orderDishDto.getPackageFlag())==null)//没有出现过的套餐
+                        {
+                            totalMoney=totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getPackageQuantity()));
+                            packageFlagMap.put(orderDishDto.getPackageFlag(),1);//标记为出现过
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ReturnTableOrderTotalMoneyFail,e);
+        }
+        return totalMoney;
     }
 }

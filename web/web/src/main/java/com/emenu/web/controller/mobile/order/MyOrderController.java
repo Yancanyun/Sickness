@@ -33,6 +33,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.order.CheckoutServcie;
+import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -128,7 +129,6 @@ public class MyOrderController  extends AbstractController {
                 if(tempOrderDishDto.getIsPackage()== PackageStatusEnums.IsNotPackage.getId()
                         &&tempOrderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId())//非套餐，status为4的时候为退菜,退了的菜不做处理
                 {
-                    orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getDishQuantity()));
                     //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
                     tempOrderDishDto.setPrice();
                     DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getDishId());//通过dishId查询出菜品的信息
@@ -147,7 +147,6 @@ public class MyOrderController  extends AbstractController {
                 {
                     if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)//没有出现过的套餐
                     {
-                        orderTotalMoney=orderTotalMoney.add(new BigDecimal(tempOrderDishDto.getSalePrice().doubleValue()*tempOrderDishDto.getPackageQuantity()));
                         packageFlagMap.put(tempOrderDishDto.getPackageFlag(),1);//标记为出现过
                         //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
                         tempOrderDishDto.setPrice();
@@ -185,6 +184,7 @@ public class MyOrderController  extends AbstractController {
                     sendOrderDishDtos.add(tempOrderDishDto);
                 }
             }
+            orderTotalMoney = orderService.returnOrderTotalMoney(tableId);
             java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
             String orderTotalMoneyTemp = myformat.format(orderTotalMoney);
             orderTotalMoney=new BigDecimal(orderTotalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
@@ -227,14 +227,15 @@ public class MyOrderController  extends AbstractController {
                     temp.setUnitName(unit.getName());//菜品单位名称
                     if(dto.getTasteId()!=null)//选择的菜品口味,没有选择菜品口味的话传递的是null值会报错
                     temp.setTaste(tasteService.queryById(dto.getTasteId()));//菜品口味,菜品详情页选择的菜品口味只能选择一个
-                    totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getSalePrice().doubleValue()));//菜品数量乘以菜品单价
+                    //之前返回已点菜品总金额的话用的是下面这句话,后来改写成调用一个方法返回
+                    //totalMoney=totalMoney.add(new BigDecimal(temp.getCount()*temp.getSalePrice().doubleValue()));//菜品数量乘以菜品单价
                     myOrderDto.add(temp);//price要转换成double类型
                 }
             }
-
             model.addAttribute("uniqueRemark",uniqueRemark);//菜品关联的菜品备注
             model.addAttribute("myOrderDto",myOrderDto);//已经点了的缓存中的菜品
             model.addAttribute("tableId",tableId);//餐桌号
+            totalMoney = orderDishCacheService.returnTotalMoneyByTableId(tableId);
             String totalMoneyTemp = myformat.format(totalMoney);
             totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
             model.addAttribute("totalMoney",totalMoney);//已经点的菜品的总金额
@@ -418,7 +419,8 @@ public class MyOrderController  extends AbstractController {
             ,@RequestParam("serviceWay")Integer serviceWay
             ,@RequestParam("confirmOrderRemark") String confirmOrderRemark
             ,HttpSession httpSession)
-    {   //下单时间
+    {
+        //下单时间
         Date orderTime=new Date();
         //获取桌子号
         String tableIdStr = httpSession.getAttribute("tableId").toString();

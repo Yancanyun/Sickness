@@ -4,6 +4,8 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.pandawork.core.common.exception.SSException;
 
+import java.math.BigDecimal;
+
 /**
  * OrderDishCacheService
  * 点餐缓存(已点但仍未下单的菜品)
@@ -91,4 +93,11 @@ public interface OrderDishCacheService {
      * @throws SSException
      */
     public void changeCache(int oldTableId, int newTableId) throws SSException;
+
+    /**
+     * 返回餐桌缓存菜品的总金额
+     * @param tableId
+     * @throws SSException
+     */
+    public BigDecimal returnTotalMoneyByTableId(int tableId) throws SSException;
 }

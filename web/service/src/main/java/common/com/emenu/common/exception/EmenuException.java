@@ -540,6 +540,7 @@ public enum EmenuException implements IBizExceptionMes {
     TableLockRemoveFail("餐台解锁失败", 10009),
     SetCurrentOperateCustomerIpFail("设置正在下单的顾客的Ip失败",10010),
     GetCurrentOperateCustomerIpFail("获取正在下单的顾客的Ip失败",10011),
+    ReturnTotalMoneyFail("返回已点未下单的所有菜品总金额失败",10012),
 
     //订单菜品模块
     OrderIdError("订单id错误",10030),
@@ -573,6 +574,9 @@ public enum EmenuException implements IBizExceptionMes {
     TimeUnreasonable1("开始时间不能大于等于结束时间",10056),
     TimeUnreasonable2("开始时间不能大于结束时间",10057),
     QueryMaxFalgFail("获取最大的套餐标识失败",10058),
+    QuantityCanNotReduce("菜品数量无法再减少1",10059),
+    QuantityIsNegative("菜品数量不能为负数",10060),
+    ReturnTableOrderTotalMoneyFail("返回餐桌未结账的订单的总金额失败",10061),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

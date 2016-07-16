@@ -2,15 +2,19 @@ package com.emenu.service.order.impl;
 
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.service.dish.DishService;
 import com.emenu.service.order.OrderDishCacheService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +37,9 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
 
     //当前正在下单的用户的Ip,用来判断如果是这个用户在确认订单的时候刷新了页面,要解除缓存的锁
     private String currentOperateCustomerIp;
+
+    @Autowired
+    DishService dishService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
@@ -302,5 +309,32 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CleanTableCacheError, e);
         }
+    }
+
+    @Override
+    public BigDecimal returnTotalMoneyByTableId(int tableId) throws SSException
+    {
+        BigDecimal totalMoney = new BigDecimal(0);
+        TableOrderCache tableOrderCache = new TableOrderCache();
+        List<OrderDishCache> orderDishCaches = new ArrayList<OrderDishCache>();
+        try {
+            if(!Assert.lessOrEqualZero(tableId))
+            tableOrderCache = tableOrderCacheMap.get(tableId);
+            if(tableOrderCache!=null)
+                orderDishCaches = tableOrderCache.getOrderDishCacheList();
+            if(orderDishCaches!=null&&!orderDishCaches.isEmpty())
+            {
+                for(OrderDishCache dto : orderDishCaches)
+                {
+                    DishDto dishDto = new DishDto();
+                    dishDto = dishService.queryById(dto.getDishId());//查询菜品信息
+                    totalMoney=totalMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue() *dto.getQuantity()));
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ReturnTotalMoneyFail, e);
+        }
+        return totalMoney;
     }
 }

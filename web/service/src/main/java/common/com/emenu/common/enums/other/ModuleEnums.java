@@ -341,6 +341,15 @@ public enum ModuleEnums {
     WaiterLogin("Waiter:Login"),
     //服务员退菜
     WaiterBackDish("Waiter:Back:Dish"),
+    //服务员端显示点了的缓存中的菜品
+    WaiterOrderList("Waiter:Order:List"),
+    //服务员端修改菜品数量
+    WaiterOrderDishChangeQuantity("Waiter:Order:Dish:Quantity:Change"),
+    //服务员端删除菜品
+    WaiterOrderDishDelete("Waiter:Order:Dish:Delete"),
+    //服务员端删除菜品
+    WaiterOrderConfirm("Waiter:Order:Confirm"),
+
 
 
     //吧台客户端模块

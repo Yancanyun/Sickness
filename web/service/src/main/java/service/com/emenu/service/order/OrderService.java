@@ -5,6 +5,7 @@ import com.emenu.common.entity.order.Order;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -74,4 +75,13 @@ public interface OrderService {
      * @throws Exception
      */
     public List<CheckOrderDto> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 根据tableId查询对应订单且未结账的订单的所有菜品的总金额
+     * @param
+     * @return
+     * @throws Exception
+     */
+
+    public BigDecimal returnOrderTotalMoney(Integer tabldId) throws SSException;
 }
