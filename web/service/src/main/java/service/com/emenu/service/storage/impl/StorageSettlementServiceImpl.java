@@ -117,9 +117,10 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
 
     /**
      * 初始化缓存
+     * @PostConstruct
      * @throws Exception
      */
-    @PostConstruct
+
     public void initCache() throws SSException {
         // 新
         // 库存盘点（单据的一次结算）= 已下单的未结账的单据.未盘点已经结账后的订单中的菜品（转换成原配料）+ 单据（审核通过、未结算）中的原配料（入库单特殊处理）
@@ -276,12 +277,20 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             // 第一步：添加一条结算数据:t_storage_settlement
             StorageSettlement settlement = new StorageSettlement();
             settlement.setSerialNumber(serialNumService.generateSerialNum(SerialNumTemplateEnums.SettlementSerialNum));
-            Integer settlementId = commonDao.insert(settlement).getId();
+
             // 第二步取出已经审核通过且未结算的单据
             Date nowTime = new Date();
             List<StorageReportDto> storageReportDtoList = storageReportService.listUnsettleAndAuditedStorageReportByEndTime(nowTime);
             // 第三步获取已经结账未结算（盘点）的订单
             List<CheckOrderDto> orderIdDtolist = orderService.listCheckOrderDtoForCheck(2,0,nowTime);
+            Integer settlementId = 0;
+            if ((Assert.isNull(storageReportDtoList) || Assert.lessOrEqualZero(storageReportDtoList.size()))
+            && (Assert.isNull(orderIdDtolist) || Assert.lessOrEqualZero(orderIdDtolist.size()))){
+                return;
+            } else {
+                settlementId = commonDao.insert(settlement).getId();
+            }
+
             // 获取所有库存原配料
             List<Ingredient> ingredientList = ingredientService.listAll();
             // 循环库存原配料

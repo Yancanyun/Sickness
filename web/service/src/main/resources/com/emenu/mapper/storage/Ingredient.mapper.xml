@@ -173,7 +173,7 @@
           WHERE `id` = #{ingredient.id};
     </update>
 
-    <select id="queryByKeyword" resultType="Ingredient">
+    <select id="listByKeyword" resultMap="pw.Ingredient">
         SELECT
         ingredient.`id` AS id,
         ingredient.`tag_id` AS tagId,
@@ -197,8 +197,8 @@
         ingredient.`last_modified_time` AS lastModifiedTime
         FROM `t_ingredient` AS ingredient
         LEFT JOIN `t_tag` AS tag ON ingredient.`tag_id` = tag.`id`
-        WHERE ingredient.`name` LIKE "%"#{searchDto.keyword}"%"
-              OR ingredient.`assistant_code` LIKE "%"#{searchDto.keyword}"%"
-              OR ingredient.`ingredient_number` LIKE "%"#{searchDto.keyword}"%"
+        WHERE ingredient.`name` LIKE "%"#{keyword}"%"
+              OR ingredient.`assistant_code` LIKE "%"#{keyword}"%"
+              OR ingredient.`ingredient_number` LIKE "%"#{keyword}"%"
     </select>
 </mapper>

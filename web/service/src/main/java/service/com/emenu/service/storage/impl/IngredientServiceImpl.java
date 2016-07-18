@@ -164,18 +164,20 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Ingredient queryByKeyword(String keyword) throws SSException {
-        Ingredient ingredient = null;
+    public List<Ingredient> listByKeyword(String keyword) throws SSException {
+
+        List<Ingredient> ingredientList = Collections.emptyList();
         if (Assert.isNull(keyword)){
             throw SSException.get(EmenuException.KeywordError);
         }
         try {
-            ingredient = ingredientMapper.queryByKeyword(keyword);
+            ingredientList = ingredientMapper.listByKeyword(keyword);
+            setUnitName(ingredientList);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
-        return ingredient;
+        return ingredientList;
     }
 
     @Override

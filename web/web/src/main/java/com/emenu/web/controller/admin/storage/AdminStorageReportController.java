@@ -327,15 +327,23 @@ public class AdminStorageReportController extends AbstractController {
     @RequestMapping(value = "ajax/getingredient", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject getReportIngredient(@RequestParam("keyword")String keyword){
-        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
         try {
-            Ingredient ingredient = ingredientService.queryByKeyword(keyword);
-            jsonObject.put("ingredient", ingredient);
+            List<Ingredient> ingredientList = ingredientService.listByKeyword(keyword);
+            for (Ingredient ingredient : ingredientList){
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("ingredientId", ingredient.getId());
+                jsonObject.put("name", ingredient.getName());
+                jsonObject.put("code", ingredient.getAssistantCode());
+                jsonObject.put("ingredientNumber", ingredient.getIngredientNumber());
+                jsonObject.put("costCardUnitName",ingredient.getCostCardUnitName());
+                jsonArray.add(jsonObject);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        return sendJsonArray(jsonArray);
     }
 
     /**
@@ -425,30 +433,28 @@ public class AdminStorageReportController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminStorageReportExport)
-    @RequestMapping(value = "export", method = RequestMethod.GET)
-    public String toReportExport(@RequestParam(value = "startTime",required = false) Date startTime,
-                                 @RequestParam(value = "endTime",required = false) Date endTime,
-                                 @RequestParam("createdPartyId") Integer createdPartyId,
-                                 @RequestParam(value = "depotId", required = false) Integer[] depotId,
-                                 @RequestParam("handlerPartyId") Integer handlerPartyId,
-                                 @RequestParam("auditPartyId ") Integer auditPartyId,
+    @RequestMapping(value = "exportbycd", method = RequestMethod.GET)
+    public String toReportExport(@RequestParam("createdPartyId")Integer createdPartyId,
+                                 @RequestParam("handlerPartyId")Integer handlerPartyId,
+                                 @RequestParam("auditPartyId")Integer auditPartyId,
+                                 @RequestParam("startTime")Date startTime,
+                                 @RequestParam("endTime")Date endTime,
                                  @RequestParam("isAudited") Integer isAudited,
                                  @RequestParam("isSettlemented") Integer isSettlemented,
-                                 @RequestParam("serialNumber") String serialNumber){
+                                 @RequestParam("depotId") Integer depotId){
         try{
             List<Integer> depots = new ArrayList<Integer>();
-            if (depotId != null && depotId.length > 0) {
-                for (int i = 0; i < depotId.length; i++) {
-                    depots.add(depotId[i]);
-                }
-            }
+//            if (depotId != null && depotId.length > 0) {
+//                for (int i = 0; i < depotId.length; i++) {
+//                    depots.add(depotId[i]);
+//                }
+//            }
             StorageReport report = new StorageReport();
             report.setCreatedPartyId(createdPartyId);
             report.setHandlerPartyId(handlerPartyId);
             report.setIsAudited(isAudited);
             report.setIsSettlemented(isSettlemented);
             report.setAuditPartyId(auditPartyId);
-            report.setSerialNumber(serialNumber);
             storageReportService.exportToExcel(report,startTime,endTime,depots,createdPartyId,handlerPartyId,getResponse());
             sendErrMsg("导出成功");
         }catch (Exception e){
@@ -457,6 +463,8 @@ public class AdminStorageReportController extends AbstractController {
         }
         return null;
     }
+
+
 
     /**
      * 修改审核状态

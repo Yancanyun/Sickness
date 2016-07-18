@@ -52,7 +52,7 @@ public interface IngredientService {
      * @return
      * @throws SSException
      */
-    public Ingredient queryByKeyword(String keyword) throws SSException;
+    public List<Ingredient> listByKeyword(String keyword) throws SSException;
 
     /**
      * 获取所有原配料

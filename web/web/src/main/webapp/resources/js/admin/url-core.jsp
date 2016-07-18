@@ -120,6 +120,7 @@
             ['editStoreBill', site.website + 'admin/storage/report/ajax/update', 'post', '编辑库存单据', 'json'],
             ['checkEnableAdd', site.website + 'admin/storage/report/ajax/convertingredient', 'get', '验证是否能合理添加'],
             ['checkStoreBill', site.website + 'admin/storage/report/ajax/update/isaudited', 'put', '审核库存单据'],
+            ['sendIngredientKeyword', site.website + 'admin/storage/report/ajax/getingredient', 'get', '搜索原材料返回原材料信息'],
 
             //原配料管理
             ['hasName', site.website + 'admin/storage/ingredient/ajax/checkname', 'get', 'yuanpeil判断原配料名称是否重复'],
@@ -251,7 +252,8 @@
         Module: [
             ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],
             ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码'],
-            ['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择'],
+            //['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择'],
+            ['getGoodsName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '库存单据管理页-获取相应的值,搜索选择，返回物品信息'],
             ['getDish', site.website + 'admin/dish/cost/card/ajax/dish/list', 'get', '成本卡添加页-搜索菜品，返回菜品信息']
         ]
     };

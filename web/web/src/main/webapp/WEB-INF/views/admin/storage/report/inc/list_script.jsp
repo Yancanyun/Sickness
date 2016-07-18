@@ -78,13 +78,13 @@
         {@if isEdit == true}
         <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>操作人</label>
-            <div class="col-sm-6" id="create">
+            <div class="col-sm-6" >
                 <p class="form-control-static J_serialNumber">&{createdName}</p>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>结算状态</label>
-            <div class="col-sm-6" id="create">
+            <div class="col-sm-6"  >
                 <p class="form-control-static J_serialNumber">
                     {@if isSettlemented == 0}未结算{@/if}
                     {@if isSettlemented == 1}已结算{@/if}
@@ -268,6 +268,16 @@
                     </div>
                 </div>
             </div>
+            {@if type == 1}
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label"><span class="requires">*</span>存放点</label>
+                    <div class="col-sm-6">
+                        <p class="form-control-static">&{depotName}</p>
+                    </div>
+                </div>
+            </div>
+            {@/if}
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="col-sm-3 control-label" style="padding-right: 48px;margin-right: -34px;">单据备注</label>
@@ -388,6 +398,7 @@
     <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.handlerPartyId}" data-store-bill-createdPartyId="&{it.createdPartyId}"  data-store-bill-auditPartyId="&{it.auditPartyId}" data-store-bill-depotId="&{it.depotId}" data-store-bill-type="&{it.type}" data-store-bill-itemNumber="&{it.itemNumber}" data-store-bill-id="&{it.id}" data-store-bill-comment="&{it.comment}" data-store-bill-isAudited="&{it.isAudited}" data-store-bill-isSettlemented="&{it.isSettlemented}">
         <input type="hidden" name="id" value="&{it.id}"/>
         <input type="hidden" name="depotId" value="&{it.depotId}"/>
+        <input type="hidden" name="depotName" value="&{it.depotName}"/>
         <input type="hidden" name="type" value="&{it.type}"/>
         <input type="hidden" name="money" value="&{it.money}"/>
         <input type="hidden" name="serialNumber" value="&{it.serialNumber}"/>

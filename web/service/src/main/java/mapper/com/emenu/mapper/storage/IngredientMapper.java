@@ -72,5 +72,5 @@ public interface IngredientMapper {
      * @return
      * @throws SSException
      */
-    public Ingredient queryByKeyword(@Param("keyword") String keyword) throws Exception;
+    public List<Ingredient> listByKeyword(@Param("keyword") String keyword) throws Exception;
 }

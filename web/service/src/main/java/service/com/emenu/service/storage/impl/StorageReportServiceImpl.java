@@ -645,7 +645,7 @@ public class StorageReportServiceImpl implements StorageReportService {
             //获取单据信息
             reportList = storageReportMapper.listUnsettleAndAuditedStorageReportByEndTime(endTime);
             if (Assert.isEmpty(reportList)
-                    || Assert.lessOrEqualZero(reportDtoList.size())){
+                    || Assert.lessOrEqualZero(reportList.size())){
                 return reportDtoList;
             }
             reportDtoList = new ArrayList<StorageReportDto>();

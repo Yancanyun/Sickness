@@ -87,14 +87,12 @@ public class AdminController extends AbstractController {
             token.setRememberMe(true);
         }
         try {
-
             loginManageService.validLogin(token, LoginTypeEnums.BackgroundLogin,getRequest(), getResponse());
             httpSession.setAttribute("userName",loginName);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
