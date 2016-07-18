@@ -154,7 +154,7 @@ public class OrderManagementController extends AbstractController {
                     temp.put("orderDishes",jsonArray);
                     temp.put("id",order.getId());//订单id
                     //现在时间和订单创建时间的差值,为毫秒数,再除以1000转换成秒,再除以60换算成分钟数
-                    temp.put("time",((int)(new Date().getTime() - order.getCreatedTime().getTime())/1000/60));
+                    temp.put("time",order.getCreatedTime().getTime());//返回订单时间,前端计算把分钟数显示出来
                     temp.put("remark",order.getOrderRemark());//订单备注
                     all.add(temp);//作为一个订单的整体放到JSONArray里面
                 }
