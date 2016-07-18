@@ -9,6 +9,7 @@ import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMerge;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
@@ -46,11 +47,11 @@ public class WaiterTableMergeController extends AbstractController {
     @ResponseBody
     public JSONObject toMergeTable (@RequestParam("tableIdList") List<Integer> tableIdList,
                                     HttpSession httpSession) {
-        if (Assert.isNull(tableIdList)) {
-            return null;
-        }
-
         try {
+            if (Assert.isNull(tableIdList) || tableIdList.size() < 2) {
+                throw SSException.get(EmenuException.MergeTableNumLessThanTwo);
+            }
+
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
 
             List<Integer> newTableIdList = tableIdList;
@@ -160,5 +161,4 @@ public class WaiterTableMergeController extends AbstractController {
 //            return sendErrMsgAndErrCode(e);
 //        }
 //    }
-
 }

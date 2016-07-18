@@ -1,8 +1,6 @@
 package com.emenu.web.controller.mobile.order;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
@@ -11,29 +9,19 @@ import com.emenu.common.dto.order.MyOrderDto;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.order.OrderDishDto;
-import com.emenu.common.dto.table.AreaDto;
-import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
-import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
-import com.emenu.common.entity.remark.Remark;
-import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
-import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.order.*;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.dish.DishService;
-import com.emenu.service.dish.UnitService;
-import com.emenu.service.order.CheckoutServcie;
-import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -44,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.java2d.opengl.OGLDrawImage;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
@@ -427,7 +413,7 @@ public class MyOrderController  extends AbstractController {
         Integer tableId = Integer.parseInt(tableIdStr);
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutServcie.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
+            checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
@@ -446,7 +432,7 @@ public class MyOrderController  extends AbstractController {
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
                 //checkout.setTotalPayMoney();
                 //checkout.setWipeZeroMoney();
-                checkoutServcie.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
+                checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
             }
 
             //新增订单到数据表

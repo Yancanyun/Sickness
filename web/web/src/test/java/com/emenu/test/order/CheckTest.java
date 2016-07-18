@@ -1,7 +1,7 @@
 package com.emenu.test.order;
 
 import com.emenu.common.entity.order.Checkout;
-import com.emenu.service.order.CheckoutServcie;
+import com.emenu.service.order.CheckoutService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
@@ -18,7 +18,7 @@ import java.util.Date;
 public class CheckTest extends AbstractTestCase {
 
     @Autowired
-    private CheckoutServcie checkoutService;
+    private CheckoutService checkoutService;
     @Test
     public void queryByTableId() throws SSException{
         Checkout checkout = checkoutService.queryByTableId(1,1);

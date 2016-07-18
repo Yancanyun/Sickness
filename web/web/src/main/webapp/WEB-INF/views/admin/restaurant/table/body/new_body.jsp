@@ -80,7 +80,9 @@
             <div class="col-sm-6 checkbox">
               <c:forEach var="mealPeriod" items="${mealPeriodList}">
                 <label>
-                  <input class="J_mealPeriod"  type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList">${mealPeriod.name}
+                  <c:if test="${mealPeriod.id == 1}"><input class="J_mealPeriod" type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList" checked="checked">${mealPeriod.name}</c:if>
+                  <c:if test="${mealPeriod.id != 1}"><input class="J_mealPeriod" type="checkbox" value="${mealPeriod.id}" name="mealPeriodIdList">${mealPeriod.name}</c:if>
+
                 </label>
               </c:forEach>
             </div>

@@ -7,9 +7,6 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
-import com.emenu.common.dto.order.MyOrderDto;
-import com.emenu.common.dto.order.OrderDishDto;
-import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
@@ -22,11 +19,9 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
-import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -347,7 +342,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
         Date orderTime=new Date();
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutServcie.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
+            checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
@@ -366,7 +361,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
                 //checkout.setTotalPayMoney();
                 //checkout.setWipeZeroMoney();
-                checkoutServcie.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
+                checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
             }
 
             //新增订单到数据表

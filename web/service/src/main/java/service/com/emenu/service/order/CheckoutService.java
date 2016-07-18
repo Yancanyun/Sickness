@@ -5,12 +5,12 @@ import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * CheckoutServcie
+ * CheckoutService
  *
  * @author xubaorong
  * @date 2016/6/3.
  */
-public interface CheckoutServcie {
+public interface CheckoutService {
     /**
      * 根据桌号id查询结账单
      * @param tableId

@@ -6,7 +6,10 @@ import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.table.AreaDto;
+import com.emenu.common.dto.table.TableDto;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.enums.waiter.WaiterTableStatusEnums;
@@ -101,27 +104,35 @@ public class WaiterTableController extends AbstractController {
                     break;
                 // 并台 根据PartyId获取餐台状态为可用、占用未结账、已并桌、占用已结账的AreaDtoList
                 case MergeTable:
-                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Enabled.getId());
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Uncheckouted.getId()));
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Merged.getId()));
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Checkouted.getId()));
+                    List<Integer> statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Enabled.getId());
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    statusList.add(TableStatusEnums.Checkouted.getId());
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
                 // 点菜 根据PartyId获取餐台状态为占用已结账、占用未结账、已并桌的AreaDtoList
                 case OrderDish:
-                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Checkouted.getId());
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Uncheckouted.getId()));
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Merged.getId()));
+                    statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Checkouted.getId());
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
                 // 查单 根据PartyId获取餐台状态为占用已结账、占用未结账、已并桌的AreaDtoList
                 case QueryCheckout:
-                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Checkouted.getId());
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Uncheckouted.getId()));
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Merged.getId()));
+                    statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Checkouted.getId());
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
                 // 查单 根据PartyId获取餐台状态为占用未结账、已并桌的AreaDtoList
                 case RetreatDish:
-                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Uncheckouted.getId());
-                    areaDtoList.addAll(waiterTableService.queryAreaDtoByPartyIdAndStatus(partyId, TableStatusEnums.Merged.getId()));
+                    statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
             }
             // 获取AreaDtoList中的第一个AreaDto
@@ -198,15 +209,27 @@ public class WaiterTableController extends AbstractController {
         if (Assert.isNull(tableList)) {
             return jsonArray;
         }
+
+        // 根据餐段来判断哪些餐台可以显示出来
         for (Table table : tableList) {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("tableId", table.getId());
-            jsonObject.put("tableName", table.getName());
-            jsonObject.put("seatNum", table.getSeatNum());
-            jsonObject.put("currentNum", table.getPersonNum());
-
-            jsonArray.add(jsonObject);
+            MealPeriod nowMealPeriod = mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.Using);
+            TableDto tableDto = tableService.queryTableDtoById(table.getId());
+            if (tableDto.getMealPeriodList() == null || tableDto.getMealPeriodList().size() == 0) {
+                break;
+            }
+            for (MealPeriod mealPeriod : tableDto.getMealPeriodList()) {
+                if (mealPeriod.getId() == nowMealPeriod.getId()) {
+                    jsonObject.put("tableId", table.getId());
+                    jsonObject.put("tableName", table.getName());
+                    jsonObject.put("seatNum", table.getSeatNum());
+                    jsonObject.put("currentNum", table.getPersonNum());
+                    jsonObject.put("tableStatus", table.getStatus());
+                    jsonArray.add(jsonObject);
+                    break;
+                }
+            }
         }
 
         return jsonArray;

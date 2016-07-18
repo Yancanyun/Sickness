@@ -5,7 +5,7 @@ import com.emenu.common.entity.order.Order;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.CheckoutMapper;
-import com.emenu.service.order.CheckoutServcie;
+import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2016/6/3.
  */
 @Service("checkoutService")
-public class CheckoutServiceImpl implements CheckoutServcie{
+public class CheckoutServiceImpl implements CheckoutService {
 
     @Autowired
     private CheckoutMapper checkoutMapper;

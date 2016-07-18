@@ -38,7 +38,6 @@ import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
 import com.pandawork.wechat.WeChatService;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.annotation.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -469,7 +468,7 @@ public class AbstractController extends Base {
     //结账单
     @StaticAutoWire
     @Qualifier("checkoutService")
-    protected static CheckoutServcie checkoutServcie;
+    protected static CheckoutService checkoutService;
 
 
 

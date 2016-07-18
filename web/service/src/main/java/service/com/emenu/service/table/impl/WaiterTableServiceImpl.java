@@ -174,6 +174,49 @@ public class WaiterTableServiceImpl implements WaiterTableService {
     }
 
     @Override
+    public List<AreaDto> queryAreaDtoByPartyIdAndStatusList(int partyId, List<Integer> statusList) throws SSException {
+        try {
+            //根据状态List查询服务员负责的餐台的id，查t_waiter_table
+            List<Integer> tableIdList = queryByPartyIdAndStatus(partyId, statusList.get(0));
+            for (int i = 1; i < statusList.size(); i++) {
+                tableIdList.addAll(queryByPartyIdAndStatus(partyId, statusList.get(i)));
+            }
+            List<Table> tableList = new ArrayList<Table>();
+
+            //查询服务员负责餐台的详细信息
+            for(int tid : tableIdList) {
+                tableList.add(tableService.queryById(tid));
+            }
+            // 把服务员负责的餐台封装成AreaDto
+            List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
+            //返回所有区域
+            List<Area> areaList = areaService.listAll();
+            //获取所有区域和每一区域下的所有餐台
+            for(Area area : areaList) {
+                //areaDto包括已tablelist和一个area
+                AreaDto areaDto = new AreaDto();
+                List<Table> tables = new ArrayList<Table>();
+                for(Table table : tableList) {
+                    if(table.getAreaId().equals(area.getId())) {
+                        tables.add(table);
+                    }
+                }
+                if(tables!=null && tables.size()!=0) {
+                    //把区域和对应的餐台加入到areaDto里面
+                    areaDto.setArea(area);
+                    areaDto.setTableList(tables);
+                    areaDtoList.add(areaDto);
+                }
+            }
+
+            return areaDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryWaiterTableFail, e);
+        }
+    }
+
+    @Override
     public AreaDto queryAreaDtoByPartyIdAndAreaIdAndStatusList(int partyId, int areaId, List<Integer> statusList) throws SSException {
         try {
             if (Assert.isNull(statusList)) {

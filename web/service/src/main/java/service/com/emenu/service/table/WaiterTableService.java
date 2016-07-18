@@ -57,6 +57,15 @@ public interface WaiterTableService {
     public List<AreaDto> queryAreaDtoByPartyIdAndStatus(int partyId, int status) throws SSException;
 
     /**
+     * 根据状态List查询服务员负责的餐桌
+     * @param partyId
+     * @param statusList
+     * @return
+     * @throws SSException
+     */
+    public List<AreaDto> queryAreaDtoByPartyIdAndStatusList(int partyId, List<Integer> statusList) throws SSException;
+
+    /**
      * 根据状态List、区域ID、PartyId查询服务员负责的餐桌
      * @param partyId
      * @param areaId
