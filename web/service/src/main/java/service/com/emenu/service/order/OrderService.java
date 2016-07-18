@@ -84,4 +84,12 @@ public interface OrderService {
      */
 
     public BigDecimal returnOrderTotalMoney(Integer tabldId) throws SSException;
+
+    /**
+     * 根据订单菜品查询订单
+     * @param orderId
+     * @return
+     * @throws SSException
+     */
+    public Order queryById(Integer orderId) throws SSException;
 }

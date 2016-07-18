@@ -558,6 +558,11 @@ public enum EmenuException implements IBizExceptionMes {
     OrderdishsIsNotEmpty("订单菜品集合元素不为空",10042),
     NewOrderDishsFailed("批量添加订单菜品失败",10043),
 
+    //退菜
+    BackOrderDishNotNull("退菜菜品不能为空",10050),
+    BackOrderDishFailed("退菜失败",10051),
+    BackOrderNumberError("退菜数量错误",10052),
+
     //订单模块
     TableIdError("桌号id错误",10044),
     OrderStatusError("订单状态错误",10045),

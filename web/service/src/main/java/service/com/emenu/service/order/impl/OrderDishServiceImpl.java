@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -120,7 +121,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             if(serveType==2){
                 serveType = ServeTypeEnums.Later.getId();
             }
-            orderDishMapper.updateServeType(id,serveType);
+            orderDishMapper.updateServeType(id, serveType);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateServeTypeFailed,e);
@@ -131,7 +132,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     public void updatePresentedDish(int id, int isPresentedDish) throws SSException {
         try{
             Assert.lessOrEqualZero(id,EmenuException.OrderDishIdError);
-            orderDishMapper.updatePresentedDish(id,isPresentedDish);
+            orderDishMapper.updatePresentedDish(id, isPresentedDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdatePresentedDishFailed,e);
@@ -141,7 +142,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Override
     public void updateOrderDish(OrderDish orderDish) throws SSException {
         try {
-            Assert.isNotNull(orderDish,EmenuException.OrderDishIsNotNull);
+            Assert.isNotNull(orderDish, EmenuException.OrderDishIsNotNull);
             commonDao.update(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -165,7 +166,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     public void newOrderDishs(List<OrderDish> orderDishs) throws SSException {
         try{
             Assert.isNotNull(orderDishs,EmenuException.OrderDishIsNotNull);
-            Assert.isNotEmpty(orderDishs,EmenuException.OrderdishsIsNotEmpty);
+            Assert.isNotEmpty(orderDishs, EmenuException.OrderdishsIsNotEmpty);
             commonDao.insertAll(orderDishs);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -263,5 +264,32 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException. QueryMaxFalgFail,e);
         }
         return count;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean waiterBackDish(Integer orderDishId) throws SSException{
+        try{
+            if (!Assert.isNull(orderDishId)
+                    && Assert.lessOrEqualZero(orderDishId)) {
+                throw SSException.get(EmenuException.OrderDishIdError);
+            }
+            OrderDish orderDish = this.queryById(orderDishId);
+            // 已上菜不能退
+            if (orderDish.getStatus() == OrderDishStatusEnums.IsFinsh.getId()){
+                return false;
+            }else {
+                // 退菜将订单菜品状态改为已退菜，折扣、会员价、售价改为0
+                orderDish.setDiscount(new BigDecimal("0.00"));
+                orderDish.setVipDishPrice(new BigDecimal("0.00"));
+                orderDish.setSalePrice(new BigDecimal("0.00"));
+                orderDish.setStatus(OrderDishStatusEnums.IsBack.getId());
+                commonDao.update(orderDish);
+                return true;
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException. BackOrderDishFailed,e);
+        }
     }
 }

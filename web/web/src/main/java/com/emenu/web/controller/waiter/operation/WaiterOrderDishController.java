@@ -16,6 +16,7 @@ import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractAppBarController;
+import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ import java.util.List;
 @Controller
 @Module(ModuleEnums.WaiterOrderDish)
 @RequestMapping(value = URLConstants.WAITER_ORDER_DISH_URL)
-public class WaiterOrderDishController extends AbstractAppBarController {
+public class WaiterOrderDishController extends AbstractController {
 
     /**
      * 去菜品列表页面

@@ -100,4 +100,5 @@ public interface OrderDishMapper {
      * @throws Exception
      */
     public int isOrderHaveOrderDish(@Param("orderId")Integer orderId) throws Exception;
+
 }

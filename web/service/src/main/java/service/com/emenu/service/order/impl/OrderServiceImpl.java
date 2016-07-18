@@ -233,4 +233,18 @@ public class OrderServiceImpl implements OrderService{
         }
         return totalMoney;
     }
+
+    @Override
+    public Order queryById(Integer orderId) throws SSException{
+        try{
+            if (Assert.lessOrEqualZero(orderId)){
+                throw SSException.get(EmenuException.OrderIdError);
+            }
+            Order order = commonDao.queryById(Order.class, orderId);
+            return order;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ReturnTableOrderTotalMoneyFail,e);
+        }
+    }
 }
