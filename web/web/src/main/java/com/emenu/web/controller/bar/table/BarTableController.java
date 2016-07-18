@@ -5,12 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.dto.table.TableDto;
+import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.table.Area;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.meal.MealPeriodIsCurrentEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -82,13 +86,28 @@ public class BarTableController extends AbstractController {
 
             JSONArray jsonArray = new JSONArray();
 
+            if (Assert.isNull(tableList)) {
+                return sendJsonArray(jsonArray);
+            }
+
+            // 根据餐段来判断哪些餐台可以显示出来
             for (Table table : tableList) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("tableId", table.getId());
-                jsonObject.put("tableName", table.getName());
-                jsonObject.put("status", table.getStatus());
 
-                jsonArray.add(jsonObject);
+                MealPeriod nowMealPeriod = mealPeriodService.queryByCurrentPeriod(MealPeriodIsCurrentEnums.Using);
+                TableDto tableDto = tableService.queryTableDtoById(table.getId());
+                if (tableDto.getMealPeriodList() == null || tableDto.getMealPeriodList().size() == 0) {
+                    break;
+                }
+                for (MealPeriod mealPeriod : tableDto.getMealPeriodList()) {
+                    if (mealPeriod.getId() == nowMealPeriod.getId()) {
+                        jsonObject.put("tableId", table.getId());
+                        jsonObject.put("tableName", table.getName());
+                        jsonObject.put("status", table.getStatus());
+                        jsonArray.add(jsonObject);
+                        break;
+                    }
+                }
             }
 
             return sendJsonArray(jsonArray);
