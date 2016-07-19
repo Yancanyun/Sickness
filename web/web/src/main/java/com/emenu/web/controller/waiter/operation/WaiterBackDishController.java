@@ -5,14 +5,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.Taste;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.entity.remark.Remark;
+import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.service.remark.RemarkTagService;
+import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -23,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,17 +101,57 @@ public class WaiterBackDishController extends AbstractController {
         }
     }
 
-    /*@RequestMapping(value = "back", method = RequestMethod.GET)
+    @RequestMapping(value = "back", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject bachDish(@RequestParam("orderDishId") Integer orderDishId){
+    public JSONObject backDishConfirm(@RequestParam("orderDishId") Integer orderDishId){
+        List<RemarkTag> remarkTagList = Collections.emptyList();
+        List<Remark> remarkList = Collections.emptyList();
+        JSONArray backRemarkList = new JSONArray();
         try{
-            BackDish backDish = new BackDish();
-            OrderDish orderDish = orderDishService.queryById(orderDishId);
-            backDish.setId(orderDish.getDishId());
+            OrderDishDto orderDishDto = orderDishService.queryDtoById(orderDishId);
+            Taste taste = tasteService.queryById(orderDishDto.getTasteId());
+            // 获取所有的退菜备注分类
+            remarkTagList = remarkTagService.listByParentId(2);
+            for (RemarkTag remarkTag: remarkTagList){
+                // 获取所有分类下的备注内容
+                remarkList = remarkService.listByRemarkTagId(remarkTag.getId());
+                if (remarkList.size() == 0 || remarkList.isEmpty()){
+                    for (Remark remark :remarkList){
+                        JSONObject backRemark = new JSONObject();
+                        backRemark.put("backRemark",remark.getName());
+                        backRemarkList.add(backRemark);
+                    }
+                }
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("orderDishId",orderDishId);
+            jsonObject.put("orderDishName",orderDishDto.getDishName());
+            jsonObject.put("taste",taste.getName());
+            jsonObject.put("number",orderDishDto.getDishQuantity());
+            jsonObject.put("backRemarkList",backRemarkList);
+
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-    }*/
+    }
+
+    @RequestMapping(value = "back/finish", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject bachDish(@RequestParam("orderDishId") Integer orderDishId,
+                               @RequestParam("backNumber") Float backNumber,
+                               @RequestParam("backRemarks") String backRemarks,
+                               HttpSession httpSession){
+        try{
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+            backDishService.backDishByOrderDishId(orderDishId, backNumber, backRemarks, partyId);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
 
 }

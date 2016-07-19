@@ -483,6 +483,11 @@ public class AbstractController extends Base {
     @Qualifier("orderService")
     protected static OrderService orderService;
 
+    // 退菜service
+    @StaticAutoWire
+    @Qualifier("backDishService")
+    protected static BackDishService backDishService;
+
     //订单菜品service
     @StaticAutoWire
     @Qualifier("orderDishService")

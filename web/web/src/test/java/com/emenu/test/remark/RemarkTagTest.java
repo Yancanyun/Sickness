@@ -74,11 +74,15 @@ public class RemarkTagTest extends AbstractTestCase {
 
     @Test
     public void listByParentId() throws SSException {
-        int pId = 1;
+        int pId = 7;
         List<RemarkTag> remarkTagList = remarkTagService.listByParentId(pId);
 
-        for (RemarkTag remarkTag:remarkTagList){
-            System.out.println("Name:" + remarkTag.getName() + " pid:" + remarkTag.getpId());
+        if(remarkTagList.size() == 0){
+            System.out.println("没有备注内容");
+        }else {
+            for (RemarkTag remarkTag:remarkTagList){
+                System.out.println("id:" + remarkTag.getId() + " Name:" + remarkTag.getName() + " pid:" + remarkTag.getpId());
+            }
         }
     }
 

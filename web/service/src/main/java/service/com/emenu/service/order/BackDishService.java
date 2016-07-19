@@ -14,5 +14,5 @@ public interface BackDishService {
      * @param orderDishId
      * @throws SSException
      */
-    public void newBackDishByOrderDishId(Integer orderDishId, Float backNumber, String backRemarks, Integer partyId) throws SSException;
+    public void backDishByOrderDishId(Integer orderDishId, Float backNumber, String backRemarks, Integer partyId) throws SSException;
 }

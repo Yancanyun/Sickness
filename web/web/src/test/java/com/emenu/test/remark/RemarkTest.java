@@ -66,7 +66,7 @@ public class RemarkTest extends AbstractTestCase {
 
     @Test
     public void listRemarkDtoByRemarkTagId() throws SSException {
-        List<RemarkDto> remarkDtoList = remarkService.listRemarkDtoByRemarkTagId(6);
+        List<RemarkDto> remarkDtoList = remarkService.listRemarkDtoByRemarkTagId(2);
 
         for (RemarkDto remarkDto:remarkDtoList){
             System.out.println("Name:" + remarkDto.getRemark().getName() + " remarkTagId:" + remarkDto.getRemarkTagId()
