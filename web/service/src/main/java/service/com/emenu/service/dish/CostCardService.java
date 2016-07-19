@@ -76,4 +76,12 @@ public interface CostCardService {
      * @throws SSException
      */
     public CostCard queryCostCardByDishId(Integer dishId) throws SSException;
+
+    /**
+     * 查询出所有的成本卡和成本卡详细信息
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<CostCardDto> listAllCostCardDto()throws SSException;
 }

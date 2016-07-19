@@ -22,6 +22,7 @@ public class TableOrderCache {
     // 锁
     private Boolean lock = false;
 
+
     public List<OrderDishCache> getOrderDishCacheList() {
         return orderDishCacheList;
     }

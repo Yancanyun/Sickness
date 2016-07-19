@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service("orderDishCacheService")
 public class OrderDishCacheServiceImpl implements OrderDishCacheService {
+
     // 餐台点餐缓存的Map
     private Map<Integer, TableOrderCache> tableOrderCacheMap = new ConcurrentHashMap<Integer, TableOrderCache>();
 

@@ -103,4 +103,9 @@
         SELECT * FROM t_cost_card
         WHERE dish_id = #{dishId}
            </select>
+
+    <select id="listAllCostCard" resultType="CostCard">
+       SELECT *
+       FROM t_cost_card
+    </select>
 </mapper>

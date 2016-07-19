@@ -9,6 +9,7 @@ import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.meal.MealPeriod;
 import com.emenu.common.enums.dish.DishStatusEnums;
+import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.DishPackageMapper;
@@ -301,9 +302,9 @@ public class DishPackageServiceImpl implements DishPackageService{
     {
         try {
             if(dishPackageMapper.judgeIsOrNotPackage(dishId)>0)
-                return 1;
+                return PackageStatusEnums.IsPackage.getId();
             else
-                return 0;
+                return PackageStatusEnums.IsNotPackage.getId();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DishQueryFailed, e);

@@ -81,4 +81,13 @@ public interface CostCardMapper {
      * @throws SSException
      */
     public CostCard queryCostCardByDishId(@Param("dishId") Integer dishId) throws Exception;
+
+    /**
+     * 查询出所有的成本卡
+     *
+     * @param
+     * @return
+     * @throws SSException
+     */
+    public List<CostCard> listAllCostCard() throws Exception;
 }

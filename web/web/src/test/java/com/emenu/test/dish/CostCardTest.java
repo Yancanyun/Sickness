@@ -1,6 +1,5 @@
 package com.emenu.test.dish;
 
-import com.emenu.common.dto.dish.CostCardDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.CostCard;
 import com.emenu.mapper.dish.CostCardMapper;
@@ -75,5 +74,11 @@ public class CostCardTest extends AbstractTestCase {
     public void testQueryCostCardByDishId()throws SSException
     {
         System.out.println(costCardService.queryCostCardByDishId(2));
+    }
+
+    @Test
+    public void testListAllCostCardDto() throws SSException
+    {
+        System.out.println(costCardService.listAllCostCardDto());
     }
 }

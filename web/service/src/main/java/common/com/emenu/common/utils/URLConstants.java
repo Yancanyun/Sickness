@@ -227,4 +227,5 @@ public final class URLConstants {
 
     /**********************后厨管理端*************************/
     public static final String COOK_ORDER_MANAGEMETN_URL = "cook/ordermanage";
+
 }

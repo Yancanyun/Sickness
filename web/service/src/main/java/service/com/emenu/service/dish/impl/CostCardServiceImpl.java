@@ -1,10 +1,8 @@
 package com.emenu.service.dish.impl;
 
 import com.emenu.common.dto.dish.CostCardDto;
-import com.emenu.common.dto.dish.CostCardSearchDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.CostCard;
-import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.CostCardItemMapper;
 import com.emenu.mapper.dish.CostCardMapper;
@@ -12,13 +10,13 @@ import com.emenu.service.dish.CostCardService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
-import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,9 +30,11 @@ import java.util.List;
 public class CostCardServiceImpl implements CostCardService {
 
     @Autowired
+    @Qualifier("costCardMapper")
     private CostCardMapper costCardMapper;
 
     @Autowired
+    @Qualifier("costCardItemMapper")
     private CostCardItemMapper costCardItemMapper;
 
     @Override
@@ -155,5 +155,27 @@ public class CostCardServiceImpl implements CostCardService {
             throw SSException.get(EmenuException.QueryCostCardFailed, e);
         }
         return costCard;
+    }
+
+    @Override
+    public List<CostCardDto> listAllCostCardDto()throws SSException
+    {
+        List<CostCardDto> costCardDtos = new ArrayList<CostCardDto>();
+        List<CostCard> costCards = new ArrayList<CostCard>();
+        try {
+            costCards = costCardMapper.listAllCostCard();
+            for(CostCard dto : costCards)
+            {
+                CostCardDto costCardDto = new CostCardDto();
+                costCardDto = costCardMapper.queryById(dto.getId());
+                if(costCardDto!=null)
+                    costCardDtos.add(costCardDto);
+            }
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException. ListAllCostCardDtoFail, e);
+        }
+        return costCardDtos;
     }
 }

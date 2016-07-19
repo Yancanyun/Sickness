@@ -1,5 +1,7 @@
 package com.emenu.common.cache.order;
 
+import com.emenu.common.enums.order.OrderDishPresentedEnums;
+
 /**
  * OrderDishCache
  * 已点但仍未下单的单个菜品的缓存
@@ -25,6 +27,17 @@ public class OrderDishCache {
 
     // 菜品备注
     private String remark;
+
+    // 是否为赠送菜品
+    private Integer isPresentedDish = OrderDishPresentedEnums.IsNotPresentedDish.getId();
+
+    public Integer getIsPresentedDish() {
+        return isPresentedDish;
+    }
+
+    public void setIsPresentedDish(Integer isPresentedDish) {
+        this.isPresentedDish = isPresentedDish;
+    }
 
     public Integer getId() {
         return id;

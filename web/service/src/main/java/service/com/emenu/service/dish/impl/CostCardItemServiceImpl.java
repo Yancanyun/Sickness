@@ -32,12 +32,11 @@ import java.util.List;
  */
 @Service("costCardItemService")
 public class CostCardItemServiceImpl implements CostCardItemService {
+
     @Autowired
-    @Qualifier("costCardItemMapper")
     private CostCardItemMapper costCardItemMapper;
 
     @Autowired
-    @Qualifier("commonDao")
     private CommonDao commonDao;
 
     @Override
