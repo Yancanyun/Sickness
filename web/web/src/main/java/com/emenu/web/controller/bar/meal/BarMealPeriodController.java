@@ -83,7 +83,7 @@ public class BarMealPeriodController extends AbstractController {
     @Module(ModuleEnums.BarMealPeriod)
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listMealPeriod(@RequestParam Integer mealPeriodId) {
+    public JSONObject changeMealPeriod(@RequestParam Integer mealPeriodId) {
         try {
             mealPeriodService.updateCurrentMealPeriod(mealPeriodId, MealPeriodIsCurrentEnums.Using);
 

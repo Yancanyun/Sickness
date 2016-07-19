@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMerge;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -41,6 +42,7 @@ public class WaiterTableMergeController extends AbstractController {
     /**
      * Ajax 返回并台信息
      * @param tableIdList
+     * @param httpSession
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -52,13 +54,31 @@ public class WaiterTableMergeController extends AbstractController {
                 throw SSException.get(EmenuException.MergeTableNumLessThanTwo);
             }
 
+            // 检查服务员是否可服务这些餐台
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> canServiceList = employeeDto.getTables();
+            if (Assert.isNull(canServiceList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            for (Integer tableId : tableIdList) {
+                Boolean canService = false;
+                for (Integer integer : canServiceList) {
+                    if (tableId == integer) {
+                        canService = true;
+                        break;
+                    }
+                }
+                if (canService == false) {
+                    throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+                }
+            }
 
-            List<Integer> newTableIdList = tableIdList;
+            List<Integer> newTableIdList = canServiceList;
             // 利用Map的不可重复功能，实现不重复的记录全部已并台的餐台
             Map<Integer, Table> newTableIdMap = new HashMap<Integer, Table>();
 
-            for (Integer tableId : tableIdList) {
+            for (Integer tableId : canServiceList) {
                 newTableIdMap.put(tableId, tableService.queryById(tableId));
 
                 // 寻找传来的餐台ID列表中存在已并台的餐台
@@ -96,17 +116,38 @@ public class WaiterTableMergeController extends AbstractController {
     /**
      * Ajax 执行并台操作
      * @param tableIdList
+     * @param httpSession
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject mergeTable (@RequestParam("tableIdList") List<Integer> tableIdList) {
+    public JSONObject mergeTable (@RequestParam("tableIdList") List<Integer> tableIdList,
+                                  HttpSession httpSession) {
         try {
-            // TODO: 记录哪个服务员并的台
+            // 检查服务员是否可服务这些餐台
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> canServiceList = employeeDto.getTables();
+            if (Assert.isNull(canServiceList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            for (Integer tableId : tableIdList) {
+                Boolean canService = false;
+                for (Integer integer : canServiceList) {
+                    if (tableId == integer) {
+                        canService = true;
+                        break;
+                    }
+                }
+                if (canService == false) {
+                    throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+                }
+            }
 
             // 执行并台操作
             tableMergeService.mergeTable(tableIdList);
 
+// TODO: 暂时不做服务员跨区域并台，跟缓存相关的代码暂时注释掉
 //            // 把缓存中该PartyId的缓存清空
 //            tableMergeCacheService.cleanCacheByPartyId(partyId);
 

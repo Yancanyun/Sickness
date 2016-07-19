@@ -105,4 +105,24 @@ public class BarTableMergeController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
+
+    /**
+     * Ajax 取消并台操作
+     * @param tableId
+     * @return
+     */
+    @Module(ModuleEnums.BarTableMerge)
+    @RequestMapping(value = "cancel", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject cancelMergeTable(@RequestParam("tableId") Integer tableId) {
+        try {
+            // 执行取消并台操作
+            tableMergeService.delTableMerge(tableId);
+
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
 }
