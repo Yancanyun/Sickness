@@ -168,6 +168,7 @@ public class CostCardServiceImpl implements CostCardService {
             {
                 CostCardDto costCardDto = new CostCardDto();
                 costCardDto = costCardMapper.queryById(dto.getId());
+                costCardDto.setCostCardItemDtos(costCardItemMapper.listByCostCardId(dto.getId()));
                 if(costCardDto!=null)
                     costCardDtos.add(costCardDto);
             }

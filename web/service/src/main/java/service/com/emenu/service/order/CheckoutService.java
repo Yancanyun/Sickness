@@ -1,5 +1,6 @@
 package com.emenu.service.order;
 
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.entity.order.Checkout;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +33,12 @@ public interface CheckoutService {
      * @throws SSException
      */
     public void updateCheckout(Checkout checkout) throws SSException;
+
+    /**
+     * 修改结账单
+     * @author quanyibo
+     * @param tableId
+     * @throws SSException
+     */
+    public JSONObject printCheckOutByTableId(Integer tableId) throws SSException;
 }

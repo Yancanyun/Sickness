@@ -418,21 +418,11 @@ public class MyOrderController  extends AbstractController {
             if (checkout == null) {
                 checkout = new Checkout();
                 checkout.setTableId(tableId);
-                //checkout.setCheckerPartyId();
-                //checkout.setCheckoutTime();
-                //checkout.setConsumptionMoney();
-                //checkout.setConsumptionType();
                 checkout.setCreatedTime(new Date());
-                //checkout.setFreeRemarkId();
-                //checkout.setIsFreeOrder();
-                //checkout.setIsInvoiced();
-                //checkout.setLastModifiedTime();
-                //checkout.setPrepayMoney();
-                //checkout.setShouldPayMoney();
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
-                //checkout.setTotalPayMoney();
-                //checkout.setWipeZeroMoney();
                 checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
+                // 获取到新生成的结账单,主要是要获取到checkOut的Id这个属性
+                checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
             }
 
             //新增订单到数据表
