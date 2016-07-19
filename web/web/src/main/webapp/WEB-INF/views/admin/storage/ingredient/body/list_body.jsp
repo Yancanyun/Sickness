@@ -61,7 +61,7 @@
                     <table class="table table-hover table-bordered">
                         <thead class="v-center">
                         <tr>
-                            <th rowspan="2">编号</th>
+                            <th rowspan="2">序号</th>
                             <th rowspan="2">名称</th>
                             <th rowspan="2">原配料编号</th>
                             <th rowspan="2">助记码</th>

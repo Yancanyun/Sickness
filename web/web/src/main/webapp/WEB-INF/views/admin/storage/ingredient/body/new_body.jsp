@@ -12,9 +12,7 @@
         <h2>原配料添加</h2>
     </div>
     <div class="col-sm-12">
-        <c:if test="${!empty msg}">
-        <div class="alert hidden J_tip" role="alert">提示信息!</div>
-        </c:if>
+        <div class="alert hidden J_tip" role="alert">保存成功！</div>
         <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
             <div class="panel panel-info">
                 <div class="panel-heading">

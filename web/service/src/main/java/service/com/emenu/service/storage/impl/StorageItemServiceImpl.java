@@ -68,7 +68,12 @@ public class StorageItemServiceImpl implements StorageItemService {
     @Override
     public List<StorageItem> listBySearchDto(ItemAndIngredientSearchDto searchDto) throws SSException {
         List<StorageItem> list = Collections.emptyList();
+
         int pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
+        if (Assert.isNull(searchDto.getPageSize())
+                || Assert.lessOrEqualZero(searchDto.getPageSize())){
+            searchDto.setPageSize(10);
+        }
         int offset = pageNo * searchDto.getPageSize();
         searchDto.setOffset(offset);
         try {

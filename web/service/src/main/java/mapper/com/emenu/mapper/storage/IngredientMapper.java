@@ -25,6 +25,14 @@ public interface IngredientMapper {
     public void updateIngredient(@Param("ingredient") Ingredient ingredient) throws Exception;
 
     /**
+     * 根据原配料id修改原配料状态
+     * @param id
+     * @param status
+     * @throws Exception
+     */
+    public void updateIngredientStatusById(@Param("id") int id, @Param("status") int status) throws Exception;
+
+    /**
      * 获取所有没有删除的原配料
      * @return
      * @throws Exception

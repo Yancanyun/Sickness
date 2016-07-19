@@ -31,6 +31,14 @@ public interface IngredientService {
     public void updateIngredient(Ingredient ingredient) throws SSException;
 
     /**
+     * 根据原配料id修改原配料状态
+     * @param id
+     * @param status
+     * @throws SSException
+     */
+    public void updateIngredientStatusById(int id,int status) throws SSException;
+
+    /**
      * 根据原配料id 查询原配料
      * @param id
      * @return
@@ -97,6 +105,12 @@ public interface IngredientService {
      */
     public void setQuantityFormat(List<Ingredient> ingredientList) throws SSException;
 
+    /**
+     * 根据原配料的id，判断当前原配料是否可以更改
+     * @param id
+     * @throws SSException
+     */
+    public boolean checkIsCanUpdate(int id) throws SSException;
 
 
 }

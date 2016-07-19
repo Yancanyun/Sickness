@@ -173,6 +173,12 @@
           WHERE `id` = #{ingredient.id};
     </update>
 
+    <update id="updateIngredientStatusById">
+          UPDATE `t_ingredient`
+            SET  `status` = #{status}
+          WHERE `id` = #{id};
+    </update>
+
     <select id="listByKeyword" resultMap="pw.Ingredient">
         SELECT
         ingredient.`id` AS id,

@@ -269,6 +269,19 @@
                 <shiro:checkPermission name="Admin:Storage:Ingredient">
                     <li <c:if test="${MethodModule eq 'Admin:Storage:Ingredient'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/storage/ingredient">库存原配料管理</a>
+                        <c:if test="${ExtModule eq 'Admin:Storage:Ingredient:New'
+                                            or ExtModule eq 'Admin:Storage:Ingredient:Update'}">
+                            <ul>
+                                <li <c:if test="${ExtModule eq 'Admin:Storage:Ingredient:New'}">class="active" </c:if>>
+                                    <a href="${website}admin/storage/ingredient/tonew">添加原配料</a>
+                                </li>
+                                <c:if test="${ExtModule eq 'Admin:Storage:Ingredient:Update'}">
+                                    <li class="active">
+                                        <a href="#">修改原配料</a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </c:if>
                     </li>
                 </shiro:checkPermission>
                 <shiro:checkPermission name="Admin:Storage:Item">

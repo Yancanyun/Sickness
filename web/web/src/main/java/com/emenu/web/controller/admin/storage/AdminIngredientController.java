@@ -13,12 +13,14 @@ import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.enums.storage.IngredientStatusEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.apache.velocity.util.introspection.Uberspect;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,17 +76,23 @@ public class AdminIngredientController extends AbstractController{
     public JSON ajaxList(@PathVariable("pageNo")Integer pageNo,
                          @RequestParam("pageSize") Integer pageSize,
                          ItemAndIngredientSearchDto searchDto){
-        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
-        //ItemAndIngredientSearchDto searchDto = new ItemAndIngredientSearchDto();
+        pageSize = (pageSize == null || pageSize<=0) ? DEFAULT_PAGE_SIZE : pageSize;
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
         List<Ingredient> ingredientList = Collections.emptyList();
         JSONArray jsonArray = new JSONArray();
         try {
             ingredientList = ingredientService.listBySearchDto(searchDto);
+            int offset = 0;
+            if (Assert.isNotNull(pageNo)){
+                pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+                offset = pageNo * pageSize;
+            }
+            int i = 0;
             for (Ingredient ingredient : ingredientList){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", ingredient.getId());
+                jsonObject.put("sequenceNumber",offset+(++i));
                 jsonObject.put("tagName", ingredient.getTagName());
                 jsonObject.put("name", ingredient.getName());
                 jsonObject.put("ingredientNumber", ingredient.getIngredientNumber());
@@ -95,21 +103,21 @@ public class AdminIngredientController extends AbstractController{
                 jsonObject.put("storageToCostCardRatio", ingredient.getStorageToCostCardRatio());
                 jsonObject.put("costCardUnitName", ingredient.getCostCardUnitName());
                 // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-                BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+                BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
                 String maxStorageQuantityStr = maxStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
                 // 最小库存
-                BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+                BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
                 String minStorageQuantityStr = minStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
                 // 实际库存
-                BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
+                BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
                 String realQuantityStr = realQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("realQuantityStr", realQuantityStr);
                 jsonObject.put("averagePrice", ingredient.getAveragePrice().toString());
                 jsonObject.put("realMoney", ingredient.getRealMoney().toString());
                 // 总数量
-                BigDecimal totalQuantity = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio());
+                BigDecimal totalQuantity = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
                 String totalQuantityStr = totalQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("totalQuantityStr", totalQuantityStr);
                 jsonObject.put("totalMoney", ingredient.getTotalMoney().toString());
@@ -120,7 +128,6 @@ public class AdminIngredientController extends AbstractController{
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-
         int dataCount = 0;
         try {
             dataCount = ingredientService.countBySearchDto(searchDto);
@@ -157,7 +164,7 @@ public class AdminIngredientController extends AbstractController{
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminStorageIngredientNew, extModule = ModuleEnums.AdminStorageIngredientNew)
+    @Module(value = ModuleEnums.AdminStorageIngredient, extModule = ModuleEnums.AdminStorageIngredientNew)
     @RequestMapping(value = "tonew",method = RequestMethod.GET)
     public String toNew(Model model){
         try {
@@ -183,14 +190,22 @@ public class AdminIngredientController extends AbstractController{
         return "admin/storage/ingredient/new_home";
     }
 
-
-    @Module(value = ModuleEnums.AdminStorageIngredientNew, extModule = ModuleEnums.AdminStorageIngredientNew)
+    /**
+     * 添加原配料
+     * @param ingredient
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageIngredient, extModule = ModuleEnums.AdminStorageIngredientNew)
     @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject newIngredient(Ingredient ingredient){
+    public JSONObject newIngredient(Ingredient ingredient,Model model){
         try {
-            ingredientService.newIngredient(ingredient);
-            return sendMsgAndCode(AJAX_SUCCESS_CODE,"添加成功");
+            Ingredient ingredient1 = ingredientService.newIngredient(ingredient);
+            if (Assert.isNull(ingredient1)){
+                return sendMsgAndCode(AJAX_FAILURE_CODE,"添加失败");
+            } else {
+                return sendMsgAndCode(AJAX_SUCCESS_CODE,"添加成功");
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -208,7 +223,6 @@ public class AdminIngredientController extends AbstractController{
     public JSONObject checkIngredientName(@RequestParam("name")String name){
         if (Assert.isNull(name)){
             return sendJsonObject(AJAX_SUCCESS_CODE);
-
         }
         try {
             if (ingredientService.checkIngredientNameIsExist(name)){
@@ -229,7 +243,7 @@ public class AdminIngredientController extends AbstractController{
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
+    @Module(value = ModuleEnums.AdminStorageIngredient,extModule = ModuleEnums.AdminStorageIngredientUpdate)
     @RequestMapping(value = "toupdate/{id}",method = RequestMethod.GET)
     public String toUpdate(@PathVariable("id")Integer id,Model model){
         try {
@@ -272,6 +286,12 @@ public class AdminIngredientController extends AbstractController{
             model.addAttribute("tagList",tagList);
             model.addAttribute("unit",unitList);
 
+            if (ingredientService.checkIsCanUpdate(id)){
+                model.addAttribute("isUpdated",0);
+            } else {
+                model.addAttribute("isUpdated",1);
+            }
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -280,6 +300,13 @@ public class AdminIngredientController extends AbstractController{
         return "admin/storage/ingredient/update_home";
     }
 
+    /**
+     * 当库存单位和成本卡单位转换率改变时，对页面显示的总数量和实际数量进行修改
+     * @param id
+     * @param storageUnitId
+     * @param storageToCostCardRatio
+     * @return
+     */
     @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
     @RequestMapping(value = "ajax/convert/quantity",method = RequestMethod.GET)
     @ResponseBody
@@ -340,4 +367,22 @@ public class AdminIngredientController extends AbstractController{
         }
     }
 
+
+    @Module(value = ModuleEnums.AdminStorageIngredient,extModule = ModuleEnums.AdminStorageIngredientDelete)
+    @RequestMapping(value = "ajax/del/{id}",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject delById(@RequestParam("id")Integer id) {
+        try {
+            if (ingredientService.checkIsCanUpdate(id)){
+                ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
+                return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
+            } else {
+                return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
+            }
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
 }

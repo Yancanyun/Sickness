@@ -65,6 +65,12 @@ public class AdminStorageItemController extends AbstractController {
         return "admin/storage/item/list_home";
     }
 
+    /**
+     * 去详情页
+     * @param id
+     * @param model
+     * @return
+     */
     @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemList)
     @RequestMapping(value = "todetails/{id}", method = RequestMethod.GET)
     public String toDetails(@PathVariable("id")Integer id, Model model) {
@@ -84,10 +90,8 @@ public class AdminStorageItemController extends AbstractController {
 
     /**
      * ajax获取列表
-     *
      * @param pageNo
      * @param pageSize
-     * @param searchDto
      * @return
      */
     @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemList)
@@ -96,21 +100,29 @@ public class AdminStorageItemController extends AbstractController {
     public JSON ajaxList(@PathVariable("pageNo") Integer pageNo,
                          @RequestParam("pageSize") Integer pageSize,
                          ItemAndIngredientSearchDto searchDto) {
-        pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        pageSize = (pageSize == null || pageSize<=0)   ? DEFAULT_PAGE_SIZE : pageSize;
+//        ItemAndIngredientSearchDto searchDto = new ItemAndIngredientSearchDto();
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
         List<StorageItem> list = Collections.emptyList();
         try {
             list = storageItemService.listBySearchDto(searchDto);
+
         } catch (SSException e) {
         	LogClerk.errLog.error(e);
         	return sendErrMsgAndErrCode(e);
         }
-
         JSONArray jsonArray = new JSONArray();
+        int offset = 0;
+        if (Assert.isNotNull(pageNo)){
+            pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+            offset = pageNo * pageSize;
+        }
+        int i = 0;
         for (StorageItem storageItem : list) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", storageItem.getId());
+            jsonObject.put("sequenceNumber",offset+(++i));
             jsonObject.put("name", storageItem.getName());
             jsonObject.put("itemNumber", storageItem.getItemNumber());
             jsonObject.put("assistantCode", storageItem.getAssistantCode());
@@ -125,18 +137,19 @@ public class AdminStorageItemController extends AbstractController {
             jsonObject.put("costCardUnitName", storageItem.getCostCardUnitName());
             jsonObject.put("countUnitName", storageItem.getOrderUnitName());
             // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+
+            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
             String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
             jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
             // 最小库存
-            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
             String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
             jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
             jsonObject.put("lastStockInPrice", storageItem.getLastStockInPrice());
             // 总数量
-            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
             String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
-            jsonObject.put("totalStockInQuantityStr", totalStockInQuantityStr);
+            jsonObject.put("totalStockInQuantityStr", totalQuantityStr);
             jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());
             jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
 

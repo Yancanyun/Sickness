@@ -4,7 +4,7 @@
 <script type="text/template" id="tpl">
     {@each list as it}
     <tr data-ingredient-id="&{it.id}">
-        <td>&{it.id}</td>
+        <td>&{it.sequenceNumber}</td>
         <td>&{it.name}</td>
         <td>&{it.ingredientNumber}</td>
         <td>&{it.assistantCode}</td>
@@ -18,7 +18,7 @@
         <td>&{it.totalMoney}</td>
         <td>
             <a href="${website}admin/storage/ingredient/toupdate/&{it.id}" class="label-info"><i class="fa fa-pencil">&nbsp;编辑</i></a>
-            <a href="javascript:;" class="label-info"><i class="fa fa-times">&nbsp;删除</i></a>
+            <a href="JavaScript:;" class="label-info J_del"><i class="fa fa-times">&nbsp;删除</i></a>
             <a href="${website}admin/storage/ingredient/todetails/&{it.id}" class="label-info"><i class="fa fa-search"></i>&nbsp;查看详情</a>
         </td>
     </tr>

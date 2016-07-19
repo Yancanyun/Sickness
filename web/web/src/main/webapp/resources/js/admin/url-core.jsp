@@ -127,7 +127,7 @@
             ['submitIngredient', site.website + 'admin/storage/ingredient/ajax/new', 'post', '提交添加的原配料'],
             ['submitEditIngredient', site.website + 'admin/storage/ingredient/ajax/update', 'post', '提交编辑页的原配料'],
             ['getRelatedSettings', site.website + 'admin/storage/ingredient/ajax/convert/quantity', 'get', '获取均价、结存、总数量'],
-
+            ['delIngredient', site.website + 'admin/storage/ingredient/ajax/del/&{id}', 'delete', '删除原配料，发送当前原配料id'],
         ],
         // 菜品管理
         DishManagement: [

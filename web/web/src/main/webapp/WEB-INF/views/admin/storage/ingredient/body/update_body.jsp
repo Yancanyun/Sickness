@@ -21,7 +21,7 @@
                 </div>
                 <div class="panel-body">
                     <input class="J_ingredientId" type="hidden" name="id" value="${ingredient.id}">
-                    <input class="J_isUpdated" type="hidden" name="isUpdated" value="0">
+                    <input class="J_isUpdated" type="hidden" name="isUpdated" value="${isUpdated}">
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
                         <div class="col-sm-6">

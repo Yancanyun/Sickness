@@ -1,21 +1,31 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.dish.CostCardDto;
+import com.emenu.common.dto.dish.CostCardItemDto;
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemDto;
+import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.dto.storage.StorageSupplierDto;
+import com.emenu.common.entity.dish.CostCard;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
-import com.emenu.common.entity.storage.Ingredient;
+import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.EntityUtil;
 import com.emenu.common.utils.StringUtils;
 import com.emenu.mapper.storage.IngredientMapper;
+import com.emenu.service.dish.CostCardService;
 import com.emenu.service.dish.UnitService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.IngredientService;
+import com.emenu.service.storage.StorageItemService;
+import com.emenu.service.storage.StorageReportItemService;
+import com.emenu.service.storage.StorageReportService;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -60,6 +70,17 @@ public class IngredientServiceImpl implements IngredientService {
     @Autowired
     private SerialNumService serialNumService;
 
+    @Autowired
+    private CostCardService costCardService;
+
+    @Autowired
+    private StorageItemService storageItemService;
+
+    @Autowired
+    private StorageReportService storageReportService;
+
+    private final static int DEFAULT_PAGE_SIZE = 10;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Ingredient newIngredient(Ingredient ingredient) throws SSException {
@@ -83,7 +104,6 @@ public class IngredientServiceImpl implements IngredientService {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
-
         try {
             return commonDao.insert(ingredient);
         } catch (Exception e) {
@@ -93,6 +113,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateIngredient(Ingredient ingredient) throws SSException {
         try {
             if (this.checkBeforeSave(ingredient)) {
@@ -105,6 +126,24 @@ public class IngredientServiceImpl implements IngredientService {
             throw SSException.get(EmenuException.IngredientUpdateFailed, e);
         }
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateIngredientStatusById(int id, int status) throws SSException {
+        try {
+            if (Assert.isNull(id)
+                    || Assert.lessOrEqualZero(id)
+                    || Assert.isNull(status)
+                    || Assert.lessOrEqualZero(status)){
+                throw SSException.get(EmenuException.IngredientUpdateFailed);
+            }
+            ingredientMapper.updateIngredientStatusById(id,status);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+    }
+
 
     @Override
     public Ingredient queryById(int id) throws SSException {
@@ -148,6 +187,9 @@ public class IngredientServiceImpl implements IngredientService {
                 pageNo = searchDto.getPageNo() <= 0 ? 0 : searchDto.getPageNo() - 1;
             }
             if (Assert.isNotNull(searchDto.getPageSize())) {
+                if (Assert.lessOrEqualZero(searchDto.getPageSize())){
+                    searchDto.setPageSize(DEFAULT_PAGE_SIZE);
+                }
                 offset = pageNo * searchDto.getPageSize();
                 searchDto.setOffset(offset);
             }
@@ -370,10 +412,11 @@ public class IngredientServiceImpl implements IngredientService {
         if (Assert.isNull(ingredient)) {
             return false;
         }
-
         Assert.isNotNull(ingredient.getTagId(), EmenuException.IngredientTagIdIsNotNull);
         Assert.isNotNull(ingredient.getName(), EmenuException.IngredientNameIsNotNull);
-        checkIngredientNameIsExist(ingredient.getName());
+        if (checkIngredientNameIsExist(ingredient.getName())){
+            throw SSException.get(EmenuException.IngredientIsExist);
+        }
         Assert.isNotNull(ingredient.getOrderUnitId(), EmenuException.IngredientOrderUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getStorageUnitId(), EmenuException.IngredientStorageUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getCostCardUnitId(), EmenuException.IngredientCostCardUnitIdIsNotNull);
@@ -446,6 +489,47 @@ public class IngredientServiceImpl implements IngredientService {
             BigDecimal realStockInQuantityStr = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
             String realQuantityStr = realStockInQuantityStr.toString() + ingredient.getStorageUnitName();
             ingredient.setRealQuantityStr(realQuantityStr);
+        }
+    }
+
+    @Override
+    public boolean checkIsCanUpdate(int id) throws SSException {
+        // 遍历所有成卡和单据,查询该原配料是被添加
+        try {
+            List<CostCardDto> costCardDtoList = costCardService.listAllCostCardDto();
+            // map中的key为原配料的id，value为原配料存在状态0或者空代表没有，1代表有
+            Map<Integer,Integer> checkMap = new HashMap<Integer, Integer>();
+            for (CostCardDto costCardDto : costCardDtoList){
+                List<CostCardItemDto> costCardItemDtoList = costCardDto.getCostCardItemDtos();
+                for (CostCardItemDto costCardItemDto : costCardItemDtoList){
+                    checkMap.put(costCardItemDto.getIngredientId(),1);
+                }
+            }
+            List<StorageReportDto> storageReportDtoList = storageReportService.listReportDto();
+            for (StorageReportDto storageReportDto : storageReportDtoList){
+                if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
+                    for (StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
+                        StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                        Ingredient ingredient = queryById(storageItem.getIngredientId());
+                        checkMap.put(ingredient.getId(),1);
+                    }
+                } else {
+                    for (StorageReportIngredient storageReportIngredient : storageReportDto.getStorageReportIngredientList()){
+                        checkMap.put(storageReportIngredient.getIngredientId(),1);
+                    }
+                }
+            }
+            if (Assert.isNull(id)
+                    ||Assert.lessOrEqualZero(id)){
+                if (Assert.isNull(checkMap.get(id))
+                        || Assert.lessOrEqualZero(checkMap.get(id))){
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
         }
     }
 

@@ -76,6 +76,7 @@ public enum EmenuException implements IBizExceptionMes {
     IngredientInserFailed("新增原配料失败",31102),
     IngredientNotExist("原配料不存在",31103),
     IngredientQueryFailed("原配料查询失败",31104),
+    IngredientIsExist("原配料已存在",31105),
 
     // 菜品管理模块
     // 分类管理
