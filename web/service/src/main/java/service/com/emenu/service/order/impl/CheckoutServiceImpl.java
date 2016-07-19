@@ -2,20 +2,22 @@ package com.emenu.service.order.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.Checkout;
+import com.emenu.common.entity.order.CheckoutPay;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
-import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
 import com.emenu.service.dish.DishService;
+import com.emenu.service.order.CheckoutPayService;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
@@ -27,6 +29,8 @@ import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,47 +69,68 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Autowired
     private PrinterService printerService;
 
+    @Autowired
+    private CheckoutPayService checkoutPayService;
+
     @Override
-    public Checkout queryByTableId(Integer tableId,Integer status) throws SSException {
+    public Checkout queryByTableIdAndStatus(int tableId, int status) throws SSException {
         Checkout checkout = null;
         try {
-            Assert.lessOrEqualZero(tableId,EmenuException.TableIdError);
-            checkout = checkoutMapper.queryByTableId(tableId,status);
-        }catch (Exception e){
+            Assert.lessOrEqualZero(tableId, EmenuException.TableIdError);
+            Assert.lessOrEqualZero(tableId, EmenuException.CheckoutStatusError);
+
+            checkout = checkoutMapper.queryByTableIdAndStatus(tableId, status);
+        } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryCheckoutByTableIdFailed);
+            throw SSException.get(EmenuException.QueryCheckoutByTableIdFailed, e);
         }
         return checkout;
     }
 
     @Override
+    public Checkout queryByTableId(int tableId) throws SSException {
+        Checkout checkout = null;
+        try {
+            Assert.lessOrEqualZero(tableId, EmenuException.TableIdError);
+
+            checkout = checkoutMapper.queryByTableId(tableId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCheckoutByTableIdFailed, e);
+        }
+        return checkout;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public Checkout newCheckout(Checkout checkout) throws SSException {
         Checkout checkout1 = null;
-        try{
+        try {
             Assert.isNotNull(checkout, EmenuException.CheckoutIsNotNull);
 
             checkout1= commonDao.insert(checkout);
-            Assert.isNotNull(checkout,EmenuException.CheckoutIsNotNull);
             List<Order> orderList = orderService.listByTableIdAndStatus(checkout.getTableId(), OrderStatusEnums.IsBooked.getId());
-            for(Order order:orderList){
+            for (Order order : orderList) {
                 order.setCheckoutId(checkout1.getId());
                 orderService.updateOrder(order);
             }
-        }catch (Exception e){
+        } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.NewCheckoutFailed);
+            throw SSException.get(EmenuException.NewCheckoutFailed, e);
         }
         return checkout1;
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void updateCheckout(Checkout checkout) throws SSException {
-        try{
+        try {
             Assert.isNotNull(checkout, EmenuException.CheckoutIsNotNull);
+
             commonDao.update(checkout);
-        }catch (Exception e){
+        } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateCheckoutFailed);
+            throw SSException.get(EmenuException.UpdateCheckoutFailed, e);
         }
     }
 
@@ -227,5 +252,64 @@ public class CheckoutServiceImpl implements CheckoutService {
             throw SSException.get(EmenuException.UpdateCheckoutFailed);
         }
         return jsonObject;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void checkout(int orderId, Checkout checkout, CheckoutPay checkoutPay) throws SSException {
+        try {
+            Assert.lessOrEqualZero(orderId, EmenuException.OrderIdError);
+            if (Assert.isNull(checkout)) {
+                throw SSException.get(EmenuException.CheckoutIsNull);
+            }
+
+            // 把订单状态改为已结账
+            Order order = orderService.queryById(orderId);
+            if (Assert.isNull(order)) {
+                throw SSException.get(EmenuException.OrderIdError);
+            }
+            order.setStatus(OrderStatusEnums.IsCheckouted.getId());
+            orderService.updateOrder(order);
+
+            checkout.setStatus(CheckOutStatusEnums.IsCheckOut.getId());
+            checkout.setCheckoutTime(new Date());
+
+            // 修改结账单中的消费金额
+            Table table = tableService.queryById(order.getTableId());
+            BigDecimal tableFee = table.getTableFee();
+            BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
+            // 计算此订单的金额
+            BigDecimal orderCost = new BigDecimal(0);
+            List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>(); // 所有的订单菜品
+            orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
+            for (OrderDishDto orderDishDto : orderDishDtoList) {
+                if (orderDishDto.getIsPackage() == 0) {
+                    orderCost = orderCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getDishQuantity()));
+                } else {
+                    orderCost = orderCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getPackageQuantity()));
+                }
+            }
+            // TODO: 若本餐桌第二次及之后消费，则无需重复加餐台费及餐位费
+            // 消费金额等于餐台费+餐位费*人数+此订单金额
+            BigDecimal totalCost = new BigDecimal(0);
+            totalCost = totalCost.add(tableFee);
+            totalCost = totalCost.add(totalSeatFee);
+            totalCost = totalCost.add(orderCost);
+            checkout.setConsumptionMoney(totalCost);
+
+            // 根据消费金额及抹零金额计算出实付金额
+            checkout.setShouldPayMoney(totalCost.subtract(checkout.getWipeZeroMoney()));
+
+            // 根据宾客付款、预付金额及实付金额计算出找零金额
+            checkout.setChangeMoney((checkout.getTotalPayMoney().add(checkout.getPrepayMoney())).subtract(checkout.getShouldPayMoney()));
+
+            updateCheckout(checkout);
+
+            // 新增结账-支付信息
+            checkoutPayService.newCheckoutPay(checkoutPay);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
     }
 }

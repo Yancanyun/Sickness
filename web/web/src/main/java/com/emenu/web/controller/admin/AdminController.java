@@ -89,9 +89,9 @@ public class AdminController extends AbstractController {
         }
         try {
             loginManageService.validLogin(token, LoginTypeEnums.BackgroundLogin,getRequest(), getResponse());
-            httpSession.setAttribute("userName",loginName);
+            httpSession.setAttribute("userName", loginName);
 
-            // TODO: 在后台测试app的AJAX请求用，发布前可以删掉
+            // TODO: 在后台页面测试服务员端App的AJAX请求要用，发布前可以删掉
             // 把partyId放入Session
             SecurityUser user = securityUserService.queryByLoginName(loginName);
             Integer partyId = user.getPartyId();

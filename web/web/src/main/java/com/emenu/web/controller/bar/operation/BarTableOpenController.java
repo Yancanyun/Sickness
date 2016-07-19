@@ -61,6 +61,7 @@ public class BarTableOpenController extends AbstractController {
     /**
      * Ajax 执行开台操作
      * @param tableId
+     * @param personNum
      * @return
      */
     @Module(ModuleEnums.BarTableOpen)

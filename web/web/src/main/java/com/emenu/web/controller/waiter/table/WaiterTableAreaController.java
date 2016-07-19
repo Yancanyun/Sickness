@@ -32,6 +32,7 @@ import java.util.List;
 public class WaiterTableAreaController extends AbstractController {
     /**
      * Ajax 获取可管理餐台区域列表
+     * @param httpSession
      * @return
      */
     @Module(ModuleEnums.WaiterTableAreaList)

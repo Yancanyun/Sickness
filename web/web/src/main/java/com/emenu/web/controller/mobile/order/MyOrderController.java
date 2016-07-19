@@ -413,7 +413,7 @@ public class MyOrderController  extends AbstractController {
         Integer tableId = Integer.parseInt(tableIdStr);
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
+            checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
@@ -422,7 +422,7 @@ public class MyOrderController  extends AbstractController {
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
                 checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
                 // 获取到新生成的结账单,主要是要获取到checkOut的Id这个属性
-                checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+                checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
             }
 
             //新增订单到数据表

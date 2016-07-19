@@ -35,6 +35,7 @@ public class WaiterLoginController extends AbstractController {
      * Ajax 登录提交
      * @param loginName
      * @param password
+     * @param httpSession
      * @return
      */
     @IgnoreLogin

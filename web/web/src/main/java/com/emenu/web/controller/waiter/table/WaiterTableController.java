@@ -41,9 +41,9 @@ import java.util.List;
 public class WaiterTableController extends AbstractController {
     /**
      * Ajax 根据AreaId(可选)、操作状态(开台、清台、换台、并台等)返回餐台数据
-     * @param partyId
      * @param areaId
      * @param status
+     * @param httpSession
      * @return
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
@@ -54,7 +54,7 @@ public class WaiterTableController extends AbstractController {
         try {
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
 
-            if (Assert.isNull(status) || Assert.lessOrEqualZero(status)) {
+            if (Assert.isNull(status) || Assert.lessZero(status)) {
                 throw SSException.get(EmenuException.OperateStatusIsNotLegal);
             }
 
@@ -73,14 +73,16 @@ public class WaiterTableController extends AbstractController {
      * 获取根据状态、PartyId、AreaId获取餐台数据
      * @param partyId
      * @param areaId
+     * @param status
      * @return
+     * @throws SSException
      */
     private JSONArray getTableList(Integer partyId, Integer areaId, Integer status) throws SSException {
         JSONArray jsonArray = new JSONArray();
 
         AreaDto areaDto = new AreaDto();
 
-        // 若未传来AreaId
+        // 若未传来AreaId，则返回该服务员的第一个区域的数据
         if (Assert.isNull(areaId)) {
             List<AreaDto> areaDtoList = new ArrayList<AreaDto>();
             WaiterTableStatusEnums waiterTableStatusEnums = WaiterTableStatusEnums.valueOf(status);
@@ -141,7 +143,7 @@ public class WaiterTableController extends AbstractController {
             areaDto = areaDtoList.get(0);
         }
 
-        // 若传来AreaId
+        // 若传来AreaId，则按照AreaId返回数据
         else {
             WaiterTableStatusEnums waiterTableStatusEnums = WaiterTableStatusEnums.valueOf(status);
             List<Integer> statusList = new ArrayList<Integer>();

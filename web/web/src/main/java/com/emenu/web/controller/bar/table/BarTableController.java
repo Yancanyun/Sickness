@@ -119,7 +119,6 @@ public class BarTableController extends AbstractController {
 
     /**
      * Ajax 获取某餐台的具体信息
-     *
      * @param tableId
      * @return
      */

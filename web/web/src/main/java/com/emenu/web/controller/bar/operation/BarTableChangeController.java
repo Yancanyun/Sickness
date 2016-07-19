@@ -34,6 +34,7 @@ import java.util.List;
 public class BarTableChangeController extends AbstractController {
     /**
      * Ajax 获取换台对话框中的数据
+     * @param tableId
      * @return
      */
     @Module(ModuleEnums.BarTableChange)
@@ -82,7 +83,7 @@ public class BarTableChangeController extends AbstractController {
                 }
             }
 
-            jsonObject.put("jsonArray", jsonArray);
+            jsonObject.put("newTableList", jsonArray);
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {

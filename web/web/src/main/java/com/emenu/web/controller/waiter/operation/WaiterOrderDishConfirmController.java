@@ -342,7 +342,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
         Date orderTime=new Date();
         try {
             Checkout checkout = new Checkout();
-            checkout = checkoutService.queryByTableId(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
+            checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
