@@ -382,6 +382,14 @@ public enum ModuleEnums {
     //吧台餐段
     BarMealPeriod("Bar:Meal:Period"),
 
+    // 吧台催菜
+    BarCallDish("Bar:Call:Dish"),
+    // 吧台退菜
+    BarBackDish("Bar:Back:Dish"),
+    // 吧台退菜列表
+    BarBackDishList("Bar:Back:Dish:List"),
+    // 吧台退菜确认
+    BarBackDishConfirm("Bar:Back:Dish:Confirm"),
 
 
     //后厨管理模块

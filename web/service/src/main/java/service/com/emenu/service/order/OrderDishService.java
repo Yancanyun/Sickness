@@ -134,10 +134,10 @@ public interface OrderDishService {
     public int isOrderHaveOrderDish(Integer orderId) throws SSException;
 
     /**
-     * 退菜
+     * 根据订单菜品id催菜
      * @param orderDishId
      * @throws SSException
      */
-    public boolean waiterBackDish(Integer orderDishId) throws SSException;
+    public void callDish(Integer orderDishId)throws SSException;
 
 }

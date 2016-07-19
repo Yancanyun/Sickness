@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 退菜
+ * 退菜controller
  *
  * @author chenyuting
  * @date 2016/7/15 9:02
@@ -144,6 +144,10 @@ public class WaiterBackDishController extends AbstractController {
                     }
                 }
             }
+            // 在备注的最后追加一个"其他"
+            JSONObject backRemarkOther = new JSONObject();
+            backRemarkOther.put("backRemark","其他");
+            backRemarkList.add(backRemarkOther);
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("orderDishId",orderDishId);

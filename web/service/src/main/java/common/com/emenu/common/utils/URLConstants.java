@@ -221,6 +221,12 @@ public final class URLConstants {
     // 吧台餐段
     public static final String BAR_MEAL_PERIOD_URL = "bar/meal/period";
 
+    // 吧台催菜
+    public static final String BAR_CALL_DISH = "bar/call/dish";
+
+    // 吧台退菜
+    public static final String BAR_BACK_DISH = "bar/back/dish";
+
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 

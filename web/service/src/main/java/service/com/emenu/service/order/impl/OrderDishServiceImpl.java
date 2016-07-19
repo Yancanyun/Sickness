@@ -2,6 +2,7 @@ package com.emenu.service.order.impl;
 
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.enums.order.OrderDishCallStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
@@ -103,7 +104,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             if(status==2){
                 status = OrderStatusEnums.IsCheckouted.getId();
             }
-            orderDishMapper.updateDishStatus(id,status);
+            orderDishMapper.updateDishStatus(id, status);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateDishStatusFailed,e);
@@ -131,7 +132,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Override
     public void updatePresentedDish(int id, int isPresentedDish) throws SSException {
         try{
-            Assert.lessOrEqualZero(id,EmenuException.OrderDishIdError);
+            Assert.lessOrEqualZero(id, EmenuException.OrderDishIdError);
             orderDishMapper.updatePresentedDish(id, isPresentedDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -153,7 +154,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Override
     public void newOrderDish(OrderDish orderDish) throws SSException {
         try {
-            Assert.isNotNull(orderDish,EmenuException.OrderDishIsNotNull);
+            Assert.isNotNull(orderDish, EmenuException.OrderDishIsNotNull);
             commonDao.insert(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -267,29 +268,21 @@ public class OrderDishServiceImpl implements OrderDishService{
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public boolean waiterBackDish(Integer orderDishId) throws SSException{
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void callDish(Integer orderDishId)throws SSException{
         try{
-            if (!Assert.isNull(orderDishId)
-                    && Assert.lessOrEqualZero(orderDishId)) {
+            if (Assert.lessOrEqualZero(orderDishId)){
                 throw SSException.get(EmenuException.OrderDishIdError);
             }
-            OrderDish orderDish = this.queryById(orderDishId);
-            // 已上菜不能退
-            if (orderDish.getStatus() == OrderDishStatusEnums.IsFinsh.getId()){
-                return false;
-            }else {
-                // 退菜将订单菜品状态改为已退菜，折扣、会员价、售价改为0
-                orderDish.setDiscount(new BigDecimal("0.00"));
-                orderDish.setVipDishPrice(new BigDecimal("0.00"));
-                orderDish.setSalePrice(new BigDecimal("0.00"));
-                orderDish.setStatus(OrderDishStatusEnums.IsBack.getId());
-                commonDao.update(orderDish);
-                return true;
-            }
-        }catch (Exception e){
+
+            // TODO 多次催菜实现多次记录，现在只做1次催菜记录
+
+            OrderDish orderDish = orderDishMapper.queryById(orderDishId);
+            orderDish.setIsCall(OrderDishCallStatusEnums.IsCall.getId());
+            commonDao.update(orderDish);
+        } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException. BackOrderDishFailed,e);
+            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
         }
     }
 }
