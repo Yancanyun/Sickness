@@ -94,7 +94,6 @@ public class StorageReportServiceImpl implements StorageReportService {
                    Assert.lessOrEqualZero(reportDto.getStorageReport().getType())){
                throw SSException.get(EmenuException.ReportTypeError);
            }
-
            // 获取单据编号
            String serialNumber = "";
            switch (reportDto.getStorageReport().getType()){
@@ -618,14 +617,37 @@ public class StorageReportServiceImpl implements StorageReportService {
             //获取所有单据信息
             reportList = listAll();
             for (StorageReport report : reportList){
-                StorageReportDto reportDto = new StorageReportDto();
-                List<StorageReportItem> reportItemList = new ArrayList();
-                //根据单据id获取单据详情信息
-                reportItemList = storageReportItemService.listByReportId(report.getId());
-                //数据存入reportDto
-                reportDto.setStorageReport(report);
-                reportDto.setStorageReportItemList(reportItemList);
-                reportDtoList.add(reportDto);
+                {
+                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                        // 入库单物品详情
+                        List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
+                        for (StorageReportItem storageReportItem : storageReportItemList){
+                            StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
+                            storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
+                            storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportItemList(storageReportItemList);
+                        reportDtoList.add(storageReportDto);
+                    } else {
+                        // 其他单据原配料详情
+                        List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(report.getId());
+                        for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                            Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                            storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
+                            storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            // 获取成卡单位数量
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                        }
+                        StorageReportDto storageReportDto = new StorageReportDto();
+                        storageReportDto.setStorageReport(report);
+                        storageReportDto.setStorageReportIngredientList(storageReportIngredientList);
+                        reportDtoList.add(storageReportDto);
+                    }
+                }
             }
             return reportDtoList;
         } catch (Exception e) {

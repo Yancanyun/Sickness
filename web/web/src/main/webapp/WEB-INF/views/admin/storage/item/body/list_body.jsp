@@ -91,8 +91,8 @@
                                 <th rowspan="2">原配料</th>
                                 <th rowspan="2">所属分类</th>
                                 <th rowspan="2">供货商</th>
-                                <th rowspan="2">入库总数量</th>
-                                <th rowspan="2">入库总金额</th>
+                                <th class="width60" rowspan="2">入库总数量</th>
+                                <th class="width60" rowspan="2">入库总金额</th>
                                 <th rowspan="2">最新入库价格</th>
                                 <th colspan="2">库存预警</th>
                                 <th rowspan="2">出库方式</th>

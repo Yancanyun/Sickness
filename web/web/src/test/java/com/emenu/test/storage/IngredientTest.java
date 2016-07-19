@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +62,21 @@ public class IngredientTest extends AbstractTestCase{
 
 
     }
-   @Test
-    public void exportExcel(HttpServletResponse response) throws SSException {
+
+    @Test
+    public void exportExcel() throws SSException {
        ItemAndIngredientSearchDto searchDto=new ItemAndIngredientSearchDto();
        searchDto.setKeyword("辣椒");
        List<Integer> tagIdlist=new ArrayList<Integer>();
        tagIdlist.add(70);
        searchDto.setTagIdList(tagIdlist);
-
-       ingredientService.exportExcel(searchDto,response);
+       ingredientService.exportExcel(searchDto,null);
    }
+
+    @Test
+    public void queryById() throws SSException{
+        Integer a = null;
+        ingredientService.queryById(a);
+    }
+
 }

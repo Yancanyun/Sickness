@@ -172,6 +172,7 @@ public interface StorageReportService {
     public int countByReportSerachDto(ReportSearchDto reportSearchDto) throws SSException;
 
     /**
+     * 新
      * 获取所有单据和单据详情
      * @return
      * @throws SSException

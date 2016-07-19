@@ -285,13 +285,12 @@ public class AdminIngredientController extends AbstractController{
             model.addAttribute("quantityUnit", quantityUnit);
             model.addAttribute("tagList",tagList);
             model.addAttribute("unit",unitList);
-
             if (ingredientService.checkIsCanUpdate(id)){
                 model.addAttribute("isUpdated",0);
             } else {
                 model.addAttribute("isUpdated",1);
             }
-
+            model.addAttribute("isUpdated",1);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -315,7 +314,6 @@ public class AdminIngredientController extends AbstractController{
                                       @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
             Ingredient ingredientReal = ingredientService.queryById(id);
-
             JSONObject jsonObject = new JSONObject();
             if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
                 return sendJsonObject(AJAX_FAILURE_CODE);
@@ -371,14 +369,16 @@ public class AdminIngredientController extends AbstractController{
     @Module(value = ModuleEnums.AdminStorageIngredient,extModule = ModuleEnums.AdminStorageIngredientDelete)
     @RequestMapping(value = "ajax/del/{id}",method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONObject delById(@RequestParam("id")Integer id) {
+    public JSONObject delById(@PathVariable("id")Integer id) {
         try {
-            if (ingredientService.checkIsCanUpdate(id)){
-                ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
-                return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
-            } else {
-                return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
-            }
+//            if (ingredientService.checkIsCanUpdate(id)){
+//                ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
+//                return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
+//            } else {
+//                return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
+//            }
+            ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
+            return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

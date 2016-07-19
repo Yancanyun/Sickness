@@ -14,6 +14,7 @@ import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -354,8 +355,6 @@ public class AdminStorageItemController extends AbstractController {
         }
     }
 
-
-
     /**
      * ajax删除
      *
@@ -363,16 +362,21 @@ public class AdminStorageItemController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminStorageItem, extModule = ModuleEnums.AdminStorageItemDelete)
-    @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/del/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public JSON ajaxDel(@PathVariable("id") Integer id) {
         try {
-            storageItemService.delById(id);
+            Assert.isNotNull(id, EmenuException.StorageItemIdNotNull);
+            if (storageItemService.checkIsCanDelById(id)){
+                storageItemService.delById(id);
+                sendMsgAndCode(AJAX_SUCCESS_CODE,"删除成功");
+            } else {
+                sendMsgAndCode(AJAX_FAILURE_CODE,"删除失败，当前物品已被使用");
+            }
         } catch (SSException e) {
         	LogClerk.errLog.error(e);
         	return sendErrMsgAndErrCode(e);
         }
-
         return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 

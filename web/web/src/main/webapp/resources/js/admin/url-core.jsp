@@ -101,7 +101,7 @@
             ['delStoreClassify', site.website + 'admin/storage/tag/ajax/&{id}', 'delete','删除库存分类'],
 
             // 库存物品管理
-            ['delStoreItem', site.website + 'admin/storage/item/ajax/&{id}', 'delete','删除库存物品'],
+            ['delStoreItem', site.website + 'admin/storage/item/ajax/del/&{id}', 'delete','删除库存物品'],
             ['editStoreItemConversionRatio', site.website + 'admin/storage/item/unit/conversion/ajax', 'put','编辑换算比例'],
             ['getStorageUnitRelatedSettings', site.website + 'admin/storage/item/ajax/convert/quantity', 'get','获取库存预警、总数量'],
             ['submitStorageItem', site.website  + 'admin/storage/item/ajax/new', 'post', '提交添加的库存物品'],

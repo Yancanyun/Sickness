@@ -1,13 +1,19 @@
 package com.emenu.service.storage.impl;
 
+import com.emenu.common.dto.dish.CostCardDto;
+import com.emenu.common.dto.dish.CostCardItemDto;
 import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
 import com.emenu.common.dto.storage.StorageItemSearchDto;
+import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.entity.storage.StorageReportIngredient;
+import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.storage.StorageItemStatusEnums;
+import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.StringUtils;
 import com.emenu.common.utils.EntityUtil;
@@ -16,6 +22,7 @@ import com.emenu.service.dish.UnitService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.IngredientService;
 import com.emenu.service.storage.StorageItemService;
+import com.emenu.service.storage.StorageReportService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -60,6 +67,9 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Autowired
     private SerialNumService serialNumService;
+
+    @Autowired
+    private StorageReportService storageReportService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -334,8 +344,9 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Override
     public void delById(int id) throws SSException {
-        if (Assert.lessOrEqualZero(id)) {
-            return ;
+        if (Assert.isNull(id)
+                ||Assert.lessOrEqualZero(id)) {
+            throw SSException.get(EmenuException.StorageItemIdNotNull);
         }
         try {
             // TODO: 2015/11/12 查询是否有成本卡使用物品,查询结算的库存物品是否还有剩余
@@ -343,7 +354,35 @@ public class StorageItemServiceImpl implements StorageItemService {
             storageItemMapper.updateStatusById(id, StorageItemStatusEnums.Deleted.getId());
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.StorageTagDeleteFailed, e);
+            throw SSException.get(EmenuException.StorageItemDeleteFailed, e);
+        }
+    }
+
+    @Override
+    public boolean checkIsCanDelById(int id) throws SSException {
+        // 遍历所有单据,查询该库存物品是被添加
+        try {
+            // map中的key为库存物品的id，value为库存物品存在状态0或者空代表没有，1代表有
+            Map<Integer,Integer> checkMap = new HashMap<Integer, Integer>();
+            List<StorageReportDto> storageReportDtoList = storageReportService.listReportDto();
+            for (StorageReportDto storageReportDto : storageReportDtoList){
+                if (storageReportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
+                    for (StorageReportItem storageReportItem : storageReportDto.getStorageReportItemList()){
+                        checkMap.put(storageReportItem.getItemId(),1);
+                    }
+                }
+            }
+            if (Assert.isNull(id)
+                    ||Assert.lessOrEqualZero(id)){
+                if (Assert.isNull(checkMap.get(id))
+                        ||  checkMap.get(id) != 1){
+                    return false;
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
         }
     }
 

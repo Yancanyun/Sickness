@@ -147,6 +147,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient queryById(int id) throws SSException {
+        System.out.println("xiaozl");
         if (Assert.lessOrEqualZero(id)){
             return null;
         }
@@ -522,7 +523,7 @@ public class IngredientServiceImpl implements IngredientService {
             if (Assert.isNull(id)
                     ||Assert.lessOrEqualZero(id)){
                 if (Assert.isNull(checkMap.get(id))
-                        || Assert.lessOrEqualZero(checkMap.get(id))){
+                        || checkMap.get(id) != 1){
                     return false;
                 }
             }

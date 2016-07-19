@@ -84,6 +84,13 @@ public interface StorageItemService {
     public void delById(int id) throws SSException;
 
     /**
+     * 根据库存物品id判断是否可删除
+     * @param id
+     * @throws SSException
+     */
+    public boolean checkIsCanDelById(int id) throws SSException;
+
+    /**
      * 根据分类ID查询数量
      *
      * @param tagId
