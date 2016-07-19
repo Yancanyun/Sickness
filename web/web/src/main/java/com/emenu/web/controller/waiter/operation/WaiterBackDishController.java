@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.remark.RemarkDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Taste;
@@ -15,6 +16,7 @@ import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.service.remark.RemarkTagService;
@@ -52,10 +54,29 @@ public class WaiterBackDishController extends AbstractController {
      */
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject table(@RequestParam("tableId") Integer tableId){
+    public JSONObject table(@RequestParam("tableId") Integer tableId,
+                            HttpSession httpSession){
         try{
 
             JSONObject jsonObject = new JSONObject();
+
+            // 判断服务员是否可以服务该餐台
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> tableIdList = employeeDto.getTables();
+            if (Assert.isNull(tableIdList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            Boolean canService = false;
+            for (Integer integer : tableIdList) {
+                if (tableId == integer) {
+                    canService = true;
+                    break;
+                }
+            }
+            if (canService == false) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
 
             // 查询本餐台所有的订单菜品
             List<Order> orderList = new ArrayList<Order>();
@@ -153,5 +174,4 @@ public class WaiterBackDishController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
 }

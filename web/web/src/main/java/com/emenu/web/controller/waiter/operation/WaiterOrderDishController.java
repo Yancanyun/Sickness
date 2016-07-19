@@ -7,6 +7,7 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Taste;
 import com.emenu.common.entity.remark.Remark;
@@ -18,6 +19,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,23 +48,29 @@ public class WaiterOrderDishController extends AbstractController {
      * @param httpSession
      * @return
      */
-    @RequestMapping(value = "",method = RequestMethod.GET)
+    @RequestMapping(value = "list",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject toOrderDish(@RequestParam("tableId") Integer tableId,
                                   @RequestParam("tagId") Integer tagId,
                                   HttpSession httpSession){
         try{
-
+            // 判断服务员是否可以服务该餐台
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
-            // TODO: 检查服务员是否可点菜
-
-            // 根据ID检查餐台是否可以点菜
-            /*Integer status = tableService.queryStatusById(tableId);
-            if (status != TableStatusEnums.Enabled.getId()
-                    && status != TableStatusEnums.Merged.getId()
-                    && status != TableStatusEnums.Checkouted.getId()) {
-                throw SSException.get(EmenuException.TableIsNotEnabled);
-            }*/
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> tableIdList = employeeDto.getTables();
+            if (Assert.isNull(tableIdList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            Boolean canService = false;
+            for (Integer integer : tableIdList) {
+                if (tableId == integer) {
+                    canService = true;
+                    break;
+                }
+            }
+            if (canService == false) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
 
             // 获取二级分类列表
             JSONArray tagList = new JSONArray();
@@ -109,16 +117,14 @@ public class WaiterOrderDishController extends AbstractController {
                 jsonObject.put("salePrice",dishDto.getSalePrice());
 
                 // 从OrderDishCacheList中找dishId相同的菜品，把数量加起来发给前台
-                Float number = new Float(0);
+                Float number = 0f;
                 for (OrderDishCache orderDishCache : orderDishCacheList) {
                     if (orderDishCache.getDishId() != null && orderDishCache.getDishId().equals(dishDto.getId())) {
                         number = number + orderDishCache.getQuantity();
                     }
                 }
                 // 有数量则传值，没有数量则为空
-                if (number != 0) {
-                    jsonObject.put("dishNumber", number);
-                }
+                jsonObject.put("dishNumber", number);
                 dishDtoList.add(jsonObject);
             }
 
@@ -138,7 +144,7 @@ public class WaiterOrderDishController extends AbstractController {
      * @param keyword
      * @return
      */
-    @RequestMapping(value = "search",method = RequestMethod.GET)
+    @RequestMapping(value = "search",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject searchDish(@RequestParam("key") String keyword){
         try{
@@ -175,6 +181,7 @@ public class WaiterOrderDishController extends AbstractController {
             JSONObject jsonObject = new JSONObject();
             DishDto dishDto = dishService.queryById(dishId);
             jsonObject.put("dishId",dishDto.getId());
+            jsonObject.put("dishName",dishDto.getName());
             jsonObject.put("salePrice",dishDto.getSalePrice());
 
             // 口味信息放入json中
@@ -217,18 +224,33 @@ public class WaiterOrderDishController extends AbstractController {
      * @param remarks
      * @return
      */
-    @RequestMapping(value = "new", method = RequestMethod.GET)
+    @RequestMapping(value = "new", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject orderDish(HttpSession httpSession,
                                 @RequestParam("tableId") Integer tableId,
                                 @RequestParam("dishId") Integer dishId,
-                                @RequestParam("serveType") Integer serveType,
+                                @RequestParam(value = "serveType", required = false) Integer serveType,
                                 @RequestParam("number") Float number,
-                                @RequestParam("taste") Integer taste,
+                                @RequestParam(value = "taste", required = false) Integer taste,
                                 @RequestParam("remarks") String remarks){
         try{
+            // 判断服务员是否可以服务该餐台
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
-            // TODO: 检查服务员是否可点菜
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> tableIdList = employeeDto.getTables();
+            if (Assert.isNull(tableIdList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            Boolean canService = false;
+            for (Integer integer : tableIdList) {
+                if (tableId == integer) {
+                    canService = true;
+                    break;
+                }
+            }
+            if (canService == false) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
 
             //检查这个桌是否已经开台
             if (tableService.queryStatusById(tableId) == TableStatusEnums.Disabled.getId()
@@ -258,11 +280,30 @@ public class WaiterOrderDishController extends AbstractController {
      * @param dishId
      * @return
      */
-    @RequestMapping(value = "new/quickly", method = RequestMethod.GET)
+    @RequestMapping(value = "new/quickly", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject orderDishQuickly(@RequestParam("tableId") Integer tableId,
-                                       @RequestParam("dishId") Integer dishId){
+                                       @RequestParam("dishId") Integer dishId,
+                                       HttpSession httpSession){
         try{
+            // 判断服务员是否可以服务该餐台
+            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            List<Integer> tableIdList = employeeDto.getTables();
+            if (Assert.isNull(tableIdList)) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+            Boolean canService = false;
+            for (Integer integer : tableIdList) {
+                if (tableId == integer) {
+                    canService = true;
+                    break;
+                }
+            }
+            if (canService == false) {
+                throw SSException.get(EmenuException.WaiterCanNotServiceThisTable);
+            }
+
             OrderDishCache orderDishCache = new OrderDishCache();
             orderDishCache.setDishId(dishId);
             orderDishCacheService.newDish(tableId, orderDishCache);
@@ -272,6 +313,4 @@ public class WaiterOrderDishController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
-
 }
