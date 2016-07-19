@@ -18,7 +18,7 @@
     <thead>
     <th>备注内容</th>
     <th>权重</th>
-    <th>关联收费</th>
+    <%--<th>关联收费</th>--%>
     <th>是否常用</th>
     <th>操作</th>
     </thead>
@@ -29,11 +29,11 @@
       <input type="hidden" name="id" value="&{item.contentId}">
       <input type="hidden" name="name" value="&{item.content}">
       <input type="hidden" name="weight" value="&{item.weight}">
-      <input type="hidden" name="relatedCharge" value="&{item.relatedCharge}">
+      <%--<input type="hidden" name="relatedCharge" value="&{item.relatedCharge}">--%>
       <input type="hidden" name="isCommon" value="&{item.isCommon}">
       <td class="col-sm-5 J_content">&{item.content}</td>
       <td class="col-sm-1 J_weight">&{item.weight}</td>
-      <td class="col-sm-3 J_relatedCharge">&{item.relatedCharge}</td>
+      <%--<td class="col-sm-3 J_relatedCharge">&{item.relatedCharge}</td>--%>
       {@if item.isCommon == 0}
       <td class="col-sm-1 J_isCommon">否</td>
       {@else}
@@ -92,7 +92,7 @@
   <thead>
   <th>备注内容</th>
   <th>权重</th>
-  <th>关联收费</th>
+  <%--<th>关联收费</th>--%>
   <th>是否常用</th>
   <th>操作</th>
   </thead>
@@ -158,12 +158,12 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-sm-3 control-label"><span>&nbsp;</span>关联收费</label>
-      <div class="col-sm-9">
-        <input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isFloat"  value="&{dlg.relatedCharge}" name="relatedCharge" />
-      </div>
-    </div>
+    <%--<div class="form-group">--%>
+      <%--<label class="col-sm-3 control-label"><span>&nbsp;</span>关联收费</label>--%>
+      <%--<div class="col-sm-9">--%>
+        <%--<input class="J_relatedChargeInp" type="text" data-valid-tip="请输入关联收费内容|关联收费内容不能为非数字，请重新输入" data-valid-rule="isFloat"  value="&{dlg.relatedCharge}" name="relatedCharge" />--%>
+      <%--</div>--%>
+    <%--</div>--%>
   </form>
 </script>
 <!-- 备注内容 -->
@@ -173,11 +173,11 @@
     <input type="hidden" name="id" value="&{id}">
     <input type="hidden" name="name" value="&{name}">
     <input type="hidden" name="weight" value="&{weight}">
-    <input type="hidden" name="relatedCharge" value="&{relatedCharge}">
+    <%--<input type="hidden" name="relatedCharge" value="&{relatedCharge}">--%>
     <input type="hidden" name="isCommon" value="&{isCommon}">
     <td class="col-sm-5 J_content">&{name}</td>
     <td class="col-sm-1 J_weight">&{weight}</td>
-    <td class="col-sm-3 J_relatedCharge">&{relatedCharge}</td>
+    <%--<td class="col-sm-3 J_relatedCharge">&{relatedCharge}</td>--%>
     {@if isCommon == 0}
     <td class="col-sm-1 J_isCommon">否</td>
     {@else}

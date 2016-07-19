@@ -147,7 +147,7 @@ public class WaiterTableMergeController extends AbstractController {
             // 执行并台操作
             tableMergeService.mergeTable(tableIdList);
 
-// TODO: 暂时不做服务员跨区域并台，跟缓存相关的代码暂时注释掉
+            // TODO: 暂时不做服务员跨区域并台，跟缓存相关的代码暂时注释掉
 //            // 把缓存中该PartyId的缓存清空
 //            tableMergeCacheService.cleanCacheByPartyId(partyId);
 

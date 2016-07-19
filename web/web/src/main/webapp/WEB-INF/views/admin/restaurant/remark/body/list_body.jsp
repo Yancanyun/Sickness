@@ -78,7 +78,7 @@
                                             <thead>
                                             <th>备注内容</th>
                                             <th>权重</th>
-                                            <th>关联收费</th>
+                                            <%--<th>关联收费</th>--%>
                                             <th>是否常用</th>
                                             <th>操作</th>
                                             </thead>
@@ -90,11 +90,11 @@
                                                 <input type="hidden" name="id" value="${remarkDto.remark.id}">
                                                 <input type="hidden" name="name" value="${remarkDto.remark.name}">
                                                 <input type="hidden" name="weight" value="${remarkDto.remark.weight}">
-                                                <input type="hidden" name="relatedCharge" value="${remarkDto.remark.relatedCharge}">
+                                                <%--<input type="hidden" name="relatedCharge" value="${remarkDto.remark.relatedCharge}">--%>
                                                 <input type="hidden" name="isCommon" value="${remarkDto.remark.isCommon}">
                                                 <td class="col-sm-5 J_content">${remarkDto.remark.name}</td>
                                                 <td class="col-sm-1 J_weight">${remarkDto.remark.weight}</td>
-                                                <td class="col-sm-3 J_relatedCharge">${remarkDto.remark.relatedCharge}</td>
+                                                <%--<td class="col-sm-3 J_relatedCharge">${remarkDto.remark.relatedCharge}</td>--%>
                                                 <td class="col-sm-1 J_isCommon"><c:choose><c:when test="${remarkDto.remark.isCommon == 0}">否</c:when><c:otherwise>是</c:otherwise></c:choose></td>
                                                 <td class="col-sm-2">
                                                     <a href="javascript:;"
