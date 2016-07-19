@@ -10,7 +10,6 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.LoginTypeEnums;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.shiro.authc.UsernamePasswordToken;

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.LoginTypeEnums;
@@ -89,6 +90,12 @@ public class AdminController extends AbstractController {
         try {
             loginManageService.validLogin(token, LoginTypeEnums.BackgroundLogin,getRequest(), getResponse());
             httpSession.setAttribute("userName",loginName);
+
+            // TODO: 在后台测试app的AJAX请求用，发布前可以删掉
+            // 把partyId放入Session
+            SecurityUser user = securityUserService.queryByLoginName(loginName);
+            Integer partyId = user.getPartyId();
+            httpSession.setAttribute("partyId", partyId);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

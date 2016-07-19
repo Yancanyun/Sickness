@@ -7,7 +7,6 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;

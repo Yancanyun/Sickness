@@ -9,7 +9,6 @@ import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
-import com.emenu.web.spring.AbstractAppBarController;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -32,8 +31,7 @@ import java.util.List;
  */
 @Controller
 @IgnoreLogin
-//呼叫服务要和服务员端交互,所以要继承AbstractAppBarController
-public class MobileCallController  extends AbstractAppBarController {
+public class MobileCallController  extends AbstractController {
 
     /**
      * ajax获取呼叫服务列表
