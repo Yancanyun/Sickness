@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.order.BackDishMapper">
+
+    <select id="queryBackDishListByOrderId" resultType="BackDish">
+        SELECT id,
+        order_id AS orderId,
+        order_dish_id AS orderDishId,
+        taste_id AS tasteId,
+        `back_number` AS backNumber,
+        back_remarks AS backRemarks,
+        back_time AS backTime,
+        employee_party_id AS employeePartyId
+        FROM t_back_dish
+        WHERE order_id = #{orderId}
+    </select>
+
+</mapper>

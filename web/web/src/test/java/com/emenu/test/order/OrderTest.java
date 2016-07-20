@@ -48,7 +48,7 @@ public class OrderTest extends AbstractTestCase {
     @Test
     public void listByTableIdAndStatus() throws SSException{
         List<Order> orderList = Collections.EMPTY_LIST;
-        orderList = orderService.listByTableIdAndStatus(1,1);
+        orderList = orderService.listByTableIdAndStatus(4,1);
         for(Order order:orderList){
             System.out.print(order.getOrderRemark());
         }

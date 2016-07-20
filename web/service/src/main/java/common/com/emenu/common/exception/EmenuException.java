@@ -585,6 +585,9 @@ public enum EmenuException implements IBizExceptionMes {
     QuantityCanNotReduce("菜品数量无法再减少1",10059),
     QuantityIsNegative("菜品数量不能为负数",10060),
     ReturnTableOrderTotalMoneyFail("返回餐桌未结账的订单的总金额失败",10061),
+    CallDishFailed("催菜失败",10062),
+    QueryOrderDishListFailed("查询餐台订单菜品失败",10063),
+    QueryBackDishListFailed("查询退菜菜品失败",10063),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

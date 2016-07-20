@@ -3,6 +3,7 @@ package com.emenu.test.order;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -104,12 +105,12 @@ public class OrderDishTest extends AbstractTestCase {
 
     @Test
     public void updateServeType()throws SSException{
-        orderDishService.updateServeType(3,1);
+        orderDishService.updateServeType(3, 1);
     }
 
     @Test
     public void updatePresentedDish() throws SSException{
-        orderDishService.updatePresentedDish(3,1);
+        orderDishService.updatePresentedDish(3, 1);
     }
 
     @Test
@@ -160,5 +161,14 @@ public class OrderDishTest extends AbstractTestCase {
     public void testIsOrderHaveOrderDish() throws SSException
     {
         orderDishService.isOrderHaveOrderDish(1);
+    }
+
+    @Test
+    public void queryOrderDishListByTableId()throws SSException{
+        List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishListByTableId(4);
+        for (OrderDishDto orderDishDto: orderDishDtoList){
+            System.out.print("菜品名称：" + orderDishDto.getDishName());
+            System.out.println(" 菜品状态：" + OrderDishStatusEnums.valueOf(orderDishDto.getStatus()).getStatus());
+        }
     }
 }

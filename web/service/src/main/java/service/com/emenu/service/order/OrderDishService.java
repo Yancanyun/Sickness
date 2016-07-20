@@ -1,6 +1,7 @@
 package com.emenu.service.order;
 
 import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.pandawork.core.common.exception.SSException;
@@ -140,4 +141,20 @@ public interface OrderDishService {
      */
     public void callDish(Integer orderDishId)throws SSException;
 
+    /**
+     * 根据餐台查询所有的订单菜品
+     * 包含已退菜和赠送的
+     * @param tableId
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDishDto> queryOrderDishListByTableId(Integer tableId) throws SSException;
+
+    /**
+     * 根据订单id列表查询退菜信息
+     * @param tableIdList
+     * @return
+     * @throws SSException
+     */
+    public List<BackDish> queryBackDishListByTableIdList(List<Integer> tableIdList) throws SSException;
 }

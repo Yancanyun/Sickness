@@ -1,6 +1,8 @@
 package com.emenu.service.order.impl;
 
 import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.entity.order.BackDish;
+import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.enums.order.OrderDishCallStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
@@ -9,6 +11,7 @@ import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderDishMapper;
 import com.emenu.service.cook.CookTableCacheService;
+import com.emenu.service.order.BackDishService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
 import com.pandawork.core.common.exception.SSException;
@@ -16,7 +19,6 @@ import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,12 @@ public class OrderDishServiceImpl implements OrderDishService{
 
     @Autowired
     private OrderDishMapper orderDishMapper;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private BackDishService backDishService;
 
     @Autowired
     private CommonDao commonDao;
@@ -282,7 +290,57 @@ public class OrderDishServiceImpl implements OrderDishService{
             commonDao.update(orderDish);
         } catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
+            throw SSException.get(EmenuException. CallDishFailed,e);
+        }
+    }
+
+    @Override
+    public List<OrderDishDto> queryOrderDishListByTableId(Integer tableId) throws SSException{
+        List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
+        try{
+            if (Assert.lessOrEqualZero(tableId)){
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
+            List<com.emenu.common.entity.order.Order> orderList = new ArrayList<com.emenu.common.entity.order.Order>();
+            // 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
+            orderList = orderService.listByTableIdAndStatus(tableId,  OrderStatusEnums.IsBooked.getId());
+            if (Assert.isNotNull(orderList)) {
+                for (com.emenu.common.entity.order.Order order : orderList) {
+                    Integer orderId = order.getId();
+                    orderDishDtoList.addAll(this.listDtoByOrderId(orderId));
+                }
+            }
+            return orderDishDtoList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed,e);
+        }
+    }
+
+    @Override
+    public List<BackDish> queryBackDishListByTableIdList(List<Integer> tableIdList) throws SSException{
+        List<BackDish> backDishList = new ArrayList<BackDish>();
+        try{
+            if (Assert.isNull(tableIdList)){
+                throw SSException.get(EmenuException.QueryBackDishListFailed);
+            }
+            if (!tableIdList.isEmpty()){
+                for (Integer tableId: tableIdList){
+                    // 查询该桌的所有订单
+                    List<Order> orderList = orderService.listByTableIdAndStatus(tableId, OrderStatusEnums.IsBooked.getId());
+                    for (Order order: orderList){
+                        List<BackDish> backDishChildrenList = backDishService.queryBackDishListByOrderId(order.getId());
+                        backDishList.addAll(backDishChildrenList);
+                    }
+                }
+            }else {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+            return backDishList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishListFailed,e);
         }
     }
 }

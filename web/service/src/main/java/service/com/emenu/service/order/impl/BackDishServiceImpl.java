@@ -6,6 +6,7 @@ import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.mapper.order.BackDishMapper;
 import com.emenu.service.dish.DishPackageService;
 import com.emenu.service.order.BackDishService;
 import com.emenu.service.order.OrderDishService;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 退菜service
@@ -32,6 +35,9 @@ public class BackDishServiceImpl implements BackDishService {
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private BackDishMapper backDishMapper;
 
     @Autowired
     private OrderService orderService;
@@ -61,6 +67,7 @@ public class BackDishServiceImpl implements BackDishService {
             // 创建t_back_dish表的一条记录
             BackDish backDish = new BackDish();
             // 判断是否是套餐,修改对应数量和菜品状态
+            // TODO 套餐下菜品如何变化
             if (orderDish.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
                 // 套餐
                 backDishId = orderDish.getPackageId();
@@ -89,8 +96,8 @@ public class BackDishServiceImpl implements BackDishService {
                 orderDish.setDishQuantity(surplusDishNumber);
             }
 
-            backDish.setOrderDishId(backDishId);
-            backDish.setOrderDishId(orderDish.getDishId());
+            backDish.setOrderId(orderDish.getOrderId());
+            backDish.setOrderDishId(orderDish.getId());
             backDish.setBackNumber(backNumber);
             backDish.setBackRemarks(backRemarks);
             backDish.setTasteId(orderDish.getTasteId());
@@ -104,6 +111,21 @@ public class BackDishServiceImpl implements BackDishService {
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.BackOrderDishFailed, e);
+        }
+    }
+
+    @Override
+    public List<BackDish> queryBackDishListByOrderId(Integer orderId) throws SSException{
+        List<BackDish> backDishList = Collections.emptyList();
+        try{
+            if (Assert.lessOrEqualZero(orderId)){
+                throw SSException.get(EmenuException.OrderIdError);
+            }
+            backDishList = backDishMapper.queryBackDishListByOrderId(orderId);
+            return backDishList;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishListFailed, e);
         }
     }
 }
