@@ -309,20 +309,60 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStorageItem(StorageItem storageItem) throws SSException {
+    public void updateStorageItem(StorageItem storageItem,Integer isUpdated) throws SSException {
         try {
-            if (!checkBeforeSave(storageItem)) {
-                return ;
+            if (isUpdated == 0){
+                if (checkBeforeSave(storageItem)){
+                    Assert.isNotNull(storageItem.getId(), EmenuException.StorageItemIdNotNull);
+                    StorageItem storageItem1 = storageItemMapper.queryById(storageItem.getId());
+                    Assert.isNotNull(storageItem1,EmenuException.StorageItemIsNotNull);
+                    if (storageItem.getName().equals(storageItem1.getName())
+                            && storageItem.getTagId() == storageItem1.getTagId()
+                            && storageItem.getSupplierPartyId() == storageItem1.getSupplierPartyId()){
+                        if (checkStorageItemIsExist(storageItem)){
+                            storageItemMapper.updateStorageItemById(storageItem);
+                        }
+                    } else {
+                        if (checkStorageItemIsExist(storageItem)){
+                            throw SSException.get(EmenuException.StorageItemIsExist);
+                        }
+                    }
+                }
+            } else {
+                Assert.isNotNull(storageItem.getId(), EmenuException.StorageItemIdNotNull);
+                Assert.isNotNull(storageItem,EmenuException.StockOutTypeError);
+                if (storageItem.getStockOutType() < 1 || storageItem.getStockOutType()>2){
+                    throw SSException.get(EmenuException.StorageItemNameNotNull);
+                }
+                Assert.isNotNull(storageItem.getMaxStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);
+                Assert.isNotNull(storageItem.getMinStorageQuantity(), EmenuException.StorageItemMaxMinQuantity);
+                storageItemMapper.updateStorageItemByIsUpdated(storageItem);
             }
-            Assert.isNotNull(storageItem.getId(), EmenuException.StorageItemIdNotNull);
-            if (Assert.lessOrEqualZero(storageItem.getId())) {
-                return ;
-            }
-
-            commonDao.update(storageItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StorageItemUpdateFailed, e);
+        }
+    }
+
+    @Override
+    public boolean checkStorageItemIsExist(StorageItem storageItem) throws SSException {
+        Integer count = 0;
+        try {
+            Assert.isNotNull(storageItem.getName(),EmenuException.StorageItemNameNotNull);
+            Assert.isNotNull(storageItem.getTagId(),EmenuException.StorageItemTagNotNull);
+            Assert.lessOrEqualZero(storageItem.getTagId(),EmenuException.StorageItemTagIdError);
+            Assert.isNotNull(storageItem.getSupplierPartyId(),EmenuException.StorageItemSupplierNotNull);
+            Assert.lessOrEqualZero(storageItem.getSupplierPartyId(),EmenuException.StorageItemSupplierPartyIdError);
+            count = storageItemMapper.countByNameAndTagIdAndsupplierPartyId(storageItem.getName(),storageItem.getTagId(),storageItem.getSupplierPartyId());
+            if (Assert.isNull(count)
+                    || count == 0){
+                return false;
+            } else {
+                return count > 0;
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
         }
     }
 
@@ -452,10 +492,11 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     private boolean checkBeforeSave(StorageItem storageItem) throws SSException {
-        if (Assert.isNull(storageItem)) {
-            return false;
+        Assert.isNotNull(storageItem,EmenuException.StorageItemIsNotNull);
+        Assert.isNotNull(storageItem,EmenuException.StockOutTypeError);
+        if (storageItem.getStockOutType()<1 || storageItem.getStockOutType()>2){
+            throw SSException.get(EmenuException.StorageItemNameNotNull);
         }
-
         Assert.isNotNull(storageItem.getName(), EmenuException.StorageItemNameNotNull);
         Assert.isNotNull(storageItem.getIngredientId(), EmenuException.StorageItemIngredientIdNotNull);
         Assert.isNotNull(storageItem.getSupplierPartyId(), EmenuException.StorageItemSupplierNotNull);

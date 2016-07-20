@@ -20,7 +20,7 @@
                 </div>
                 <div class="panel-body">
                     <input class="J_storeItemId" type="hidden" name="id" value="${storageItem.id}">
-                    <input class="J_isUpdated" type="hidden" name="isUpdated" value="0">
+                    <input class="J_isUpdated" type="hidden" name="isUpdated" value="${isUpdated}">
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
                         <div class="col-sm-6">
@@ -36,7 +36,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">物品编号</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180" name="itemNumber" value="${storageItem.itemNumber}" readonly="readonly">
+                            <input type="text" class="w180 J_isDisabled" name="itemNumber" value="${storageItem.itemNumber}" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
                         <div class="col-sm-6">
-                            <select class="w180 form-control" name="tagId">
+                            <select class="w180 form-control J_isDisabled" name="tagName">
                                 <c:forEach var="tag" items="${tagList}">
                                     <option value="${tag.id}" <c:if test="${tag.id == storageItem.tagId}">selected="selected"</c:if> >${tag.name}</option>
                                 </c:forEach>
@@ -101,7 +101,7 @@
                                 <option value="1" <c:if test="${storageUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${storageUnitType == 2}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="w180 form-control  J_storageUnit J_isDisabled" name="storageUnitId">
+                            <select class="w180 form-control J_storageUnit J_isDisabled" name="storageUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == storageItem.storageUnitId}">selected="selected"</c:if>>${unit.name}</option>
                                 </c:forEach>
@@ -122,16 +122,15 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">成本卡单位</label>
                         <div class="col-sm-6">
-                            <input type="hidden" name="costCardUnitId" value="${storageItem.costCardUnitId}">
-                            <input type="text" class="w180 J_costCardUnit" value="${storageItem.costCardUnitName}" readonly="readonly">
-
+                            <input class="J_isDisabled" type="hidden" name="costCardUnitId" value="${storageItem.costCardUnitId}">
+                            <input type="text" class="w180 J_costCardUnit J_isDisabled" value="${storageItem.costCardUnitName}" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>计数单位</label>
                         <div class="col-sm-6">
-                            <input type="hidden" name="countUnitId" value="${storageItem.orderUnitId}">
-                            <input type="text" class="w180 J_countUnit" value="${storageItem.orderUnitName}" readonly="readonly">
+                            <input class="J_isDisabled" type="hidden" name="countUnitId" value="${storageItem.orderUnitId}">
+                            <input type="text" class="w180 J_countUnit J_isDisabled" value="${storageItem.orderUnitName}" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">

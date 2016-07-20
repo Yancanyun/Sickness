@@ -26,6 +26,21 @@ public interface StorageItemMapper {
     public List<StorageItem> listBySearchDto(@Param("searchDto") ItemAndIngredientSearchDto searchDto) throws Exception;
 
     /**
+     * 修改库物品
+     * @param storageItem
+     * @throws Exception
+     */
+    public void updateStorageItemById(@Param("storageItem") StorageItem storageItem) throws Exception;
+
+    /**
+     *
+     * @param storageItem
+     * @throws Exception
+     */
+    public void  updateStorageItemByIsUpdated(@Param("storageItem") StorageItem storageItem) throws Exception;
+
+
+    /**
      * 根据搜索条件查询数量
      *
      * @param searchDto
@@ -59,6 +74,16 @@ public interface StorageItemMapper {
      * @throws Exception
      */
     public int countByTagId(@Param("tagId") int tagId) throws Exception;
+
+    /**
+     * 根据库存物品名称和库存物品分类和供货商查询库存物品
+     * @param name
+     * @param tagId
+     * @param supplierPartyId
+     * @return
+     * @throws Exception
+     */
+    public int countByNameAndTagIdAndsupplierPartyId(String name,Integer tagId,Integer supplierPartyId) throws Exception;
 
     /**
      * 根据ID修改状态

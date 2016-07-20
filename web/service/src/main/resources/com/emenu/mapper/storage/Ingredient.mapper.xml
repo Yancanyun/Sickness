@@ -162,10 +162,13 @@
 
     <update id="updateIngredient">
           UPDATE `t_ingredient`
-            SET `tag_id` = #{ingredient.tagId},
-                `ingredient_number` = #{ingredient.assistantCode},
+            SET
+                `name` = #{ingredient.name},
+                `assistant_code` = #{ingredient.assistantCode},
+                `tag_id` = #{ingredient.tagId},
                 `order_unit_id` = #{ingredient.orderUnitId},
                 `storage_unit_id` = #{ingredient.storageUnitId},
+                `cost_card_unit_id` = #{ingredient.costCardUnitId},
                 `order_to_storage_ratio` = #{ingredient.orderToStorageRatio},
                 `storage_to_cost_card_ratio` = #{ingredient.storageToCostCardRatio},
                 `max_storage_quantity` = #{ingredient.maxStorageQuantity},
@@ -177,6 +180,13 @@
           UPDATE `t_ingredient`
             SET  `status` = #{status}
           WHERE `id` = #{id};
+    </update>
+
+    <update id="updateIngredientCodeAndLimitById">
+          UPDATE `t_ingredient`
+            SET `max_storage_quantity` = #{ingredient.maxStorageQuantity},
+                `min_storage_quantity` = #{ingredient.minStorageQuantity}
+          WHERE `id` = #{ingredient.id};
     </update>
 
     <select id="listByKeyword" resultMap="pw.Ingredient">

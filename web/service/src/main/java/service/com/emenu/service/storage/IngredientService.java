@@ -28,7 +28,7 @@ public interface IngredientService {
      * @param ingredient
      * @throws SSException
      */
-    public void updateIngredient(Ingredient ingredient) throws SSException;
+    public void updateIngredient(Ingredient ingredient,int isUpdated) throws SSException;
 
     /**
      * 根据原配料id修改原配料状态

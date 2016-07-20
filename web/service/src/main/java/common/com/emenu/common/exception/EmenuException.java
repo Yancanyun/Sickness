@@ -41,13 +41,18 @@ public enum EmenuException implements IBizExceptionMes {
     StorageItemDeleteFailed("删除库存物品失败", 1023),
     StorageItemNameNotNull("物品名称不能为空", 1024),
     StorageItemSupplierNotNull("物品的供应商不能为空", 1025),
-    StorageItemTagNotNull("物品所属分类不能为空", 1026),
+    StorageItemSupplierPartyIdError("供货商id错误",1026),
     StorageItemUnitNotNull("物品的订货单位、库存单位、成本卡单位不能为空", 1027),
     StorageItemUnitRatioNotNull("物品的单位换算关系不能为空", 1028),
     StorageItemMaxMinQuantity("物品的最大、最小库存量不能为空", 1029),
     StorageItemIdNotNull("物品的ID不能为空", 1030),
     StorageItemIngredientIdNotNull("库存物品原配料ID不能为空",1031),
     StorageItemNotExist("库存物品不存在",1032),
+    StorageItemIsNotNull("库存物品不能为空",1033),
+    StockOutTypeError("出库方式错误",1034),
+    StorageItemTagNotNull("物品所属分类不能为空", 1035),
+    StorageItemTagIdError("库存物品分类id错误",1036),
+    StorageItemIsExist("库存物品已经存在",1037),
 
     // 库存结算
     InsertStorageSettlementItemFailed("库存结算保存失败", 3030),
@@ -77,6 +82,9 @@ public enum EmenuException implements IBizExceptionMes {
     IngredientNotExist("原配料不存在",31103),
     IngredientQueryFailed("原配料查询失败",31104),
     IngredientIsExist("原配料已存在",31105),
+    IngredientUpdateStatusError("编辑时状态错误",31106),
+    IngredientIsNotNull("原配料不能为空",31107),
+    AssistantCode("助记码不能为空",31008),
 
     // 菜品管理模块
     // 分类管理

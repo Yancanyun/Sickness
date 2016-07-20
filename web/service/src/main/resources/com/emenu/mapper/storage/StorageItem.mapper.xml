@@ -155,6 +155,16 @@
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
     </select>
 
+    <select id="countByNameAndTagIdAndsupplierPartyId">
+        SELECT
+            COUNT(1)
+        FROM `t_storage_item`
+        WHERE `tag_id` = #{tagId}
+              `name` = #{name}
+              `supplier_party_id` = #{supplierPartyId}
+              AND `status` != 2
+    </select>
+
     <select id="countByTagId" resultType="int">
         SELECT
             COUNT(1)
@@ -167,6 +177,33 @@
         UPDATE `t_storage_item`
             SET `status` = #{status}
         WHERE `id` = #{id}
+    </update>
+
+    <update id="updateStorageItemById">
+        UPDATE `t_storage_item`
+            SET `name` = #{storageItem.name},
+            `assistant_code` = #{storageItem.assistantCode},
+            `ingredient_id` = #{storageItem.ingredientId},
+            `tag_id` = #{storageItem.tagId},
+            `supplier_party_id` = #{storageItem.supplierPartyId},
+            `order_unit_id` = #{storageItem.orderUnitId},
+            `storage_unit_id` = #{storageItem.storageUnitId},
+            `cost_card_unit_id` = #{storageItem.costCardUnitId},
+            `order_to_storage_ratio` = #{storageItem.orderToStorageRatio},
+            `storage_to_cost_card_ratio` = #{storageItem.storageToCostCardRatio},
+            `max_storage_quantity` = #{storageItem.maxStorageQuantity},
+            `min_storage_quantity` = #{storageItem.minStorageQuantity},
+            `stock_out_type` = #{storageItem.stockOutType}
+        WHERE `id` = #{storageItem.id}
+    </update>
+
+    <update id="updateStorageItemByIsUpdated">
+        UPDATE `t_storage_item`
+            SET `assistant_code` = #{storageItem.assistantCode},
+            `max_storage_quantity` = #{storageItem.maxStorageQuantity},
+            `min_storage_quantity` = #{storageItem.minStorageQuantity},
+            `stock_out_type` = #{storageItem.stockOutType}
+        WHERE `id` = #{storageItem.id}
     </update>
 
     <select id="listByKeyword" resultMap="pw.StorageItem">

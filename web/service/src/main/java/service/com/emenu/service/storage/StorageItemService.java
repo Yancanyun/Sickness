@@ -61,11 +61,17 @@ public interface StorageItemService {
 
     /**
      * 更新
-     *
      * @param storageItem
      * @throws SSException
      */
-    public void updateStorageItem(StorageItem storageItem) throws SSException;
+    public void updateStorageItem(StorageItem storageItem, Integer isUpdated) throws SSException;
+
+    /**
+     * 判断数据库中该物品是否存在
+     * @param storageItem
+     * @throws SSException
+     */
+    public boolean checkStorageItemIsExist(StorageItem storageItem) throws SSException;
 
     /**
      * 更新各个单位

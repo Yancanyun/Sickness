@@ -132,7 +132,8 @@ public class StorageReportServiceImpl implements StorageReportService {
            }
            StorageReport storageReport = this.newReport(reportDto.getStorageReport());
            if (reportDto.getStorageReport().getType() == StorageReportTypeEnum.StockInReport.getId()){
-               if (Assert.isNull(reportDto.getStorageReportItemList())){
+               if (Assert.isNull(reportDto.getStorageReportItemList())
+                       || reportDto.getStorageReportItemList().size() == 0){
                    throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
                }
                for (StorageReportItem reportItem : reportDto.getStorageReportItemList()) {
@@ -140,7 +141,8 @@ public class StorageReportServiceImpl implements StorageReportService {
                    storageReportItemService.newReportItem(reportItem);
                }
            } else {
-               if (Assert.isNull(reportDto.getStorageReportIngredientList())){
+               if (Assert.isNull(reportDto.getStorageReportIngredientList())
+                       || reportDto.getStorageReportIngredientList().size() == 0){
                    throw SSException.get(EmenuException.StorageReportDeatilIsNotNull);
                }
                for (StorageReportIngredient reportIngredient : reportDto.getStorageReportIngredientList()) {
@@ -618,7 +620,7 @@ public class StorageReportServiceImpl implements StorageReportService {
             reportList = listAll();
             for (StorageReport report : reportList){
                 {
-                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
                         for (StorageReportItem storageReportItem : storageReportItemList){

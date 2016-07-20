@@ -22,16 +22,17 @@
                 <div class="panel-body">
                     <input class="J_ingredientId" type="hidden" name="id" value="${ingredient.id}">
                     <input class="J_isUpdated" type="hidden" name="isUpdated" value="${isUpdated}">
+                    <input class="J_ingredientName" type="hidden" name="" value="${ingredient.name}">
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180 J_name" placeholder="请输入原配料名称" data-valid-rule="length(1,30,1)" data-valid-tip="请输入1-30个字符|输入有误，请重新填写" name="name" value="${ingredient.name}">
+                            <input type="text" class="w180 J_name J_isDisabled" placeholder="请输入原配料名称" data-valid-rule="length(1,30,1)" data-valid-tip="请输入1-30个字符|输入有误，请重新填写" name="name" value="${ingredient.name}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">原配料编号</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180" name="ingredientNumber" value="${ingredient.ingredientNumber}" readonly="readonly">
+                            <input type="text" class="w180 J_isDisabled" name="ingredientNumber" value="${ingredient.ingredientNumber}" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
@@ -43,7 +44,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
                         <div class="col-sm-6">
-                            <select class="w180 form-control" name="tagId">
+                            <select class="w180 form-control J_isDisabled" name="tagId">
                                 <c:forEach var="tag" items="${tagList}">
                                     <option value="${tag.id}" <c:if test="${tag.id == ingredient.tagId}">selected="selected"</c:if> >${tag.name}</option>
                                 </c:forEach>
@@ -53,16 +54,16 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位</label>
                         <div class="col-sm-6">
-                            <select class="w180 form-control J_unitType">
+                            <select class="w180 form-control J_unitType J_isDisabled">
                                 <option value="1" <c:if test="${orderUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${orderUnitType == 2}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="w180 form-control" name="orderUnitId">
+                            <select class="w180 form-control J_isDisabled" name="orderUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == ingredient.orderUnitId}">selected="selected"</c:if> data-unit-name="${unit.name}" >${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="w180 form-control hidden" name="orderUnitId" disabled="disabled">
+                            <select class="w180 form-control hidden J_isDisabled" name="orderUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == ingredient.orderUnitId}">selected="selected"</c:if> data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
@@ -72,22 +73,22 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位与库存换算关系</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="${ingredient.orderToStorageRatio}">
+                            <input type="text" class="w180 J_isDisabled" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="${ingredient.orderToStorageRatio}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位</label>
                         <div class="col-sm-6">
-                            <select class="w180 form-control J_unitType J_storageUnitType">
+                            <select class="w180 form-control J_unitType J_storageUnitType J_isDisabled">
                                 <option value="1" <c:if test="${storageUnitType == 1}">selected="selected"</c:if>>重量单位</option>
                                 <option value="2" <c:if test="${storageUnitType == 2}">selected="selected"</c:if>>数量单位</option>
                             </select>
-                            <select class="w180 form-control J_storageUnit" name="storageUnitId">
+                            <select class="w180 form-control J_storageUnit J_isDisabled" name="storageUnitId">
                                 <c:forEach var="unit" items="${weightUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == ingredient.storageUnitId}">selected="selected"</c:if> data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
                             </select>
-                            <select class="w180 form-control hidden J_storageUnit" name="storageUnitId" disabled="disabled">
+                            <select class="w180 form-control hidden J_storageUnit J_isDisabled" name="storageUnitId" disabled="disabled">
                                 <c:forEach var="unit" items="${quantityUnit}">
                                     <option value="${unit.id}" <c:if test="${unit.id == ingredient.storageUnitId}">selected="selected"</c:if> data-unit-name="${unit.name}">${unit.name}</option>
                                 </c:forEach>
@@ -97,22 +98,21 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位与成本卡换算关系</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180 J_storageToCostRatio" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="${ingredient.storageToCostCardRatio}">
+                            <input type="text" class="w180 J_storageToCostRatio J_isDisabled" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="${ingredient.storageToCostCardRatio}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">成本卡单位</label>
                         <div class="col-sm-6">
-                            <input type="hidden" name="costCardUnitId" value="${ingredient.costCardUnitId}">
-                            <input type="text" class="w180" value="${ingredient.costCardUnitName}" readonly="readonly">
+                            <input class="J_isDisabled" type="hidden" name="costCardUnitId" value="${ingredient.id}">
+                            <input type="text" class="w180 J_isDisabled" value="${ingredient.costCardUnitName}" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">库存预警上限</label>
+                        <label class="col-sm-3 control-label"><span class="requires">*</span>库存预警上限</label>
                         <div class="col-sm-9">
                             <input type="text" class="w180 J_storageWarning J_maxStorageWarning" data-valid-rule="isFloat" data-valid-tip="请输入库存预警上限|输入有误，请重新填写" name="maxStorageQuantity" value="${ingredient.maxStorageQuantity}">
                             <input type="text" class="w50 J_storageWarningUnit" readonly value="${ingredient.storageUnitName}">
-
                         </div>
                     </div>
                     <div class="form-group">
@@ -151,7 +151,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总金额</label>
                         <div class="col-sm-6">
-                            <input type="text" class="w180" name="totalMoney" value="${ingredient.totalMoney}" readonly="readonly">
+                            <input type="text" class="w180" name="totalMoney" value="${ingredient.totalMoney}"  readonly="readonly">
                         </div>
                     </div>
                 </div>

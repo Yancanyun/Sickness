@@ -4,14 +4,18 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="${website}"><i class="fa fa-home"></i>&nbsp;首页</a></li>
-            <li><a href="#">库存管理</a></li>
-            <li class="active">库存盘点</li>
+            <li>
+                <a href="#"><i class="fa fa-home"></i>&nbsp;首页</a>
+            </li>
+            <li>
+                <a href="#">库存管理</a>
+            </li>
+            <li>
+                <a href="#" class="active">库存盘点</a>
+            </li>
         </ol>
         <h2>库存盘点</h2>
-        <c:if test="${eMsg!=null}">
-        <div class="alert alert-danger col-sm-12 J_msg" role="alert">${eMsg}</div>
-        </c:if>
+        <div class="alert alert-danger col-sm-12 J_msg" role="alert">添加失败！</div>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -20,51 +24,33 @@
             </div>
             <div class="panel-body">
                 <form class="form-horizontal operForm" autocomplete="off">
-                    <div class="form-group col-sm-6"  >
-                        <label class="col-sm-4 control-label">开始时间</label>
-                        <div class="col-sm-5">
-                            <input type="text" class="J_date" name="startDate" value="" />
+                    <div class="form-group "  >
+                        <label class="col-sm-2 control-label">开始时间</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="J_date" name="startTime" value="" />
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
+                    <div class="form-group">
                         <label class="col-sm-2 control-label">结束时间</label>
-                        <div class="col-sm-4">
-                            <input type="text" class=" J_date" name="endDate" value="" />
+                        <div class="col-sm-7">
+                            <input type="text" class=" J_date" name="endTime" value="" />
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
-                        <label class="col-sm-4 control-label">物品名称</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="w190" name="itemName" value="" />
+                    <div class="form-group ">
+                        <label class="col-sm-2 control-label">原配料名称</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="w190" name="ingredientNumber" value="" />
                         </div>
                     </div>
-                    <div class="form-group col-sm-6">
-                        <label class="col-sm-2 control-label">供货商</label>
-                        <div class="col-sm-8">
-                            <select class="form-control w190" name="supplierId">
-                                <option value="0">请选择</option>
-                                <c:forEach items="${supplierList}" var="supplier">
-                                    <option value="${supplier.id}">${supplier.name}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label padding-R">存放点</label>
-                        <div class="J_checkbox checkbox block col-sm-7">
-                            <c:forEach items="${storageDepotList}" var="depot">
-                                <label>
-                                    <input type="checkbox" name="depotIds" value="${depot.id}" />${depot.name}
-                                </label>
-                            </c:forEach>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label padding-R">分类</label>
+                    <div class="form-group ">
+                        <label class="col-sm-2 control-label padding-R-17">分类</label>
                         <div class="checkbox block col-sm-7">
-                            <c:forEach items="${tagList}" var="tag">
+                            <label>
+                                <input type="checkbox" class="J_selectAll" name="tagIds" value="1">全选
+                            </label>
+                            <c:forEach var="tag" items="${tagList}">
                                 <label>
-                                    <input type="checkbox" name="tagIds" value="${tag.id}" />${tag.name}
+                                    <input type="checkbox" class="J_selectType" name="tagIds"  value="${tag.id}" />${tag.name}
                                 </label>
                             </c:forEach>
                         </div>
@@ -83,45 +69,34 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="${website}admin/storage/settlement/check/export" class="btn btn-warning margin-bottom-15 J_export">
-                        <i class="fa fa-download"></i>&nbsp;导出Excel
-                    </a>
+                    <a href="sdff?" class="btn btn-warning margin-bottom-15 ">库存盘点</a>
+                    <a href="#" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead class="v-center">
                         <tr>
+                            <th rowspan="2">序号</th>
                             <th rowspan="2">类别</th>
+                            <th rowspan="2">名称</th>
                             <th rowspan="2">编号</th>
-                            <th rowspan="2">物品名称</th>
-                            <th rowspan="2">物品最新入库单价</th>
-                            <th rowspan="2">库存规格</th>
-                            <th rowspan="2">订货规格</th>
-                            <th colspan="2">期初</th>
-                            <th colspan="2">入库</th>
-                            <th colspan="2">出库</th>
-                            <th colspan="2">盈亏</th>
-                            <th colspan="3">结存</th>
+                            <th colspan="3">规格</th>
+                            <th rowspan="2">期初</th>
+                            <th rowspan="2">入库</th>
+                            <th rowspan="2">出库</th>
+                            <th rowspan="2">盈亏</th>
+                            <th rowspan="2">结存</th>
                             <th colspan="2">库存报警值</th>
                         </tr>
                         <tr>
-                            <th>数量</th>
-                            <th>金额</th>
-                            <th>数量</th>
-                            <th>金额</th>
-                            <th>数量</th>
-                            <th>金额</th>
-                            <th>数量</th>
-                            <th>金额</th>
-                            <th>数量</th>
-                            <th>均价</th>
-                            <th>金额</th>
+                            <th>库存</th>
+                            <th>订货</th>
+                            <th>成本卡</th>
                             <th>上限</th>
                             <th>下限</th>
                         </tr>
                         </thead>
                         <tbody id="J_template">
-
                         </tbody>
                     </table>
                     <div class="J_pagination pagination-white">
@@ -130,4 +105,4 @@
             </div>
         </div>
     </div>
-</div>
+</div><!--row-->

@@ -25,6 +25,13 @@ public interface IngredientMapper {
     public void updateIngredient(@Param("ingredient") Ingredient ingredient) throws Exception;
 
     /**
+     * 根据id修改原配料助记码和库存上下限
+     * @param ingredient
+     * @throws Exception
+     */
+    public void updateIngredientCodeAndLimitById(@Param("ingredient") Ingredient ingredient) throws Exception;
+
+    /**
      * 根据原配料id修改原配料状态
      * @param id
      * @param status

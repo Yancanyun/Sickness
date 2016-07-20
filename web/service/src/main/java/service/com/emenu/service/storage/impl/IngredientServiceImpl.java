@@ -84,6 +84,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Ingredient newIngredient(Ingredient ingredient) throws SSException {
+        System.out.println("xiao");
         if (!checkBeforeSave(ingredient)) {
             return null;
         }
@@ -114,12 +115,37 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateIngredient(Ingredient ingredient) throws SSException {
+    public void updateIngredient(Ingredient ingredient,int isUpdated) throws SSException {
         try {
-            if (this.checkBeforeSave(ingredient)) {
+            // isUpdated 0，代表 可以修改，1代表不可以修改
+            if (isUpdated == 0) {
+                if (this.checkBeforeSave(ingredient)) {
+                    Ingredient ingredient1 = queryById(ingredient.getId());
+                    ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+                    ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+                    Assert.isNotNull(ingredient1,EmenuException.IngredientIsNotNull);
+                    if (ingredient1.getName().equals(ingredient.getName())){
+                        ingredientMapper.updateIngredient(ingredient);
+                    } else {
+                        if (checkIngredientNameIsExist(ingredient.getName())){
+                            throw SSException.get(EmenuException.IngredientIsExist);
+                        } else {
+                            ingredientMapper.updateIngredient(ingredient);
+                        }
+                    }
+                }
+            } else {
+                Assert.isNotNull(ingredient,EmenuException.IngredientIsNotNull);
+                Assert.isNotNull(ingredient.getAssistantCode(),EmenuException.AssistantCode);
+                if (Assert.isNull(ingredient.getId())
+                        || Assert.lessOrEqualZero(ingredient.getId())){
+                    throw SSException.get(EmenuException.IngredientIdError);
+                }
+                Assert.isNotNull(ingredient.getMaxStorageQuantity(), EmenuException.IngredientMaxStorageQuantityIsNotNull);
+                Assert.isNotNull(ingredient.getMinStorageQuantity(), EmenuException.IngredientMinStorageQuantityIsNotNull);
                 ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
                 ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
-                ingredientMapper.updateIngredient(ingredient);
+                ingredientMapper.updateIngredientCodeAndLimitById(ingredient);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -147,11 +173,10 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient queryById(int id) throws SSException {
-        System.out.println("xiaozl");
         if (Assert.lessOrEqualZero(id)){
             return null;
         }
-        Ingredient ingredient;
+        Ingredient ingredient = null;
         try {
             ingredient = commonDao.queryById(Ingredient.class,id);
             if (Assert.isNull(ingredient)){
@@ -522,12 +547,13 @@ public class IngredientServiceImpl implements IngredientService {
             }
             if (Assert.isNull(id)
                     ||Assert.lessOrEqualZero(id)){
-                if (Assert.isNull(checkMap.get(id))
-                        || checkMap.get(id) != 1){
-                    return false;
-                }
+               return false;
             }
-            return true;
+            if (Assert.isNull(checkMap.get(id))
+                    || checkMap.get(id) != 1){
+                return true;
+            }
+            return false;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);

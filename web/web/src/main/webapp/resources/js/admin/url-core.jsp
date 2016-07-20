@@ -107,6 +107,8 @@
             ['submitStorageItem', site.website  + 'admin/storage/item/ajax/new', 'post', '提交添加的库存物品'],
             ['submitEditedStorageItem', site.website  + 'admin/storage/item/ajax/update', 'put', '提交编辑的库存物品'],
             ['getCostCardUnit', site.website + 'admin/storage/item/ajax/getcostcardunit', 'get', '获取成本卡单位'],
+
+
             //存放点管理
             ['delDepot', site.staticWebsite + 'admin/storage/depot/ajax/&{id}', 'delete', '删除存放点'],
 

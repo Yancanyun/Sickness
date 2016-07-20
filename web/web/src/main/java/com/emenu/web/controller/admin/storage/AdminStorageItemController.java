@@ -272,7 +272,11 @@ public class AdminStorageItemController extends AbstractController {
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("tagList", tagList);
             model.addAttribute("ingredientList", ingredientList);
-
+            if (storageItemService.checkIsCanDelById(id)){
+                model.addAttribute("isUpdated", 1);
+            } else {
+                model.addAttribute("isUpdated", 0);
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
@@ -290,10 +294,10 @@ public class AdminStorageItemController extends AbstractController {
     @Module(value = ModuleEnums.AdminStorageItem, extModule= ModuleEnums.AdminStorageItemUpdate)
     @RequestMapping(value = "ajax/update", method = RequestMethod.PUT)
     @ResponseBody
-    public JSON updateStorageItem(StorageItem storageItem) {
+    public JSON updateStorageItem(StorageItem storageItem,@RequestParam("isUpdated")Integer isUpdated) {
         try{
             System.out.println("xiaozl");
-            storageItemService.updateStorageItem(storageItem);
+            storageItemService.updateStorageItem(storageItem,isUpdated);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

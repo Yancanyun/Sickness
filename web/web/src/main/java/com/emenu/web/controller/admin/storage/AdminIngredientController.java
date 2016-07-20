@@ -14,6 +14,7 @@ import com.emenu.common.enums.dish.UnitEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.IngredientStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -213,22 +214,70 @@ public class AdminIngredientController extends AbstractController{
     }
 
     /**
-     * 检查原配料名是否重名
+     * 检查原配料名是否重名，添加的时候
      * @param name
      * @return
      */
     @Module(ModuleEnums.AdminStorageIngredientNew)
     @RequestMapping(value = "ajax/checkname",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject checkIngredientName(@RequestParam("name")String name){
+    public JSONObject checkIngredientName(@RequestParam("id")Integer id,@RequestParam("name")String name){
         if (Assert.isNull(name)){
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            return sendJsonObject(AJAX_FAILURE_CODE);
         }
         try {
-            if (ingredientService.checkIngredientNameIsExist(name)){
-                return sendJsonObject(AJAX_FAILURE_CODE);
+            if (Assert.isNull(id)
+                    || Assert.lessOrEqualZero(id)){
+                if (ingredientService.checkIngredientNameIsExist(name)){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                } else {
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
             } else {
+                Ingredient ingredient = ingredientService.queryById(id);
+                Assert.isNotNull(ingredient,EmenuException.IngredientIsNotNull);
+                if (ingredient.getName().equals(name)){
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                } else {
+                    if (ingredientService.checkIngredientNameIsExist(name)){
+                        return sendJsonObject(AJAX_FAILURE_CODE);
+                    } else {
+                        return sendJsonObject(AJAX_SUCCESS_CODE);
+                    }
+                }
+            }
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * 检查原配料名是否重名,编辑的时候
+     * @param name
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageIngredientNew)
+    @RequestMapping(value = "ajax/checkname/on/update",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject checkIngredientNameOnUpdate(@RequestParam("id")Integer id,@RequestParam("name")String name){
+        if (Assert.isNull(name)){
+            return sendJsonObject(AJAX_FAILURE_CODE);
+        }
+        try {
+            Assert.isNotNull(id, EmenuException.IngredientIdError);
+            Ingredient ingredient = ingredientService.queryById(id);
+            Assert.isNotNull(ingredient,EmenuException.IngredientQueryFailed);
+            Assert.isNotNull(name,EmenuException.IngredientNameIsNotNull);
+            if (ingredient.getName().equals(name)){
                 return sendJsonObject(AJAX_SUCCESS_CODE);
+            } else {
+                if (ingredientService.checkIngredientNameIsExist(name)){
+                    return sendJsonObject(AJAX_FAILURE_CODE);
+                } else {
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }
             }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -290,13 +339,33 @@ public class AdminIngredientController extends AbstractController{
             } else {
                 model.addAttribute("isUpdated",1);
             }
-            model.addAttribute("isUpdated",1);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
         return "admin/storage/ingredient/update_home";
+    }
+
+    /**
+     * 编辑ingredient数量转换
+     * @param ingredient
+     *
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
+    @RequestMapping(value = "ajax/update",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject update(Ingredient ingredient,@RequestParam("isUpdated")Integer isUpdated) {
+        try {
+            Assert.isNotNull(isUpdated,EmenuException.IngredientUpdateStatusError);
+            ingredientService.updateIngredient(ingredient,isUpdated);
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     /**
@@ -331,25 +400,7 @@ public class AdminIngredientController extends AbstractController{
         }
     }
 
-    /**
-     * 编辑ingredient数量转换
-     * @param ingredient
-     *
-     * @return
-     */
-    @Module(value = ModuleEnums.AdminStorageIngredientUpdate,extModule = ModuleEnums.AdminStorageIngredientUpdate)
-    @RequestMapping(value = "ajax/update",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject update(Ingredient ingredient,@RequestParam("isUpdated")Integer isUpdated) {
-        try {
-            ingredientService.updateIngredient(ingredient);
-            return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return sendErrMsgAndErrCode(e);
-        }
-    }
+
 
     @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = "export",method = RequestMethod.GET)
