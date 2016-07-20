@@ -52,7 +52,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
     @RequestMapping(value = "",method = RequestMethod.GET)
     @Module(ModuleEnums.WaiterOrderList)
     @ResponseBody
-    public JSONObject ajaxToConfirmPage(@RequestParam("tabldId")Integer tableId
+    public JSONObject ajaxToConfirmPage(@RequestParam("tableId")Integer tableId
             ,HttpServletRequest request)
     {
         Set<String> uniqueRemark = new HashSet<String>();//去除重复后的备注
@@ -92,7 +92,9 @@ public class WaiterOrderDishConfirmController extends AbstractController{
 
                     temp.put("dishCacheId",dto.getId());
                     temp.put("dishName",dishDto.getName());
-                    if(tasteService.queryById(dto.getTasteId())!=null)
+                    if(dto.getTasteId()!=null
+                            &&dto.getTasteId()>0
+                            &&tasteService.queryById(dto.getTasteId())!=null)
                     temp.put("taste",tasteService.queryById(dto.getTasteId()).getName());
                     else
                     temp.put("taste","");
@@ -347,20 +349,8 @@ public class WaiterOrderDishConfirmController extends AbstractController{
             if (checkout == null) {
                 checkout = new Checkout();
                 checkout.setTableId(tableId);
-                //checkout.setCheckerPartyId();
-                //checkout.setCheckoutTime();
-                //checkout.setConsumptionMoney();
-                //checkout.setConsumptionType();
                 checkout.setCreatedTime(new Date());
-                //checkout.setFreeRemarkId();
-                //checkout.setIsFreeOrder();
-                //checkout.setIsInvoiced();
-                //checkout.setLastModifiedTime();
-                //checkout.setPrepayMoney();
-                //checkout.setShouldPayMoney();
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
-                //checkout.setTotalPayMoney();
-                //checkout.setWipeZeroMoney();
                 checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
             }
 

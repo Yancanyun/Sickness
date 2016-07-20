@@ -390,6 +390,11 @@ public enum ModuleEnums {
     BarBackDishList("Bar:Back:Dish:List"),
     // 吧台退菜确认
     BarBackDishConfirm("Bar:Back:Dish:Confirm"),
+    // 吧台结账单
+    BarCheckout("Bar:Checkout"),
+    // 吧台打印消费清单
+    BarCheckoutPrint("Bar:Checkout:Print"),
+
 
 
     //后厨管理模块

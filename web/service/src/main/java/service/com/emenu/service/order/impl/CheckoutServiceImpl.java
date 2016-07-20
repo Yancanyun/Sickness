@@ -11,6 +11,8 @@ import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishPresentedEnums;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.exception.EmenuException;
@@ -135,8 +137,7 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
-    public JSONObject printCheckOutByTableId(Integer tableId) throws SSException
-    {
+    public JSONObject printCheckOutByTableId(Integer tableId) throws SSException {
         List<Order> orders = new ArrayList<Order>();
         List<OrderDish> orderDishs = new ArrayList<OrderDish>();
         Table table = new Table();
@@ -147,74 +148,107 @@ public class CheckoutServiceImpl implements CheckoutService {
         try{
             // 获取对应餐桌未结账的所有订单
             orders = orderService.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());
-
             // 获取订单的所有菜品
-            if(orders!=null&&!orders.isEmpty())
-            {
-                for(Order dto : orders)
-                {
-
+            if(orders!=null&&!orders.isEmpty()) {
+                for(Order dto : orders) {
                     orderDishs.addAll(orderDishService.listByOrderId(dto.getId()));
                 }
             }
-
             // 查询出餐桌的信息
             table = tableService.queryById(tableId);
             str += "餐台名称:"+table.getName()+"\n";
             str += "菜品名称          数量    单价\n";
-
             int len, i;
+            // 应收金额包括赠送菜品的金额
+            BigDecimal shoulePayMoney = new BigDecimal(0);
             // 打印的菜品信息
-            for(OrderDish dto : orderDishs)
-            {
+            for(OrderDish dto : orderDishs) {
+                Integer orderDishStatus = dto.getStatus();
+                Integer orderDishPresentedStatus = dto.getIsPresentedDish();
                 // 是套餐
-                if(dto.getIsPackage()== PackageStatusEnums.IsPackage.getId())
-                {
+                if(dto.getIsPackage()== PackageStatusEnums.IsPackage.getId()) {
                     // 之前未打印过该套餐,则打印出来
-                    if(packageFlagMap.get(dto.getPackageFlag())==null)
-                    {
+                    if(packageFlagMap.get(dto.getPackageFlag())==null) {
                         // 查询出套餐的信息
                         DishDto dishDto = dishService.queryById(dto.getPackageId());
                         str += dishDto.getName();
-
+                        if(orderDishPresentedStatus == OrderDishPresentedEnums.IsPresentedDish.getId())
+                            str += "(赠)";
+                        if(orderDishStatus == OrderDishStatusEnums.IsBack.getId())
+                            str +="(退)";
                         // 加空格以保证对齐
                         len = dishDto.getName().length() * 2;
                         for(i = 0; i < 18 - len; i++)str += " ";
                         str += String.valueOf(dto.getPackageQuantity());
                         len = String.valueOf(dto.getPackageQuantity()).length();
                         for(i = 0; i < 8 - len; i++)str += " ";
-                        str += String.valueOf(dishDto.getSalePrice().floatValue()*dto.getPackageQuantity()) + "\n";
+                        str += String.valueOf(dishDto.getSalePrice()) + "\n";
+                        shoulePayMoney = shoulePayMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue()*dto.getPackageQuantity()));
                         // 此套餐已经打印过
                         packageFlagMap.put(tableId,1);
                     }
                 }
                 // 非套餐
-                else
-                {
+                else {
                     // 查询出套餐的信息
                     DishDto dishDto = dishService.queryById(dto.getDishId());
                     str += dishDto.getName();
-
+                    if(orderDishPresentedStatus == OrderDishPresentedEnums.IsPresentedDish.getId())
+                        str += "(赠)";
+                    if(orderDishStatus == OrderDishStatusEnums.IsBack.getId())
+                        str +="(退)";
                     // 加空格以保证对齐
                     len = dishDto.getName().length() * 2;
                     for(i = 0; i < 18 - len; i++)str += " ";
                     str += String.valueOf(dto.getDishQuantity());
                     len = String.valueOf(dto.getDishQuantity()).length();
                     for(i = 0; i < 8 - len; i++)str += " ";
-                    str += String.valueOf(dishDto.getSalePrice().floatValue()*dto.getDishQuantity()) + "\n";
+                    str += String.valueOf(dishDto.getSalePrice()) + "\n";
+                    shoulePayMoney = shoulePayMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue()*dto.getDishQuantity()));
                 }
             }
 
             str += "餐台费用:"+table.getTableFee()+"\n";
             // 餐位费用等于实际用餐人数*每一位的费用
             str += "餐位费用: ="+table.getSeatFee() + " * " +table.getPersonNum()+ " = " +table.getSeatFee().floatValue()*table.getPersonNum().floatValue()+"\n";
-
-            // 总消费金额
-            BigDecimal totalMoney = new BigDecimal(0);
-            // 总消费金额等于餐台费用+餐位费用+订单菜品的总费用(包括了退的菜和赠送的菜)
-            totalMoney = totalMoney.add(new BigDecimal(table.getTableFee().floatValue()+table.getSeatFee().floatValue()*table.getPersonNum().floatValue()+orderService.returnOrderTotalMoney(tableId).floatValue()));
-            str +="应收金额："+String.valueOf(totalMoney) + "\n";
+            shoulePayMoney = shoulePayMoney.add(new BigDecimal(table.getTableFee().floatValue()+table.getSeatFee().floatValue()*table.getPersonNum().floatValue()+orderService.returnOrderTotalMoney(tableId).floatValue()));
+            str +="应收金额："+String.valueOf(shoulePayMoney) + "\n";
             str += "--------------------------------\n";
+            // 实际消费金额,不包括赠送的菜品
+            BigDecimal actualPayMoney = new BigDecimal(0);
+            actualPayMoney = shoulePayMoney;
+            // 上面用到过,这里还要用到,要初始化一下
+            packageFlagMap = new HashMap<Integer, Integer>();
+            // 下面显示所有的赠送菜品
+            for(OrderDish dto : orderDishs) {
+                Integer orderDishPresentedStatus = dto.getIsPresentedDish();
+                Integer orderDishStatus = dto.getStatus();
+                if(orderDishPresentedStatus == OrderDishPresentedEnums.IsPresentedDish.getId()){
+
+                    DishDto dishDto = dishService.queryById(dto.getDishId());
+                    str += dishDto.getName()+"(赠)";
+                    // 加空格以保证对齐
+                    len = dishDto.getName().length() * 2;
+                    for(i = 0; i < 18 - len; i++)str += " ";
+                    str += String.valueOf(dto.getDishQuantity());
+                    len = String.valueOf(dto.getDishQuantity()).length();
+                    for(i = 0; i < 8 - len; i++)str += " ";
+                    str += String.valueOf(dishDto.getSalePrice()) + "\n";
+                    // 赠送的菜品是套餐
+                    if(orderDishStatus==PackageStatusEnums.IsPackage.getId()){
+                        // 未出现过的套餐
+                        if(packageFlagMap.get(dto.getPackageFlag())==null){
+                            actualPayMoney.subtract(new BigDecimal(dishDto.getSalePrice().floatValue()*dto.getPackageQuantity()));
+                            packageFlagMap.put(dto.getPackageFlag(),1);
+                        }
+                    }
+                    // 非套餐
+                    else{
+                        actualPayMoney.subtract(new BigDecimal(dishDto.getSalePrice().floatValue()*dto.getDishQuantity()));
+                    }
+                }
+            }
+            str +="实际消费金额: " + String.valueOf(actualPayMoney)+"\n";
             str += "聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n";
 
             Socket socket = new Socket();
@@ -226,31 +260,38 @@ public class CheckoutServiceImpl implements CheckoutService {
             Printer printer = new Printer();
             printer = printerService.queryById(printerId);
             // 未设置打印机的ip地址
-            if(printer.getIpAddress()==null)
+            if(printer.getIpAddress()==null){
                 jsonObject.put("code",2);
+                return jsonObject;
+            }
             // 连接打印机
             socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 10000);
             // 成功建立了连接
-            if (socket.isConnected())
-            {
+            if (socket.isConnected()) {
                 // 打印
                 // 初始化打印机
                 os.write(PrintUtils.initPrinter());
 
-                //设置0为左对齐,1的话为设置为居中,2为右对齐
+                // 设置0为左对齐,1的话为设置为居中,2为右对齐
                 os.write(PrintUtils.setLocation(0));
 
                 os.write(PrintUtils.printText(str));//打印信息
 
                 os.write(PrintUtils.println(4));
-                //切纸
+                // 切纸
                 os.write(PrintUtils.cutPaper());
+            }
+            else{
+                // 打印机连接失败
+                jsonObject.put("code",1);
+                return jsonObject;
             }
 
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateCheckoutFailed);
         }
+        jsonObject.put("code",0);
         return jsonObject;
     }
 

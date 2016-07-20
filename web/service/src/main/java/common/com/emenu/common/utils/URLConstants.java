@@ -227,6 +227,9 @@ public final class URLConstants {
     // 吧台退菜
     public static final String BAR_BACK_DISH = "bar/back/dish";
 
+    // 吧台结账单
+    public static final String BAR_CHECKOUT_URL = "bar/checkout";
+
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 
