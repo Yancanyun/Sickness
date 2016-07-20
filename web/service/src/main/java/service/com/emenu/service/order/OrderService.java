@@ -77,7 +77,7 @@ public interface OrderService {
     public List<CheckOrderDto> queryOrderByTimePeroid2(Date startTime,Date endTime) throws SSException;
 
     /**
-     * 根据tableId查询对应订单且未结账的订单的所有菜品的总金额
+     * 根据tableId查询对应订单且未结账的订单的所有菜品的总金额(包括赠送菜品的金额但不包括退菜的菜品金额)
      * @param
      * @return
      * @throws Exception

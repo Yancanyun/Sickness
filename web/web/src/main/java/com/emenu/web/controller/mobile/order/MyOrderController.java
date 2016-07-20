@@ -417,6 +417,11 @@ public class MyOrderController  extends AbstractController {
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
+                // 餐桌状态为占用已结账的话则不是第一次消费
+                if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId())
+                    checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
+                else
+                checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());
                 checkout.setTableId(tableId);
                 checkout.setCreatedTime(new Date());
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
@@ -429,14 +434,11 @@ public class MyOrderController  extends AbstractController {
             Order order = new Order();
             order.setCheckoutId(checkout.getId());
             order.setCreatedTime(new Date());
-            //order.setEmployeePartyId();
-            //order.setLoginType();
             order.setOrderRemark(confirmOrderRemark);
             order.setOrderServeType(serviceWay);
             order.setStatus(OrderStatusEnums.IsBooked.getId());
             order.setTableId(tableId);
             order.setIsSettlemented(OrderSettlementStatusEnums.IsNotSettlement.getId());//订单是否被盘点过
-            //order.setVipPartyId();
             orderService.newOrder(order);
 
             //新增订单菜品到数据表

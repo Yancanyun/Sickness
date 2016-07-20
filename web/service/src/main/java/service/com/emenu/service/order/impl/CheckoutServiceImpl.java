@@ -212,7 +212,10 @@ public class CheckoutServiceImpl implements CheckoutService {
             // 餐位费用等于实际用餐人数*每一位的费用
             str += "餐位费用: ="+table.getSeatFee() + " * " +table.getPersonNum()+ " = " +table.getSeatFee().floatValue()*table.getPersonNum().floatValue()+"\n";
             shoulePayMoney = shoulePayMoney.add(new BigDecimal(table.getTableFee().floatValue()+table.getSeatFee().floatValue()*table.getPersonNum().floatValue()+orderService.returnOrderTotalMoney(tableId).floatValue()));
-            str +="应收金额："+String.valueOf(shoulePayMoney) + "\n";
+            // 保留两位小数
+            java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");
+            String moneyTemp = myformat.format(shoulePayMoney);
+            str +="应收金额："+moneyTemp + "\n";
             str += "--------------------------------\n";
             // 实际消费金额,不包括赠送的菜品
             BigDecimal actualPayMoney = new BigDecimal(0);
@@ -248,7 +251,8 @@ public class CheckoutServiceImpl implements CheckoutService {
                     }
                 }
             }
-            str +="实际消费金额: " + String.valueOf(actualPayMoney)+"\n";
+            moneyTemp = myformat.format(actualPayMoney);
+            str +="实际消费金额: " + moneyTemp +"\n";
             str += "聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n";
 
             Socket socket = new Socket();
@@ -268,6 +272,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 10000);
             // 成功建立了连接
             if (socket.isConnected()) {
+                os = socket.getOutputStream();
                 // 打印
                 // 初始化打印机
                 os.write(PrintUtils.initPrinter());
@@ -289,7 +294,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateCheckoutFailed);
+            throw SSException.get(EmenuException.PrintCheckoutFail);
         }
         jsonObject.put("code",0);
         return jsonObject;

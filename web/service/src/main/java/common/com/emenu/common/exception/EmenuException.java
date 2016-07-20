@@ -599,6 +599,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateCheckoutPayFailed("修改结账-支付信息失败",10079),
     QueryCheckoutPayFailed("查询结账-支付信息失败",10080),
     CheckoutIdError("结账单ID不合法",10081),
+    PrintCheckoutFail("打印结账单失败",10082),
 
 
     //后厨管理模块

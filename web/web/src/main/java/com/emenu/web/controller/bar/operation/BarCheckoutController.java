@@ -32,16 +32,18 @@ public class BarCheckoutController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.BarCheckoutPrint)
-    @RequestMapping(value = "/print",method = RequestMethod.GET)
+    @RequestMapping(value = "/print",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject checkoutPrint(@RequestParam("tableId")Integer tableId) {
+        JSONObject jsonObject = new JSONObject();
         try {
             return checkoutService.printCheckOutByTableId(tableId);
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
+            jsonObject.put("code",3);
+            return jsonObject;
         }
-        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 }
