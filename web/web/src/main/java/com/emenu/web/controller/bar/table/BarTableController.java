@@ -129,24 +129,8 @@ public class BarTableController extends AbstractController {
         try {
             Table table = tableService.queryById(tableId);
 
-            // 计算此餐台的总金额
-            BigDecimal totalCost = new BigDecimal(0); // 已下单未结账订单菜品的总金额
-            List<Order> orderList = new ArrayList<Order>(); // 订单List
-            List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>(); // 所有的订单菜品
-            orderList = orderService.listByTableIdAndStatus(tableId, 1);// 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
-            if (Assert.isNotNull(orderList)) {
-                for (Order order : orderList) {
-                    Integer orderId = order.getId(); // 订单Id
-                    orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
-                }
-            }
-            for (OrderDishDto orderDishDto : orderDishDtoList) {
-                if (orderDishDto.getIsPackage() == 0) {
-                    totalCost = totalCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getDishQuantity()));
-                } else {
-                    totalCost = totalCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getPackageQuantity()));
-                }
-            }
+            // 计算此餐台已下单未结账订单菜品的总金额
+            BigDecimal totalCost = orderService.returnOrderTotalMoney(tableId);
 
             // 找与本餐台并台的餐台
             String role = "";

@@ -2,7 +2,7 @@ package com.emenu.service.order.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.dto.dish.DishDto;
-import com.emenu.common.dto.order.OrderDishDto;
+import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
 import com.emenu.common.entity.order.Order;
@@ -16,6 +16,7 @@ import com.emenu.common.enums.order.OrderDishPresentedEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.printer.PrinterTypeEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
@@ -25,6 +26,7 @@ import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
 import com.emenu.service.printer.PrinterService;
+import com.emenu.service.table.TableMergeService;
 import com.emenu.service.table.TableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -75,6 +77,9 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Autowired
     private CheckoutPayService checkoutPayService;
 
+    @Autowired
+    private TableMergeService tableMergeService;
+
     @Override
     public Checkout queryByTableIdAndStatus(int tableId, int status) throws SSException {
         Checkout checkout = null;
@@ -83,20 +88,6 @@ public class CheckoutServiceImpl implements CheckoutService {
             Assert.lessOrEqualZero(tableId, EmenuException.CheckoutStatusError);
 
             checkout = checkoutMapper.queryByTableIdAndStatus(tableId, status);
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryCheckoutByTableIdFailed, e);
-        }
-        return checkout;
-    }
-
-    @Override
-    public Checkout queryByTableId(int tableId) throws SSException {
-        Checkout checkout = null;
-        try {
-            Assert.lessOrEqualZero(tableId, EmenuException.TableIdError);
-
-            checkout = checkoutMapper.queryByTableId(tableId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryCheckoutByTableIdFailed, e);
@@ -111,13 +102,13 @@ public class CheckoutServiceImpl implements CheckoutService {
         try {
             Assert.isNotNull(checkout, EmenuException.CheckoutIsNotNull);
 
-            checkout1= commonDao.insert(checkout);
+            checkout1 = commonDao.insert(checkout);
             List<Order> orderList = orderService.listByTableIdAndStatus(checkout.getTableId(), OrderStatusEnums.IsBooked.getId());
             for (Order order : orderList) {
                 order.setCheckoutId(checkout1.getId());
                 orderService.updateOrder(order);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.NewCheckoutFailed, e);
         }
@@ -131,7 +122,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             Assert.isNotNull(checkout, EmenuException.CheckoutIsNotNull);
 
             commonDao.update(checkout);
-        } catch (Exception e){
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateCheckoutFailed, e);
         }
@@ -311,57 +302,249 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void checkout(int orderId, Checkout checkout, CheckoutPay checkoutPay) throws SSException {
+    public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
+                         BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
+                         int checkoutType, String serialNum) throws SSException {
         try {
-            Assert.lessOrEqualZero(orderId, EmenuException.OrderIdError);
+            Assert.lessOrEqualZero(tableId, EmenuException.OrderIdError);
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
+            // 设置结账单内容
+            Checkout checkout = queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
             if (Assert.isNull(checkout)) {
                 throw SSException.get(EmenuException.CheckoutIsNull);
             }
+            checkout.setCheckerPartyId(partyId);
+            checkout.setConsumptionMoney(consumptionMoney);
+            checkout.setWipeZeroMoney(wipeZeroMoney);
+            checkout.setTotalPayMoney(totalPayMoney);
 
-            // 把订单状态改为已结账
-            Order order = orderService.queryById(orderId);
-            if (Assert.isNull(order)) {
-                throw SSException.get(EmenuException.OrderIdError);
-            }
-            order.setStatus(OrderStatusEnums.IsCheckouted.getId());
-            orderService.updateOrder(order);
+            // 设置结账-支付信息内容
+            CheckoutPay checkoutPay = new CheckoutPay();
+            checkoutPay.setPayMoney(consumptionMoney.subtract(wipeZeroMoney));
+            checkoutPay.setCheckoutId(checkout.getId());
+            checkoutPay.setCheckoutType(checkoutType);
+            checkoutPay.setSerialNum(serialNum);
 
-            checkout.setStatus(CheckOutStatusEnums.IsCheckOut.getId());
-            checkout.setCheckoutTime(new Date());
+            // 无论是否并台，都先对本餐台自身进行结账
+            checkoutOneTable(tableId, checkout, checkoutPay);
 
-            // 修改结账单中的消费金额
-            Table table = tableService.queryById(order.getTableId());
-            BigDecimal tableFee = table.getTableFee();
-            BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
-            // 计算此订单的金额
-            BigDecimal orderCost = new BigDecimal(0);
-            List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>(); // 所有的订单菜品
-            orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
-            for (OrderDishDto orderDishDto : orderDishDtoList) {
-                if (orderDishDto.getIsPackage() == 0) {
-                    orderCost = orderCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getDishQuantity()));
-                } else {
-                    orderCost = orderCost.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue() * orderDishDto.getPackageQuantity()));
+            // 把餐台状态改为"占用已结账"
+            setTableStatusToCheckouted(tableId);
+
+            // 如果并台，则需要把和它并的所有的餐台的都结账
+            if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+
+                // 依次对所有与本餐台并台的餐台进行结账
+                for (Table t : tableList) {
+                    Checkout c = queryByTableIdAndStatus(t.getId(), CheckOutStatusEnums.IsNotCheckOut.getId());
+                    if (Assert.isNull(c)) {
+                        // 若该并台餐台未生成结账单(即其未下单)，直接把餐台状态改为"占用已结账"即可
+                        setTableStatusToCheckouted(t.getId());
+                    } else {
+                        // 若该并台餐台已生成结账单(即其已下单)，则调用私有方法对其结账
+                        checkoutOneTable(t.getId(), c);
+                        // 然后把餐台状态改为"占用已结账"
+                        setTableStatusToCheckouted(t.getId());
+                    }
+                }
+
+                // 若餐台为"已并台"状态，则将它从并台表中删除
+                tableList.add(table);
+                for (Table t : tableList) {
+                    if (t.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                        tableMergeService.delTableMergeInfo(t.getId());
+                    }
                 }
             }
-            // TODO: 若本餐桌第二次及之后消费，则无需重复加餐台费及餐位费
-            // 消费金额等于餐台费+餐位费*人数+此订单金额
-            BigDecimal totalCost = new BigDecimal(0);
-            totalCost = totalCost.add(tableFee);
-            totalCost = totalCost.add(totalSeatFee);
-            totalCost = totalCost.add(orderCost);
-            checkout.setConsumptionMoney(totalCost);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    @Override
+    public BigDecimal calcConsumptionMoney(int tableId) throws SSException {
+        try {
+            BigDecimal totalCost = new BigDecimal(0); // 本次结账的消费金额等于餐台费+餐位费*人数+所有订单的金额
+
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
+            Checkout checkout = queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+
+            // 如果未并台，则只需要把该餐台中的所有未结账的订单进行计算即可
+            if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                BigDecimal tableFee = table.getTableFee();
+                BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
+
+                // 计算此餐台已下单未结账订单菜品的总金额
+                BigDecimal orderCost = orderService.returnOrderTotalMoney(tableId);
+                totalCost = totalCost.add(orderCost);
+
+                // 若本餐台是第一次消费，则需加上餐台费及餐位费
+                if (Assert.isNull(checkout)) {
+                    throw SSException.get(EmenuException.CheckoutIsNull);
+                }
+                if (checkout.getConsumptionType() == 1) {
+                    totalCost = totalCost.add(tableFee);
+                    totalCost = totalCost.add(totalSeatFee);
+                }
+            }
+            // 如果并台，则需要把和它并的所有的餐台的钱算出来
+            else {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+
+                // 先计算本餐台自身的消费金额
+                BigDecimal tableFee = table.getTableFee();
+                BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
+                BigDecimal orderCost = orderService.returnOrderTotalMoney(tableId);
+                totalCost = totalCost.add(orderCost);
+
+                // 若本餐台未生成结账单(即其未下单)，需加上它的餐台费及餐位费
+                if (Assert.isNull(checkout)) {
+                    totalCost = totalCost.add(tableFee);
+                    totalCost = totalCost.add(totalSeatFee);
+                } else {
+                    // 若本餐台是第一次消费，则也需加上餐台费及餐位费
+                    if (checkout.getConsumptionType() == 1) {
+                        totalCost = totalCost.add(tableFee);
+                        totalCost = totalCost.add(totalSeatFee);
+                    }
+                }
+
+                // 再依次计算所有与本餐台并台的餐台的消费金额
+                for (Table t : tableList) {
+                    tableFee = t.getTableFee();
+                    totalSeatFee = t.getSeatFee().multiply(new BigDecimal(t.getPersonNum()));
+                    orderCost = orderService.returnOrderTotalMoney(t.getId());
+                    totalCost = totalCost.add(orderCost);
+
+                    Checkout c = queryByTableIdAndStatus(t.getId(), CheckOutStatusEnums.IsNotCheckOut.getId());
+                    if (Assert.isNull(c)) {
+                        // 若该并台餐台未生成结账单(即其未下单)，需加上它的餐台费及餐位费
+                        totalCost = totalCost.add(tableFee);
+                        totalCost = totalCost.add(totalSeatFee);
+                    } else {
+                        // 若该并台餐台是第一次消费，则也需加上餐台费及餐位费
+                        if (c.getConsumptionType() == 1) {
+                            totalCost = totalCost.add(tableFee);
+                            totalCost = totalCost.add(totalSeatFee);
+                        }
+                    }
+                }
+            }
+            return totalCost;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    /**
+     * 对单个餐台(未并台的餐台、并台餐台中进行结账操作的餐台)进行结账
+     * @param tableId
+     * @param checkout
+     * @param checkoutPay
+     * @throws SSException
+     */
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    private void checkoutOneTable(int tableId, Checkout checkout, CheckoutPay checkoutPay) throws SSException {
+        try {
+            List<Order> orderList = orderService.listByTableIdAndStatus(tableId, OrderStatusEnums.IsBooked.getId());
+            if (Assert.isNull(orderList)) {
+                throw SSException.get(EmenuException.OrderIdError);
+            }
+
+            // 把订单状态都改为已结账
+            for (Order order : orderList) {
+                order.setStatus(OrderStatusEnums.IsCheckouted.getId());
+                orderService.updateOrder(order);
+            }
 
             // 根据消费金额及抹零金额计算出实付金额
-            checkout.setShouldPayMoney(totalCost.subtract(checkout.getWipeZeroMoney()));
+            checkout.setShouldPayMoney(checkout.getConsumptionMoney().subtract(checkout.getWipeZeroMoney()));
 
             // 根据宾客付款、预付金额及实付金额计算出找零金额
             checkout.setChangeMoney((checkout.getTotalPayMoney().add(checkout.getPrepayMoney())).subtract(checkout.getShouldPayMoney()));
+
+            // 把结账单状态修改为"已结账"
+            checkout.setStatus(CheckOutStatusEnums.IsCheckOut.getId());
 
             updateCheckout(checkout);
 
             // 新增结账-支付信息
             checkoutPayService.newCheckoutPay(checkoutPay);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    /**
+     * 对单个餐台(并台餐台中由其他餐台结账且已点菜的餐台)进行结账
+     * @param tableId
+     * @param checkout
+     * @throws SSException
+     */
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    private void checkoutOneTable(int tableId, Checkout checkout) throws SSException {
+        try {
+            List<Order> orderList = orderService.listByTableIdAndStatus(tableId, OrderStatusEnums.IsBooked.getId());
+            if (Assert.isNull(orderList)) {
+                throw SSException.get(EmenuException.OrderIdError);
+            }
+
+            // 把订单状态都改为已结账
+            for (Order order : orderList) {
+                order.setStatus(OrderStatusEnums.IsCheckouted.getId());
+                orderService.updateOrder(order);
+            }
+
+            // 把结账单状态修改为"已结账"
+            checkout.setStatus(CheckOutStatusEnums.IsCheckOut.getId());
+
+            updateCheckout(checkout);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    /**
+     * 把餐台改成"占用已结账"状态
+     * @param tableId
+     */
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    private void setTableStatusToCheckouted(int tableId) throws SSException {
+        try {
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
+            // 把餐台改成"占用已结账"状态
+            TableDto tableDto = tableService.queryTableDtoById(tableId);
+            table.setStatus(TableStatusEnums.Checkouted.getId());
+            tableDto.setTable(table);
+            tableService.forceUpdateTable(tableId, tableDto);
+
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckoutFailed, e);

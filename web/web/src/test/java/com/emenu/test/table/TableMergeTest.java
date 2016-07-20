@@ -62,6 +62,6 @@ public class TableMergeTest extends AbstractTestCase {
     @Test
     public void delTableMerge() throws SSException {
         int tableId = 1;
-        tableMergeService.delTableMerge(tableId);
+        tableMergeService.cancelTableMerge(tableId);
     }
 }

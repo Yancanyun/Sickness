@@ -6,6 +6,9 @@ import com.emenu.common.entity.order.CheckoutPay;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * CheckoutService
  *
@@ -21,14 +24,6 @@ public interface CheckoutService {
      * @throws SSException
      */
     public Checkout queryByTableIdAndStatus(int tableId, int status) throws SSException;
-
-    /**
-     * 根据餐台ID查询结账单
-     * @param tableId
-     * @return
-     * @throws SSException
-     */
-    public Checkout queryByTableId(int tableId) throws SSException;
 
     /**
      * 添加结账单
@@ -53,10 +48,24 @@ public interface CheckoutService {
     public JSONObject printCheckOutByTableId(Integer tableId) throws SSException;
 
     /**
-     * 根据订单ID、结账单、结账-支付信息结账
-     * @param orderId
-     * @param checkout
+     * 根据餐台ID、结账人PartyID、消费金额、抹零金额、宾客付款金额、付款方式、流水号对餐台进行结账
+     * @param tableId
+     * @param partyId
+     * @param consumptionMoney
+     * @param wipeZeroMoney
+     * @param totalPayMoney
+     * @param checkoutType
+     * @param serialNum
      * @throws SSException
      */
-    public void checkout(int orderId, Checkout checkout, CheckoutPay checkoutPay) throws SSException;
+    public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
+                         BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
+                         int checkoutType, String serialNum) throws SSException;
+
+    /**
+     * 根据餐台ID计算出该餐台若结账，消费金额是多少
+     * @param tableId
+     * @throws SSException
+     */
+    public BigDecimal calcConsumptionMoney(int tableId) throws SSException;
 }

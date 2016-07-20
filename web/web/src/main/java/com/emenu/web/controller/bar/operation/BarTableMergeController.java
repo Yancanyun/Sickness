@@ -116,7 +116,7 @@ public class BarTableMergeController extends AbstractController {
     public JSONObject cancelMergeTable(@RequestParam("tableId") Integer tableId) {
         try {
             // 执行取消并台操作
-            tableMergeService.delTableMerge(tableId);
+            tableMergeService.cancelTableMerge(tableId);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {

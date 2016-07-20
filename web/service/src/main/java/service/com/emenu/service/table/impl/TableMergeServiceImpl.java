@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,7 +59,8 @@ public class TableMergeServiceImpl implements TableMergeService {
                 throw SSException.get(EmenuException.TableIdError);
             }
 
-            return tableMergeMapper.queryByTableId(tableId);
+            TableMerge tableMerge = tableMergeMapper.queryByTableId(tableId);
+            return tableMerge;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMergeTableFail, e);
@@ -121,9 +123,14 @@ public class TableMergeServiceImpl implements TableMergeService {
 
                     commonDao.insert(tableMerge);
 
+                    // 若餐台在并台前未开台，则把开台时间设为并台的时间
+                    Table table = tableDto.getTable();
+                    if (table.getStatus() == TableStatusEnums.Enabled.getId()) {
+                        table.setOpenTime(new Date());
+                    }
+
                     // 把餐台状态改为"已并桌"
                     tableDto.setStatus(TableStatusEnums.Merged.getType());
-                    Table table = tableDto.getTable();
                     table.setStatus(TableStatusEnums.Merged.getId());
                     tableDto.setTable(table);
                     tableService.forceUpdateTable(tableId, tableDto);
@@ -140,7 +147,7 @@ public class TableMergeServiceImpl implements TableMergeService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void delTableMerge(int tableId) throws SSException {
+    public void cancelTableMerge(int tableId) throws SSException {
         try {
             if (Assert.lessOrEqualZero(tableId)) {
                 throw SSException.get(EmenuException.TableIdError);
@@ -152,6 +159,10 @@ public class TableMergeServiceImpl implements TableMergeService {
             tableDto.setStatus(TableStatusEnums.valueOf(tableMerge.getLastTableStatus()).getType());
             Table table = tableDto.getTable();
             table.setStatus(TableStatusEnums.valueOf(tableMerge.getLastTableStatus()).getId());
+            // 若原始状态未开台，则把开台时间置空
+            if (table.getStatus() == TableStatusEnums.Enabled.getId()) {
+                table.setOpenTime(null);
+            }
             tableDto.setTable(table);
             tableService.forceUpdateTable(tableId, tableDto);
 
@@ -163,9 +174,20 @@ public class TableMergeServiceImpl implements TableMergeService {
             tableMergeList = listByMergeId(mergeId);
             if (tableMergeList.size() < 2) {
                 for (TableMerge tableMerge1 : tableMergeList) {
-                    delTableMerge(tableMerge1.getTableId());
+                    cancelTableMerge(tableMerge1.getTableId());
                 }
             }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.MergeTableFail, e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void delTableMergeInfo(int tableId) throws SSException {
+        try {
+            tableMergeMapper.delTableMergeByTableId(tableId);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.MergeTableFail, e);
@@ -186,11 +208,11 @@ public class TableMergeServiceImpl implements TableMergeService {
                     }
                 }
             }
+
+            return tableList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMergeTableFail, e);
         }
-
-        return tableList;
     }
 }

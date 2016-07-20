@@ -604,7 +604,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateCheckoutFailed("修改结账单失败",10073),
     CheckoutFailed("结账失败", 10074),
     CheckoutStatusError("结账单状态不合法", 10075),
-    CheckoutIsNull("结账单为空",10076),
+    CheckoutIsNull("该桌未消费，不能在该桌进行结账",10076),
     CheckoutPayIsNull("结账-支付信息为空",10077),
     NewCheckoutPayFailed("添加结账-支付信息失败",10078),
     UpdateCheckoutPayFailed("修改结账-支付信息失败",10079),

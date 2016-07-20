@@ -205,13 +205,6 @@ public interface TableService {
     public void cleanTable(int id) throws SSException;
 
     /**
-     * 并台
-     * @param tableIdList
-     * @throws SSException
-     */
-    public void mergeTable(List<Integer> tableIdList) throws SSException;
-
-    /**
      * 根据搜索关键字餐台（仅餐台表本身的信息）
      * @param keywords
      * @return Table

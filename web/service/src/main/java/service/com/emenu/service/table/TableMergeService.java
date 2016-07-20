@@ -45,11 +45,18 @@ public interface TableMergeService {
     public List<TableMerge> mergeTable(List<Integer> tableIdList) throws SSException;
 
     /**
-     * 根据TableId删除某个餐台的并台信息
+     * 根据TableId取消并台
      * @param tableId
      * @throws SSException
      */
-    public void delTableMerge(int tableId) throws SSException;
+    public void cancelTableMerge(int tableId) throws SSException;
+
+    /**
+     * 根据TableId删除t_table_merge表中的内容
+     * @param tableId
+     * @throws SSException
+     */
+    public void delTableMergeInfo(int tableId) throws SSException;
 
     /**
      * 根据TableId查询与该餐台并台的其它餐台

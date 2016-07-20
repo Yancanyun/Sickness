@@ -2,10 +2,15 @@ package com.emenu.test.order;
 
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
+import com.emenu.common.enums.checkout.CheckOutStatusEnums;
+import com.emenu.common.enums.order.CheckoutConsumptionTypeEnums;
 import com.emenu.common.enums.order.CheckoutTypeEnums;
+import com.emenu.common.enums.order.OrderStatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -51,19 +56,21 @@ public class CheckTest extends AbstractTestCase {
     }
 
     @Test
+    public void calcConsumptionMoney() throws SSException {
+        System.out.println(checkoutService.calcConsumptionMoney(6));
+    }
+
+    @Test
     public void checkout() throws SSException {
-        int orderId = 91;
-        Checkout checkout = checkoutService.queryByTableId(56);
-        checkout.setCheckerPartyId(1);
-        checkout.setWipeZeroMoney(new BigDecimal(48));
-        checkout.setTotalPayMoney(new BigDecimal(1300));
+        int tableId = 6;
+        int partyId = 1;
+        BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(6);
+        BigDecimal wipeZeroMoney = new BigDecimal(10);
+        BigDecimal totalPayMoney = new BigDecimal(400);
+        int checkoutType = CheckoutTypeEnums.Alipay.getId();
+        String serialNum = "Alipay0001";
 
-        CheckoutPay checkoutPay = new CheckoutPay();
-        checkoutPay.setPayMoney(checkout.getShouldPayMoney());
-        checkoutPay.setCheckoutId(checkout.getId());
-        checkoutPay.setCheckoutType(CheckoutTypeEnums.Alipay.getId());
-        checkoutPay.setSerialNum("qwerty001");
-
-        checkoutService.checkout(orderId, checkout, checkoutPay);
+        checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney,
+                totalPayMoney, checkoutType, serialNum);
     }
 }
