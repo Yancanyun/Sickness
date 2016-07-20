@@ -10,7 +10,6 @@ import com.emenu.common.enums.order.OrderDishPresentedEnums;
  * @time: 2016/5/31 17:08
  **/
 public class OrderDishCache {
-    // 已点但仍未下单的单个菜品的ID
     private Integer id;
 
     // 菜品ID
