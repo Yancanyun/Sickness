@@ -2,19 +2,26 @@ package com.emenu.test.storage;
 
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.storage.StorageReport;
+import com.emenu.common.entity.storage.StorageReportIngredient;
 import com.emenu.common.entity.storage.StorageReportItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.StorageReportStatusEnum;
+import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.utils.DateUtils;
+import com.emenu.mapper.storage.StorageReportMapper;
 import com.emenu.service.other.SerialNumService;
+import com.emenu.service.storage.StorageReportIngredientService;
 import com.emenu.service.storage.StorageReportItemService;
 import com.emenu.service.storage.StorageReportService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.util.Assert;
+import org.apache.xpath.SourceTree;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -165,7 +172,7 @@ public class ReportTest extends AbstractTestCase {
 
         endTime = DateUtils.getTodayEndTime();
 
-       // StorageReportDtoList = storageReportService.listReportDtoUnsettledByEndTime(endTime);
+        // StorageReportDtoList = storageReportService.listReportDtoUnsettledByEndTime(endTime);
 
         for (StorageReportDto storageReportDto : StorageReportDtoList) {
             List<StorageReportItem> storageReportItemList = storageReportDto.getStorageReportItemList();

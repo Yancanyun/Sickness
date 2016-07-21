@@ -27,6 +27,8 @@ import jxl.Workbook;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import org.apache.commons.collections.bag.SynchronizedSortedBag;
+import org.apache.xpath.SourceTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -1172,15 +1174,26 @@ public class StorageReportServiceImpl implements StorageReportService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void exportToExcel(StorageReport report,Date startTime, Date endTime,List<Integer> deports, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException{
+    public void exportToExcel(StorageReport report,Date startTime, Date endTime,List<Integer> deports,
+                              Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException{
         OutputStream os = null;
         List<StorageReportDto> storageReportDtoList = Collections.emptyList();
         try{
             //从数据库中取数据
-            storageReportDtoList = this.listReportDtoByCondition1(report,null,null,deports,startTime,endTime);
+            ReportSearchDto reportSearchDto = new ReportSearchDto();
+            reportSearchDto.setAuditPartyId(report.getAuditPartyId());
+            reportSearchDto.setCreatedPartyId(createdPartyId);
+            reportSearchDto.setDepotId(report.getDepotId());
+            reportSearchDto.setEndTime(endTime);
+            reportSearchDto.setHandlerPartyId(handlerPartyId);
+            reportSearchDto.setIsAudited(report.getIsAudited());
+            reportSearchDto.setIsSettlemented(report.getIsSettlemented());
+            reportSearchDto.setStartTime(startTime);
+            storageReportDtoList = this.listReportDtoBySerachDto(reportSearchDto);
+            System.out.println("xiao");
+            //storageReportDtoList = this.listReportDtoByCondition1(report,null,null,deports,startTime,endTime);
             for (StorageReportDto storageReportDto : storageReportDtoList){
                 EntityUtil.setNullFieldDefault(storageReportDto);
-
             }
             //设置输出流
             //设置excel文件名和sheetName
@@ -1197,62 +1210,195 @@ public class StorageReportServiceImpl implements StorageReportService {
             WritableWorkbook outBook = Workbook.createWorkbook(os,tplWorkBook);
             //获取sheet往sheet中写入数据
             WritableSheet sheet = outBook.getSheet(0);
-            int row = 2;
-            for (StorageReportDto storageReportDto : storageReportDtoList){
-                // 类型
-                Label labelReportType = new Label(0, row, StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName());
+            int row = 3;
+            int rowchildren = 0;
+            int up = 3;
+            for (StorageReportDto storageReportDto : storageReportDtoList) {
+                //类型
+                Label labelReportType = new Label(0, row + rowchildren, StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName());
                 sheet.addCell(labelReportType);
                 // 单据编号
-                Label labelSerialNumber = new Label(1, row, storageReportDto.getStorageReport().getSerialNumber());
+                Label labelSerialNumber = new Label(1, row + rowchildren, storageReportDto.getStorageReport().getSerialNumber());
                 sheet.addCell(labelSerialNumber);
                 // 存放点
-                String deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
-                Label labelDepot = new Label(2, row, deportName);
+                String deportName = null;
+                if (storageReportDto.getStorageReport().getDepotId() != 0) {
+                    deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                } else {
+                    deportName = "无";
+                }
+                Label labelDepot = new Label(2, row + rowchildren, deportName);
                 sheet.addCell(labelDepot);
                 // 经手人
                 String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
-                Label labelHandlerName = new Label(3, row, handlerName);
+                Label labelHandlerName = new Label(3, row + rowchildren, handlerName);
                 sheet.addCell(labelHandlerName);
-                // 金额
-                Label labelMoney = new Label(4, row, storageReportDto.getStorageReport().getMoney().toString());
-                sheet.addCell(labelMoney);
                 // 操作人
                 String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getCreatedPartyId()).getName();
-                Label labelCreatedName = new Label(5, row, createdName);
+                Label labelCreatedName = new Label(4, row + rowchildren, createdName);
                 sheet.addCell(labelCreatedName);
+                //审核人
+                String auditName = null;
+                if (storageReportDto.getStorageReport().getAuditPartyId() != 0) {
+                    auditName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getAuditPartyId()).getName();
+                } else {
+                    auditName = "无";
+                }
+                Label labelAuditName = new Label(5, row + rowchildren, auditName);
+                sheet.addCell(labelAuditName);
+                // 总金额
+                Label labelMoney = new Label(6, row + rowchildren, storageReportDto.getStorageReport().getMoney().toString());
+                sheet.addCell(labelMoney);
                 // 单据备注
-                Label labelReportComment = new Label(6, row, storageReportDto.getStorageReport().getComment());
+                String comment = ("".equals(storageReportDto.getStorageReport().getComment())?"无":storageReportDto.getStorageReport().getComment());
+                Label labelReportComment = new Label(7, row + rowchildren, comment);
                 sheet.addCell(labelReportComment);
                 // 日期
                 String createdTime = DateUtils.yearMonthDayFormat(storageReportDto.getStorageReport().getCreatedTime());
-                Label labelCreatedTime = new Label(7, row, createdTime);
+                Label labelCreatedTime = new Label(8, row + rowchildren, createdTime);
                 sheet.addCell(labelCreatedTime);
                 // 物品列表
-                //List<StorageReportItemDto> storageItemDtoList = storageReportDto.getStorageReportItemDtoList();
-                List<StorageReportItemDto> storageItemDtoList = null;
-                int rowchildren = 0;
-                for (StorageReportItemDto storageItemDto : storageItemDtoList){
-                    // 物品名称
-                    Label labelItemName = new Label(8, row+rowchildren,storageItemDto.getItemName());
-                    sheet.addCell(labelItemName);
-                    // 物品数量
-                    Label labelQuantity = new Label(9, row+rowchildren, storageItemDto.getQuantity().toString());
-                    sheet.addCell(labelQuantity);
-                    // 物品价格
-                    Label labelPrice = new Label(10, row+rowchildren, storageItemDto.getPrice().toString());
-                    sheet.addCell(labelPrice);
-                    // 小计金额
-                    BigDecimal price = storageItemDto.getPrice();
-                    BigDecimal quantity = storageItemDto.getQuantity();
-                    BigDecimal subTotal = price.multiply(quantity);
-                    Label labelSubTotal = new Label(11, row, subTotal.toString());
-                    sheet.addCell(labelSubTotal);
-                    //备注
-                    Label labelItemComment = new Label(12, row+rowchildren ,storageItemDto.getComment());
-                    sheet.addCell(labelItemComment);
-                    rowchildren++;
+                List<StorageReportItem> storageItemList = storageReportDto.getStorageReportItemList();
+                List<StorageReportIngredient> storageReportIngredientList = storageReportDto.getStorageReportIngredientList();
+                if ("入库单".equals(StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName())) {
+                    for (StorageReportItem storageItem : storageItemList) {
+
+                        // 物品名称
+                        Label labelItemName = new Label(9, row + rowchildren, storageItem.getItemName());
+                        sheet.addCell(labelItemName);
+                        // 物品编号
+                        String itemNumber = null;
+                        if (storageItem.getItemId() != null &&
+                                !"".equals(storageItem.getItemId()) &&
+                                (storageItemService.queryById(storageItem.getItemId())) != null) {
+                            itemNumber = storageItemService.queryById(storageItem.getItemId()).getItemNumber();
+                        } else {
+                            itemNumber = "无";
+                        }
+                        Label labelItemNumber = new Label(10, row + rowchildren, itemNumber);
+                        sheet.addCell(labelItemNumber);
+
+                        // 物品数量(库存订货)
+                        Label labelQuantity = new Label(11, row + rowchildren, storageItem.getQuantity().toString());
+                        sheet.addCell(labelQuantity);
+
+                        // 物品单位(库存订货)
+                        String unit = storageItem.getOrderUnitName();
+                        Label labelUnit = new Label(12, row + rowchildren, unit);
+                        sheet.addCell(labelUnit);
+
+                        // 数量(成本卡)
+                        String costCardQuantity = (storageItem.getCostCardQuantity() == null ? "无" : storageItem.getCostCardQuantity().toString());
+                        Label label13 = new Label(13, row + rowchildren, costCardQuantity);
+                        sheet.addCell(label13);
+                        // 单位(成本卡)
+                        Label label14 = new Label(14, row + rowchildren, storageItem.getCostCardUnitName());
+                        sheet.addCell(label14);
+                        // 物品价格
+                        Label labelPrice = new Label(15, row + rowchildren, storageItem.getPrice().toString());
+                        sheet.addCell(labelPrice);
+
+                        //备注
+                        String storageItemComment = ("".equals(storageItem.getComment())?"无":storageItem.getComment());
+                        Label labelItemComment = new Label(16, row + rowchildren, storageItemComment);
+                        sheet.addCell(labelItemComment);
+                        rowchildren++;
+                    }
+                } else {
+                    for (StorageReportIngredient storageIngredient : storageReportIngredientList) {
+
+                        // 物品名称
+                        Label labelItemName = new Label(9, row + rowchildren, storageIngredient.getIngredientName());
+                        sheet.addCell(labelItemName);
+                        // 物品编号
+                        String itemNumber = storageIngredient.getIngredientNumber();
+                        Label labelItemNumber = new Label(10, row + rowchildren, itemNumber);
+                        sheet.addCell(labelItemNumber);
+
+                        // 物品数量(库存订货)
+                        Label labelQuantity = new Label(11, row + rowchildren, storageIngredient.getQuantity().toString());
+                        sheet.addCell(labelQuantity);
+
+                        // 物品单位(库存订货)
+                        String unit = storageIngredient.getStorageUnitName();
+                        Label labelUnit = new Label(12, row + rowchildren, unit);
+                        sheet.addCell(labelUnit);
+
+                        // 数量(成本卡)storageItemDto.getCostCardQuantity().toString()
+                        String costCardQuantity = (storageIngredient.getCostCardQuantity() == null ? "无" : storageIngredient.getCostCardQuantity().toString());
+                        Label label13 = new Label(13, row + rowchildren, costCardQuantity);
+                        sheet.addCell(label13);
+
+                        // 单位(成本卡)
+                        Label label14 = new Label(14, row + rowchildren, storageIngredient.getCostCardUnitName());
+                        sheet.addCell(label14);
+
+                        // 物品价格
+                        Label labelPrice = new Label(15, row + rowchildren, "无");
+                        sheet.addCell(labelPrice);
+
+                        //备注
+                        String storageIngredientComment = ("".equals(storageIngredient.getComment())?"无":storageIngredient.getComment());
+                        Label labelItemComment = new Label(16, row + rowchildren, storageIngredientComment);
+                        sheet.addCell(labelItemComment);
+                        rowchildren++;
+                    }
                 }
-                if(storageItemDtoList.size()>1) {
+
+                // 合并单元格
+
+                if((storageItemList==null&&storageReportIngredientList.size()>=1)){
+                    sheet.mergeCells(0, up , 0, up+storageReportIngredientList.size()-1 );
+                    sheet.mergeCells(1, up, 1, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(2, up, 2, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(3, up, 3, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(4, up, 4, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(5, up, 5, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(6, up, 6, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(7, up, 7, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(8, up, 8, up+storageReportIngredientList.size()-1);
+                    up = up+storageReportIngredientList.size();
+                    row++;
+                    rowchildren--;
+                }else if((storageItemList.size()>=1&&storageReportIngredientList == null)){
+                    sheet.mergeCells(0, up , 0, up + storageItemList.size()-1);
+                    sheet.mergeCells(1, up, 1, up + storageItemList.size()-1);
+                    sheet.mergeCells(2, up, 2, up + storageItemList.size()-1);
+                    sheet.mergeCells(3, up, 3, up + storageItemList.size()-1);
+                    sheet.mergeCells(4, up, 4, up + storageItemList.size()-1);
+                    sheet.mergeCells(5, up, 5, up + storageItemList.size()-1);
+                    sheet.mergeCells(6, up, 6, up + storageItemList.size()-1);
+                    sheet.mergeCells(7, up, 7, up + storageItemList.size()-1);
+                    sheet.mergeCells(8, up, 8, up + storageItemList.size()-1);
+                    up = up + storageItemList.size();
+                    row++;
+                    rowchildren--;
+                }else{
+                    row++;
+                    rowchildren--;
+                }
+            }
+
+                /*if((storageItemList==null&&storageReportIngredientList.size()>=1)||
+                        (storageItemList.size()>=1&&storageReportIngredientList == null)){
+                    sheet.mergeCells(0, row , 0, row + rowchildren-1);
+                    sheet.mergeCells(1, row, 1, row + rowchildren-1);
+                    sheet.mergeCells(2, row, 2, row + rowchildren-1);
+                    sheet.mergeCells(3, row, 3, row + rowchildren-1);
+                    sheet.mergeCells(4, row, 4, row + rowchildren-1);
+                    sheet.mergeCells(5, row, 5, row + rowchildren-1);
+                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
+                    sheet.mergeCells(7, row, 7, row + rowchildren-1);
+                    sheet.mergeCells(8, row, 8, row + rowchildren-1);
+
+            }
+            grow = rowchildren;
+            up = row+rowchildren;
+            row++;*/
+
+
+                /*// 单元格合并函数
+                if(storageItemList.size()>1||){
                     sheet.mergeCells(0, row, 0, row + rowchildren-1);
                     sheet.mergeCells(1, row, 1, row + rowchildren-1);
                     sheet.mergeCells(2, row, 2, row + rowchildren-1);
@@ -1262,18 +1408,19 @@ public class StorageReportServiceImpl implements StorageReportService {
                     sheet.mergeCells(6, row, 6, row + rowchildren-1);
                     sheet.mergeCells(7, row, 7, row + rowchildren-1);
                 }
-                if(rowchildren<=1) {
+                if(rowchildren<=1){
                     row ++;
-                }else {
+                }else{
                     row = row + rowchildren;
-                }
-            }
+                }*/
+
+
             outBook.write();
             outBook.close();
             tplWorkBook.close();
             tplStream.close();
             os.close();
-            }catch (Exception e) {
+        }catch (Exception e) {
             LogClerk.errLog.error(e);
             response.setContentType("text/html");
             response.setHeader("Content-Type", "text/html");
@@ -1302,5 +1449,261 @@ public class StorageReportServiceImpl implements StorageReportService {
         }
     }
 
+    //@Override
+    @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void exportToExcelAll(HttpServletResponse response)throws SSException{
+        OutputStream os = null;
+        try {
+            List<StorageReportDto> storageReportDtoList = listReportDto();
+            //设置输出流
+            //设置excel文件名和sheetName
+            String filename = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            filename = ExcelExportTemplateEnums.AdminStorageReportList.getName() + sdf.format(new Date());
+            response.setContentType("application/msexcel");
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
+            os = response.getOutputStream();
+            //获取模板
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminStorageReportList.getFilePath());
+            Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
+            WritableWorkbook outBook = Workbook.createWorkbook(os, tplWorkBook);
+            //获取sheet往sheet中写入数据
+            WritableSheet sheet = outBook.getSheet(0);
+            int row = 3;
+            int rowchildren = 0;
+            int up = 3;
+            for (StorageReportDto storageReportDto : storageReportDtoList) {
+                //类型
+                Label labelReportType = new Label(0, row + rowchildren, StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName());
+                sheet.addCell(labelReportType);
+                // 单据编号
+                Label labelSerialNumber = new Label(1, row + rowchildren, storageReportDto.getStorageReport().getSerialNumber());
+                sheet.addCell(labelSerialNumber);
+                // 存放点
+                String deportName = null;
+                if (storageReportDto.getStorageReport().getDepotId() != 0) {
+                    deportName = storageDepotService.queryById(storageReportDto.getStorageReport().getDepotId()).getName();
+                } else {
+                    deportName = "无存放点";
+                }
+                Label labelDepot = new Label(2, row + rowchildren, deportName);
+                sheet.addCell(labelDepot);
+                // 经手人
+                String handlerName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getHandlerPartyId()).getName();
+                Label labelHandlerName = new Label(3, row + rowchildren, handlerName);
+                sheet.addCell(labelHandlerName);
+                // 操作人
+                String createdName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getCreatedPartyId()).getName();
+                Label labelCreatedName = new Label(4, row + rowchildren, createdName);
+                sheet.addCell(labelCreatedName);
+                //审核人
+                String auditName = null;
+                if (storageReportDto.getStorageReport().getAuditPartyId() != 0) {
+                    auditName = employeeService.queryByPartyId(storageReportDto.getStorageReport().getAuditPartyId()).getName();
+                } else {
+                    auditName = "暂无";
+                }
+                Label labelAuditName = new Label(5, row + rowchildren, auditName);
+                sheet.addCell(labelAuditName);
+                // 总金额
+                Label labelMoney = new Label(6, row + rowchildren, storageReportDto.getStorageReport().getMoney().toString());
+                sheet.addCell(labelMoney);
+                // 单据备注
+                Label labelReportComment = new Label(7, row + rowchildren, storageReportDto.getStorageReport().getComment());
+                sheet.addCell(labelReportComment);
+                // 日期
+                String createdTime = DateUtils.yearMonthDayFormat(storageReportDto.getStorageReport().getCreatedTime());
+                Label labelCreatedTime = new Label(8, row + rowchildren, createdTime);
+                sheet.addCell(labelCreatedTime);
+                // 物品列表
+                List<StorageReportItem> storageItemList = storageReportDto.getStorageReportItemList();
+                List<StorageReportIngredient> storageReportIngredientList = storageReportDto.getStorageReportIngredientList();
+                if ("入库单".equals(StorageReportTypeEnum.valueOf(storageReportDto.getStorageReport().getType()).getName())) {
+                    for (StorageReportItem storageItem : storageItemList) {
+
+                        // 物品名称
+                        Label labelItemName = new Label(9, row + rowchildren, storageItem.getItemName());
+                        sheet.addCell(labelItemName);
+                        // 物品编号
+                        String itemNumber = null;
+                        if (storageItem.getItemId() != null &&
+                                !"".equals(storageItem.getItemId()) &&
+                                (storageItemService.queryById(storageItem.getItemId())) != null) {
+                            itemNumber = storageItemService.queryById(storageItem.getItemId()).getItemNumber();
+                        } else {
+                            itemNumber = "无物品编号";
+                        }
+                        Label labelItemNumber = new Label(10, row + rowchildren, itemNumber);
+                        sheet.addCell(labelItemNumber);
+
+                        // 物品数量(库存订货)
+                        Label labelQuantity = new Label(11, row + rowchildren, storageItem.getQuantity().toString());
+                        sheet.addCell(labelQuantity);
+
+                        // 物品单位(库存订货)
+                        String unit = storageItem.getOrderUnitName();
+                        Label labelUnit = new Label(12, row + rowchildren, unit);
+                        sheet.addCell(labelUnit);
+
+                        // 数量(成本卡)
+                        String costCardQuantity = (storageItem.getCostCardQuantity() == null ? "无数量" : storageItem.getCostCardQuantity().toString());
+                        Label label13 = new Label(13, row + rowchildren, costCardQuantity);
+                        sheet.addCell(label13);
+                        // 单位(成本卡)
+                        Label label14 = new Label(14, row + rowchildren, storageItem.getCostCardUnitName());
+                        sheet.addCell(label14);
+                        // 物品价格
+                        Label labelPrice = new Label(15, row + rowchildren, storageItem.getPrice().toString());
+                        sheet.addCell(labelPrice);
+
+                        //备注
+                        Label labelItemComment = new Label(16, row + rowchildren, storageItem.getComment());
+                        sheet.addCell(labelItemComment);
+                        rowchildren++;
+                    }
+                } else {
+                    for (StorageReportIngredient storageIngredient : storageReportIngredientList) {
+
+                        // 物品名称
+                        Label labelItemName = new Label(9, row + rowchildren, storageIngredient.getIngredientName());
+                        sheet.addCell(labelItemName);
+                        // 物品编号
+                        String itemNumber = storageIngredient.getIngredientNumber();
+                        Label labelItemNumber = new Label(10, row + rowchildren, itemNumber);
+                        sheet.addCell(labelItemNumber);
+
+                        // 物品数量(库存订货)
+                        Label labelQuantity = new Label(11, row + rowchildren, storageIngredient.getQuantity().toString());
+                        sheet.addCell(labelQuantity);
+
+                        // 物品单位(库存订货)
+                        String unit = storageIngredient.getStorageUnitName();
+                        Label labelUnit = new Label(12, row + rowchildren, unit);
+                        sheet.addCell(labelUnit);
+
+                        // 数量(成本卡)storageItemDto.getCostCardQuantity().toString()
+                        String costCardQuantity = (storageIngredient.getCostCardQuantity() == null ? "无数量" : storageIngredient.getCostCardQuantity().toString());
+                        Label label13 = new Label(13, row + rowchildren, costCardQuantity);
+                        sheet.addCell(label13);
+
+                        // 单位(成本卡)
+                        Label label14 = new Label(14, row + rowchildren, storageIngredient.getCostCardUnitName());
+                        sheet.addCell(label14);
+
+                        // 物品价格
+                        Label labelPrice = new Label(15, row + rowchildren, "无价格");
+                        sheet.addCell(labelPrice);
+
+                        //备注
+                        Label labelItemComment = new Label(16, row + rowchildren, storageIngredient.getComment());
+                        sheet.addCell(labelItemComment);
+                        rowchildren++;
+                    }
+                }
+
+                // 合并单元格
+
+                if((storageItemList==null&&storageReportIngredientList.size()>=1)){
+                    sheet.mergeCells(0, up , 0, up+storageReportIngredientList.size()-1 );
+                    sheet.mergeCells(1, up, 1, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(2, up, 2, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(3, up, 3, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(4, up, 4, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(5, up, 5, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(6, up, 6, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(7, up, 7, up+storageReportIngredientList.size()-1);
+                    sheet.mergeCells(8, up, 8, up+storageReportIngredientList.size()-1);
+                    up = up+storageReportIngredientList.size();
+                    row++;
+                    rowchildren--;
+                }else if((storageItemList.size()>=1&&storageReportIngredientList == null)){
+                    sheet.mergeCells(0, up , 0, up + storageItemList.size()-1);
+                    sheet.mergeCells(1, up, 1, up + storageItemList.size()-1);
+                    sheet.mergeCells(2, up, 2, up + storageItemList.size()-1);
+                    sheet.mergeCells(3, up, 3, up + storageItemList.size()-1);
+                    sheet.mergeCells(4, up, 4, up + storageItemList.size()-1);
+                    sheet.mergeCells(5, up, 5, up + storageItemList.size()-1);
+                    sheet.mergeCells(6, up, 6, up + storageItemList.size()-1);
+                    sheet.mergeCells(7, up, 7, up + storageItemList.size()-1);
+                    sheet.mergeCells(8, up, 8, up + storageItemList.size()-1);
+                    up = up + storageItemList.size();
+                    row++;
+                    rowchildren--;
+                }else{
+                    row++;
+                    rowchildren--;
+                }
+            }
+
+                /*if((storageItemList==null&&storageReportIngredientList.size()>=1)||
+                        (storageItemList.size()>=1&&storageReportIngredientList == null)){
+                    sheet.mergeCells(0, row , 0, row + rowchildren-1);
+                    sheet.mergeCells(1, row, 1, row + rowchildren-1);
+                    sheet.mergeCells(2, row, 2, row + rowchildren-1);
+                    sheet.mergeCells(3, row, 3, row + rowchildren-1);
+                    sheet.mergeCells(4, row, 4, row + rowchildren-1);
+                    sheet.mergeCells(5, row, 5, row + rowchildren-1);
+                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
+                    sheet.mergeCells(7, row, 7, row + rowchildren-1);
+                    sheet.mergeCells(8, row, 8, row + rowchildren-1);
+
+            }
+            grow = rowchildren;
+            up = row+rowchildren;
+            row++;*/
+
+
+                /*// 单元格合并函数
+                if(storageItemList.size()>1||){
+                    sheet.mergeCells(0, row, 0, row + rowchildren-1);
+                    sheet.mergeCells(1, row, 1, row + rowchildren-1);
+                    sheet.mergeCells(2, row, 2, row + rowchildren-1);
+                    sheet.mergeCells(3, row, 3, row + rowchildren-1);
+                    sheet.mergeCells(4, row, 4, row + rowchildren-1);
+                    sheet.mergeCells(5, row, 5, row + rowchildren-1);
+                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
+                    sheet.mergeCells(7, row, 7, row + rowchildren-1);
+                }
+                if(rowchildren<=1){
+                    row ++;
+                }else{
+                    row = row + rowchildren;
+                }*/
+
+
+            outBook.write();
+            outBook.close();
+            tplWorkBook.close();
+            tplStream.close();
+            os.close();
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            response.setContentType("text/html");
+            response.setHeader("Content-Type", "text/html");
+            response.setHeader("Content-disposition", "");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                String eMsg = "系统内部异常，请联系管理员！";
+                eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+                response.sendRedirect("/admin/storage/report?eMsg="+eMsg);
+                os.close();
+            } catch (IOException e1) {
+                LogClerk.errLog.error(e1.getMessage());
+            }
+            throw SSException.get(EmenuException.ExportReportFail, e);
+        }
+        finally {
+            if (os != null) {
+                try {
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    LogClerk.errLog.error(e);
+                    throw SSException.get(EmenuException.ExportReportFail, e);
+                }
+            }
+        }
+    }
 
 }

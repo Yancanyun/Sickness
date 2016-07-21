@@ -427,7 +427,7 @@ public class AdminStorageReportController extends AbstractController {
     }
 
     /**
-     * 导出单据
+     * 条件导出单据
      * @param startTime
      * @param endTime
      * @param createdPartyId
@@ -437,7 +437,7 @@ public class AdminStorageReportController extends AbstractController {
      */
     @Module(ModuleEnums.AdminStorageReportExport)
     @RequestMapping(value = "exportbycd", method = RequestMethod.GET)
-    public String toReportExport(@RequestParam("createdPartyId")Integer createdPartyId,
+    public void toReportExport(@RequestParam("createdPartyId")Integer createdPartyId,
                                  @RequestParam("handlerPartyId")Integer handlerPartyId,
                                  @RequestParam("auditPartyId")Integer auditPartyId,
                                  @RequestParam("startTime")Date startTime,
@@ -447,27 +447,37 @@ public class AdminStorageReportController extends AbstractController {
                                  @RequestParam("depotId") Integer depotId){
         try{
             List<Integer> depots = new ArrayList<Integer>();
-//            if (depotId != null && depotId.length > 0) {
-//                for (int i = 0; i < depotId.length; i++) {
-//                    depots.add(depotId[i]);
-//                }
-//            }
+            System.out.println(depotId);
             StorageReport report = new StorageReport();
             report.setCreatedPartyId(createdPartyId);
             report.setHandlerPartyId(handlerPartyId);
             report.setIsAudited(isAudited);
             report.setIsSettlemented(isSettlemented);
             report.setAuditPartyId(auditPartyId);
-            storageReportService.exportToExcel(report,startTime,endTime,depots,createdPartyId,handlerPartyId,getResponse());
+            storageReportService.exportToExcel(report, startTime, endTime, depots, handlerPartyId, createdPartyId, getResponse());
             sendErrMsg("导出成功");
         }catch (Exception e){
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
         }
-        return null;
+
     }
 
-
+    /**
+     * 把所有单据导出
+     * @return
+     */
+    @Module(ModuleEnums.AdminStorageReportExport)
+    @RequestMapping(value = "exportall", method = RequestMethod.GET)
+    public void toReportExportAll(){
+        try{
+            storageReportService.exportToExcelAll(getResponse());
+            sendErrMsg("导出成功");
+        }catch(Exception e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+    }
 
     /**
      * 修改审核状态

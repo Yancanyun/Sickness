@@ -288,5 +288,10 @@ public interface StorageReportService {
      */
     public void exportToExcel(StorageReport report,Date startTime, Date endTime,List<Integer> deports, Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
 
+    /**
+     * 全部的单据导出
+     * @throws SSException
+     */
+    public void exportToExcelAll(HttpServletResponse response) throws SSException;
 
 }
