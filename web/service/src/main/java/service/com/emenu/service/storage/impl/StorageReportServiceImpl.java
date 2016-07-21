@@ -627,7 +627,10 @@ public class StorageReportServiceImpl implements StorageReportService {
                             StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
                             storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
                             storageReportItem.setOrderUnitName(storageItem.getOrderUnitName());
+                            storageReportItem.setItemNumber(storageItem.getItemNumber());
+                            storageReportItem.setItemName(storageItem.getName());
                             // 获取成卡单位数量
+                            storageReportItem.setOrderQuantity(storageReportItem.getQuantity());
                             storageReportItem.setCostCardQuantity(storageReportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
@@ -641,6 +644,10 @@ public class StorageReportServiceImpl implements StorageReportService {
                             Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity());
+                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setIngredientName(ingredient.getName());
+                            storageReportIngredient.setIngredientNumber(ingredient.getIngredientNumber());
                             // 获取成卡单位数量
                             storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
                         }
