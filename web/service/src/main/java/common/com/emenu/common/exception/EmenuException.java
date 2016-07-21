@@ -612,6 +612,7 @@ public enum EmenuException implements IBizExceptionMes {
     CheckoutIdError("结账单ID不合法",10081),
     PrintCheckoutFail("打印结账单失败",10082),
 
+    /****************************后厨管理端****************************/
 
     //后厨管理模块
     QueryIsHaveOrderDishFailed("查询餐桌是否有未上的菜品失败",10090),
@@ -626,6 +627,10 @@ public enum EmenuException implements IBizExceptionMes {
     WipeOrderDishFail("菜品划单失败",10099),
     PrinterIpIsNull("打印机Ip地址未设置",10100),
     ConnectPrinterFail("连接打印机失败",10101),
+
+    /****************************吧台端****************************/
+    QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),
+
     ;
 
 
