@@ -197,6 +197,8 @@ public class OrderServiceImpl implements OrderService{
         List<Order> orders = new ArrayList<Order>();
         List<OrderDish> orderDishs = new ArrayList<OrderDish>();
         BigDecimal totalMoney = new BigDecimal(0);
+        // 保留两位小数
+        java.text.DecimalFormat  df=new java.text.DecimalFormat("#.00");
         try{
             orders=this.listByTableIdAndStatus(tabldId,OrderStatusEnums.IsBooked.getId());//获取餐桌的未结账的订单
             if(orders!=null)
@@ -231,6 +233,9 @@ public class OrderServiceImpl implements OrderService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ReturnTableOrderTotalMoneyFail,e);
         }
+        // 保留两位小数
+        String temp =df.format(totalMoney);
+        totalMoney = new BigDecimal(temp);
         return totalMoney;
     }
 
