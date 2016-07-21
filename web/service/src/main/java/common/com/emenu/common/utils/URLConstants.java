@@ -186,16 +186,18 @@ public final class URLConstants {
     // 服务员点菜
     public static final String WAITER_ORDER_DISH_URL = "waiter/order/dish";
 
-    //服务员确认订单
+    // 服务员确认订单
     public static final String WAITER_ORDER_DISH_CONFIRM_URL = "waiter/order/dish/confirm";
+
+    public static final String WAITER_QUERY_CHECKOUT_URL = "waiter/query/checkout";
 
     // 服务员退菜
     public static final String WAITER_BACK_DISH_URL = "waiter/back/dish";
 
-    //服务员并台
+    // 服务员并台
     public static final String WAITER_TABLE_MERGE_URL = "waiter/table/merge";
 
-    //服务员查看所有呼叫服务
+    // 服务员查看所有呼叫服务
     public static final String WAITER_CALL_LIST_URL = "waiter/call";
 
 

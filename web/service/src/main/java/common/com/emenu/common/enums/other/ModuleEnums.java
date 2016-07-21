@@ -341,8 +341,6 @@ public enum ModuleEnums {
     WaiterCallList("Waiter:Call:List"),
     // 服务员登录
     WaiterLogin("Waiter:Login"),
-    //服务员退菜
-    WaiterBackDish("Waiter:Back:Dish"),
     //服务员端显示点了的缓存中的菜品
     WaiterOrderList("Waiter:Order:List"),
     //服务员端修改菜品数量
@@ -351,6 +349,10 @@ public enum ModuleEnums {
     WaiterOrderDishDelete("Waiter:Order:Dish:Delete"),
     //服务员端删除菜品
     WaiterOrderConfirm("Waiter:Order:Confirm"),
+    // 服务员退菜
+    WaiterBackDish("Waiter:Bach:Dish"),
+    // 服务员查单
+    WaiterQueryCheckout("Waiter:Query:Checkout"),
 
 
 

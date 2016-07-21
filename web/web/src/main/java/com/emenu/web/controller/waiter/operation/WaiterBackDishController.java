@@ -125,6 +125,11 @@ public class WaiterBackDishController extends AbstractController {
         }
     }
 
+    /**
+     * 退菜确认信息页
+     * @param orderDishId
+     * @return
+     */
     @RequestMapping(value = "back", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject backDishConfirm(@RequestParam("orderDishId") Integer orderDishId){
@@ -170,6 +175,14 @@ public class WaiterBackDishController extends AbstractController {
         }
     }
 
+    /**
+     * 服务员退菜完成
+     * @param orderDishId
+     * @param backNumber
+     * @param backRemarks
+     * @param httpSession
+     * @return
+     */
     @RequestMapping(value = "back/finish", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject bachDish(@RequestParam("orderDishId") Integer orderDishId,
