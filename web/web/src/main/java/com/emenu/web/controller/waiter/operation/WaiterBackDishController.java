@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -114,7 +115,8 @@ public class WaiterBackDishController extends AbstractController {
                 jsonObject.put("seatFee",table.getSeatFee());
                 jsonObject.put("tableFee",table.getTableFee());
 
-                // TODO totalMoney
+                BigDecimal totalMoney = orderService.returnOrderTotalMoney(tableId);
+                jsonObject.put("totalMoney",totalMoney);
             }
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -137,11 +139,11 @@ public class WaiterBackDishController extends AbstractController {
             for (RemarkTag remarkTag: remarkTagList){
                 // 获取所有分类下的备注内容
                 remarkList = remarkService.listByRemarkTagId(remarkTag.getId());
-                if (remarkList.size() == 0 || remarkList.isEmpty()){
+                if (remarkList.size() != 0 || !remarkList.isEmpty()){
                     for (Remark remark :remarkList){
-                        JSONObject backRemark = new JSONObject();
-                        backRemark.put("backRemark",remark.getName());
-                        backRemarkList.add(backRemark);
+                        JSONObject backRemarkObject = new JSONObject();
+                        backRemarkObject.put("backRemark",remark.getName());
+                        backRemarkList.add(backRemarkObject);
                     }
                 }
             }

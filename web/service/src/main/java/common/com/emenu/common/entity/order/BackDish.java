@@ -106,7 +106,7 @@ public class BackDish extends AbstractEntity {
     public void setBackTime(Date backTime) {
         this.backTime = backTime;
         if (backTime != null) {
-            this.backTimeStr = DateUtils.formatDate(backTime, "yyyy-MM-dd");
+            this.backTimeStr = DateUtils.formatDate(backTime, "yyyy-MM-dd HH:mm:ss");
         } else {
             this.backTimeStr = "";
         }

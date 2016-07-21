@@ -1,5 +1,7 @@
 package com.emenu.common.dto.order;
 
+import com.emenu.common.utils.DateUtils;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.math.BigDecimal;
@@ -71,6 +73,9 @@ public class OrderDishDto {
 
     // 下单时间
     private Date orderTime;
+
+    // 下单时间字符串
+    private String orderTimeStr;
 
     // 上菜方式：1-即起；2-叫起
     private Integer serveType;
@@ -290,6 +295,11 @@ public class OrderDishDto {
 
     public void setOrderTime(Date orderTime) {
         this.orderTime = orderTime;
+        if (orderTime != null) {
+            this.orderTimeStr = DateUtils.formatDate(orderTime, "yyyy-MM-dd HH:mm:ss");
+        } else {
+            this.orderTimeStr = "";
+        }
     }
 
     public Integer getServeType() {
@@ -334,5 +344,13 @@ public class OrderDishDto {
 
     public void setIsChange(Integer isChange) {
         this.isChange = isChange;
+    }
+
+    public String getOrderTimeStr() {
+        return orderTimeStr;
+    }
+
+    public void setOrderTimeStr(String orderTimeStr) {
+        this.orderTimeStr = orderTimeStr;
     }
 }

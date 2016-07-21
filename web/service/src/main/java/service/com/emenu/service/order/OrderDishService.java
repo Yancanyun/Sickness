@@ -143,18 +143,11 @@ public interface OrderDishService {
 
     /**
      * 根据餐台查询所有的订单菜品
-     * 包含已退菜和赠送的
+     * 不包含已退菜
+     * 包含赠送
      * @param tableId
      * @return
      * @throws SSException
      */
     public List<OrderDishDto> queryOrderDishListByTableId(Integer tableId) throws SSException;
-
-    /**
-     * 根据订单id列表查询退菜信息
-     * @param tableIdList
-     * @return
-     * @throws SSException
-     */
-    public List<BackDish> queryBackDishListByTableIdList(List<Integer> tableIdList) throws SSException;
 }

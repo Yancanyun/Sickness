@@ -10,7 +10,6 @@ import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderDishMapper;
-import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.order.BackDishService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
@@ -302,45 +301,24 @@ public class OrderDishServiceImpl implements OrderDishService{
                 throw SSException.get(EmenuException.TableIdError);
             }
 
-            List<com.emenu.common.entity.order.Order> orderList = new ArrayList<com.emenu.common.entity.order.Order>();
+            List<Order> orderList = new ArrayList<com.emenu.common.entity.order.Order>();
             // 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
             orderList = orderService.listByTableIdAndStatus(tableId,  OrderStatusEnums.IsBooked.getId());
             if (Assert.isNotNull(orderList)) {
-                for (com.emenu.common.entity.order.Order order : orderList) {
+                for (Order order : orderList) {
                     Integer orderId = order.getId();
-                    orderDishDtoList.addAll(this.listDtoByOrderId(orderId));
+                    List<OrderDishDto> orderDishDtoChildrenList = this.listDtoByOrderId(orderId);
+                    for (OrderDishDto orderDishDto: orderDishDtoChildrenList){
+                        if (orderDishDto.getStatus() != OrderDishStatusEnums.IsBack.getId()){
+                            orderDishDtoList.add(orderDishDto);
+                        }
+                    }
                 }
             }
             return orderDishDtoList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderDishListFailed,e);
-        }
-    }
-
-    @Override
-    public List<BackDish> queryBackDishListByTableIdList(List<Integer> tableIdList) throws SSException{
-        List<BackDish> backDishList = new ArrayList<BackDish>();
-        try{
-            if (Assert.isNull(tableIdList)){
-                throw SSException.get(EmenuException.QueryBackDishListFailed);
-            }
-            if (!tableIdList.isEmpty()){
-                for (Integer tableId: tableIdList){
-                    // 查询该桌的所有订单
-                    List<Order> orderList = orderService.listByTableIdAndStatus(tableId, OrderStatusEnums.IsBooked.getId());
-                    for (Order order: orderList){
-                        List<BackDish> backDishChildrenList = backDishService.queryBackDishListByOrderId(order.getId());
-                        backDishList.addAll(backDishChildrenList);
-                    }
-                }
-            }else {
-                throw SSException.get(EmenuException.TableIdError);
-            }
-            return backDishList;
-        } catch (Exception e){
-            LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryBackDishListFailed,e);
         }
     }
 }
