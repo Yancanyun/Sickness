@@ -752,6 +752,7 @@ public class TableServiceImpl implements TableService {
             forceUpdateTable(oldTableId, oldTableDto);
 
             // TODO: 把新旧餐台的缓存交换
+            // TODO: 把新旧餐台的呼叫服务交换
 
 
         } catch (Exception e) {
