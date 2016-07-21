@@ -75,8 +75,8 @@ public class Checkout extends AbstractEntity{
     private Integer isFreeOrder;
 
     // 免单备注
-    @Column(name = "free_remark_id")
-    private Integer freeRemarkId;
+    @Column(name = "free_remark")
+    private String freeRemark;
 
     // 创建时间
     @Column(name = "created_time")
@@ -201,13 +201,14 @@ public class Checkout extends AbstractEntity{
         this.isFreeOrder = isFreeOrder;
     }
 
-    public Integer getFreeRemarkId() {
-        return freeRemarkId;
+    public String getFreeRemark() {
+        return freeRemark;
     }
 
-    public void setFreeRemarkId(Integer freeRemarkId) {
-        this.freeRemarkId = freeRemarkId;
+    public void setFreeRemark(String freeRemark) {
+        this.freeRemark = freeRemark;
     }
+
     public Date getCreatedTime() {
         return createdTime;
     }

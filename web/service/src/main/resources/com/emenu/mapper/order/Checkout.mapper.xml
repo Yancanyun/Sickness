@@ -5,7 +5,7 @@
 <mapper namespace="com.emenu.mapper.order.CheckoutMapper">
     <select id="queryByTableIdAndStatus" resultMap="pw.Checkout">
         SELECT id,table_id,checker_party_id,checkout_time,consumption_money,wipe_zero_money,should_pay_money,total_pay_money,
-        change_money,prepay_money,status,consumption_type,is_invoiced,is_free_order,free_remark_id,created_time,last_modified_time
+        change_money,prepay_money,status,consumption_type,is_invoiced,is_free_order,free_remark,created_time,last_modified_time
         FROM `t_checkout`
         WHERE t_checkout.`table_id` = #{tableId} AND t_checkout.`status` = #{status}
     </select>

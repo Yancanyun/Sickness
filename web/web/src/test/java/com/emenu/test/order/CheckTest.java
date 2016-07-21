@@ -57,20 +57,31 @@ public class CheckTest extends AbstractTestCase {
 
     @Test
     public void calcConsumptionMoney() throws SSException {
-        System.out.println(checkoutService.calcConsumptionMoney(6));
+        System.out.println(checkoutService.calcConsumptionMoney(17));
     }
 
     @Test
     public void checkout() throws SSException {
-        int tableId = 6;
+        int tableId = 17;
         int partyId = 1;
-        BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(6);
-        BigDecimal wipeZeroMoney = new BigDecimal(10);
-        BigDecimal totalPayMoney = new BigDecimal(400);
+        BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(tableId);
+        BigDecimal wipeZeroMoney = new BigDecimal(1.7);
+        BigDecimal totalPayMoney = new BigDecimal(200);
         int checkoutType = CheckoutTypeEnums.Alipay.getId();
         String serialNum = "Alipay0001";
+        int isInvoiced = 0;
 
         checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney,
-                totalPayMoney, checkoutType, serialNum);
+                totalPayMoney, checkoutType, serialNum, isInvoiced);
+    }
+
+    @Test
+    public void freeOrder() throws SSException {
+        int tableId = 17;
+        int partyId = 1;
+        BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(tableId);
+        String freeRemark = "没有理由，就是免单，任性";
+
+        checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
     }
 }

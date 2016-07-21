@@ -48,7 +48,7 @@ public interface CheckoutService {
     public JSONObject printCheckOutByTableId(Integer tableId) throws SSException;
 
     /**
-     * 根据餐台ID、结账人PartyID、消费金额、抹零金额、宾客付款金额、付款方式、流水号对餐台进行结账
+     * 根据餐台ID、结账人PartyID、消费金额、抹零金额、宾客付款金额、付款方式、流水号、是否开发票对餐台进行结账
      * @param tableId
      * @param partyId
      * @param consumptionMoney
@@ -56,11 +56,12 @@ public interface CheckoutService {
      * @param totalPayMoney
      * @param checkoutType
      * @param serialNum
+     * @param isInvoiced
      * @throws SSException
      */
     public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
                          BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
-                         int checkoutType, String serialNum) throws SSException;
+                         int checkoutType, String serialNum, int isInvoiced) throws SSException;
 
     /**
      * 根据餐台ID计算出该餐台若结账，消费金额是多少
@@ -68,4 +69,15 @@ public interface CheckoutService {
      * @throws SSException
      */
     public BigDecimal calcConsumptionMoney(int tableId) throws SSException;
+
+    /**
+     * 根据餐台ID、结账人PartyID、消费金额、免单备注对餐台进行免单
+     * @param tableId
+     * @param partyId
+     * @param consumptionMoney
+     * @param freeRemark
+     * @throws SSException
+     */
+    public void freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
+                          String freeRemark) throws SSException;
 }
