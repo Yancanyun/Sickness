@@ -23,7 +23,7 @@
         t_remark.`created_time`, t_remark.`last_modified_time`
         FROM t_dish_remark_tag LEFT JOIN t_remark_tag ON t_dish_remark_tag.`remark_tag_id` = t_remark_tag.`id`
                                LEFT  JOIN  t_remark ON t_remark_tag.`id` = t_remark.`remark_tag_id`
-        WHERE t_dish_remark_tag.`tag_id` = #{tagId}
+        WHERE t_dish_remark_tag.`tag_id` = #{tagId} AND t_remark.status != 2
     </select>
 
 </mapper>
