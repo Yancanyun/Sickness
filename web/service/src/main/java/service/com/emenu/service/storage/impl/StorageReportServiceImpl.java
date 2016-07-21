@@ -1032,20 +1032,20 @@ public class StorageReportServiceImpl implements StorageReportService {
     @Override
     public int countByReportSerachDto(ReportSearchDto reportSearchDto) throws SSException {
         // 新
-        List<StorageReport> reportList = Collections.emptyList();
+//        List<StorageReport> reportList = Collections.emptyList();
+//
+//        try {
+//            if (reportSearchDto.getEndTime() != null) {
+//                reportSearchDto.getEndTime().setHours(23);
+//                reportSearchDto.getEndTime().setMinutes(59);
+//                reportSearchDto.getEndTime().setSeconds(59);
+//            }
+//            reportList = listReportBySerachDto(reportSearchDto);
+//        } catch (Exception e) {
+//            LogClerk.errLog.error(e);
+//            throw SSException.get(PartyException.SystemException, e);
+//        }
         Integer count = 0;
-        try {
-            if (reportSearchDto.getEndTime() != null) {
-                reportSearchDto.getEndTime().setHours(23);
-                reportSearchDto.getEndTime().setMinutes(59);
-                reportSearchDto.getEndTime().setSeconds(59);
-            }
-            reportList = listReportBySerachDto(reportSearchDto);
-        } catch (Exception e) {
-            LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
-        }
-
         try {
             count = storageReportMapper.countByReportSerachDto(reportSearchDto);
         } catch (Exception e) {

@@ -76,7 +76,7 @@ public class IngredientTest extends AbstractTestCase{
     @Test
     public void queryById() throws SSException{
         Integer a = null;
-        ingredientService.queryById(a);
+        ingredientService.queryById(67);
     }
 
 }

@@ -117,10 +117,10 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
 
     /**
      * 初始化缓存
-     * @PostConstruct
+     *
      * @throws Exception
      */
-
+    @PostConstruct
     public void initCache() throws SSException {
         // 新
         // 库存盘点（单据的一次结算）= 已下单的未结账的单据.未盘点已经结账后的订单中的菜品（转换成原配料）+ 单据（审核通过、未结算）中的原配料（入库单特殊处理）
@@ -218,7 +218,11 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                     // 计算库存实际编号和剩余库存
                     realQuantity = stockInQuantity.subtract(stockOutQuantity).add(incomeOnQuantity.subtract(lossOnQuantity));
                     StorageSettlement storageSettlementLast = storageSettlementMapper.queryLastSettlement(nowTime);
-                    StorageSettlementIngredient beforeSettlementIngredient = storageSettlementMapper.queryBySettlementIdAndIngredientId(storageSettlementLast.getId(), ingredient.getId());
+                    StorageSettlementIngredient beforeSettlementIngredient = null;
+                    if (Assert.isNotNull(storageSettlementLast)){
+                        beforeSettlementIngredient = storageSettlementMapper.queryBySettlementIdAndIngredientId(storageSettlementLast.getId(), ingredient.getId());
+                    }
+
                     if (Assert.isNotNull(beforeSettlementIngredient)) {
                         totalQuantity = beforeSettlementIngredient.getTotalQuantity();
                     }

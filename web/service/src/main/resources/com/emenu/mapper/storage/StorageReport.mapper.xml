@@ -67,8 +67,12 @@
             </if>
         </where>
         ORDER BY `created_time` DESC
-        <if test="reportSearchDto != null and reportSearchDto.offset >= 0 and reportSearchDto.pageSize >= 0">
-            LIMIT #{reportSearchDto.offset},#{reportSearchDto.pageSize}
+        <if test="reportSearchDto != null
+        and reportSearchDto.offset != null
+        and reportSearchDto.offset >= 0
+        and reportSearchDto.pageSize != null
+        and reportSearchDto.pageSize >= 0">
+        LIMIT #{reportSearchDto.offset},#{reportSearchDto.pageSize}
         </if>
     </select>
 

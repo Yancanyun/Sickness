@@ -61,8 +61,14 @@ public class CostCardServiceImpl implements CostCardService {
                     &&Assert.isNotNull(costCard.getMainCost())&&Assert.isNotNull(costCard.getAssistCost())
                     &&Assert.isNotNull(costCard.getDeliciousCost())&&Assert.isNotNull(costCard.getStandardCost()))
             {
-                costCardMapper.newCostCard(costCard);
-                return 1;//添加成功
+
+                CostCard costCard1 = queryCostCardByDishId(costCard.getDishId());
+                if (Assert.isNull(costCard1)){
+                    costCardMapper.newCostCard(costCard);
+                    return 1;//添加成功
+                } else {
+                    return 0;//添加失败
+                }
             }
             else
             {
@@ -144,7 +150,7 @@ public class CostCardServiceImpl implements CostCardService {
     @Override
     public CostCard queryCostCardByDishId(Integer dishId) throws SSException
     {
-        CostCard costCard = new CostCard();
+        CostCard costCard = null;
         try {
           if(!Assert.lessOrEqualZero(dishId))
           {

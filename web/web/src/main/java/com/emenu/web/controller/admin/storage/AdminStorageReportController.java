@@ -103,7 +103,10 @@ public class AdminStorageReportController extends AbstractController {
                            @RequestParam("isSettlemented") Integer isSettlemented,
                            @RequestParam("depotId") Integer depotId) {
         ReportSearchDto reportSearchDto = new ReportSearchDto();
+        // 对页面大小和页码预处理
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
+        pageNo = pageNo == null ? 1 : pageNo;
+
         reportSearchDto.setPageNo(pageNo);
         reportSearchDto.setPageSize(pageSize);
         reportSearchDto.setEndTime(endTime);
