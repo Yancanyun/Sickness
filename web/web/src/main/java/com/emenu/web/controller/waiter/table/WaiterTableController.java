@@ -135,6 +135,13 @@ public class WaiterTableController extends AbstractController {
                     statusList.add(TableStatusEnums.Merged.getId());
                     areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
+                case Confirm:
+                    statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Checkouted.getId());
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
+                    break;
             }
             // 获取AreaDtoList中的第一个AreaDto
             if (areaDtoList.size() == 0) {
