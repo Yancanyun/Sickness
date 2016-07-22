@@ -110,6 +110,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
                     JSONObject temp1 = new JSONObject();
                     temp1.put("tasteId",dishTaste.getId());
                     // 获得口味名称
+                    if(tasteService.queryById(dishTaste.getId())!=null)
                     temp1.put("name",tasteService.queryById(dishTaste.getId()).getName());
                     jsonArray1.add(temp1);
                 }

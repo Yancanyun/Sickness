@@ -396,8 +396,22 @@ public enum ModuleEnums {
     BarCheckout("Bar:Checkout"),
     // 吧台打印消费清单
     BarCheckoutPrint("Bar:Checkout:Print"),
-
-
+    // 吧台新增消费
+    BarOrderDishAdd("Bar:Order:Dish:Add"),
+    // 吧台新增消费获取一级分类和二级分类
+    BarOrderDishAddListTag("Bar:Order:Dish:Add:List:Tag"),
+    // 吧台获取二级分类下的所有菜品
+    BarOrderDishAddListDish("Bar:Order:Dish:Add:List:Dish"),
+    // 吧台获取缓存所有菜品
+    BarOrderDishAddListCacheDish("Bar:Order:Dish:Add:List:Cache:Dish"),
+    // 吧台获取缓存所有菜品
+    BarOrderDishAddFinish("Bar:Order:Dish:Add:Finish"),
+    // 吧台新增消费赠送菜品
+    BarOrderDishAddPresent("Bar:Order:Dish:Add:Present"),
+    // 吧台新增消费删除缓存菜品
+    BarOrderDishAddDelete("Bar:Order:Dish:Add:Delete"),
+    // 吧台新增消费再次确认
+    BarOrderDishAddReconfirm("Bar:Order:Dish:Add:Reconfirm"),
 
     //后厨管理模块
     Cook("Cook"),

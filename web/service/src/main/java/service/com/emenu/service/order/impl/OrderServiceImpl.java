@@ -216,14 +216,14 @@ public class OrderServiceImpl implements OrderService{
                     if(orderDishDto.getIsPackage()== PackageStatusEnums.IsNotPackage.getId()
                             &&orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId())//非套餐，status为4的时候为退菜,退了的菜不做处理
                     {
-                        totalMoney= totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getDishQuantity()));
+                        totalMoney= totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getDishQuantity()).multiply(orderDishDto.getDiscount().divide(new BigDecimal(10))));
                     }
                     else if(orderDishDto.getIsPackage()==PackageStatusEnums.IsPackage.getId()
                             &&orderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//套餐的话会有重复，在数据库里套餐被拆成菜品
                     {
                         if(packageFlagMap.get(orderDishDto.getPackageFlag())==null)//没有出现过的套餐
                         {
-                            totalMoney=totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getPackageQuantity()));
+                            totalMoney=totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getPackageQuantity()).multiply(orderDishDto.getDiscount().divide(new BigDecimal(10))));
                             packageFlagMap.put(orderDishDto.getPackageFlag(),1);//标记为出现过
                         }
                     }

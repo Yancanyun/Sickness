@@ -305,8 +305,13 @@ public class WaiterOrderDishConfirmController extends AbstractController{
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)
                 orderDishCache = tableOrderCache.getOrderDishCacheList();//已点菜品缓存
+            //菜品缓存为空,则没有必要展示给用户空的列表
+            else {
+                return sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishCacheIsNull));
+            }
             //orderStatus为0的时候点击的是返回按钮
-            if(tableOrderCache.getLock()==true&&orderStatus==1)//已经加上了锁且点击的为确认菜品，即存在其他人正在下单
+            if(tableOrderCache.getLock()==true
+                    &&orderStatus==1)//已经加上了锁且点击的为确认菜品，即存在其他人正在下单
                 return sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
             if(orderStatus==1)//锁死菜品缓存
             {
@@ -416,7 +421,8 @@ public class WaiterOrderDishConfirmController extends AbstractController{
                         orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
                         orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
                         orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
-                        if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
+                        if(dto.getTasteId()!=null
+                                &&dto.getTasteId()!=0)//菜品口味可以不选择,不选择的话为默认菜品口味
                             orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
                         orderDish.setPackageFlag(packageFlag);//设置套餐标识
                         orderDishService.newOrderDish(orderDish);
@@ -444,7 +450,8 @@ public class WaiterOrderDishConfirmController extends AbstractController{
                     orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
                     //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                     orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
-                    if(dto.getTasteId()!=null)//菜品口味可以不选择,不选择的话为默认菜品口味
+                    if(dto.getTasteId()!=null
+                            &&dto.getTasteId()!=0)//菜品口味可以不选择,不选择的话为默认菜品口味
                         orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
                     orderDishService.newOrderDish(orderDish);
                 }

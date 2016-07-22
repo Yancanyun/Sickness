@@ -78,6 +78,7 @@ public interface OrderService {
 
     /**
      * 根据tableId查询对应订单且未结账的订单的所有菜品的总金额(包括赠送菜品的金额但不包括退菜的菜品金额)
+     * 菜品的金额为售价*折扣
      * @param
      * @return
      * @throws Exception

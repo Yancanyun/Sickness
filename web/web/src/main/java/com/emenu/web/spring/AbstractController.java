@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.bar.BarOrderDishNewService;
 import com.emenu.service.call.CallCacheService;
 import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.dish.*;
@@ -515,9 +516,15 @@ public class AbstractController extends Base {
     @Qualifier("tableMergeService")
     protected static TableMergeService tableMergeService;
 
+    // 呼叫服务缓存
     @StaticAutoWire
     @Qualifier("callCacheService")
     protected static CallCacheService callCacheService;
+
+    //吧台端新增消费
+    @StaticAutoWire
+    @Qualifier("barOrderDishNewService")
+    protected static BarOrderDishNewService barOrderDishNewService;
 }
 
 

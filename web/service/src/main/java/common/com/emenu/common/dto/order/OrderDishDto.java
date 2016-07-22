@@ -140,9 +140,7 @@ public class OrderDishDto {
     public void setPrice()
     {
         BigDecimal temp = new BigDecimal(0);
-        temp=temp.add(this.getDiscount());
-        temp=temp.add(this.getSalePrice());
-        this.price =temp;
+        this.price =this.salePrice.divide(this.discount.divide(new BigDecimal(10)));
     }
 
     public String getPresentedRemarkName() {
