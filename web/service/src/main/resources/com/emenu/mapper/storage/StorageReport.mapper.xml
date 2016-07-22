@@ -146,9 +146,9 @@
         FROM `t_storage_report`
         <where>
         <if test="startTime != null">
-            `created_time` &gt; #{startTime}
+            `created_time` <![CDATA[ >]]> #{startTime}
         </if>
-            AND `created_time` &lt; #{endTime}
+            AND `created_time` <![CDATA[ <]]> #{endTime}
         </where>
     </select>
 
@@ -194,9 +194,12 @@
         FROM `t_storage_report`
         <where>
             <if test="startTime != null">
-                `created_time` &gt; #{startTime}
+                `created_time` <![CDATA[ >]]> #{startTime}
             </if>
-            AND `created_time` &lt; #{endTime}
+            <if test="endTime != null">
+                AND `created_time` <![CDATA[ < ]]> #{endTime}
+            </if>
+
             AND `is_audited` = #{isAudited};
         </where>
     </select>
@@ -397,7 +400,7 @@
     </select>
 
     <update id="updateIsSettlementedById" >
-        UPDATE `t_storage_report` SET `status` = #{status} WHERE `id` = #{id}
+        UPDATE `t_storage_report` SET `is_settlemented` = #{isSettlemented} WHERE `id` = #{id}
     </update>
 
     <select id="listByDepotIdList" resultMap="pw.StorageReport">

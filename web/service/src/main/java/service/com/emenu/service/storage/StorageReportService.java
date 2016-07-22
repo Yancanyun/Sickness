@@ -84,7 +84,7 @@ public interface StorageReportService {
 
     /**
      * 新
-     * 根据审核条件获取时间段之间的单据和单据详情，包括开始时间和结束时间
+     * 根据审核条件获取时间段之间的单据和单据详情，不包括开始时间和结束时间
      * @param startTime
      * @param endTime
      * @return

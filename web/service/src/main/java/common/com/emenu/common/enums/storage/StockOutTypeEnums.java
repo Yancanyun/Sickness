@@ -13,6 +13,7 @@ public enum StockOutTypeEnums {
 
     Average(1, "加权平均"),
     Manual(2, "手动"),
+
     ;
 
     private Integer id;

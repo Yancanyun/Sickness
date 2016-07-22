@@ -7,15 +7,21 @@ import com.emenu.common.dto.storage.StorageCheckDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.entity.storage.StorageDepot;
+import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.entity.storage.StorageReport;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +50,8 @@ public class AdminSettlementCheckController extends AbstractController{
             //获取分类列表
             List<Tag> tagList = storageTagService.listAllSmallTag();
             model.addAttribute("tagList", tagList);
+            model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
+            model.addAttribute("currentMonthNowDay", DateUtils.formatDate(new Date(),new SimpleDateFormat("yyyy-MM-dd")));
             model.addAttribute("eMsg", eMsg);
         }catch (SSException e){
             LogClerk.errLog.error(e);
@@ -65,7 +73,7 @@ public class AdminSettlementCheckController extends AbstractController{
                                @RequestParam("pageSize") Integer pageSize,
                                @RequestParam(value = "startTime", required = false) Date startTime,
                                @RequestParam(value = "endTime", required = false) Date endTime,
-                               @RequestParam(value = "ingredient", required = false) String keyword,
+                               @RequestParam(value = "keyWord", required = false) String keyword,
                                @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
         List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
         try {
@@ -74,10 +82,16 @@ public class AdminSettlementCheckController extends AbstractController{
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-
+        int offset = 0;
+        if (Assert.isNotNull(curPage)){
+            curPage = curPage <= 0 ? 0 : curPage - 1;
+            offset = curPage * pageSize;
+        }
+        int i = 0;
         JSONArray jsonArray = new JSONArray();
         for (StorageCheckDto storageCheckDto : storageCheckDtoList){
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("sequenceNumber",offset+(++i));
             jsonObject.put("ingredientName",storageCheckDto.getIngredientName());
             jsonObject.put("ingredientNumber",storageCheckDto.getIngredientNumber());
             jsonObject.put("tagName", storageCheckDto.getTagName());
@@ -85,25 +99,25 @@ public class AdminSettlementCheckController extends AbstractController{
             jsonObject.put("storageUnitName", storageCheckDto.getStorageUnitName());
             jsonObject.put("costCardUnitName",storageCheckDto.getCostCardUnitName());
 
-            String beginQuantityStr = storageCheckDto.getBeginQuantity().toString()+storageCheckDto.getCostCardUnitName();
+            String beginQuantityStr = storageCheckDto.getBeginQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString()+storageCheckDto.getCostCardUnitName();
             jsonObject.put("beginQuantityStr", beginQuantityStr);
 
-            String stockInQuantityStr = storageCheckDto.getStockInQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            String stockInQuantityStr = storageCheckDto.getStockInQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("stockInQuantityStr", stockInQuantityStr);
 
-            String stockOutQuantityStr = storageCheckDto.getStockOutQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            String stockOutQuantityStr = storageCheckDto.getStockOutQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("stockOutQuantityStr", stockOutQuantityStr);
 
             String incomeLossQuantityStr = storageCheckDto.getIncomeLossQuantity().toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("incomeLossQuantityStr", incomeLossQuantityStr);
 
-            String totalQuantityStr = storageCheckDto.getTotalQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            String totalQuantityStr = storageCheckDto.getTotalQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("totalQuantityStr", totalQuantityStr);
 
-            String maxStorageQuantityStr = storageCheckDto.getMaxStorageQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            String maxStorageQuantityStr = storageCheckDto.getMaxStorageQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
 
-            String minStorageQuantityStr = storageCheckDto.getMinStorageQuantity().toString() + storageCheckDto.getCostCardUnitName();
+            String minStorageQuantityStr = storageCheckDto.getMinStorageQuantity().setScale(2, BigDecimal.ROUND_HALF_UP).toString() + storageCheckDto.getCostCardUnitName();
             jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
             jsonArray.add(jsonObject);
         }
@@ -138,5 +152,19 @@ public class AdminSettlementCheckController extends AbstractController{
             sendErrMsg(e.getMessage());
         }
         return "admin/storage/settlement/check/list_home";
+    }
+
+    @Module(ModuleEnums.AdminStorageSettlementCheck)
+    @RequestMapping(value = "ajax/settlement/check",method = RequestMethod.PUT)
+    @ResponseBody
+    public JSONObject checkSettlement(){
+        try {
+            storageSettlementService.newSettlement();
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
     }
 }

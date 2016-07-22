@@ -27,13 +27,13 @@
                     <div class="form-group "  >
                         <label class="col-sm-2 control-label">开始时间</label>
                         <div class="col-sm-7">
-                            <input type="text" class="J_date" name="startTime" value="" />
+                            <input type="text" class="J_date" name="startTime" value="${currentMonthFirstDay}" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">结束时间</label>
                         <div class="col-sm-7">
-                            <input type="text" class=" J_date" name="endTime" value="" />
+                            <input type="text" class=" J_date" name="endTime" value="${currentMonthNowDay}" />
                         </div>
                     </div>
                     <div class="form-group ">

@@ -75,7 +75,12 @@
             AND ingredient.`status` != 2
         </where>
         ORDER BY ingredient.`tag_id` ASC, ingredient.`id` ASC
-        <if test="searchDto != null and searchDto.offset >= 0 and searchDto.pageSize >= 0">
+
+        <if test="searchDto != null
+        and searchDto.offset != null
+        and searchDto.offset >= 0
+        and searchDto.pageSize != null
+        and searchDto.pageSize >= 0">
             LIMIT #{searchDto.offset},#{searchDto.pageSize}
         </if>
     </select>
@@ -123,7 +128,11 @@
             AND ingredient.`status` != 2
         </where>
         ORDER BY ingredient.`tag_id` ASC, ingredient.`id` ASC
-        <if test="searchDto.offset >= 0 and searchDto.pageSize >= 0">
+        <if test="searchDto != null
+        and searchDto.offset != null
+        and searchDto.offset >= 0
+        and searchDto.pageSize != null
+        and searchDto.pageSize >= 0">
             LIMIT #{searchDto.offset},#{searchDto.pageSize}
         </if>
     </select>

@@ -163,4 +163,11 @@ public class SettlementTest extends AbstractTestCase{
             }
         }
     }
+
+    @Test
+    public void listExportData() throws SSException{
+
+        List<StorageCheckDto> storageCheckDtos = storageSettlementService.listExportData();
+        System.out.println("xiao");
+    }
 }

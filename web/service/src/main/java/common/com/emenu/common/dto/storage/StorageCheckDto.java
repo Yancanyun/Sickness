@@ -128,6 +128,7 @@ public class StorageCheckDto {
 
     public void setBeginQuantity(BigDecimal beginQuantity) {
         this.beginQuantity = beginQuantity;
+
     }
 
     public String getBeginQuantityStr() {
@@ -144,6 +145,7 @@ public class StorageCheckDto {
 
     public void setStockInQuantity(BigDecimal stockInQuantity) {
         this.stockInQuantity = stockInQuantity;
+
     }
 
     public String getStockInQuantityStr() {
@@ -156,10 +158,12 @@ public class StorageCheckDto {
 
     public BigDecimal getStockOutQuantity() {
         return stockOutQuantity;
+
     }
 
     public void setStockOutQuantity(BigDecimal stockOutQuantity) {
         this.stockOutQuantity = stockOutQuantity;
+
     }
 
     public String getStockOutQuantityStr() {
@@ -176,6 +180,7 @@ public class StorageCheckDto {
 
     public void setIncomeLossQuantity(BigDecimal incomeLossQuantity) {
         this.incomeLossQuantity = incomeLossQuantity;
+
     }
 
     public String getIncomeLossQuantityStr() {
@@ -192,6 +197,7 @@ public class StorageCheckDto {
 
     public void setTotalQuantity(BigDecimal totalQuantity) {
         this.totalQuantity = totalQuantity;
+
     }
 
     public String getTotalQuantityStr() {

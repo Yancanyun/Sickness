@@ -4,7 +4,7 @@
 <script type="text/template" id="tpl">
     {@each list as it}
     <tr>
-        <td>&{it.itemNumber}</td><!-- 序号 -->
+        <td>&{it.sequenceNumber}</td><!-- 序号 -->
         <td>&{it.tagName}</td><!-- 类别 -->
         <td>&{it.ingredientName}</td><!-- 名称 -->
         <td>&{it.ingredientNumber}</td><!-- 原配料编号 -->
@@ -28,7 +28,7 @@
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
-                url: 'ajax/list/',
+                url: 'check/ajax/list/',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
 //                    return url;

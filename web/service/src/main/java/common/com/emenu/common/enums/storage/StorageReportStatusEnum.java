@@ -10,8 +10,15 @@ import java.util.Map;
  * @date 2015/11/15
  */
 public enum StorageReportStatusEnum {
+    // 结算状态
     NotSettled(0 , "未结算"),
-    Settled(1 , "已结算");
+    Settled(1 , "已结算"),
+
+    // 审核状态
+    NotAudited(0,"未审核"),
+    PassAudited(1,"审核通过"),
+    NotPassAudited(2,"审核未通过");
+
 
     private Integer id;
     private String name;

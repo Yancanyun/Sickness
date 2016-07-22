@@ -379,6 +379,11 @@ public class ReportTest extends AbstractTestCase {
         // storageReportService.newReport(storageReport);
     }
 
+    @Test
+    public void listReportByTimeAndIsAudited1()throws SSException {
+        List<StorageReport> storageReportList = storageReportService.listReportByTimeAndIsAudited1(null,new Date(),1);
+        System.out.println("xiao");
+    }
 
 }
 

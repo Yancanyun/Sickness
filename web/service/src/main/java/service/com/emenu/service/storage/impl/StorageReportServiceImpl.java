@@ -278,7 +278,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 return reportDtoList;
             } else {
                 for (StorageReport report : reportList){
-                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
                         for (StorageReportItem storageReportItem : storageReportItemList){
@@ -328,7 +328,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 return reportDtoList;
             } else {
                 for (StorageReport report : reportList){
-                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
                         for (StorageReportItem storageReportItem : storageReportItemList){
@@ -397,7 +397,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                 return reportDtoList;
             } else {
                 for (StorageReport report : reportList){
-                    if (report.getType() == StorageReportTypeEnum.IncomeOnReport.getId()){
+                    if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
                         for (StorageReportItem storageReportItem : storageReportItemList){

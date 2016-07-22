@@ -47,6 +47,13 @@ public interface StorageSettlementService {
                                                       Integer pageSize) throws SSException;
 
     /**
+     * 获取导出数据
+     * @return
+     * @throws SSException
+     */
+    public List<StorageCheckDto> listExportData() throws SSException;
+
+    /**
      * 新
      * 计算库存盘点总数
      * @param tagIds

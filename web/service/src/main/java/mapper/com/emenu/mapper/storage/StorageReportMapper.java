@@ -61,7 +61,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listStorageReportByTime(Date startTime, Date endTime) throws Exception;
+    public List<StorageReport> listStorageReportByTime(@Param("startTime") Date startTime, @Param("endTime") Date endTime) throws Exception;
 
     /**
      * 新
@@ -72,7 +72,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listReportByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws Exception;
+    public List<StorageReport> listReportByTimeAndIsAudited(@Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("isAudited") int isAudited) throws Exception;
 
     /**
      * 新
@@ -83,7 +83,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public List<StorageReport> listReportByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws Exception;
+    public List<StorageReport> listReportByTimeAndIsAudited1(@Param("startTime") Date startTime, @Param("endTime") Date endTime, @Param("isAudited") int isAudited) throws Exception;
 
 
     /**
@@ -163,7 +163,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public boolean updateIsSettlementedById(@Param("id")int id, @Param("status")int status) throws Exception;
+    public boolean updateIsSettlementedById(@Param("id")int id, @Param("isSettlemented")int isSettlemented) throws Exception;
 
     /**
      * 根据存放点IdList获取单据信息
@@ -197,7 +197,7 @@ public interface StorageReportMapper {
      * @return
      * @throws Exception
      */
-    public int countByCondition(ReportSearchDto reportSearchDto) throws Exception;
+    public int countByCondition(@Param("reportSearchDto") ReportSearchDto reportSearchDto) throws Exception;
 
     /**
      *
