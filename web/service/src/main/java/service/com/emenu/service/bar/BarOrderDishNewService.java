@@ -26,5 +26,10 @@ public interface BarOrderDishNewService {
      */
     public JSONObject queryAllDishByBigTag(Integer bigTagId) throws SSException;
 
-
+    /**
+     * 增加消费-按照菜品大类和关键字搜索菜品
+     * @param
+     * @throws com.pandawork.core.common.exception.SSException
+     */
+    public JSONObject queryDishByBigTagAndKey(Integer bigTagId,String key) throws SSException;
 }

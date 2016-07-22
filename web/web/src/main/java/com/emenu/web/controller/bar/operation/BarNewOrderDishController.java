@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +79,28 @@ public class BarNewOrderDishController extends AbstractController{
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject = barOrderDishNewService.queryAllDishByBigTag(tagId);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 增加消费-根据关键字和菜品大类搜索
+     * @param
+     * @return
+     */
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    @Module(ModuleEnums.BarOrderDishAddSearch)
+    @ResponseBody
+    public JSONObject searchDishByTagIdAndKey(@RequestParam("tagId") Integer tagId,
+                                              @RequestParam("key") String key) {
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject = barOrderDishNewService.queryDishByBigTagAndKey(tagId,key);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

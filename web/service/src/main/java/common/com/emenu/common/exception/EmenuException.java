@@ -631,7 +631,8 @@ public enum EmenuException implements IBizExceptionMes {
 
     /****************************吧台端****************************/
     QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),
-
+    QueryDishByTagFail("根据菜品大类查询菜品失败",10201),
+    QueryDishByKeyFail("根据关键字查询菜品失败",10202),
     ;
 
 

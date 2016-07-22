@@ -412,6 +412,8 @@ public enum ModuleEnums {
     BarOrderDishAddDelete("Bar:Order:Dish:Add:Delete"),
     // 吧台新增消费再次确认
     BarOrderDishAddReconfirm("Bar:Order:Dish:Add:Reconfirm"),
+    // 吧台新增消费搜索菜品
+    BarOrderDishAddSearch("Bar:Order:Dish:Add:Search"),
 
     //后厨管理模块
     Cook("Cook"),

@@ -2,6 +2,7 @@ package com.emenu.service.bar.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.*;
 import com.emenu.common.entity.remark.Remark;
@@ -103,15 +104,16 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
                 temp.put("assistantCode",dto.getDishAssistantCode());
 
                 // 获取菜品具有的全部口味
-                List<DishTaste> tastes = new ArrayList<DishTaste>();
-                tastes = dishTasteService.listByDishId(dto.getDishId());
+                DishDto dishDto = new DishDto();
+                dishDto = dishService.queryById(dto.getDishId());
+                List<Taste> tastes = new ArrayList<Taste>();
+                tastes = dishDto.getTasteList();
                 JSONArray jsonArray1 = new JSONArray();
-                for(DishTaste dishTaste : tastes) {
+                for(Taste taste : tastes) {
                     JSONObject temp1 = new JSONObject();
-                    temp1.put("tasteId",dishTaste.getId());
+                    temp1.put("tasteId", taste.getId());
                     // 获得口味名称
-                    if(tasteService.queryById(dishTaste.getId())!=null)
-                    temp1.put("name",tasteService.queryById(dishTaste.getId()).getName());
+                    temp1.put("name",taste.getName());
                     jsonArray1.add(temp1);
                 }
                 temp.put("dishTasteList",jsonArray1);
@@ -131,9 +133,65 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
             jsonObject.put("dishList",jsonArray);
         } catch (SSException e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryTagFail,e);
+            throw SSException.get(EmenuException.QueryDishByTagFail,e);
         }
         return jsonObject;
     }
 
+    @Override
+    public JSONObject queryDishByBigTagAndKey(Integer bigTagId,String key) throws SSException
+    {
+        List<DishTagDto> dishTagDtos = new ArrayList<DishTagDto>();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            // 根据二级分类查询出所有菜品
+            dishTagDtos = dishTagService.listDtoByTagId(bigTagId);
+            JSONArray jsonArray = new JSONArray();
+            for(DishTagDto dto : dishTagDtos) {
+
+                if(dto.getDishName().contains(key)
+                        ||dto.getDishAssistantCode().contains(key)){
+
+                    JSONObject temp = new JSONObject();
+                    temp.put("dishId",dto.getDishId());
+                    temp.put("dishName",dto.getDishName());
+                    temp.put("dishSalePrice",dto.getDishSalePrice());
+                    temp.put("dishUnit",dto.getDishUnitName());
+                    temp.put("assistantCode",dto.getDishAssistantCode());
+
+                    // 获取菜品具有的全部口味
+                    DishDto dishDto = new DishDto();
+                    dishDto = dishService.queryById(dto.getDishId());
+                    List<Taste> tastes = new ArrayList<Taste>();
+                    tastes = dishDto.getTasteList();
+                    JSONArray jsonArray1 = new JSONArray();
+                    for(Taste taste : tastes) {
+                        JSONObject temp1 = new JSONObject();
+                        temp1.put("tasteId",taste.getId());
+                        // 获得口味名称
+                        temp1.put("name",taste.getName());
+                        jsonArray1.add(temp1);
+                    }
+                    temp.put("dishTasteList",jsonArray1);
+
+                    //获取菜品的关联备注
+                    List<Remark> remarks = new ArrayList<Remark>();
+                    remarks = dishService.queryDishRemarkByDishId(dto.getDishId());
+                    JSONArray jsonArray2 = new JSONArray();
+                    for(Remark remark : remarks){
+                        JSONObject temp1 = new JSONObject();
+                        temp1.put("remark",remark.getName());
+                        jsonArray2.add(temp1);
+                    }
+                    temp.put("dishRemarkList",jsonArray2);
+                    jsonArray.add(temp);
+                }
+            }
+            jsonObject.put("dishList",jsonArray);
+        } catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDishByKeyFail,e);
+        }
+        return jsonObject;
+    }
 }
