@@ -101,4 +101,13 @@ public interface OrderDishMapper {
      */
     public int isOrderHaveOrderDish(@Param("orderId")Integer orderId) throws Exception;
 
+    /**
+     * 根据订单ID及套餐ID查询订单菜品列表
+     * @param orderId
+     * @param packageId
+     * @return
+     * @throws Exception
+     */
+    public List<OrderDish> listByOrderIdAndPackageId(@Param("orderId") int orderId,
+                                                     @Param("packageId") int packageId) throws Exception;
 }

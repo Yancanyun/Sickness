@@ -465,6 +465,86 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
+    public BigDecimal calcTableMoney(int tableId) throws SSException {
+        try {
+            BigDecimal tableMoney = new BigDecimal(0); // 本次结账的房间费用=餐位费*人数+餐台费
+
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
+            Checkout checkout = queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+
+            // 如果未并台，则只需要把该餐台中的所有未结账的订单进行计算即可
+            if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                BigDecimal tableFee = table.getTableFee();
+                BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
+
+                // 若本餐台是第一次消费，加餐台费及餐位费
+                if (Assert.isNull(checkout)) {
+                    throw SSException.get(EmenuException.CheckoutIsNull);
+                }
+                if (checkout.getConsumptionType() == 1) {
+                    tableMoney = tableMoney.add(tableFee);
+                    tableMoney = tableMoney.add(totalSeatFee);
+                }
+            }
+            // 如果并台，则需要把和它并的所有的餐台的钱算出来
+            else {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+
+                BigDecimal tableFee = table.getTableFee();
+                BigDecimal totalSeatFee = table.getSeatFee().multiply(new BigDecimal(table.getPersonNum()));
+
+                // 若本餐台未生成结账单(即其未下单)，需加它的餐台费及餐位费
+                if (Assert.isNull(checkout)) {
+                    tableMoney = tableMoney.add(tableFee);
+                    tableMoney = tableMoney.add(totalSeatFee);
+                } else {
+                    // 若本餐台是第一次消费，则也需加餐台费及餐位费
+                    if (checkout.getConsumptionType() == 1) {
+                        tableMoney = tableMoney.add(tableFee);
+                        tableMoney = tableMoney.add(totalSeatFee);
+                    }
+                }
+
+                // 再依次计算所有与本餐台并台的餐台的消费金额
+                for (Table t : tableList) {
+                    tableFee = t.getTableFee();
+                    totalSeatFee = t.getSeatFee().multiply(new BigDecimal(t.getPersonNum()));
+
+                    Checkout c = queryByTableIdAndStatus(t.getId(), CheckOutStatusEnums.IsNotCheckOut.getId());
+                    if (Assert.isNull(c)) {
+                        // 若该并台餐台未生成结账单(即其未下单)，需加上它餐台费及餐位费
+                        tableMoney = tableMoney.add(tableFee);
+                        tableMoney = tableMoney.add(totalSeatFee);
+                    } else {
+                        // 若该并台餐台是第一次消费，则也需加餐台费及餐位费
+                        if (c.getConsumptionType() == 1) {
+                            tableMoney = tableMoney.add(tableFee);
+                            tableMoney = tableMoney.add(totalSeatFee);
+                        }
+                    }
+                }
+            }
+
+            // 保留两位小数
+            tableMoney = tableMoney.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            return tableMoney;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
                           String freeRemark) throws SSException {
@@ -633,7 +713,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     /**
      * 对单个餐台进行免单
-     *
      * @param tableId
      * @param checkout
      * @throws SSException

@@ -162,6 +162,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     public void newOrderDish(OrderDish orderDish) throws SSException {
         try {
             Assert.isNotNull(orderDish, EmenuException.OrderDishIsNotNull);
+            orderDish.setDiscount(new BigDecimal(10)); // 默认的折扣都是10(不打折)
             commonDao.insert(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -175,6 +176,9 @@ public class OrderDishServiceImpl implements OrderDishService{
         try{
             Assert.isNotNull(orderDishs,EmenuException.OrderDishIsNotNull);
             Assert.isNotEmpty(orderDishs, EmenuException.OrderdishsIsNotEmpty);
+            for(OrderDish orderDish : orderDishs) {
+                orderDish.setDiscount(new BigDecimal(10)); // 默认的折扣都是10(不打折)
+            }
             commonDao.insertAll(orderDishs);
         }catch (Exception e){
             LogClerk.errLog.error(e);
@@ -320,5 +324,19 @@ public class OrderDishServiceImpl implements OrderDishService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderDishListFailed,e);
         }
+    }
+
+    @Override
+    public List<OrderDish> listByOrderIdAndPackageId(int orderId, int packageId) throws SSException {
+        List<OrderDish> orderDishList = Collections.emptyList();
+        try {
+            Assert.lessOrEqualZero(orderId, EmenuException.OrderIdError);
+            Assert.lessOrEqualZero(packageId, EmenuException.DishPackageIdError);
+            orderDishList = orderDishMapper.listByOrderIdAndPackageId(orderId, packageId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed, e);
+        }
+        return orderDishList;
     }
 }

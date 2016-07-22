@@ -120,7 +120,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
      *
      * @throws Exception
      */
-    @PostConstruct
+//    @PostConstruct
     public void initCache() throws SSException {
         // 新
         // 库存盘点（单据的一次结算）= 已下单的未结账的单据.未盘点已经结账后的订单中的菜品（转换成原配料）+ 单据（审核通过、未结算）中的原配料（入库单特殊处理）

@@ -392,8 +392,12 @@ public enum ModuleEnums {
     BarBackDishList("Bar:Back:Dish:List"),
     // 吧台退菜确认
     BarBackDishConfirm("Bar:Back:Dish:Confirm"),
-    // 吧台结账单
+    // 吧台结账
     BarCheckout("Bar:Checkout"),
+    // 吧台免单
+    BarCheckoutFreeOrder("Bar:Checkout:Free:Order"),
+    // 吧台结账菜品列表
+    BarCheckoutOrderDish("Bar:Checkout:Order:Dish"),
     // 吧台打印消费清单
     BarCheckoutPrint("Bar:Checkout:Print"),
     // 吧台新增消费

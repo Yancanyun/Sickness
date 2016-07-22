@@ -71,6 +71,13 @@ public interface CheckoutService {
     public BigDecimal calcConsumptionMoney(int tableId) throws SSException;
 
     /**
+     * 根据餐台ID计算出该餐台若结账，房间费用
+     * @param tableId
+     * @throws SSException
+     */
+    public BigDecimal calcTableMoney(int tableId) throws SSException;
+
+    /**
      * 根据餐台ID、结账人PartyID、消费金额、免单备注对餐台进行免单
      * @param tableId
      * @param partyId

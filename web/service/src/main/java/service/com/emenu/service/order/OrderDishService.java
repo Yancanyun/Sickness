@@ -150,4 +150,13 @@ public interface OrderDishService {
      * @throws SSException
      */
     public List<OrderDishDto> queryOrderDishListByTableId(Integer tableId) throws SSException;
+
+    /**
+     * 根据订单ID及套餐ID查询订单菜品列表
+     * @param orderId
+     * @param packageId
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDish> listByOrderIdAndPackageId(int orderId, int packageId) throws SSException;
 }

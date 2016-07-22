@@ -181,7 +181,6 @@ public class BarTableController extends AbstractController {
     @ResponseBody
     public JSONObject orderDishList(@RequestParam("tableId") int tableId) {
         try {
-
             JSONArray jsonArray = new JSONArray();
 
             // 查询本餐台所有的订单菜品
@@ -210,7 +209,7 @@ public class BarTableController extends AbstractController {
                         DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
                         assistantCode = dishDto.getAssistantCode();
                         jsonObject.put("assistantCode", assistantCode);
-                        jsonObject.put("discount", orderDishDto.getDiscount());
+                        jsonObject.put("discount", orderDishDto.getDiscount().multiply(new BigDecimal(10)));
                         jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
                         String unitName = "";
                         unitName = dishDto.getUnitName();
@@ -253,7 +252,7 @@ public class BarTableController extends AbstractController {
                             String assistantCode = "";
                             assistantCode = dishDto.getAssistantCode();
                             jsonObject.put("assistantCode", assistantCode);
-                            jsonObject.put("discount", orderDishDto.getDiscount());
+                            jsonObject.put("discount", orderDishDto.getDiscount().multiply(new BigDecimal(10)));
                             jsonObject.put("dishQuantity", orderDishDto.getPackageQuantity());
                             String unitName = "";
                             unitName = dishDto.getUnitName();
