@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
-import com.emenu.common.entity.vip.VipRejisterDto;
+import com.emenu.common.entity.vip.VipRegisterDto;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -60,10 +60,10 @@ public class BarVipRegisterController extends AbstractController{
             SecurityUser securityUser = securityUserService.queryById(uid);
             Assert.isNotNull(securityUser, PartyException.UserNotExist);
             Integer operatorPartyId = securityUser.getPartyId();
-            VipRejisterDto rejisterDto = vipOperationService.registerVip(name,sex,phone,birthday,validityTime,permanentlyEffective,operatorPartyId);
-            Assert.isNotNull(rejisterDto,EmenuException.RejisterVipFail);
+            VipRegisterDto registerDto = vipOperationService.registerVip(name,sex,phone,birthday,validityTime,permanentlyEffective,operatorPartyId);
+            Assert.isNotNull(registerDto,EmenuException.RejisterVipFail);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("cardNumber",rejisterDto.getVipCard().getCardNumber());
+            jsonObject.put("cardNumber",registerDto.getVipCard().getCardNumber());
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -73,6 +73,12 @@ public class BarVipRegisterController extends AbstractController{
 
     }
 
+    /**
+     * 绑定会员卡和物理卡号
+     * @param physicalNumber
+     * @param cardNumber
+     * @return
+     */
     @RequestMapping(value = "bindvipnum",method = RequestMethod.POST)
     @Module(ModuleEnums.BarVipNew)
     @ResponseBody

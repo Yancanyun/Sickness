@@ -3,7 +3,7 @@ package com.emenu.service.vip.impl;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.entity.vip.VipCard;
-import com.emenu.common.entity.vip.VipRejisterDto;
+import com.emenu.common.entity.vip.VipRegisterDto;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
@@ -42,8 +42,8 @@ public class VipOperationServiceImpl implements VipOperationService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public VipRejisterDto registerVip(String name, Integer sex, String phone, Date birthday, Date validityTime, Integer permanentlyEffective, Integer operatorPartyId) throws SSException {
-        VipRejisterDto vipRejisterDto = new VipRejisterDto();
+    public VipRegisterDto registerVip(String name, Integer sex, String phone, Date birthday, Date validityTime, Integer permanentlyEffective, Integer operatorPartyId) throws SSException {
+        VipRegisterDto vipRejisterDto = new VipRegisterDto();
         try {
             // 会员基本信息
             VipInfo vipInfo = new VipInfo();

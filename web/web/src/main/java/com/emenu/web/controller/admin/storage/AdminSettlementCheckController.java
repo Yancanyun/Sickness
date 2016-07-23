@@ -156,6 +156,34 @@ public class AdminSettlementCheckController extends AbstractController{
         return "admin/storage/settlement/check/list_home";
     }
 
+    @Module(ModuleEnums.AdminStorageSettlementCheckList)
+    @RequestMapping(value = "ajax/settlement/listingredient",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listIngredientByKeyword(@RequestParam("keyword")String keyword){
+        try {
+            List<Ingredient> ingredientList = ingredientService.listByKeyword(keyword);
+            JSONArray jsonArray = new JSONArray();
+            if (Assert.isNotNull(ingredientList)
+                    && ingredientList.size() > 0){
+                for (Ingredient ingredient : ingredientList){
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id",ingredient.getId());
+                    jsonObject.put("name",ingredient.getName());
+                    jsonObject.put("assistantCode",ingredient.getAssistantCode());
+                }
+            }
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"盘点成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendMsgAndCode(AJAX_FAILURE_CODE,"盘点失败");
+        }
+    }
+
+    /**
+     * 结算
+     * @return
+     */
     @Module(ModuleEnums.AdminStorageSettlementCheck)
     @RequestMapping(value = "ajax/settlement/check",method = RequestMethod.PUT)
     @ResponseBody

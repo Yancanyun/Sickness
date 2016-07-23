@@ -259,7 +259,8 @@
             ['getAssistantCode', site.website + 'admin/common/tool/str2py/ajax', 'get', '获取名称对应的助记码'],
             //['getName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '获取相应的值,搜索选择'],
             ['getGoodsName', site.website + 'admin/common/tool/storage/item/search/ajax', 'get', '库存单据管理页-获取相应的值,搜索选择，返回物品信息'],
-            ['getDish', site.website + 'admin/dish/cost/card/ajax/dish/list', 'get', '成本卡添加页-搜索菜品，返回菜品信息']
+            ['getDish', site.website + 'admin/dish/cost/card/ajax/dish/list', 'get', '成本卡添加页-搜索菜品，返回菜品信息'],
+            ['getIngredient', site.website + 'mock/admin/inventory-ingredient.json', 'get', '发送keyword，返回原材料信息']
         ]
     };
 })();

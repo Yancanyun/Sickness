@@ -9,7 +9,7 @@ import com.emenu.common.entity.party.group.vip.VipInfo;
  * @author xiaozl
  * @date: 2016/7/23
  */
-public class VipRejisterDto {
+public class VipRegisterDto {
 
     // 会员基本信息
     private VipInfo vipInfo;
