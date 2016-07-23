@@ -6,8 +6,8 @@ import com.pandawork.core.common.exception.SSException;
 import java.util.Date;
 
 /**
+ * 会员管理service
  * VipOperationService
- *
  * @author xiaozl
  * @date: 2016/7/23
  */
