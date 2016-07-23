@@ -275,6 +275,10 @@ public enum EmenuException implements IBizExceptionMes {
     CallCacheSendTimeLimit("两次相同服务请求间隔不得小于1分钟", 4129),
     CallCacheNotHandle("此请求还未被处理,请稍等哦！", 4130),
     TableNotAvailable("该餐桌已停用或已被删除!", 4131),
+    TableNotHaveCallCache("该餐桌不存在服务请求", 4132),
+    CountNotResponseTotalMessageFail("查询服务员未应答的服务请求总数失败",4133),
+    QueryCallByIdFail("根据服务的Id查询服务请求失败",4134),
+    ResponseCallFail("应答服务请求失败",4135),
 
     //基本信息管理
     //搜索风向标

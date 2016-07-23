@@ -10,6 +10,12 @@ import java.util.Date;
  */
 public class CallCache {
 
+    //呼叫服务主键
+    private Integer id;
+
+    // 缓存主键
+    private Integer cacheId;
+
     //服务名称
     private String name;
 
@@ -24,6 +30,22 @@ public class CallCache {
 
     //服务应答状态  0为应答了 1为未应答
     private  Integer status;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getCacheId() {
+        return cacheId;
+    }
+
+    public void setCacheId(Integer cacheId) {
+        this.cacheId = cacheId;
+    }
 
     public Integer getTableId() {
         return tableId;

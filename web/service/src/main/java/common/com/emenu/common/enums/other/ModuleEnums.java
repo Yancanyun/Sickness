@@ -339,6 +339,12 @@ public enum ModuleEnums {
     WaiterTableMerge("Waiter:Table:Merge"),
     //服务员查看所有呼叫服务
     WaiterCallList("Waiter:Call:List"),
+    //服务员有多少未应答的消息
+    WaiterCallTotal("Waiter:Call:Total"),
+    //服务员应答服务请求
+    WaiterCallResponse("Waiter:Call:Response"),
+    //删除服务员对应的已经应答了的请求
+    WaiterCallDelete("Waiter:Call:Delete"),
     // 服务员登录
     WaiterLogin("Waiter:Login"),
     //服务员端显示点了的缓存中的菜品
