@@ -281,6 +281,10 @@ public class AbstractController extends Base {
     @Qualifier("vipInfoService")
     protected static VipInfoService vipInfoService;
 
+    @StaticAutoWire
+    @Qualifier("vipOperationService")
+    protected static VipOperationService vipOperationService;
+
     //菜品和原料单位
     @StaticAutoWire
     @Qualifier("unitService")
@@ -525,6 +529,8 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("barOrderDishNewService")
     protected static BarOrderDishNewService barOrderDishNewService;
+
+
 }
 
 

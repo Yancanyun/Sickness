@@ -143,4 +143,6 @@ public interface VipInfoService {
      * @throws SSException
      */
     public VipInfo queryByOpenId(String openId) throws SSException;
+
+
 }

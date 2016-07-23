@@ -235,6 +235,9 @@ public final class URLConstants {
     // 吧台新增消费
     public static final String BAR_ORDER_DISH_ADD_URL = "bar/order/dish/add";
 
+    // 吧台vip
+    public static final String BAR_VIP_URL = "bar/vip";
+
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 

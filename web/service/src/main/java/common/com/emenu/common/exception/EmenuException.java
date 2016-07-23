@@ -521,6 +521,9 @@ public enum EmenuException implements IBizExceptionMes {
     PermanentlyEffectiveIsNull("有效期不可为空", 8144),
     PermanentlyEffectiveBeforeToday("有效期不可为今天或今天之前", 8145),
 
+    //会员注册
+    RejisterVipFail("注册会员失败",80146),
+
     //成本卡原料
     IngredientIdError("原料id错误",8120),
     CostCardIdError("成本卡id错误",8121),

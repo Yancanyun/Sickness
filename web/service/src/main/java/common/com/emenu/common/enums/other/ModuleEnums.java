@@ -419,6 +419,10 @@ public enum ModuleEnums {
     // 吧台新增消费搜索菜品
     BarOrderDishAddSearch("Bar:Order:Dish:Add:Search"),
 
+    // 吧台vip操作
+    BarVip("Bar:Vip"),
+    BarVipNew("Bar:Vip:New"),
+
     //后厨管理模块
     Cook("Cook"),
     CookOrderList("Cook:Order:List"),

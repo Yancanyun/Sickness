@@ -160,11 +160,11 @@ public class AdminSettlementCheckController extends AbstractController{
     public JSONObject checkSettlement(){
         try {
             storageSettlementService.newSettlement();
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"盘点成功");
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return sendErrMsgAndErrCode(e);
+            return sendMsgAndCode(AJAX_FAILURE_CODE,"盘点失败");
         }
     }
 }

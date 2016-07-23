@@ -355,6 +355,7 @@ public class VipInfoServiceImpl implements VipInfoService{
         }
     }
 
+
     /**
      * 保存前检查用户名和电话是否为空
      * @param vipInfo

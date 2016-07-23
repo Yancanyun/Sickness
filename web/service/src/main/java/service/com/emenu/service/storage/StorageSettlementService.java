@@ -8,6 +8,7 @@ import com.pandawork.core.common.exception.SSException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,22 @@ public interface StorageSettlementService {
      * @throws SSException
      */
     public void newSettlement() throws SSException;
+
+    /**
+     * 修改盘点缓存
+     * @param key
+     * @param quantity
+     * @throws SSException
+     */
+    public void updateSettlementCache(Integer key, BigDecimal quantity) throws SSException;
+
+    /**
+     * 查询盘点缓存中的原配料库存
+     * @param key
+     * @return
+     * @throws SSException
+     */
+    public BigDecimal queryCache(Integer key) throws SSException;
 
     /**
      * 新

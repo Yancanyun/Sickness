@@ -322,8 +322,8 @@
                         <a class="J_menu" href="${website}admin/storage/report">库存单据管理</a>
                     </li>
                 </shiro:checkPermission>
-                <shiro:checkPermission name="Admin:BasicInfo">
-                    <li <c:if test="${MethodModule eq 'Admin:BasicInfo'}">class="active" </c:if>>
+                <shiro:checkPermission name="Admin:Storage:Settlement:Check:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Storage:Settlement:Check:List'}">class="active" </c:if>>
                         <a class="J_menu" href="${website}admin/storage/settlement/check">库存盘点</a>
                     </li>
                 </shiro:checkPermission>
