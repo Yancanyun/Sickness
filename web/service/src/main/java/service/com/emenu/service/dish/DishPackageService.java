@@ -87,7 +87,7 @@ public interface DishPackageService {
 
     /**
      * 根据菜品Id来判断这个菜品是否属于套餐
-     *
+     * 返回1为是套餐
      * @return
      * @throws SSException
      */

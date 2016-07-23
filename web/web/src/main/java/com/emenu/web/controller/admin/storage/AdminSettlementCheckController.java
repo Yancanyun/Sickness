@@ -167,4 +167,6 @@ public class AdminSettlementCheckController extends AbstractController{
             return sendMsgAndCode(AJAX_FAILURE_CODE,"盘点失败");
         }
     }
+
+
 }

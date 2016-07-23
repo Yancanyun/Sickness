@@ -1,5 +1,7 @@
 package com.emenu.test.order;
 
+import com.emenu.common.cache.order.OrderDishCache;
+import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
@@ -10,6 +12,7 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -170,5 +173,23 @@ public class OrderDishTest extends AbstractTestCase {
             System.out.print("菜品名称：" + orderDishDto.getDishName());
             System.out.println(" 菜品状态：" + OrderDishStatusEnums.valueOf(orderDishDto.getStatus()).getStatus());
         }
+    }
+    @Test
+    public void isOrderHaveEnoughIngredient()throws SSException{
+        TableOrderCache tableOrderCache = new TableOrderCache();
+        List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
+        for(int i=0;i<5;i++){
+            OrderDishCache orderDishCache = new OrderDishCache();
+            orderDishCache.setId(i);
+            orderDishCache.setDishId(14);
+            orderDishCache.setQuantity(new Float(5));
+            orderDishCache.setRemark("没有备注");
+            orderDishCacheList.add(orderDishCache);
+        }
+        tableOrderCache.setLock(true);
+        tableOrderCache.setOrderDishCacheList(orderDishCacheList);
+        tableOrderCache.setOrderRemark("备注");
+        tableOrderCache.setOrderServeType(1);
+        orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
     }
 }

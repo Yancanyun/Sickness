@@ -15,7 +15,7 @@
             </li>
         </ol>
         <h2>库存盘点</h2>
-        <!-- 删除添加失败 -->
+        <div class="alert alert-danger col-sm-12 J_msg" role="alert">添加失败！</div>
     </div>
     <div class="col-sm-12">
         <div class="panel panel-info">
@@ -25,30 +25,27 @@
             <div class="panel-body">
                 <form class="form-horizontal operForm" autocomplete="off">
                     <div class="form-group "  >
-                        <!-- 添加了只读属性和开始时间结束时间键值对data-start-time="2016-7-21"readonly="readonly" -->
                         <label class="col-sm-2 control-label">开始时间</label>
                         <div class="col-sm-7">
-                            <input type="text" class="J_date J_startTime" name="startTime" value="${currentMonthFirstDay}" readonly="readonly"/>
+                            <input type="text" class="J_date" name="startTime" value="${currentMonthFirstDay}" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">结束时间</label>
                         <div class="col-sm-7">
-                            <input type="text" class=" J_date J_endTime" name="endTime" value="${currentMonthNowDay}"  readonly="readonly" />
+                            <input type="text" class=" J_date" name="endTime" value="${currentMonthNowDay}" />
                         </div>
                     </div>
                     <div class="form-group ">
                         <label class="col-sm-2 control-label">原配料名称</label>
                         <div class="col-sm-7">
-                            <!-- 修改了关键字name="keyWord" -->
-                            <input type="text" class="w190" name="keyWord" value="" />
+                            <input type="text" class="w190" name="ingredientNumber" value="" />
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group ">
                         <label class="col-sm-2 control-label padding-R-17">分类</label>
                         <div class="checkbox block col-sm-7">
                             <label>
-                                <!-- 添加了全选类class="J_selectAll" -->
                                 <input type="checkbox" class="J_selectAll" name="tagIds" value="1">全选
                             </label>
                             <c:forEach var="tag" items="${tagList}">
@@ -72,9 +69,8 @@
             </div>
             <div class="panel-body">
                 <div class="text-right">
-                    <!-- 添加了库存盘点类名J_inventory，href="javascript:;"-->
-                    <a href="javascript:;" class="btn btn-warning margin-bottom-15 J_inventory">库存盘点</a>
-                    <a href="" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
+                    <a href="sdff?" class="btn btn-warning margin-bottom-15 ">库存盘点</a>
+                    <a href="#" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">

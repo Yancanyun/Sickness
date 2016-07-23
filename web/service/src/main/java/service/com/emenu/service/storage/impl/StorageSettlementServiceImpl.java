@@ -120,7 +120,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
      *
      * @throws Exception
      */
-    @PostConstruct
+//    @PostConstruct
     public void initCache() throws SSException {
         // 新
         // 库存盘点（单据的一次结算）= 已下单的未结账的单据.未盘点已经结账后的订单中的菜品（转换成原配料）+ 单据（审核通过、未结算）中的原配料（入库单特殊处理）
@@ -749,6 +749,10 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             response.setHeader("Content-disposition",
                     "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
             os = response.getOutputStream();
+            // 获取模板
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminSettlementCheckList.getFilePath());
+            Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
+            WritableWorkbook outBook = Workbook.createWorkbook(os,tplWorkBook);
             int startRow = 3;
             //调用core包里的工具类
             ExcelWriter.writeExcelByTemplate(storageCheckDtoList, startRow, os, ExcelExportTemplateEnums.AdminSettlementCheckList, checkDataTypes);

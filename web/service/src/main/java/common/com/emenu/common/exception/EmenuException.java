@@ -555,6 +555,9 @@ public enum EmenuException implements IBizExceptionMes {
     SetCurrentOperateCustomerIpFail("设置正在下单的顾客的Ip失败",10010),
     GetCurrentOperateCustomerIpFail("获取正在下单的顾客的Ip失败",10011),
     ReturnTotalMoneyFail("返回已点未下单的所有菜品总金额失败",10012),
+    OrderNotEnoughIngredient("下单包含菜品存在原材料不足情况",10013),
+
+
 
     //订单菜品模块
     OrderIdError("订单id错误",10030),
@@ -647,6 +650,10 @@ public enum EmenuException implements IBizExceptionMes {
     EmenuException(String msg, int code) {
         this.msg = msg;
         this.code = code;
+    }
+
+     EmenuException(String msg) {
+        this.msg = msg;
     }
 
     @Override
