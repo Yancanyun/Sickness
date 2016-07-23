@@ -513,6 +513,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateVipAccountInfoStatusFail("修改会员账户状态失败",8130),
     QueryVipAccountFailed("查询会员账户信息失败", 8131),
 
+
     //会员卡发放
     QueryVipCardFail("查询会员卡失败", 8140),
     InsertVipCardFail("发卡失败", 8141),
@@ -523,6 +524,8 @@ public enum EmenuException implements IBizExceptionMes {
 
     //会员注册
     RejisterVipFail("注册会员失败",80146),
+    PhysicalNumberError("物理卡号错误",80147),
+    CardNumberError("会员卡号错误",80148),
 
     //成本卡原料
     IngredientIdError("原料id错误",8120),

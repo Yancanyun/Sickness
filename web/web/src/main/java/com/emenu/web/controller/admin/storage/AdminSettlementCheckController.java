@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.storage.StorageCheckDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
@@ -44,12 +45,13 @@ public class AdminSettlementCheckController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model,
-                         @RequestParam(value = "eMsg", required = false) String eMsg){
+    public String toList(@RequestParam(value = "eMsg", required = false) String eMsg,Model model){
         try {
             //获取分类列表
             List<Tag> tagList = storageTagService.listAllSmallTag();
+            List<Ingredient> ingredientList = ingredientService.listAll();
             model.addAttribute("tagList", tagList);
+            model.addAttribute("ingredientList",ingredientList);
             model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
             model.addAttribute("currentMonthNowDay", DateUtils.formatDate(new Date(),new SimpleDateFormat("yyyy-MM-dd")));
             model.addAttribute("eMsg", eMsg);

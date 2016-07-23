@@ -17,6 +17,9 @@ public class VipRejisterDto {
     // 会员卡信息
     private VipCard vipCard;
 
+    // 会员账户信息
+    private VipAccountInfo vipAccountInfo;
+
     public VipInfo getVipInfo() {
         return vipInfo;
     }
@@ -31,5 +34,13 @@ public class VipRejisterDto {
 
     public void setVipCard(VipCard vipCard) {
         this.vipCard = vipCard;
+    }
+
+    public VipAccountInfo getVipAccountInfo() {
+        return vipAccountInfo;
+    }
+
+    public void setVipAccountInfo(VipAccountInfo vipAccountInfo) {
+        this.vipAccountInfo = vipAccountInfo;
     }
 }

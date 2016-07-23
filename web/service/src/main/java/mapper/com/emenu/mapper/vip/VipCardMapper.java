@@ -105,4 +105,12 @@ public interface VipCardMapper {
      * @throws Exception
      */
     public VipCard queryLastVipCard() throws Exception;
+
+    /**
+     * 根据会员卡号修改物理卡号
+     * @param physicalNumber
+     * @param cardNumber
+     * @throws Exception
+     */
+    public void updatePhysicalNumberByCardNumber(@Param("physicalNumber") String physicalNumber, @Param("cardNumber") String cardNumber) throws Exception;
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
+import com.emenu.common.entity.vip.VipRejisterDto;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -28,7 +29,7 @@ import java.util.Date;
  * @date: 2016/7/23
  */
 @Controller
-@Module(ModuleEnums.AdminVip)
+@Module(ModuleEnums.BarVip)
 @RequestMapping(value = URLConstants.BAR_VIP_URL)
 public class BarVipRegisterController extends AbstractController{
 
@@ -59,16 +60,39 @@ public class BarVipRegisterController extends AbstractController{
             SecurityUser securityUser = securityUserService.queryById(uid);
             Assert.isNotNull(securityUser, PartyException.UserNotExist);
             Integer operatorPartyId = securityUser.getPartyId();
-            vipOperationService.registerVip(name,sex,phone,birthday,validityTime,permanentlyEffective,operatorPartyId);
-
+            VipRejisterDto rejisterDto = vipOperationService.registerVip(name,sex,phone,birthday,validityTime,permanentlyEffective,operatorPartyId);
+            Assert.isNotNull(rejisterDto,EmenuException.RejisterVipFail);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("cardNumber",rejisterDto.getVipCard().getCardNumber());
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return sendErrMsgAndErrCode(e);
         }
-        return null;
+
     }
 
+    @RequestMapping(value = "bindvipnum",method = RequestMethod.POST)
+    @Module(ModuleEnums.BarVipNew)
+    @ResponseBody
+    public JSONObject bindVipNum(@RequestParam("physicalNumber")String physicalNumber,
+                                 @RequestParam("cardNumber")String cardNumber){
+        try {
+            vipCardService.updatePhysicalNumberByCardNumber(physicalNumber,cardNumber);
+            return sendMsgAndCode(AJAX_SUCCESS_CODE,"绑定成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * 检查电话号码是否重复
+     * @param phone
+     * @return
+     */
     @RequestMapping(value = "checkphone",method = RequestMethod.GET)
     @Module(ModuleEnums.BarVipNew)
     @ResponseBody

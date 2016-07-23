@@ -37,13 +37,19 @@
                             <input type="text" class=" J_date J_endTime" name="endTime" value="${currentMonthNowDay}"  readonly="readonly" />
                         </div>
                     </div>
-                    <div class="form-group ">
-                        <label class="col-sm-2 control-label">原配料名称</label>
-                        <div class="col-sm-7">
-                            <!-- 修改了关键字name="keyWord" -->
-                            <input type="text" class="w190" name="keyWord" value="" />
-                        </div>
+                    <!-- 存放搜索结果的keword -->
+                    <input type="hidden" class="w190 J_ingredientInp"  name="keyword" value="" />
+                    <div class="form-group">
+                        <label for="basic" class="col-sm-2 control-label">原配料名称</label>
+                        <div class="col-sm-5 J_text" id="basic"></div>
                     </div>
+                    <!-- 搜索原材料-hidden-刷数据 -->
+                    <!-- data-code中刷原材料编号 -->
+                    <select class="selectpicker show-tick form-control hidden" data-live-search="true">
+                        <c:forEach var="ingredient" items="${ingredientList}">
+                            <option value="${ingredient.id}" data-code="${ingredient.assistantCode}">${ingredient.name}</option>
+                        </c:forEach>
+                    </select>
                     <div class="form-group">
                         <label class="col-sm-2 control-label padding-R-17">分类</label>
                         <div class="checkbox block col-sm-7">

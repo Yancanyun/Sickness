@@ -156,4 +156,12 @@ public interface VipCardService {
      * @throws SSException
      */
     public void updateOperatorById(int id, int operatorPartyId) throws SSException;
+
+    /**
+     * 根据会员卡号修改物理卡号
+     * @param physicalNumber
+     * @param cardNumber
+     * @throws SSException
+     */
+    public void updatePhysicalNumberByCardNumber(String physicalNumber,String cardNumber) throws SSException;
 }

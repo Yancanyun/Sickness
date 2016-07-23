@@ -410,4 +410,22 @@ public class VipCardServiceImpl implements VipCardService {
             throw SSException.get(EmenuException.UpdateVipCardFail, e);
         }
     }
+
+    @Override
+    public void updatePhysicalNumberByCardNumber(String physicalNumber, String cardNumber) throws SSException {
+        try {
+            if (Assert.isNull(physicalNumber)
+                    || "".equals(physicalNumber)){
+                throw SSException.get(EmenuException.PhysicalNumberError);
+            }
+            if (Assert.isNull(cardNumber)
+                    || "".equals(cardNumber)){
+                throw SSException.get(EmenuException.CardNumberError);
+            }
+            vipCardMapper.updatePhysicalNumberByCardNumber(physicalNumber,cardNumber);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateVipCardFail, e);
+        }
+    }
 }
