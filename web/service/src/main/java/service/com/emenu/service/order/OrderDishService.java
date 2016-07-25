@@ -159,4 +159,13 @@ public interface OrderDishService {
      * @throws SSException
      */
     public List<String> isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
+
+    /**
+     *
+     * @param orderId
+     * @param packageId
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDish> listByOrderIdAndPackageId(int orderId, int packageId) throws SSException;
 }
