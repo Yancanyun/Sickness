@@ -155,8 +155,7 @@ public class BarCheckoutController extends AbstractController {
             checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney, totalPayMoney,
                     checkoutType, serialNum, isInvoiced);
 
-            // 打印消费清单
-            checkoutService.printCheckOutByTableId(tableId);
+            // TODO: 打印消费清单
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -244,8 +243,7 @@ public class BarCheckoutController extends AbstractController {
             // 免单
             checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
 
-            // 打印消费清单
-            checkoutService.printCheckOutByTableId(tableId);
+            // TODO: 打印消费清单
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
