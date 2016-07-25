@@ -91,6 +91,7 @@ public class AdminIngredientController extends AbstractController{
             }
             int i = 0;
             for (Ingredient ingredient : ingredientList){
+                System.out.println(ingredient.getId());
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", ingredient.getId());
                 jsonObject.put("sequenceNumber",offset+(++i));
@@ -104,15 +105,15 @@ public class AdminIngredientController extends AbstractController{
                 jsonObject.put("storageToCostCardRatio", ingredient.getStorageToCostCardRatio());
                 jsonObject.put("costCardUnitName", ingredient.getCostCardUnitName());
                 // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-                BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
+                BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
                 String maxStorageQuantityStr = maxStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
                 // 最小库存
-                BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
+                BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
                 String minStorageQuantityStr = minStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
                 // 实际库存
-                BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
+                BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
                 String realQuantityStr = realQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("realQuantityStr", realQuantityStr);
                 jsonObject.put("averagePrice", ingredient.getAveragePrice().toString());

@@ -139,16 +139,16 @@ public class AdminStorageItemController extends AbstractController {
             jsonObject.put("countUnitName", storageItem.getOrderUnitName());
             // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
 
-            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
+            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
             String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
             jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
             // 最小库存
-            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
+            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
             String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
             jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
             jsonObject.put("lastStockInPrice", storageItem.getLastStockInPrice());
             // 总数量
-            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2);
+            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
             String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
             jsonObject.put("totalStockInQuantityStr", totalQuantityStr);
             jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());
@@ -347,9 +347,9 @@ public class AdminStorageItemController extends AbstractController {
             if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
                 return sendJsonObject(AJAX_FAILURE_CODE);
             }else {
-                jsonObject.put("totalQuantity",storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio));
-                jsonObject.put("maxStorageQuantity",storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio));
-                jsonObject.put("minStorageQuantity",storageItem.getMinStorageQuantity().divide(storageToCostCardRatio));
+                jsonObject.put("totalQuantity",storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
+                jsonObject.put("maxStorageQuantity",storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
+                jsonObject.put("minStorageQuantity",storageItem.getMinStorageQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
             }
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {

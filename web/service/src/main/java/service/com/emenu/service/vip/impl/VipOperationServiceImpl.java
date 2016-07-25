@@ -43,7 +43,7 @@ public class VipOperationServiceImpl implements VipOperationService{
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public VipRegisterDto registerVip(String name, Integer sex, String phone, Date birthday, Date validityTime, Integer permanentlyEffective, Integer operatorPartyId) throws SSException {
-        VipRegisterDto vipRejisterDto = new VipRegisterDto();
+        VipRegisterDto vipRegisterDto = new VipRegisterDto();
         try {
             // 会员基本信息
             VipInfo vipInfo = new VipInfo();
@@ -53,7 +53,7 @@ public class VipOperationServiceImpl implements VipOperationService{
             vipInfo.setBirthday(birthday);
             VipInfo vipInfo1= vipInfoService.newVipInfo(operatorPartyId,vipInfo);
             Assert.isNotNull(vipInfo1,EmenuException.InsertVipInfoFail);
-            vipRejisterDto.setVipInfo(vipInfo1);
+            vipRegisterDto.setVipInfo(vipInfo1);
 
             // 会员卡信息
             VipCard vipCard = new VipCard();
@@ -63,20 +63,20 @@ public class VipOperationServiceImpl implements VipOperationService{
             vipCard.setVipPartyId(vipInfo.getPartyId());
             VipCard vipCard1 = vipCardService.newVipCard(vipCard);
             Assert.isNotNull(vipCard1,EmenuException.InsertVipCardFail);
-            vipRejisterDto.setVipCard(vipCard1);
+            vipRegisterDto.setVipCard(vipCard1);
 
             // 会员账户信息
             VipAccountInfo vipAccountInfo = new VipAccountInfo();
             vipAccountInfo.setPartyId(vipInfo.getPartyId());
             VipAccountInfo vipAccountInfo1 = vipAccountInfoService.newVipAccountInfo(vipAccountInfo);
             Assert.isNotNull(vipAccountInfo1,EmenuException.NewVipAccountInfoFailed);
-            vipRejisterDto.setVipAccountInfo(vipAccountInfo1);
+            vipRegisterDto.setVipAccountInfo(vipAccountInfo1);
 
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.RejisterVipFail, e);
         }
-        return vipRejisterDto;
+        return vipRegisterDto;
     }
 
     @Override

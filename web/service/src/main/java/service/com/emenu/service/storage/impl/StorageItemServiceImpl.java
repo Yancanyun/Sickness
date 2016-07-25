@@ -497,17 +497,17 @@ public class StorageItemServiceImpl implements StorageItemService {
     public void setQuantityFormat(List<StorageItem> storageItemList) throws SSException{
         for (StorageItem storageItem : storageItemList) {
             // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),BigDecimal.ROUND_HALF_EVEN);
             String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
             storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
             // 最小库存
-            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),BigDecimal.ROUND_HALF_EVEN);
             String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
             storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
 
             // 总数量
-            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity());
+            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity(),BigDecimal.ROUND_HALF_EVEN);
             String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
             storageItem.setTotalStockInQuantityStr(totalQuantityStr);
         }
@@ -515,17 +515,17 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     public void setQuantityFormat(StorageItem storageItem) throws SSException{
         // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-        BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+        BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
         String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
         // 最小库存
-        BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio());
+        BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
         String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
 
         // 总数量
-        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio());
+        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
         String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
         storageItem.setTotalStockInQuantityStr(totalQuantityStr);
     }
