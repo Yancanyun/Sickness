@@ -3,6 +3,7 @@ package com.emenu.service.vip;
 import com.emenu.common.dto.vip.VipRegisterDto;
 import com.pandawork.core.common.exception.SSException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -41,4 +42,17 @@ public interface VipOperationService {
      */
     public VipRegisterDto queryByKeyword(String keyword) throws SSException;
 
+    /**
+     * 会员充值
+     * @param vipPartyId
+     * @param rechargePlanId
+     * @param rechargeAmount
+     * @param payAmount
+     * @throws SSException
+     */
+    public void rechargeByVipPartyId(Integer vipPartyId,
+                                     Integer rechargePlanId,
+                                     BigDecimal rechargeAmount,
+                                     BigDecimal payAmount,
+                                     Integer operator) throws SSException;
 }

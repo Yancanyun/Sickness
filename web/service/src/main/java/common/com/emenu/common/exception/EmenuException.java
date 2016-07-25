@@ -477,6 +477,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateVipRechargePlanFail("编辑会员充值方案失败", 8063),
     DeleteVipRechargePlanFail("删除会员充值方案失败", 8064),
     VipRechargePlanNameIsNull("会员充值方案名称不能为空", 8065),
+    RechargePlanIdError("充值方案id错误", 8066),
 
     //会员等级方案
     QueryVipGradeFail("查询会员等级方案失败", 8080),

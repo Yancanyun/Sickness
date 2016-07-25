@@ -30,7 +30,7 @@ public interface VipIntegralPlanService {
      */
     public List<VipIntegralDto> listDtosGradeId(int gradeId) throws SSException;
 
-   /* *//**
+   /* /**
      * 添加积分管理方案
      * @param vipIntegralPlan
      * @throws SSException

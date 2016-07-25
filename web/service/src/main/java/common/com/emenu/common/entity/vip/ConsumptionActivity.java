@@ -59,6 +59,9 @@ public class ConsumptionActivity extends AbstractEntity{
     @Column(name = "integral_change")
     private Integer integralChange;
 
+    // 类型,1-消费,2-充值
+    private Integer type;
+
     //操作人
     private String operator;
 
@@ -149,6 +152,14 @@ public class ConsumptionActivity extends AbstractEntity{
 
     public void setIntegralChange(Integer integralChange) {
         this.integralChange = integralChange;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getOperator() {
