@@ -154,20 +154,6 @@ public class BarCheckoutController extends AbstractController {
             // 打印消费清单
             checkoutService.printCheckOutByTableId(tableId);
 
-            // 如果并台，则需要把和它并的所有的餐台的结账单都打印
-            if ((table.getStatus().equals(TableStatusEnums.Merged.getId()))) {
-                // 与本餐台并台的其他餐台的列表
-                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
-
-                if (Assert.isNull(tableList) || tableList.size() == 0) {
-                    throw SSException.get(EmenuException.MergeIdError);
-                }
-
-                for (Table t : tableList) {
-                    checkoutService.printCheckOutByTableId(t.getId());
-                }
-            }
-
             // 结账
             checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney, totalPayMoney,
                     checkoutType, serialNum, isInvoiced);
@@ -257,20 +243,6 @@ public class BarCheckoutController extends AbstractController {
 
             // 打印消费清单
             checkoutService.printCheckOutByTableId(tableId);
-
-            // 如果并台，则需要把和它并的所有的餐台的结账单都打印
-            if ((table.getStatus().equals(TableStatusEnums.Merged.getId()))) {
-                // 与本餐台并台的其他餐台的列表
-                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
-
-                if (Assert.isNull(tableList) || tableList.size() == 0) {
-                    throw SSException.get(EmenuException.MergeIdError);
-                }
-
-                for (Table t : tableList) {
-                    checkoutService.printCheckOutByTableId(t.getId());
-                }
-            }
 
             // 免单
             checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
