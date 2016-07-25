@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-sm-12">
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+            <li><a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#">库存管理</a></li>
             <li class="active">原配料编辑</li>
         </ol>

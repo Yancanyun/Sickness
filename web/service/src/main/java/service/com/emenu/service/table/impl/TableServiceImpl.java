@@ -1,15 +1,20 @@
 package com.emenu.service.table.impl;
 
+import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.meal.MealPeriod;
+import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.TableMealPeriod;
+import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.table.TableMapper;
+import com.emenu.service.call.CallCacheService;
 import com.emenu.service.meal.MealPeriodService;
+import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderDishCacheService;
 import com.emenu.service.table.*;
 import com.emenu.service.order.OrderDishService;
@@ -71,6 +76,12 @@ public class TableServiceImpl implements TableService {
 
     @Autowired
     private OrderDishCacheService orderDishCacheService;
+
+    @Autowired
+    private CheckoutService checkoutService;
+
+    @Autowired
+    private CallCacheService callCacheService;
 
     @Override
     public List<TableDto> listAllTableDto() throws SSException {
@@ -751,7 +762,14 @@ public class TableServiceImpl implements TableService {
 
             forceUpdateTable(oldTableId, oldTableDto);
 
-            // TODO: 把新旧餐台的缓存交换
+            // 交换新旧餐台的Checkout
+            Checkout checkout = checkoutService.queryByTableIdAndStatus(oldTableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+            checkout.setTableId(newTableId);
+            checkoutService.updateCheckout(checkout);
+
+            // 把新旧餐台的点餐缓存交换
+            orderDishCacheService.changeCache(oldTableId, newTableId);
+
             // TODO: 把新旧餐台的呼叫服务交换
 
 

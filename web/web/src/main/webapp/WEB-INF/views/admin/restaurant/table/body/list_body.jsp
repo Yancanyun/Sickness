@@ -8,7 +8,7 @@
         <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
       </li>
       <li>
-        <a href="${website}admin/restaurant">饭店管理</a>
+        <a href="#">饭店管理</a>
       </li>
       <li class="active">餐台管理</li>
     </ol>

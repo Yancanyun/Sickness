@@ -4,7 +4,7 @@
     <div class="col-sm-12">
         <ol class="breadcrumb">
             <li>
-                <a href="${website}"><i class="fa fa-home"></i>&nbsp;首页</a>
+                <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
             </li>
             <li>
                 <a href="#">菜品管理</a>

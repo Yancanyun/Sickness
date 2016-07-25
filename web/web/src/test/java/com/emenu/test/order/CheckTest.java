@@ -57,7 +57,7 @@ public class CheckTest extends AbstractTestCase {
 
     @Test
     public void calcConsumptionMoney() throws SSException {
-        System.out.println(checkoutService.calcConsumptionMoney(17));
+        System.out.println(checkoutService.calcConsumptionMoney(62));
     }
 
     @Test

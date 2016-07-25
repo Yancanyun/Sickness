@@ -11,10 +11,7 @@ import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
-import com.emenu.common.enums.order.CheckoutConsumptionTypeEnums;
-import com.emenu.common.enums.order.OrderDishPresentedEnums;
-import com.emenu.common.enums.order.OrderDishStatusEnums;
-import com.emenu.common.enums.order.OrderStatusEnums;
+import com.emenu.common.enums.order.*;
 import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
@@ -368,6 +365,11 @@ public class CheckoutServiceImpl implements CheckoutService {
                         tableMergeService.delTableMergeInfo(t.getId());
                     }
                 }
+
+                // TODO: 如果是会员卡结账，要做特殊操作
+//                if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
+//
+//                }
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -8,10 +8,9 @@
         <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
       </li>
       <li>
-        <a href="${website}admin/vip">会员管理</a>
+        <a href="#">会员管理</a>
       </li>
-      <li>
-        <a href="#" class="active">充值方案管理</a>
+      <li class="active">充值方案管理
       </li>
     </ol>
     <h2>充值方案管理</h2>

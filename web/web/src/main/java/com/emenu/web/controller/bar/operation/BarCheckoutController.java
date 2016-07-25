@@ -18,6 +18,7 @@ import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.CheckoutTypeEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
@@ -253,12 +254,25 @@ public class BarCheckoutController extends AbstractController {
                 throw SSException.get(EmenuException.TableIdError);
             }
 
-            // TODO: 并台显示所有菜品
-
-            // 查询本餐台所有的订单菜品
             List<Order> orderList = new ArrayList<Order>();
             List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
-            orderList = orderService.listByTableIdAndStatus(tableId, 1);// 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
+
+            // 查本餐台的订单
+            orderList = orderService.listByTableIdAndStatus(tableId, 1);
+
+            // 若已并台，则需要查询出与本餐台并台的所有餐台的订单
+            if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+                // 与本餐台并台的所有餐台的订单
+                for (Table t : tableList) {
+                    orderList.addAll(orderService.listByTableIdAndStatus(t.getId(), 1));
+                }
+            }
+
             if (Assert.isNotNull(orderList)) {
                 for (Order order : orderList) {
                     Integer orderId = order.getId();
@@ -293,7 +307,15 @@ public class BarCheckoutController extends AbstractController {
                             jsonObject.put("tasteName", orderDishDto.getTasteName());
                         }
                         jsonObject.put("serveType", orderDishDto.getServeType());
-                        jsonObject.put("tableName", table.getName());
+                        // 若没有并台，则直接显示该餐台的餐台名
+                        if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                            jsonObject.put("tableName", table.getName());
+                        } else {
+                            // 否则显示Order对应餐台的餐台名
+                            Order order = orderService.queryById(orderDishDto.getOrderId());
+                            Table t = tableService.queryById(order.getTableId());
+                            jsonObject.put("tableName", t.getName());
+                        }
 
                         jsonArray.add(jsonObject);
                     }
@@ -304,7 +326,7 @@ public class BarCheckoutController extends AbstractController {
                         JSONObject jsonObject = new JSONObject();
 
                         // 没有出现过的套餐
-                        if(packageFlagMap.get(orderDishDto.getPackageFlag()) == null) {
+                        if (packageFlagMap.get(orderDishDto.getPackageFlag()) == null) {
                             // 标记为出现过
                             packageFlagMap.put(orderDishDto.getPackageFlag(), 1);
 
@@ -330,7 +352,15 @@ public class BarCheckoutController extends AbstractController {
                                 jsonObject.put("tasteName", orderDishDto.getTasteName());
                             }
                             jsonObject.put("serveType", orderDishDto.getServeType());
-                            jsonObject.put("tableName", table.getName());
+                            // 若没有并台，则直接显示该餐台的餐台名
+                            if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                                jsonObject.put("tableName", table.getName());
+                            } else {
+                                // 否则显示Order对应餐台的餐台名
+                                Order order = orderService.queryById(orderDishDto.getOrderId());
+                                Table t = tableService.queryById(order.getTableId());
+                                jsonObject.put("tableName", t.getName());
+                            }
 
                             jsonArray.add(jsonObject);
                         }
