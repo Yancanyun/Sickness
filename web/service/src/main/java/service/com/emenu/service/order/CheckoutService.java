@@ -40,7 +40,7 @@ public interface CheckoutService {
     public void updateCheckout(Checkout checkout) throws SSException;
 
     /**
-     * 修改结账单
+     * 打印结账单
      * @author quanyibo
      * @param tableId
      * @throws SSException
@@ -58,6 +58,8 @@ public interface CheckoutService {
      * @param serialNum
      * @param isInvoiced
      * @throws SSException
+     *
+     * @author yangch
      */
     public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
                          BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
@@ -67,6 +69,8 @@ public interface CheckoutService {
      * 根据餐台ID计算出该餐台若结账，消费金额是多少
      * @param tableId
      * @throws SSException
+     *
+     * @author yangch
      */
     public BigDecimal calcConsumptionMoney(int tableId) throws SSException;
 
@@ -74,6 +78,8 @@ public interface CheckoutService {
      * 根据餐台ID计算出该餐台若结账，房间费用
      * @param tableId
      * @throws SSException
+     *
+     * @author yangch
      */
     public BigDecimal calcTableMoney(int tableId) throws SSException;
 
@@ -84,7 +90,17 @@ public interface CheckoutService {
      * @param consumptionMoney
      * @param freeRemark
      * @throws SSException
+     *
+     * @author yangch
      */
     public void freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
                           String freeRemark) throws SSException;
+
+    /**
+     * 检查打印机是否可用
+     * @throws SSException
+     *
+     * @author yangch
+     */
+    public Boolean isPrinterOk() throws SSException;
 }

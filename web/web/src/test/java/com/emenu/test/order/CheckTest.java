@@ -84,4 +84,9 @@ public class CheckTest extends AbstractTestCase {
 
         checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
     }
+
+    @Test
+    public void isPrinterOk() throws SSException {
+        System.out.println(checkoutService.isPrinterOk());
+    }
 }

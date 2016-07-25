@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
@@ -135,6 +136,10 @@ public class CheckoutServiceImpl implements CheckoutService {
         Checkout checkout = new Checkout();
         // 记录套餐标识
         Map<Integer, Integer> packageFlagMap = new HashMap<Integer, Integer>();
+
+        Socket socket = new Socket();
+        InputStream is = null;
+        OutputStream os = null;
         try {
             // 只有未结账的结账单才能打印
             checkout = checkoutMapper.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
@@ -251,9 +256,6 @@ public class CheckoutServiceImpl implements CheckoutService {
                     str += "实际消费金额: " + moneyTemp + "\n";
                     str += "聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n";
                 }
-                Socket socket = new Socket();
-                InputStream is = null;
-                OutputStream os = null;
 
                 // 获取吧台打印机的Id
                 Integer printerId = PrinterTypeEnums.BarPrinter.getId();
@@ -290,6 +292,23 @@ public class CheckoutServiceImpl implements CheckoutService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.PrintCheckoutFail);
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();//关闭输出流
+                } catch (IOException e) {
+                    LogClerk.errLog.error(e.getMessage());
+                    throw SSException.get(EmenuException.SystemException, e);
+                }
+            }
+            if (socket != null) {
+                try {
+                    socket.close();//断开连接
+                } catch (IOException e) {
+                    LogClerk.errLog.error(e.getMessage());
+                    throw SSException.get(EmenuException.SystemException, e);
+                }
+            }
         }
         jsonObject.put("code", 0);
         return jsonObject;
@@ -613,6 +632,45 @@ public class CheckoutServiceImpl implements CheckoutService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckoutFailed, e);
+        }
+    }
+
+    @Override
+    public Boolean isPrinterOk() throws SSException {
+        Socket socket = new Socket();
+        try {
+
+            // 获取吧台打印机的ID
+            Integer printerId = PrinterTypeEnums.BarPrinter.getId();
+            Printer printer = new Printer();
+            printer = printerService.queryById(printerId);
+
+            // 未设置打印机的ip地址
+            if (printer.getIpAddress() == null) {
+                return false;
+            }
+
+            // 连接打印机(超时为1秒)
+            socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 1000);
+
+            // 未建立连接
+            if (!socket.isConnected()) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            return false;
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();//断开连接
+                } catch (IOException e) {
+                    LogClerk.errLog.error(e.getMessage());
+                    throw SSException.get(EmenuException.SystemException, e);
+                }
+            }
         }
     }
 

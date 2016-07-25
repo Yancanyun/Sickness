@@ -48,6 +48,7 @@ import java.util.List;
 @Module(ModuleEnums.BarCheckout)
 @RequestMapping(value = URLConstants.BAR_CHECKOUT_URL)
 public class BarCheckoutController extends AbstractController {
+
     /**
      * 获取结账窗口的信息
      * @param tableId
@@ -95,6 +96,8 @@ public class BarCheckoutController extends AbstractController {
                 throw SSException.get(EmenuException.QueryEmployeeInfoFail);
             }
             jsonObject.put("name", employee.getName());
+            // 打印机是否连接成功
+            jsonObject.put("isPrinterOk", checkoutService.isPrinterOk());
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -128,6 +131,11 @@ public class BarCheckoutController extends AbstractController {
                                    @RequestParam("isInvoiced") int isInvoiced,
                                    @RequestParam(required = false) String serialNum) {
         try {
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
             // 计算消费金额
             BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(tableId);
 
@@ -143,6 +151,24 @@ public class BarCheckoutController extends AbstractController {
                 serialNum = null;
             }
 
+            // 打印消费清单
+            checkoutService.printCheckOutByTableId(tableId);
+
+            // 如果并台，则需要把和它并的所有的餐台的结账单都打印
+            if ((table.getStatus().equals(TableStatusEnums.Merged.getId()))) {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+
+                for (Table t : tableList) {
+                    checkoutService.printCheckOutByTableId(t.getId());
+                }
+            }
+
+            // 结账
             checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney, totalPayMoney,
                     checkoutType, serialNum, isInvoiced);
 
@@ -152,7 +178,6 @@ public class BarCheckoutController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
     }
-
 
     /**
      * 获取免单备注
@@ -215,6 +240,11 @@ public class BarCheckoutController extends AbstractController {
                                 @RequestParam("uid") Integer uid,
                                 @RequestParam(required = false) String freeRemark) {
         try {
+            Table table = tableService.queryById(tableId);
+            if (Assert.isNull(table)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+
             // 计算消费金额
             BigDecimal consumptionMoney = checkoutService.calcConsumptionMoney(tableId);
 
@@ -225,6 +255,24 @@ public class BarCheckoutController extends AbstractController {
             }
             int partyId = securityUser.getPartyId();
 
+            // 打印消费清单
+            checkoutService.printCheckOutByTableId(tableId);
+
+            // 如果并台，则需要把和它并的所有的餐台的结账单都打印
+            if ((table.getStatus().equals(TableStatusEnums.Merged.getId()))) {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+
+                if (Assert.isNull(tableList) || tableList.size() == 0) {
+                    throw SSException.get(EmenuException.MergeIdError);
+                }
+
+                for (Table t : tableList) {
+                    checkoutService.printCheckOutByTableId(t.getId());
+                }
+            }
+
+            // 免单
             checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
