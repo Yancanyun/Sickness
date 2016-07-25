@@ -258,7 +258,7 @@ public class VipCardServiceImpl implements VipCardService {
                 if (newNum < 100 && newNum >= 10) {
                     newVipCardNumber = todayStr + "0" + newNum;
                 }
-                else {
+                if (newNum >= 100){
                     newVipCardNumber = todayStr + newNum;
                 }
             }

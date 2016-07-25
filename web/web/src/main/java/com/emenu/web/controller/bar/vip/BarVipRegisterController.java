@@ -64,6 +64,7 @@ public class BarVipRegisterController extends AbstractController{
             Assert.isNotNull(registerDto,EmenuException.RejisterVipFail);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("cardNumber",registerDto.getVipCard().getCardNumber());
+
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

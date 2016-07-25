@@ -1,7 +1,5 @@
 package com.emenu.test.vip;
 
-import com.emenu.common.entity.party.group.vip.VipInfo;
-
 import com.emenu.common.entity.vip.VipRegisterDto;
 import com.emenu.service.vip.VipOperationService;
 import com.emenu.test.AbstractTestCase;
