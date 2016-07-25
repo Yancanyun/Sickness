@@ -1,6 +1,6 @@
 package com.emenu.test.vip;
 
-import com.emenu.common.entity.vip.VipRegisterDto;
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.service.vip.VipOperationService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -27,4 +27,9 @@ public class VipOperationTest extends AbstractTestCase {
         System.out.println("xiaoz");
     }
 
+    @Test
+    public void queryByKeyword() throws SSException{
+        VipRegisterDto registerDto = vipOperationService.queryByKeyword("20160723006");
+        System.out.println("xiao");
+    }
 }

@@ -74,4 +74,12 @@ public interface VipAccountInfoService {
      * @throws SSException
      */
     public VipAccountInfoDto queryByOpenId(String openId) throws SSException;
+
+    /**
+     * 根据partyId查询会员账户信息
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public VipAccountInfo queryByPartyId(int partyId) throws SSException;
 }

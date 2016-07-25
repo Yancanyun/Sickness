@@ -149,4 +149,14 @@
         ORDER BY id DESC
         LIMIT 1
     </select>
+
+    <select id="queryByKeyWord"  resultMap="pw.VipCard">
+        SELECT vipCard.*
+        FROM `t_vip_card`  AS vipCard
+        INNER JOIN `t_party_vip_info` AS vipInfo
+          ON vipInfo.`party_id` = vipCard.`vip_party_id`
+        WHERE vipInfo.`phone` = #{keyword}
+          OR vipCard.`card_number` = #{keyword}
+          OR vipCard.`physical_number` = #{keyword}
+    </select>
 </mapper>

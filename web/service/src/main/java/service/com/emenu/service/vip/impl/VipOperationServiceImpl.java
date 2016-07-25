@@ -1,10 +1,12 @@
 package com.emenu.service.vip.impl;
 
+import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.entity.vip.VipCard;
-import com.emenu.common.entity.vip.VipRegisterDto;
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.exception.PartyException;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
 import com.emenu.service.vip.VipCardService;
@@ -12,9 +14,7 @@ import com.emenu.service.vip.VipOperationService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
-import com.pandawork.core.framework.bean.StaticAutoWire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,5 +77,24 @@ public class VipOperationServiceImpl implements VipOperationService{
             throw SSException.get(EmenuException.RejisterVipFail, e);
         }
         return vipRejisterDto;
+    }
+
+    @Override
+    public VipRegisterDto queryByKeyword(String keyword) throws SSException {
+        try {
+            VipInfo vipInfo = vipInfoService.queryByKeyWord(keyword);
+            Assert.isNotNull(vipInfo,EmenuException.VipInfoNotExist);
+            VipCard vipCard = vipCardService.queryByPartyId(vipInfo.getPartyId());
+            Assert.isNotNull(EmenuException.VipCardNotExist);
+            VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipInfo.getPartyId());
+            VipRegisterDto vipRegisterDto = new VipRegisterDto();
+            vipRegisterDto.setVipInfo(vipInfo);
+            vipRegisterDto.setVipCard(vipCard);
+            vipRegisterDto.setVipAccountInfo(vipAccountInfo);
+            return vipRegisterDto;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
     }
 }

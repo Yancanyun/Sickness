@@ -164,4 +164,12 @@ public interface VipCardService {
      * @throws SSException
      */
     public void updatePhysicalNumberByCardNumber(String physicalNumber,String cardNumber) throws SSException;
+
+    /**
+     * 根据会员卡号、物理卡号、电话号查询会员卡
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public VipCard queryByKeyWord(String keyword) throws SSException;
 }

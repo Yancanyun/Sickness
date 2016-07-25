@@ -428,6 +428,7 @@ public enum ModuleEnums {
     // 吧台vip操作
     BarVip("Bar:Vip"),
     BarVipNew("Bar:Vip:New"),
+    BarVipSearch("Bar:Vip:Search"),
 
     //后厨管理模块
     Cook("Cook"),

@@ -428,4 +428,20 @@ public class VipCardServiceImpl implements VipCardService {
             throw SSException.get(EmenuException.UpdateVipCardFail, e);
         }
     }
+
+    @Override
+    public VipCard queryByKeyWord(String keyword) throws SSException {
+        VipCard vipCard = null;
+        try {
+            if (Assert.isNull(keyword)
+                    || "".equals(keyword)){
+                throw SSException.get(EmenuException.KeywordError);
+            }
+            vipCard = vipCardMapper.queryByKeyWord(keyword);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return vipCard;
+    }
 }

@@ -1,7 +1,9 @@
-package com.emenu.common.entity.vip;
+package com.emenu.common.dto.vip;
 
 import com.emenu.common.dto.vip.VipCardDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.vip.VipAccountInfo;
+import com.emenu.common.entity.vip.VipCard;
 
 /**
  * VipRejisterDto
@@ -19,6 +21,9 @@ public class VipRegisterDto {
 
     // 会员账户信息
     private VipAccountInfo vipAccountInfo;
+
+    // 会员等级
+    private VipGradeDto vipGradeDto;
 
     public VipInfo getVipInfo() {
         return vipInfo;
@@ -42,5 +47,13 @@ public class VipRegisterDto {
 
     public void setVipAccountInfo(VipAccountInfo vipAccountInfo) {
         this.vipAccountInfo = vipAccountInfo;
+    }
+
+    public VipGradeDto getVipGradeDto() {
+        return vipGradeDto;
+    }
+
+    public void setVipGradeDto(VipGradeDto vipGradeDto) {
+        this.vipGradeDto = vipGradeDto;
     }
 }

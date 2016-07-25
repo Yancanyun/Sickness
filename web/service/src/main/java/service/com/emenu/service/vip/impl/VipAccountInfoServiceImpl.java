@@ -156,4 +156,19 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
             throw SSException.get(EmenuException.QueryVipAccountFailed);
         }
     }
+
+    @Override
+    public VipAccountInfo queryByPartyId(int partyId) throws SSException {
+        try {
+            if (Assert.isNull(partyId)) {
+                throw SSException.get(EmenuException.VipAccountInfoPartyIdError);
+            }
+
+            // 获取会员账户信息
+            return vipAccountInfoMapper.queryEntityByPartyId(partyId);
+        } catch(Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipAccountFailed);
+        }
+    }
 }

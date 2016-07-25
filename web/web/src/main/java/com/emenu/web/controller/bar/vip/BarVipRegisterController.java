@@ -2,9 +2,8 @@ package com.emenu.web.controller.bar.vip;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
-import com.emenu.common.entity.vip.VipRegisterDto;
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
@@ -109,6 +107,31 @@ public class BarVipRegisterController extends AbstractController{
                 return sendMsgAndCode(AJAX_FAILURE_CODE,"此电话已注册");
             }
             return sendMsgAndCode(AJAX_SUCCESS_CODE,"电话未重复");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     *
+     * @param keyword
+     * @return
+     */
+    @RequestMapping(value = "searchinfo",method = RequestMethod.GET)
+    @Module(ModuleEnums.BarVipSearch)
+    @ResponseBody
+    public JSONObject searchInfo(@RequestParam("keyword")String keyword){
+        try {
+            VipRegisterDto registerDto = vipOperationService.queryByKeyword(keyword);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name",registerDto.getVipInfo().getName());
+            jsonObject.put("cardNumber",registerDto.getVipCard().getCardNumber());
+            jsonObject.put("phone",registerDto.getVipInfo().getPhone());
+            jsonObject.put("vipPartyId",registerDto.getVipInfo().getPartyId());
+            jsonObject.put("balance",registerDto.getVipAccountInfo().getBalance());
+            return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

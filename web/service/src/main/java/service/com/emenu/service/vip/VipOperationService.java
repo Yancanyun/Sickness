@@ -1,6 +1,6 @@
 package com.emenu.service.vip;
 
-import com.emenu.common.entity.vip.VipRegisterDto;
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.Date;
@@ -32,5 +32,13 @@ public interface VipOperationService {
                                       Date validityTime,
                                       Integer permanentlyEffective,
                                       Integer operatorPartyId) throws SSException;
+
+    /**
+     * 根据会员电话、物理卡号、会员号搜索
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public VipRegisterDto queryByKeyword(String keyword) throws SSException;
 
 }

@@ -1,6 +1,7 @@
 package com.emenu.mapper.vip;
 
 import com.emenu.common.entity.vip.VipCard;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -113,4 +114,12 @@ public interface VipCardMapper {
      * @throws Exception
      */
     public void updatePhysicalNumberByCardNumber(@Param("physicalNumber") String physicalNumber, @Param("cardNumber") String cardNumber) throws Exception;
+
+    /**
+     * 根据会员卡号、物理卡号、电话查询会员卡
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public VipCard queryByKeyWord(String keyword) throws Exception;
 }

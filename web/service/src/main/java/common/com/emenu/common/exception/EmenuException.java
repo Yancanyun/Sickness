@@ -516,6 +516,7 @@ public enum EmenuException implements IBizExceptionMes {
     VipAccountInfoStatesError("会员账户状态错误",8129),
     UpdateVipAccountInfoStatusFail("修改会员账户状态失败",8130),
     QueryVipAccountFailed("查询会员账户信息失败", 8131),
+    QueryVipError("查询会员信息失败",8132),
 
 
     //会员卡发放
@@ -530,6 +531,8 @@ public enum EmenuException implements IBizExceptionMes {
     RejisterVipFail("注册会员失败",80146),
     PhysicalNumberError("物理卡号错误",80147),
     CardNumberError("会员卡号错误",80148),
+    VipInfoNotExist("会员不存在",80149),
+    VipCardNotExist("会员卡号不存在",80150),
 
     //成本卡原料
     IngredientIdError("原料id错误",8120),
@@ -546,6 +549,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryByCostCardIdFailed("根据成本卡id查询其所有原料失败",8131),
     CostCardItemTypeIsNotNull("成本卡原料类别不为空",8132),
     CostCardItemIdError("成本卡原料主键错误",8133),
+
 
 
     /****************************顾客点餐端****************************/

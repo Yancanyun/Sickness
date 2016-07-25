@@ -1,5 +1,6 @@
 package com.emenu.service.party.group.vip.impl;
 
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.party.group.vip.VipInfo;
@@ -353,6 +354,22 @@ public class VipInfoServiceImpl implements VipInfoService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipInfoFail, e);
         }
+    }
+
+    @Override
+    public VipInfo queryByKeyWord(String keyword) throws SSException {
+        VipInfo vipInfo = null;
+        try {
+            if (Assert.isNull(keyword)
+                    || "".equals(keyword)){
+                throw SSException.get(EmenuException.KeywordError);
+            }
+            vipInfo = vipInfoMapper.queryByKeyWord(keyword);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipError, e);
+        }
+        return vipInfo;
     }
 
 

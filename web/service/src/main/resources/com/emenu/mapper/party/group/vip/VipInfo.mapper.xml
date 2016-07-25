@@ -135,4 +135,13 @@
         WHERE `open_id` = #{openId}
         AND `status` = 1
     </select>
+
+    <select id="queryByKeyWord" resultMap="pw.VipInfo">
+        SELECT vipInfo.*
+        FROM `t_party_vip_info` AS vipInfo
+        LEFT JOIN `t_vip_card` AS vipCard ON vipInfo.`party_id` = vipCard.`vip_party_id`
+        WHERE vipInfo.`phone` = #{keyword}
+          OR vipCard.`card_number` = #{keyword}
+          OR vipCard.`physical_number` = #{keyword}
+    </select>
 </mapper>

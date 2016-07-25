@@ -2,6 +2,7 @@ package com.emenu.mapper.party.group.vip;
 
 
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -152,4 +153,12 @@ public interface VipInfoMapper {
      * @throws Exception
      */
     public VipInfo queryByOpenId(@Param("openId") String openId) throws Exception;
+
+    /**
+     * 根据会员卡号、物理卡号、电话查询会员
+     * @param keyword
+     * @return
+     * @throws Exception
+     */
+    public VipInfo queryByKeyWord(String keyword) throws Exception;
 }

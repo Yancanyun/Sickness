@@ -9,7 +9,9 @@ import com.emenu.common.entity.vip.VipGrade;
  * @time: 2015/12/30 11:12
  */
 public class VipGradeDto {
+
     private VipGrade vipGrade;
+
     private String vipDishPricePlanName;
 
     public VipGrade getVipGrade() {

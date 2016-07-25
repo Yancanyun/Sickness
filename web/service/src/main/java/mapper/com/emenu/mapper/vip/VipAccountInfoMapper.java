@@ -1,6 +1,7 @@
 package com.emenu.mapper.vip;
 
 import com.emenu.common.dto.vip.VipAccountInfoDto;
+import com.emenu.common.entity.vip.VipAccountInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -52,4 +53,13 @@ public interface VipAccountInfoMapper {
      * @throws Exception
      */
     public VipAccountInfoDto queryByPartyId(@Param("partyId") int partyId) throws Exception;
+
+    /**
+     * 根据PartyId获取会员账户信息
+     * @param partyId
+     * @return
+     * @throws Exception
+     */
+    public VipAccountInfo queryEntityByPartyId(@Param("partyId") int partyId) throws Exception;
+
 }

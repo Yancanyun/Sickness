@@ -45,4 +45,10 @@
         WHERE `party_id` = #{partyId}
         AND `status` = 1
     </select>
+
+    <select id="queryEntityByPartyId" resultMap="pw.VipAccountInfo">
+        SELECT * FROM `t_vip_account_info`
+        WHERE `party_id` = #{partyId}
+        AND `status` = 1
+    </select>
 </mapper>

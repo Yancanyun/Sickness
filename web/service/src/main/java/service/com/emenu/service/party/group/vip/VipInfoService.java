@@ -1,6 +1,7 @@
 package com.emenu.service.party.group.vip;
 
 
+import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.exception.EmenuException;
@@ -144,5 +145,11 @@ public interface VipInfoService {
      */
     public VipInfo queryByOpenId(String openId) throws SSException;
 
-
+    /**
+     * 根据会员卡号、物理卡号、电话查询会员
+     * @param keyword
+     * @return
+     * @throws SSException
+     */
+    public VipInfo queryByKeyWord(String keyword) throws SSException;
 }
