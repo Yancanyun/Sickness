@@ -102,13 +102,13 @@ public class StorageItemServiceImpl implements StorageItemService {
         OutputStream os = null;
         //从数据库中获取数据
         try {
-            List<StorageItem> storageItemlist= storageItemMapper.listBySearchDto(searchDto);
+            List<StorageItem> storageItemlist= listBySearchDto(searchDto);
 
-            for (StorageItem storageItem :storageItemlist) {
+            /*for (StorageItem storageItem :storageItemlist) {
                 EntityUtil.setNullFieldDefault(storageItem);
                 setUnitName(storageItem);
                 setQuantityFormat(storageItem);
-            }
+            }*/
             // 设置输出流
             // 设置excel文件名和sheetName
             String filename = "";
@@ -122,7 +122,7 @@ public class StorageItemServiceImpl implements StorageItemService {
             Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
             WritableWorkbook outBook = Workbook.createWorkbook(os, tplWorkBook);
             WritableSheet sheet = outBook.getSheet(0);
-            int row=2;
+            int row=3;
 
             for(StorageItem storageItem :storageItemlist){
                 //单元格居中格式
@@ -130,97 +130,52 @@ public class StorageItemServiceImpl implements StorageItemService {
                 cellFormat.setAlignment(jxl.format.Alignment.CENTRE);
                 cellFormat.setVerticalAlignment(jxl.format.VerticalAlignment.CENTRE);
                 cellFormat.setWrap(true);
-                //名称
-
-                Label lableId= new Label(0, row, storageItem.getName());
-                lableId.setCellFormat(cellFormat);
-                sheet.addCell(lableId);
-                //助记码
-
-                Label labelName = new Label(1, row,storageItem.getAssistantCode());
-                labelName.setCellFormat(cellFormat);
-                sheet.addCell(labelName);
-                //物品编号
-
-                Label IngredientNumber = new Label(2, row,storageItem.getItemNumber());
-                IngredientNumber.setCellFormat(cellFormat);
-                sheet.addCell(IngredientNumber);
-                //原配料
-
-                Label AssistantCode = new Label(3, row,storageItem.getIngredientName());
-                AssistantCode.setCellFormat(cellFormat);
-                sheet.addCell(AssistantCode);
-
-                //分类
-
-                Label TagName = new Label(4, row,storageItem.getTagName());
-                TagName.setCellFormat(cellFormat);
-                sheet.addCell(TagName);
-                //供货商
-
-                Label OrderUnitName = new Label(5, row,storageItem.getSupplierName());
-                OrderUnitName.setCellFormat(cellFormat);
-                sheet.addCell(OrderUnitName);
-                //订货单位
-
-                Label OrderToStorageRatio = new Label(6, row,storageItem.getOrderUnitName());
-                OrderToStorageRatio.setCellFormat(cellFormat);
-                sheet.addCell(OrderToStorageRatio);
-                //订货单位到库存单位转换比例
-
-                Label StorageUnitName = new Label(7, row,storageItem.getOrderToStorageRatio().toString());
-                StorageUnitName.setCellFormat(cellFormat);
-                sheet.addCell(StorageUnitName);
-                //库存单位
-
-                Label StorageToCostCardRatio = new Label(8, row,storageItem.getStorageUnitName());
-                StorageToCostCardRatio.setCellFormat(cellFormat);
-                sheet.addCell(StorageToCostCardRatio);
-                //库存单位到成本卡单位转换比例
-
-                Label CostCardUnitName = new Label(9, row,storageItem.getStorageToCostCardRatio().toString());
-                CostCardUnitName.setCellFormat(cellFormat);
-                sheet.addCell(CostCardUnitName);
-
-                //成本卡单位
-
-                Label MaxStorageQuantity = new Label(10, row,storageItem.getCostCardUnitName());
-                MaxStorageQuantity.setCellFormat(cellFormat);
-                sheet.addCell(MaxStorageQuantity);
-                //计数单位
-
-                Label MinStorageQuantity = new Label(11, row,storageItem.getCountUnitName());
-                MinStorageQuantity.setCellFormat(cellFormat);
-                sheet.addCell(MinStorageQuantity);
-                //库存预警上限
-
-                Label AveragePrice = new Label(12, row,storageItem.getMaxStorageQuantityStr());
-                AveragePrice.setCellFormat(cellFormat);
-                sheet.addCell(AveragePrice);
-                //库存预警下限
-
-                Label RealQuantity = new Label(13, row,storageItem.getMinStorageQuantityStr());
-                RealQuantity.setCellFormat(cellFormat);
-                sheet.addCell(RealQuantity);
-
-                //最新入库价格
-
-                Label RealMoney = new Label(14, row,storageItem.getLastStockInPrice().toString());
-                RealMoney.setCellFormat(cellFormat);
-                sheet.addCell(RealMoney);
-
-                //入库总数量
-
-                Label TotalQuantity = new Label(15, row,storageItem.getTotalStockInQuantityStr());
-                TotalQuantity.setCellFormat(cellFormat);
-                sheet.addCell(TotalQuantity);
-
-                //入库总金额
-
-                Label labelTotalMoney = new Label(16, row,storageItem.getTotalStockInMoney().toString());
-                labelTotalMoney.setCellFormat(cellFormat);
-                sheet.addCell(labelTotalMoney);
-
+                // 序号
+                Label labelNumber = new Label(0,row,String.valueOf(row - 2));
+                sheet.addCell(labelNumber);
+                // 名称
+                Label lableName= new Label(1, row, storageItem.getName());
+                sheet.addCell(lableName);
+                // 物品编号
+                Label labelItemNumber = new Label(2,row,storageItem.getItemNumber());
+                sheet.addCell(labelItemNumber);
+                // 助记码
+                Label labelAssistantCode = new Label(3, row,storageItem.getAssistantCode());
+                sheet.addCell(labelAssistantCode);
+                // 原配料
+                Label labelingredientName = new Label(4, row,storageItem.getIngredientName());
+                sheet.addCell(labelingredientName);
+                // 分类
+                Label labelTagName = new Label(5, row,storageItem.getTagName());
+                sheet.addCell(labelTagName);
+                // 供货商
+                Label labelSupplierName = new Label(6, row,storageItem.getSupplierName());
+                sheet.addCell(labelSupplierName);
+                // 入库总数量
+                String totalStockIn = storageItem.getTotalStockInQuantity().toString();
+                if(storageItem.getCountUnitId()!=null){
+                    totalStockIn = totalStockIn.concat(unitService.queryById(storageItem.getCountUnitId()).getName());
+                }
+                Label labelTotalStockIn = new Label(7, row,totalStockIn);
+                sheet.addCell(labelTotalStockIn);
+                // 入库总金额
+                Label labelTotalStockInMoney = new Label(8, row,storageItem.getTotalStockInMoney().toString());
+                sheet.addCell(labelTotalStockInMoney);
+                // 最新入库价格
+                Label labelLastStockInPrice = new Label(9, row,storageItem.getLastStockInPrice().toString());
+                sheet.addCell(labelLastStockInPrice);
+                // 上限
+                String maxStorageQuantityStr = storageItem.getMaxStorageQuantity().toString() + storageItem.getStorageUnitName();
+                Label labelMaxStorage = new Label(10,row,maxStorageQuantityStr);
+                sheet.addCell(labelMaxStorage);
+                // 下限
+                String minStorageQuantityStr = storageItem.getMinStorageQuantity().toString() + storageItem.getStorageUnitName();
+                Label labelMinStorage = new Label(11,row,minStorageQuantityStr);
+                sheet.addCell(labelMinStorage);
+                // 出库方式
+                String stockOutType = ((storageItem.getStockOutType() == 1)?"加权平均":"手动");
+                Label labelStockOutType = new Label(12,row,stockOutType);
+                sheet.addCell(labelStockOutType);
                 row++;
 
             }

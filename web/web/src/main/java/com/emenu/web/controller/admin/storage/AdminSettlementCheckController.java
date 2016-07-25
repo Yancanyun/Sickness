@@ -140,14 +140,9 @@ public class AdminSettlementCheckController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckExport)
     @RequestMapping(value = "export", method = RequestMethod.GET)
-    public String toCheckExport(@RequestParam(value = "startDate", required = false) Date startDate,
-                              @RequestParam(value = "endDate", required = false) Date endDate,
-                              @RequestParam(value = "supplierId", required = false) Integer supplierId,
-                              @RequestParam(value = "itemName", required = false) String keyword,
-                              @RequestParam(value = "depotIds", required = false) List<Integer> depotIds,
-                              @RequestParam(value = "tagIds", required = false) List<Integer> tagIds){
+    public String toCheckExport(){
         try{
-            storageSettlementService.exportSettlementCheckToExcel(startDate,endDate,supplierId,depotIds,tagIds,keyword,getResponse());
+            storageSettlementService.exportSettlementCheckToExcel(getResponse());
             sendErrMsg("导出成功");
         }catch (SSException e){
             LogClerk.errLog.error(e);

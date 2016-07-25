@@ -9,10 +9,12 @@ import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
+import org.apache.xpath.SourceTree;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.net.ssl.SSLHandshakeException;
+import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,6 +192,9 @@ public class OrderDishTest extends AbstractTestCase {
         tableOrderCache.setOrderDishCacheList(orderDishCacheList);
         tableOrderCache.setOrderRemark("备注");
         tableOrderCache.setOrderServeType(1);
-        orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+        List<String> list = orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i));
+        }
     }
 }

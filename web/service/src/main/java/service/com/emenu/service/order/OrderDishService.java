@@ -1,5 +1,6 @@
 package com.emenu.service.order;
 
+import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
@@ -152,11 +153,10 @@ public interface OrderDishService {
     public List<OrderDishDto> queryOrderDishListByTableId(Integer tableId) throws SSException;
 
     /**
-     * 根据订单ID及套餐ID查询订单菜品列表
-     * @param orderId
-     * @param packageId
+     * 确认订单的时候返回什么菜品原材料不足只能做几份
+     * @param tableOrderCache
      * @return
      * @throws SSException
      */
-    public List<OrderDish> listByOrderIdAndPackageId(int orderId, int packageId) throws SSException;
+    public List<String> isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
 }

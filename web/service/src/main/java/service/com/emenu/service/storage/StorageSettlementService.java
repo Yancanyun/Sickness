@@ -96,22 +96,10 @@ public interface StorageSettlementService {
 
     /**
      * 库存盘点导出EXCEL
-     * @param startDate
-     * @param endDate
-     * @param supplierId
-     * @param depotIds
-     * @param tagIds
-     * @param keyword
      * @param response
      * @throws SSException
      */
-    public void exportSettlementCheckToExcel(Date startDate,
-                                             Date endDate,
-                                             Integer supplierId,
-                                             List<Integer> depotIds,
-                                             List<Integer> tagIds,
-                                             String keyword,
-                                             HttpServletResponse response) throws SSException;
+    public void exportSettlementCheckToExcel(HttpServletResponse response) throws SSException;
 
     /**
      * 结算中心导出Excel

@@ -722,24 +722,13 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
         }
     }
 
-    @Override
+    //@Override
     @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void exportSettlementCheckToExcel(Date startDate,
-                                             Date endDate,
-                                             Integer supplierId,
-                                             List<Integer> depotIds,
-                                             List<Integer> tagIds,
-                                             String keyword,
-                                             HttpServletResponse response) throws SSException{
-
+    public void exportSettlementCheckToExcel(HttpServletResponse response) throws SSException{
+        List<StorageCheckDto> storageCheckDtoList = new ArrayList<StorageCheckDto>();
         OutputStream os = null;
         try {
-            //从数据库中获取数据
-            //List<StorageCheckDto> storageCheckDtoList = this.listSettlementCheck(startDate,endDate,supplierId,depotIds,tagIds,keyword,null,null);
-            List<StorageCheckDto> storageCheckDtoList = null;
-            for(StorageCheckDto storageCheckDto : storageCheckDtoList){
-                EntityUtil.setNullFieldDefault(storageCheckDto);
-            }
+            storageCheckDtoList = this.listExportData();
             // 设置输出流
             // 设置excel文件名和sheetName
             String filename = "";
@@ -753,9 +742,66 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminSettlementCheckList.getFilePath());
             Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
             WritableWorkbook outBook = Workbook.createWorkbook(os,tplWorkBook);
-            int startRow = 3;
-            //调用core包里的工具类
-            ExcelWriter.writeExcelByTemplate(storageCheckDtoList, startRow, os, ExcelExportTemplateEnums.AdminSettlementCheckList, checkDataTypes);
+            // 获取sheet往sheet里面写数据
+            WritableSheet sheet = outBook.getSheet(0) ;
+            int row = 3;
+            for(StorageCheckDto storageCheckDto:storageCheckDtoList){
+                // 序号
+                Label labelNumber = new Label(0, row , String.valueOf(row - 2));
+                sheet.addCell(labelNumber);
+                // 类别
+                Label labelTagName = new Label(1, row , storageCheckDto.getTagName());
+                sheet.addCell(labelTagName);
+                // 名称
+                Label labelIngredientName = new Label(2, row , storageCheckDto.getIngredientName());
+                sheet.addCell(labelIngredientName);
+                // 编号
+                Label labelIngredientNumber = new Label(3, row , storageCheckDto.getIngredientNumber());
+                sheet.addCell(labelIngredientNumber);
+                // 库存
+                Label labelStorageUnitName = new Label(4, row , storageCheckDto.getStorageUnitName());
+                sheet.addCell(labelStorageUnitName);
+                // 订货
+                Label labelOrderUnitName = new Label(5,row,storageCheckDto.getOrderUnitName());
+                sheet.addCell(labelOrderUnitName);
+                // 成本卡
+                Label labelCostCardUnitName = new Label(6,row,storageCheckDto.getCostCardUnitName());
+                sheet.addCell(labelCostCardUnitName);
+                // 期初
+                String begin = storageCheckDto.getBeginQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelBegin = new Label(7,row,begin);
+                sheet.addCell(labelBegin);
+                // 入库
+                String stockIn = storageCheckDto.getStockInQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelStockIn = new Label(8,row,stockIn);
+                sheet.addCell(labelStockIn);
+                // 出库
+                String stockOut = storageCheckDto.getStockOutQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelStockOut = new Label(9,row,stockOut);
+                sheet.addCell(labelStockOut);
+                // 盈亏
+                String incomeLoss = storageCheckDto.getIncomeLossQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelIncomeLoss = new Label(10,row,incomeLoss);
+                sheet.addCell(labelIncomeLoss);
+                // 结存
+                String total = storageCheckDto.getTotalQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelTotal = new Label(11,row,total);
+                sheet.addCell(labelTotal);
+                // 上限
+                String maxStorage = storageCheckDto.getMaxStorageQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelMaxStorage = new Label(12,row,maxStorage);
+                sheet.addCell(labelMaxStorage);
+                // 下限
+                String minStorage = storageCheckDto.getMinStorageQuantity().toString().concat(storageCheckDto.getCostCardUnitName());
+                Label labelMinStorage = new Label(13,row,minStorage);
+                sheet.addCell(labelMinStorage);
+                row++;
+            }
+            outBook.write();
+            outBook.close();
+            tplWorkBook.close();
+            tplStream.close();
+            os.close();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             response.setContentType("text/html");
