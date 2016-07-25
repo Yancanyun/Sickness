@@ -448,4 +448,33 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException.OrderNotEnoughIngredient, e);
         }
     }
+
+    @Override
+    public List<OrderDishDto> queryOrderDishAndCombinePackageByTableId(Integer tableId) throws SSException {
+        List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
+        try {
+            if (Assert.lessOrEqualZero(tableId)) {
+                throw SSException.get(EmenuException.TableIdError);
+            }
+            List<OrderDishDto> orderDishChildrenList = this.queryOrderDishListByTableId(tableId);
+            Map<Integer,Integer> map = new HashMap<Integer,Integer>();
+            for (OrderDishDto orderDishDto: orderDishChildrenList){
+                if (orderDishDto.getStatus() != OrderDishStatusEnums.IsBack.getId()){
+                    //是套餐并且未出现在Map里
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()
+                            && map.get(orderDishDto.getPackageFlag()) == null){
+                        map.put(orderDishDto.getPackageFlag(),orderDishDto.getDishId());
+                        orderDishDtoList.add(orderDishDto);
+                    }
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsNotPackage.getId()){
+                        orderDishDtoList.add(orderDishDto);
+                    }
+                }
+            }
+            return orderDishDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
+        }
+    }
 }

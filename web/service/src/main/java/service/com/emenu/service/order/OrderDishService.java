@@ -169,4 +169,13 @@ public interface OrderDishService {
      * @throws SSException
      */
     public List<OrderDish> listByOrderIdAndPackageId(int orderId, int packageId) throws SSException;
+
+    /**
+     * 根据餐桌号查所有菜品（套餐包含的菜品合并为一个套餐，输出套餐）
+     * @param tableId
+     * @return
+     * @author pengpeng
+     * @throws SSException
+     */
+    public List<OrderDishDto> queryOrderDishAndCombinePackageByTableId(Integer tableId) throws SSException;
 }

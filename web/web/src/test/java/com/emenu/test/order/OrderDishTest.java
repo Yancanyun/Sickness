@@ -195,4 +195,9 @@ public class OrderDishTest extends AbstractTestCase {
          orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
 
     }
+    @Test
+    public void queryOrderDishAndCombinePackageByTableId()throws SSException{
+        List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishListByTableId(4);
+        System.out.println(orderDishDtoList.size());
+    }
 }
