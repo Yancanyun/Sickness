@@ -155,10 +155,11 @@ public interface OrderDishService {
     /**
      * 确认订单的时候返回什么菜品原材料不足只能做几份
      * @param tableOrderCache
+     * @author guofengrui
      * @return
      * @throws SSException
      */
-    public List<String> isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
+    public void isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
 
     /**
      *

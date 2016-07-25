@@ -183,7 +183,7 @@ public class OrderDishTest extends AbstractTestCase {
         for(int i=0;i<5;i++){
             OrderDishCache orderDishCache = new OrderDishCache();
             orderDishCache.setId(i);
-            orderDishCache.setDishId(14);
+            orderDishCache.setDishId(12);
             orderDishCache.setQuantity(new Float(5));
             orderDishCache.setRemark("没有备注");
             orderDishCacheList.add(orderDishCache);
@@ -192,9 +192,7 @@ public class OrderDishTest extends AbstractTestCase {
         tableOrderCache.setOrderDishCacheList(orderDishCacheList);
         tableOrderCache.setOrderRemark("备注");
         tableOrderCache.setOrderServeType(1);
-        List<String> list = orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
-        for(int i=0;i<list.size();i++){
-            System.out.println(list.get(i));
-        }
+         orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+
     }
 }

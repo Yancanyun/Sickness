@@ -370,11 +370,12 @@ public class OrderDishServiceImpl implements OrderDishService{
 
 
     //@Override
-    public List<String> isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException {
+    public void isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException {
         // 得到前台订单中的所点的菜品和套餐
         List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
         // 要返回的异常集合
-        List<String> list = new ArrayList<String>();
+        List<String> exceptionList = new ArrayList<String>();
+        String exceptionString = "";
         try {
             if (tableOrderCache != null)
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
@@ -391,29 +392,17 @@ public class OrderDishServiceImpl implements OrderDishService{
                         DishPackage dishPackage = dishDto.getDishPackage();
                         // 套餐中某菜品的数量
                         BigDecimal qualityDish = new BigDecimal(Integer.toString(dishPackage.getDishQuantity()));
-                        map.put(dishDto.getId(), (qualityDish.multiply(qualityPackage)));
+                        if(map.containsKey(dishDto.getId())){
+                            map.put(dishDto.getId(),map.get(dishDto.getId()).add((qualityDish.multiply(qualityPackage))));
+                        }
                     }
 
                 } else {
                     // 普通菜品
                     DishDto dishDto = dishService.queryById(orderDishCache.getDishId());
                     BigDecimal qualityDish = new BigDecimal(Float.toString(orderDishCache.getQuantity()));
-                    map.put(dishDto.getId(), qualityDish);
-                }
-                // 所有的套餐里面的菜品和普通的菜品都已经在map里面了，遍历map使得相同的菜品数量相加
-                Iterator iter = map.entrySet().iterator();
-                while (iter.hasNext()) {
-                    Map.Entry entry = (Map.Entry) iter.next();
-                    Integer key = (Integer) entry.getKey();
-                    BigDecimal val = (BigDecimal) entry.getValue();
-                    while (iter.hasNext()) {
-                        Map.Entry entryNext = (Map.Entry) iter.next();
-                        Integer keyNext = (Integer) entryNext.getKey();
-                        BigDecimal valNext = (BigDecimal) entryNext.getValue();
-                        if (key == keyNext) {
-                            val = val.add(valNext);
-                            map.remove(entryNext.getKey());
-                        }
+                    if(map.containsKey(dishDto.getId())){
+                        map.put(dishDto.getId(),map.get(dishDto.getId()).add(qualityDish));
                     }
                 }
                 //遍历map查看里面的菜品是否都原料充足
@@ -428,24 +417,32 @@ public class OrderDishServiceImpl implements OrderDishService{
                         List<CostCardItemDto> listCostCardItemDto = costCardItemService.listByCostCardId(costCard.getId());
                         for (CostCardItemDto costCardItemDto : listCostCardItemDto) {
                             BigDecimal allCount = storageSettlementService.queryCache(costCardItemDto.getId());
-                            BigDecimal needCount = costCardItemDto.getOtherCount().multiply(quality);
+                            BigDecimal needCount = costCardItemDto.getOtherCount();
                             if (allCount != null) {
+                                // 库存能做几份
                                 BigDecimal number = allCount.divide(needCount);
+                                // 小于1
                                 if (number.compareTo(BigDecimal.valueOf(1)) == -1) {
-                                    list.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
+                                    exceptionList.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
                                 } else {
+                                    // 小于点的数量
                                     if (number.compareTo(quality) == -1) {
-                                        list.add("菜品" + dishDto.getName() + ",原材料不足，目前只能做" + number.intValue() + dishDto.getName());
+                                        exceptionList.add("菜品" + dishDto.getName() + ",原材料不足，目前只能做" + number.intValue() + dishDto.getName());
                                     }
                                 }
                             } else {
-                                list.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
+                                exceptionList.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
                             }
                         }
                     }
                 }
             }
-            return list;
+            if(!exceptionList.isEmpty()){
+                for(String list :exceptionList){
+                    exceptionString.concat(list.toString()).concat("\n");
+                }
+                throw SSException.get(EmenuException.valueOf(exceptionString));
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.OrderNotEnoughIngredient, e);
