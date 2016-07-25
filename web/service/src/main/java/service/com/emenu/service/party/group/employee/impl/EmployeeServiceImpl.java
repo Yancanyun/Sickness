@@ -59,6 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Autowired
     private SecurityUserGroupService securityUserGroupService;
 
+
     @Autowired
     @Qualifier("commonDao")
     private CommonDao commonDao;//core包
@@ -456,20 +457,22 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delByPartyId(int partyId) throws SSException {
-
         //假删除，在数据库表中并没有删除，只是把status字段设为“删除”
         try {
             //修改t_employee员工状态
             employeeMapper.updateStatusByPartyId(partyId, UserStatusEnums.Deleted.getId());
+            //删除员工和角色关联的信息
+
+            //删除员工服务的餐桌
+            employeeMapper.delRoleByPartyId(partyId);
+            employeeMapper.delWaiterTableByPartyId(partyId);
 
             //修改t_party_security_user员工状态
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
             securityUser.setStatus(EnableEnums.Disabled.getId());
             securityUserService.updateSecurityUser(securityUser);
-
             // 从SecurityUserGroup中删除信息
             securityUserGroupService.delByUserId(securityUser.getId());
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteEmployeeFail, e);
