@@ -38,6 +38,7 @@ public class VipCard extends AbstractEntity {
     private Date validityTime;
 
     //格式化后的有效期String
+    @Transient
     private String validityTimeStr;
 
     //是否永久有效: 0-否, 1-是
@@ -56,6 +57,7 @@ public class VipCard extends AbstractEntity {
     private Date createdTime;
 
     //格式化后的创建时间String
+    @Transient
     private String createdTimeStr;
 
     //最近修改时间

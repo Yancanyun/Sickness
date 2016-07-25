@@ -1,11 +1,17 @@
 package com.emenu.service.call.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.cache.call.CallCache;
 import com.emenu.common.cache.call.TableCallCache;
+import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.table.WaiterTable;
+import com.emenu.common.enums.call.CallCacheResponseEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.call.CallCacheService;
+import com.emenu.service.call.CallWaiterService;
+import com.emenu.service.table.TableService;
 import com.emenu.service.table.WaiterTableService;
 import com.lowagie.text.ChapterAutoNumber;
 import com.pandawork.core.common.exception.SSException;
@@ -15,6 +21,7 @@ import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,10 +37,19 @@ public class CallCacheServiceImpl implements CallCacheService {
 
     @Autowired
     WaiterTableService waiterTableService;
+
+    @Autowired
+    CallWaiterService callWaiterService;
+
+    @Autowired
+    TableService tableService;
+
     //时间戳60秒
     private static final  long TIMESTAMP = 60*1000l;
     //时间戳30秒
     private static final  long TIMESTAMP2 = 30*1000l;
+
+    private Integer callCacheId = 0;
 
     private Map<Integer,TableCallCache> tableCallCacheMap = new ConcurrentHashMap<Integer, TableCallCache>();
 
@@ -43,11 +59,28 @@ public class CallCacheServiceImpl implements CallCacheService {
     public void addCallCache(Integer tableId,CallCache callCache)throws SSException {
         TableCallCache tableCallCache = new TableCallCache();
         List<CallCache> callCaches = new ArrayList<CallCache>();
+        List<CallWaiter> callWaiters = new ArrayList<CallWaiter>();
+        Integer id = new Integer(0);
         try {
             tableCallCache = tableCallCacheMap.get(tableId);
+            // 查询服务的主键
+            for(CallWaiter callWaiter : callWaiters){
+                if(callWaiter.getName()==callCache.getName()){
+                    //设置主键
+                    id = callWaiter.getId();
+                    break;
+                }
+            }
             if(tableCallCache==null||tableCallCache.getCallCacheList().isEmpty())//未发出过呼叫
             {
                 tableCallCache = new TableCallCache();
+                //获取所有的服务类型
+                callWaiters = callWaiterService.queryAllCallWaiter();
+                // 设置缓存主键
+                callCache.setCacheId(++callCacheId);
+                // 设置服务的主键
+                callCache.setId(id);
+                callCache.setTableId(tableId);
                 callCaches.add(callCache);
                 tableCallCache.setCallCacheList(callCaches);
                 tableCallCacheMap.put(tableId,tableCallCache);
@@ -66,7 +99,7 @@ public class CallCacheServiceImpl implements CallCacheService {
                         if(callCache.getCallTime().getTime()-dto.getCallTime().getTime()>=TIMESTAMP)//两次请求间隔大于60秒
                         {
                             ok=1;
-                            dto.setStatus(1);
+                            dto.setStatus(CallCacheResponseEnums.IsNotResponse.getId());
                             dto.setCallTime(new Date());
                             tableCallCache.setCallCacheList(callCaches);
                             tableCallCacheMap.put(tableId,tableCallCache);//更新缓存
@@ -76,19 +109,21 @@ public class CallCacheServiceImpl implements CallCacheService {
                                         &&temp.getTableId()==dto.getTableId())
                                 {
                                     temp.setCallTime(new Date());
-                                    temp.setStatus(1);
+                                    temp.setStatus(CallCacheResponseEnums.IsNotResponse.getId());
                                     break;
                                 }
                             }
                         }
                        else
                         {
-                            throw SSException.get(EmenuException. CallCacheSendTimeLimit);
+                            throw SSException.get(EmenuException.CallCacheSendTimeLimit);
                         }
                     }
                 }
                 if(ok==0)//不存在同名呼叫服务
                 {
+                    // 设置缓存主键
+                    callCache.setCacheId(++callCacheId);
                     callCaches.add(callCache);
                     tableCallCache.setCallCacheList(callCaches);
                     tableCallCacheMap.put(tableId,tableCallCache);
@@ -105,7 +140,7 @@ public class CallCacheServiceImpl implements CallCacheService {
     {
         TableCallCache tableCallCache = new TableCallCache();
         List<Integer> tableId = new ArrayList<Integer>();//
-        List<CallCache> callCaches = new ArrayList<CallCache>();
+        List<CallCache> callCaches = Collections.EMPTY_LIST;
         try
         {
             tableId = waiterTableService.queryByPartyId(partyId);//查询出了服务员服务的餐桌,
@@ -119,28 +154,31 @@ public class CallCacheServiceImpl implements CallCacheService {
                    }
                }
             }
-            Collections.sort(callCaches, new Comparator<CallCache>() {//将缓存重新排序一下
-                @Override  //排序函数
-                public int compare(CallCache o1, CallCache o2) {
+            if(callCaches!=null)
+            {
+                Collections.sort(callCaches, new Comparator<CallCache>() {//将缓存重新排序一下
+                    @Override  //排序函数
+                    public int compare(CallCache o1, CallCache o2) {
 
-                    //先按处理状态进行升序排序,即把没处理的呼叫服务放在前面
-                    if(o1.getStatus() > o2.getStatus()){
-                        return 1;
-                    }
-                    if(o1.getStatus() == o2.getStatus())
-                    {
-                        //若状态值相同则按照时间的升序进行排序,呼叫时间小的靠前
-                        if(o1.getCallTime().getTime() > o2.getCallTime().getTime()){
+                        //先按处理状态进行升序排序,即把没处理的呼叫服务放在前面
+                        if(o1.getStatus() > o2.getStatus()){
                             return 1;
                         }
-                        if(o1.getCallTime().getTime() == o2.getCallTime().getTime())
-                            return 0;
+                        if(o1.getStatus() == o2.getStatus())
+                        {
+                            //若状态值相同则按照时间的升序进行排序,呼叫时间小的靠前
+                            if(o1.getCallTime().getTime() > o2.getCallTime().getTime()){
+                                return 1;
+                            }
+                            if(o1.getCallTime().getTime() == o2.getCallTime().getTime())
+                                return 0;
+                            return -1;
+                        }
                         return -1;
                     }
-                    return -1;
-                }
-            });
-            tableCallCache.setCallCacheList(callCaches);
+                });
+                tableCallCache.setCallCacheList(callCaches);
+            }
         }
         catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -157,10 +195,10 @@ public class CallCacheServiceImpl implements CallCacheService {
             //不管服务员应答与否,都删除掉
             if(!Assert.lessZero(tableId))
             tableCallCacheMap.put(tableId,new TableCallCache());
-            for(CallCache dto : allCallCaches)//后加的list集合中也要把相应的缓存删掉
+            for(int i=allCallCaches.size()-1;i>=0;i--)//后加的list集合中也要把相应的缓存删掉
             {
-                if(dto.getTableId()==tableId)
-                    allCallCaches.remove(dto);
+                if(allCallCaches.get(i).getTableId()==tableId)
+                    allCallCaches.remove(i);
             }
         }
         catch (Exception e) {
@@ -178,30 +216,159 @@ public class CallCacheServiceImpl implements CallCacheService {
             tableId = waiterTableService.queryByPartyId(partyId);//查询出了服务员服务的餐桌,
             for(Integer dto :tableId)
             {
-                for(CallCache temp : allCallCaches)
+                // 在总列表里删除缓存
+                for(int i = allCallCaches.size()-1;i>=0;i--)
                 {
                     //0为服务员已经应答,1为服务员未应答,未应答的不能删除
-                    if(temp.getTableId()==dto&&temp.getStatus()==0)
+                    if(allCallCaches.get(i).getTableId()==dto
+                            &&allCallCaches.get(i).getStatus()==CallCacheResponseEnums.IsResponse.getId())
                     {
-                        allCallCaches.remove(temp);//删除掉这个缓存
+                        allCallCaches.remove(i);//删除掉这个缓存
                     }
                 }
+
+                // 删除餐桌未处理的缓存
                 TableCallCache tableCallCache = tableCallCacheMap.get(dto);
-                List<CallCache> callCaches = new ArrayList<CallCache>();
+                List<CallCache> callCaches = Collections.EMPTY_LIST;
                 if(tableCallCache!=null)
                     callCaches=tableCallCache.getCallCacheList();
-                for(CallCache callCache : callCaches)
+                for(int i = callCaches.size()-1;i>=0;i--)
                 {
-                    if(callCache.getStatus()==0)//0为应答了,1为未应答
+                    if(callCaches.get(i).getStatus()==CallCacheResponseEnums.IsResponse.getId())//0为应答了,1为未应答
                     {
-                        callCaches.remove(callCache);
+                        callCaches.remove(i);
                     }
+                }
+                // 更新缓存
+                if(!callCaches.isEmpty()){
+                    tableCallCache.setCallCacheList(callCaches);
+                    tableCallCacheMap.put(dto,tableCallCache);
+                }
+                // 为空则删除对应餐桌的缓存
+                else{
+                    this.delTableCallCache(dto);
                 }
             }
         }
         catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryCallCacheByWaiterIdFail, e);
+        }
+    }
+    @Override
+      public TableCallCache queryCallCachesByTableId(Integer tableId) throws SSException {
+        TableCallCache tableCallCache = new TableCallCache();
+        try
+        {
+           if(Assert.isNotNull(tableId)
+                   &&!Assert.lessOrEqualZero(tableId)){
+               tableCallCache=tableCallCacheMap.get(tableId);
+           }
+        }
+        catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.TableNotHaveCallCache, e);
+        }
+        return tableCallCache;
+    }
+
+    @Override
+    public int countNotResponseTotalMessage(Integer partyId) throws SSException{
+
+        List<Integer> tableId = new ArrayList<Integer>();
+        int count=0;
+        try {
+            tableId = waiterTableService.queryByPartyId(partyId);//查询出了服务员服务的餐桌
+            for(Integer dto :tableId) {
+                // 在总列表里删除缓存
+                for(int i = allCallCaches.size()-1;i>=0;i--)
+                {
+                    //0为服务员已经应答,1为服务员未应答,未应答的不能删除
+                    if(allCallCaches.get(i).getTableId()==dto
+                            &&allCallCaches.get(i).getStatus()==CallCacheResponseEnums.IsNotResponse.getId()) {
+                        count++;
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountNotResponseTotalMessageFail, e);
+        }
+        return count;
+    }
+
+    @Override
+    public JSONObject queryCallById(Integer id,Integer partyId) throws SSException{
+        List<CallCache> callCaches = new ArrayList<CallCache>();
+        JSONObject jsonObject = new JSONObject();
+        List<Integer> tableId = new ArrayList<Integer>();
+        try {
+            // 获取服务员服务的餐桌
+            tableId = waiterTableService.queryByPartyId(partyId);
+            for(Integer dto : tableId){
+                for(CallCache callCache : allCallCaches){
+                    if(callCache.getId()==id
+                            &&callCache.getTableId()==dto){
+                        callCaches.add(callCache);
+                    }
+                }
+            }
+            JSONArray jsonArray = new JSONArray();
+            for(CallCache dto :callCaches){
+                JSONObject temp = new JSONObject();
+                temp.put("cacheId",dto.getId());
+                temp.put("tableId",dto.getTableId());
+
+                // 获取桌子信息
+                Table table = new Table();
+                table = tableService.queryById(dto.getTableId());
+                temp.put("tableName",table.getName());
+                temp.put("name",dto.getName());
+                // 只显示出时分秒
+                DateFormat df = DateFormat.getTimeInstance();
+                temp.put("time",df.format(dto.getCallTime()));
+                temp.put("status",dto.getStatus());
+                jsonArray.add(temp);
+            }
+            jsonObject.put("callList",jsonArray);
+        }
+        catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCallByIdFail, e);
+        }
+        return jsonObject;
+    }
+
+    @Override
+    public void responseCall(Integer tableId, Integer cacheId) throws SSException{
+        List<CallCache> callCaches = new ArrayList<CallCache>();
+        TableCallCache tableCallCache = new TableCallCache();
+        try {
+            for(CallCache dto : allCallCaches){
+                if(dto.getId()==cacheId){
+                    dto.setStatus(CallCacheResponseEnums.IsResponse.getId());
+                    break;
+                }
+            }
+
+            tableCallCache=tableCallCacheMap.get(tableId);
+            if(tableCallCache!=null){
+                callCaches = tableCallCache.getCallCacheList();
+                for(CallCache dto : callCaches){
+                    if(dto.getId()==cacheId){
+                        dto.setStatus(CallCacheResponseEnums.IsResponse.getId());
+                        break;
+                    }
+                }
+                tableCallCache.setCallCacheList(callCaches);
+                // 更新一下
+                tableCallCacheMap.put(tableId,tableCallCache);
+            }
+        }
+        catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ResponseCallFail, e);
         }
     }
 }

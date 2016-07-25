@@ -5,12 +5,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
+import com.emenu.common.annotation.Module;
+import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
+import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.StringUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -97,5 +101,30 @@ public class AdminCommonController extends AbstractController {
         }
 
         return sendJsonArray(jsonArray);
+    }
+
+    @Module(ModuleEnums.AdminStorageSettlementCheckList)
+    @RequestMapping(value = "tool/storage/ingredient/search/ajax",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject listIngredientByKeyword(@RequestParam("keyword")String keyword){
+        try {
+            List<Ingredient> ingredientList = ingredientService.listByKeyword(keyword);
+            JSONArray jsonArray = new JSONArray();
+            if (Assert.isNotNull(ingredientList)
+                    && ingredientList.size() > 0){
+                for (Ingredient ingredient : ingredientList){
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id",ingredient.getId());
+                    jsonObject.put("name",ingredient.getName());
+                    jsonObject.put("assistantCode",ingredient.getAssistantCode());
+                    jsonArray.add(jsonObject);
+                }
+            }
+            return sendJsonArray(jsonArray);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return sendErrMsgAndErrCode(e);
+        }
     }
 }

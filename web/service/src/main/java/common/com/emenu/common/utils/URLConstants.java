@@ -198,7 +198,7 @@ public final class URLConstants {
     public static final String WAITER_TABLE_MERGE_URL = "waiter/table/merge";
 
     // 服务员查看所有呼叫服务
-    public static final String WAITER_CALL_LIST_URL = "waiter/call";
+    public static final String WAITER_MESSAGE_LIST_URL = "waiter/message";
 
 
     /**********************吧台客户端*************************/

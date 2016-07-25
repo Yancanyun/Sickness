@@ -7,6 +7,7 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
+import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
@@ -20,8 +21,6 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
-import com.pandawork.core.common.util.Assert;
-import org.omg.IOP.TAG_ALTERNATE_IIOP_ADDRESS;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -92,7 +91,7 @@ public class BarNewOrderDishController extends AbstractController{
      * @return
      */
 
-    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    @RequestMapping(value = "/search",method = RequestMethod.GET)
     @Module(ModuleEnums.BarOrderDishAddSearch)
     @ResponseBody
     public JSONObject searchDishByTagIdAndKey(@RequestParam("tagId") Integer tagId,
@@ -185,8 +184,11 @@ public class BarNewOrderDishController extends AbstractController{
                    temp.put("dishCacheId",dto.getId());
                    temp.put("dishId",dto.getDishId());
                    // 查询出菜品信息
-                   DishDto dishDto = dishService.queryById(dto.getDishId());
+                   DishDto dishDto = dishService.queryById(dto.getDishId() );
+                   if(dishDto.getDishNumber()!=null)
                    temp.put("dishNumber",dishDto.getDishNumber());
+                   else
+                   temp.put("dishNumber","无");
                    temp.put("assistantCode",dishDto.getAssistantCode());
                    temp.put("name",dishDto.getName());
                    temp.put("unit",dishDto.getUnitName());

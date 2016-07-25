@@ -128,6 +128,12 @@
         WHERE `id` = #{id}
     </update>
 
+    <update id="updatePhysicalNumberByCardNumber">
+        UPDATE `t_vip_card`
+        SET `physical_number` = #{physicalNumber}
+        WHERE `card_number` = #{cardNumber}
+    </update>
+
     <select id="queryLastVipCard" resultMap="pw.VipCard">
         SELECT
         `id`,

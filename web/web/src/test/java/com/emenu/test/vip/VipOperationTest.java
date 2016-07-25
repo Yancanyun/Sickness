@@ -1,7 +1,6 @@
 package com.emenu.test.vip;
 
-import com.emenu.common.entity.party.group.vip.VipInfo;
-import com.emenu.common.entity.vip.VipRejisterDto;
+import com.emenu.common.entity.vip.VipRegisterDto;
 import com.emenu.service.vip.VipOperationService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -24,7 +23,7 @@ public class VipOperationTest extends AbstractTestCase {
     @Test
     public void registerVip() throws SSException{
 
-        VipRejisterDto rejisterDto = vipOperationService.registerVip("yang",1,"18982436412",new Date(),new Date(),1,1);
+        VipRegisterDto rejisterDto = vipOperationService.registerVip("yang",1,"18982436412",new Date(),new Date(),1,1);
         System.out.println("xiaoz");
     }
 

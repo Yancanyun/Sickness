@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.storage.StorageCheckDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.party.group.supplier.Supplier;
+import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageDepot;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReport;
@@ -44,12 +45,13 @@ public class AdminSettlementCheckController extends AbstractController{
      */
     @Module(ModuleEnums.AdminStorageSettlementCheckList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toList(Model model,
-                         @RequestParam(value = "eMsg", required = false) String eMsg){
+    public String toList(@RequestParam(value = "eMsg", required = false) String eMsg,Model model){
         try {
             //获取分类列表
             List<Tag> tagList = storageTagService.listAllSmallTag();
+            List<Ingredient> ingredientList = ingredientService.listAll();
             model.addAttribute("tagList", tagList);
+            model.addAttribute("ingredientList",ingredientList);
             model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
             model.addAttribute("currentMonthNowDay", DateUtils.formatDate(new Date(),new SimpleDateFormat("yyyy-MM-dd")));
             model.addAttribute("eMsg", eMsg);
@@ -73,7 +75,7 @@ public class AdminSettlementCheckController extends AbstractController{
                                @RequestParam("pageSize") Integer pageSize,
                                @RequestParam(value = "startTime", required = false) Date startTime,
                                @RequestParam(value = "endTime", required = false) Date endTime,
-                               @RequestParam(value = "keyWord", required = false) String keyword,
+                               @RequestParam(value = "keyword", required = false) String keyword,
                                @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
         List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
         try {
@@ -154,6 +156,10 @@ public class AdminSettlementCheckController extends AbstractController{
         return "admin/storage/settlement/check/list_home";
     }
 
+    /**
+     * 盘点库存
+     * @return
+     */
     @Module(ModuleEnums.AdminStorageSettlementCheck)
     @RequestMapping(value = "ajax/settlement/check",method = RequestMethod.PUT)
     @ResponseBody
@@ -164,7 +170,7 @@ public class AdminSettlementCheckController extends AbstractController{
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return sendMsgAndCode(AJAX_FAILURE_CODE,"盘点失败");
+            return sendErrMsgAndErrCode(e);
         }
     }
 
