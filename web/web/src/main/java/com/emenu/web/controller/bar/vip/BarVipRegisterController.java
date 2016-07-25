@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -130,7 +131,11 @@ public class BarVipRegisterController extends AbstractController{
             jsonObject.put("cardNumber",registerDto.getVipCard().getCardNumber());
             jsonObject.put("phone",registerDto.getVipInfo().getPhone());
             jsonObject.put("vipPartyId",registerDto.getVipInfo().getPartyId());
-            jsonObject.put("balance",registerDto.getVipAccountInfo().getBalance());
+            if (Assert.isNull(registerDto.getVipAccountInfo())){
+                jsonObject.put("balance", new BigDecimal("0.00"));
+            } else {
+                jsonObject.put("balance", registerDto.getVipAccountInfo().getBalance());
+            }
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

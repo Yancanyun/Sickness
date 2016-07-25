@@ -11,6 +11,7 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -46,6 +49,18 @@ public class AdminSettlementSupplierController extends AbstractController{
             //获取供货商
             List<Supplier> supplierList = supplierService.listAll();
             List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(0,null,null);
+            if (Assert.isNotNull(storageSupplierDtoList)
+                    && storageSupplierDtoList.size() > 0){
+                Iterator<StorageSupplierDto> iter = storageSupplierDtoList.iterator();
+                while(iter.hasNext()){
+                    StorageSupplierDto storageSupplierDto = iter.next();
+                    if (Assert.isNull(storageSupplierDto.getStorageItemDtoList())
+                            || Assert.lessOrEqualZero(storageSupplierDto.getStorageItemDtoList().size())
+                            || storageSupplierDto.getTotalMoney().equals(BigDecimal.ZERO)){
+                        iter.remove();
+                    }
+                }
+            }
             model.addAttribute("supplierDtoList", storageSupplierDtoList);
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("eMsg", eMsg);
@@ -74,24 +89,39 @@ public class AdminSettlementSupplierController extends AbstractController{
             return sendErrMsgAndErrCode(e);
         }
         JSONArray jsonArray = new JSONArray();
-        for (StorageSupplierDto storageSupplierDto : storageSupplierDtoList){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("supplierName",storageSupplierDto.getSupplierName());
-            jsonObject.put("totalMoney", storageSupplierDto.getTotalMoney());
-            List<StorageItemDto> storageItemDtoList = storageSupplierDto.getStorageItemDtoList();
-            JSONArray childJsonArray = new JSONArray();
-            for (StorageItemDto storageItemDto : storageItemDtoList){
-                JSONObject childJsonObject = new JSONObject();
-                childJsonObject.put("itemName", storageItemDto.getItemName());
-                childJsonObject.put("itemQuantity", storageItemDto.getItemQuantity());
-                childJsonObject.put("itemMoney", storageItemDto.getItemMoney());
-                childJsonObject.put("handlerName", storageItemDto.getHandlerName());
-                childJsonObject.put("createdName", storageItemDto.getCreatedName());
-                childJsonArray.add(childJsonObject);
+        if (Assert.isNotNull(storageSupplierDtoList)
+                && storageSupplierDtoList.size() > 0){
+            Iterator<StorageSupplierDto> iter = storageSupplierDtoList.iterator();
+            while(iter.hasNext()){
+                StorageSupplierDto storageSupplierDto = iter.next();
+                if (Assert.isNull(storageSupplierDto.getStorageItemDtoList())
+                        || Assert.lessOrEqualZero(storageSupplierDto.getStorageItemDtoList().size())
+                        || storageSupplierDto.getTotalMoney().equals(BigDecimal.ZERO)){
+                    iter.remove();
+                }
             }
-            jsonObject.put("items", childJsonArray);
+        }
+        if (Assert.isNotNull(storageSupplierDtoList)
+                && storageSupplierDtoList.size() > 0) {
+            for (StorageSupplierDto storageSupplierDto : storageSupplierDtoList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("supplierName", storageSupplierDto.getSupplierName());
+                jsonObject.put("totalMoney", storageSupplierDto.getTotalMoney());
+                List<StorageItemDto> storageItemDtoList = storageSupplierDto.getStorageItemDtoList();
+                JSONArray childJsonArray = new JSONArray();
+                for (StorageItemDto storageItemDto : storageItemDtoList) {
+                    JSONObject childJsonObject = new JSONObject();
+                    childJsonObject.put("itemName", storageItemDto.getItemName());
+                    childJsonObject.put("itemQuantity", storageItemDto.getItemQuantity());
+                    childJsonObject.put("itemMoney", storageItemDto.getItemMoney());
+                    childJsonObject.put("handlerName", storageItemDto.getHandlerName());
+                    childJsonObject.put("createdName", storageItemDto.getCreatedName());
+                    childJsonArray.add(childJsonObject);
+                }
+                jsonObject.put("items", childJsonArray);
 
-            jsonArray.add(jsonObject);
+                jsonArray.add(jsonObject);
+            }
         }
         return sendJsonArray(jsonArray);
     }

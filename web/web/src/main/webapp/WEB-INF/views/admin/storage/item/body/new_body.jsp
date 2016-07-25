@@ -126,6 +126,15 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">出库方式</label>
+                        <div class="col-sm-6">
+                            <select class="w180 form-control" name="stockOutType">
+                                <option value="1">自动出库</option>
+                                <option value="2">手动出库</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>库存预警上限</label>
                         <div class="col-sm-9">
                             <input type="text" class="w180 J_storageWarning" data-valid-rule="isFloat" data-valid-tip="请输入库存预警上限|输入有误，请重新填写" name="maxStorageQuantity" value="">

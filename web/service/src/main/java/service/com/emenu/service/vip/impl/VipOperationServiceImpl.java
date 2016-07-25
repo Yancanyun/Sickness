@@ -101,7 +101,7 @@ public class VipOperationServiceImpl implements VipOperationService{
             VipInfo vipInfo = vipInfoService.queryByKeyWord(keyword);
             Assert.isNotNull(vipInfo,EmenuException.VipInfoNotExist);
             VipCard vipCard = vipCardService.queryByPartyId(vipInfo.getPartyId());
-            Assert.isNotNull(EmenuException.VipCardNotExist);
+            Assert.isNotNull(vipCard,EmenuException.VipCardNotExist);
             VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipInfo.getPartyId());
             VipRegisterDto vipRegisterDto = new VipRegisterDto();
             vipRegisterDto.setVipInfo(vipInfo);

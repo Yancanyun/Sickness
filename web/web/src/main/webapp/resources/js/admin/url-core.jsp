@@ -110,7 +110,7 @@
 
 
             //存放点管理
-            ['delDepot', site.staticWebsite + 'admin/storage/depot/ajax/&{id}', 'delete', '删除存放点'],
+            ['delDepot', site.website + 'admin/storage/depot/ajax/&{id}', 'delete', '删除存放点'],
 
             //结算中心管理
             ['getSettlementList', site.website + 'admin/storage/settlement/supplier/ajax/list', 'get', '获取结算列表'],
