@@ -2,6 +2,7 @@ package com.emenu.common.dto.rank;
 
 import com.emenu.common.entity.order.OrderDish;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,11 +13,11 @@ public class DishSaleRankDto {
     // 主键
     private Integer id;
 
-    // 所消费菜品集合
-    private List<OrderDish> orderDishList;
+    // 菜品(套餐)Id
+    private Integer dishId;
 
-    // 菜品名称
-    private String diahName;
+    // 菜品(套餐)名称
+    private String dishName;
 
     // 菜品大类名称
     private String tagName;
@@ -28,7 +29,7 @@ public class DishSaleRankDto {
     private Integer num;
 
     // 消费金额
-    private Integer consumeSum;
+    private BigDecimal consumeSum;
 
     public Integer getId() {
         return id;
@@ -38,20 +39,12 @@ public class DishSaleRankDto {
         this.id = id;
     }
 
-    public List<OrderDish> getOrderDishList() {
-        return orderDishList;
+    public String getDishName() {
+        return dishName;
     }
 
-    public void setOrderDishList(List<OrderDish> orderDishList) {
-        this.orderDishList = orderDishList;
-    }
-
-    public String getDiahName() {
-        return diahName;
-    }
-
-    public void setDiahName(String diahName) {
-        this.diahName = diahName;
+    public void setDishName(String diahName) {
+        this.dishName = diahName;
     }
 
     public String getTagName() {
@@ -78,11 +71,19 @@ public class DishSaleRankDto {
         this.num = num;
     }
 
-    public Integer getConsumeSum() {
+    public BigDecimal getConsumeSum() {
         return consumeSum;
     }
 
-    public void setConsumeSum(Integer consumeSum) {
+    public void setConsumeSum(BigDecimal consumeSum) {
         this.consumeSum = consumeSum;
+    }
+
+    public Integer getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(Integer dishId) {
+        this.dishId = dishId;
     }
 }

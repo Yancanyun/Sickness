@@ -3,6 +3,7 @@ package com.emenu.web.spring;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.dto.rank.DishSaleRankDto;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.bar.BarOrderDishNewService;
 import com.emenu.service.call.CallCacheService;
@@ -27,6 +28,7 @@ import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
+import com.emenu.service.rank.DishSaleRankService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.call.CallWaiterService;
@@ -34,6 +36,7 @@ import com.emenu.service.sms.SmsService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
+import com.emenu.service.rank.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
@@ -462,6 +465,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("smsService")
     protected static SmsService smsService;
+
+    // 菜品销售排行
+    @StaticAutoWire
+    @Qualifier("dishSaleRankService")
+    protected static DishSaleRankService dishSaleRankService;
 
     /**************************顾客点菜端**************************/
     //呼叫服务后台管理
