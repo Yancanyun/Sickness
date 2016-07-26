@@ -272,11 +272,9 @@ public class BarCheckoutController extends AbstractController {
                 throw SSException.get(EmenuException.TableIdError);
             }
 
-            List<Order> orderList = new ArrayList<Order>();
+            // 查询本餐台所有的订单菜品(套餐已被合并为一个订单菜品)
             List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
-
-            // 查本餐台的订单
-            orderList = orderService.listByTableIdAndStatus(tableId, 1);
+            orderDishDtoList = orderDishService.queryOrderDishAndCombinePackageByTableId(tableId);
 
             // 若已并台，则需要查询出与本餐台并台的所有餐台的订单
             if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
@@ -287,102 +285,43 @@ public class BarCheckoutController extends AbstractController {
                 }
                 // 与本餐台并台的所有餐台的订单
                 for (Table t : tableList) {
-                    orderList.addAll(orderService.listByTableIdAndStatus(t.getId(), 1));
+                    orderDishDtoList.addAll(orderDishService.queryOrderDishAndCombinePackageByTableId(t.getId()));
                 }
             }
-
-            if (Assert.isNotNull(orderList)) {
-                for (Order order : orderList) {
-                    Integer orderId = order.getId();
-                    orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
-                }
-            }
-            // 用来判断套餐标识是否出现过
-            HashMap<Integer, Integer> packageFlagMap = new HashMap<Integer, Integer>();
 
             if (Assert.isNotNull(orderDishDtoList)) {
                 for (OrderDishDto orderDishDto : orderDishDtoList) {
-                    // 非套餐且不为退菜时，按如下方法发数据
-                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsNotPackage.getId() &&
-                            orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId()) {
-                        JSONObject jsonObject = new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
 
-                        jsonObject.put("id", orderDishDto.getId());
-                        jsonObject.put("dishName", orderDishDto.getDishName());
-                        String assistantCode = "";
-                        DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
-                        assistantCode = dishDto.getAssistantCode();
-                        jsonObject.put("assistantCode", assistantCode);
-                        jsonObject.put("discount", orderDishDto.getDiscount().multiply(new BigDecimal(10)));
-                        jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
-                        String unitName = "";
-                        unitName = dishDto.getUnitName();
-                        jsonObject.put("unitName", unitName);
-                        jsonObject.put("salePrice", orderDishDto.getSalePrice());
-                        if (orderDishDto.getTasteName() == null) {
-                            jsonObject.put("tasteName", "");
-                        } else {
-                            jsonObject.put("tasteName", orderDishDto.getTasteName());
-                        }
-                        jsonObject.put("serveType", orderDishDto.getServeType());
-                        // 若没有并台，则直接显示该餐台的餐台名
-                        if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
-                            jsonObject.put("tableName", table.getName());
-                        } else {
-                            // 否则显示Order对应餐台的餐台名
-                            Order order = orderService.queryById(orderDishDto.getOrderId());
-                            Table t = tableService.queryById(order.getTableId());
-                            jsonObject.put("tableName", t.getName());
-                        }
-
-                        jsonArray.add(jsonObject);
+                    jsonObject.put("id", orderDishDto.getId());
+                    jsonObject.put("dishName", orderDishDto.getDishName());
+                    String assistantCode = "";
+                    DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                    assistantCode = dishDto.getAssistantCode();
+                    jsonObject.put("assistantCode", assistantCode);
+                    jsonObject.put("discount", orderDishDto.getDiscount().multiply(new BigDecimal(10)));
+                    jsonObject.put("dishQuantity", orderDishDto.getDishQuantity());
+                    String unitName = "";
+                    unitName = dishDto.getUnitName();
+                    jsonObject.put("unitName", unitName);
+                    jsonObject.put("salePrice", orderDishDto.getSalePrice());
+                    if (orderDishDto.getTasteName() == null) {
+                        jsonObject.put("tasteName", "");
+                    } else {
+                        jsonObject.put("tasteName", orderDishDto.getTasteName());
+                    }
+                    jsonObject.put("serveType", orderDishDto.getServeType());
+                    // 若没有并台，则直接显示该餐台的餐台名
+                    if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                        jsonObject.put("tableName", table.getName());
+                    } else {
+                        // 否则显示Order对应餐台的餐台名
+                        Order order = orderService.queryById(orderDishDto.getOrderId());
+                        Table t = tableService.queryById(order.getTableId());
+                        jsonObject.put("tableName", t.getName());
                     }
 
-                    // 是套餐且不为退菜时，按如下方法发数据(在数据库里套餐被拆成菜品，因而要做特殊处理)
-                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId() &&
-                            orderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId()) {
-                        JSONObject jsonObject = new JSONObject();
-
-                        // 没有出现过的套餐
-                        if (packageFlagMap.get(orderDishDto.getPackageFlag()) == null) {
-                            // 标记为出现过
-                            packageFlagMap.put(orderDishDto.getPackageFlag(), 1);
-
-                            // 通过packageId查询出菜品的信息
-                            DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
-                            // 原本的话套餐显示是单个菜品名字,这里要重新设置一下，设置成显示套餐的名字
-                            orderDishDto.setDishName(dishDto.getName());
-
-                            jsonObject.put("id", orderDishDto.getId());
-                            jsonObject.put("dishName", orderDishDto.getDishName());
-                            String assistantCode = "";
-                            assistantCode = dishDto.getAssistantCode();
-                            jsonObject.put("assistantCode", assistantCode);
-                            jsonObject.put("discount", orderDishDto.getDiscount().multiply(new BigDecimal(10)));
-                            jsonObject.put("dishQuantity", orderDishDto.getPackageQuantity());
-                            String unitName = "";
-                            unitName = dishDto.getUnitName();
-                            jsonObject.put("unitName", unitName);
-                            jsonObject.put("salePrice", orderDishDto.getSalePrice());
-                            if (orderDishDto.getTasteName() == null) {
-                                jsonObject.put("tasteName", "");
-                            } else {
-                                jsonObject.put("tasteName", orderDishDto.getTasteName());
-                            }
-                            jsonObject.put("serveType", orderDishDto.getServeType());
-                            // 若没有并台，则直接显示该餐台的餐台名
-                            if (!table.getStatus().equals(TableStatusEnums.Merged.getId())) {
-                                jsonObject.put("tableName", table.getName());
-                            } else {
-                                // 否则显示Order对应餐台的餐台名
-                                Order order = orderService.queryById(orderDishDto.getOrderId());
-                                Table t = tableService.queryById(order.getTableId());
-                                jsonObject.put("tableName", t.getName());
-                            }
-
-                            jsonArray.add(jsonObject);
-                        }
-                    }
+                    jsonArray.add(jsonObject);
                 }
             }
 

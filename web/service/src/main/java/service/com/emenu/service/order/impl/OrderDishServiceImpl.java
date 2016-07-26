@@ -193,6 +193,7 @@ public class OrderDishServiceImpl implements OrderDishService{
     public void newOrderDish(OrderDish orderDish) throws SSException {
         try {
             Assert.isNotNull(orderDish, EmenuException.OrderDishIsNotNull);
+            orderDish.setDiscount(new BigDecimal(10)); // 添加进来时，折扣默认都是10(100%)
             commonDao.insert(orderDish);
         }catch (Exception e){
             LogClerk.errLog.error(e);

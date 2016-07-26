@@ -116,9 +116,9 @@ public class MyOrderController  extends AbstractController {
                 if(tempOrderDishDto.getIsPackage()== PackageStatusEnums.IsNotPackage.getId()
                         &&tempOrderDishDto.getStatus()!= OrderDishStatusEnums.IsBack.getId())//非套餐，status为4的时候为退菜,退了的菜不做处理
                 {
-                    //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
-                    tempOrderDishDto.setPrice();
                     DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getDishId());//通过dishId查询出菜品的信息
+                    //设置一下定价,宝荣写的类里面没有定价属性，从DishDto中获取定价
+                    tempOrderDishDto.setPrice(dishDtoTemp.getPrice());
                     Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
                     if(unitTemp!=null)//若菜品单位不为空
                         tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
@@ -135,10 +135,10 @@ public class MyOrderController  extends AbstractController {
                     if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null)//没有出现过的套餐
                     {
                         packageFlagMap.put(tempOrderDishDto.getPackageFlag(),1);//标记为出现过
-                        //设置一下定价,宝荣写的类里面没有定价属性，但是定价属性可以通过售价和折扣计算得到
-                        tempOrderDishDto.setPrice();
                         DishDto dishDtoTemp = dishService.queryById(tempOrderDishDto.getPackageId());//通过packageId查询出菜品的信息
                         tempOrderDishDto.setDishName(dishDtoTemp.getName());//原本的话套餐显示是单个菜品名字,这里要重新设置一下,设置成显示套餐的名字
+                        //设置一下定价,宝荣写的类里面没有定价属性，从DishDto中获取定价
+                        tempOrderDishDto.setPrice(dishDtoTemp.getPrice());
                         Unit unitTemp = unitService.queryById(dishDtoTemp.getUnitId());//查询出菜品的单位
                         if(unitTemp!=null)//若菜品单位不为空
                             tempOrderDishDto.setUnitName(unitService.queryById(unitTemp.getId()).getName());
