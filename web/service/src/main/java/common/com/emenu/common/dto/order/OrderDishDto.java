@@ -351,4 +351,9 @@ public class OrderDishDto {
     public void setOrderTimeStr(String orderTimeStr) {
         this.orderTimeStr = orderTimeStr;
     }
+
+    public int compareTo(OrderDishDto order) {
+        // 只能对一个字段做比较，如果做整个对象的比较就实现不了按指定字段排序了。
+        return this.getId().compareTo(order.getId());
+    }
 }

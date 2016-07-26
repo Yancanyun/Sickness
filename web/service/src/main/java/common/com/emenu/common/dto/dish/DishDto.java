@@ -15,7 +15,7 @@ import java.util.List;
  * @author: zhangteng
  * @time: 2015/11/17 16:38
  **/
-public class DishDto {
+public class  DishDto {
     // 主键
     private Integer id;
 

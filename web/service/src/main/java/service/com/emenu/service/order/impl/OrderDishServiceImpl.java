@@ -460,9 +460,13 @@ public class OrderDishServiceImpl implements OrderDishService{
             Map<Integer,Integer> map = new HashMap<Integer,Integer>();
             for (OrderDishDto orderDishDto: orderDishChildrenList){
                 if (orderDishDto.getStatus() != OrderDishStatusEnums.IsBack.getId()){
-                    //是套餐并且未出现在Map里
+                    // 是套餐并且未出现在Map里
                     if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()
                             && map.get(orderDishDto.getPackageFlag()) == null){
+                        // 通过packageId查询出菜品的信息
+                        DishDto dishDtoTemp = dishService.queryById(orderDishDto.getPackageId());
+                        // 原本的话套餐显示是单个菜品名字,这里要重新设置一下,设置成显示套餐的名字
+                        orderDishDto.setDishName(dishDtoTemp.getName());
                         map.put(orderDishDto.getPackageFlag(),orderDishDto.getDishId());
                         orderDishDtoList.add(orderDishDto);
                     }

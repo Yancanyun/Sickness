@@ -197,7 +197,11 @@ public class OrderDishTest extends AbstractTestCase {
     }
     @Test
     public void queryOrderDishAndCombinePackageByTableId()throws SSException{
-        List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishListByTableId(4);
+        List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishAndCombinePackageByTableId(4);
+        //System.out.println("啦啦啦啦啦啦啦啦啦啦");
         System.out.println(orderDishDtoList.size());
+        for(OrderDishDto dto : orderDishDtoList) {
+            System.out.println(dto.getId()+dto.getDishName());
+        }
     }
 }

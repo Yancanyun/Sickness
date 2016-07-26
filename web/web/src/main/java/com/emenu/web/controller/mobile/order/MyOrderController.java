@@ -100,7 +100,8 @@ public class MyOrderController  extends AbstractController {
             model.addAttribute("tablePrice",table.getTableFee());//餐台费用
             model.addAttribute("tableName",table.getName());//餐桌的名称
 
-            orders = orderService.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());//查询出对应餐桌所有已下单的订单,已结账的订单不显示
+            // 查询出对应餐桌所有已下单的订单,已结账的订单不显示
+            orders = orderService.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());
             if(orders!=null)//存在对应餐桌已下单的订单
             {
                 for(Order orderDto:orders)
