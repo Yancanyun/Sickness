@@ -195,7 +195,7 @@ public class EmployeeController  extends AbstractController {
      * 去添加员工页
      * @return
      */
-    @Module(ModuleEnums.AdminUserManagementEmployeeNew)
+    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule = ModuleEnums.AdminUserManagementEmployee)
     @RequestMapping(value = "add",method = RequestMethod.GET)
     public String toNew(Model model){
         try{

@@ -48,7 +48,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>密码<!-- 新密码--> </label>
             <div class="col-sm-6">
-              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16)" value="" name="password" />
+              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16) || isNull" value="" name="password" />
             </div>
           </div>
           <div class="form-group">

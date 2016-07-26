@@ -30,6 +30,7 @@
                 dataRender: '#J_template',
                 url: 'check/ajax/list/',
                 pageSize: 10,
+                timeout: 100,
                 configUrl: function(url,page,me,prevPaginationData){
 //                    return url;
                      return url + '/' + page;

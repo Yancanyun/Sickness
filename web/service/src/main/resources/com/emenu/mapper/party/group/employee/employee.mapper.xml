@@ -69,7 +69,9 @@
     </select>
 
     <select id="queryByNumber" parameterType="String" resultMap="pw.Employee">
-        SELECT * FROM `t_party_employee` WHERE `employee_number` = #{employeeNumber}
+        SELECT * FROM `t_party_employee`
+        WHERE `employee_number` = #{employeeNumber}
+          AND `status` != 3
     </select>
 
     <select id="queryByPhone" parameterType="String" resultMap="pw.Employee">
