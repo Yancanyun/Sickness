@@ -20,9 +20,9 @@ public class BackDishTest extends AbstractTestCase{
 
     @Test
     public void backDishByOrderDishId() throws SSException{
-        Integer orderDishId = 137;
-        Float backNumber = 0.5f;
-        String backRemarks = "";
+        Integer orderDishId = 381;
+        Float backNumber = 1f;
+        String backRemarks = "48khkcvhk";
         Integer partyId = 2;
         backDishService.backDishByOrderDishId(orderDishId, backNumber, backRemarks, partyId);
         System.out.println("退菜成功");

@@ -11,6 +11,7 @@ import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
+import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
@@ -55,7 +56,7 @@ public class BarBackDishController extends AbstractController {
             JSONObject jsonObject = new JSONObject();
 
             // 查询本餐台所有的订单菜品
-            List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishListByTableId(tableId);
+            List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishAndCombinePackageByTableId(tableId);
 
             // 消费清单列表
             JSONArray orderDishList = new JSONArray();
@@ -63,8 +64,20 @@ public class BarBackDishController extends AbstractController {
                 for(OrderDishDto orderDishDto : orderDishDtoList) {
                     JSONObject orderDishJsonObject = new JSONObject();
 
-                    // 查询菜品信息
-                    DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                        // 查询套餐信息
+                        DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
+                        orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
+                        orderDishJsonObject.put("unitName",dishDto.getUnitName());
+                        // 判断整个套餐的状态
+                        orderDishJsonObject.put("status",orderDishService.queryPackageStatusByFirstOrderDishId(orderDishDto.getId()).getId());
+                    }else {
+                        // 查询菜品信息
+                        DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                        orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
+                        orderDishJsonObject.put("unitName",dishDto.getUnitName());
+                        orderDishJsonObject.put("status",orderDishDto.getStatus());
+                    }
 
                     orderDishJsonObject.put("orderDishId", orderDishDto.getId());
                     orderDishJsonObject.put("dishName", orderDishDto.getDishName());
@@ -75,11 +88,7 @@ public class BarBackDishController extends AbstractController {
                     } else {
                         orderDishJsonObject.put("taste", orderDishDto.getTasteName());
                     }
-
-                    orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
-                    orderDishJsonObject.put("unitName",dishDto.getUnitName());
                     orderDishJsonObject.put("serveType",orderDishDto.getServeType());
-                    orderDishJsonObject.put("status",orderDishDto.getStatus());
                     orderDishJsonObject.put("orderTime",orderDishDto.getOrderTimeStr());
                     orderDishList.add(orderDishJsonObject);
                 }

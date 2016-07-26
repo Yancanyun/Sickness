@@ -122,7 +122,7 @@ public class VipOperationServiceImpl implements VipOperationService{
                     || Assert.lessOrEqualZero(operator)){
                 throw SSException.get(EmenuException.PartyIdError);
             }
-            if (Assert.lessOrEqualZero(rechargePlanId)){
+            if (Assert.lessZero(rechargePlanId)){
                 throw SSException.get(EmenuException.RechargePlanIdError);
             }
             // 查询充值方案

@@ -24,7 +24,7 @@ public class ConsumptionActivity extends AbstractEntity{
     private Integer id;
 
     //会员partyId
-    @Column(name = "partyId")
+    @Column(name = "party_id")
     private Integer partyId;
 
     //充值方案id

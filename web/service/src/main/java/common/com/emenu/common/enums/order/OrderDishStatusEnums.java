@@ -12,7 +12,7 @@ import java.util.Map;
 public enum OrderDishStatusEnums {
     IsBooked(1, "已下单"),
     IsMake(2, "正在做"),
-    IsFinsh(3,"已上菜"),
+    IsFinish(3,"已上菜"),
     IsBack(4,"已退菜"),
     ;
 

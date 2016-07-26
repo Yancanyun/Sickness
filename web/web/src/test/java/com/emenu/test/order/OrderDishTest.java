@@ -204,4 +204,21 @@ public class OrderDishTest extends AbstractTestCase {
             System.out.println(dto.getId()+dto.getDishName());
         }
     }
+
+    @Test
+    public void queryPackageOrderDishByFirstOrderDishId() throws SSException{
+        Integer orderDishId = 381;
+        List<OrderDish> orderDishList = orderDishService.queryPackageOrderDishByFirstOrderDishId(orderDishId);
+        for (OrderDish orderDish: orderDishList){
+            System.out.print("菜品id：" + orderDish.getDishId());
+            System.out.println(" 菜品数量：" + orderDish.getDishQuantity());
+        }
+    }
+
+    @Test
+    public void queryPackageStatusByFirstOrderDishId() throws SSException{
+        Integer orderDishId = 381;
+        OrderDishStatusEnums orderDishStatusEnums = orderDishService.queryPackageStatusByFirstOrderDishId(orderDishId);
+        System.out.println("套餐的状态：" + orderDishStatusEnums.getStatus());
+    }
 }

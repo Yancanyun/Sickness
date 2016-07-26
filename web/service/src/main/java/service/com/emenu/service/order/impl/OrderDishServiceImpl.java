@@ -258,11 +258,11 @@ public class OrderDishServiceImpl implements OrderDishService{
                 {
                     if(orderDish.getStatus()== OrderDishStatusEnums.IsBooked.getId())//划单的菜品状态必须是2.正在做 1为已下单,打印了菜品的话菜品的状态会从1变为2
                         throw SSException.get(EmenuException.OrderDishStatusWrong);
-                    else if(orderDish.getStatus()==OrderDishStatusEnums.IsFinsh.getId())
+                    else if(orderDish.getStatus()==OrderDishStatusEnums.IsFinish.getId())
                         throw SSException.get(EmenuException.OrderDishWipeIsFinsh);
                     else//修改订单菜品状态
                     {
-                        orderDish.setStatus(OrderDishStatusEnums.IsFinsh.getId());
+                        orderDish.setStatus(OrderDishStatusEnums.IsFinish.getId());
                         this.updateOrderDish(orderDish);
                     }
                 }
@@ -476,6 +476,69 @@ public class OrderDishServiceImpl implements OrderDishService{
                 }
             }
             return orderDishDtoList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
+        }
+    }
+
+    @Override
+    public List<OrderDish> queryPackageOrderDishByFirstOrderDishId(Integer orderDishId) throws SSException{
+        List<OrderDish> orderDishList = new ArrayList<OrderDish>();
+        try{
+            if(Assert.lessOrEqualZero(orderDishId)){
+                throw SSException.get(EmenuException.OrderDishIdError);
+            }
+            OrderDish orderDish = this.queryById(orderDishId);
+            Integer packageFlag = orderDish.getPackageFlag();
+            // 查询出该所有的订单菜品
+            List<OrderDish> allOrderDish = this.listByOrderId(orderDish.getOrderId());
+            for (OrderDish tempOrderDish: allOrderDish){
+                if (tempOrderDish.getPackageFlag() == packageFlag){
+                    orderDishList.add(tempOrderDish);
+                }
+            }
+            return orderDishList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
+        }
+    }
+
+    @Override
+    public OrderDishStatusEnums queryPackageStatusByFirstOrderDishId(Integer orderDishId) throws SSException{
+        List<OrderDish> orderDishList = Collections.emptyList();
+        try{
+            if(Assert.lessOrEqualZero(orderDishId)){
+                throw SSException.get(EmenuException.OrderDishIdError);
+            }
+            OrderDish firstOrderDish = this.queryById(orderDishId);
+            if (firstOrderDish.getStatus() == OrderDishStatusEnums.IsBack.getId()){
+                return OrderDishStatusEnums.IsBack;
+            }
+            // 取到套餐下的所有菜品
+            orderDishList = this.queryPackageOrderDishByFirstOrderDishId(orderDishId);
+            Integer isBooked = 0; // 已下单的菜品数量
+            Integer isFinish = 0; // 已经完成的菜品数量
+            for (OrderDish orderDish : orderDishList){
+                Integer status = orderDish.getStatus();
+                // 统计套餐下所有菜品的状态
+                if (status == OrderDishStatusEnums.IsBooked.getId()){
+                    isBooked++;
+                }else if (status == OrderDishStatusEnums.IsFinish.getId()){
+                    isFinish++;
+                }
+            }
+
+            // 判断套餐状态
+            Integer packageDishNumber = orderDishList.size();
+            if(isBooked == packageDishNumber){
+                return OrderDishStatusEnums.IsBooked;
+            } else if (isFinish == packageDishNumber){
+                return OrderDishStatusEnums.IsFinish;
+            } else {
+                return OrderDishStatusEnums.IsMake;
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderDishListFailed, e);

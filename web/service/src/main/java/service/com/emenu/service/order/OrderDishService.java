@@ -5,6 +5,7 @@ import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 import org.apache.xpath.operations.Or;
@@ -178,4 +179,20 @@ public interface OrderDishService {
      * @throws SSException
      */
     public List<OrderDishDto> queryOrderDishAndCombinePackageByTableId(Integer tableId) throws SSException;
+
+    /**
+     * 根据套餐第一个菜品的orderDishId，查询整个套餐的订单菜品
+     * @param orderDishId
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDish> queryPackageOrderDishByFirstOrderDishId(Integer orderDishId) throws SSException;
+
+    /**
+     * 根据套餐第一个菜品的orderDishId判断整个套餐的状态
+     * @param orderDishId
+     * @return
+     * @throws SSException
+     */
+    public OrderDishStatusEnums queryPackageStatusByFirstOrderDishId(Integer orderDishId) throws SSException;
 }

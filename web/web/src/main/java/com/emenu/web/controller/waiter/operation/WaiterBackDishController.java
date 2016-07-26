@@ -15,6 +15,8 @@ import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishPresentedEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
@@ -81,15 +83,7 @@ public class WaiterBackDishController extends AbstractController {
             }
 
             // 查询本餐台所有的订单菜品
-            List<Order> orderList = new ArrayList<Order>();
-            List<OrderDishDto> orderDishDtoList = new ArrayList<OrderDishDto>();
-            orderList = orderService.listByTableIdAndStatus(tableId,  OrderStatusEnums.IsBooked.getId());// 查询出对应餐桌所有已下单的订单, 已结账的订单不显示
-            if (Assert.isNotNull(orderList)) {
-                for (Order order : orderList) {
-                    Integer orderId = order.getId();
-                    orderDishDtoList.addAll(orderDishService.listDtoByOrderId(orderId));
-                }
-            }
+            List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishAndCombinePackageByTableId(tableId);
 
             JSONArray orderDishList = new JSONArray();
             if (Assert.isNotNull(orderDishDtoList)) {
@@ -105,9 +99,14 @@ public class WaiterBackDishController extends AbstractController {
                     } else {
                         orderDishJsonObject.put("taste", orderDishDto.getTasteName());
                     }
-                    orderDishJsonObject.put("dishStatus", orderDishDto.getStatus());
                     orderDishJsonObject.put("remarks", orderDishDto.getRemark());
                     orderDishList.add(orderDishJsonObject);
+                    // 状态返回，套餐状态需判断
+                    if (orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                        orderDishJsonObject.put("dishStatus", orderDishService.queryPackageStatusByFirstOrderDishId(orderDishDto.getId()).getId());
+                    }else {
+                        orderDishJsonObject.put("dishStatus", orderDishDto.getStatus());
+                    }
                 }
                 jsonObject.put("orderDishList",orderDishList);
                 Table table = tableService.queryById(tableId);
@@ -159,7 +158,13 @@ public class WaiterBackDishController extends AbstractController {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("orderDishId",orderDishId);
-            jsonObject.put("orderDishName",orderDishDto.getDishName());
+            // 判断，如果是套餐，则显示套餐的名称
+            if (orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
+                jsonObject.put("orderDishName",dishDto.getName());
+            }else {
+                jsonObject.put("orderDishName",orderDishDto.getDishName());
+            }
             if (taste != null){
                 jsonObject.put("taste",taste.getName());
             }else {
