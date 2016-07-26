@@ -78,7 +78,7 @@
                 <div class="text-right">
                     <!-- 添加了库存盘点类名J_inventory，href="javascript:;"-->
                     <a href="javascript:;" class="btn btn-warning margin-bottom-15 J_inventory">库存盘点</a>
-                    <a href="?sdff" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
+                    <a href="${website}admin/storage/settlement/check/export" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
