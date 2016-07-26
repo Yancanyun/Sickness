@@ -62,7 +62,7 @@
               <span class="requires">*</span>结算周期
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="settlementCycle" value="" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入" data-valid-rule="notNegativeNumber"/>&nbsp;月
+              <input class="w180" type="text" name="settlementCycle" value="" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入" data-valid-rule="notNegativeNumber & isInteger"/>&nbsp;月
             </div>
           </div>
           <div class="form-group">

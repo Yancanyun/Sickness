@@ -104,9 +104,12 @@ public class WaiterBackDishController extends AbstractController {
                     // 状态返回，套餐状态需判断
                     if (orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
                         orderDishJsonObject.put("dishStatus", orderDishService.queryPackageStatusByFirstOrderDishId(orderDishDto.getId()).getId());
+                        //orderDishJsonObject.put("unitName",dishService.queryById(orderDishDto.getPackageId()).getUnitName());
                     }else {
                         orderDishJsonObject.put("dishStatus", orderDishDto.getStatus());
+                        //orderDishJsonObject.put("unitName",orderDishDto.getUnitName());
                     }
+                    orderDishJsonObject.put("unitName",orderDishDto.getUnitName());
                 }
                 jsonObject.put("orderDishList",orderDishList);
                 Table table = tableService.queryById(tableId);

@@ -26,7 +26,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">关键字</label>
             <div class="col-sm-3">
-              <input type="text" class="col-sm-3 form-control J_key" placeholder="请输入关键字" name="keyword" value="">
+              <input type="text" class="col-sm-3 form-control J_key" placeholder="请输入姓名/电话" name="keyword" value="">
             </div>
           </div>
           <div class="col-sm-6 col-sm-offset-3">
