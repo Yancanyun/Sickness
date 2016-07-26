@@ -40,4 +40,11 @@
        where  t_order.created_time>=#{startTime}
        AND #{endTime}>=t_order.created_time
     </select>
+
+    <select id="queryOrdersByCheckoutId" resultMap="pw.Order">
+        SELECT *
+        FROM t_checkout, t_order
+        WHERE t_checkout.id = t_order.checkout_id
+        AND t_checkout.id=#{checkoutId}
+    </select>
 </mapper>

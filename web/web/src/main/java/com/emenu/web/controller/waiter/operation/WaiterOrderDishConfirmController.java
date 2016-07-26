@@ -353,24 +353,31 @@ public class WaiterOrderDishConfirmController extends AbstractController{
             //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
+                // 餐桌状态为占用已结账的话则不是第一次消费
+                if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId()){
+                    checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
+                    // 第二次消费的话餐桌状态由占有已经账变为占用未结账
+                    tableService.updateStatus(tableId,TableStatusEnums.Uncheckouted.getId());
+                }
+                else
+                    checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());
                 checkout.setTableId(tableId);
                 checkout.setCreatedTime(new Date());
                 checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
                 checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
+                // 获取到新生成的结账单,主要是要获取到checkOut的Id这个属性
+                checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
             }
 
             //新增订单到数据表
             Order order = new Order();
             order.setCheckoutId(checkout.getId());
             order.setCreatedTime(new Date());
-            //order.setEmployeePartyId();
-            //order.setLoginType();
             order.setOrderRemark(orderRemark);
             order.setOrderServeType(orderServeType);
             order.setStatus(OrderStatusEnums.IsBooked.getId());
             order.setTableId(tableId);
             order.setIsSettlemented(OrderSettlementStatusEnums.IsNotSettlement.getId());//订单是否被盘点过
-            //order.setVipPartyId();
             orderService.newOrder(order);
 
             //新增订单菜品到数据表

@@ -94,15 +94,38 @@
                   </p>
                     <c:choose>
                       <c:when test="${dto.isPackage eq 0}">
-                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
-                        <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                        <c:choose>
+                          <c:when test="${dto.status eq 1}">
+                            <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                          <c:when test="${dto.status eq 2}">
+                            <p class="ordered-number">正在做，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                          <c:when test="${dto.status eq 3}">
+                            <p class="ordered-number">已上菜，数量 × <span class="J_orderedDishNum">${dto.dishQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                        </c:choose>
                        </c:when>
                       <c:otherwise>
-                        <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
-                          <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                        <c:choose>
+                          <c:when test="${dto.status eq 1}">
+                            <p class="ordered-number">已下单，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                          <c:when test="${dto.status eq 2}">
+                            <p class="ordered-number">正在做，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                          <c:when test="${dto.status eq 3}">
+                            <p class="ordered-number">已上菜，数量 × <span class="J_orderedDishNum">${dto.packageQuantity}</span>
+                              <span class =ordered-dish-unit>${dto.unitName}</span></p>
+                          </c:when>
+                        </c:choose>
                       </c:otherwise>
                      </c:choose>
-
                   <p class="ordered-remark-info J_remarks">${dto.remark}</p>
                 </div>
                   <button class="J_delete">删除</button>

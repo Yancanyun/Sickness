@@ -80,4 +80,10 @@ public class OrderTest extends AbstractTestCase {
         startTime.setTime(9999);
         orderService.queryOrderByTimePeroid1(startTime,new Date());
     }
+
+    @Test
+    public void testQueryOrderByCheckoutId() throws SSException{
+
+        orderService.queryOrdersByCheckoutId(40);
+    }
 }

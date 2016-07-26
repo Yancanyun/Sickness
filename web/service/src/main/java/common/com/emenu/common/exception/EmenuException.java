@@ -279,6 +279,7 @@ public enum EmenuException implements IBizExceptionMes {
     CountNotResponseTotalMessageFail("查询服务员未应答的服务请求总数失败",4133),
     QueryCallByIdFail("根据服务的Id查询服务请求失败",4134),
     ResponseCallFail("应答服务请求失败",4135),
+    DelCallCachesByPartyIdFail("删除服务员已经处理的服务请求失败",4136),
 
     //基本信息管理
     //搜索风向标
@@ -334,6 +335,8 @@ public enum EmenuException implements IBizExceptionMes {
     DelPrinterDishError("删除打印机与菜品关联失败",5056),
     PrinterIsUsing("打印机正在被使用，请取消所有关联菜品分类后重试",5057),
     PrinterDishExist("关联信息已存在",5058),
+    BarPrinterIsNotExistOrIpNotSet("未设置吧台打印机或打印机Ip地址未设置",5059),
+    PrinterConnectFaiil("打印机连接失败",5060),
 
     //用户管理模块
     QueryEmployeeInfoFail("获取员工信息失败",6001),
@@ -620,6 +623,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderDishListFailed("查询餐台订单菜品失败",10063),
     QueryBackDishListFailed("查询退菜菜品失败",10063),
     OrderDishCacheNotExist("缓存中不存在该菜品",10064),
+    QueryOrderByCheckoutIdFail("根据结账单id查询订单失败",10065),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

@@ -7,7 +7,9 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.cache.call.CallCache;
 import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.call.CallCacheResponseEnums;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -83,10 +85,11 @@ public class MobileCallController  extends AbstractController {
         try
         {
            table = tableService.queryById(tableId);
-            if(table.getStatus()!=0&&table.getStatus()!=6)//0为停用状态,6为删除状态,这两种状态不能发送请求
+            if(table.getStatus()!= TableStatusEnums.Disabled.getId()
+                    &&table.getStatus()!=TableStatusEnums.Deleted.getId())//0为停用状态,6为删除状态,这两种状态不能发送请求
             {
                 callCache.setCallTime(new Date());//发出时间
-                callCache.setStatus(1);//服务员未响应为1 响应了为0
+                callCache.setStatus(CallCacheResponseEnums.IsNotResponse.getId());//服务员未响应为1 响应了为0
                 callCache.setTableId(tableId);
                 callCacheService.addCallCache(tableId,callCache);
                 return sendJsonObject(AJAX_SUCCESS_CODE);

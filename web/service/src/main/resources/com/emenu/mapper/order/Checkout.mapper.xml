@@ -9,4 +9,5 @@
         FROM `t_checkout`
         WHERE t_checkout.`table_id` = #{tableId} AND t_checkout.`status` = #{status}
     </select>
+
 </mapper>

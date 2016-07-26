@@ -252,4 +252,20 @@ public class OrderServiceImpl implements OrderService{
             throw SSException.get(EmenuException.ReturnTableOrderTotalMoneyFail,e);
         }
     }
+
+    @Override
+    public List<Order> queryOrdersByCheckoutId(Integer checkoutId) throws SSException{
+
+        List<Order> orders = new ArrayList<Order>();
+        try{
+            if (!Assert.lessOrEqualZero(checkoutId)){
+                orders = orderMapper.queryOrdersByCheckoutId(checkoutId);
+            }
+
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderByCheckoutIdFail,e);
+        }
+        return orders;
+    }
 }

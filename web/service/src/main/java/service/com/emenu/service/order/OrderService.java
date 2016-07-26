@@ -93,4 +93,12 @@ public interface OrderService {
      * @throws SSException
      */
     public Order queryById(Integer orderId) throws SSException;
+
+    /**
+     * 根据checkoutId查询订单
+     * @param checkoutId
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrdersByCheckoutId(Integer checkoutId) throws SSException;
 }

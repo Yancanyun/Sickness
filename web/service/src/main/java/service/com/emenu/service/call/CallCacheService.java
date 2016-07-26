@@ -1,5 +1,6 @@
 package com.emenu.service.call;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.cache.call.CallCache;
 import com.emenu.common.cache.call.TableCallCache;
@@ -65,10 +66,11 @@ public interface CallCacheService {
 
     /**
      * 根据服务类型的Id和partyId来获取相同服务类型的请求
+     * 若查询的是全部的请求则id为空
      * @param id
      * @throws SSException
      */
-    public JSONObject queryCallById(Integer id,Integer partyId) throws SSException;
+    public JSONArray queryCallById(Integer id,Integer partyId) throws SSException;
 
     /**
      * 应答服务请求

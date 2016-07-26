@@ -1,6 +1,7 @@
 package com.emenu.mapper.order;
 
 import com.emenu.common.entity.order.Checkout;
+import com.emenu.common.entity.order.Order;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface CheckoutMapper {
      */
     public Checkout queryByTableIdAndStatus(@Param("tableId")int tableId,
                                             @Param("status")int status) throws Exception;
+
 }

@@ -355,12 +355,15 @@ public class BarNewOrderDishController extends AbstractController{
         try {
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
-            // 新增结账单到数据表
+            //新增结账单到数据表
             if (checkout == null) {
                 checkout = new Checkout();
                 // 餐桌状态为占用已结账的话则不是第一次消费
-                if(tableService.queryById(tableId).getStatus()== TableStatusEnums.Checkouted.getId())
+                if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId()){
                     checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
+                    // 第二次消费的话餐桌状态由占有已经账变为占用未结账
+                    tableService.updateStatus(tableId,TableStatusEnums.Uncheckouted.getId());
+                }
                 else
                     checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());
                 checkout.setTableId(tableId);

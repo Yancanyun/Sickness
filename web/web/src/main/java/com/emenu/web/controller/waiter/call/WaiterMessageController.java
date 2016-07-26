@@ -51,6 +51,9 @@ public class WaiterMessageController extends AbstractController {
             temp = httpSession.getAttribute("partyId").toString();
             partyId = Integer.parseInt(temp);
             jsonObject.put("totalMessage",callCacheService.countNotResponseTotalMessage(partyId));
+            // 没有消息的话返回code 1
+            if(callCacheService.countNotResponseTotalMessage(partyId)==0)
+                return sendJsonObject(AJAX_FAILURE_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -95,20 +98,20 @@ public class WaiterMessageController extends AbstractController {
     @ResponseBody
     public JSONObject listCallById(@RequestParam("id")Integer id,
                                    HttpSession httpSession) {
-        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
         Integer partyId;
         String temp;
         try{
             // 首先获取服务员的partyId
             temp = httpSession.getAttribute("partyId").toString();
             partyId = Integer.parseInt(temp);
-            jsonObject=callCacheService.queryCallById(id,partyId);
+            jsonArray=callCacheService.queryCallById(id,partyId);
 
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        return sendJsonArray(jsonArray,AJAX_SUCCESS_CODE);
     }
 
     /**

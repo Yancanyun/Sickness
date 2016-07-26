@@ -58,4 +58,12 @@ public interface OrderMapper {
      */
     public List<Order> queryOrderByTimePeroid2(@Param("startTime") Date startTime
             ,@Param("endTime") Date endTime) throws Exception;
+
+    /**
+     * 根据checkoutId查询订单
+     * @param checkoutId
+     * @return
+     * @throws Exception
+     */
+    public List<Order> queryOrdersByCheckoutId(@Param("checkoutId")Integer checkoutId) throws Exception;
 }

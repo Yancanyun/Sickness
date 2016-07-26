@@ -103,4 +103,14 @@ public interface CheckoutService {
      * @author yangch
      */
     public Boolean isPrinterOk() throws SSException;
+
+    /**
+     * 结账单的状态为已结账后打印
+     * 吧台打印结账单(并桌的话则会将多个结账单合并到一起打印)
+     * @throws SSException
+     * @param checkouts
+     *
+     * @author quanyibo
+     */
+    public void printCheckOut(List<Checkout> checkouts) throws SSException;
 }
