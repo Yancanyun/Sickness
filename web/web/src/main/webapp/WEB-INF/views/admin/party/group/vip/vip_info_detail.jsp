@@ -8,5 +8,4 @@
 <tiles:insertDefinition name="admin">
   <tiles:putAttribute name="title" value="${webTitle}"/>
   <tiles:putAttribute name="body" value="/WEB-INF/views/admin/party/group/vip/body/detail_body.jsp"/>
-  <tiles:putAttribute name="script" value="/WEB-INF/views/admin/party/group/vip/inc/detail_script.jsp"/>
 </tiles:insertDefinition>

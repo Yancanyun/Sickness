@@ -5,15 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
+import com.emenu.common.entity.vip.ConsumptionActivity;
 import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
+import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.enums.vip.VipCardStatusEnums;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +83,7 @@ public class VipInfoController extends AbstractController {
                 jsonObject.put("name", vipInfo.getName());
                 jsonObject.put("phone", vipInfo.getPhone());
                 jsonObject.put("status", vipInfo.getStatus());
+                jsonObject.put("partyId", vipInfo.getPartyId());
 
                 //获取会员卡号
                 Integer partyId = vipInfo.getPartyId();
@@ -306,4 +311,87 @@ public class VipInfoController extends AbstractController {
         return "admin/party/group/vip/vip_info_detail";
     }
 
+    /**
+     * 去会员消费详情列表页
+     * @param partyId
+     * @param model
+     * @return
+     *
+     * @author yangch
+     * @date 2016/7/26 09:50
+     */
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoConsumption)
+    @RequestMapping(value = "consumption/{partyId}", method = RequestMethod.GET)
+    public String toList(@PathVariable("partyId") Integer partyId, Model model) {
+        model.addAttribute("partyId", partyId);
+
+        return "admin/party/group/vip/vip_consumption_list";
+    }
+
+    /**
+     * Ajax 获取消费详情列表
+     * @param curPage
+     * @param pageSize
+     * @param partyId
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminVipInfo , extModule = ModuleEnums.AdminVipInfoConsumption)
+    @RequestMapping(value = "ajax/consumption/list/{curPage}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject ajaxConsumptionList(@PathVariable("curPage") Integer curPage,
+                                          @RequestParam Integer pageSize,
+                                          @RequestParam("partyId") Integer partyId,
+                                          @RequestParam(required = false) Date startTime,
+                                          @RequestParam(required = false) Date endTime) {
+        List<ConsumptionActivity> consumptionActivityList = Collections.emptyList();
+        try {
+            // 将结束时间设置为当天的最后一秒，以查询当天的记录
+            if (endTime != null) {
+                endTime.setHours(23);
+                endTime.setMinutes(59);
+                endTime.setSeconds(59);
+            }
+
+            JSONArray jsonArray = new JSONArray();
+            consumptionActivityList = consumptionActivityService.listByPartyIdAndPageAndDate(partyId, curPage, pageSize, startTime, endTime);
+
+            for (ConsumptionActivity consumptionActivity : consumptionActivityList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("consumptionId", consumptionActivity.getId());
+                if (Assert.isNotNull(consumptionActivity.getCreatedTime())) {
+                    jsonObject.put("consumptionTime", DateUtils.formatDatetime(consumptionActivity.getCreatedTime()));
+                } else {
+                    jsonObject.put("consumptionTime", "");
+                }
+                String type = "";
+                if (consumptionActivity.getType() == ConsumptionActivityTypeEnums.Consumption.getId()) {
+                    type = "消费";
+                }
+                if (consumptionActivity.getType() == ConsumptionActivityTypeEnums.Recharge.getId()) {
+                    type = "充值";
+                }
+                jsonObject.put("type", type);
+                jsonObject.put("oldMoney", consumptionActivity.getOriginalAmount());
+                if (consumptionActivity.getType() == ConsumptionActivityTypeEnums.Consumption.getId()) {
+                    jsonObject.put("consumptionMoney", "-" + consumptionActivity.getConsumptionAmount());
+                }
+                if (consumptionActivity.getType() == ConsumptionActivityTypeEnums.Recharge.getId()) {
+                    jsonObject.put("consumptionMoney", "+" + consumptionActivity.getConsumptionAmount());
+                }
+                jsonObject.put("realMoney", consumptionActivity.getActualPayment());
+                jsonObject.put("newMoney", consumptionActivity.getResidualAmount());
+                jsonObject.put("operName", consumptionActivity.getOperator());
+
+                jsonArray.add(jsonObject);
+            }
+
+            Integer dataCount = 0;
+            dataCount = consumptionActivityService.countByPartyIdAndDate(partyId, startTime, endTime);
+
+            return sendJsonArray(jsonArray, dataCount);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
 }

@@ -163,6 +163,7 @@ public enum ModuleEnums {
     AdminVipInfoDetail("Admin:User:Management:Vip:VipInfo:Detail"),
     AdminVipInfoDel("Admin:User:Management:Vip:VipInfo:Del"),
     AdminVipInfoSearch("Admin:User:Management:Vip:VipInfo:Search"),
+    AdminVipInfoConsumption("Admin:User:Management:Vip:VipInfo:Consumption"),
 
     //员工管理
 

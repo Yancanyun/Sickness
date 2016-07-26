@@ -535,6 +535,9 @@ public enum EmenuException implements IBizExceptionMes {
     VipInfoNotExist("会员不存在",80149),
     VipCardNotExist("会员卡号不存在",80150),
 
+    // 会员消费详情
+    QueryConsumptionActivityFail("查询会员消费详情失败", 8180),
+
     //成本卡原料
     IngredientIdError("原料id错误",8120),
     CostCardIdError("成本卡id错误",8121),

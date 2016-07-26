@@ -196,7 +196,9 @@
                 <li <c:if test="${MethodModule eq 'Admin:User:Management:Vip:VipInfo'}">class="active"</c:if>>
                     <a class="J_menu" href="${website}admin/party/group/vip/">会员管理</a>
                     <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:New'
-                                            or ExtModule eq 'Admin:User:Management:Vip:VipInfo:Update'}">
+                                            or ExtModule eq 'Admin:User:Management:Vip:VipInfo:Update'
+                                            or ExtModule eq 'Admin:User:Management:Vip:VipInfo:Detail'
+                                            or ExtModule eq 'Admin:User:Management:Vip:VipInfo:Consumption'}">
                         <ul>
                             <li <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:New'}">class="active" </c:if>>
                                 <a href="${website}admin/party/group/vip/new">添加会员</a>
@@ -204,6 +206,16 @@
                             <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:Update'}">
                                 <li class="active">
                                     <a href="#">修改会员</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:Detail'}">
+                                <li class="active">
+                                    <a href="#">查看详情</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${ExtModule eq 'Admin:User:Management:Vip:VipInfo:Consumption'}">
+                                <li class="active">
+                                    <a href="#">消费详情列表</a>
                                 </li>
                             </c:if>
                         </ul>

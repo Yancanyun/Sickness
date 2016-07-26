@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.emenu.mapper.vip.ConsumptionActivityMapper">
+    <select id="listByPartyIdAndPageAndDate" resultMap="pw.ConsumptionActivity">
+        SELECT *
+        FROM `t_vip_consumption_activity`
+        WHERE `party_id` = #{partyId}
+        <if test="startTime != null">
+            AND `created_time` &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND `created_time` &lt;= #{endTime}
+        </if>
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByPartyIdAndPageAndDate" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_vip_consumption_activity`
+        WHERE `party_id` = #{partyId}
+        <if test="startTime != null">
+            AND `created_time` &gt;= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND `created_time` &lt;= #{endTime}
+        </if>
+    </select>
+</mapper>

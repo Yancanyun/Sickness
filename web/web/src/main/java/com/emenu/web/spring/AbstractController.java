@@ -285,6 +285,10 @@ public class AbstractController extends Base {
     @Qualifier("vipOperationService")
     protected static VipOperationService vipOperationService;
 
+    @StaticAutoWire
+    @Qualifier("consumptionActivityService")
+    protected static ConsumptionActivityService consumptionActivityService;
+
     //菜品和原料单位
     @StaticAutoWire
     @Qualifier("unitService")

@@ -3,21 +3,37 @@ package com.emenu.service.vip;
 import com.emenu.common.entity.vip.ConsumptionActivity;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * ConsumptionActivityService
- * 充值消费记录Service
  *
- * @author Wang LM
- * @date 2016/1/18 19:51
+ * @author: yangch
+ * @time: 2016/7/26 10:02
  */
 public interface ConsumptionActivityService {
-
     /**
-     * 新增充值记录
-     *
-     * @param consumptionActivity
+     * 根据会员PartyId及分页列出消费详情
+     * @param partyId
+     * @param curPage
+     * @param pageSize
      * @return
      * @throws SSException
      */
-    public ConsumptionActivity newRechargeRecord(ConsumptionActivity consumptionActivity) throws SSException;
+    public List<ConsumptionActivity> listByPartyIdAndPageAndDate(int partyId,
+                                                                 int curPage,
+                                                                 int pageSize,
+                                                                 Date startTime,
+                                                                 Date endTime) throws SSException;
+
+    /**
+     * 根据会员PartyId列出消费详情数量
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public int countByPartyIdAndDate(int partyId,
+                                     Date startTime,
+                                     Date endTime) throws SSException;
 }
