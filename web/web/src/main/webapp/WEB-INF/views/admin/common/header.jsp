@@ -119,9 +119,9 @@
     </ul>
     <ul class="nav navbar-nav hello-administrator pull-right">
         <li>
-            <a class="menu-list J_adminInfo" href="javascript:;">你好，管理员！<span class="caret"></span></a>
+            <a class="menu-list J_adminInfo" href="javascript:;">你好，${web_user_login_name}！<span class="caret"></span></a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a href="javascript:;"><i class="fa fa-user"></i>&nbsp;修改个人信息</a></li>
+                <li><a href="${website}admin/personal/information"><i class="fa fa-user"></i>&nbsp;修改个人信息</a></li>
                 <li class="divider"></li>
                 <li><a href="${website}admin/logout"><i class="fa fa-sign-out"></i>&nbsp;退出登录</a></li>
             </ul>

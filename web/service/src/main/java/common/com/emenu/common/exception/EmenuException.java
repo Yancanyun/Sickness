@@ -350,6 +350,8 @@ public enum EmenuException implements IBizExceptionMes {
     CheckEmployeeNumberFail("检查员工编号重名失败",6013),
     CheckEmployeePhoneFail("检查员工电话重名失败",6014),
     CheckLoginNameFail("检查登录名重名失败",6015),
+    OldPasswordWrong("原密码错误", 6016),
+    PasswordNotEqual("两遍密码不一致", 6017),
 
     // 库存管理
     InsertReportFail("添加单据失败",7001),

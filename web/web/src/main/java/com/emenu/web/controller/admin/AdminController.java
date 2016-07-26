@@ -5,10 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.party.group.employee.EmployeeDto;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.LoginTypeEnums;
+import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.CommonUtil;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -17,6 +21,7 @@ import com.pandawork.core.common.util.Assert;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -190,5 +195,68 @@ public class AdminController extends AbstractController {
             }
         }
         return ADMIN_SYS_ERR_PAGE;
+    }
+
+    /**
+     * 去个人信息修改页
+     * @param model
+     * @return
+     */
+    @IgnoreAuthorization
+    @RequestMapping(value = "personal/information", method = RequestMethod.GET)
+    public String toPersonalInformation(HttpSession httpSession, Model model) {
+        try {
+            int partyId = (Integer) httpSession.getAttribute("partyId");
+
+            Employee employee = employeeService.queryByPartyId(partyId);
+            model.addAttribute("phone", employee.getPhone());
+
+            return "admin/index/personal_home";
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
+    }
+
+    /**
+     * 修改个人信息
+     * @param phone
+     * @param oldPassword
+     * @param newPassword
+     * @param confirmPassword
+     * @return
+     */
+    @IgnoreAuthorization
+    @RequestMapping(value = "personal/information", method = RequestMethod.POST)
+    public String personalInformation(@RequestParam("phone") String phone,
+                                      @RequestParam("oldPassword") String oldPassword,
+                                      @RequestParam("newPassword") String newPassword,
+                                      @RequestParam("confirmPassword") String confirmPassword,
+                                      HttpSession httpSession) {
+        try {
+            int partyId = (Integer) httpSession.getAttribute("partyId");
+
+            Employee employee = employeeService.queryByPartyId(partyId);
+            employee.setPhone(phone);
+            EmployeeDto employeeDto = employeeService.queryEmployeeDtoByPartyId(partyId);
+            employeeDto.setEmployee(employee);
+
+            SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
+            if (!securityUser.getPassword().equals(CommonUtil.md5(oldPassword))) {
+                throw SSException.get(EmenuException.OldPasswordWrong);
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                throw SSException.get(EmenuException.PasswordNotEqual);
+            }
+
+            employeeService.update(employeeDto, partyId, employeeDto.getLoginName(), CommonUtil.md5(newPassword));
+
+            return "redirect:/admin/login";
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
     }
 }
