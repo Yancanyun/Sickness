@@ -61,9 +61,9 @@ public interface CheckoutService {
      *
      * @author yangch
      */
-    public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
-                         BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
-                         int checkoutType, String serialNum, int isInvoiced) throws SSException;
+    public List<Checkout> checkout(int tableId, int partyId, BigDecimal consumptionMoney,
+                                   BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
+                                   int checkoutType, String serialNum, int isInvoiced) throws SSException;
 
     /**
      * 根据餐台ID计算出该餐台若结账，消费金额是多少
@@ -93,8 +93,8 @@ public interface CheckoutService {
      *
      * @author yangch
      */
-    public void freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
-                          String freeRemark) throws SSException;
+    public List<Checkout> freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
+                                    String freeRemark) throws SSException;
 
     /**
      * 检查打印机是否可用

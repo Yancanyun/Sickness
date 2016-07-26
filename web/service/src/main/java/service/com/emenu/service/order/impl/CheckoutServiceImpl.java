@@ -316,10 +316,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void checkout(int tableId, int partyId, BigDecimal consumptionMoney,
-                         BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
-                         int checkoutType, String serialNum, int isInvoiced) throws SSException {
+    public List<Checkout> checkout(int tableId, int partyId, BigDecimal consumptionMoney,
+                                   BigDecimal wipeZeroMoney, BigDecimal totalPayMoney,
+                                   int checkoutType, String serialNum, int isInvoiced) throws SSException {
         try {
+            List<Checkout> checkoutList = new ArrayList<Checkout>();
+
             Assert.lessOrEqualZero(tableId, EmenuException.OrderIdError);
             Table table = tableService.queryById(tableId);
             if (Assert.isNull(table)) {
@@ -348,6 +350,9 @@ public class CheckoutServiceImpl implements CheckoutService {
             // 无论是否并台，都先对本餐台自身进行结账
             checkoutOneTable(tableId, checkout, checkoutPay);
 
+            // 结账之后把已结账的Checkout加到List中
+            checkoutList.add(checkout);
+
             // 把餐台状态改为"占用已结账"
             setTableStatusToCheckouted(tableId);
 
@@ -372,6 +377,9 @@ public class CheckoutServiceImpl implements CheckoutService {
                         c.setCheckoutTime(new Date());
                         checkoutOneTable(t.getId(), c);
 
+                        // 结账之后把已结账的Checkout加到List中
+                        checkoutList.add(c);
+
                         // 然后把餐台状态改为"占用已结账"
                         setTableStatusToCheckouted(t.getId());
                     }
@@ -390,6 +398,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 //
 //                }
             }
+
+            return checkoutList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckoutFailed, e);
@@ -567,9 +577,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    public void freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
-                          String freeRemark) throws SSException {
+    public List<Checkout> freeOrder(int tableId, int partyId, BigDecimal consumptionMoney,
+                                    String freeRemark) throws SSException {
         try {
+            List<Checkout> checkoutList = new ArrayList<Checkout>();
+
             Assert.lessOrEqualZero(tableId, EmenuException.OrderIdError);
             Table table = tableService.queryById(tableId);
             if (Assert.isNull(table)) {
@@ -589,6 +601,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 
             // 无论是否并台，都先对本餐台自身进行免单
             freeOneTable(tableId, checkout);
+
+            // 结账之后把已结账的Checkout加到List中
+            checkoutList.add(checkout);
 
             // 把餐台状态改为"占用已结账"
             setTableStatusToCheckouted(tableId);
@@ -616,6 +631,9 @@ public class CheckoutServiceImpl implements CheckoutService {
                         c.setCheckoutTime(new Date());
                         freeOneTable(t.getId(), c);
 
+                        // 结账之后把已结账的Checkout加到List中
+                        checkoutList.add(c);
+
                         // 然后把餐台状态改为"占用已结账"
                         setTableStatusToCheckouted(t.getId());
                     }
@@ -629,6 +647,8 @@ public class CheckoutServiceImpl implements CheckoutService {
                     }
                 }
             }
+
+            return checkoutList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckoutFailed, e);
