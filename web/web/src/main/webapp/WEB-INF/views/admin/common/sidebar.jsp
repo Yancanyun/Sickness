@@ -175,13 +175,15 @@
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
                 <shiro:checkPermission name="Admin:User:Management:Employee">
-                <li <c:if test="${MethodModule eq 'Admin:User:Management:Employee:List'}">class="active"</c:if>>
-                    <a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a>
+                <li <c:if test="${MethodModule eq 'Admin:User:Management:Employee'}">class="active"</c:if>>
+                    <c:if test="${ExtModule eq 'Admin:User:Management:Employee:List'}">
+                        <a class="J_menu" href="${website}admin/party/group/employee/">员工管理</a>
+                    </c:if>
                     <c:if test="${ExtModule eq 'Admin:User:Management:Employee:New'
                                             or ExtModule eq 'Admin:User:Management:Employee:Update'}">
                         <ul>
                             <li <c:if test="${ExtModule eq 'Admin:User:Management:Employee:New'}">class="active" </c:if>>
-                                <a href="${website}admin/party/group/employee/add">添加会员</a>
+                                <a href="${website}admin/party/group/employee/add">添加员工</a>
                             </li>
                             <c:if test="${ExtModule eq 'Admin:User:Management:Employee:Update'}">
                                 <li class="active">

@@ -42,7 +42,7 @@ public class EmployeeController  extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminUserManagementEmployeeList)
+    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule =  ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "",method = RequestMethod.GET)
     public String toEmployeePage(Model model){
         try {
@@ -67,7 +67,7 @@ public class EmployeeController  extends AbstractController {
      * @param request
      * @return
      */
-    @Module(ModuleEnums.AdminUserManagementEmployeeList)
+    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule =  ModuleEnums.AdminUserManagementEmployeeList)
     @RequestMapping(value = "ajax/list",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject listByRoles(@RequestParam("roles")Integer [] roles,Model model,HttpServletRequest request){
@@ -196,7 +196,7 @@ public class EmployeeController  extends AbstractController {
      * 去添加员工页
      * @return
      */
-    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule = ModuleEnums.AdminUserManagementEmployee)
+    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule = ModuleEnums.AdminUserManagementEmployeeNew)
     @RequestMapping(value = "add",method = RequestMethod.GET)
     public String toNew(Model model){
         try{

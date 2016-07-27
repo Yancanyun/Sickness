@@ -34,7 +34,6 @@ public class ModuleInterceptor extends HandlerInterceptorAdapter {
             request.setAttribute("MethodModule", methodModule.value().getName());
             request.setAttribute("ExtModule", methodModule.extModule().getName());
         }
-
         return true;
     }
 }
