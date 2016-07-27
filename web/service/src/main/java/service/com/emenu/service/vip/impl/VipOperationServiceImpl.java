@@ -137,6 +137,7 @@ public class VipOperationServiceImpl implements VipOperationService{
             consumptionActivity.setOriginalAmount(vipAccountInfo.getBalance());//原有金额
             consumptionActivity.setResidualAmount(vipAccountInfo.getBalance().add(rechargeAmount));// 账户余额=原有金额+充值金额
             consumptionActivity.setActualPayment(payAmount);// 实际付款
+            consumptionActivity.setConsumptionAmount(rechargeAmount);
             consumptionActivity.setType(ConsumptionActivityTypeEnums.Recharge.getId());//类型：充值
             consumptionActivity.setOperator(employeeService.queryByPartyId(operator).getName());// 操作人姓名
             commonDao.insert(consumptionActivity);
