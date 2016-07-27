@@ -631,6 +631,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryBackDishListFailed("查询退菜菜品失败",10063),
     OrderDishCacheNotExist("缓存中不存在该菜品",10064),
     QueryOrderByCheckoutIdFail("根据结账单id查询订单失败",10065),
+    CallDishNotAllow("菜品未到达上菜时限，暂不能催菜",10066),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),
@@ -667,6 +668,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),
     QueryDishByTagFail("根据菜品大类查询菜品失败",10201),
     QueryDishByKeyFail("根据关键字查询菜品失败",10202),
+
     ;
 
 

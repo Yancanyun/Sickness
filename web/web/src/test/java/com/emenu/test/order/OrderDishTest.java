@@ -221,4 +221,10 @@ public class OrderDishTest extends AbstractTestCase {
         OrderDishStatusEnums orderDishStatusEnums = orderDishService.queryPackageStatusByFirstOrderDishId(orderDishId);
         System.out.println("套餐的状态：" + orderDishStatusEnums.getStatus());
     }
+
+    @Test
+    public void callDish()throws SSException{
+        Integer orderDishId = 417;
+        orderDishService.callDish(orderDishId);
+    }
 }
