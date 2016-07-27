@@ -203,4 +203,5 @@ public interface OrderDishService {
      * @throws SSException
      */
     public List<OrderDish> queryPackageOrderDishesByPackageFlag(Integer packageFlag) throws SSException;
+
 }
