@@ -34,4 +34,10 @@
         SET `integral_enable_state` = #{status}
         WHERE `id` = #{id}
     </update>
+    
+    <select id="countVipDishPricePlan" resultType="int">
+        SELECT COUNT(1)
+        FROM t_vip_grade
+        WHERE vip_dish_price_plan_id = #{vipDishPricePlanId}
+    </select>
 </mapper>

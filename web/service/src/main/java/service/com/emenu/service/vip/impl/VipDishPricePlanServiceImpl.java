@@ -4,6 +4,7 @@ import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.vip.VipDishPricePlanMapper;
 import com.emenu.service.vip.VipDishPricePlanService;
+import com.emenu.service.vip.VipGradeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -27,6 +28,9 @@ public class VipDishPricePlanServiceImpl implements VipDishPricePlanService {
 
     @Autowired
     private VipDishPricePlanMapper vipDishPricePlanMapper;
+
+    @Autowired
+    private VipGradeService vipGradeService;
 
     @Autowired
     private CommonDao commonDao;
@@ -100,10 +104,15 @@ public class VipDishPricePlanServiceImpl implements VipDishPricePlanService {
             if (!Assert.isNull(id) && Assert.lessOrEqualZero(id)){
                 throw SSException.get(EmenuException.VipDishPricePlanIdError);
             }
-            commonDao.deleteById(VipDishPricePlan.class, id);
+            int count = vipGradeService.countByVipPricePlanId(id);
+            if (count == 0){
+                commonDao.deleteById(VipDishPricePlan.class, id);
+            } else{
+                throw SSException.get(EmenuException.DeleteVipDishPricePlanNotAllow);
+            }
         } catch (Exception e) {
             LogClerk.errLog.equals(e);
-            throw SSException.get(EmenuException.DeleteVipDishPricePlanFail);
+            throw SSException.get(EmenuException.DeleteVipDishPricePlanFail, e);
         }
     }
 

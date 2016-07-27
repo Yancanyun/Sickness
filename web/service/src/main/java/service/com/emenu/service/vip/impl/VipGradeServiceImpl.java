@@ -1,6 +1,7 @@
 package com.emenu.service.vip.impl;
 
 import com.emenu.common.dto.vip.VipGradeDto;
+import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.vip.grade.IntegralEnableStatusEnums;
 import com.emenu.common.exception.EmenuException;
@@ -65,8 +66,13 @@ public class VipGradeServiceImpl implements VipGradeService{
                 for (VipGrade vipGrade : vipGradeList) {
                     VipGradeDto vipGradeDto = new VipGradeDto();
                     vipGradeDto.setVipGrade(vipGrade);
-                    vipGradeDto.setVipDishPricePlanName(vipDishPricePlanService.queryById(vipGrade.getVipDishPricePlanId()).getName());
 
+                    VipDishPricePlan vipDishPricePlan = vipDishPricePlanService.queryById(vipGrade.getVipDishPricePlanId());
+                    if (vipDishPricePlan == null){
+                        vipGradeDto.setVipDishPricePlanName("暂无会员价方案");
+                    }else {
+                        vipGradeDto.setVipDishPricePlanName(vipDishPricePlan.getName());
+                    }
                     vipGradeDtoList.add(vipGradeDto);
                 }
             }
@@ -119,13 +125,15 @@ public class VipGradeServiceImpl implements VipGradeService{
 
     @Override
     public void delById(int id) throws SSException {
-        Assert.lessOrEqualZero(id, EmenuException.VipGradeIdIllegal);
-        //判断是否正在被使用
-        if (0 < vipInfoService.countByGradeId(id)){
-            throw SSException.get(EmenuException.VipGradeIdIsUsing);
-        }
         try {
-            commonDao.deleteById(VipGrade.class, id);
+            Assert.lessOrEqualZero(id, EmenuException.VipGradeIdIllegal);
+            //判断是否正在被使用
+            if (vipInfoService.countByGradeId(id) > 0){
+                throw SSException.get(EmenuException.VipGradeIdIsUsing);
+            }else {
+                commonDao.deleteById(VipGrade.class, id);
+            }
+
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteVipGradeFail, e);
@@ -148,8 +156,10 @@ public class VipGradeServiceImpl implements VipGradeService{
     @Override
     public int countByVipPricePlanId(int vipDishPricePlanId) throws SSException {
         Assert.lessOrEqualZero(vipDishPricePlanId);
+        int count = 0;
         try {
-            return vipGradeMapper.countByVipPricePlanId(vipDishPricePlanId);
+            count = vipGradeMapper.countByVipPricePlanId(vipDishPricePlanId);
+            return count;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryMultipleIntegralPlanFail, e);

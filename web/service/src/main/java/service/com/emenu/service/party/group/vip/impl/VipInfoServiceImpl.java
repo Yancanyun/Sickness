@@ -306,10 +306,10 @@ public class VipInfoServiceImpl implements VipInfoService{
     @Override
     public Integer countByGradeId(int gradeId) throws SSException{
         Integer count = 0;
-        if (Assert.isNull(gradeId)){
-            throw SSException.get(EmenuException.VipGradeIdIllegal);
-        }
         try{
+            if (Assert.lessOrEqualZero(gradeId)){
+                throw SSException.get(EmenuException.VipGradeIdIllegal);
+            }
             count = vipInfoMapper.countByGradeId(gradeId);
         } catch (Exception e){
             LogClerk.errLog.error(e);

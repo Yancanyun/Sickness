@@ -90,4 +90,5 @@ public interface VipGradeService {
      * @throws SSException
      */
     public void updateIntegralStatus(int id, IntegralEnableStatusEnums status) throws SSException;
+
 }

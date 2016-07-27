@@ -99,7 +99,7 @@ public interface VipInfoMapper {
      * @return
      * @throws Exception
      */
-    public Integer countByGradeId(@Param("id") int gradeId) throws Exception;
+    public Integer countByGradeId(@Param("gradeId") int gradeId) throws Exception;
 
     /**
      * 根据姓名或电话查询会员信息

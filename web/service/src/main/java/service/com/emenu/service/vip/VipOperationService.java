@@ -48,6 +48,8 @@ public interface VipOperationService {
      * @param rechargePlanId
      * @param rechargeAmount
      * @param payAmount
+     * @param operator
+     * @param paymentType
      * @throws SSException
      */
     public void rechargeByVipPartyId(Integer vipPartyId,

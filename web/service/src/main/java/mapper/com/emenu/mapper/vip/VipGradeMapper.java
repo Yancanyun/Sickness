@@ -46,4 +46,12 @@ public interface VipGradeMapper {
      * @throws Exception
      */
     public void updateIntegralStatus(@Param("id") int id, @Param("status") int status) throws Exception;
+
+    /**
+     * 统计会员等级中使用会员价方案的个数
+     * @param vipDishPricePlanId
+     * @return
+     * @throws Exception
+     */
+    public int countVipDishPricePlan(int vipDishPricePlanId) throws Exception;
 }

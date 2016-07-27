@@ -65,6 +65,7 @@ public class BarVipRechargeController extends AbstractController {
      * @param rechargePlanId
      * @param rechargeAmount
      * @param payAmount
+     * @param paymentType
      * @param uid
      * @return
      */
