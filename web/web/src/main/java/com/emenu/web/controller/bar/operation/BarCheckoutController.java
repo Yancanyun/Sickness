@@ -114,7 +114,7 @@ public class BarCheckoutController extends AbstractController {
      * @param totalPayMoney
      * @param checkoutType
      * @param isInvoiced
-     * @param serialNum
+     * @param serialNum 注: 会员卡结账时，流水号字段中的内容是会员卡号
      * @return
      *
      * @author: yangch

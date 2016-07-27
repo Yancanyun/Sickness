@@ -409,7 +409,8 @@ public class CheckoutServiceImpl implements CheckoutService {
 
                 // TODO: 如果是会员卡结账，要做特殊操作
 //                if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
-//
+//                    // 会员卡结账时，流水号字段中的内容是会员卡号
+                int vipCardNumber = Integer.getInteger(serialNum);
 //                }
             }
 
