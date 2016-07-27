@@ -560,13 +560,14 @@ public enum EmenuException implements IBizExceptionMes {
     CostCardItemIdError("成本卡原料主键错误",8133),
 
     // 营业分析
-    GetOrderDishByTimePeroidFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),
-    GetDishSaleRankDtoByTimePeroidFailed("根据开始时间和结束时间获取消费菜品并处理放入dto中失败",9002),
+    GetOrderDishByTimePeriodFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),
+    GetDishSaleRankDtoByTimePeriodFailed("根据开始时间和结束时间获取消费菜品并处理放入dto中失败",9002),
     ListAllDishSaleRankDtoFailed("查找全部的菜品销售排行失败",9003),
-    GetOrderDishDtoByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类的Id获取消费菜品并处理放入dto中失败",9004),
+    GetOrderDishDtoByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类的Id获取消费菜品并处理放入dto中失败",9004),
     ExportToExcelFailed("菜品销售排行导出Excel表格失败",9005),
-    GetPageOrderDishDtoByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取分页失败",9006),
-    GetCountByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取数据条数失败",9007),
+    GetPageOrderDishDtoByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取分页失败",9006),
+    GetCountByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取数据条数失败",9007),
+    GetDishTagRankFailed("根据开始时间和结束时间获取菜品大类的排行失败",9008),
 
     /****************************顾客点餐端****************************/
     // 点菜
