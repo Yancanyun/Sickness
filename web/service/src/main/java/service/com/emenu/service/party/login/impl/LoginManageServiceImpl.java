@@ -169,7 +169,7 @@ public class LoginManageServiceImpl implements LoginManageService {
         // 添加到缓存中
         this.addSubject(subject);
         if (loginType == LoginTypeEnums.BackgroundLogin || loginType == LoginTypeEnums.WaiterLogin
-                || loginType == LoginTypeEnums.BarLogin){
+                || loginType == LoginTypeEnums.BarLogin || loginType == LoginTypeEnums.BackKitchenLogin){
             // 生成T票
             this.generateTGT(subject.getSession().getId().toString(), request, response, token.isRememberMe());
         }
