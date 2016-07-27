@@ -144,4 +144,14 @@
         WHERE t_order_dish.`order_id` = #{orderId}
         AND t_order_dish.`package_id` = #{packageId}
     </select>
+
+    <select id="queryPackageOrderDishesByPackageFlag" resultMap="pw.OrderDish">
+         SELECT `id`,`order_id`,`package_id`,`dish_id`,`package_quantity`,
+        `dish_quantity`,`taste_id`,`remark`,`remark_price`,`sale_price`,
+        `vip_dish_price`,`is_package`,`discount`,`status`,`order_time`,
+        `serve_type`,`is_presented_dish`,`presented_remark_id`,`created_time`,`last_modified_time`,
+        `is_call`,`is_change`,`package_flag`
+        FROM t_order_dish
+        WHERE package_flag = #{packageFlag}
+    </select>
 </mapper>

@@ -30,7 +30,7 @@ public class BackDishTest extends AbstractTestCase{
 
     @Test
     public void queryBackDishListByOrderId() throws SSException{
-        Integer orderId = 101;
+        Integer orderId = 182;
         List<BackDish> backDishList = backDishService.queryBackDishListByOrderId(orderId);
         for (BackDish backDish: backDishList){
             System.out.print("订单菜品id：" + backDish.getOrderDishId());

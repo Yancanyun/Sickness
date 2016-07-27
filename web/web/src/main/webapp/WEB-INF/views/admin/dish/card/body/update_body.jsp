@@ -13,13 +13,13 @@
 			</li>
 			<li class="active">菜品成本卡管理</li>
 		</ol>
-		<h2>添加菜品成本卡</h2>
+		<h2>编辑菜品成本卡</h2>
 		<!-- <h2>修改菜品成本卡</h2> -->
 	</div>
 	<div class="col-sm-12">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<h4>添加菜品成本卡</h4>
+				<h4>编辑菜品成本卡</h4>
 			</div>
 			<div class="panel-body">
 				<form class="form-horizontal J_operForm">

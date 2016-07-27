@@ -586,4 +586,16 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
         }
     }
+
+    @Override
+    public List<OrderDish> queryPackageOrderDishesByPackageFlag(Integer packageFlag) throws SSException{
+        List<OrderDish> orderDishList = new ArrayList<OrderDish>();
+        try{
+            orderDishList = orderDishMapper.queryPackageOrderDishesByPackageFlag(packageFlag);
+            return orderDishList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
+        }
+    }
 }

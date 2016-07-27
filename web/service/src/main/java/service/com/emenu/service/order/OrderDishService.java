@@ -195,4 +195,12 @@ public interface OrderDishService {
      * @throws SSException
      */
     public OrderDishStatusEnums queryPackageStatusByFirstOrderDishId(Integer orderDishId) throws SSException;
+
+    /**
+     * 根据套餐标记，查询套餐列表
+     * @param packageFlag
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDish> queryPackageOrderDishesByPackageFlag(Integer packageFlag) throws SSException;
 }

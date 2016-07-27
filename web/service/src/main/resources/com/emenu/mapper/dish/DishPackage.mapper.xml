@@ -56,4 +56,11 @@
         FROM t_dish_package
         WHERE package_id=#{dishId}
     </select>
+    
+    <select id="queryDishQuantityByPackageIdAndDishId" resultType="int">
+        SELECT dish_quantity
+        FROM t_dish_package
+        WHERE package_id = #{packageId}
+        AND dish_id = #{dishId}
+    </select>
 </mapper>

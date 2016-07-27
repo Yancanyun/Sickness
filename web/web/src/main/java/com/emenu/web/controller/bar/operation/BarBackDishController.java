@@ -105,18 +105,27 @@ public class BarBackDishController extends AbstractController {
                         // 退菜列表不为空，加入jsonObject中
                         for (BackDish backDish:backDishChildrenList){
                             JSONObject backDishJsonObject = new JSONObject();
-                            backDishJsonObject.put("orderDishId",backDish.getOrderDishId());
                             // 查询订单菜品信息
                             OrderDish orderDish = orderDishService.queryById(backDish.getOrderDishId());
-                            // 查询菜品信息
-                            DishDto dishDto = dishService.queryById(orderDish.getDishId());
+                            if (orderDish.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                                // 查询套餐信息
+                                DishDto dishDto = dishService.queryById(orderDish.getPackageId());
+                                backDishJsonObject.put("dishName",dishDto.getName());
+                                backDishJsonObject.put("assistantCode",dishDto.getAssistantCode());
+                                backDishJsonObject.put("unitName",dishDto.getUnitName());
+                                backDishJsonObject.put("salePrice",orderDish.getSalePrice());
+                            }else {
+                                // 查询菜品信息
+                                DishDto dishDto = dishService.queryById(orderDish.getDishId());
+                                backDishJsonObject.put("dishName",dishDto.getName());
+                                backDishJsonObject.put("assistantCode",dishDto.getAssistantCode());
+                                backDishJsonObject.put("unitName",dishDto.getUnitName());
+                                backDishJsonObject.put("salePrice",orderDish.getSalePrice());
+                            }
+                            backDishJsonObject.put("backDishNumber",backDish.getBackNumber());
+                            backDishJsonObject.put("orderDishId",backDish.getOrderDishId());
                             // 查询退菜口味信息
                             Taste taste = tasteService.queryById(backDish.getTasteId());
-                            backDishJsonObject.put("dishName",dishDto.getName());
-                            backDishJsonObject.put("assistantCode",dishDto.getAssistantCode());
-                            backDishJsonObject.put("unitName",dishDto.getUnitName());
-                            backDishJsonObject.put("salePrice",orderDish.getSalePrice());
-                            backDishJsonObject.put("backDishNumber",backDish.getBackNumber());
                             if (taste != null){
                                 backDishJsonObject.put("taste",taste.getName());
                             }else {

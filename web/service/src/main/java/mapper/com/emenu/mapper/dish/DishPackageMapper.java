@@ -55,4 +55,14 @@ public interface DishPackageMapper {
      * @throws Exception
      */
     public Integer judgeIsOrNotPackage(@Param("dishId") Integer dishId) throws Exception;
+
+    /**
+     * 根据套餐id和菜品id查询菜品的数量
+     * @param packageId
+     * @param dishId
+     * @return
+     * @throws Exception
+     */
+    public Integer queryDishQuantityByPackageIdAndDishId(@Param("packageId") Integer packageId,
+                                                         @Param("dishId") Integer dishId) throws Exception;
 }

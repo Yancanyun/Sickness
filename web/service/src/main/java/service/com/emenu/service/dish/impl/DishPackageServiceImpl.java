@@ -310,4 +310,18 @@ public class DishPackageServiceImpl implements DishPackageService{
             throw SSException.get(EmenuException.DishQueryFailed, e);
         }
     }
+
+    @Override
+    public Integer queryDishQuantityByPackageIdAndDishId(Integer packageId, Integer dishId) throws SSException{
+        try{
+            if (Assert.lessOrEqualZero(packageId) && Assert.lessOrEqualZero(dishId)){
+                throw SSException.get(EmenuException.DishIdError);
+            }
+            Integer number = dishPackageMapper.queryDishQuantityByPackageIdAndDishId(packageId,dishId);
+            return number;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DishQueryFailed, e);
+        }
+    }
 }

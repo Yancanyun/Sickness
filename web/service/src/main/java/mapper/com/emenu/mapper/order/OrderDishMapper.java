@@ -110,4 +110,12 @@ public interface OrderDishMapper {
      */
     public List<OrderDish> listByOrderIdAndPackageId(@Param("orderId") int orderId,
                                                      @Param("packageId") int packageId) throws Exception;
+
+    /**
+     *根据套餐标记，查询套餐列表
+     * @param packageFlag
+     * @return
+     * @throws Exception
+     */
+    public List<OrderDish> queryPackageOrderDishesByPackageFlag(Integer packageFlag) throws Exception;
 }

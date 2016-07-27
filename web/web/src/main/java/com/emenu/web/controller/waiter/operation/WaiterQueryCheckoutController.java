@@ -11,6 +11,7 @@ import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -57,11 +58,25 @@ public class WaiterQueryCheckoutController extends AbstractController {
             if (Assert.isNotNull(orderDishDtoList)) {
                 for(OrderDishDto orderDishDto : orderDishDtoList) {
                     JSONObject orderDishJsonObject = new JSONObject();
+                    if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                        // 查询套餐信息
+                        DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
+                        orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
+                        orderDishJsonObject.put("unitName",dishDto.getUnitName());
+                        // 判断整个套餐的状态
+                        orderDishJsonObject.put("dishStatus",orderDishService.queryPackageStatusByFirstOrderDishId(orderDishDto.getId()).getId());
+                    }else {
+                        // 查询菜品信息
+                        DishDto dishDto = dishService.queryById(orderDishDto.getDishId());
+                        orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
+                        orderDishJsonObject.put("unitName",dishDto.getUnitName());
+                        orderDishJsonObject.put("dishStatus",orderDishDto.getStatus());
 
-                    orderDishJsonObject.put("orderDishId", orderDishDto.getId());
-                    orderDishJsonObject.put("dishName", orderDishDto.getDishName());
-                    orderDishJsonObject.put("number", orderDishDto.getDishQuantity());
+                    }
                     orderDishJsonObject.put("salePrice", orderDishDto.getSalePrice());
+                    orderDishJsonObject.put("dishName", orderDishDto.getDishName());
+                    orderDishJsonObject.put("orderDishId", orderDishDto.getId());
+                    orderDishJsonObject.put("number", orderDishDto.getDishQuantity());
                     if (orderDishDto.getTasteName() == null) {
                         orderDishJsonObject.put("taste", "");
                     } else {
@@ -69,7 +84,6 @@ public class WaiterQueryCheckoutController extends AbstractController {
                     }
                     orderDishJsonObject.put("remarks",orderDishDto.getRemark());
                     orderDishJsonObject.put("serveType",orderDishDto.getServeType());
-                    orderDishJsonObject.put("dishStatus",orderDishDto.getStatus());
                     orderDishList.add(orderDishJsonObject);
                 }
                 jsonObject.put("orderDishList",orderDishList);
@@ -85,14 +99,27 @@ public class WaiterQueryCheckoutController extends AbstractController {
                         // 退菜列表不为空，加入jsonObject中
                         for (BackDish backDish:backDishChildrenList){
                             JSONObject backDishJsonObject = new JSONObject();
+
                             // 查询订单菜品信息
                             OrderDish orderDish = orderDishService.queryById(backDish.getOrderDishId());
-                            // 查询菜品信息
-                            DishDto dishDto = dishService.queryById(orderDish.getDishId());
+                            if (orderDish.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                                // 查询套餐信息
+                                DishDto dishDto = dishService.queryById(orderDish.getPackageId());
+                                backDishJsonObject.put("dishName",dishDto.getName());
+                                backDishJsonObject.put("assistantCode",dishDto.getAssistantCode());
+                                backDishJsonObject.put("unitName",dishDto.getUnitName());
+                                backDishJsonObject.put("salePrice",orderDish.getSalePrice());
+                            }else {
+                                // 查询菜品信息
+                                DishDto dishDto = dishService.queryById(orderDish.getDishId());
+                                backDishJsonObject.put("dishName",dishDto.getName());
+                                backDishJsonObject.put("assistantCode",dishDto.getAssistantCode());
+                                backDishJsonObject.put("unitName",dishDto.getUnitName());
+                                backDishJsonObject.put("salePrice",orderDish.getSalePrice());
+                            }
+
                             // 查询退菜口味信息
                             Taste taste = tasteService.queryById(backDish.getTasteId());
-                            backDishJsonObject.put("dishName",dishDto.getName());
-                            backDishJsonObject.put("salePrice",orderDish.getSalePrice());
                             backDishJsonObject.put("number",backDish.getBackNumber());
                             if (taste != null){
                                 backDishJsonObject.put("taste",taste.getName());

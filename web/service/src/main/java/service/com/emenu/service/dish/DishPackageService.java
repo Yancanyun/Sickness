@@ -7,6 +7,7 @@ import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.enums.dish.DishStatusEnums;
 import com.pandawork.core.common.exception.SSException;
+import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -92,4 +93,13 @@ public interface DishPackageService {
      * @throws SSException
      */
     public int judgeIsOrNotPackage(int dishId) throws SSException;
+
+    /**
+     * 根据套餐id和菜品id查询菜品数量
+     * @param packageId
+     * @param dishId
+     * @return
+     * @throws SSException
+     */
+    public Integer queryDishQuantityByPackageIdAndDishId(Integer packageId, Integer dishId) throws SSException;
 }

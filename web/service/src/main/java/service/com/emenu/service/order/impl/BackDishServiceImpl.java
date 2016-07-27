@@ -1,5 +1,6 @@
 package com.emenu.service.order.impl;
 
+import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -141,12 +143,40 @@ public class BackDishServiceImpl implements BackDishService {
 
     @Override
     public List<BackDish> queryBackDishListByOrderId(Integer orderId) throws SSException{
-        List<BackDish> backDishList = Collections.emptyList();
+        List<BackDish> backDishList = new ArrayList<BackDish>();
         try{
             if (Assert.lessOrEqualZero(orderId)){
                 throw SSException.get(EmenuException.OrderIdError);
             }
-            backDishList = backDishMapper.queryBackDishListByOrderId(orderId);
+            List<BackDish> allBackDishList = backDishMapper.queryBackDishListByOrderId(orderId);
+            // 套餐菜品计数标记
+            Integer flag = 0;
+            for (BackDish backDish : allBackDishList){
+                // 查询订单菜品信息
+                OrderDish orderDish = orderDishService.queryById(backDish.getOrderDishId());
+                // 如果退的菜品是套餐
+                if (orderDish.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                    Integer packageFlag = orderDish.getPackageFlag();
+                    List<OrderDish> orderDishList = orderDishService.queryPackageOrderDishesByPackageFlag(packageFlag);
+                    // 只把套餐的第一个退菜菜品放入List
+                    if (flag < 1){
+                        // 套餐中菜品的数量
+                        Integer number = dishPackageService.queryDishQuantityByPackageIdAndDishId(orderDish.getPackageId(),orderDish.getDishId());
+                        // 套餐的退菜数量
+                        Float backNumber = backDish.getBackNumber()/number;
+                        backDish.setBackNumber(backNumber);
+                        backDishList.add(backDish);
+                        flag++;
+                    }
+                    // 一个套餐的菜品遍历完成后，标记归零
+                    if (flag >= orderDishList.size()){
+                        flag = 0;
+                    }
+                } else {
+                    // 非套餐
+                    backDishList.add(backDish);
+                }
+            }
             return backDishList;
         } catch (Exception e){
             LogClerk.errLog.error(e);
