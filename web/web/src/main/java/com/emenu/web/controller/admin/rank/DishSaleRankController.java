@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.rank.DishSaleRankDto;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
@@ -27,16 +28,18 @@ import java.util.List;
  * @author guofengrui
  * @date 2016/7/26.
  */
-@Module(value = ModuleEnums.AdminDishSaleRanking)
+@Module(value = ModuleEnums.AdminCountDishSaleRanking)
 @Controller
 @RequestMapping(value = URLConstants.ADMIN_COUNT_DISH_SALE_RANKING_URL)
 public class DishSaleRankController extends AbstractController {
 
-    @Module(value = ModuleEnums.AdminDishSaleRankingList)
+    @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
     @RequestMapping(value = {""}, method = RequestMethod.GET)
     public String toList(Model model){
         try{
-            List<DishSaleRankDto> dishSaleRankDtoList = dishSaleRankService.listAll();
+            List<Tag> list = tagService.queryLayer2Tag();
+            model.addAttribute("tagId" ,list);
+            model.addAttribute("tagName" ,list);
             // 今天的开始时间
             model.addAttribute("firstToday", DateUtils.getToday().concat(" 00:00:00"));
             // 今天的结束时间
@@ -65,7 +68,7 @@ public class DishSaleRankController extends AbstractController {
         }
     }
 
-    @Module(value = ModuleEnums.AdminDishSaleRankingList)
+    @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
     @RequestMapping(value = "ajax/list/{pageNumber}",method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxSearch(@PathVariable("pageNumber")Integer pageNumber,
@@ -92,7 +95,6 @@ public class DishSaleRankController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
         JSONArray jsonArray = new JSONArray();
-
             for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dishId",dishSaleRankDto.getDishId());

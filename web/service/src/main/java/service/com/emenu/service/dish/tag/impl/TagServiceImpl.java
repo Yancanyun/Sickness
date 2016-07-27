@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -191,6 +192,18 @@ public class TagServiceImpl implements TagService{
             throw SSException.get(EmenuException.QueryTagFailed, e);
         }
         return tag;
+    }
+
+    @Override
+    public List<Tag> queryLayer2Tag() throws SSException{
+        List<Tag> list = Collections.emptyList();
+        try{
+            list =  tagMapper.listSecondTag();
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
+        return list;
     }
 
     /**

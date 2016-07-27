@@ -42,11 +42,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by Administrator on 2016/7/26.
+ * Created by guofengrui on 2016/7/26.
  */
 @Service("dishSaleRankService")
 public class DishSaleRankServiceImpl implements DishSaleRankService {
-    @Autowired private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private DishPackageService dishPackageService;
@@ -79,7 +80,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             return orderDishList;
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.GetOrderDishByTimePeroidFailed,e);
+            throw SSException.get(EmenuException.GetOrderDishByTimePeriodFailed,e);
         }
     }
     @Override
@@ -160,7 +161,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             return dishSaleRankDtoList;
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.GetDishSaleRankDtoByTimePeroidFailed,e);
+            throw SSException.get(EmenuException.GetDishSaleRankDtoByTimePeriodFailed,e);
         }
     }
 
@@ -189,7 +190,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             return dishSaleRankDtoList;
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.GetOrderDishDtoByTimePeroidAndTagIdFailed,e);
+            throw SSException.get(EmenuException.GetOrderDishDtoByTimePeriodAndTagIdFailed,e);
         }
     }
 
@@ -314,7 +315,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             return dishSaleRankDtoList;
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.GetPageOrderDishDtoByTimePeroidAndTagIdFailed, e);
+            throw SSException.get(EmenuException.GetPageOrderDishDtoByTimePeriodAndTagIdFailed, e);
         }
     }
 
@@ -333,7 +334,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             return number;
         }catch(Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.GetCountByTimePeroidAndTagIdFailed, e);
+            throw SSException.get(EmenuException.GetCountByTimePeriodAndTagIdFailed, e);
         }
     }
 }

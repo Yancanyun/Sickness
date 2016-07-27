@@ -90,4 +90,12 @@ public interface TagService {
      */
     public Tag queryLayer2TagByDishId(int dishId) throws SSException;
 
+    /**
+     * 查找菜品二级分类
+     * @author guofengrui
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> queryLayer2Tag() throws SSException;
+
 }

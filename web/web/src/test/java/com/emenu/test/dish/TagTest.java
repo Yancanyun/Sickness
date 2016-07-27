@@ -71,11 +71,16 @@ public class TagTest extends AbstractTestCase{
         Tag tag = new Tag();
         tag.setId(8);
         tag.setpId(6);
-        tagService.updateFiled(tag,"pId");
+        tagService.updateFiled(tag, "pId");
     }
 
     @Test
     public void delTagPrinter() throws SSException {
-        dishTagPrinterService.delPrinterDish(18,1);
+        dishTagPrinterService.delPrinterDish(18, 1);
+    }
+
+    @Test
+    public void queryLayer2Tag() throws SSException{
+        tagService.queryLayer2Tag();
     }
 }

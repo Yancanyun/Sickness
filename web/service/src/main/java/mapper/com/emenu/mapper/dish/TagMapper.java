@@ -1,5 +1,6 @@
 package com.emenu.mapper.dish;
 
+import com.emenu.common.dto.dish.tag.TagDto;
 import com.emenu.common.entity.dish.Tag;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
@@ -59,4 +60,11 @@ public interface TagMapper {
      * @throws Exception
      */
     public Tag queryDishTagByDishId(@Param("dishId") int dishId) throws Exception;
+
+    /**
+     * 查找二级分类（菜品大类）
+     * @return
+     * @throws Exception
+     */
+    public List<Tag> listSecondTag() throws Exception;
 }
