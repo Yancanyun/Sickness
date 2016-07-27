@@ -75,6 +75,7 @@ public class BarVipRechargeController extends AbstractController {
                                       @RequestParam("rechargePlanId") Integer rechargePlanId,
                                       @RequestParam("rechargeAmount") BigDecimal rechargeAmount,
                                       @RequestParam("payAmount") BigDecimal payAmount,
+                                      @RequestParam("paymentType") Integer paymentType,
                                       @RequestParam("uid") Integer uid){
         try{
             // 根据uid获取PartyID
@@ -83,7 +84,7 @@ public class BarVipRechargeController extends AbstractController {
                 throw SSException.get(EmenuException.QueryEmployeeInfoFail);
             }
             int partyId = securityUser.getPartyId();
-            vipOperationService.rechargeByVipPartyId(vipPartyId,rechargePlanId,rechargeAmount,payAmount,partyId);
+            vipOperationService.rechargeByVipPartyId(vipPartyId,rechargePlanId,rechargeAmount,payAmount,partyId,paymentType);
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

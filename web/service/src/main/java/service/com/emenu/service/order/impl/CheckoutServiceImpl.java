@@ -10,6 +10,8 @@ import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.checkout.CheckOutStatusEnums;
+import com.emenu.common.enums.checkout.CheckoutConsumptionTypeEnums;
+import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.*;
 import com.emenu.common.enums.printer.PrinterTypeEnums;

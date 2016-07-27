@@ -1,16 +1,10 @@
 package com.emenu.test.order;
 
 import com.emenu.common.entity.order.Checkout;
-import com.emenu.common.entity.order.CheckoutPay;
-import com.emenu.common.enums.checkout.CheckOutStatusEnums;
-import com.emenu.common.enums.order.CheckoutConsumptionTypeEnums;
-import com.emenu.common.enums.order.CheckoutTypeEnums;
-import com.emenu.common.enums.order.OrderStatusEnums;
-import com.emenu.common.exception.EmenuException;
+import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
-import com.pandawork.core.common.util.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

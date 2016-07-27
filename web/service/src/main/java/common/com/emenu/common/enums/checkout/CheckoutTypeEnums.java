@@ -1,4 +1,4 @@
-package com.emenu.common.enums.order;
+package com.emenu.common.enums.checkout;
 
 import java.util.HashMap;
 import java.util.Map;

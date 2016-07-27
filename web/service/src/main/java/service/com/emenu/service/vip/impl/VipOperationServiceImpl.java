@@ -1,12 +1,12 @@
 package com.emenu.service.vip.impl;
 
-import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.vip.ConsumptionActivity;
 import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.dto.vip.VipRegisterDto;
 import com.emenu.common.entity.vip.VipRechargePlan;
+import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -116,7 +116,12 @@ public class VipOperationServiceImpl implements VipOperationService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void rechargeByVipPartyId(Integer vipPartyId, Integer rechargePlanId, BigDecimal rechargeAmount, BigDecimal payAmount, Integer operator) throws SSException{
+    public void rechargeByVipPartyId(Integer vipPartyId,
+                                     Integer rechargePlanId,
+                                     BigDecimal rechargeAmount,
+                                     BigDecimal payAmount,
+                                     Integer operator,
+                                     Integer paymentType) throws SSException{
         try{
             if (Assert.lessOrEqualZero(vipPartyId)
                     || Assert.lessOrEqualZero(operator)){
@@ -125,8 +130,6 @@ public class VipOperationServiceImpl implements VipOperationService{
             if (Assert.lessZero(rechargePlanId)){
                 throw SSException.get(EmenuException.RechargePlanIdError);
             }
-            // 查询充值方案
-            VipRechargePlan vipRechargePlan = vipRechargePlanService.queryById(rechargePlanId);
             // 查询会员账户信息
             VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipPartyId);
 
@@ -137,8 +140,9 @@ public class VipOperationServiceImpl implements VipOperationService{
             consumptionActivity.setOriginalAmount(vipAccountInfo.getBalance());//原有金额
             consumptionActivity.setResidualAmount(vipAccountInfo.getBalance().add(rechargeAmount));// 账户余额=原有金额+充值金额
             consumptionActivity.setActualPayment(payAmount);// 实际付款
-            consumptionActivity.setConsumptionAmount(rechargeAmount);
-            consumptionActivity.setType(ConsumptionActivityTypeEnums.Recharge.getId());//类型：充值
+            consumptionActivity.setConsumptionAmount(rechargeAmount);// 消费金额（充值金额）
+            consumptionActivity.setType(ConsumptionActivityTypeEnums.Recharge.getId());// 类型：充值
+            consumptionActivity.setPaymentType(CheckoutTypeEnums.valueOf(paymentType).getId());// 付款方式
             consumptionActivity.setOperator(employeeService.queryByPartyId(operator).getName());// 操作人姓名
             commonDao.insert(consumptionActivity);
 

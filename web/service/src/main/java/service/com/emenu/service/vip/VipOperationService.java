@@ -54,5 +54,6 @@ public interface VipOperationService {
                                      Integer rechargePlanId,
                                      BigDecimal rechargeAmount,
                                      BigDecimal payAmount,
-                                     Integer operator) throws SSException;
+                                     Integer operator,
+                                     Integer paymentType) throws SSException;
 }

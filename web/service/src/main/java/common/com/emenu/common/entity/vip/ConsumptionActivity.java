@@ -62,6 +62,10 @@ public class ConsumptionActivity extends AbstractEntity{
     // 类型,1-消费,2-充值
     private Integer type;
 
+    // 付款方式
+    @Column(name = "payment_type")
+    private Integer paymentType;
+
     //操作人
     private String operator;
 
@@ -160,6 +164,14 @@ public class ConsumptionActivity extends AbstractEntity{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(Integer paymentType) {
+        this.paymentType = paymentType;
     }
 
     public String getOperator() {
