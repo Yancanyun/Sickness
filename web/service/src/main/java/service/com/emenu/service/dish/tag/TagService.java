@@ -98,4 +98,19 @@ public interface TagService {
      */
     public List<Tag> queryLayer2Tag() throws SSException;
 
+    /**
+     * 根据分类名获取分类
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public Tag queryByName(String name) throws SSException;
+
+    /**
+     * 根据父id获取子类
+     * @param parentId
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listByParentId(int parentId) throws SSException;
 }

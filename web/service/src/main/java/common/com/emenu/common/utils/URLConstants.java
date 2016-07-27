@@ -244,6 +244,9 @@ public final class URLConstants {
     // 吧台对账
     public static final String BAR_CONTRAST_URL = "bar/contrast";
 
+    // 吧台酒水标缺少
+    public static final String BAR_WINE_MARK = "bar/wine/mark";
+
     /**********************微信*************************/
     public static final String WECHAT_URL = "wechat";
 

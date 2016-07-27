@@ -17,7 +17,6 @@ public class ModuleInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         if (!(handler instanceof HandlerMethod)) {
             // 如果不是方法请求地址，不拦截
             return true;

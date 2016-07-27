@@ -60,6 +60,15 @@ public interface VipInfoService {
     public VipInfo newVipInfo(Integer userPartyId, VipInfo vipInfo) throws SSException;
 
     /**
+     * 新增vipInfo
+     * @param userPartyId
+     * @param vipInfo
+     * @return
+     * @throws SSException
+     */
+    public VipInfo newVipInfo1(Integer userPartyId, VipInfo vipInfo) throws SSException;
+
+    /**
      * 判断手机号是否存在
      * @param phone
      * @return

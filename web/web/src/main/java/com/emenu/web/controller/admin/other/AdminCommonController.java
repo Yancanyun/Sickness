@@ -120,6 +120,28 @@ public class AdminCommonController extends AbstractController {
                     jsonArray.add(jsonObject);
                 }
             }
+            if (Assert.isNull(keyword)){
+                ingredientList = ingredientService.listAll();
+                for (Ingredient ingredient : ingredientList) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", ingredient.getId());
+                    jsonObject.put("name", ingredient.getName());
+                    jsonObject.put("assistantCode", ingredient.getAssistantCode());
+                    jsonArray.add(jsonObject);
+                }
+            } else {
+                keyword = keyword.replaceAll(" ","");
+                if ("".equals(keyword)){
+                ingredientList = ingredientService.listAll();
+                for (Ingredient ingredient : ingredientList) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", ingredient.getId());
+                    jsonObject.put("name", ingredient.getName());
+                    jsonObject.put("assistantCode", ingredient.getAssistantCode());
+                    jsonArray.add(jsonObject);
+                    }
+                }
+            }
             return sendJsonArray(jsonArray);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

@@ -59,4 +59,6 @@ public interface StorageTagService {
      * @throws SSException
      */
     public void delById(int id) throws SSException;
+
+
 }

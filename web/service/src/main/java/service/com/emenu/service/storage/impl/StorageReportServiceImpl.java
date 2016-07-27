@@ -192,6 +192,16 @@ public class StorageReportServiceImpl implements StorageReportService {
                     offset = pageNo * reportSearchDto.getPageSize();
                     reportSearchDto.setOffset(offset);
                 }
+                if (reportSearchDto.getStartTime() != null){
+                    reportSearchDto.getStartTime().setHours(0);
+                    reportSearchDto.getStartTime().setMinutes(0);
+                    reportSearchDto.getStartTime().setSeconds(0);
+                }
+                if (reportSearchDto.getEndTime() != null) {
+                    reportSearchDto.getEndTime().setHours(23);
+                    reportSearchDto.getEndTime().setMinutes(59);
+                    reportSearchDto.getEndTime().setSeconds(59);
+                }
                 reportList = storageReportMapper.listReportBySerachDto(reportSearchDto);
                 // 设置经手人、操作人、审核人名字
                 for (StorageReport storageReport : reportList){
@@ -1049,6 +1059,16 @@ public class StorageReportServiceImpl implements StorageReportService {
 //        }
         Integer count = 0;
         try {
+            if (reportSearchDto.getStartTime() != null){
+                reportSearchDto.getStartTime().setHours(0);
+                reportSearchDto.getStartTime().setMinutes(0);
+                reportSearchDto.getStartTime().setSeconds(0);
+            }
+            if (reportSearchDto.getEndTime() != null) {
+                reportSearchDto.getEndTime().setHours(23);
+                reportSearchDto.getEndTime().setMinutes(59);
+                reportSearchDto.getEndTime().setSeconds(59);
+            }
             count = storageReportMapper.countByReportSerachDto(reportSearchDto);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

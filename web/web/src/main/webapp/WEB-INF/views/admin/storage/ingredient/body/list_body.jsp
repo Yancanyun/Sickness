@@ -20,8 +20,8 @@
                 <form class="form-horizontal J_searchForm" action="" method="">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">关键字</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control" placeholder="请输入原配料姓名/编号/助记码" name="keyword" value="">
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" placeholder="请输入原配料名称/编号/助记码" name="keyword" value="">
                         </div>
                     </div>
                     <div class="form-group">

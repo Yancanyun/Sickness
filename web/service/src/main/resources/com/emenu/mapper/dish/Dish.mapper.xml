@@ -256,6 +256,27 @@
         SET like_nums = like_nums - 1
         WHERE id = #{id}
     </update>
+
+    <select id="listByTagIdList" resultMap="pw.Dish">
+        SELECT *
+        FROM `t_dish`
+        <where>
+            `tag_id` IN
+            <if test="tagIdList != null and tagIdList.size>0">
+                <foreach collection="tagIdList" index="index" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+            </if>
+            AND `status` != 3 AND `status` !=0
+        </where>
+    </select>
+
+    <select id="listByKeywordAndStatus" resultMap="pw.Dish">
+        SELECT *
+        FROM `t_dish`
+        WHERE `name` LIKE "%"#{keyword}"%"
+            AND `status` = #{status}
+    </select>
     
     <resultMap id="dishDtoResultMap" type="com.emenu.common.dto.dish.DishDto">
         <id property="id" column="id" />

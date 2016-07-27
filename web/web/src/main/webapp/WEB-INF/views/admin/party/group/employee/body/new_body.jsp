@@ -48,7 +48,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>密码<!-- 新密码--> </label>
             <div class="col-sm-6">
-              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16) || isNull" value="" name="password" />
+              <input class="w180 J_passward" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16)" value="" name="password" />
             </div>
           </div>
           <div class="form-group">
@@ -60,18 +60,18 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>角色</label>
             <div class="col-sm-6">
-              <c:forEach var="role" items="${roleList}">
+              <c:forEach var="role" items="${roleList}" varStatus="status">
                 <c:if test="${role.id != 4}">
                   <div class="checkbox block">
                     <label>
-                      <input type="checkbox" value="${role.id}" name="roles"> ${role.name}
+                      <input class="J_role" type="checkbox" value="${role.id}" name="roles"> ${role.name}
                     </label>
                   </div>
                 </c:if>
                 <c:if test="${role.id == 4}">
                   <div class="checkbox block">
                     <label>
-                      <input class="J_waiter" type="checkbox" value="${role.id}" name="roles"> 服务员
+                      <input class="J_waiter J_role" type="checkbox" value="${role.id}" name="roles"> 服务员
                     </label>
                     <div class="waiter-table J_waiterTable hidden">
                       <c:forEach var="areaDto" items="${areaDtoList}">
@@ -89,6 +89,7 @@
                 </c:if>
               </c:forEach>
             </div>
+            <div class="col-sm-3 col-sm-pull-5 error-tip hidden J_errorTip">员工角色不能为空，请重新选择</div>
           </div>
         </div>
         <div class="panel-footer">

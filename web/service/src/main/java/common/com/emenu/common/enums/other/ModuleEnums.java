@@ -431,6 +431,13 @@ public enum ModuleEnums {
     // 吧台新增消费搜索菜品
     BarOrderDishAddSearch("Bar:Order:Dish:Add:Search"),
 
+    // 吧台酒水标缺少
+    BarWineMark("Bar:Wine:Mark"),
+    BarWineMarKList("Bar:Wine:Mark:List"),
+    BarWineMarkUpdate("Bar:Wine:Mark:Update"),
+
+
+
     // 吧台对账
     BarContrast("Bar:Contrast"),
 

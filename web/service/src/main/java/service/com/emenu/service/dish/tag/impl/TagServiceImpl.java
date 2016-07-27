@@ -227,4 +227,29 @@ public class TagServiceImpl implements TagService{
             throw SSException.get(EmenuException.QueryTagFailed, e);
         }
     }
+
+    @Override
+    public Tag queryByName(String name) throws SSException {
+        Tag tag = null;
+        try {
+            Assert.isNotNull(name,EmenuException.TagNameIsNull);
+            tag = tagMapper.queryByName(name);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
+        return tag;
+    }
+
+    @Override
+    public List<Tag> listByParentId(int parentId) throws SSException {
+        List<Tag> tagList = Collections.emptyList();
+        try {
+            tagList = tagMapper.listByParentId(parentId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
+        return tagList;
+    }
 }

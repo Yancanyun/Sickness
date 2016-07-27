@@ -4,6 +4,7 @@ import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishTag;
+import com.emenu.common.entity.dish.Tag;
 import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;
@@ -99,4 +100,6 @@ public interface DishTagService {
      * @throws Exception
      */
     public int countByTagId(int tagId,String keyword) throws SSException;
+
+
 }

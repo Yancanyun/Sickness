@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -77,9 +78,21 @@ public class AdminSettlementCheckController extends AbstractController{
                                @RequestParam(value = "endTime", required = false) Date endTime,
                                @RequestParam(value = "keyword", required = false) String keyword,
                                @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
-        List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
+        List<StorageCheckDto> storageCheckDtoList = null;
         try {
             storageCheckDtoList = storageSettlementService.listSettlementCheck(startTime,endTime,tagIds,keyword,curPage,pageSize);
+            if (Assert.isNotNull(storageCheckDtoList)
+                    || storageCheckDtoList.size() > 0){
+                Iterator<StorageCheckDto> iter = storageCheckDtoList.iterator();
+                while (iter.hasNext()){
+                    StorageCheckDto storageCheckDto = iter.next();
+                    if (Assert.isNotNull(storageCheckDto)
+                            && Assert.isNotNull(storageCheckDto.getIngredientName())
+                            && !storageCheckDto.getIngredientName().equals(keyword)){
+                        iter.remove();
+                    }
+                }
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

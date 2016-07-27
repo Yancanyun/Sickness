@@ -9,12 +9,14 @@
         SELECT *
         FROM `t_party_employee`
         WHERE `status` != 3
+        ORDER BY `created_time`
     </select>
 
     <select id="queryRoleByPartyId" parameterType="int" resultType="Integer">
         SELECT `role_id` AS `roleId`
         FROM `t_party_employee_role`
         WHERE `party_id` = #{partyId}
+        ORDER BY `created_time`
     </select>
 
 
@@ -35,6 +37,7 @@
         `created_time` AS `createdTime`,
         `last_modified_time` AS `lastModifiedTime`
         from `t_party_employee_role` WHERE `party_id` = #{partyId}
+        ORDER BY `created_time`
     </select>
 
     <update id="updateStatusByPartyId" >
@@ -62,10 +65,15 @@
     <select id="listPartIdByRoles" parameterType="java.util.List" resultType="Integer">
         SELECT DISTINCT `party_id`
         from `t_party_employee_role`
-        WHERE `role_id` IN
-        <foreach collection="roles" index="index" item="roleId" open="(" separator="," close=")">
-            #{roleId}
-        </foreach>
+        <where>
+            `role_id` IN
+            <if test="roles != null and roles.size > 0">
+                <foreach collection="roles" index="index" item="roleId" open="(" separator="," close=")">
+                    #{roleId}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY `created_time`
     </select>
 
     <select id="queryByNumber" parameterType="String" resultMap="pw.Employee">
@@ -77,19 +85,5 @@
     <select id="queryByPhone" parameterType="String" resultMap="pw.Employee">
          SELECT * FROM `t_party_employee` WHERE `phone` = #{phone}
     </select>
-    <!-- <select id="checkUsername" parameterType="String" resultType="User">
-         select id, username from `t_user` where `username` = #{username}
-     </select>
-
-     <delete id="deleteUserRoleByUserId" parameterType="int">
-         delete from `t_user_role` where user_id = #{uid}
-     </delete>
-
-     <select id="checkUserLogin" resultType="User">
-         SELECT u.id,u.status
-         FROM t_user AS u,
-         t_user_role AS ur
-         WHERE u.username=#{username} AND u.password=#{password} AND u.id=ur.user_id AND ur.role=#{role}
-     </select>-->
 
 </mapper>

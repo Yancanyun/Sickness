@@ -58,6 +58,19 @@
         WHERE dish.`status` != 3 AND dish.`id` = #{dishId}
     </select>
 
+    <select id="queryByName" resultMap="pw.Tag">
+        SELECT *
+        FROM `t_tag`
+        WHERE `name` = #{name}
+    </select>
+
+    <select id="listByParentId" resultMap="pw.Tag">
+        SELECT *
+        FROM `t_tag`
+        WHERE `p_id` = #{parentId}
+    </select>
+
+
     <select id="listSecondTag" resultMap="pw.Tag">
         SELECT  *
         FROM  t_tag tag

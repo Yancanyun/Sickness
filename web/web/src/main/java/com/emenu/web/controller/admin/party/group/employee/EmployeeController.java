@@ -77,6 +77,7 @@ public class EmployeeController  extends AbstractController {
                 employeeDtoList = employeeService.listAll();//向前端返回用户列表数据
             }else {
                 List<Integer> roleList = new ArrayList<Integer>();
+
                 for (int i = 0; i <roles.length ; i++) {
                     roleList.add(roles[i]);
                 }

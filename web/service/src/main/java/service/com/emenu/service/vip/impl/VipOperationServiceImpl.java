@@ -10,6 +10,7 @@ import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
+import com.emenu.mapper.vip.VipAccountInfoMapper;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.vip.VipAccountInfoService;
@@ -56,6 +57,9 @@ public class VipOperationServiceImpl implements VipOperationService{
     @Autowired
     private CommonDao commonDao;
 
+    @Autowired
+    private VipAccountInfoMapper vipAccountInfoMapper;
+
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public VipRegisterDto registerVip(String name, Integer sex, String phone, Date birthday, Date validityTime, Integer permanentlyEffective, Integer operatorPartyId) throws SSException {
@@ -82,9 +86,7 @@ public class VipOperationServiceImpl implements VipOperationService{
             vipRegisterDto.setVipCard(vipCard1);
 
             // 会员账户信息
-            VipAccountInfo vipAccountInfo = new VipAccountInfo();
-            vipAccountInfo.setPartyId(vipInfo.getPartyId());
-            VipAccountInfo vipAccountInfo1 = vipAccountInfoService.newVipAccountInfo(vipAccountInfo);
+            VipAccountInfo vipAccountInfo1 = vipAccountInfoMapper.queryEntityByPartyId(vipInfo.getPartyId());
             Assert.isNotNull(vipAccountInfo1,EmenuException.NewVipAccountInfoFailed);
             vipRegisterDto.setVipAccountInfo(vipAccountInfo1);
 

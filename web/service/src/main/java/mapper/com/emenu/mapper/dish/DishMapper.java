@@ -3,6 +3,7 @@ package com.emenu.mapper.dish;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.entity.dish.Dish;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -86,4 +87,21 @@ public interface DishMapper {
      * @throws Exception
      */
     public int dislikeThisDish(@Param("id")int id) throws Exception;
+
+    /**
+     * 根据tagid获取dish
+     * @param tagIdList
+     * @return
+     * @throws Exception
+     */
+    public List<Dish> listByTagIdList(@Param("tagIdList") List<Integer> tagIdList) throws Exception;
+
+    /**
+     * 根据关键字搜索和状态搜索酒水
+     * @param keyword
+     * @param status
+     * @return
+     */
+    public List<Dish> listByKeywordAndStatus(@Param("keyword") String keyword, @Param("status") int status) throws Exception;
+
 }

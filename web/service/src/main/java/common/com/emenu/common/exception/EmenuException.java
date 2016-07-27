@@ -114,6 +114,7 @@ public enum EmenuException implements IBizExceptionMes {
     DelByDishTagIdFailed("根据菜品分类id删除菜品分类失败",3022),
     NewDishRemarkTagsFailed("新增菜品分类与备注分类失败",3023),
     DishRemarkTags("菜品分类与备注不为空",3024),
+    TagNotExist("菜品没有存在",2025),
 
     //菜品口味
     ListTasteFailed("口味列表查询失败", 3040),
@@ -676,6 +677,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryDishByTagFail("根据菜品大类查询菜品失败",10201),
     QueryDishByKeyFail("根据关键字查询菜品失败",10202),
 
+    QueryDishTagByNameFail("根据关键字查询分类失败",10203),
     ;
 
 

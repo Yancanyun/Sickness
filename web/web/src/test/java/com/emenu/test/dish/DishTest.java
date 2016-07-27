@@ -4,6 +4,7 @@ import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.dish.DishTagService;
@@ -79,6 +80,16 @@ public class DishTest extends AbstractTestCase {
             }
     }
         System.out.print(count);
+    }
+
+    @Test
+    public void listByTagIds() throws Exception{
+        List<Integer> tagIds = new ArrayList<Integer>();
+        tagIds.add(71);
+        tagIds.add(117);
+        tagIds.add(124);
+        List<Dish> dishList = dishService.listByTagIdList(tagIds);
+        System.out.println("x");
     }
 
 }

@@ -148,7 +148,7 @@ public class VipInfoServiceImpl implements VipInfoService{
             //3.向t_vip_account_info会员账户表添加一条信息
             VipAccountInfo vipAccountInfo = new VipAccountInfo();
             vipAccountInfo.setPartyId(partyId);
-            vipAccountInfo.setUsedCreditAmount(new BigDecimal(11));
+            vipAccountInfo.setUsedCreditAmount(new BigDecimal(0));
             vipAccountInfo.setBalance(new BigDecimal(0));
             vipAccountInfo.setIntegral(0);
             vipAccountInfo.setTotalConsumption(new BigDecimal(0));
@@ -167,6 +167,51 @@ public class VipInfoServiceImpl implements VipInfoService{
             throw SSException.get(EmenuException.InsertVipInfoFail, e);
         }
     }
+
+    @Override
+    public VipInfo newVipInfo1(Integer userPartyId, VipInfo vipInfo) throws SSException {
+        try{
+            if (!checkBeforeSave(vipInfo)){
+                throw SSException.get(EmenuException.InsertVipInfoFail);
+            }
+
+            //首先判断手机号是否存在
+            String phone = vipInfo.getPhone();
+            if (this.checkPhoneIsExist(vipInfo.getId(), phone)){
+                throw SSException.get(EmenuException.VipInfoPhoneExist);
+            }
+
+            //1.先向t_party表添加一条当事人信息
+            Party party = new Party();
+            party.setPartyTypeId(PartyTypeEnums.Vip.getId());//会员
+            party.setCreatedUserId(userPartyId);//当前登录者的id
+            Party newParty = this.partyService.newParty(party);
+            int partyId = newParty.getId();//获取刚插入数据的partyId
+
+            //2.再向t_party_security_user表添加一条登录信息，默认登录名为手机号码，密码为123456；
+            SecurityUser securityUser = new SecurityUser();
+            String password = CommonUtil.md5("123456");
+            securityUser.setPartyId(partyId);
+            securityUser.setLoginName(phone);
+            securityUser.setPassword(password);
+            securityUser.setAccountType(AccountTypeEnums.Normal.getId());//正常账户
+            securityUser.setStatus(EnableEnums.Enabled.getId());
+            this.securityUserService.newSecurityUser(securityUser);
+
+
+            //4.添加t_party_vip_info会员基本信息表
+            vipInfo.setPartyId(partyId);
+            vipInfo.setGradeId(0);//注册时设置为默认最低等级
+            vipInfo.setStatus(UserStatusEnums.Enabled.getId());
+            commonDao.insert(vipInfo);
+
+            return vipInfo;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertVipInfoFail, e);
+        }
+    }
+
 
     @Override
     public boolean checkPhoneIsExist(Integer id, String phone) throws SSException{

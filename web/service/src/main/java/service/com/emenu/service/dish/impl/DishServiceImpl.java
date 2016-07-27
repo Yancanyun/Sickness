@@ -332,6 +332,31 @@ public class DishServiceImpl implements DishService {
         }
     }
 
+    @Override
+    public List<Dish> listByTagIdList(List<Integer> tagIdList) throws SSException {
+        List<Dish> dishList = Collections.emptyList();
+        try {
+            dishList = dishMapper.listByTagIdList(tagIdList);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDishError, e);
+        }
+        return dishList;
+    }
+
+    @Override
+    public List<Dish> listByKeywordAndStatus(String keyword, int status) throws SSException{
+        List<Dish> dishList = Collections.emptyList();
+        try {
+            Assert.isNotNull(keyword,EmenuException.KeywordError);
+            dishList = dishMapper.listByKeywordAndStatus(keyword,status);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDishError, e);
+        }
+        return dishList;
+    }
+
     private boolean checkBeforeSave(DishDto dishDto) throws SSException {
         if (Assert.isNull(dishDto)) {
             return false;

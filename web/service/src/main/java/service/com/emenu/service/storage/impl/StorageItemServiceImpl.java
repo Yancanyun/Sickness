@@ -300,6 +300,23 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateById(StorageItem storageItem) throws SSException {
+        try {
+            if(Assert.isNull(storageItem)){
+                throw SSException.get(EmenuException.StorageItemIdNotNull);
+            }
+            if (Assert.isNull(storageItem.getId())&&Assert.lessOrEqualZero(storageItem.getId())){
+                throw SSException.get(EmenuException.StorageItemIdNotNull);
+            }
+            commonDao.update(storageItem);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.StorageItemUpdateFailed, e);
+        }
+    }
+
+    @Override
     public boolean checkStorageItemIsExist(StorageItem storageItem) throws SSException {
         Integer count = 0;
         try {

@@ -122,5 +122,21 @@ public interface DishService {
      * @throws SSException
      */
     public List<Remark> queryDishRemarkByDishId(int dishId) throws SSException;
+
+    /**
+     * 根据分类idlist获取dish
+     * @param tagIdList
+     * @return
+     * @throws SSException
+     */
+    public List<Dish> listByTagIdList(List<Integer> tagIdList) throws SSException;
+
+    /**
+     * 根据关键字搜索和状态搜索酒水
+     * @param keyword
+     * @param status
+     * @return
+     */
+    public List<Dish> listByKeywordAndStatus(String keyword,int status) throws SSException;
 }
 

@@ -10,6 +10,7 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.storage.StorageReportIsAuditedEnum;
 import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
@@ -316,7 +317,7 @@ public class AdminStorageReportController extends AbstractController {
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
+            return sendMsgAndCode(AJAX_FAILURE_CODE,"小计失败");
         }
     }
 
@@ -505,6 +506,18 @@ public class AdminStorageReportController extends AbstractController {
             SecurityUser securityUser = securityUserService.queryByLoginName((String)httpSession.getAttribute("userName"));
             if (Assert.isNull(storageReport)){
                 throw SSException.get(PartyException.UserNotExist);
+            }
+            if (isAudited == StorageReportIsAuditedEnum.Passed.getId()) {
+                if (storageReport.getType() == StorageReportTypeEnum.StockInReport.getId()) {
+                    List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
+                    Assert.isNotNull(storageReportItemList, EmenuException.StorageItemIsNotNull);
+                    for (StorageReportItem reportItem : storageReportItemList) {
+                        StorageItem storageItem = storageItemService.queryById(reportItem.getItemId());
+                        storageItem.setTotalStockInQuantity(storageItem.getTotalStockInMoney().add(reportItem.getQuantity()));
+                        storageItem.setTotalStockInMoney(storageItem.getTotalStockInMoney().add(reportItem.getCount()));
+                        storageItemService.updateById(storageItem);
+                    }
+                }
             }
             storageReport.setAuditPartyId(securityUser.getPartyId());
             storageReportService.updateById(storageReport);

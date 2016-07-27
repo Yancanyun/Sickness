@@ -67,6 +67,12 @@ public interface StorageItemService {
     public void updateStorageItem(StorageItem storageItem, Integer isUpdated) throws SSException;
 
     /**
+     * 根据id修改库存物品
+     * @throws SSException
+     */
+    public void updateById(StorageItem storageItem) throws SSException;
+
+    /**
      * 判断数据库中该物品是否存在
      * @param storageItem
      * @throws SSException

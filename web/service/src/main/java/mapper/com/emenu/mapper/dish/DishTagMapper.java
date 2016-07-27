@@ -2,6 +2,7 @@ package com.emenu.mapper.dish;
 
 import com.emenu.common.dto.dish.DishSearchDto;
 import com.emenu.common.dto.dish.DishTagDto;
+import com.emenu.common.entity.dish.Tag;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
@@ -62,4 +63,5 @@ public interface DishTagMapper {
      * @throws Exception
      */
     public int countByTagId(@Param("tagId") int tagId,@Param("keyword") String keyword) throws Exception;
+
 }

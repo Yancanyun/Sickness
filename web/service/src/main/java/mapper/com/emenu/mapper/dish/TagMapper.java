@@ -67,4 +67,20 @@ public interface TagMapper {
      * @throws Exception
      */
     public List<Tag> listSecondTag() throws Exception;
+
+    /**
+     * 根据tagname获取tag
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public Tag queryByName(String name) throws SSException;
+
+    /**
+     * 根据父id获取taglist
+     * @param parentId
+     * @return
+     * @throws SSException
+     */
+    public List<Tag> listByParentId(int parentId) throws SSException;
 }

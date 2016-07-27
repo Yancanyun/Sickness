@@ -6,6 +6,7 @@ import com.emenu.common.dto.dish.DishTagDto;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.DishTag;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.TrueEnums;
 import com.emenu.common.enums.dish.DishImgTypeEnums;
 import com.emenu.common.exception.EmenuException;
@@ -236,6 +237,8 @@ public class DishTagServiceImpl implements DishTagService {
         }
         return count;
     }
+
+
 
     private boolean checkBeforeSave(DishTag dishTag) throws SSException {
         if (Assert.isNull(dishTag)) {

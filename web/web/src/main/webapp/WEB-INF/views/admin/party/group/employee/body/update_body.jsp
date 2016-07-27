@@ -49,13 +49,14 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>密码<!-- 新密码--> </label>
             <div class="col-sm-6">
-              <input class="w180" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16) || isNull " value="" name="password" />
+              <input class="w180 J_passward" type="password" id="pwd" data-valid-tip="请输入密码|密码有误，请重新输入" data-valid-rule="isPassword&length(5,16) | isNull " value="" name="password" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>确认密码 <!--确认新密码--></label>
             <div class="col-sm-6">
-              <input class="w180" type="password" data-valid-tip="请再次输入一遍密码|两次密码不同，请重新输入" data-valid-rule="isPassword&require(pwd)&equal(pwd)" value="" name="" />
+              <input class="w180 J_confirmPwd" type="password" value="" name="" />
+              <span></span>
             </div>
           </div>
           <div class="form-group">

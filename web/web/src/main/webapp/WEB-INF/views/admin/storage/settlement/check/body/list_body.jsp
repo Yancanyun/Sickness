@@ -44,6 +44,7 @@
                     <!-- 搜索原材料-hidden-刷数据 -->
                     <!-- data-code中刷原材料编号 -->
                     <select class="selectpicker show-tick form-control hidden" data-live-search="true">
+                        <option value="-1" data-code="null">请选择</option>
                         <c:forEach var="ingredient" items="${ingredientList}">
                             <option value="${ingredient.id}" data-code="${ingredient.assistantCode}">${ingredient.name}</option>
                         </c:forEach>
