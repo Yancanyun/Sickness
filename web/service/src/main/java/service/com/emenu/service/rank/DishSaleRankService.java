@@ -6,6 +6,7 @@ import com.emenu.common.dto.rank.DishSaleRankDto;
 import com.emenu.common.entity.order.OrderDish;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -34,5 +35,59 @@ public interface DishSaleRankService {
      */
     public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroid(Date startTime ,Date endTime) throws SSException;
 
+    /**
+     * 找到所有的菜品销售情况
+     * @return
+     * @throws SSException
+     */
     public List<DishSaleRankDto> listAll() throws SSException;
+
+    /**
+     * 根据起始时间和结束时间和菜品大类查询
+     * 可用于导出Excel
+     * @param startTime
+     * @param endTime
+     * @param tagId
+     * @return
+     * @throws SSException
+     */
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagId(Date startTime
+                                                                            ,Date endTime
+                                                                            ,Integer tagId) throws SSException;
+
+    /**
+     * 导出Excel
+     * @param startTime
+     * @param endTime
+     * @param tagId
+     * @throws SSException
+     */
+    public void exportToExcel(Date startTime ,Date endTime,Integer tagId,HttpServletResponse response) throws SSException;
+
+    /**
+     * 根据起始时间和结束时间和菜品大类查询
+     * 分页查询
+     * @param startTime
+     * @param endTime
+     * @param tagId
+     * @param pageSize
+     * @param pageNumber
+     * @return
+     * @throws SSException
+     */
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(Date startTime
+                                                                                ,Date endTime
+                                                                                ,Integer tagId
+                                                                                ,Integer pageSize
+                                                                                ,Integer pageNumber) throws SSException;
+
+    /**
+     * 根据起始时间和结束时间和菜品大类Id找到数据条数
+     * @param startTime
+     * @param endTime
+     * @param tagId
+     * @return
+     * @throws SSException
+     */
+    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException;
 }

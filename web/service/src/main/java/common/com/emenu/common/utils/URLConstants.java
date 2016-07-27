@@ -138,6 +138,9 @@ public final class URLConstants {
     //会员积分方案管理
     public static final String ADMIN_VIP_INTEGRAL_URL = "admin/vip/integral/plan";
 
+    // 统计菜品销售的排行
+    public static final String ADMIN_COUNT_DISH_SALE_RANKING_URL = "admin/vip/integral/plan";
+
 
 
     /**********************顾客点菜平台*************************/

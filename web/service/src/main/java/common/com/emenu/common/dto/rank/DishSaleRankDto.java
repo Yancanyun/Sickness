@@ -86,4 +86,5 @@ public class DishSaleRankDto {
     public void setDishId(Integer dishId) {
         this.dishId = dishId;
     }
+
 }

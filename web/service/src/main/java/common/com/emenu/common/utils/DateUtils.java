@@ -3,6 +3,7 @@ package com.emenu.common.utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 /**
  * 日期时间工具类
@@ -224,6 +225,7 @@ public class DateUtils {
         return lastDay;
     }
 
+
     /**
      * 获取本月第一天
      *
@@ -251,4 +253,77 @@ public class DateUtils {
         String lastDay = format.format(calendar.getTime());
         return lastDay;
     }
+
+    /**
+     * 获取本天时间
+     * @return
+     */
+    public static String getToday(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        String today = format.format(calendar.getTime());
+        return today;
+    }
+    /**
+     * 获取昨天时间
+     * @return
+     */
+    public static String getYesterday(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, -1);
+        String yesterday = format.format(calendar.getTime());
+        return yesterday;
+    }
+
+    /**
+     * 获取本周第一天
+     * @return
+     */
+    public static String getCurrentWeekFirstDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+    /**获取本周最后一天
+     * @return
+     */
+    public static String getCurrentWeekLastDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        String lastDay = format.format(calendar.getTime());
+        return lastDay;
+    }
+    /**
+     * 获取上周第一天
+     * @return
+     *
+     */
+    public static String getLastWeekFirstDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.WEEK_OF_YEAR, -1);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+    /**
+     * 获取上周最后一天
+     * @return
+     *
+     */
+    public static String getLastWeekLastDay() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
 }

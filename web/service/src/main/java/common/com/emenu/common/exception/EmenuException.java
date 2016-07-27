@@ -563,7 +563,10 @@ public enum EmenuException implements IBizExceptionMes {
     GetOrderDishByTimePeroidFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),
     GetDishSaleRankDtoByTimePeroidFailed("根据开始时间和结束时间获取消费菜品并处理放入dto中失败",9002),
     ListAllDishSaleRankDtoFailed("查找全部的菜品销售排行失败",9003),
-
+    GetOrderDishDtoByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类的Id获取消费菜品并处理放入dto中失败",9004),
+    ExportToExcelFailed("菜品销售排行导出Excel表格失败",9005),
+    GetPageOrderDishDtoByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取分页失败",9006),
+    GetCountByTimePeroidAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取数据条数失败",9007),
 
     /****************************顾客点餐端****************************/
     // 点菜

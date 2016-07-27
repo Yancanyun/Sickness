@@ -54,4 +54,18 @@ public class DishSaleRankTest extends AbstractTestCase {
             System.out.println(list.get(i).getConsumeSum());
         }
     }
+
+    @Test
+    public void getData() throws SSException{
+        System.out.println("本月第一天：" + DateUtils.getCurrentMonthFirstDay());
+        System.out.println("本月最后一天：" + DateUtils.getCurrentMonthLastDay());
+        System.out.println("上月第一天：" + DateUtils.getLastMonthFirstDay());
+        System.out.println("上月最后一天：" + DateUtils.getLastMonthLastDay());
+        System.out.println("本周第一天：" + DateUtils.getCurrentWeekFirstDay());
+        System.out.println("本周最后一天：" + DateUtils.getCurrentWeekLastDay());
+        System.out.println("上周第一天：" + DateUtils.getLastWeekFirstDay());
+        System.out.println("上周最后一天：" + DateUtils.getLastWeekLastDay());
+        System.out.println("今天：" + DateUtils.getToday());
+        System.out.println("昨天：" + DateUtils.getYesterday());
+    }
 }

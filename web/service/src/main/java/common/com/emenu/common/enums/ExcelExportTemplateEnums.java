@@ -1,6 +1,7 @@
 package com.emenu.common.enums;
 
 import com.pandawork.core.pweio.excel.ExcelTemplateEnum;
+import org.springframework.jdbc.support.incrementer.AbstractDataFieldMaxValueIncrementer;
 
 /**
  * ExcelExportTemplateEnums
@@ -11,13 +12,22 @@ import com.pandawork.core.pweio.excel.ExcelTemplateEnum;
 public enum ExcelExportTemplateEnums implements ExcelTemplateEnum {
     AdminSettlementCheckList("库存盘点列表",
             "classpath:template/excel/admin_storage_settlement_check_excel_export_template.xls"),
+
     AdminSettlementSupplierList("结算中心列表",
             "classpath:template/excel/admin_storage_settlement_supplier_excel_export_template.xls"),
+
     AdminStorageReportList("库存单据",
             "classpath:template/excel/admin_storage_report_excel_template.xls"),
-    AdminStorageList("库存原配料","classpath:template/excel/admin_storage_ingredient_excel_template.xls"),
 
-    AdminStorageItemList("库存物品","classpath:template/excel/admin_storage_item_excel_template.xls");
+    AdminStorageList("库存原配料",
+            "classpath:template/excel/admin_storage_ingredient_excel_template.xls"),
+
+
+    AdminStorageItemList("库存物品",
+            "classpath:template/excel/admin_storage_item_excel_template.xls"),
+
+    AdminRankDishSaleRankList("菜品销售排行",
+            "classpath:template/excel/admin_rank_dishsale_excel_template.xls");
 
 
 
