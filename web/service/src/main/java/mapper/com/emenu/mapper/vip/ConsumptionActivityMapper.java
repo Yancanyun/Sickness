@@ -3,6 +3,7 @@ package com.emenu.mapper.vip;
 import com.emenu.common.entity.vip.ConsumptionActivity;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -35,4 +36,12 @@ public interface ConsumptionActivityMapper {
     public int countByPartyIdAndPageAndDate(@Param("partyId") int partyId,
                                             @Param("startTime") Date startTime,
                                             @Param("endTime") Date endTime) throws Exception;
+
+    /**
+     * 查询该时间之后的所有现金充值
+     * @param startTime
+     * @return
+     * @throws Exception
+     */
+    public BigDecimal queryCashRechargeFromDate(@Param("startTime") Date startTime) throws Exception;
 }

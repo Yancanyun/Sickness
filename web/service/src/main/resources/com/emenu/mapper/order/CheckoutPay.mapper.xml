@@ -7,4 +7,11 @@
         SELECT * FROM `t_checkout_pay`
         WHERE `checkout_id` = #{checkoutId}
     </select>
+
+    <select id="queryCashIncomeFromDate" resultType="BigDecimal">
+        SELECT SUM(pay_money)
+        FROM t_checkout_pay
+        WHERE `checkout_type` = 1
+        AND `created_time` &gt; #{startTime}
+    </select>
 </mapper>

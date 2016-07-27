@@ -9,6 +9,9 @@ import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.entity.vip.ConsumptionActivity;
+import com.emenu.common.entity.vip.VipAccountInfo;
+import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.checkout.CheckoutConsumptionTypeEnums;
 import com.emenu.common.enums.checkout.CheckoutTypeEnums;
@@ -16,6 +19,7 @@ import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.*;
 import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
+import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
@@ -24,9 +28,12 @@ import com.emenu.service.order.CheckoutPayService;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.table.TableMergeService;
 import com.emenu.service.table.TableService;
+import com.emenu.service.vip.VipAccountInfoService;
+import com.emenu.service.vip.VipCardService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -79,6 +86,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Autowired
     private TableMergeService tableMergeService;
+
+    @Autowired
+    private VipAccountInfoService vipAccountInfoService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @Override
     public Checkout queryByTableIdAndStatus(int tableId, int status) throws SSException {
@@ -409,11 +422,33 @@ public class CheckoutServiceImpl implements CheckoutService {
                     }
                 }
 
-                // TODO: 如果是会员卡结账，要做特殊操作
-//                if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
-//                    // 会员卡结账时，流水号字段中的内容是会员卡号
-                int vipCardNumber = Integer.getInteger(serialNum);
-//                }
+                // 如果是会员卡结账，要对会员信息做操作
+                if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
+                    // 会员卡结账时，流水号字段中的内容是会员partyId
+                    Integer vipPartyId = Integer.valueOf(serialNum);
+
+                    // 查询会员账户信息
+                    VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipPartyId);
+
+                    // 新增一条会员消费记录
+                    ConsumptionActivity consumptionActivity = new ConsumptionActivity();
+                    consumptionActivity.setPartyId(vipPartyId);
+                    // 原有金额
+                    consumptionActivity.setOriginalAmount(vipAccountInfo.getBalance());
+                    // 卡内余额
+                    consumptionActivity.setResidualAmount(vipAccountInfo.getBalance().subtract(totalPayMoney));
+                    // 消费金额
+                    consumptionActivity.setConsumptionAmount(consumptionMoney);
+                    // 实际付款
+                    consumptionActivity.setActualPayment(totalPayMoney);
+                    consumptionActivity.setType(ConsumptionActivityTypeEnums.Consumption.getId());
+                    consumptionActivity.setOperator(employeeService.queryByPartyId(partyId).getName());
+                    commonDao.insert(consumptionActivity);
+
+                    // 修改账户信息
+                    vipAccountInfo.setBalance(vipAccountInfo.getBalance().subtract(totalPayMoney));
+                    commonDao.update(vipAccountInfo);
+                }
             }
 
             return checkoutList;

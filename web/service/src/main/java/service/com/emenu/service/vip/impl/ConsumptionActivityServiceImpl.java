@@ -11,6 +11,7 @@ import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -64,6 +65,22 @@ public class ConsumptionActivityServiceImpl implements ConsumptionActivityServic
             int count = consumptionActivityMapper.countByPartyIdAndPageAndDate(partyId, startTime, endTime);
             return count;
         } catch(Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryConsumptionActivityFail, e);
+        }
+    }
+
+    @Override
+    public BigDecimal queryCashRechargeFromDate(Date startTime) throws SSException {
+        try {
+            BigDecimal cashRecharge = consumptionActivityMapper.queryCashRechargeFromDate(startTime);
+
+            if (Assert.isNull(cashRecharge)) {
+                cashRecharge = new BigDecimal(0);
+            }
+
+            return cashRecharge;
+        } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryConsumptionActivityFail, e);
         }

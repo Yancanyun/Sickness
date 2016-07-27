@@ -25,4 +25,12 @@
             AND `created_time` &lt;= #{endTime}
         </if>
     </select>
+
+    <select id="queryCashRechargeFromDate" resultType="BigDecimal">
+        SELECT SUM(actual_payment)
+        FROM t_vip_consumption_activity
+        WHERE `type` = 2
+        AND `payment_type` = 1
+        AND `created_time` &gt; #{startTime}
+    </select>
 </mapper>

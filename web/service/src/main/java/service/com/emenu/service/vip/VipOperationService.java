@@ -56,4 +56,5 @@ public interface VipOperationService {
                                      BigDecimal payAmount,
                                      Integer operator,
                                      Integer paymentType) throws SSException;
+
 }

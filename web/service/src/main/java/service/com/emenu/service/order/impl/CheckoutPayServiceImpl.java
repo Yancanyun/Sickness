@@ -4,6 +4,7 @@ import com.emenu.common.entity.order.CheckoutPay;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.mapper.order.CheckoutPayMapper;
 import com.emenu.service.order.CheckoutPayService;
 import com.pandawork.core.common.exception.SSException;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +71,22 @@ public class CheckoutPayServiceImpl implements CheckoutPayService {
             Assert.lessOrEqualZero(checkoutId, EmenuException.CheckoutIdError);
 
             return checkoutPayMapper.queryByCheckoutId(checkoutId);
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCheckoutPayFailed, e);
+        }
+    }
+
+    @Override
+    public BigDecimal queryCashIncomeFromDate(Date startTime) throws SSException {
+        try {
+            BigDecimal cashIncome = checkoutPayMapper.queryCashIncomeFromDate(startTime);
+
+            if (Assert.isNull(cashIncome)) {
+                cashIncome = new BigDecimal(0);
+            }
+
+            return cashIncome;
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryCheckoutPayFailed, e);

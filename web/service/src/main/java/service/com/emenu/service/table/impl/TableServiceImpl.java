@@ -1,5 +1,7 @@
 package com.emenu.service.table.impl;
 
+import com.emenu.common.cache.call.CallCache;
+import com.emenu.common.cache.call.TableCallCache;
 import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.meal.MealPeriod;
@@ -770,8 +772,14 @@ public class TableServiceImpl implements TableService {
             // 把新旧餐台的点餐缓存交换
             orderDishCacheService.changeCache(oldTableId, newTableId);
 
-            // TODO: 把新旧餐台的呼叫服务交换
-
+            // 把新旧餐台的呼叫服务交换
+            TableCallCache oldTableCallCache = callCacheService.queryCallCachesByTableId(oldTableId);
+            if (Assert.isNotNull(oldTableCallCache.getCallCacheList()) &&
+                    oldTableCallCache.getCallCacheList().size() > 0) {
+                for (CallCache callCache : oldTableCallCache.getCallCacheList()) {
+                    callCacheService.addCallCache(newTableId, callCache);
+                }
+            }
 
         } catch (Exception e) {
             LogClerk.errLog.error(e);

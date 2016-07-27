@@ -3,6 +3,9 @@ package com.emenu.service.order;
 import com.emenu.common.entity.order.CheckoutPay;
 import com.pandawork.core.common.exception.SSException;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * CheckoutPayService
  *
@@ -31,4 +34,12 @@ public interface CheckoutPayService {
      * @throws SSException
      */
     public CheckoutPay queryByCheckoutId (int checkoutId) throws SSException;
+
+    /**
+     * 查询该时间之后的所有现金收入
+     * @param startTime
+     * @return
+     * @throws SSException
+     */
+    public BigDecimal queryCashIncomeFromDate(Date startTime) throws SSException;
 }

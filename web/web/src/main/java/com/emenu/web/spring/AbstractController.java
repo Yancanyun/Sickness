@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.dto.rank.DishSaleRankDto;
 import com.emenu.common.utils.WebConstants;
+import com.emenu.service.bar.BarContrastService;
 import com.emenu.service.bar.BarOrderDishNewService;
 import com.emenu.service.call.CallCacheService;
 import com.emenu.service.cook.CookTableCacheService;
@@ -482,11 +483,16 @@ public class AbstractController extends Base {
     @Qualifier("orderDishCacheService")
 
     protected static OrderDishCacheService orderDishCacheService;
+
     //结账单
     @StaticAutoWire
     @Qualifier("checkoutService")
     protected static CheckoutService checkoutService;
 
+    //结账-支付
+    @StaticAutoWire
+    @Qualifier("checkoutPayService")
+    protected static CheckoutPayService checkoutPayService;
 
 
     //菜品大类和备注大类关联service
@@ -541,6 +547,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("barOrderDishNewService")
     protected static BarOrderDishNewService barOrderDishNewService;
+
+    // 吧台对账
+    @StaticAutoWire
+    @Qualifier("barContrastService")
+    protected static BarContrastService barContrastService;
 
 
 }

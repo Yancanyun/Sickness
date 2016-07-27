@@ -3,6 +3,7 @@ package com.emenu.service.vip;
 import com.emenu.common.entity.vip.ConsumptionActivity;
 import com.pandawork.core.common.exception.SSException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -36,4 +37,12 @@ public interface ConsumptionActivityService {
     public int countByPartyIdAndDate(int partyId,
                                      Date startTime,
                                      Date endTime) throws SSException;
+
+    /**
+     * 查询该时间之后的所有现金充值
+     * @param startTime
+     * @return
+     * @throws SSException
+     */
+    public BigDecimal queryCashRechargeFromDate(Date startTime) throws SSException;
 }

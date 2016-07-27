@@ -569,6 +569,12 @@ public enum EmenuException implements IBizExceptionMes {
     GetCountByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取数据条数失败",9007),
     GetDishTagRankFailed("根据开始时间和结束时间获取菜品大类的排行失败",9008),
 
+    // 吧台对账
+    NewBarContrastFailed("新增吧台对账记录失败", 9020),
+    QueryBarContrastFailed("查询吧台对账记录失败", 9021),
+
+
+
     /****************************顾客点餐端****************************/
     // 点菜
     NewDishError("点菜失败", 10001),
