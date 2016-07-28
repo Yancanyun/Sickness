@@ -25,7 +25,7 @@ KISSY.add(function(S){
                 ['moveout', 'cook/ingredient/ajax/moveout ', 'post', '将原配料恢复']
             ],
             login: [
-                ['login', 'mock/login.json','get', '后厨登录验证']
+                ['login', 'cook/ajax/login','post', '后厨登录验证']
             ]
         };
     //定义常用失败数据错误码，方便处理

@@ -129,11 +129,11 @@
       <li class="dropdown">
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-            当前登录：${employeeDto.loginName}
+            当前登录：${web_user_login_name}
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="${website}cook/login/loginOut">退出登录</a></li>
+            <li><a href="${website}cook/logout">退出登录</a></li>
           </ul>
         </div>
       </li>

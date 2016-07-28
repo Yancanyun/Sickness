@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.dto.table.TableDto;
+import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.party.group.employee.Employee;
@@ -147,10 +148,11 @@ public class BarCheckoutController extends AbstractController {
             }
 
             // 结账
-            checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney, totalPayMoney,
+            List<Checkout> checkoutList = checkoutService.checkout(tableId, partyId, consumptionMoney, wipeZeroMoney, totalPayMoney,
                     checkoutType, serialNum, isInvoiced);
 
-            // TODO: 打印消费清单
+            // 打印消费清单
+            checkoutService.printCheckOut(checkoutList);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -236,9 +238,10 @@ public class BarCheckoutController extends AbstractController {
             int partyId = securityUser.getPartyId();
 
             // 免单
-            checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
+            List<Checkout> checkoutList = checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
 
-            // TODO: 打印消费清单
+            // 打印消费清单
+            checkoutService.printCheckOut(checkoutList);
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {

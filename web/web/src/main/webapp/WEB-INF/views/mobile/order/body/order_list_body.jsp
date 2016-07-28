@@ -64,9 +64,9 @@
               </c:choose>
             </p>
             <p class="ordering-number">
-              <button class="J_redudeButton"><i class="fa fa-minus"></i></button>
+              <button class="J_redudeButton ordering-number-button"><i class="fa fa-minus"></i></button>
               <input class="ordering-dish-number" type="tel" value="${dto.count}" readonly>
-              <button class="J_plusButton"><i class="fa fa-plus"></i></button>
+              <button class="J_plusButton ordering-number-button"><i class="fa fa-plus"></i></button>
               <span class="ordering-dish-unit">${dto.unitName}</span>
             </p>
             <p class="ordering-remark-info J_remarks">${dto.remark}</p>
