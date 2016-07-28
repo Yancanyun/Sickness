@@ -314,11 +314,48 @@ public class OrderDishServiceImpl implements OrderDishService{
                 throw SSException.get(EmenuException.OrderDishIdError);
             }
 
-            // TODO 多次催菜实现多次记录，现在只做1次催菜记录
-
             OrderDish orderDish = orderDishMapper.queryById(orderDishId);
-            orderDish.setIsCall(OrderDishCallStatusEnums.IsCall.getId());
-            commonDao.update(orderDish);
+            // 获取该菜品的信息
+            DishDto dishDto = dishService.queryById(orderDish.getDishId());
+            // 系统当前时间
+            Date nowDate = new Date();
+            // 获取已下单的分钟数
+            Long time = (nowDate.getTime() - orderDish.getOrderTime().getTime())/60/1000;
+
+            // 套餐催菜，整体菜品催菜
+            if (orderDish.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
+                List<OrderDish> orderDishList = this.queryPackageOrderDishesByPackageFlag(orderDish.getPackageFlag());
+                Integer minTime = dishDto.getTimeLimit();
+                // 取出套餐中最小的上菜时限
+                for (int i = 0; i < orderDishList.size(); i++){
+                    DishDto tempDishDto = dishService.queryById(orderDish.getDishId());
+                    if (tempDishDto.getTimeLimit() < minTime){
+                        minTime = tempDishDto.getTimeLimit();
+                    }
+                }
+                // 时间达到最小时限，则把套餐中所有菜品进行催菜
+                if (minTime > 0 && minTime < time){
+                    throw SSException.get(EmenuException.CallDishNotAllow);
+                }else {
+                    for (OrderDish tempOrderDish : orderDishList){
+                        tempOrderDish.setIsCall(OrderDishCallStatusEnums.IsCall.getId());
+                        commonDao.update(tempOrderDish);
+                    }
+                }
+
+            } else {
+                // 非套餐催菜
+                // 催菜加时限判断，未到达菜品上菜时限不能催菜。
+                if (dishDto.getTimeLimit() == 0){
+                    // 没有时限的菜品可以催菜
+                    orderDish.setIsCall(OrderDishCallStatusEnums.IsCall.getId());
+                }else if (time > dishDto.getTimeLimit()){
+                    orderDish.setIsCall(OrderDishCallStatusEnums.IsCall.getId());
+                }else {
+                    throw SSException.get(EmenuException.CallDishNotAllow);
+                }
+                commonDao.update(orderDish);
+            }
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException. CallDishFailed,e);

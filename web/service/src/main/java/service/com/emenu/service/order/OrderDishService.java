@@ -163,7 +163,7 @@ public interface OrderDishService {
     public void isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
 
     /**
-     *
+     * 根据订单号和套餐id查询套餐的所有菜品
      * @param orderId
      * @param packageId
      * @return
