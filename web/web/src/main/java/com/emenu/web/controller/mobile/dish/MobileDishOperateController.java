@@ -19,6 +19,8 @@ import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -113,7 +115,8 @@ public class MobileDishOperateController extends AbstractController {
      */
     @RequestMapping(value = "ajax/search", method = RequestMethod.GET)
     @ResponseBody
-    public JSON ajaxDishSearch(@RequestParam("key") String key) {
+    public JSON ajaxDishSearch(@RequestParam("key") String key,
+                               HttpServletRequest httpServletRequest) {
 
         try {
             DishSearchDto dishSearchDto = new DishSearchDto();
@@ -124,9 +127,11 @@ public class MobileDishOperateController extends AbstractController {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("dishListSrc", "image?keyword=");
-            ConstantsFilter constantsFilter = new ConstantsFilter();
-            String website = constantsFilter.getWebsite();
-            jsonObject.put("dishDetailSrc", website + "mobile/dish/detail/");
+            String path = httpServletRequest.getContextPath();
+            int port = httpServletRequest.getServerPort();
+            String href = httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName()
+                    + (port == 80 ? "" : (":" + port)) + path + "mobile/dish/detail/";
+            jsonObject.put("dishDetailSrc", href);
 
             JSONArray contentList = new JSONArray();
             for (DishDto dishDto : dishDtoList) {
