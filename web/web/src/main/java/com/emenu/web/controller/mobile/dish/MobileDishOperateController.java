@@ -11,6 +11,7 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.web.filter.ConstantsFilter;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -123,7 +124,9 @@ public class MobileDishOperateController extends AbstractController {
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("dishListSrc", "image?keyword=");
-            jsonObject.put("dishDetailSrc", "detail/");
+            ConstantsFilter constantsFilter = new ConstantsFilter();
+            String website = constantsFilter.getWebsite();
+            jsonObject.put("dishDetailSrc", website + "mobile/dish/detail/");
 
             JSONArray contentList = new JSONArray();
             for (DishDto dishDto : dishDtoList) {

@@ -304,8 +304,12 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
 
             tableOrderCacheMap.remove(oldTableId);
             tableOrderCacheMap.remove(newTableId);
-            tableOrderCacheMap.put(oldTableId, newTableOrderCache);
-            tableOrderCacheMap.put(newTableId, oldTableOrderCache);
+            if (Assert.isNotNull(newTableOrderCache)) {
+                tableOrderCacheMap.put(oldTableId, newTableOrderCache);
+            }
+            if (Assert.isNotNull(oldTableOrderCache)) {
+                tableOrderCacheMap.put(newTableId, oldTableOrderCache);
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CleanTableCacheError, e);

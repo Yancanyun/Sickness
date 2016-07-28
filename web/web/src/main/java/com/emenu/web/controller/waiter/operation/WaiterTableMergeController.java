@@ -73,11 +73,10 @@ public class WaiterTableMergeController extends AbstractController {
                 }
             }
 
-            List<Integer> newTableIdList = canServiceList;
             // 利用Map的不可重复功能，实现不重复的记录全部已并台的餐台
             Map<Integer, Table> newTableIdMap = new HashMap<Integer, Table>();
 
-            for (Integer tableId : canServiceList) {
+            for (Integer tableId : tableIdList) {
                 newTableIdMap.put(tableId, tableService.queryById(tableId));
 
                 // 寻找传来的餐台ID列表中存在已并台的餐台

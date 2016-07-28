@@ -874,7 +874,6 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     public void printCheckOut(List<Checkout> checkouts) throws SSException{
-
         // checkouts里面的第一个元素为付款的餐桌,结账单的各个属性均为0
         List<Order> orders = new ArrayList<Order>();
         List<OrderDish> orderDishs = new ArrayList<OrderDish>();
@@ -886,7 +885,6 @@ public class CheckoutServiceImpl implements CheckoutService {
         Table table = new Table();
         try {
             if(Assert.isNotNull(checkouts)){
-
                 // 获取所有的订单
                 for(Checkout checkout : checkouts){
                     orders.addAll(orderService.queryOrdersByCheckoutId(checkout.getId()));
@@ -949,7 +947,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                 }
                 // 如果是第一次消费则打印餐位费和餐台费,第二次消费的话不再收取这些钱
                 if (checkouts.get(0).getConsumptionType() == CheckoutConsumptionTypeEnums.IsFirstConsumption.getId()) {
-
+                    table = tableService.queryById(checkouts.get(0).getTableId());
                     str += "餐台费用:" + table.getTableFee() + "\n";
                     // 餐位费用等于实际用餐人数*每一位的费用
                     str += "餐位费用: =" + table.getSeatFee() + " * " + table.getPersonNum() + " = " + table.getSeatFee().floatValue() * table.getPersonNum().floatValue() + "\n";

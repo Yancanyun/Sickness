@@ -152,7 +152,9 @@ public class BarCheckoutController extends AbstractController {
                     checkoutType, serialNum, isInvoiced);
 
             // 打印消费清单
-            checkoutService.printCheckOut(checkoutList);
+            if (checkoutService.isPrinterOk() == true) {
+                checkoutService.printCheckOut(checkoutList);
+            }
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -241,7 +243,9 @@ public class BarCheckoutController extends AbstractController {
             List<Checkout> checkoutList = checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
 
             // 打印消费清单
-            checkoutService.printCheckOut(checkoutList);
+            if (checkoutService.isPrinterOk() == true) {
+                checkoutService.printCheckOut(checkoutList);
+            }
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
@@ -356,9 +360,7 @@ public class BarCheckoutController extends AbstractController {
             // 若是套餐，则需要修改该套餐下的所有菜品的OrderDish
             if (orderDish.getIsPackage() == 1) {
                 // 查询该套餐下的所有菜品的OrderDish
-                int orderId = orderDish.getOrderId();
-                int packageId = orderDish.getPackageId();
-                List<OrderDish> orderDishList = orderDishService.listByOrderIdAndPackageId(orderId, packageId);
+                List<OrderDish> orderDishList = orderDishService.queryPackageOrderDishByFirstOrderDishId(orderDish.getId());
 
                 // 修改该套餐下的所有菜品的OrderDish
                 for (OrderDish oD : orderDishList) {
