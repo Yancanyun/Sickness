@@ -318,6 +318,8 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
         BigDecimal totalMoney = new BigDecimal(0);
         TableOrderCache tableOrderCache = new TableOrderCache();
         List<OrderDishCache> orderDishCaches = new ArrayList<OrderDishCache>();
+        // 保留两位小数
+        java.text.DecimalFormat  df=new java.text.DecimalFormat("#.00");
         try {
             if(!Assert.lessOrEqualZero(tableId))
             tableOrderCache = tableOrderCacheMap.get(tableId);
@@ -332,6 +334,9 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
                     totalMoney=totalMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue() *dto.getQuantity()));
                 }
             }
+            // 保留两位小数
+            String temp =df.format(totalMoney);
+            totalMoney = new BigDecimal(temp);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ReturnTotalMoneyFail, e);
