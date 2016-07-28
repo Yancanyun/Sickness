@@ -204,4 +204,12 @@ public interface OrderDishService {
      */
     public List<OrderDish> queryPackageOrderDishesByPackageFlag(Integer packageFlag) throws SSException;
 
+    /**
+     * 根据订单Id和订单菜品状态来查询订单菜品
+     * @param orderId ,status
+     * @return
+     * @throws SSException
+     */
+    public List<OrderDish> listOrderDishByOrderIdAndStatus(Integer orderId, Integer status) throws SSException;
+
 }

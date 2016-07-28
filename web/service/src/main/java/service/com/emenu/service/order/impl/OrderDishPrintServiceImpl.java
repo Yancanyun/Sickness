@@ -122,6 +122,12 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setRemark(orderDish.getRemark());//订单菜品备注
                 temp.setServerType(ServeTypeEnums.valueOf(orderDish.getServeType()).getType());//上菜方式
                 temp.setTableName(tableService.queryById(orderDishService.queryOrderDishTableId(orderDishId)).getName());//点菜餐桌的名称
+                // 下单时间
+                temp.setOrderTime(orderDish.getOrderTime());
+                // 上菜时限
+                temp.setTimeLimit(dishService.queryById(orderDish.getDishId()).getTimeLimit());
+                // 催菜
+                temp.setIsCall(orderDish.getIsCall());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null
@@ -133,20 +139,21 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                         temp.setTaste(tasteName);
                     }
                 }
-                //菜品大类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
+                // 菜品小类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 Printer printer = new Printer();
+                // 1-菜品类别，2-具体某一个菜
                 printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
-                if(printer!=null &&printer.getIpAddress()!=null)//1-菜品类别，2-具体某一个菜
+                if(printer!=null &&printer.getIpAddress()!=null)
                 {
                     //菜品直接关联的打印机要比大类关联的打印机优先
                     temp.setPrinterIp(printer.getIpAddress());
                 }
-                else//否则根据菜品大类查询关联打印机
+                else//否则根据菜品小类查询关联打印机
                 {
-                    if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
+                    if(dishDto.getTagId()!=null)
                     {
-                        Integer layer2TagId = tagService.queryLayer2TagByDishId(dishDto.getId()).getId();//菜品的二级分类Id
-                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId,PrinterDishEnum.TagPrinter.getId());
+                        Integer tagId = dishDto.getTagId();//菜品小类
+                        printer=dishTagPrinterService.queryByTagIdAndType(tagId,PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
@@ -164,6 +171,12 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setRemark(orderDish.getRemark());//订单菜品备注
                 temp.setServerType(ServeTypeEnums.valueOf(orderDish.getServeType()).getType());//上菜方式
                 temp.setTableName(tableService.queryById(orderDishService.queryOrderDishTableId(orderDishId)).getName());//点菜餐桌的名称
+                // 下单时间
+                temp.setOrderTime(orderDish.getOrderTime());
+                // 上菜时限
+                temp.setTimeLimit(dishService.queryById(orderDish.getPackageId()).getTimeLimit());
+                // 催菜
+                temp.setIsCall(orderDish.getIsCall());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null
@@ -175,20 +188,20 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                         temp.setTaste(tasteName);
                     }
                 }
-                //菜品大类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
+                //菜品小类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 Printer printer = new Printer();
                 printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
                 if(printer!=null &&printer.getIpAddress()!=null)//1-菜品类别，2-具体某一个菜
                 {
-                    //菜品直接关联的打印机要比大类关联的打印机优先
+                    // 菜品直接关联的打印机要比小类关联的打印机优先
                     temp.setPrinterIp(printer.getIpAddress());
                 }
-                else//否则根据菜品大类查询关联打印机
+                else//否则根据菜品小类查询关联打印机
                 {
-                    if(tagService.queryLayer2TagByDishId(dishDto.getId())!=null)
+                    if(dishDto.getTagId()!=null)
                     {
-                        Integer layer2TagId = tagService.queryLayer2TagByDishId(dishDto.getId()).getId();//菜品的二级分类Id
-                        printer=dishTagPrinterService.queryByTagIdAndType(layer2TagId, PrinterDishEnum.TagPrinter.getId());
+                        Integer tagId = dishDto.getTagId();//菜品的二级分类Id
+                        printer=dishTagPrinterService.queryByTagIdAndType(tagId, PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
@@ -214,14 +227,39 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 throw SSException.get(EmenuException.PrinterIpIsNull);
             socket.connect(new InetSocketAddress(printOrderDishDto.getPrinterIp(), 9100), 10000);
             if (socket.isConnected()) {//成功建立了连接
+
                 os = socket.getOutputStream();
+
+                // 初始化打印机
+                os.write(PrintUtils.initPrinter());
+
+                //设置0为左对齐,1的话为设置为居中,2为右对齐
+                os.write(PrintUtils.setLocation(0));
+
                 String str = "";
                 //套餐下的所有菜品的orderDishId均相同
                 //第一条显示,用来提醒上菜的服务员这个菜品可能为套餐,套餐的话服务员应该等所有菜品都做完了后再进行上菜扫码
                 str+= "菜品大类: " + printOrderDishDto.getDishBigTagName() + "\n";
                 str += "桌名: " + printOrderDishDto.getTableName() + "\n";
                 str += "菜品名称: " + printOrderDishDto.getDishName() + "\n";
+
+                // 先打印一波,因为数量要打印的大一点,所以分开打印
+                os.write(PrintUtils.printText(str));
+                str = "";
+
                 str += "数量: " + String.valueOf(printOrderDishDto.getNum()) + "\n";
+                // 数量要打印的大一点
+                os.write(PrintUtils.setSize(1,1));
+                os.write(PrintUtils.printText(str));
+                str = "";
+
+                // 初始化一下
+                // 初始化打印机
+                os.write(PrintUtils.initPrinter());
+
+                //设置0为左对齐,1的话为设置为居中,2为右对齐
+                os.write(PrintUtils.setLocation(0));
+
                 str += " 口味: ";
                 if (printOrderDishDto.getTaste() != null)
                 {
@@ -237,11 +275,6 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 else
                 str += "备注: 无" + "\n";
 
-                // 打印
-                os.write(PrintUtils.initPrinter());//初始化打印机
-
-                //设置0为左对齐,1的话为设置为居中,2为右对齐
-                os.write(PrintUtils.setLocation(0));
 
                 os.write(PrintUtils.printText(str));//打印信息
 

@@ -1,5 +1,6 @@
 package com.emenu.common.dto.order;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,32 +11,41 @@ import java.util.List;
  */
 public class PrintOrderDishDto {
 
-    //订单菜品Id
+    // 订单菜品Id
     private Integer orderDishId;
 
-    //桌子名称
+    // 桌子名称
     private String tableName;
 
-    //菜品名称
+    // 菜品名称
     private String dishName;
 
     // 菜品大类名称
     private String  dishBigTagName;
 
-    //点餐数量
+    // 点餐数量
     private float num;
 
-    //备注
+    // 备注
     private String remark;
 
-    //口味
+    // 口味
     private String taste;
 
     // 上菜方式
     private String serverType;
 
-    //打印机Ip
+    // 打印机Ip
     private String printerIp;
+
+    // 下单时间
+    private Date orderTime;
+
+    // 上菜时限
+    private Integer timeLimit;
+
+    // 是否被催菜
+    private Integer isCall;
 
     public Integer getOrderDishId() {
         return orderDishId;
@@ -110,5 +120,29 @@ public class PrintOrderDishDto {
 
     public void setPrinterIp(String printerIp) {
         this.printerIp = printerIp;
+    }
+
+    public Date getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    public void setTimeLimit(Integer timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public Integer getIsCall() {
+        return isCall;
+    }
+
+    public void setIsCall(Integer isCall) {
+        this.isCall = isCall;
     }
 }

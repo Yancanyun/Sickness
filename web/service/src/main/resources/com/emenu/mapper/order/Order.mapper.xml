@@ -47,4 +47,10 @@
         WHERE t_checkout.id = t_order.checkout_id
         AND t_checkout.id=#{checkoutId}
     </select>
+
+    <select id="listOrdersByStatus" resultMap="pw.Order">
+        SELECT *
+        FROM t_order
+        WHERE status = #{status}
+    </select>
 </mapper>

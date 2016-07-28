@@ -1,6 +1,7 @@
 package com.emenu.test.order;
 
 import com.emenu.common.entity.order.Order;
+import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.service.order.OrderService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -85,5 +86,11 @@ public class OrderTest extends AbstractTestCase {
     public void testQueryOrderByCheckoutId() throws SSException{
 
         orderService.queryOrdersByCheckoutId(40);
+    }
+
+    @Test
+    public void testQueryOrderByStatus() throws  SSException{
+
+        orderService.listOrdersByStatus(OrderStatusEnums.IsBooked.getId());
     }
 }

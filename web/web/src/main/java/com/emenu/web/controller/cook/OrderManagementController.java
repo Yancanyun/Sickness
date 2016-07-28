@@ -43,20 +43,8 @@ public class OrderManagementController extends AbstractController {
      */
     @Module(ModuleEnums.CookOrderList)
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
-    public String toOrderManagementPage(HttpSession httpSession,Model model)
-    {
-      /*  try
-        {
-            String str = httpSession.getAttribute("partyId").toString();
-            Integer partyId = Integer.parseInt(str);//获得当事人Id
-            EmployeeDto employeeDto= employeeService.queryEmployeeDtoByPartyId(partyId);//获取到该员工的信息
-            model.addAttribute("employeeDto",employeeDto);
-        }
-        catch (SSException e) {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return COOK_NOT_FOUND_PAGE;
-        }*/
+    public String toOrderManagementPage(HttpSession httpSession,Model model) {
+
         return "cook/order_management";
     }
 

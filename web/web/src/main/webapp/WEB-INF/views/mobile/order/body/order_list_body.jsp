@@ -48,8 +48,9 @@
               <input type="hidden" name="dishRemark" value="无">
             </c:otherwise>
           </c:choose>
-          <img class="ordering-dish-img" src="http://static.emenu2.net/uploads${dto.imgPath}" alt="暂无菜品展示图片">
+          <img class="ordering-dish-img" src="${tinyWebsite}${dto.imgPath}" alt="暂无菜品展示图片">
           <div class="ordering-dish-info">
+            <div class="ordered-dish-info-box">
             <p class="info-text">
               <span class="ordering-dish-name">${dto.name}</span>
               <!-- 后端控制原价没有改变时，不显示price span -->
@@ -71,6 +72,10 @@
             </p>
             <p class="ordering-remark-info J_remarks">${dto.remark}</p>
           </div>
+            <div class="J_slideLeft">
+              <i class="fa fa-angle-double-left fa-5x"></i>
+            </div>
+            </div>
           <button class="J_delete">删除</button>
         </li>
         </c:forEach>
