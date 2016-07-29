@@ -17,7 +17,7 @@
         SELECT COUNT(1) FROM `t_vip_grade` WHERE `vip_dish_price_plan_id` = #{vipDishPricePlanId}
     </select>
 
-    <select id="countMinConsumptionExist" resultMap="pw.VipGrade">
+    <select id="countMinConsumptionUsingNumber" resultMap="pw.VipGrade">
         SELECT `id`, `name`,
         `vip_dish_price_plan_id` AS vipDishPricePlanId,
         `min_consumption` AS minConsumption,
