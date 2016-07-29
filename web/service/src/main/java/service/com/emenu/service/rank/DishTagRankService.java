@@ -23,4 +23,26 @@ public interface DishTagRankService {
      * @throws SSException
      */
     public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriod(Date startTime ,Date endTime) throws SSException;
+
+    /**
+     * 查找所有的菜品大类销售情况
+     * @return
+     * @throws SSException
+     */
+    public List<DishSaleRankDto> listAll() throws SSException;
+
+    /**
+     * 根据开始时间和结束时间查询菜品大类的销售情况
+     * 分页查询
+     * @param startTime
+     * @param endTime
+     * @param pageSize
+     * @param pageNumber
+     * @return
+     * @throws SSException
+     */
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndPage(Date startTime
+                                                                        ,Date endTime
+                                                                        ,Integer pageSize
+                                                                        ,Integer pageNumber) throws SSException;
 }

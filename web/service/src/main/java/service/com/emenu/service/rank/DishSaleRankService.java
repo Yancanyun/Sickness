@@ -36,8 +36,8 @@ public interface DishSaleRankService {
     public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroid(Date startTime ,Date endTime) throws SSException;
 
     /**
-     * 找到所有的菜品销售情况
-     * @return
+     *
+     * @return找到所有的菜品销售情况
      * @throws SSException
      */
     public List<DishSaleRankDto> listAll() throws SSException;

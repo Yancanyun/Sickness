@@ -10,7 +10,9 @@ import freemarker.template.utility.DateUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,7 +37,7 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryDishSaleRankDtoByTimePeroid() throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroid(startTime, endTime);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getDishName()+"   ");
             System.out.print(list.get(i).getTagName() + "   ");
@@ -57,7 +59,7 @@ public class DishSaleRankTest extends AbstractTestCase {
 
     @Test
     public void getData() throws SSException{
-        System.out.println("本月第一天：" + DateUtils.getCurrentMonthFirstDay());
+        /*System.out.println("本月第一天：" + DateUtils.getCurrentMonthFirstDay());
         System.out.println("本月最后一天：" + DateUtils.getCurrentMonthLastDay());
         System.out.println("上月第一天：" + DateUtils.getLastMonthFirstDay());
         System.out.println("上月最后一天：" + DateUtils.getLastMonthLastDay());
@@ -66,6 +68,58 @@ public class DishSaleRankTest extends AbstractTestCase {
         System.out.println("上周第一天：" + DateUtils.getLastWeekFirstDay());
         System.out.println("上周最后一天：" + DateUtils.getLastWeekLastDay());
         System.out.println("今天：" + DateUtils.getToday());
-        System.out.println("昨天：" + DateUtils.getYesterday());
+        System.out.println("昨天：" + DateUtils.getYesterday());*/
+        System.out.println("本年的第一天："+DateUtils.getCurrentYearFirstDay());
+        System.out.println("本年的最后一天："+DateUtils.getCurrentYearLastDay());
+        System.out.println("去年的第一天："+DateUtils.getLastYearFirstDay());
+        System.out.println("去年的最后一天：" + DateUtils.getLastYearLastDay());
+
     }
+
+    @Test
+    public void queryDishSaleRankDtoByTimeAndTagId() throws SSException{
+        Date startTime = DateUtils.getFirstDayOfWeek();
+        Date endTime = DateUtils.getLastDayOfWeek();
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,92);
+        for(int i=0;i<list.size();i++){
+            System.out.print(list.get(i).getDishName()+"   ");
+            System.out.print(list.get(i).getTagName() + "   ");
+            System.out.print(list.get(i).getNum() + "   ");
+            System.out.println(list.get(i).getConsumeSum());
+        }
+    }
+
+    @Test
+    public void queryDishTagRankPage() throws SSException{
+        Date startTime = DateUtils.getFirstDayOfWeek();
+        Date endTime = DateUtils.getLastDayOfWeek();
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, 92, 4, 1);
+        for(int i=0;i<list.size();i++){
+            System.out.print(list.get(i).getDishName()+"   ");
+            System.out.print(list.get(i).getTagName() + "   ");
+            System.out.print(list.get(i).getNum() + "   ");
+            System.out.println(list.get(i).getConsumeSum());
+        }
+    }
+    /*@Test
+    public  void hh() {
+        List<String> list = new ArrayList<String>();
+        list.add("JavaWeb编程词典");        //向列表中添加数据
+        list.add("Java编程词典");        //向列表中添加数据
+        list.add("C#编程词典");         //向列表中添加数据
+        list.add("ASP.NET编程词典");        //向列表中添加数据
+        list.add("VC编程词典");         //向列表中添加数据
+        list.add("SQL编程词典");        //向列表中添加数据
+        Iterator<String> its = list.iterator();     //获取集合迭代器
+        System.out.println("集合中所有元素对象：");
+        while (its.hasNext()) {        //循环遍历集合
+            System.out.print(its.next() + "  ");     //输出集合内容
+        }
+        List<String> subList = list.subList(3, 5);    //获取子列表
+        System.out.println("\n截取集合中部分元素：");
+        Iterator it = subList.iterator();
+        while (it.hasNext()) {
+            System.out.print(it.next() + "  ");
+        }
+    }*/
 }
