@@ -4,6 +4,7 @@
 <tiles:insertDefinition name="admin">
     <tiles:putAttribute name="title" value="${webTitle}"/>
     <tiles:putAttribute name="body" value="/WEB-INF/views/admin/index/body/index_body.jsp"/>
+    <tiles:putAttribute name="script" value="/WEB-INF/views/admin/index/inc/index_script.jsp"/>
     <tiles:putAttribute name="extendHead"
                         value="<link rel='stylesheet' href='${staticWebsite}css/admin/welcome.css' />" />
 </tiles:insertDefinition>

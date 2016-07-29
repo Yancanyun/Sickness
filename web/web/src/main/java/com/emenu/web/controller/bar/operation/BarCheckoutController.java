@@ -14,6 +14,7 @@ import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.checkout.CheckOutStatusEnums;
 import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
@@ -44,7 +45,6 @@ import java.util.List;
 @Module(ModuleEnums.BarCheckout)
 @RequestMapping(value = URLConstants.BAR_CHECKOUT_URL)
 public class BarCheckoutController extends AbstractController {
-
     /**
      * 获取结账窗口的信息
      * @param tableId
@@ -68,6 +68,18 @@ public class BarCheckoutController extends AbstractController {
             if (Assert.isNull(tableDto) || Assert.isNull(table)) {
                 throw SSException.get(EmenuException.TableIdError);
             }
+
+            // 若本餐台没有结账单(即没有进行消费)，且该餐台未并台，则直接将其变为"占用已结账"状态
+            Checkout checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+            if (Assert.isNull(checkout)) {
+                if (table.getStatus() == TableStatusEnums.Merged.getId()) {
+                    throw SSException.get(EmenuException.CheckoutIsNull);
+                } else {
+                    checkoutService.setTableStatusToCheckouted(tableId);
+                    throw SSException.get(EmenuException.DirectToCheckout);
+                }
+            }
+
             jsonObject.put("tableName", table.getName());
             jsonObject.put("personNum", table.getPersonNum());
             jsonObject.put("areaName", tableDto.getAreaName());
@@ -110,7 +122,7 @@ public class BarCheckoutController extends AbstractController {
      * @param totalPayMoney
      * @param checkoutType
      * @param isInvoiced
-     * @param serialNum 注: 会员卡结账时，流水号字段中的内容是会员卡号
+     * @param serialNum 注: 会员卡结账时，流水号字段中的内容是会员PartyId
      * @return
      *
      * @author: yangch
@@ -119,13 +131,13 @@ public class BarCheckoutController extends AbstractController {
     @Module(ModuleEnums.BarCheckout)
     @RequestMapping(value = "",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject checkoutInfo(@RequestParam("tableId") Integer tableId,
-                                   @RequestParam("uid") Integer uid,
-                                   @RequestParam("wipeZeroMoney") BigDecimal wipeZeroMoney,
-                                   @RequestParam("totalPayMoney") BigDecimal totalPayMoney,
-                                   @RequestParam("checkoutType") int checkoutType,
-                                   @RequestParam("isInvoiced") int isInvoiced,
-                                   @RequestParam(required = false) String serialNum) {
+    public JSONObject checkout(@RequestParam("tableId") Integer tableId,
+                               @RequestParam("uid") Integer uid,
+                               @RequestParam("wipeZeroMoney") BigDecimal wipeZeroMoney,
+                               @RequestParam("totalPayMoney") BigDecimal totalPayMoney,
+                               @RequestParam("checkoutType") int checkoutType,
+                               @RequestParam("isInvoiced") int isInvoiced,
+                               @RequestParam(required = false) String serialNum) {
         try {
             Table table = tableService.queryById(tableId);
             if (Assert.isNull(table)) {

@@ -21,6 +21,7 @@ import com.emenu.common.enums.printer.PrinterTypeEnums;
 import com.emenu.common.enums.table.TableStatusEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
 import com.emenu.service.dish.DishService;
@@ -192,9 +193,22 @@ public class CheckoutServiceImpl implements CheckoutService {
                             // 加空格以保证对齐
                             len = dishDto.getName().length() * 2;
                             for (i = 0; i < 18 - len; i++) str += " ";
+                            // 记录菜名中存在几个字母或数字或特殊符号
+                            int letter = 0;
+                            String dishName = dishDto.getName();
+                            char[] chars = dishName.toCharArray();
+                            for(int n = 0; n < chars.length;n++){
+                                if((chars[n] >= 33 && chars[n] <= 126)){
+                                    letter ++;
+                                }
+                            }
+                            // 存在几个字母或数字，打印时就多空几格
+                            for (i = 0; i < letter; i++) str += " ";
+
                             str += String.valueOf(dto.getPackageQuantity());
                             len = String.valueOf(dto.getPackageQuantity()).length();
                             for (i = 0; i < 8 - len; i++) str += " ";
+
                             str += String.valueOf(dishDto.getSalePrice()) + "\n";
                             shoulePayMoney = shoulePayMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue()
                                     * dto.getPackageQuantity()*dto.getDiscount().floatValue()/10.0));
@@ -214,6 +228,18 @@ public class CheckoutServiceImpl implements CheckoutService {
                         // 加空格以保证对齐
                         len = dishDto.getName().length() * 2;
                         for (i = 0; i < 18 - len; i++) str += " ";
+                        // 记录菜名中存在几个字母或数字或特殊符号
+                        int letter = 0;
+                        String dishName = dishDto.getName();
+                        char[] chars = dishName.toCharArray();
+                        for(int n = 0; n < chars.length;n++){
+                            if((chars[n] >= 33 && chars[n] <= 126)){
+                                letter ++;
+                            }
+                        }
+                        // 存在几个字母或数字，打印时就多空几格
+                        for (i = 0; i < letter; i++) str += " ";
+
                         str += String.valueOf(dto.getDishQuantity());
                         len = String.valueOf(dto.getDishQuantity()).length();
                         for (i = 0; i < 8 - len; i++) str += " ";
@@ -252,6 +278,18 @@ public class CheckoutServiceImpl implements CheckoutService {
                         // 加空格以保证对齐
                         len = dishDto.getName().length() * 2;
                         for (i = 0; i < 18 - len; i++) str += " ";
+                        // 记录菜名中存在几个字母或数字或特殊符号
+                        int letter = 0;
+                        String dishName = dishDto.getName();
+                        char[] chars = dishName.toCharArray();
+                        for(int n = 0; n < chars.length;n++){
+                            if((chars[n] >= 33 && chars[n] <= 126)){
+                                letter ++;
+                            }
+                        }
+                        // 存在几个字母或数字，打印时就多空几格
+                        for (i = 0; i < letter; i++) str += " ";
+
                         str += String.valueOf(dto.getDishQuantity());
                         len = String.valueOf(dto.getDishQuantity()).length();
                         for (i = 0; i < 8 - len; i++) str += " ";
@@ -818,13 +856,9 @@ public class CheckoutServiceImpl implements CheckoutService {
         }
     }
 
-    /**
-     * 把餐台改成"占用已结账"状态
-     *
-     * @param tableId
-     */
+    @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
-    private void setTableStatusToCheckouted(int tableId) throws SSException {
+    public void setTableStatusToCheckouted(int tableId) throws SSException {
         try {
             Table table = tableService.queryById(tableId);
             if (Assert.isNull(table)) {
@@ -915,6 +949,18 @@ public class CheckoutServiceImpl implements CheckoutService {
                             // 加空格以保证对齐
                             len = dishDto.getName().length() * 2;
                             for (i = 0; i < 18 - len; i++) str += " ";
+                            // 记录菜名中存在几个字母或数字或特殊符号
+                            int letter = 0;
+                            String dishName = dishDto.getName();
+                            char[] chars = dishName.toCharArray();
+                            for(int n = 0; n < chars.length;n++){
+                                if((chars[n] >= 33 && chars[n] <= 126)){
+                                    letter ++;
+                                }
+                            }
+                            // 存在几个字母或数字，打印时就多空几格
+                            for (i = 0; i < letter; i++) str += " ";
+
                             str += String.valueOf(dto.getPackageQuantity());
                             len = String.valueOf(dto.getPackageQuantity()).length();
                             for (i = 0; i < 8 - len; i++) str += " ";
@@ -948,16 +994,16 @@ public class CheckoutServiceImpl implements CheckoutService {
                 // 如果是第一次消费则打印餐位费和餐台费,第二次消费的话不再收取这些钱
                 if (checkouts.get(0).getConsumptionType() == CheckoutConsumptionTypeEnums.IsFirstConsumption.getId()) {
                     table = tableService.queryById(checkouts.get(0).getTableId());
-                    str += "餐台费用:" + table.getTableFee() + "\n";
+                    str += "餐台费用: ￥" + table.getTableFee() + "\n";
                     // 餐位费用等于实际用餐人数*每一位的费用
-                    str += "餐位费用: =" + table.getSeatFee() + " * " + table.getPersonNum() + " = " + table.getSeatFee().floatValue() * table.getPersonNum().floatValue() + "\n";
+                    str += "餐位费用: ￥" + table.getSeatFee() + " * " + table.getPersonNum() + " = ￥" + table.getSeatFee().floatValue() * table.getPersonNum().floatValue() + "\n";
                     shoulePayMoney = shoulePayMoney.add(new BigDecimal(table.getTableFee().floatValue() + table.getSeatFee().floatValue() * table.getPersonNum().floatValue()));
                 }
 
                 // 保留两位小数
                 java.text.DecimalFormat myformat = new java.text.DecimalFormat("0.00");
                 String moneyTemp = myformat.format(shoulePayMoney);
-                str += "应收金额：" + moneyTemp + "\n";
+                str += "应收金额：￥" + moneyTemp + "\n";
                 // 实际消费金额,不包括赠送的菜品
                 BigDecimal actualPayMoney = new BigDecimal(0);
                 actualPayMoney = shoulePayMoney;
@@ -988,15 +1034,14 @@ public class CheckoutServiceImpl implements CheckoutService {
                 }
 
                 moneyTemp = myformat.format(actualPayMoney);
-                str += "实际消费金额: " + moneyTemp + "\n";
+                str += "实际消费金额: ￥" + moneyTemp + "\n";
                 str += "付款方式: " + CheckoutTypeEnums.valueOf(checkoutPayService.queryByCheckoutId(checkouts.get(0).getId()).getCheckoutType()).getType() + "\n";
-                str += "宾客付款: " +checkouts.get(0).getTotalPayMoney().toString()+"\n";
-                str += "找零: " +checkouts.get(0).getChangeMoney().toString()+"\n";
-                str += "结账桌号" +tableService.queryById(checkouts.get(0).getTableId()).getName()+"\n";
-                str += "结账时间" +checkouts.get(0).getCheckoutTime() + "\n";
+                str += "宾客付款: ￥" +checkouts.get(0).getTotalPayMoney().toString()+"\n";
+                str += "找零: ￥" +checkouts.get(0).getChangeMoney().toString()+"\n";
+                str += "结账桌号: " +tableService.queryById(checkouts.get(0).getTableId()).getName()+"\n";
+                str += "结账时间: " + DateUtils.formatDate(checkouts.get(0).getCheckoutTime(), "yyyy-MM-dd HH:mm:ss") + "\n";
                 str += "--------------------------------\n";
                 str += "聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n";
-                str += "           欢迎下次光临\n";
 
                 // 获取吧台打印机的分类Id
                 Integer typeId = PrinterTypeEnums.BarPrinter.getId();

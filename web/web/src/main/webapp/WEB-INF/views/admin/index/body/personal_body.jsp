@@ -10,6 +10,9 @@
         </ol>
     </div>
     <div class="col-sm-12 margin-bottom-30">
+        <c:if test="${!empty msg}">
+            <div class="alert alert-danger col-sm-12 J_msg" role="alert">${msg}</div>
+        </c:if>
         <form class="form-horizontal J_operForm" action="${website}admin/personal/information" method="POST">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -18,9 +21,11 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>电话</label>
+                        <!-- 添加了手机号码验证 -->
                         <div class="col-sm-6">
-                            <input class="w180 J_phone" type="text" value="${phone}" name="phone" />
+                            <input class="w180 J_phone" type="text" data-valid-tip="请输入电话号码|电话号码输入有误，请重新输入" data-valid-rule="notNull&isMobile" value="${phone}" name="phone" />
                         </div>
+                        <!-- modify -->
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>原密码</label>

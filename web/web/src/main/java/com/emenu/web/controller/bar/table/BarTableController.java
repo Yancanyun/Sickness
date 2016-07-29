@@ -163,6 +163,7 @@ public class BarTableController extends AbstractController {
             jsonObject.put("totalCost", totalCost);
             jsonObject.put("role", role);
             jsonObject.put("seatFee", table.getSeatFee());
+            jsonObject.put("personNum", table.getPersonNum());
 
             return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
         } catch (SSException e) {

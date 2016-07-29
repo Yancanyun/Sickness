@@ -113,4 +113,11 @@ public interface CheckoutService {
      * @author quanyibo
      */
     public void printCheckOut(List<Checkout> checkouts) throws SSException;
+
+    /**
+     * 把餐台改成"占用已结账"状态
+     * @param tableId
+     * @throws SSException
+     */
+    public void setTableStatusToCheckouted(int tableId) throws SSException;
 }

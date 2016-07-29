@@ -1,7 +1,12 @@
 <%@ taglib prefix="shiro" uri="http://shiro.pandawork.net/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <div class="col-md-10 col-sm-offset-1">
+    <c:if test="${!empty msg}">
+        <div class="alert alert-success col-sm-12 J_msg" role="alert">${msg}</div>
+    </c:if>
     <h3 class="welcome-head text-center">欢迎使用餐饮后台管理系统</h3>
     <shiro:checkPermission name="Admin:BasicInfo:Keywords">
         <div class="col-md-2 module first-module">
