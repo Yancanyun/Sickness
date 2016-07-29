@@ -21,22 +21,21 @@
 
 
     <select id="queryByName" parameterType="String" resultMap="pw.Employee">
-
         SELECT `id`,
         `name`,
         `status`
         FROM `t_party_employee`
-        WHERE `name` = #{employeeName}
-
+        WHERE `name` = #{employeeName} AND `status` != 3
     </select>
 
     <select id="listRoleByPartyId" parameterType="Integer"  resultMap="pw.EmployeeRole">
         SELECT `id` AS `id`,
         `party_id` AS `partyId`,
-        `role_id~ AS  `roleId`,
+        `role_id` AS  `roleId`,
         `created_time` AS `createdTime`,
         `last_modified_time` AS `lastModifiedTime`
-        from `t_party_employee_role` WHERE `party_id` = #{partyId}
+        from `t_party_employee_role`
+        WHERE `party_id` = #{partyId} AND `status` != 3
         ORDER BY `created_time`
     </select>
 
@@ -58,7 +57,7 @@
 
     <select id="queryByPartyId" parameterType="Integer" resultMap="pw.Employee">
         SELECT * from `t_party_employee`
-        WHERE `party_id` = #{partyId}
+        WHERE `party_id` = #{partyId} AND `status` != 3
     </select>
 
 
@@ -72,6 +71,7 @@
                     #{roleId}
                 </foreach>
             </if>
+            AND `status` != 3
         </where>
         ORDER BY `created_time`
     </select>
@@ -83,7 +83,7 @@
     </select>
 
     <select id="queryByPhone" parameterType="String" resultMap="pw.Employee">
-         SELECT * FROM `t_party_employee` WHERE `phone` = #{phone}
+         SELECT * FROM `t_party_employee` WHERE `phone` = #{phone} AND `status` != 3
     </select>
 
 </mapper>

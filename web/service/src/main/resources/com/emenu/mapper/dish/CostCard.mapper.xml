@@ -99,10 +99,10 @@
         </where>
     </select>
 
-    <select id = "queryCostCardByDishId" resultType="CostCard">
+    <select id = "queryCostCardByDishId" resultMap="pw.CostCard">
         SELECT * FROM t_cost_card
         WHERE dish_id = #{dishId}
-           </select>
+    </select>
 
     <select id="listAllCostCard" resultType="CostCard">
        SELECT *

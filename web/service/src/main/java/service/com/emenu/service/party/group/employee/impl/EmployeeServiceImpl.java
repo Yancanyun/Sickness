@@ -326,27 +326,41 @@ public class EmployeeServiceImpl implements EmployeeService{
             //修改员工登录名密码等信息
             //获取当前partyId员工注册信息
             SecurityUser securityUser = securityUserService.queryByPartyId(partyId);
-            securityUser.setPassword(newPwd);
+            Assert.isNotNull(securityUser,PartyException.UserNotExist);
+            //密码
+            if (Assert.isNotNull(newPwd)){
+                securityUser.setPassword(newPwd);
+            }
+            //更新用户名
             securityUser.setLoginName(newloginName);
-
             //更新t_party_security_user
-
             securityUserService.updateSecurityUser(securityUser);
-
-
             //更新员工姓名、电话等信息t_party_employee
             Employee employeeNew = employeeDto.getEmployee();
             Employee employeeOld = employeeMapper.queryByPartyId(partyId);
-
-            employeeOld.setName(employeeNew.getName());
-            employeeOld.setEmployeeNumber(employeeNew.getEmployeeNumber());
-            employeeOld.setPhone(employeeNew.getPhone());
-
+            //员工姓名
+            if (Assert.isNotNull(employeeNew.getName())){
+                employeeOld.setName(employeeNew.getName());
+            } else {
+                throw SSException.get(EmenuException.EmployeeNameNotNull);
+            }
+            //员工编号
+            if (Assert.isNotNull(employeeNew.getEmployeeNumber())){
+                employeeOld.setEmployeeNumber(employeeNew.getEmployeeNumber());
+            } else {
+                throw SSException.get(EmenuException.EmployeeNumberNotNull);
+            }
+            //员工电话
+            if (Assert.isNotNull(employeeNew.getPhone())){
+                employeeOld.setPhone(employeeNew.getPhone());
+            } else {
+                throw SSException.get(EmenuException.PhoneError);
+            }
+            //更新
             commonDao.update(employeeOld);
-
+            //删除了员工角色和员工服务的餐台在添加
             employeeMapper.delRoleByPartyId(partyId);
             employeeMapper.delWaiterTableByPartyId(partyId);
-
             //获取员工角色
             List<Integer> roles = employeeDto.getRole();
             for (int r : roles) {
@@ -354,10 +368,9 @@ public class EmployeeServiceImpl implements EmployeeService{
                 EmployeeRole employeeRole = new EmployeeRole();
                 employeeRole.setPartyId(partyId);
                 employeeRole.setRoleId(r);
-
+                //添加员工角色信息
                 commonDao.insert(employeeRole);
-
-                //TODO 如果是服务员，还需添加到waiter_area表
+                // 如果是服务员，还需添加到waiter_area表，设置服务员服务的餐台
                 List<Integer> tables = employeeDto.getTables();
                 if (r == EmployeeRoleEnums.Waiter.getId() && tables != null && tables.size() != 0) {
                     List<WaiterTable> waiterTables = new ArrayList<WaiterTable>();
@@ -370,7 +383,6 @@ public class EmployeeServiceImpl implements EmployeeService{
                     waiterTableService.insertWaiterTable(waiterTables);
                 }
             }
-
             // 向SecurityUserGroup中先删除再插入信息
             securityUserGroupService.delByUserId(securityUser.getId());
             List<Integer> roleIdList = employeeDto.getRole();
@@ -378,10 +390,8 @@ public class EmployeeServiceImpl implements EmployeeService{
                 SecurityUserGroup securityUserGroup = new SecurityUserGroup();
                 securityUserGroup.setGroupId(roleId);
                 securityUserGroup.setUserId(securityUser.getId());
-
                 securityUserGroupService.newSecurityUserGroup(securityUserGroup);
             }
-
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);

@@ -81,4 +81,11 @@ public class CostCardTest extends AbstractTestCase {
     {
         System.out.println(costCardService.listAllCostCardDto());
     }
+
+    @Test
+    public void queryCostCardByDishId() throws SSException{
+        CostCard costCard = costCardService.queryCostCardByDishId(63);
+        System.out.println("xiao");
+    }
+
 }

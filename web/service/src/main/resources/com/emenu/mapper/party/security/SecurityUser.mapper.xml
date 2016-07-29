@@ -17,7 +17,7 @@
     <select id="countByLoginName" resultType="int">
         SELECT COUNT(1)
         FROM `t_party_security_user`
-        WHERE `login_name` = #{loginName}
+        WHERE `login_name` = #{loginName} and `status` != 3;
     </select>
 
     <select id="listByPartyId" resultMap="pw.SecurityUser">

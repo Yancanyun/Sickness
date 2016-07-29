@@ -78,18 +78,23 @@ public class AdminSettlementCheckController extends AbstractController{
                                @RequestParam(value = "endTime", required = false) Date endTime,
                                @RequestParam(value = "keyword", required = false) String keyword,
                                @RequestParam(value = "tagIds", required = false) List<Integer> tagIds) {
-        List<StorageCheckDto> storageCheckDtoList = null;
+        List<StorageCheckDto> storageCheckDtoList = Collections.emptyList();
         try {
             storageCheckDtoList = storageSettlementService.listSettlementCheck(startTime,endTime,tagIds,keyword,curPage,pageSize);
             if (Assert.isNotNull(storageCheckDtoList)
                     || storageCheckDtoList.size() > 0){
-                Iterator<StorageCheckDto> iter = storageCheckDtoList.iterator();
-                while (iter.hasNext()){
-                    StorageCheckDto storageCheckDto = iter.next();
-                    if (Assert.isNotNull(storageCheckDto)
-                            && Assert.isNotNull(storageCheckDto.getIngredientName())
-                            && !storageCheckDto.getIngredientName().equals(keyword)){
-                        iter.remove();
+                if (Assert.isNotNull(keyword)){
+                    keyword = keyword.replaceAll(" ","");
+                    if (! "".equals(keyword)){
+                        Iterator<StorageCheckDto> iter = storageCheckDtoList.iterator();
+                        while (iter.hasNext()){
+                            StorageCheckDto storageCheckDto = iter.next();
+                            if (Assert.isNotNull(storageCheckDto)
+                                    && Assert.isNotNull(storageCheckDto.getIngredientName())
+                                    && !storageCheckDto.getIngredientName().equals(keyword)){
+                                iter.remove();
+                            }
+                        }
                     }
                 }
             }

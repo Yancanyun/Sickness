@@ -385,6 +385,11 @@ public class ReportTest extends AbstractTestCase {
         System.out.println("xiao");
     }
 
+    @Test
+    public void listStorageReportByTime() throws SSException{
+        List<StorageReport> reports = storageReportService.listStorageReportByTime(new Date(),new Date());
+        System.out.println("xiaozl");
+    }
 }
 
 

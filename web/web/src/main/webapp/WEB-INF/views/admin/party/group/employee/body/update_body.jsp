@@ -66,14 +66,14 @@
                 <c:if test="${role.id != 4}">
                   <div class="checkbox block">
                     <label>
-                      <input type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}">checked="checked"</c:if>> ${role.name}
+                      <input class="J_role" type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}">checked="checked"</c:if>> ${role.name}
                     </label>
                   </div>
                 </c:if>
                 <c:if test="${role.id == 4}">
                   <div class="checkbox block">
                     <label>
-                      <input class="J_waiter" type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}"> checked="checked"</c:if>> ${role.name}
+                      <input class="J_waiter J_role" type="checkbox" value="${role.id}" name="roles" <c:if test="${roleMap[role.id] == 1}"> checked="checked"</c:if>> ${role.name}
                     </label>
                     <div class="waiter-table J_waiterTable hidden">
                       <c:forEach var="areaDto" items="${areaDtoList}">
@@ -91,6 +91,7 @@
                 </c:if>
               </c:forEach>
             </div>
+            <div class="col-sm-3 col-sm-pull-5 error-tip hidden J_errorTip">员工角色不能为空，请重新选择</div>
           </div>
         </div>
         <div class="panel-footer">

@@ -218,7 +218,7 @@ public class EmployeeController  extends AbstractController {
      * @param model
      * @return
      */
-    @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
+    @Module(value = ModuleEnums.AdminUserManagementEmployee,extModule = ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "toupdate/{partyId}",method = RequestMethod.GET)
     public String toUpdate(@PathVariable("partyId")Integer partyId,Model model){
         try {
@@ -264,7 +264,7 @@ public class EmployeeController  extends AbstractController {
      * @param employee
      * @return
      */
-    @Module(ModuleEnums.AdminUserManagementEmployeeUpdate)
+    @Module( value = ModuleEnums.AdminUserManagementEmployee,extModule = ModuleEnums.AdminUserManagementEmployeeUpdate)
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public String updateEmployee(@RequestParam("partyId")Integer partyId,
                                  @RequestParam("roles")Integer [] roles,
@@ -292,8 +292,13 @@ public class EmployeeController  extends AbstractController {
 
             employeeDto.setRole(roleList);
             employeeDto.setTables(tableList);
-            employeeService.update(employeeDto, partyId, loginName, CommonUtil.md5(password));
 
+            if (Assert.isNull(password)
+                    || "".equals(password)){
+                employeeService.update(employeeDto, partyId, loginName, null);
+            } else {
+                employeeService.update(employeeDto, partyId, loginName, CommonUtil.md5(password));
+            }
             String successUrl = "/" + URLConstants.EMPLOYEE_MANAGEMENT;
             //返回添加成功信息
             redirectAttributes.addFlashAttribute("msg", "编辑成功");
@@ -335,7 +340,6 @@ public class EmployeeController  extends AbstractController {
             for (int i = 0; i <roles.length ; i++) {
                 roleList.add(roles[i]);
             }
-
             if(tables!=null){
                 List<Integer> tableList = new ArrayList<Integer>();
                 for (int i = 0; i <tables.length ; i++) {
@@ -345,7 +349,6 @@ public class EmployeeController  extends AbstractController {
             }
             employeeDto.setRole(roleList);
             employeeService.newEmployee(employeeDto, loginName, CommonUtil.md5(password));
-
             String successUrl = "/" + URLConstants.EMPLOYEE_MANAGEMENT;
             //返回添加成功信息
             redirectAttributes.addFlashAttribute("msg", "添加成功");
@@ -373,6 +376,12 @@ public class EmployeeController  extends AbstractController {
     @ResponseBody
     public JSONObject checkLoginName(@RequestParam("partyId")Integer partyId,@RequestParam("loginName")String loginName){
         try {
+            if (Assert.isNotNull(loginName)){
+                loginName = loginName.replaceAll(" ","");
+                if ("".equals(loginName)){
+                       return sendMsgAndCode(AJAX_FAILURE_CODE,"用户名不合法");
+                }
+            }
             //添加页重名检查
             if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
                 if(securityUserService.checkLoginNameIsExist(loginName)){
@@ -384,10 +393,9 @@ public class EmployeeController  extends AbstractController {
             //编辑页重名检查
             if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
                 SecurityUser securityUser = securityUserService.queryByLoginName(loginName);
-                if (partyId == securityUser.getPartyId()){
+                if (securityUser.getPartyId().equals(partyId)){
                     return sendJsonObject(AJAX_SUCCESS_CODE);
-                }
-                if (partyId != securityUser.getPartyId()){
+                } else{
                     return sendJsonObject(AJAX_FAILURE_CODE);
                 }
             }
@@ -417,10 +425,9 @@ public class EmployeeController  extends AbstractController {
             }
             if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
                 Employee employee = employeeService.queryByNumber(employeeNumber);
-                if (partyId == employee.getPartyId()){
+                if (employee.getPartyId().equals(partyId)){
                     return sendJsonObject(AJAX_SUCCESS_CODE);
-                }
-                if (partyId != employee.getPartyId()){
+                } else {
                     return sendJsonObject(AJAX_FAILURE_CODE);
                 }
             }
@@ -449,10 +456,9 @@ public class EmployeeController  extends AbstractController {
             }
             if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
                 Employee employee = employeeService.queryByPhone(phone);
-                if (partyId == employee.getPartyId()){
+                if (employee.getPartyId().equals(partyId)){
                     return sendJsonObject(AJAX_SUCCESS_CODE);
-                }
-                if (partyId != employee.getPartyId()){
+                } else {
                     return sendJsonObject(AJAX_FAILURE_CODE);
                 }
             }
