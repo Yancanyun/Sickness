@@ -66,4 +66,12 @@ public interface OrderMapper {
      * @throws Exception
      */
     public List<Order> queryOrdersByCheckoutId(@Param("checkoutId")Integer checkoutId) throws Exception;
+
+    /**
+     * 根据订单状态来获取订单列表
+     * @param status
+     * @return
+     * @throws Exception
+     */
+    public List<Order> listOrdersByStatus(@Param("status") Integer status) throws Exception;
 }

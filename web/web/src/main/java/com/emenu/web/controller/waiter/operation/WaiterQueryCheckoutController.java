@@ -51,13 +51,14 @@ public class WaiterQueryCheckoutController extends AbstractController {
         JSONObject jsonObject = new JSONObject();
         try{
             // 查询本餐台所有的订单菜品
-            List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishListByTableId(tableId);
+            List<OrderDishDto> orderDishDtoList = orderDishService.queryOrderDishAndCombinePackageByTableId(tableId);
 
             // 消费清单列表
             JSONArray orderDishList = new JSONArray();
             if (Assert.isNotNull(orderDishDtoList)) {
                 for(OrderDishDto orderDishDto : orderDishDtoList) {
                     JSONObject orderDishJsonObject = new JSONObject();
+
                     if(orderDishDto.getIsPackage() == PackageStatusEnums.IsPackage.getId()){
                         // 查询套餐信息
                         DishDto dishDto = dishService.queryById(orderDishDto.getPackageId());
@@ -71,8 +72,8 @@ public class WaiterQueryCheckoutController extends AbstractController {
                         orderDishJsonObject.put("assistantCode", dishDto.getAssistantCode());
                         orderDishJsonObject.put("unitName",dishDto.getUnitName());
                         orderDishJsonObject.put("dishStatus",orderDishDto.getStatus());
-
                     }
+
                     orderDishJsonObject.put("salePrice", orderDishDto.getSalePrice());
                     orderDishJsonObject.put("dishName", orderDishDto.getDishName());
                     orderDishJsonObject.put("orderDishId", orderDishDto.getId());

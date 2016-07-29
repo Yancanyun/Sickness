@@ -36,6 +36,14 @@ public enum ConstantEnum {
     VipGradeVipAutoUpgradeState("VIP_GRADE_VIP_AUTO_UPGRADE_STATE","是否自动升级会员等级"),
 
     DishCategoryLayers("DISH_CATEGORY_LAYERS", "菜品分类等级数"),
+
+    /**************************会员等级相关参数*****************************/
+
+
+    /**************************智能排菜相关参数*****************************/
+
+    AutoPrintOrderDishStartStatus("AUTO_PRINT_ORDER_DISH_START_STATUS","智能排菜启动状态"),
+    PrinterPrintMaxNum("PRINTER_PRINT_MAX_NUM","菜品打印机最多可打印的菜品数量,相同菜品若能同时在一锅中做出只算一份"),
     ;
 
 

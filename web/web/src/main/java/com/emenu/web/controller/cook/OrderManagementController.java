@@ -2,25 +2,18 @@ package com.emenu.web.controller.cook;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.dto.dish.DishDto;
-import com.emenu.common.dto.order.PrintOrderDishDto;
-import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
-import com.emenu.common.entity.party.group.Party;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
-import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
-import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -28,11 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,9 +33,8 @@ import java.util.List;
  */
 
 @Controller
-@IgnoreLogin
 @Module(ModuleEnums.Cook)
-@RequestMapping(value = URLConstants.COOK_ORDER_MANAGEMETN_URL)
+@RequestMapping(value = URLConstants.COOK_ORDER_MANAGEMENT_URL)
 public class OrderManagementController extends AbstractController {
 
     /**
@@ -54,20 +43,8 @@ public class OrderManagementController extends AbstractController {
      */
     @Module(ModuleEnums.CookOrderList)
     @RequestMapping(value = {"","/list"},method = RequestMethod.GET)
-    public String toOrderManagementPage(HttpSession httpSession,Model model)
-    {
-      /*  try
-        {
-            String str = httpSession.getAttribute("partyId").toString();
-            Integer partyId = Integer.parseInt(str);//获得当事人Id
-            EmployeeDto employeeDto= employeeService.queryEmployeeDtoByPartyId(partyId);//获取到该员工的信息
-            model.addAttribute("employeeDto",employeeDto);
-        }
-        catch (SSException e) {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return COOK_NOT_FOUND_PAGE;
-        }*/
+    public String toOrderManagementPage(HttpSession httpSession,Model model) {
+
         return "cook/order_management";
     }
 

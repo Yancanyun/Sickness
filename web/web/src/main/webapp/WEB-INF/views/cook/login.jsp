@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="${staticWebsite}css/cook/common/bootstrap-theme.min.css">
   <link rel="stylesheet" href="${staticWebsite}css/cook/pages/style.css">
   <script src="${staticWebsite}js/cook/site-config.js"></script>
-  <script src="${puiWebsite}resources/js/base/lib/kissy/seed.js"></script>
+  <script src="http://pui.pandawork.net/resources/js/base/lib/kissy/seed.js"></script>
 
   <!--[if lt IE 9]>
   <script src="${staticWebsite}js/cook/app/page/common/html5.js"></script>
@@ -28,7 +28,7 @@
   <section class="loginBox row-fluid">
     <section class="col-sm-7 left">
       <h2>后厨调度系统登录</h2>
-      <form id="J_loginForm" role="form" method="post" action="${website}cook/login">
+      <form id="J_loginForm" role="form" method="post" action="${website}cook">
         <div class="form-group">
           <input name="username" type="text" data-valid-rule="notNull" class="form-control input-sm" id="J_userName" placeholder="用户名">
         </div>

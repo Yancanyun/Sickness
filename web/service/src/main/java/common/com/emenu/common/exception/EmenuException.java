@@ -627,11 +627,11 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateOrderDishCacheFail("修改订单菜品失败,存在其他用户正在确认下单",10051),
     QueryCheckOrderDtoFail("查询订单盘点所需要的信息失败",10052),
     OrderNotExist("不存在该订单",10053),
-    UpdateOrderIsSettlementedFail("修改订单盘点状态失败",10054),
-    QueryOrderByTimePeroidFail("查询该时间段内的订单信息失败",10055),
+    UpdateOrderIsSettlementFail("修改订单盘点状态失败",10054),
+    QueryOrderByTimePeriodFail("查询该时间段内的订单信息失败",10055),
     TimeUnreasonable1("开始时间不能大于等于结束时间",10056),
     TimeUnreasonable2("开始时间不能大于结束时间",10057),
-    QueryMaxFalgFail("获取最大的套餐标识失败",10058),
+    QueryMaxFlagFail("获取最大的套餐标识失败",10058),
     QuantityCanNotReduce("菜品数量无法再减少1",10059),
     QuantityIsNegative("菜品数量不能为负数",10060),
     ReturnTableOrderTotalMoneyFail("返回餐桌未结账的订单的总金额失败",10061),
@@ -640,7 +640,8 @@ public enum EmenuException implements IBizExceptionMes {
     QueryBackDishListFailed("查询退菜菜品失败",10063),
     OrderDishCacheNotExist("缓存中不存在该菜品",10064),
     QueryOrderByCheckoutIdFail("根据结账单id查询订单失败",10065),
-    CallDishNotAllow("菜品未到达上菜时限，暂不能催菜",10066),
+    QueryOrderByStatusFail("根据订单状态查询订单失败",10066),
+    CallDishNotAllow("菜品未到达上菜时限，暂不能催菜",10067),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),
@@ -672,6 +673,9 @@ public enum EmenuException implements IBizExceptionMes {
     WipeOrderDishFail("菜品划单失败",10099),
     PrinterIpIsNull("打印机Ip地址未设置",10100),
     ConnectPrinterFail("连接打印机失败",10101),
+    
+    // 智能排菜
+    CreateQueFail("生成智能排菜队列失败",10102),
 
     /****************************吧台端****************************/
     QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),

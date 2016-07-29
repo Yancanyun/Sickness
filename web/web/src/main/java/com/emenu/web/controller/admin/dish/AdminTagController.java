@@ -45,6 +45,17 @@ public class AdminTagController extends AbstractController{
         Map<TagDto, Integer> childrenTagDtoMap = new LinkedHashMap<TagDto, Integer>();
         List<RemarkTag> remarkTags = Collections.emptyList();
         remarkTags = remarkTagService.listByParentId(1);
+        String remarkId = "";
+        int i = 0;
+        for(RemarkTag remarkTag: remarkTags){
+            if (i == 0){
+                remarkId = remarkId + remarkTag.getId();
+            }else{
+                remarkId = remarkId + "," + remarkTag.getId();
+            }
+            i++;
+        }
+
         for(TagDto tagDto : tagDtoList){
             //获取打印机实体判断是否存在
             Printer printer = dishTagPrinterService.queryByTagId(tagDto.getTag().getId());
@@ -69,6 +80,7 @@ public class AdminTagController extends AbstractController{
         model.addAttribute("childrenTagDtoMap", childrenTagDtoMap);
         model.addAttribute("printerList", printerList);
         model.addAttribute("remarkTags",remarkTags);
+        model.addAttribute("remarkId",remarkId);
         return "admin/dish/tag/list_home";
     }
 

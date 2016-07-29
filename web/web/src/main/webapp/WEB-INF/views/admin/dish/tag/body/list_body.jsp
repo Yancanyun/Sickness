@@ -45,7 +45,7 @@
                 <h4>菜品分类列表</h4>
             </div>
             <div class="panel-body">
-                <form class="J_operForm">
+                <form class="J_operForm" autocomplete="off">
                     <a class="btn btn-success margin-bottom-15 J_addBigTag" href="javascript:;"><i class="fa fa-plus"></i>&nbsp;添加菜品大类</a>
                     <ul class="classify J_classify">
                         <c:forEach var="tagDto" items="${tagDtoMap}">
@@ -79,6 +79,7 @@
                                 <input type="hidden" name="maxPrintNum" value="${tagDto.key.tag.maxPrintNum}" />
                                 <input class="J_printId" type="hidden" name="printerId" value="${tagDto.value}" />
                                 <input type="hidden" name="timeLimit" value="${tagDto.key.tag.timeLimit}" />
+                                <input class="J_remarkIds" type="hidden" name="remarkId" value="${remarkId}" />
                                 <input type="hidden" name="type" value="1" />
                             </div>
                             <span class="root-tag">

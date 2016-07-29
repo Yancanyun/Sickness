@@ -84,7 +84,6 @@ public class BarNewOrderDishController extends AbstractController{
         }
         return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
     }
-
     /**
      * 增加消费-根据关键字和菜品大类搜索
      * @param

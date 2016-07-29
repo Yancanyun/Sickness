@@ -223,8 +223,8 @@ public class OrderDishTest extends AbstractTestCase {
     }
 
     @Test
-    public void callDish()throws SSException{
-        Integer orderDishId = 417;
-        orderDishService.callDish(orderDishId);
+    public void testListByOrderIdAndStatus() throws SSException{
+
+        orderDishService.listOrderDishByOrderIdAndStatus(133,1);
     }
 }

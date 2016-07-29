@@ -57,6 +57,9 @@ public class OrderDishServiceImpl implements OrderDishService{
     private OrderService orderService;
 
     @Autowired
+    private BackDishService backDishService;
+
+    @Autowired
     private CommonDao commonDao;
 
     @Autowired
@@ -283,7 +286,7 @@ public class OrderDishServiceImpl implements OrderDishService{
                 return packageFlagList.get(packageFlagList.size()-1);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
+            throw SSException.get(EmenuException. QueryMaxFlagFail,e);
         }
     }
 
@@ -298,7 +301,7 @@ public class OrderDishServiceImpl implements OrderDishService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException. QueryMaxFalgFail,e);
+            throw SSException.get(EmenuException. QueryMaxFlagFail,e);
         }
         return count;
     }
@@ -412,114 +415,73 @@ public class OrderDishServiceImpl implements OrderDishService{
         List<String> exceptionList = new ArrayList<String>();
         String exceptionString = "";
         try {
-            /**下面的判断???????????????????????*/
             if (tableOrderCache != null)
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
-            // dishId和quantity（菜品数量）
-            Map<Integer, BigDecimal> dishMap = new HashMap<Integer, BigDecimal>();
-            for(OrderDishCache orderDishCache : orderDishCacheList){
-                // dishId为套餐
-                if(dishPackageService.judgeIsOrNotPackage(orderDishCache.getDishId()) == PackageStatusEnums.IsPackage.getId()){
-                    DishPackageDto dishPackageDto = dishPackageService.queryDishPackageById(orderDishCache.getDishId());
+            Map<Integer, BigDecimal> map = new HashMap<Integer, BigDecimal>();
+            for (OrderDishCache orderDishCache : orderDishCacheList) {
+                // 判断是否为套餐
+                if (dishPackageService.judgeIsOrNotPackage(orderDishCache.getDishId()) == PackageStatusEnums.IsPackage.getId()) {
+                    DishPackageDto dashPackageDto = dishPackageService.queryDishPackageById(orderDishCache.getDishId());
                     // 套餐的数量
-                    BigDecimal packageQuantity = new BigDecimal(Float.toString(orderDishCache.getQuantity()));
-                    // 获得套餐的菜品
-                    List<DishDto> listDishDto = dishPackageDto.getChildDishDtoList();
-                    // 遍历套餐中的菜品,加入到dishMap里面去
-                    for(DishDto dishDto : listDishDto){
+                    BigDecimal qualityPackage = new BigDecimal(Float.toString(orderDishCache.getQuantity()));
+                    List<DishDto> listDishDto = dashPackageDto.getChildDishDtoList();
+                    // 遍历套餐中的菜品
+                    for (DishDto dishDto : listDishDto) {
                         DishPackage dishPackage = dishDto.getDishPackage();
                         // 套餐中某菜品的数量
-                        BigDecimal quantityDish = new BigDecimal(Integer.toString(dishPackage.getDishQuantity()));
-                        // dishMap里没有该菜品
-                        if(dishMap.get(dishDto.getId()) == null){
-                            dishMap.put(dishDto.getId(), quantityDish.multiply(packageQuantity));
-                        }else{
-                            dishMap.put(dishDto.getId(), dishMap.get(dishDto.getId()).add((quantityDish.multiply(packageQuantity))));
+                        BigDecimal qualityDish = new BigDecimal(Integer.toString(dishPackage.getDishQuantity()));
+                        if(map.containsKey(dishDto.getId())){
+                            map.put(dishDto.getId(),map.get(dishDto.getId()).add((qualityDish.multiply(qualityPackage))));
                         }
                     }
-                }else{
-                    // dishId为普通菜品
+
+                } else {
+                    // 普通菜品
                     DishDto dishDto = dishService.queryById(orderDishCache.getDishId());
-                    BigDecimal quantityDish = new BigDecimal(Float.toString(orderDishCache.getQuantity()));
-                    if(dishMap.get(dishDto.getId()) == null){
-                        dishMap.put(dishDto.getId(), quantityDish);
-                    }else{
-                        dishMap.put(dishDto.getId(), dishMap.get(dishDto.getId()).add(quantityDish));
+                    BigDecimal qualityDish = new BigDecimal(Float.toString(orderDishCache.getQuantity()));
+                    if(map.containsKey(dishDto.getId())){
+                        map.put(dishDto.getId(),map.get(dishDto.getId()).add(qualityDish));
                     }
                 }
-            }
-            // ingredientId和库存量
-            Map<Integer, BigDecimal> ingredientMap = new HashMap<Integer, BigDecimal>();
-            // 遍历map查看里面的菜品是否都原料充足
-            for(Map.Entry<Integer, BigDecimal> entry : dishMap.entrySet()){
-                Integer dishId = entry.getKey();
-                // 菜的数量
-                BigDecimal quantity = entry.getValue();
-                // 找到菜品的dto
-                DishDto dishDto = dishService.queryById(dishId);
-                // 找到菜品的成本卡
-                CostCard costCard = costCardService.queryCostCardByDishId(dishId);
-                // 该菜存在
-                if(costCard != null){
-                    // 菜品的所有原料
-                    List<CostCardItemDto> listCostCardItemDto = costCardItemService.listByCostCardId(costCard.getId());
-                    // 该菜能做的数量,初始值0份
-                    Float number = new Float(0);
-                    // 遍历所用的原料，得到能做该菜的份数
-                    for(CostCardItemDto costCardItemDto : listCostCardItemDto){
-                        // 库存里没有这种原料
-                        if(costCardItemDto == null){
-                            break;
-                        }
-                        // 原料Map里没有该原料
-                        if (ingredientMap.get(costCardItemDto.getIngredientId()) == null) {
-                            ingredientMap.put(costCardItemDto.getIngredientId(), storageSettlementService.queryCache(costCardItemDto.getId()));
-                        }
-                        // 原料的当前存量(在Map里)
-                        BigDecimal allCount = ingredientMap.get(costCard.getId());
-                        // 原料在Map库存量没了
-                        if(allCount.equals(0)){
-                            break;
-                        }else{
-                            // 单份菜需要该原料的量
-                            BigDecimal needCount = costCardItemDto.getOtherCount();
-                            // 库存能用这种原料做几份
-                            float tempnumber = allCount.divide(needCount).floatValue();
-                            number = number <= tempnumber ? number : tempnumber;
-                        }
-                    }
-                    if(number == 0){
-                        exceptionList.add("菜品：" + dishDto.getName() + ", 某原材料库存为空，暂时无法提供该菜品");
-                    }
-                    // 该菜可以做，但是份数少于点的
-                    else if(number < quantity.floatValue()){
-                        exceptionList.add("菜品" + dishDto.getName() + ", 原材料不足，目前只能做" + number + dishDto.getName());
-                        // 将该菜所耗费的原料的量从ingredientMap里减去
+                //遍历map查看里面的菜品是否都原料充足
+                for (Map.Entry<Integer, BigDecimal> entry : map.entrySet()) {
+                    Integer dishId = entry.getKey();
+                    BigDecimal quality = entry.getValue();
+                    // 找到菜品的dto
+                    DishDto dishDto = dishService.queryById(dishId);
+                    // 找到菜品的成本卡
+                    CostCard costCard = costCardService.queryCostCardByDishId(dishId);
+                    if (costCard != null) {
+                        List<CostCardItemDto> listCostCardItemDto = costCardItemService.listByCostCardId(costCard.getId());
                         for (CostCardItemDto costCardItemDto : listCostCardItemDto) {
-                            // 将做的份数float->BigDecimal转换
-                            BigDecimal tempNumber = new BigDecimal(number.toString());
-                            // 耗费的原料的量从ingredientMap里减去
-                            ingredientMap.put(costCardItemDto.getIngredientId(),
-                                    ingredientMap.get(costCardItemDto.getIngredientId()).subtract(tempNumber.multiply(costCardItemDto.getOtherCount())));
+                            BigDecimal allCount = storageSettlementService.queryCache(costCardItemDto.getId());
+                            BigDecimal needCount = costCardItemDto.getOtherCount();
+                            if (allCount != null) {
+                                // 库存能做几份
+                                BigDecimal number = allCount.divide(needCount);
+                                // 小于1
+                                if (number.compareTo(BigDecimal.valueOf(1)) == -1) {
+                                    exceptionList.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
+                                } else {
+                                    // 小于点的数量
+                                    if (number.compareTo(quality) == -1) {
+                                        exceptionList.add("菜品" + dishDto.getName() + ",原材料不足，目前只能做" + number.intValue() + dishDto.getName());
+                                    }
+                                }
+                            } else {
+                                exceptionList.add("菜品：" + dishDto.getName() + ",某原材料库存为空，暂时无法提供该菜品");
+                            }
                         }
                     }
-                    // 点的份数全部都做
-                    else{
-                        // 耗费的原料的量从ingredientMap里减去
-                        for(CostCardItemDto costCardItemDto : listCostCardItemDto){
-                            ingredientMap.put(costCardItemDto.getIngredientId(),
-                                    ingredientMap.get(costCardItemDto.getIngredientId()).subtract(quantity.multiply(costCardItemDto.getOtherCount())));
-                        }
-                    }
-                }
-                if(!exceptionList.isEmpty()){
-                    for(String list : exceptionList){
-                        exceptionString.concat(list.toString()).concat("\n");
-                    }
-                    throw SSException.get(EmenuException.valueOf(exceptionString));
                 }
             }
-        }catch(Exception e){
+            if(!exceptionList.isEmpty()){
+                for(String list :exceptionList){
+                    exceptionString.concat(list.toString()).concat("\n");
+                }
+                throw SSException.get(EmenuException.valueOf(exceptionString));
+            }
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.OrderNotEnoughIngredient, e);
         }
@@ -632,4 +594,23 @@ public class OrderDishServiceImpl implements OrderDishService{
             throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
         }
     }
+
+
+    @Override
+    public List<OrderDish> listOrderDishByOrderIdAndStatus(Integer orderId,
+                                                           Integer status) throws SSException{
+
+        List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+        try{
+            if(!Assert.lessOrEqualZero(orderId)
+                    &&!Assert.lessOrEqualZero(status)){
+                orderDishs = orderDishMapper.listOrderDishByOrderIdAndStatus(orderId,status);
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderDishListFailed, e);
+        }
+        return orderDishs;
+    }
+
 }

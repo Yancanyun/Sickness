@@ -112,6 +112,16 @@ public interface OrderDishMapper {
                                                      @Param("packageId") int packageId) throws Exception;
 
     /**
+     * 根据订单Id和订单菜品状态来查询订单菜品列表
+     * @param orderId
+     * @param status
+     * @return
+     * @throws Exception
+     */
+    public List<OrderDish> listOrderDishByOrderIdAndStatus(@Param("orderId")Integer orderId,
+                                                           @Param("status")Integer status) throws Exception;
+
+    /**
      *根据套餐标记，查询套餐列表
      * @param packageFlag
      * @return

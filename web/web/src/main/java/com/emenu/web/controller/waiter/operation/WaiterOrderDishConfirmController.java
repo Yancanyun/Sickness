@@ -7,6 +7,7 @@ import com.emenu.common.cache.order.OrderDishCache;
 import com.emenu.common.cache.order.TableOrderCache;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
+import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.Order;
@@ -111,9 +112,9 @@ public class WaiterOrderDishConfirmController extends AbstractController{
                 jsonObject.put("seatFee",table.getSeatFee());
                 jsonObject.put("tableFee",table.getTableFee());
                 totalMoney = orderDishCacheService.returnTotalMoneyByTableId(tableId);
-                java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+                /*java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
                 String totalMoneyTemp = myformat.format(totalMoney);
-                totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
+                totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长*/
                 jsonObject.put("totalMoney",totalMoney);
             }
         }
@@ -358,7 +359,9 @@ public class WaiterOrderDishConfirmController extends AbstractController{
                 if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId()){
                     checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
                     // 第二次消费的话餐桌状态由占有已经账变为占用未结账
-                    tableService.updateStatus(tableId,TableStatusEnums.Uncheckouted.getId());
+                    TableDto tableDto = tableService.queryTableDtoById(tableId);
+                    tableDto.setStatus(TableStatusEnums.Uncheckouted.getType());
+                    tableService.forceUpdateTable(tableId, tableDto);
                 }
                 else
                     checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());

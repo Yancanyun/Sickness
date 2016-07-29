@@ -127,7 +127,7 @@ public class OrderServiceImpl implements OrderService{
                 throw SSException.get(EmenuException.OrderNotExist);
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.UpdateOrderIsSettlementedFail,e);
+            throw SSException.get(EmenuException.UpdateOrderIsSettlementFail,e);
         }
     }
 
@@ -156,7 +156,7 @@ public class OrderServiceImpl implements OrderService{
           }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
+            throw SSException.get(EmenuException.QueryOrderByTimePeriodFail,e);
         }
         return checkOrderDtos;
     }
@@ -186,7 +186,7 @@ public class OrderServiceImpl implements OrderService{
             }
         }catch (Exception e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.QueryOrderByTimePeroidFail,e);
+            throw SSException.get(EmenuException.QueryOrderByTimePeriodFail,e);
         }
         return checkOrderDtos;
     }
@@ -265,6 +265,22 @@ public class OrderServiceImpl implements OrderService{
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryOrderByCheckoutIdFail,e);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> listOrdersByStatus(Integer status) throws SSException{
+
+        List<Order> orders = new ArrayList<Order>();
+        try{
+            if (!Assert.lessOrEqualZero(status)){
+                orders = orderMapper.listOrdersByStatus(status);
+            }
+
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryOrderByStatusFail,e);
         }
         return orders;
     }

@@ -766,15 +766,18 @@ public class TableServiceImpl implements TableService {
 
             // 交换新旧餐台的Checkout
             Checkout checkout = checkoutService.queryByTableIdAndStatus(oldTableId, CheckOutStatusEnums.IsNotCheckOut.getId());
-            checkout.setTableId(newTableId);
-            checkoutService.updateCheckout(checkout);
+            if (Assert.isNotNull(checkout)) {
+                checkout.setTableId(newTableId);
+                checkoutService.updateCheckout(checkout);
+            }
 
             // 把新旧餐台的点餐缓存交换
             orderDishCacheService.changeCache(oldTableId, newTableId);
 
             // 把新旧餐台的呼叫服务交换
             TableCallCache oldTableCallCache = callCacheService.queryCallCachesByTableId(oldTableId);
-            if (Assert.isNotNull(oldTableCallCache.getCallCacheList()) &&
+            if (Assert.isNotNull(oldTableCallCache) &&
+                    Assert.isNotNull(oldTableCallCache.getCallCacheList()) &&
                     oldTableCallCache.getCallCacheList().size() > 0) {
                 for (CallCache callCache : oldTableCallCache.getCallCacheList()) {
                     callCacheService.addCallCache(newTableId, callCache);

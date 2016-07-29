@@ -109,6 +109,7 @@
         SELECT count(1)
         FROM t_order_dish,t_order
         WHERE t_order.id=t_order_dish.order_id
+        AND t_order.status=1
         AND (t_order_dish.status=1 OR t_order_dish.status = 2)
         AND table_id=#{tableId}
             </select>
@@ -143,6 +144,13 @@
         FROM t_order_dish
         WHERE t_order_dish.`order_id` = #{orderId}
         AND t_order_dish.`package_id` = #{packageId}
+    </select>
+
+    <select id="listOrderDishByOrderIdAndStatus" resultMap="pw.OrderDish">
+        SELECT *
+        FROM t_order_dish
+        WHERE order_id = #{orderId}
+        AND status = #{status}
     </select>
 
     <select id="queryPackageOrderDishesByPackageFlag" resultMap="pw.OrderDish">
