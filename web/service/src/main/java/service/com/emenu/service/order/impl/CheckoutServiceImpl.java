@@ -7,6 +7,7 @@ import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.entity.vip.ConsumptionActivity;
@@ -24,13 +25,16 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
+import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.dish.DishService;
 import com.emenu.service.order.CheckoutPayService;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
 import com.emenu.service.party.group.employee.EmployeeService;
+import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.printer.PrinterService;
+import com.emenu.service.sms.SmsService;
 import com.emenu.service.table.TableMergeService;
 import com.emenu.service.table.TableService;
 import com.emenu.service.vip.VipAccountInfoService;
@@ -93,6 +97,12 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private SmsService smsService;
+
+    @Autowired
+    private VipInfoMapper vipInfoMapper;
 
     @Override
     public Checkout queryByTableIdAndStatus(int tableId, int status) throws SSException {
@@ -395,6 +405,17 @@ public class CheckoutServiceImpl implements CheckoutService {
                 throw SSException.get(EmenuException.TableIdError);
             }
 
+            // 若为会员卡结账，若消费金额大于会员卡余额，不允许结账
+            if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
+                // 会员卡结账时，流水号字段中的内容是会员partyId
+                Integer vipPartyId = Integer.valueOf(serialNum);
+                // 查询会员账户信息
+                VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipPartyId);
+                if (totalPayMoney.compareTo(vipAccountInfo.getBalance()) == 1) {
+                    throw SSException.get(EmenuException.VipBalanceNotEnough);
+                }
+            }
+
             // 设置结账单内容
             Checkout checkout = queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
             if (Assert.isNull(checkout)) {
@@ -412,10 +433,46 @@ public class CheckoutServiceImpl implements CheckoutService {
             checkoutPay.setPayMoney(consumptionMoney.subtract(wipeZeroMoney));
             checkoutPay.setCheckoutId(checkout.getId());
             checkoutPay.setCheckoutType(checkoutType);
-            checkoutPay.setSerialNum(serialNum);
+            if (checkoutType != CheckoutTypeEnums.VipCard.getId()) {
+                checkoutPay.setSerialNum(serialNum);
+            }
 
             // 无论是否并台，都先对本餐台自身进行结账
             checkoutOneTable(tableId, checkout, checkoutPay);
+
+            // 如果是会员卡结账，要对会员信息做操作
+            if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
+                // 会员卡结账时，流水号字段中的内容是会员partyId
+                Integer vipPartyId = Integer.valueOf(serialNum);
+
+                // 查询会员账户信息
+                VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipPartyId);
+
+                // 新增一条会员消费记录
+                ConsumptionActivity consumptionActivity = new ConsumptionActivity();
+                consumptionActivity.setPartyId(vipPartyId);
+                // 原有金额
+                consumptionActivity.setOriginalAmount(vipAccountInfo.getBalance());
+                // 卡内余额
+                consumptionActivity.setResidualAmount(vipAccountInfo.getBalance().subtract(totalPayMoney));
+                // 消费金额
+                consumptionActivity.setConsumptionAmount(consumptionMoney);
+                // 实际付款
+                consumptionActivity.setActualPayment(totalPayMoney);
+                consumptionActivity.setType(ConsumptionActivityTypeEnums.Consumption.getId());
+                consumptionActivity.setOperator(employeeService.queryByPartyId(partyId).getName());
+                commonDao.insert(consumptionActivity);
+
+                // 修改账户信息
+                vipAccountInfo.setBalance(vipAccountInfo.getBalance().subtract(totalPayMoney));
+                commonDao.update(vipAccountInfo);
+
+                // 发送给会员短信
+                VipInfo vipInfo = vipInfoMapper.queryByPartyId(vipPartyId);
+                String text = "【聚客多】您的会员卡正在进行消费操作，消费金额：" + totalPayMoney + "元。交易后余额："
+                        + vipAccountInfo.getBalance() + "元。";
+                smsService.sendSms(vipInfo.getPhone(), text);
+            }
 
             // 结账之后把已结账的Checkout加到List中
             checkoutList.add(checkout);
@@ -458,34 +515,6 @@ public class CheckoutServiceImpl implements CheckoutService {
                     if (t.getStatus().equals(TableStatusEnums.Merged.getId())) {
                         tableMergeService.delTableMergeInfo(t.getId());
                     }
-                }
-
-                // 如果是会员卡结账，要对会员信息做操作
-                if (checkoutType == CheckoutTypeEnums.VipCard.getId()) {
-                    // 会员卡结账时，流水号字段中的内容是会员partyId
-                    Integer vipPartyId = Integer.valueOf(serialNum);
-
-                    // 查询会员账户信息
-                    VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipPartyId);
-
-                    // 新增一条会员消费记录
-                    ConsumptionActivity consumptionActivity = new ConsumptionActivity();
-                    consumptionActivity.setPartyId(vipPartyId);
-                    // 原有金额
-                    consumptionActivity.setOriginalAmount(vipAccountInfo.getBalance());
-                    // 卡内余额
-                    consumptionActivity.setResidualAmount(vipAccountInfo.getBalance().subtract(totalPayMoney));
-                    // 消费金额
-                    consumptionActivity.setConsumptionAmount(consumptionMoney);
-                    // 实际付款
-                    consumptionActivity.setActualPayment(totalPayMoney);
-                    consumptionActivity.setType(ConsumptionActivityTypeEnums.Consumption.getId());
-                    consumptionActivity.setOperator(employeeService.queryByPartyId(partyId).getName());
-                    commonDao.insert(consumptionActivity);
-
-                    // 修改账户信息
-                    vipAccountInfo.setBalance(vipAccountInfo.getBalance().subtract(totalPayMoney));
-                    commonDao.update(vipAccountInfo);
                 }
             }
 

@@ -2,8 +2,8 @@
 
 <script type="text/javascript">
     KISSY.ready(function(S){
-        S.use('page/user-management/modify-personal-information', function(S){
-            PW.page.UserManagement.ModifyPersonalInformation.Modify();
+        S.use('page/welcome', function(){
+            PW.page.Welcome.Core();
         });
     });
 </script>

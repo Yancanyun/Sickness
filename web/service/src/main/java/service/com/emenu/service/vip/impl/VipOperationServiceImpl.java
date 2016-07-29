@@ -10,9 +10,11 @@ import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
+import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.mapper.vip.VipAccountInfoMapper;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.vip.VipInfoService;
+import com.emenu.service.sms.SmsService;
 import com.emenu.service.vip.VipAccountInfoService;
 import com.emenu.service.vip.VipCardService;
 import com.emenu.service.vip.VipOperationService;
@@ -60,6 +62,12 @@ public class VipOperationServiceImpl implements VipOperationService{
     @Autowired
     private VipAccountInfoMapper vipAccountInfoMapper;
 
+    @Autowired
+    private SmsService smsService;
+
+    @Autowired
+    private VipInfoMapper vipInfoMapper;
+
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public VipRegisterDto registerVip(String name, Integer sex, String phone, Date birthday, Date validityTime, Integer permanentlyEffective, Integer operatorPartyId) throws SSException {
@@ -89,6 +97,11 @@ public class VipOperationServiceImpl implements VipOperationService{
             VipAccountInfo vipAccountInfo1 = vipAccountInfoMapper.queryEntityByPartyId(vipInfo.getPartyId());
             Assert.isNotNull(vipAccountInfo1,EmenuException.NewVipAccountInfoFailed);
             vipRegisterDto.setVipAccountInfo(vipAccountInfo1);
+
+            // 发送给会员短信
+            // @author yangch
+            String text = "【聚客多】您正在进行注册会员操作，会员卡号：" + vipCard1.getCardNumber() + "。";
+            smsService.sendSms(phone, text);
 
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -152,6 +165,12 @@ public class VipOperationServiceImpl implements VipOperationService{
             vipAccountInfo.setBalance(vipAccountInfo.getBalance().add(rechargeAmount));// 卡内余额=原有金额+充值金额
             vipAccountInfo.setTotalConsumption(vipAccountInfo.getTotalConsumption().add(rechargeAmount));// 总消费金额=原有总消费金额+充值金额
             commonDao.update(vipAccountInfo);
+
+            // 发送给会员短信
+            // @author yangch
+            String text = "【聚客多】您正在进行充值操作，充值金额：" + payAmount + "元。交易后余额：" + vipAccountInfo.getBalance() + "元。";
+            VipInfo vipInfo = vipInfoMapper.queryByPartyId(vipPartyId);
+            smsService.sendSms(vipInfo.getPhone(), text);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
