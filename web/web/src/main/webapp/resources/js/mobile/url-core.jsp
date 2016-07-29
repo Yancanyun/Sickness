@@ -47,28 +47,28 @@ Order: [
         ],
         //为您推荐
         Recommend: [
-        ['sendDishInfo', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id'],
+        ['sendDishInfo', site.website + 'mobile/dish/ajax/new/quickly', 'get', '发送菜品id'],
         ['getRecommendDishList', site.website + 'mock/mobile/get-dish-list.json', 'get', '获取推荐的菜品列表']
         ],
         //销量排行
         SalesRank: [
-        ['sendDishInfo', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id'],
+        ['sendDishInfo', site.website + 'mobile/dish/ajax/new/quickly', 'get', '发送菜品id'],
         ['getSalesRankDishList', site.website + 'mobile/dish/prefer/ajax/rank/list', 'get', '获取销量排行的菜品列表']
         ],
         //今日特价
         TodaySpecial: [
-        ['sendDishInfo', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id'],
+        ['sendDishInfo', site.website + 'mobile/dish/ajax/new/quickly', 'get', '发送菜品id'],
         ['getTodaySpecialDishList', site.website + 'mobile/dish/prefer/ajax/cheap/list', 'get', '获取今日特价的菜品列表']
         ],
         //本店特色
         RestSpecials: [
-        ['sendDishInfo', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id'],
+        ['sendDishInfo', site.website + 'mobile/dish/ajax/new/quickly', 'get', '发送菜品id'],
         ['getRestSpecialsDishList', site.website + 'mobile/dish/prefer/ajax/feature/list', 'get', '获取本店特色的菜品列表']
         ],
         //历史记录
         HistoryRecord: [
         ['getDishList', site.website + 'mock/mobile/history-dish-list.json', 'get','获取历史记录中的菜品列表'],
-        ['sendDishId', site.website + 'mock/mobile/send-dish-info.json', 'get', '发送菜品id']
+        ['sendDishId', site.website + 'mobile/dish/ajax/new/quickly', 'get', '发送菜品id']
         ],
         //公共部分，header,footer
         Common: [

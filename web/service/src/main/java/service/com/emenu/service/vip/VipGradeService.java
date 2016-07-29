@@ -91,4 +91,12 @@ public interface VipGradeService {
      */
     public void updateIntegralStatus(int id, IntegralEnableStatusEnums status) throws SSException;
 
+    /**
+     * 计算当前使用最低消费金额的等级的数量
+     * @param minConsumption
+     * @return
+     * @throws SSException
+     */
+    public VipGrade countMinConsumptionUsingNumber(BigDecimal minConsumption) throws SSException;
+
 }

@@ -326,4 +326,56 @@ public class DateUtils {
         return firstDay;
     }
 
+    /**
+     * 得到本年的第一天
+     * @return
+     */
+    public static String getCurrentYearFirstDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 0);
+        calendar.set(Calendar.DAY_OF_YEAR,calendar.getActualMinimum(Calendar.DAY_OF_YEAR));
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
+    /**
+     * 得到本年的最后一天
+     * @return
+     */
+    public static String getCurrentYearLastDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 0);
+        calendar.set(Calendar.DAY_OF_YEAR,calendar.getActualMaximum(Calendar.DAY_OF_YEAR) );
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
+    /**
+     * 得到去年的第一天
+     * @return
+     */
+    public static String getLastYearFirstDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -1);
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.getActualMinimum(Calendar.DAY_OF_YEAR));
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
+    /**
+     * 得到去年的最后一天
+     * @return
+     */
+    public static String getLastYearLastDay(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -1);
+        calendar.set(Calendar.DAY_OF_YEAR,calendar.getActualMaximum(Calendar.DAY_OF_YEAR) );
+        String firstDay = format.format(calendar.getTime());
+        return firstDay;
+    }
+
 }

@@ -6,18 +6,22 @@ import com.emenu.common.dto.vip.VipGradeDto;
 import com.emenu.common.entity.vip.VipDishPricePlan;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -160,6 +164,29 @@ public class AdminVipGradeController extends AbstractController {
     public JSONObject delById(@PathVariable("id") Integer id) {
         try {
             vipGradeService.delById(id);
+            return sendJsonObject(AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    /**
+     * ajax 判断会员最低消费金额是否重复
+     * @param id
+     * @param minConsumption
+     * @return
+     */
+    @RequestMapping(value = "ajax/min/{id}",method = RequestMethod.POST)
+    public JSONObject isMinConsumptionUsed(@PathVariable("id") Integer id,
+                                           @RequestParam("minConsumption")BigDecimal minConsumption){
+        try{
+            VipGrade vipGrade = vipGradeService.countMinConsumptionUsingNumber(minConsumption);
+            if (!Assert.isNull(vipGrade)){
+                if (vipGrade.getId() != id){
+                    throw SSException.get(EmenuException.MinConsumptionExist);
+                }
+            }
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

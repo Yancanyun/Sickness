@@ -89,10 +89,10 @@ public class VipGradeServiceImpl implements VipGradeService{
             return null;
         }
         try {
-            //查看数据库中是否有相同最低消费金额的记录
-            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
+            //查看数据库中是否有相同最低消费金额的记录，去除与自己的重复
+            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionUsingNumber(vipGrade.getMinConsumption());
             if (!Assert.isNull(vipGrade1)){
-                if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption())){
+                if (vipGrade1.getId() != vipGrade.getId()){
                     throw SSException.get(EmenuException.MinConsumptionExist);
                 }
             }
@@ -110,9 +110,9 @@ public class VipGradeServiceImpl implements VipGradeService{
         }
         try {
             //查看数据库中是否有相同最低消费金额的记录，并且忽略其本身那条记录
-            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionExist(vipGrade.getMinConsumption());
+            VipGrade vipGrade1 = vipGradeMapper.countMinConsumptionUsingNumber(vipGrade.getMinConsumption());
             if (!Assert.isNull(vipGrade1)){
-                if (vipGrade1.getMinConsumption().equals(vipGrade.getMinConsumption()) && vipGrade1.getId().equals(vipGrade.getId())){
+                if (vipGrade1.getId() != vipGrade.getId()){
                     throw SSException.get(EmenuException.MinConsumptionExist);
                 }
             }
@@ -203,6 +203,17 @@ public class VipGradeServiceImpl implements VipGradeService{
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateVipGradeFail, e);
+        }
+    }
+
+    @Override
+    public VipGrade countMinConsumptionUsingNumber(BigDecimal minConsumption) throws SSException{
+        try{
+            VipGrade vipGrade = vipGradeMapper.countMinConsumptionUsingNumber(minConsumption);
+            return vipGrade;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipGradeFail, e);
         }
     }
 

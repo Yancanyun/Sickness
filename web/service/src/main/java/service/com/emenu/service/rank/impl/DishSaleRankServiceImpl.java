@@ -182,12 +182,13 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagId(Date startTime ,Date endTime,Integer tagId) throws SSException{
         try{
             List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+            List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
             for(DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
-                if(dishSaleRankDto.getTagId() == tagId){
-                    dishSaleRankDtoList.remove(dishSaleRankDto);
+                if((tagId).equals(dishSaleRankDto.getTagId())){
+                    dishSaleRankDtoList2.add(dishSaleRankDto);
                 }
             }
-            return dishSaleRankDtoList;
+            return dishSaleRankDtoList2;
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.GetOrderDishDtoByTimePeriodAndTagIdFailed,e);
@@ -281,34 +282,34 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
                 if(dishSaleRankDtoList.size()%pageSize==0){
                     if(pageNumber == 1){
-                        dishSaleRankDtoList.subList(0,pageSize-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
                     }else{
-                        dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber - 1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
                     }
                 }else{
                     if(pageNumber == 1){
-                        dishSaleRankDtoList.subList(0,pageSize-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
                     }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                        dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size()-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
                     }else{
-                        dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber - 1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
                     }
                 }
             } else {
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
                 if(dishSaleRankDtoList.size()%pageSize==0){
                     if(pageNumber == 1){
-                        dishSaleRankDtoList.subList(0,pageSize-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
                     }else{
-                        dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber - 1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
                     }
                 }else{
                     if(pageNumber == 1){
-                        dishSaleRankDtoList.subList(0,pageSize-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
                     }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                        dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size()-1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
                     }else{
-                        dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber - 1);
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
                     }
                 }
             }

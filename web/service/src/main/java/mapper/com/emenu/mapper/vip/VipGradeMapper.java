@@ -37,7 +37,7 @@ public interface VipGradeMapper {
      * @return
      * @throws Exception
      */
-    public VipGrade countMinConsumptionExist(BigDecimal minConsumption) throws Exception;
+    public VipGrade countMinConsumptionUsingNumber(BigDecimal minConsumption) throws Exception;
 
     /**
      * 根据id修改积分启用状态

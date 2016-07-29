@@ -135,6 +135,7 @@ public class WaiterTableController extends AbstractController {
                     statusList.add(TableStatusEnums.Merged.getId());
                     areaDtoList = waiterTableService.queryAreaDtoByPartyIdAndStatusList(partyId, statusList);
                     break;
+                // 确认 根据PartyId获取餐台状态为占用未结账、占用已结账、已并桌的AreaDtoList
                 case Confirm:
                     statusList = new ArrayList<Integer>();
                     statusList.add(TableStatusEnums.Checkouted.getId());
@@ -205,6 +206,14 @@ public class WaiterTableController extends AbstractController {
                 // 退菜 根据PartyId获取餐台状态为占用未结账、已并桌的AreaDto
                 case RetreatDish:
                     statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Uncheckouted.getId());
+                    statusList.add(TableStatusEnums.Merged.getId());
+                    areaDto = waiterTableService.queryAreaDtoByPartyIdAndAreaIdAndStatusList(partyId, areaId, statusList);
+                    break;
+                // 确认 根据PartyId获取餐台状态为占用未结账、占用已结账、已并桌的AreaDto
+                case Confirm:
+                    statusList = new ArrayList<Integer>();
+                    statusList.add(TableStatusEnums.Checkouted.getId());
                     statusList.add(TableStatusEnums.Uncheckouted.getId());
                     statusList.add(TableStatusEnums.Merged.getId());
                     areaDto = waiterTableService.queryAreaDtoByPartyIdAndAreaIdAndStatusList(partyId, areaId, statusList);

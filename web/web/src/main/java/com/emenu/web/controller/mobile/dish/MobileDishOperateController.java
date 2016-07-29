@@ -126,12 +126,12 @@ public class MobileDishOperateController extends AbstractController {
             List<DishDto> dishDtoList = dishService.listBySearchDtoInMobile(dishSearchDto);
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("dishListSrc", "image?keyword=");
             String path = httpServletRequest.getContextPath();
             int port = httpServletRequest.getServerPort();
             String href = httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName()
-                    + (port == 80 ? "" : (":" + port)) + path + "mobile/dish/detail/";
-            jsonObject.put("dishDetailSrc", href);
+                    + (port == 80 ? "" : (":" + port)) + path;
+            jsonObject.put("dishListSrc", href + "/mobile/dish/image?keyword=");
+            jsonObject.put("dishDetailSrc", href + "/mobile/dish/detail/");
 
             JSONArray contentList = new JSONArray();
             for (DishDto dishDto : dishDtoList) {

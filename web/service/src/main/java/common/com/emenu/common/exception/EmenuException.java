@@ -570,7 +570,8 @@ public enum EmenuException implements IBizExceptionMes {
     GetPageOrderDishDtoByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取分页失败",9006),
     GetCountByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取数据条数失败",9007),
     GetDishTagRankFailed("根据开始时间和结束时间获取菜品大类的排行失败",9008),
-
+    GetDishTagAllFailed("获取所有的菜品大类排行失败",9009),
+    GetPageDishTagRankByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取菜品大类销售排行分页失败",9010),
     // 吧台对账
     NewBarContrastFailed("新增吧台对账记录失败", 9020),
     QueryBarContrastFailed("查询吧台对账记录失败", 9021),
@@ -650,13 +651,14 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateCheckoutFailed("修改结账单失败",10073),
     CheckoutFailed("结账失败", 10074),
     CheckoutStatusError("结账单状态不合法", 10075),
-    CheckoutIsNull("该桌未消费，不能在该桌进行结账",10076),
+    CheckoutIsNull("该餐台未消费，不能在该桌进行结账",10076),
     CheckoutPayIsNull("结账-支付信息为空",10077),
     NewCheckoutPayFailed("添加结账-支付信息失败",10078),
     UpdateCheckoutPayFailed("修改结账-支付信息失败",10079),
     QueryCheckoutPayFailed("查询结账-支付信息失败",10080),
     CheckoutIdError("结账单ID不合法",10081),
     PrintCheckoutFail("打印结账单失败",10082),
+    DirectToCheckout("该餐台未消费，将直接进行结账", 10083),
 
     /****************************后厨管理端****************************/
 

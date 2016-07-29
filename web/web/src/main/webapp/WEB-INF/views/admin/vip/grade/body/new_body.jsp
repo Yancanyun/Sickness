@@ -54,7 +54,7 @@
               <span class="requires">*</span>信用额度
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="creditAmount" value="" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+              <input class="w180" type="text" name="creditAmount" value="0" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
             </div>
           </div>
           <div class="form-group">

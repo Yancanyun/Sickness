@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -233,7 +234,8 @@ public class AdminController extends AbstractController {
                                       @RequestParam("oldPassword") String oldPassword,
                                       @RequestParam("newPassword") String newPassword,
                                       @RequestParam("confirmPassword") String confirmPassword,
-                                      HttpSession httpSession) {
+                                      HttpSession httpSession,
+                                      RedirectAttributes redirectAttributes) {
         try {
             int partyId = (Integer) httpSession.getAttribute("partyId");
 
@@ -252,11 +254,19 @@ public class AdminController extends AbstractController {
 
             employeeService.update(employeeDto, partyId, employeeDto.getLoginName(), CommonUtil.md5(newPassword));
 
-            return "redirect:/admin/login";
+            String successUrl = "/" + URLConstants.ADMIN_URL;
+            // 返回添加成功信息
+            redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
+            // 返回首页
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
+            String failedUrl = "/" + URLConstants.ADMIN_URL + "/personal/information";
+            // 返回添加失败信息
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            // 返回当前页
+            return "redirect:" + failedUrl;
         }
     }
 }

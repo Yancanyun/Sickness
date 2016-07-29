@@ -28,7 +28,7 @@ import java.util.List;
  * @author guofengrui
  * @date 2016/7/26.
  */
-@Module(value = ModuleEnums.AdminCountDishSaleRanking)
+@Module(value = ModuleEnums.AdminCountDishSaleRankingList)
 @Controller
 @RequestMapping(value = URLConstants.ADMIN_COUNT_DISH_SALE_RANKING_URL)
 public class DishSaleRankController extends AbstractController {
@@ -41,26 +41,32 @@ public class DishSaleRankController extends AbstractController {
             model.addAttribute("tagId" ,list);
             model.addAttribute("tagName" ,list);
             // 今天的开始时间
-            model.addAttribute("firstToday", DateUtils.getToday().concat(" 00:00:00"));
+            model.addAttribute("firstToday", DateUtils.getToday());
             // 今天的结束时间
-            model.addAttribute("lastToday", DateUtils.getToday().concat(" 23:59:59"));
+            model.addAttribute("lastToday", DateUtils.getToday());
             // 昨天的开始时间
-            model.addAttribute("firstYesterday", DateUtils.getYesterday().concat(" 00:00:00"));
+            model.addAttribute("firstYesterday", DateUtils.getYesterday());
             // 昨天的结束时间
-            model.addAttribute("lastYesterday", DateUtils.getYesterday().concat(" 23:59:59"));
+            model.addAttribute("lastYesterday", DateUtils.getYesterday());
             // 上周
-            model.addAttribute("lastWeekFirstDay", DateUtils.getLastWeekFirstDay().concat(" 00:00:00"));
-            model.addAttribute("lastWeekLastDay", DateUtils.getLastWeekLastDay().concat(" 23:59:59"));
+            model.addAttribute("lastWeekFirstDay", DateUtils.getLastWeekFirstDay());
+            model.addAttribute("lastWeekLastDay", DateUtils.getLastWeekLastDay());
             // 本周
-            model.addAttribute("currentWeekFirstDay", DateUtils.getCurrentWeekFirstDay().concat(" 00:00:00"));
-            model.addAttribute("currentWeekLastDay", DateUtils.getCurrentWeekLastDay().concat(" 23:59:59"));
+            model.addAttribute("currentWeekFirstDay", DateUtils.getCurrentWeekFirstDay());
+            model.addAttribute("currentWeekLastDay", DateUtils.getCurrentWeekLastDay());
             // 上月
-            model.addAttribute("lastMonthFirstDay", DateUtils.getLastMonthFirstDay().concat(" 00:00:00"));
-            model.addAttribute("lastMonthLastDay", DateUtils.getLastMonthLastDay().concat(" 23:59:59"));
+            model.addAttribute("lastMonthFirstDay", DateUtils.getLastMonthFirstDay());
+            model.addAttribute("lastMonthLastDay", DateUtils.getLastMonthLastDay());
             // 本月
-            model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay().concat(" 00:00:00"));
-            model.addAttribute("currentMonthLastDay", DateUtils.getCurrentMonthLastDay().concat(" 23:59:59"));
-            return "admin/dish/sale/ranking/list_home";
+            model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
+            model.addAttribute("currentMonthLastDay", DateUtils.getCurrentMonthLastDay());
+            // 本年
+            model.addAttribute("currentYearFirstDay", DateUtils.getCurrentYearFirstDay());
+            model.addAttribute("currentYearLastDay", DateUtils.getCurrentYearLastDay());
+            // 去年
+            model.addAttribute("LastYearFirstDay", DateUtils.getLastYearFirstDay());
+            model.addAttribute("LastYearLastDay", DateUtils.getLastYearLastDay());
+            return "admin/rank/dishsale/list_home";
         }catch(SSException e){
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);

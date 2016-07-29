@@ -378,17 +378,24 @@
             <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
         </ul>
     </li>
-    <li id="firstMenu8" class="active hidden">
-        <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营业分析</span><i
-                class="fa fa-angle-right angle-right"></i></a>
-        <ul>
-            <li><a class="J_menu" href="javascript:;">菜品销售排行</a></li>
-            <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
-            <li><a class="J_menu" href="javascript:;">菜品大类销售排行</a></li>
-            <li><a class="J_menu" href="javascript:;">餐台使用排行</a></li>
-            <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
-        </ul>
-    </li>
+    <shiro:checkPermission name="Admin:DishManagement:Count">
+        <li id="firstMenu8" class="active hidden">
+            <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营业分析</span><i
+                    class="fa fa-angle-right angle-right"></i></a>
+            <ul>
+                <shiro:checkPermission name="Admin:DishManagement:Count:SaleRanking">
+                    <li <c:if test="${ExtModule eq 'Admin:DishManagement:Count:SaleRanking'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a>
+                    </li>
+                </shiro:checkPermission>
+                    <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">菜品大类销售排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">餐台使用排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
+            </ul>
+        </li>
+    </shiro:checkPermission>
+
     <shiro:checkPermission name="Admin:SAdmin:Party">
         <li id="firstMenu9" class="active hidden">
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">超级管理</span><i
@@ -398,11 +405,13 @@
                     <li <c:if test="${MethodModule eq 'Admin:SAdmin:Party:Security'}">class="active"</c:if> >
                         <a class="J_menu" href="javascript:;">权限管理<i class="fa fa-angle-right angle-right"></i></a>
                         <ul <c:if test="${MethodModule != 'Admin:SAdmin:Party:Security'}">class="hidden"</c:if>>
-                           <shiro:checkPermission name="Admin:SAdmin:Party:Security:Permission:List">
+
+                            <shiro:checkPermission name="Admin:SAdmin:Party:Security:Permission:List">
                                 <li <c:if test="${ExtModule eq 'Admin:SAdmin:Party:Security:Permission:List'}">class="active"</c:if>>
                                     <a href="${website}admin/party/security/permission">基本权限管理</a>
                                 </li>
                            </shiro:checkPermission>
+
                             <shiro:checkPermission name="Admin:SAdmin:Party:Security:Group:List">
                                 <li <c:if test="${ExtModule eq 'Admin:SAdmin:Party:Security:Group:List'}">class="active"</c:if>>
                                     <a href="${website}admin/party/security/group">安全组管理</a>
