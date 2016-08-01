@@ -46,7 +46,7 @@
               <span class="requires">*</span>最低消费金额
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="minConsumption" value="" data-valid-tip="请输入最低消费金额|最低消费金额不符合规格，请重新输入"  data-valid-rule="notNull&isFloat"/>&nbsp;元
+              <input class="w180 J_minConsumption" type="text" name="minConsumption" value=""/>&nbsp;元
             </div>
           </div>
           <div class="form-group">
@@ -54,7 +54,7 @@
               <span class="requires">*</span>信用额度
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="creditAmount" value="0" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+              <input class="w180 J_creditAmount" type="text" name="creditAmount" value="0" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat" />&nbsp;元
             </div>
           </div>
           <div class="form-group">
@@ -62,7 +62,7 @@
               <span class="requires">*</span>结算周期
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="settlementCycle" value="" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入" data-valid-rule="notNegativeNumber & isInteger"/>&nbsp;月
+              <input class="w180 J_settlementCycle" type="text" name="settlementCycle" value="" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入"/>&nbsp;月
             </div>
           </div>
           <div class="form-group">

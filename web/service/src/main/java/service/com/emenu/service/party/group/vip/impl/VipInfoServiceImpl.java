@@ -90,10 +90,10 @@ public class VipInfoServiceImpl implements VipInfoService{
         List<VipInfo> vipInfoList  = Collections.emptyList();
         curPage = curPage <= 0 ? 0 : curPage - 1;
         int offset = curPage * pageSize;
-        if (Assert.lessZero(offset)) {
-            return vipInfoList;
-        }
         try{
+            if (Assert.lessZero(offset)) {
+                return vipInfoList;
+            }
             Assert.isNotNull(keyword, EmenuException.VipInfoKeywordNotNull);
             return vipInfoMapper.listByKeyword(keyword, offset, pageSize);
         } catch (Exception e){

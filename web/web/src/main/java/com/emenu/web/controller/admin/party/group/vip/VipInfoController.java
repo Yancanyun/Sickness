@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.vip.VipInfoDto;
 import com.emenu.common.entity.party.group.vip.VipInfo;
 import com.emenu.common.entity.vip.ConsumptionActivity;
+import com.emenu.common.entity.vip.VipAccountInfo;
 import com.emenu.common.entity.vip.VipCard;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
@@ -78,12 +79,14 @@ public class VipInfoController extends AbstractController {
 
             JSONArray jsonArray = new JSONArray();
             for (VipInfo vipInfo : vipInfoList) {
+                VipAccountInfo vipAccountInfo = vipAccountInfoService.queryByPartyId(vipInfo.getPartyId());
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", vipInfo.getId());
                 jsonObject.put("name", vipInfo.getName());
                 jsonObject.put("phone", vipInfo.getPhone());
                 jsonObject.put("status", vipInfo.getStatus());
                 jsonObject.put("partyId", vipInfo.getPartyId());
+                jsonObject.put("money",vipAccountInfo.getBalance());
 
                 //获取会员卡号
                 Integer partyId = vipInfo.getPartyId();

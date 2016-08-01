@@ -135,7 +135,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryUnitFailed("查询单位失败", 3052),
     UnitIdError("单位的ID为空或者小于0", 3053),
     DeleteUnitFailed("删除单位失败", 3054),
-    UpdateUnitFailed("查询单位失败", 3055),
+    UpdateUnitFailed("更新单位失败", 3055),
     UnitNameError("单位名称为空", 3056),
     UnitTypeError("单位类型为空或者小于0", 3057),
     UnitNameIsExist("单位名称已存在", 3058),

@@ -45,25 +45,16 @@
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>最低消费金额
             </label>
-            <c:choose>
-              <c:when test="${vipGrade.id eq 1}">
                 <div class="col-sm-6">
-                  <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" readonly/>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条无法修改
+                  <input class="w180 J_minConsumption" type="text" name="minConsumption" value="${vipGrade.minConsumption}"/>&nbsp;元
                 </div>
-              </c:when>
-              <c:otherwise>
-                <div class="col-sm-6">
-                  <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" data-valid-tip="请输入最低消费金额|最低消费金额不符合规格，请重新输入"  data-valid-rule="notNull&isFloat"/>&nbsp;元
-                </div>
-              </c:otherwise>
-            </c:choose>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>信用额度
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="creditAmount" value="${vipGrade.creditAmount}" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+              <input class="w180 J_creditAmount" type="text" name="creditAmount" value="${vipGrade.creditAmount}" data-valid-tip="请输入信用额度|信用额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat" />&nbsp;元
             </div>
           </div>
           <div class="form-group">
@@ -71,25 +62,16 @@
               <span class="requires">*</span>结算周期
             </label>
             <div class="col-sm-6">
-              <input class="w180" type="text" name="settlementCycle" value="${vipGrade.settlementCycle}" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入" data-valid-rule="notNegativeNumber & isInteger"/>&nbsp;月
+              <input class="w180 J_settlementCycle" type="text" name="settlementCycle" value="${vipGrade.settlementCycle}" data-valid-tip="请输入结算周期|结算周期不符合规格，请重新输入"/>&nbsp;月
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>升级预提醒额度
             </label>
-            <c:choose>
-              <c:when test="${vipGrade.id eq 1}">
-                <div class="col-sm-6">
-                  <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" readonly/>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条无法修改
-                </div>
-              </c:when>
-              <c:otherwise>
                 <div class="col-sm-6">
                   <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" data-valid-tip="请输入升级预提醒额度|升级预提醒额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
                 </div>
-              </c:otherwise>
-            </c:choose>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">卡片政策</label>
