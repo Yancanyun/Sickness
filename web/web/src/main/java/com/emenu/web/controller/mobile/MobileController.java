@@ -15,6 +15,7 @@ import com.emenu.service.call.CallWaiterService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,16 +47,26 @@ public class MobileController extends AbstractController {
                           Model model,
                           HttpServletRequest httpServletRequest) {
         try {
-            // 检查是否访问者是否来自局域网内
+            /**
+             * 检查是否访问者是否来自局域网内
+             */
             String customerIp = httpServletRequest.getRemoteAddr(); // 访问者的IP地址
             // 常量表中配置的内网IP地址
             String internalNetworkAddress = constantService.queryValueByKey(ConstantEnum.InternalNetworkAddress.getKey());
+            // 常量表中配置的反向代理服务器IP地址
+            String reverseProxyAddress = constantService.queryValueByKey(ConstantEnum.ReverseProxyAddress.getKey());
             String[] customerIps = customerIp.split("\\.");
             String[] internalNetworkAddresses = internalNetworkAddress.split("\\.");
+            // 若未正确配置内网地址，则直接报错
             if (internalNetworkAddresses.length != 4) {
                 throw SSException.get(EmenuException.InternalNetworkAddressError);
             }
-            if (!customerIp.equals("127.0.0.1")) { // 若不是本机进行访问，则对两个IP地址的前三组进行匹配
+            // 若访问者IP地址与反向代理服务器IP地址相同，则证明是外网访问，拒绝访问
+            if (customerIp.equals(reverseProxyAddress)) {
+                throw SSException.get(EmenuException.CustomerIsNotInLAN);
+            }
+            // 若不是本机进行访问，则对IP地址的前三组进行匹配。若匹配不成功，则证明是外网访问，拒绝访问
+            if (!customerIp.equals("127.0.0.1")) {
                 for (int i = 0; i < 3; i++) {
                     if (!customerIps[i].equals(internalNetworkAddresses[i])) {
                         throw SSException.get(EmenuException.CustomerIsNotInLAN);
