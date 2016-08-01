@@ -9,6 +9,8 @@ import com.pandawork.core.common.exception.IBizExceptionMes;
  */
 public enum EmenuException implements IBizExceptionMes {
     SystemException("系统内部异常", 1),
+    InternalNetworkAddressError("内网地址配置错误", 2),
+    CustomerIsNotInLAN("用户未处于局域网内，禁止访问", 3),
 
     ImageCompressedFail("图片压缩失败!", 1001),
     UploadFileNotNull("上传的文件不能为空!", 1002),

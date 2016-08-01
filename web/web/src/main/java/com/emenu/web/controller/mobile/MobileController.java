@@ -6,8 +6,10 @@ import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.call.CallWaiter;
 import com.emenu.common.entity.page.IndexImg;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.page.IndexImgEnum;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.service.call.CallWaiterService;
 import com.emenu.web.spring.AbstractController;
@@ -39,9 +41,28 @@ import java.util.List;
 public class MobileController extends AbstractController {
     @Module(ModuleEnums.MobileIndex)
     @RequestMapping(value = "{tableId}", method = RequestMethod.GET)
-    public String toIndex(@PathVariable("tableId")Integer tableId, HttpSession session, Model model
-            ,HttpServletRequest httpServletRequest) {
+    public String toIndex(@PathVariable("tableId")Integer tableId,
+                          HttpSession session,
+                          Model model,
+                          HttpServletRequest httpServletRequest) {
         try {
+            // 检查是否访问者是否来自局域网内
+            String customerIp = httpServletRequest.getRemoteAddr(); // 访问者的IP地址
+            // 常量表中配置的内网IP地址
+            String internalNetworkAddress = constantService.queryValueByKey(ConstantEnum.InternalNetworkAddress.getKey());
+            String[] customerIps = customerIp.split("\\.");
+            String[] internalNetworkAddresses = internalNetworkAddress.split("\\.");
+            if (internalNetworkAddresses.length != 4) {
+                throw SSException.get(EmenuException.InternalNetworkAddressError);
+            }
+            if (!customerIp.equals("127.0.0.1")) { // 若不是本机进行访问，则对两个IP地址的前三组进行匹配
+                for (int i = 0; i < 3; i++) {
+                    if (!customerIps[i].equals(internalNetworkAddresses[i])) {
+                        throw SSException.get(EmenuException.CustomerIsNotInLAN);
+                    }
+                }
+            }
+
             IndexImg indexImg = indexImgService.queryByState(IndexImgEnum.Using);
 
             List<CallWaiter> callWaiter = new ArrayList<CallWaiter>();

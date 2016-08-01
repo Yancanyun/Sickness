@@ -9,6 +9,7 @@ public enum ConstantEnum {
 
     SaleRank("SaleRank","销量排行"),//销量排行
     WebDomain("WebDomain", "网站域名"),   // 网站的域名，用于二维码生成
+    InternalNetworkAddress("INTERNAL_NETWORK_ADDRESS", "内网地址"),   // 内网地址，用来禁止外网进行访问
     CookPrinterIp("CookPrinterIp", "后厨打印机ip"),
     BarPrinterIp("BarPrinterIp", "吧台打印机ip"),
     BackDishPrinterIp("BackDishPrinterIp", "退菜打印机ip"),

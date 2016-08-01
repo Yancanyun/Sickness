@@ -30,7 +30,7 @@
           </div>
           <div class="form-group input-box">
             <div class="col-sm-3">
-              <input class="form-control new-text" type="text" name="webDomain" placeholder="请输入网站域名" data-valid-rule="notNull" data-valid-tip="请输入网站域名|输入网站域名不可为空"  value="">
+              <input class="form-control new-text" type="text" name="webDomain" placeholder="请输入网站域名" data-valid-rule="notNull" data-valid-tip="请输入网站域名|输入网站域名不可为空" value="${webDomain}">
             </div>
             <div class="col-sm-3">
               <div class="btn-toolbar">
