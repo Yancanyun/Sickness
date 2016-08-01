@@ -1,12 +1,15 @@
 package com.emenu.service.order;
 
 import com.alibaba.fastjson.JSONObject;
+import com.emenu.common.dto.rank.CheckoutDto;
+import com.emenu.common.dto.rank.CheckoutEachItemSumDto;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -120,4 +123,24 @@ public interface CheckoutService {
      * @throws SSException
      */
     public void setTableStatusToCheckouted(int tableId) throws SSException;
+
+    /**
+     * 根据时间段返回该时间段的所有结账单信息(已结账的账单)
+     * @param startDate
+     * @param endDate
+     * @return
+     *
+     * @author pengpeng
+     */
+    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException;
+
+    /**
+     * 求出时间段里的所有账单单项的金钱总和
+     * @param checkoutDtoList
+     * @return
+     * @throws SSException
+     *
+     * @author pengpeng
+     */
+    public CheckoutEachItemSumDto sumCheckoutEachItem(List<CheckoutDto> checkoutDtoList) throws SSException;
 }

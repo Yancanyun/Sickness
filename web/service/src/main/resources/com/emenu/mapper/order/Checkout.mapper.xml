@@ -10,4 +10,15 @@
         WHERE t_checkout.`table_id` = #{tableId} AND t_checkout.`status` = #{status}
     </select>
 
+    <select id = "queryCheckoutByTimePeriod" resultMap="pw.Checkout">
+        SELECT *
+        FROM t_checkout
+        where  t_checkout.checkout_time >= #{startDate}
+        AND #{endDate} >= t_checkout.checkout_time
+        AND t_checkout.status = 1
+        <!--        <if test="offset >= 0 and searchDto.pageSize > 0">
+                    LIMIT #{offset}, #{searchDto.pageSize}
+                </if>-->
+    </select>
+
 </mapper>

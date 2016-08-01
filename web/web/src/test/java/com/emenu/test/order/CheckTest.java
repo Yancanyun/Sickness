@@ -1,7 +1,10 @@
 package com.emenu.test.order;
 
+import com.emenu.common.dto.rank.CheckoutDto;
+import com.emenu.common.dto.rank.CheckoutEachItemSumDto;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.enums.checkout.CheckoutTypeEnums;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.service.order.CheckoutService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
@@ -9,7 +12,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * CheckTest
@@ -82,5 +89,43 @@ public class CheckTest extends AbstractTestCase {
     @Test
     public void isPrinterOk() throws SSException {
         System.out.println(checkoutService.isPrinterOk());
+    }
+
+    @Test
+    public void queryCheckoutByTimePeriod() throws SSException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String d0 = DateUtils.getLastWeekFirstDay();
+        String d2 = DateUtils.getLastWeekLastDay();
+        String db = "00:00:00";
+        String de = "23:59:59";
+        d0 = d0 + " " + db;
+        d2 = d2 + " " + de;
+        ParsePosition pos1 =new ParsePosition(0);
+        Date startDate = sdf.parse(d0,pos1);
+        ParsePosition pos2 = new ParsePosition(0);
+        Date endDate = sdf.parse(d2,pos2);
+       List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
+        checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate);
+        for(CheckoutDto checkoutDto : checkoutDtoList){
+            System.out.println(checkoutDto);
+        }
+    }
+
+    @Test
+    public void sumCheckoutEachItem() throws SSException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String d0 = DateUtils.getLastWeekFirstDay();
+        String d2 = DateUtils.getLastWeekLastDay();
+        String db = "00:00:00";
+        String de = "23:59:59";
+        d0 = d0 + " " + db;
+        d2 = d2 + " " + de;
+        ParsePosition pos1 =new ParsePosition(0);
+        Date startDate = sdf.parse(d0,pos1);
+        ParsePosition pos2 = new ParsePosition(0);
+        Date endDate = sdf.parse(d2,pos2);
+        CheckoutEachItemSumDto checkoutEachItemSumDto = new  CheckoutEachItemSumDto();
+        checkoutEachItemSumDto = checkoutService.sumCheckoutEachItem(checkoutService.queryCheckoutByTimePeriod(startDate, endDate));
+        System.out.println(checkoutEachItemSumDto);
     }
 }

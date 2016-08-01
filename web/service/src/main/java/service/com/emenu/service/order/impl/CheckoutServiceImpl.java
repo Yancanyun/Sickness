@@ -2,6 +2,8 @@ package com.emenu.service.order.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.rank.CheckoutDto;
+import com.emenu.common.dto.rank.CheckoutEachItemSumDto;
 import com.emenu.common.dto.table.TableDto;
 import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
@@ -1134,5 +1136,152 @@ public class CheckoutServiceImpl implements CheckoutService {
                 }
             }
         }
+    }
+
+    @Override
+    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException{
+        List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
+        List<Checkout> checkoutList = new ArrayList<Checkout>();
+        try{
+            if(Assert.isNotNull(startDate) && Assert.isNotNull(endDate)){
+                // 从checkout表中取出该时间段的账单
+                checkoutList = checkoutMapper.queryCheckoutByTimePeriod(startDate, endDate);
+                // 将checkoutList加入到checkoutDtoList里去
+                for(Checkout checkout : checkoutList){
+                    // 该账单在如果免单或者并台，则在checkoutpay表里不生成
+                    if(checkoutPayService.queryByCheckoutId(checkout.getId()) == null){
+                        continue;
+                    }
+                    // 单个账单Dto
+                    CheckoutDto checkoutDto = new CheckoutDto();
+                    // 账单Id
+                    checkoutDto.setCheckoutId(checkout.getId());
+                    // 餐台Id
+                    checkoutDto.setTableId(checkout.getTableId());
+                    // 餐台名
+                    checkoutDto.setTableName(tableService.queryById(checkout.getTableId()).getName());
+                    // 收款人partyId
+                    checkoutDto.setCheckerPartyId(checkout.getCheckerPartyId());
+                    // 结账时间
+                    checkoutDto.setCheckoutTime(checkout.getCheckoutTime());
+                    // 支付类型
+                    checkoutDto.setCheckoutType(checkoutPayService.queryByCheckoutId(checkout.getId()).getCheckoutType());
+                    // 消费金额
+                    checkoutDto.setConsumptionMoney(checkout.getConsumptionMoney());
+                    // 抹零金额
+                    checkoutDto.setWipeZeroMoney(checkout.getWipeZeroMoney());
+                    // 实付金额
+                    checkoutDto.setShouldPayMoney(checkout.getShouldPayMoney());
+                    // 宾客付款
+                    checkoutDto.setTotalPayMoney(checkout.getTotalPayMoney());
+                    // 找零金额
+                    checkoutDto.setChangeMoney(checkout.getChangeMoney());
+                    // 消费类型
+                    checkoutDto.setConsumptionType(checkout.getConsumptionType());
+                    // 是否开发票
+                    checkoutDto.setIsInvoiced(checkout.getIsInvoiced());
+                    // 加入到checkoutDtoList里去
+                    checkoutDtoList.add(checkoutDto);
+                }
+            }
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCheckoutByTimePeriodFail,e);
+        }
+        return checkoutDtoList;
+    }
+
+    @Override
+    public CheckoutEachItemSumDto sumCheckoutEachItem(List<CheckoutDto> checkoutDtoList) throws SSException{
+        CheckoutEachItemSumDto checkoutEachItemSumDto = new CheckoutEachItemSumDto();
+        try{
+            // 有账单
+            if(!checkoutDtoList.isEmpty()){
+                // 账单总数
+                checkoutEachItemSumDto.setCheckSum(checkoutDtoList.size());
+                // 求出各项金额总和
+                for(CheckoutDto checkoutDto : checkoutDtoList){
+                    // 现金支付
+                    if(checkoutDto.getCheckoutType() == CheckoutTypeEnums.Cash.getId()){
+                        // 现金支付的第一笔(实付金额)
+                        if(checkoutEachItemSumDto.getCashSum() == null){
+                            checkoutEachItemSumDto.setCashSum(checkoutDto.getShouldPayMoney());
+                        }else{
+                            checkoutEachItemSumDto.setCashSum(checkoutEachItemSumDto.getCashSum().add(checkoutDto.getShouldPayMoney()));
+                        }
+                    }
+                    // 会员卡支付
+                    if(checkoutDto.getCheckoutType() == CheckoutTypeEnums.VipCard.getId()){
+                        // 会员卡支付的第一笔(实付金额)
+                        if(checkoutEachItemSumDto.getVipCardSum() == null){
+                            checkoutEachItemSumDto.setVipCardSum(checkoutDto.getShouldPayMoney());
+                        }else{
+                            checkoutEachItemSumDto.setVipCardSum(checkoutEachItemSumDto.getVipCardSum().add(checkoutDto.getShouldPayMoney()));
+                        }
+                    }
+                    // 银行卡支付
+                    if(checkoutDto.getCheckoutType() == CheckoutTypeEnums.BankCard.getId()){
+                        // 银行卡支付的第一笔(实付金额)
+                        if(checkoutEachItemSumDto.getBankCardSum() == null){
+                            checkoutEachItemSumDto.setBankCardSum(checkoutDto.getShouldPayMoney());
+                        }else{
+                            checkoutEachItemSumDto.setBankCardSum(checkoutEachItemSumDto.getBankCardSum().add(checkoutDto.getShouldPayMoney()));
+                        }
+                    }
+                    // 支付宝支付
+                    if(checkoutDto.getCheckoutType() == CheckoutTypeEnums.Alipay.getId()){
+                        // 支付宝支付的第一笔(实付金额)
+                        if(checkoutEachItemSumDto.getAlipaySum() == null){
+                            checkoutEachItemSumDto.setAlipaySum(checkoutDto.getShouldPayMoney());
+                        }else{
+                            checkoutEachItemSumDto.setAlipaySum(checkoutEachItemSumDto.getAlipaySum().add(checkoutDto.getShouldPayMoney()));
+                        }
+                    }
+                    // 微信支付
+                    if(checkoutDto.getCheckoutType() == CheckoutTypeEnums.WeChat.getId()){
+                        // 微信支付的第一笔(实付金额)
+                        if(checkoutEachItemSumDto.getWeChatSum() == null){
+                            checkoutEachItemSumDto.setWeChatSum(checkoutDto.getShouldPayMoney());
+                        }else{
+                            checkoutEachItemSumDto.setWeChatSum(checkoutEachItemSumDto.getWeChatSum().add(checkoutDto.getShouldPayMoney()));
+                        }
+                    }
+                    // 消费金额总和
+                    if(checkoutEachItemSumDto.getConsumptionMoneySum() == null){
+                        checkoutEachItemSumDto.setConsumptionMoneySum(checkoutDto.getConsumptionMoney());
+                    }else{
+                        checkoutEachItemSumDto.setConsumptionMoneySum(checkoutEachItemSumDto.getConsumptionMoneySum().add(checkoutDto.getConsumptionMoney()));
+                    }
+                    // 抹零金额总和
+                    if(checkoutEachItemSumDto.getWipeZeroMoneySum() == null){
+                        checkoutEachItemSumDto.setWipeZeroMoneySum(checkoutDto.getWipeZeroMoney());
+                    }else{
+                        checkoutEachItemSumDto.setWipeZeroMoneySum(checkoutEachItemSumDto.getWipeZeroMoneySum().add(checkoutDto.getWipeZeroMoney()));
+                    }
+                    // 实付金额总和
+                    if(checkoutEachItemSumDto.getShouldPayMoneySum() == null){
+                        checkoutEachItemSumDto.setShouldPayMoneySum(checkoutDto.getShouldPayMoney());
+                    }else{
+                        checkoutEachItemSumDto.setShouldPayMoneySum(checkoutEachItemSumDto.getShouldPayMoneySum().add(checkoutDto.getShouldPayMoney()));
+                    }
+                    // 宾客付款总和
+                    if(checkoutEachItemSumDto.getTotalPayMoneySum() == null){
+                        checkoutEachItemSumDto.setTotalPayMoneySum(checkoutDto.getTotalPayMoney());
+                    }else{
+                        checkoutEachItemSumDto.setTotalPayMoneySum(checkoutEachItemSumDto.getTotalPayMoneySum().add(checkoutDto.getTotalPayMoney()));
+                    }
+                    // 找零金额总和
+                    if(checkoutEachItemSumDto.getChangeMoneySum() == null){
+                        checkoutEachItemSumDto.setChangeMoneySum(checkoutDto.getChangeMoney());
+                    }else{
+                        checkoutEachItemSumDto.setChangeMoneySum(checkoutEachItemSumDto.getChangeMoneySum().add(checkoutDto.getChangeMoney()));
+                    }
+                }
+            }
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SumCheckoutEachItemFail,e);
+        }
+        return checkoutEachItemSumDto;
     }
 }
