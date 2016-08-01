@@ -142,7 +142,7 @@ public final class URLConstants {
     public static final String ADMIN_COUNT_DISH_SALE_RANKING_URL = "admin/rank/sale";
 
     //统计菜品大类销售的排行
-    public static final String ADMIN_COUNT_DISH_TAG_RANKING_URL = "admin/rank/tag";
+    public static final String ADMIN_COUNT_DISH_TAG_RANKING_URL = "admin/rank/bigtag";
 
 
 

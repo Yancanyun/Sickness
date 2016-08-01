@@ -472,10 +472,15 @@ public class AbstractController extends Base {
     @Qualifier("smsService")
     protected static SmsService smsService;
 
-    // 菜品销售排行
+    // 营业分析中的菜品销售排行
     @StaticAutoWire
     @Qualifier("dishSaleRankService")
     protected static DishSaleRankService dishSaleRankService;
+
+    // 营业分析中的菜品大类销售排行
+    @StaticAutoWire
+    @Qualifier("dishTagRankService")
+    protected static DishTagRankService dishTagRankService;
 
     /**************************顾客点菜端**************************/
     //呼叫服务后台管理

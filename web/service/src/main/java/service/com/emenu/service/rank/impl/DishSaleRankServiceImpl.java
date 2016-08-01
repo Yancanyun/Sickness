@@ -216,13 +216,13 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             // 设置excel文件名和sheetName
             String filename = "";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
-            filename = ExcelExportTemplateEnums.AdminRankDishSaleRankList.getName() + sdf.format(new Date());
+            filename = ExcelExportTemplateEnums.AdminRankDishSaleList.getName() + sdf.format(new Date());
             response.setContentType("application/msexcel");
             response.setHeader("Content-disposition",
                     "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
             os = response.getOutputStream();
             // 获取模板
-            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminRankDishSaleRankList.getFilePath());
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminRankDishSaleList.getFilePath());
             Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
             WritableWorkbook outBook = Workbook.createWorkbook(os,tplWorkBook);
             // 获取sheet往sheet里面写数据
@@ -266,7 +266,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             } catch (IOException e1) {
                 LogClerk.errLog.error(e1.getMessage());
             }
-            throw SSException.get(EmenuException.ExportToExcelFailed, e);
+            throw SSException.get(EmenuException.DishSaleRankExportToExcelFailed, e);
         }
         finally {
             if (os != null) {
@@ -275,7 +275,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                     os.close();
                 } catch (Exception e) {
                     LogClerk.errLog.error(e);
-                    throw SSException.get(EmenuException.ExportToExcelFailed, e);
+                    throw SSException.get(EmenuException.DishSaleRankExportToExcelFailed, e);
                 }
             }
         }

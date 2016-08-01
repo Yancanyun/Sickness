@@ -26,8 +26,11 @@ public enum ExcelExportTemplateEnums implements ExcelTemplateEnum {
     AdminStorageItemList("库存物品",
             "classpath:template/excel/admin_storage_item_excel_template.xls"),
 
-    AdminRankDishSaleRankList("菜品销售排行",
-            "classpath:template/excel/admin_rank_dishsale_excel_template.xls");
+    AdminRankDishSaleList("菜品销售排行",
+            "classpath:template/excel/admin_rank_dishsale_excel_template.xls"),
+
+    AdminRankBigTagList("菜品大类销售排行",
+            "classpath:template/excel/admin_rank_bigtag_excel_template.xls");
 
 
 

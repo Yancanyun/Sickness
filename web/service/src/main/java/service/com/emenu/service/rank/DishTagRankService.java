@@ -3,6 +3,7 @@ package com.emenu.service.rank;
 import com.emenu.common.dto.rank.DishSaleRankDto;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -45,4 +46,21 @@ public interface DishTagRankService {
                                                                         ,Date endTime
                                                                         ,Integer pageSize
                                                                         ,Integer pageNumber) throws SSException;
+
+    /**
+     * 根据开始时间和结束时间查询数据的条数
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 根据开始时间和结束时间查询数据并导出表格
+     * @param startTime
+     * @param endTime
+     * @throws SSException
+     */
+    public void exportToExcel(Date startTime,Date endTime,HttpServletResponse response) throws SSException;
 }

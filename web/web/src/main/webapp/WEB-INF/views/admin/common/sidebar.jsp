@@ -388,8 +388,14 @@
                         <a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a>
                     </li>
                 </shiro:checkPermission>
+
                     <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
-                    <li><a class="J_menu" href="javascript:;">菜品大类销售排行</a></li>
+
+                <shiro:checkPermission name="Admin:DishManagement:Count:TagRanking">
+                    <li <c:if test="${ExtModule eq 'Admin:DishManagement:Count:TagRanking'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/rank/bigtag">菜品大类销售排行</a>
+                    </li>
+                </shiro:checkPermission>
                     <li><a class="J_menu" href="javascript:;">餐台使用排行</a></li>
                     <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
             </ul>
