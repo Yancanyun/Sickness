@@ -11,6 +11,9 @@ import java.util.List;
  */
 public class PrintOrderDishDto {
 
+    //菜品（套餐）Id
+    private Integer dishId;
+
     // 订单菜品Id
     private Integer orderDishId;
 
@@ -46,6 +49,14 @@ public class PrintOrderDishDto {
 
     // 是否被催菜
     private Integer isCall;
+
+    public Integer getDishId() {
+        return dishId;
+    }
+
+    public void setDishId(Integer dishId) {
+        this.dishId = dishId;
+    }
 
     public Integer getOrderDishId() {
         return orderDishId;

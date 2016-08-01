@@ -209,4 +209,19 @@ public class DishTagPrinterServiceImpl implements DishTagPrinterService{
 
         return true;
     }
+
+    @Override
+    public Tag queryTagByTagId(Integer id) throws SSException{
+        Tag tag = new Tag();
+        try {
+            if(!Assert.lessOrEqualZero(id)&&Assert.isNotNull(id))
+            {
+                tag = dishTagPrinterMapper.queryTagByTagId(id);
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryTagFailed, e);
+        }
+        return tag;
+    }
 }

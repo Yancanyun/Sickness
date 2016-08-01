@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name="t_cost_card")
-public class CostCard extends AbstractEntity{
+public class CostCard  extends AbstractEntity {
 
     //主键
     @Id

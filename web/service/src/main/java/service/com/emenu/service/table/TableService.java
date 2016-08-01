@@ -219,4 +219,12 @@ public interface TableService {
      * @throws SSException
      */
     public TableDto queryTableDtoByKeywords(String keywords) throws SSException;
+
+    /**
+     * 更新餐桌
+     * @param table
+     * @return
+     * @throws SSException
+     */
+    public void updateTable (Table table) throws SSException;
 }

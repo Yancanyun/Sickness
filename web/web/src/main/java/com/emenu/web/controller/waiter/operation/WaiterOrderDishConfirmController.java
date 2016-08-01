@@ -62,7 +62,6 @@ public class WaiterOrderDishConfirmController extends AbstractController{
         TableOrderCache tableOrderCache = new TableOrderCache();//一个餐桌的订单缓存
         BigDecimal totalMoney = new BigDecimal(0);//已点菜品的总金额
         Table table = new Table();
-        BigDecimal orderTotalMoney = new BigDecimal(0);//已下单未结账订单菜品的总金额
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         try {
@@ -74,49 +73,42 @@ public class WaiterOrderDishConfirmController extends AbstractController{
             }
             String customerIp = request.getRemoteAddr();//获取当前的用户Ip
             String currentOperateCustomerIp = orderDishCacheService.getCurrentOperateCustomerIp();
-            if(currentOperateCustomerIp!=null&&customerIp.equals(currentOperateCustomerIp))
-            {
-                //有人正在进行确认下单操作且该用户刷新了页面,则解除锁
-                orderDishCacheService.tableLockRemove(tableId);
-                orderDishCacheService.setCurrentOperateCustomerIp(new String());//清空原来的Ip
-            }
             table=tableService.queryById(tableId);//查询出餐台信息
             HashMap<Integer,Integer> packageFlagMap = new HashMap<Integer, Integer>();//用来判断套餐标识是否出现过
             tableOrderCache=orderDishCacheService.listByTableId(tableId);//已经点的餐桌菜品缓存
             if(tableOrderCache!=null)//若对应桌的订单缓存不为空
             {
-                orderDishCache=tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部菜品缓存
-                for(OrderDishCache dto :orderDishCache)
-                {
+                orderDishCache = tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部菜品缓存
+                for (OrderDishCache dto : orderDishCache) {
                     JSONObject temp = new JSONObject();//临时变量
                     DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
                     Unit unit = unitService.queryById(dishDto.getUnitId());//查询出菜品的单位
 
-                    temp.put("dishCacheId",dto.getId());
-                    temp.put("dishName",dishDto.getName());
-                    if(dto.getTasteId()!=null
-                            &&dto.getTasteId()>0
-                            &&tasteService.queryById(dto.getTasteId())!=null)
-                    temp.put("taste",tasteService.queryById(dto.getTasteId()).getName());
+                    temp.put("dishCacheId", dto.getId());
+                    temp.put("dishName", dishDto.getName());
+                    if (dto.getTasteId() != null
+                            && dto.getTasteId() > 0
+                            && tasteService.queryById(dto.getTasteId()) != null)
+                        temp.put("taste", tasteService.queryById(dto.getTasteId()).getName());
                     else
-                    temp.put("taste","");
-                    temp.put("salePrice",dishDto.getSalePrice());
-                    temp.put("number",dto.getQuantity());
+                        temp.put("taste", "");
+                    temp.put("salePrice", dishDto.getSalePrice());
+                    temp.put("number", dto.getQuantity());
                     //先前计算总金额在循环中,后来写了一个方法直接调用即可
                     //totalMoney=totalMoney.add(new BigDecimal(dishDto.getSalePrice().floatValue()*dto.getQuantity()));
                     temp.put("remarks", dto.getRemark());
                     jsonArray.add(temp);
                 }
+            }
                 jsonObject.put("myOrderDtoList",jsonArray);
                 jsonObject.put("personNum",table.getPersonNum());
                 jsonObject.put("seatFee",table.getSeatFee());
                 jsonObject.put("tableFee",table.getTableFee());
                 totalMoney = orderDishCacheService.returnTotalMoneyByTableId(tableId);
-                /*java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+                java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
                 String totalMoneyTemp = myformat.format(totalMoney);
-                totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长*/
+                totalMoney=new BigDecimal(totalMoneyTemp);//保留两位小数,不保留的话传给前端数字将会显示的非常的长
                 jsonObject.put("totalMoney",totalMoney);
-            }
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -270,11 +262,28 @@ public class WaiterOrderDishConfirmController extends AbstractController{
     {
         JSONObject jsonObject = new JSONObject();
         TableOrderCache tableOrderCache = new TableOrderCache();
+        List<OrderDishCache> orderDishCaches = new ArrayList<OrderDishCache>();
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
-            if(tableOrderCache.getLock()==false)//餐桌未锁死
-                orderDishCacheService.delDish(tableId,dishCacheId);
+            // 餐桌未锁死
+            if(tableOrderCache.getLock()==false){
+                orderDishCaches = tableOrderCache.getOrderDishCacheList();
+                // 标志变量,若缓存中存在要被删除的菜品则为1
+                boolean ok = false;
+                for(OrderDishCache dto :orderDishCaches){
+
+                    if(dto.getId()==dishCacheId){
+                        ok=true;
+                        break;
+                    }
+                }
+                // 若存在该菜品
+                if(ok)
+                    orderDishCacheService.delDish(tableId,dishCacheId);
+                else
+                    sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishNotExist));
+            }
             else
                 sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
            jsonObject.put("totalMoney",orderDishCacheService.returnTotalMoneyByTableId(tableId));
@@ -302,28 +311,26 @@ public class WaiterOrderDishConfirmController extends AbstractController{
     {
         TableOrderCache tableOrderCache = new TableOrderCache();
         List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
+        Table table = new Table();
+        JSONObject jsonObject = new JSONObject();
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
+            table = tableService.queryById(tableId);
             if(tableOrderCache!=null)
                 orderDishCache = tableOrderCache.getOrderDishCacheList();//已点菜品缓存
-            //菜品缓存为空,则没有必要展示给用户空的列表
-            else {
-                return sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishCacheIsNull));
-            }
             //orderStatus为0的时候点击的是返回按钮
-            if(tableOrderCache.getLock()==true
+            if(tableOrderCache!=null
+                    &&tableOrderCache.getLock()==true
                     &&orderStatus==1)//已经加上了锁且点击的为确认菜品，即存在其他人正在下单
                 return sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
-            if(orderStatus==1)//锁死菜品缓存
-            {
-                //把当前正在操作的顾客的Ip地址记录下
-                orderDishCacheService.setCurrentOperateCustomerIp(request.getRemoteAddr());
-            }
-            else//若点击了返回则解除锁死
-            {
+
+            // 锁死菜品缓存
+            if(orderStatus==1)
+                orderDishCacheService.tableLock(tableId);
+            // 若点击了返回则解除锁死
+            else
                 orderDishCacheService.tableLockRemove(tableId);
-            }
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -336,6 +343,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
     /**
      * 服务员端确认下单—确认下单
      * 清空缓存，插入数据库
+     * 服务员的话可能只是想单纯的修改就餐人数,这个时候菜品缓存中没有菜,不生成新的结账单
      * @param
      * @return
      */
@@ -345,132 +353,149 @@ public class WaiterOrderDishConfirmController extends AbstractController{
     public JSONObject ajaxConfirmOrder(@RequestParam("tableId")Integer tableId
             ,@RequestParam("personNum")Integer personNum
             ,@RequestParam("orderServeType") Integer orderServeType
-            ,@RequestParam("orderRemark") String orderRemark)
-    {
+            ,@RequestParam("orderRemark") String orderRemark) {
+
         //下单时间
         Date orderTime=new Date();
+        Table table = new Table();
         try {
-            Checkout checkout = new Checkout();
-            checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
-            //新增结账单到数据表
-            if (checkout == null) {
-                checkout = new Checkout();
-                // 餐桌状态为占用已结账的话则不是第一次消费
-                if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId()){
-                    checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
-                    // 第二次消费的话餐桌状态由占有已经账变为占用未结账
-                    TableDto tableDto = tableService.queryTableDtoById(tableId);
-                    tableDto.setStatus(TableStatusEnums.Uncheckouted.getType());
-                    tableService.forceUpdateTable(tableId, tableDto);
-                }
-                else
-                    checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());
-                checkout.setTableId(tableId);
-                checkout.setCreatedTime(new Date());
-                checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
-                checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
-                // 获取到新生成的结账单,主要是要获取到checkOut的Id这个属性
-                checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
-            }
-
-            //新增订单到数据表
-            Order order = new Order();
-            order.setCheckoutId(checkout.getId());
-            order.setCreatedTime(new Date());
-            order.setOrderRemark(orderRemark);
-            order.setOrderServeType(orderServeType);
-            order.setStatus(OrderStatusEnums.IsBooked.getId());
-            order.setTableId(tableId);
-            order.setIsSettlemented(OrderSettlementStatusEnums.IsNotSettlement.getId());//订单是否被盘点过
-            orderService.newOrder(order);
-
-            //新增订单菜品到数据表
             TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
             List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
             tableOrderCache=orderDishCacheService.listByTableId(tableId);
-            if(tableOrderCache!=null)//若对应桌的订单缓存不为空
-            {
-                orderDishCache=tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部订单缓存
-            }
-            for(OrderDishCache dto :orderDishCache)
-            {
-                DishDto dishDto = new DishDto();
-                //是套餐,把套餐拆成一个一个的菜品存到书库库里
-                if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐,把套餐拆成一个一个的菜品存到书库库里
+
+            //更新餐桌实际就餐人数
+            table = tableService.queryById(tableId);
+            table.setPersonNum(personNum);
+            tableService.updateTable(table);
+
+            // 对缓存里的进行原配料是否够用的判断,若存在无法完成要求数量的菜品则会抛出异常
+            if(tableOrderCache!=null
+                    &&!tableOrderCache.getOrderDishCacheList().isEmpty())
+                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+            // 有菜品则生成新的结账单,没有的话认为服务员只是想修改一些就餐实际的人数
+            if(tableOrderCache!=null
+                    &&!tableOrderCache.getOrderDishCacheList().isEmpty()){
+
+                Checkout checkout = new Checkout();
+                checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
+                //新增结账单到数据表
+                if (checkout == null) {
+                    checkout = new Checkout();
+                    // 餐桌状态为占用已结账的话则不是第一次消费
+                    if(tableService.queryById(tableId).getStatus()==TableStatusEnums.Checkouted.getId()){
+                        checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsSecondConsumption.getId());
+                        // 第二次消费的话餐桌状态由占有已经账变为占用未结账
+                        TableDto tableDto = tableService.queryTableDtoById(tableId);
+                        tableDto.setStatus(TableStatusEnums.Uncheckouted.getType());
+                        tableService.forceUpdateTable(tableId, tableDto);
+                    }
+                    else
+                        checkout.setConsumptionType(CheckoutConsumptionTypeEnums.IsFirstConsumption.getId());
+                    checkout.setTableId(tableId);
+                    checkout.setCreatedTime(new Date());
+                    checkout.setStatus(CheckOutStatusEnums.IsNotCheckOut.getId());
+                    checkoutService.newCheckout(checkout);//若不存在结帐单再生成新的结账单,存在的话不用新生成结账单
+                    // 获取到新生成的结账单,主要是要获取到checkOut的Id这个属性
+                    checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());
+                }
+
+                //新增订单到数据表
+                Order order = new Order();
+                order.setCheckoutId(checkout.getId());
+                order.setCreatedTime(new Date());
+                order.setOrderRemark(orderRemark);
+                order.setOrderServeType(orderServeType);
+                order.setStatus(OrderStatusEnums.IsBooked.getId());
+                order.setTableId(tableId);
+                order.setIsSettlemented(OrderSettlementStatusEnums.IsNotSettlement.getId());//订单是否被盘点过
+                orderService.newOrder(order);
+
+                //新增订单菜品到数据表
+                if(tableOrderCache!=null)//若对应桌的订单缓存不为空
                 {
-                    DishPackageDto dishPackageDto = new DishPackageDto();
-                    //根据套餐Id查询出套餐具体信息,是套餐的话dishId就是对应的套餐Id
-                    dishPackageDto=dishPackageService.queryDishPackageById(dto.getDishId());
-                    List<DishDto> dishDtos = new ArrayList<DishDto>();
-                    dishDtos=dishPackageDto.getChildDishDtoList();//获得套餐所有的子菜品
-                    //将套餐拆成单个菜品存到数据库里
-                    Integer packageFlag;
-                    packageFlag = orderDishService.queryMaxPackageFlag();//获取套餐标识最大值
-                    packageFlag+=1;//新增的套餐的套餐标识为最大值加1
-                    for(DishDto packageDto :dishDtos)
+                    orderDishCache=tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部订单缓存
+                }
+                for(OrderDishCache dto :orderDishCache)
+                {
+                    DishDto dishDto = new DishDto();
+                    //是套餐,把套餐拆成一个一个的菜品存到书库库里
+                    if(dishPackageService.judgeIsOrNotPackage(dto.getDishId())>0)//是套餐,把套餐拆成一个一个的菜品存到书库库里
                     {
-                        OrderDish orderDish = new OrderDish();
+                        DishPackageDto dishPackageDto = new DishPackageDto();
+                        //根据套餐Id查询出套餐具体信息,是套餐的话dishId就是对应的套餐Id
+                        dishPackageDto=dishPackageService.queryDishPackageById(dto.getDishId());
+                        List<DishDto> dishDtos = new ArrayList<DishDto>();
+                        dishDtos=dishPackageDto.getChildDishDtoList();//获得套餐所有的子菜品
+                        //将套餐拆成单个菜品存到数据库里
+                        Integer packageFlag;
+                        packageFlag = orderDishService.queryMaxPackageFlag();//获取套餐标识最大值
+                        packageFlag+=1;//新增的套餐的套餐标识为最大值加1
+                        for(DishDto packageDto :dishDtos)
+                        {
+                            OrderDish orderDish = new OrderDish();
+                            orderDish.setCreatedTime(new Date());
+                            orderDish.setDishId(packageDto.getDishPackage().getDishId());
+                            Float temp = dto.getQuantity();
+                            orderDish.setIsPackage(PackageStatusEnums.IsPackage.getId());
+                            orderDish.setPackageId(dto.getDishId());
+                            orderDish.setPackageQuantity(temp.intValue());
+                            //套餐菜品数量为单个套餐中单个菜品的数量*套餐数量
+                            orderDish.setDishQuantity(packageDto.getDishPackage().getDishQuantity().floatValue()*temp.floatValue());
+                            orderDish.setOrderId(order.getId());
+                            //根据套餐的子菜品的Id来获取菜品信息
+                            dishDto = dishService.queryById(dto.getDishId());//应该查询的是套餐的信息
+                            orderDish.setSalePrice(dishDto.getSalePrice());//整体套餐售价,而不是套餐中单个菜品售价
+                            orderDish.setStatus(OrderDishStatusEnums.IsBooked.getId());//菜品状态：1-已下单；2-正在做；3-已上菜
+                            orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
+                            if(dto.getServeType()==null
+                                    ||dto.getServeType()== ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                                orderDish.setServeType(orderServeType);
+                            else orderDish.setServeType(dto.getServeType());
+                            orderDish.setOrderTime(orderTime);
+                            orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
+                            orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
+                            orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
+                            if(dto.getTasteId()!=null
+                                    &&dto.getTasteId()!=0)//菜品口味可以不选择,不选择的话为默认菜品口味
+                                orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
+                            orderDish.setPackageFlag(packageFlag);//设置套餐标识
+                            orderDishService.newOrderDish(orderDish);
+                        }
+                    }
+                    else
+                    {
+                        OrderDish orderDish=new OrderDish();
                         orderDish.setCreatedTime(new Date());
-                        orderDish.setDishId(packageDto.getDishPackage().getDishId());
-                        Float temp = dto.getQuantity();
-                        orderDish.setIsPackage(PackageStatusEnums.IsPackage.getId());
-                        orderDish.setPackageId(dto.getDishId());
-                        orderDish.setPackageQuantity(temp.intValue());
-                        //套餐菜品数量为单个套餐中单个菜品的数量*套餐数量
-                        orderDish.setDishQuantity(packageDto.getDishPackage().getDishQuantity().floatValue()*temp.floatValue());
+                        orderDish.setDishId(dto.getDishId());
+                        Float temp = dto.getQuantity(); //设置菜品数量
+                        orderDish.setDishQuantity(temp);
+                        orderDish.setIsPackage(PackageStatusEnums.IsNotPackage.getId());
+                        dishDto = dishService.queryById(dto.getDishId());
                         orderDish.setOrderId(order.getId());
-                        //根据套餐的子菜品的Id来获取菜品信息
-                        dishDto = dishService.queryById(dto.getDishId());//应该查询的是套餐的信息
-                        orderDish.setSalePrice(dishDto.getSalePrice());//整体套餐售价,而不是套餐中单个菜品售价
                         orderDish.setStatus(OrderDishStatusEnums.IsBooked.getId());//菜品状态：1-已下单；2-正在做；3-已上菜
                         orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
+                        orderDish.setSalePrice(dishDto.getSalePrice());
                         if(dto.getServeType()==null
-                                ||dto.getServeType()== ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
+                                ||dto.getServeType()==ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
                             orderDish.setServeType(orderServeType);
                         else orderDish.setServeType(dto.getServeType());
                         orderDish.setOrderTime(orderTime);
                         orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
                         orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
+                        //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
                         orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
                         if(dto.getTasteId()!=null
                                 &&dto.getTasteId()!=0)//菜品口味可以不选择,不选择的话为默认菜品口味
                             orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
-                        orderDish.setPackageFlag(packageFlag);//设置套餐标识
                         orderDishService.newOrderDish(orderDish);
                     }
                 }
-                else
-                {
-                    OrderDish orderDish=new OrderDish();
-                    orderDish.setCreatedTime(new Date());
-                    orderDish.setDishId(dto.getDishId());
-                    Float temp = dto.getQuantity(); //设置菜品数量
-                    orderDish.setDishQuantity(temp);
-                    orderDish.setIsPackage(PackageStatusEnums.IsNotPackage.getId());
-                    dishDto = dishService.queryById(dto.getDishId());
-                    orderDish.setOrderId(order.getId());
-                    orderDish.setStatus(OrderDishStatusEnums.IsBooked.getId());//菜品状态：1-已下单；2-正在做；3-已上菜
-                    orderDish.setDiscount(new BigDecimal(dishDto.getDiscount()));//折扣
-                    orderDish.setSalePrice(dishDto.getSalePrice());
-                    if(dto.getServeType()==null
-                            ||dto.getServeType()==ServeTypeEnums.NotSet.getId())//未设置单个菜品的上菜方式,则上菜方式为整单上菜方式
-                        orderDish.setServeType(orderServeType);
-                    else orderDish.setServeType(dto.getServeType());
-                    orderDish.setOrderTime(orderTime);
-                    orderDish.setIsCall(OrderDishCallStatusEnums.IsNotCall.getId());//是否被催菜
-                    orderDish.setIsChange(OrderDishTableChangeStatusEnums.IsNotChangeTable.getId());//是否换了桌
-                    //快捷点菜的时候不加菜品的备注,在详情页点菜可以给菜品加备注,但是如果对应多个备注这里面怎么加进去呢
-                    orderDish.setRemark(dto.getRemark());//菜品备注要从缓存中取出
-                    if(dto.getTasteId()!=null
-                            &&dto.getTasteId()!=0)//菜品口味可以不选择,不选择的话为默认菜品口味
-                        orderDish.setTasteId(dto.getTasteId());//设置菜品口味Id
-                    orderDishService.newOrderDish(orderDish);
-                }
+                //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
+                orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
+                orderDishCacheService.cleanCacheByTableId(tableId);//清除掉菜品缓存
+                cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新页面
             }
-            //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
-            orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
-            orderDishCacheService.cleanCacheByTableId(tableId);//清除掉菜品缓存
-            cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新页面
+
         }catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

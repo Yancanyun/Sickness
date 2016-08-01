@@ -104,7 +104,7 @@
         WHERE dish_id = #{dishId}
     </select>
 
-    <select id="listAllCostCard" resultType="CostCard">
+    <select id="listAllCostCard" resultMap="pw.CostCard">
        SELECT *
        FROM t_cost_card
     </select>

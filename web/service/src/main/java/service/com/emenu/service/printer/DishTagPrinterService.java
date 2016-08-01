@@ -99,4 +99,12 @@ public interface DishTagPrinterService {
      * @throws SSException
      */
     public Printer queryByTagIdAndType(Integer id,Integer type) throws SSException;
+
+    /**
+     * 根据主键查询Tag
+     *
+     * @param id
+     * @throws SSException
+     */
+    public Tag queryTagByTagId(Integer id) throws SSException;
 }

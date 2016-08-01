@@ -104,6 +104,11 @@ public class MobilePrefersController extends AbstractController {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
 
+            // 为空
+            if(dishTagDtos==null
+                    ||dishTagDtos.isEmpty()){
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }
             JSONArray jsonArray = new JSONArray();
             for(DishTagDto dishTagDto : dishTagDtos){
                 JSONObject jsonObject = new JSONObject();
@@ -194,6 +199,12 @@ public class MobilePrefersController extends AbstractController {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             }
 
+            // 为空
+            if(dishTagDtos==null
+                    ||dishTagDtos.isEmpty()){
+                return sendJsonObject(AJAX_FAILURE_CODE);
+            }
+
             JSONArray jsonArray = new JSONArray();
             for(DishTagDto dishTagDto:dishTagDtos){
                 JSONObject jsonObject = new JSONObject();
@@ -281,6 +292,12 @@ public class MobilePrefersController extends AbstractController {
             List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
             if (tableOrderCache != null) {
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
+            }
+
+            // 为空
+            if(dishTagDtos==null
+                    ||dishTagDtos.isEmpty()){
+                return sendJsonObject(AJAX_FAILURE_CODE);
             }
 
             JSONArray jsonArray = new JSONArray();

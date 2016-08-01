@@ -860,4 +860,16 @@ public class TableServiceImpl implements TableService {
             throw SSException.get(EmenuException.QueryTableFail, e);
         }
     }
+
+    @Override
+    public void updateTable (Table table) throws SSException{
+
+        try {
+            if(Assert.isNotNull(table))
+                commonDao.update(table);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateTableFail, e);
+        }
+    }
 }

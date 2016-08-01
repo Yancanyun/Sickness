@@ -108,6 +108,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
         OrderDish orderDish = new OrderDish();
         DishDto dishDto = new DishDto();
         Table table = new Table();
+
         try{
             orderDish = orderDishService.queryById(orderDishId);//查询出订单菜品
             //非套餐
@@ -128,6 +129,8 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setTimeLimit(dishService.queryById(orderDish.getDishId()).getTimeLimit());
                 // 催菜
                 temp.setIsCall(orderDish.getIsCall());
+                // 菜品主键
+                temp.setDishId(orderDish.getDishId());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null
@@ -177,6 +180,8 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setTimeLimit(dishService.queryById(orderDish.getPackageId()).getTimeLimit());
                 // 催菜
                 temp.setIsCall(orderDish.getIsCall());
+                // 菜品主键
+                temp.setDishId(orderDish.getPackageId());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null

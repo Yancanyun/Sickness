@@ -110,4 +110,12 @@ public interface DishTagPrinterMapper {
      */
     public Printer queryByTagIdAndType(@Param("id") Integer id
             ,@Param("type")Integer type) throws Exception;
+
+    /**
+     * 根据主键查询Tag
+     *
+     * @param id
+     * @throws Exception
+     */
+    public Tag queryTagByTagId(@Param("id") Integer id) throws Exception;
 }

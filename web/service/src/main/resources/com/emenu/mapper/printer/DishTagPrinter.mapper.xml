@@ -82,4 +82,10 @@
         AND `t_printer`.`id` = `t_dish_tag_printer`.`printer_id`
         AND `t_dish_tag_printer`.`type` = #{type}
     </select>
+
+    <select id = "queryTagByTagId" resultMap="pw.Tag">
+        SELECT *
+        FROM t_tag
+        WHERE id = #{id}
+    </select>
 </mapper>

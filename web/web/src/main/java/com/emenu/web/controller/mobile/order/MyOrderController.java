@@ -1,5 +1,6 @@
 package com.emenu.web.controller.mobile.order;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
@@ -87,11 +88,17 @@ public class MyOrderController  extends AbstractController {
                     || tableService.queryStatusById(tableId) == TableStatusEnums.Enabled.getId()) {
                 return MOBILE_NOT_OPEN_PAGE;
             }
-            String customerIp = request.getRemoteAddr();//获取当前的用户Ip
+            String customerIp = "";
+            // 通过下面这个方法能获得用户的真正的ip地址,若直接使用getRemoterAddr则可能返回的可能是代理服务器的地址
+            if (request.getHeader("x-forwarded-for") == null)
+                customerIp=request.getRemoteAddr();
+            else
+                customerIp=request.getHeader("x-forwarded-for");
+
             String currentOperateCustomerIp = orderDishCacheService.getCurrentOperateCustomerIp();
-            if(currentOperateCustomerIp!=null&&customerIp.equals(currentOperateCustomerIp))
-            {
-                //有人正在进行确认下单操作且该用户刷新了页面,则解除锁
+            if(currentOperateCustomerIp!=null
+                    &&customerIp.equals(currentOperateCustomerIp)) {
+                // 有人正在进行确认下单操作且该用户刷新了页面,则解除锁
                 orderDishCacheService.tableLockRemove(tableId);
                 orderDishCacheService.setCurrentOperateCustomerIp(new String());//清空原来的Ip
             }
@@ -254,17 +261,35 @@ public class MyOrderController  extends AbstractController {
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
-            if(tableOrderCache.getLock()==false)//餐桌未锁死
-            orderDishCacheService.delDish(tableId,orderDishCacheId);
+            // 餐桌未锁死
+            if(tableOrderCache.getLock()==false){
+
+                List<OrderDishCache> orderDishCaches = new ArrayList<OrderDishCache>();
+                orderDishCaches = tableOrderCache.getOrderDishCacheList();
+                // 标志变量,若缓存中存在要被删除的菜品则为1
+                boolean ok = false;
+                for(OrderDishCache dto :orderDishCaches){
+
+                    if(dto.getId()==orderDishCacheId){
+                        ok=true;
+                        break;
+                    }
+                }
+                // 若存在该菜品
+                if(ok)
+                    orderDishCacheService.delDish(tableId,orderDishCacheId);
+                else
+                    sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishNotExist));
+            }
             else
             sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
-            return sendJsonObject(AJAX_SUCCESS_CODE);
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             return sendErrMsgAndErrCode(e);
         }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
     }
 
     /**
@@ -335,9 +360,10 @@ public class MyOrderController  extends AbstractController {
     }
 
     /**
-     * ajax返回确认下单的菜品的总金额
+     * ajax返回确认下单的菜品的总金额和缓存中的所有菜品
      * 同时把缓存锁死
      * 存在问题(已解决)刷新页面后餐台的锁没有被解除
+     *
      * @param orderStatus
      *
      * @return
@@ -356,6 +382,7 @@ public class MyOrderController  extends AbstractController {
         TableOrderCache tableOrderCache = new TableOrderCache();
         BigDecimal totalMoney = new BigDecimal(0);//总金额
         JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
@@ -368,16 +395,44 @@ public class MyOrderController  extends AbstractController {
             //orderStatus为0的时候点击的是返回按钮
             if(tableOrderCache.getLock()==true&&orderStatus==1)//已经加上了锁且点击的为确认菜品，即存在其他人正在下单
                 return sendErrMsgAndErrCode(SSException.get(EmenuException.TableIsLock));
-            for(OrderDishCache dto :orderDishCache)
-            {
+
+            for(OrderDishCache dto :orderDishCache) {
+
+                JSONObject temp = jsonObject;
                 DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
+                temp.put("dishId",dto.getDishId());
+                temp.put("dishName",dishDto.getName());
+                temp.put("dishNumber",dto.getQuantity());
+                temp.put("dishPrice",dishDto.getSalePrice());
+                if(dto.getRemark()!=null)
+                    temp.put("dishRemark",dto.getRemark());
+                else
+                    temp.put("dishRemark","");
+
+                if(dto.getTasteId()!=null)
+                    temp.put("dishTaste",tasteService.queryById(dto.getTasteId()).getName());
+                else
+                    temp.put("dishTaste","口味: 正常");
+
+                temp.put("dishUnit",dishDto.getUnitName());
                 totalMoney=totalMoney.add(new BigDecimal(dto.getQuantity()*dishDto.getSalePrice().doubleValue()));
+                jsonArray.add(temp);
             }
+            jsonObject.put("orderList",jsonArray);
             if(orderStatus==1)//锁死菜品缓存
             {
-                //把当前正在操作的顾客的Ip地址记录下
-                orderDishCacheService.setCurrentOperateCustomerIp(request.getRemoteAddr());
+                // 把当前正在操作的顾客的Ip地址记录下
+                // 通过下面这个方法能获得用户的真正的ip地址,若直接使用getRemoterAddr则可能返回的可能是代理服务器的地址
+                if (request.getHeader("x-forwarded-for") == null)
+                    orderDishCacheService.setCurrentOperateCustomerIp(request.getRemoteAddr());
+                else
+                    orderDishCacheService.setCurrentOperateCustomerIp(request.getHeader("x-forwarded-for"));
+
                 orderDishCacheService.tableLock(tableId);
+
+                java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+                String totalMoneyTemp = myformat.format(totalMoney);
+                totalMoney = new BigDecimal(totalMoneyTemp);
                 jsonObject.put("customPrice", totalMoney);
             }
             else//若点击了返回则解除锁死
@@ -414,6 +469,16 @@ public class MyOrderController  extends AbstractController {
         String tableIdStr = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(tableIdStr);
         try {
+
+            TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
+            List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
+            tableOrderCache=orderDishCacheService.listByTableId(tableId);
+
+            // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
+            if(tableOrderCache!=null
+                    &&!tableOrderCache.getOrderDishCacheList().isEmpty())
+                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
@@ -444,9 +509,6 @@ public class MyOrderController  extends AbstractController {
             orderService.newOrder(order);
 
             //新增订单菜品到数据表
-            TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
-            List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
-            tableOrderCache=orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)//若对应桌的订单缓存不为空
             {
                 orderDishCache=tableOrderCache.getOrderDishCacheList();//获取一个餐桌的全部订单缓存

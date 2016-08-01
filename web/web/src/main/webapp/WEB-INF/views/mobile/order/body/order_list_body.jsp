@@ -133,7 +133,6 @@
                      </c:choose>
                   <p class="ordered-remark-info J_remarks">${dto.remark}</p>
                 </div>
-                  <button class="J_delete">删除</button>
             </li>
          </c:forEach>
         </c:if>

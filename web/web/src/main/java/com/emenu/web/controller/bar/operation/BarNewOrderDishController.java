@@ -328,6 +328,9 @@ public class BarNewOrderDishController extends AbstractController{
                     orderDishCacheService.tableLockRemove(tableId);
                 }
             }
+            // 不存在任何菜品
+            else
+                sendErrMsgAndErrCode(SSException.get(EmenuException.OrderDishCacheIsNull));
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -345,13 +348,22 @@ public class BarNewOrderDishController extends AbstractController{
     @RequestMapping(value = "/finish",method = RequestMethod.POST)
     @Module(ModuleEnums.BarOrderDishAddFinish)
     @ResponseBody
-    public JSONObject listDishByTagId(@RequestParam("tableId") Integer tableId,
+    public JSONObject confirmOrder(@RequestParam("tableId") Integer tableId,
                                       @RequestParam("serveType") Integer serveType,
                                       @RequestParam("orderRemark")String orderRemark) {
 
         //下单时间
         Date orderTime=new Date();
         try {
+            TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
+            List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
+            tableOrderCache = orderDishCacheService.listByTableId(tableId);
+
+            // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
+            if(tableOrderCache!=null
+                    &&!tableOrderCache.getOrderDishCacheList().isEmpty())
+                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
             //新增结账单到数据表
@@ -386,9 +398,6 @@ public class BarNewOrderDishController extends AbstractController{
             orderService.newOrder(order);
 
             // 新增订单菜品到数据库
-            TableOrderCache tableOrderCache = new TableOrderCache();
-            List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
-            tableOrderCache=orderDishCacheService.listByTableId(tableId);
             if(tableOrderCache!=null)
             {
                 // 获取一个餐桌的全部订单缓存

@@ -684,9 +684,10 @@ public enum EmenuException implements IBizExceptionMes {
     WipeOrderDishFail("菜品划单失败",10099),
     PrinterIpIsNull("打印机Ip地址未设置",10100),
     ConnectPrinterFail("连接打印机失败",10101),
-    
+
     // 智能排菜
     CreateQueFail("生成智能排菜队列失败",10102),
+    OrderDishPrinterIsNotSet("未设置菜品打印机",10103),
 
     /****************************吧台端****************************/
     QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),
@@ -707,7 +708,7 @@ public enum EmenuException implements IBizExceptionMes {
         this.code = code;
     }
 
-     EmenuException(String msg) {
+    EmenuException(String msg) {
         this.msg = msg;
     }
 
