@@ -279,6 +279,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     }
 
 
+
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public void newSettlement() throws SSException {

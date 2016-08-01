@@ -42,6 +42,7 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.framework.bean.StaticAutoWire;
 import com.pandawork.core.framework.web.spring.controller.Base;
 import com.pandawork.wechat.WeChatService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
@@ -388,6 +389,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("storageReportItemService")
     protected static StorageReportItemService storageReportItemService;
+
+    @StaticAutoWire
+    @Qualifier("storageReportIngredientService")
+    protected StorageReportIngredientService storageReportIngredientService;
 
     @StaticAutoWire
     @Qualifier("serialNumService")

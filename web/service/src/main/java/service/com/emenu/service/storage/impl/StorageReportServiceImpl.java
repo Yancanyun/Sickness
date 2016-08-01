@@ -233,7 +233,6 @@ public class StorageReportServiceImpl implements StorageReportService {
                     if (report.getType() == StorageReportTypeEnum.StockInReport.getId()){
                         // 入库单物品详情
                         List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(report.getId());
-
                         for (StorageReportItem storageReportItem : storageReportItemList){
                             StorageItem storageItem = storageItemService.queryById(storageReportItem.getItemId());
                             storageReportItem.setCostCardUnitName(storageItem.getCostCardUnitName());
@@ -255,12 +254,14 @@ public class StorageReportServiceImpl implements StorageReportService {
                             Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity());
-                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            //库存单位数量
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
+                            //成卡单位数量
+                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity());
                             storageReportIngredient.setIngredientName(ingredient.getName());
                             storageReportIngredient.setIngredientNumber(ingredient.getIngredientNumber());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -310,7 +311,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -360,7 +361,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -429,7 +430,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);
@@ -531,7 +532,7 @@ public class StorageReportServiceImpl implements StorageReportService {
                     Unit storageUnit = unitService.queryById(ingredient.getStorageUnitId());
                     reportIngredient.setStorageUnitName(storageUnit.getName());
                     // 设置库存单位数量
-                    BigDecimal storageQuantity = reportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio());
+                    BigDecimal storageQuantity = reportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
                     reportIngredient.setStorageQuantity(storageQuantity);
                 }
             }
@@ -657,11 +658,11 @@ public class StorageReportServiceImpl implements StorageReportService {
                             storageReportIngredient.setCostCardUnitName(ingredient.getCostCardUnitName());
                             storageReportIngredient.setStorageUnitName(ingredient.getOrderUnitName());
                             storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity());
-                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setCostCardQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                             storageReportIngredient.setIngredientName(ingredient.getName());
                             storageReportIngredient.setIngredientNumber(ingredient.getIngredientNumber());
                             // 获取成卡单位数量
-                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio()));
+                            storageReportIngredient.setStorageQuantity(storageReportIngredient.getQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
                         }
                         StorageReportDto storageReportDto = new StorageReportDto();
                         storageReportDto.setStorageReport(report);

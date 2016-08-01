@@ -44,6 +44,7 @@ public interface StorageSettlementService {
      */
     public BigDecimal queryCache(Integer key) throws SSException;
 
+
     /**
      * 新
      * 库存盘点（库存物品）获取截止时间时的库存统计结果

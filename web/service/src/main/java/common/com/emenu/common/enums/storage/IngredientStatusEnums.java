@@ -13,6 +13,8 @@ public enum IngredientStatusEnums {
 
     Normal(1, "正常使用"),
     Delete(2, "已删除"),
+    CanUpdate(0,"可编辑"),
+    NotUpdate(1,"不可编辑"),
     ;
 
     private Integer id;

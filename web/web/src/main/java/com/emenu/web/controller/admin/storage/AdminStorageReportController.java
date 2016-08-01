@@ -10,6 +10,7 @@ import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.storage.IngredientStatusEnums;
 import com.emenu.common.enums.storage.StorageReportIsAuditedEnum;
 import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
@@ -417,7 +418,7 @@ public class AdminStorageReportController extends AbstractController {
         try {
             Ingredient ingredient = ingredientService.queryById(id);
             BigDecimal storageQuantity = new BigDecimal("0.00");
-            storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio()));
+            storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
             jsonObject.put("storageQuantity", storageQuantity);
             jsonObject.put("storageUnitName", ingredient.getStorageUnitName());
         } catch (SSException e) {
@@ -507,16 +508,50 @@ public class AdminStorageReportController extends AbstractController {
             if (Assert.isNull(storageReport)){
                 throw SSException.get(PartyException.UserNotExist);
             }
+            // 修改库存中物品进货总数量和总金额
             if (StorageReportIsAuditedEnum.Passed.getId().equals(isAudited)) {
                 if (storageReport.getType() == StorageReportTypeEnum.StockInReport.getId()) {
                     List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
                     Assert.isNotNull(storageReportItemList, EmenuException.StorageItemIsNotNull);
                     for (StorageReportItem reportItem : storageReportItemList) {
                         StorageItem storageItem = storageItemService.queryById(reportItem.getItemId());
+                        Assert.isNotNull(storageItem,EmenuException.StorageItemIsNotNull);
                         storageItem.setTotalStockInQuantity(storageItem.getTotalStockInMoney().add(reportItem.getQuantity()));
                         storageItem.setTotalStockInMoney(storageItem.getTotalStockInMoney().add(reportItem.getCount()));
+                        // 如果是入库单同时修改原配料缓存
+                        BigDecimal ingredientCacheQuntity = storageSettlementService.queryCache(storageItem.getIngredientId());
+                        if (Assert.isNull(ingredientCacheQuntity)){
+                            ingredientCacheQuntity = reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio());
+                            storageSettlementService.updateSettlementCache(storageItem.getIngredientId(),ingredientCacheQuntity);
+                        } else {
+                            ingredientCacheQuntity = ingredientCacheQuntity.add(reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
+                            storageSettlementService.updateSettlementCache(storageItem.getIngredientId(),ingredientCacheQuntity);
+                        }
+                        // 设置原配料入库总金额、入库总数量、均价
+                        Ingredient ingredient1 = ingredientService.queryById(storageItem.getIngredientId());
+                        ingredient1.setTotalQuantity(ingredient1.getTotalQuantity().add(ingredientCacheQuntity));
+                        ingredient1.setTotalMoney(ingredient1.getTotalMoney().add(reportItem.getCount()));
+                        ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(),2, BigDecimal.ROUND_HALF_EVEN));
+                        ingredientService.updateIngredient(ingredient1, IngredientStatusEnums.CanUpdate.getId());
                         storageItemService.updateById(storageItem);
                     }
+                }
+                if (storageReport.getType() == StorageReportTypeEnum.StockOutReport.getId()){
+                    // 其他单据原配料详情
+                    List<StorageReportIngredient> storageReportIngredientList = storageReportIngredientService.listByReportId(storageReport.getId());
+                    for (StorageReportIngredient storageReportIngredient : storageReportIngredientList){
+                        Ingredient ingredient = ingredientService.queryById(storageReportIngredient.getIngredientId());
+                        // 如果是入库单同时修改原配料缓存
+                        BigDecimal ingredientCacheQuntity = storageSettlementService.queryCache(storageReportIngredient.getIngredientId());
+                        if (Assert.isNull(ingredientCacheQuntity)){
+                            ingredientCacheQuntity = storageReportIngredient.getQuantity();
+                            storageSettlementService.updateSettlementCache(ingredient.getId(),ingredientCacheQuntity);
+                        } else {
+                            ingredientCacheQuntity = ingredientCacheQuntity.subtract( storageReportIngredient.getQuantity());
+                            storageSettlementService.updateSettlementCache(ingredient.getId(),ingredientCacheQuntity);
+                        }
+                    }
+
                 }
             }
             storageReport.setAuditPartyId(securityUser.getPartyId());
