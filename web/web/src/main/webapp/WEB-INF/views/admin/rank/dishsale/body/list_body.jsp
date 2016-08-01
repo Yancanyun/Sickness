@@ -51,21 +51,11 @@
                     <label>
                       <input type="checkbox" class="J_selectAll" name="tagIds" value="1">全选
                     </label>
-                    <label>
-                      <input type="checkbox" class="J_selectType" name="tagIds"  value="2" />套餐
-                    </label>
-                    <label>
-                      <input type="checkbox"  class="J_selectType"  name="tagIds" value="3" />披萨
-                    </label>
-                    <label>
-                      <input type="checkbox"  class="J_selectType"  name="tagIds" value="4" />意面
-                    </label>
-                    <label>
-                      <input type="checkbox"  class="J_selectType"  name="tagIds" value="5" />意面
-                    </label>
-                    <label>
-                      <input type="checkbox"  class="J_selectType"  name="tagIds" value="6" />意面
-                    </label>
+                    <c:forEach items="${tag}" var="tag">
+                      <label>
+                        <input type="checkbox" class="J_selectType" name="tagIds" value="${tag.id}" />${tag.name}11
+                      </label>
+                    </c:forEach>
                   </div>
                 </div>
                 <div class="col-sm-6 col-sm-offset-4">

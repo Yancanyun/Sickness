@@ -134,6 +134,13 @@
             //原配料管理
             ['inventory', site.website + 'admin/storage/settlement/check/ajax/settlement/check', 'put', '库存盘点']
         ],
+            // 营业分析
+        BusinessAnalysis: [
+            //菜品销售排行
+            ['dishSalesRanking', site.staticWebsite + 'mock/admin/dish-sales-ranking.json', 'get', '菜品销售排行列表'],
+            ['dishBigtagSalesRanking', site.staticWebsite + 'mock/admin/dish-bigtag-sales-ranking.json', 'get', '菜品大类销售排行列表']
+
+        ],
         // 菜品管理
         DishManagement: [
             // 单位管理--列表

@@ -75,6 +75,11 @@
         SELECT  *
         FROM  t_tag tag
         WHERE
-        tag.p_id IN (3,4,5,6,7)
+        tag.p_id IN
+        (SELECT id
+         FROM t_tag tag2
+         WHERE tag2.p_id IN
+        (3,4,5,6,7)
+				)
     </select>
 </mapper>

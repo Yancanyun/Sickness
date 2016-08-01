@@ -38,8 +38,7 @@ public class DishSaleRankController extends AbstractController {
     public String toList(Model model){
         try{
             List<Tag> list = tagService.queryLayer2Tag();
-            model.addAttribute("tagId" ,list);
-            model.addAttribute("tagName" ,list);
+            model.addAttribute("tag" ,list);
             // 今天的开始时间
             model.addAttribute("firstToday", DateUtils.getToday());
             // 今天的结束时间
@@ -81,33 +80,52 @@ public class DishSaleRankController extends AbstractController {
                            @RequestParam("pageSize") Integer pageSize,
                            @RequestParam("startTime")Date startTime,
                            @RequestParam("endTime")Date endTime,
-                           @RequestParam("tagId")Integer tagId){
+                           @RequestParam(value = "tagId",required = false) List<Integer> tagIds){
         // 对页面大小和页码预处理
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         pageNumber = pageNumber == null ? 1 : pageNumber;
+        List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
+        List<DishSaleRankDto> dishSaleRankDtoList2 = Collections.emptyList();
         // 数据量
         int dataCount = 0;
-        try{
-            dataCount = dishSaleRankService.countByTimePeroidAndTagId(startTime,endTime,tagId);
-        }catch(SSException e){
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
-        List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
-        try{
-            dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
-        }catch(SSException e){
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
+        if(tagIds != null){
+            try{
+                for(Integer tagId:tagIds){
+                    dataCount +=   dishSaleRankService.countByTimePeroidAndTagId(startTime,endTime,tagId);
+                }
+            }catch(SSException e){
+                LogClerk.errLog.error(e);
+                return sendErrMsgAndErrCode(e);
+            }
+            try{
+                for(Integer tagId:tagIds){
+                    dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
+                    for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
+                        dishSaleRankDtoList2.add(dishSaleRankDto);
+                    }
+                }
+            }catch(SSException e){
+                LogClerk.errLog.error(e);
+                return sendErrMsgAndErrCode(e);
+            }
+        }else{
+            try{
+                dataCount =   dishSaleRankService.countByTimePeroidAndTagId(startTime,endTime,0);
+                dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
+            }catch(SSException e){
+                LogClerk.errLog.error(e);
+                return sendErrMsgAndErrCode(e);
+            }
+
         }
         JSONArray jsonArray = new JSONArray();
-            for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
+            for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList2){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dishId",dishSaleRankDto.getDishId());
                 jsonObject.put("dishName",dishSaleRankDto.getDishName());
                 jsonObject.put("tagId",dishSaleRankDto.getTagId());
-                jsonObject.put("tagName",dishSaleRankDto.getTagName());
-                jsonObject.put("num",dishSaleRankDto.getNum());
+                jsonObject.put("bigTag",dishSaleRankDto.getTagName());
+                jsonObject.put("num", dishSaleRankDto.getNum());
                 jsonObject.put("consumeSum",dishSaleRankDto.getConsumeSum());
                 jsonArray.add(jsonObject);
             }

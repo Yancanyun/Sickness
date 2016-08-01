@@ -16,13 +16,14 @@
         renderTo: '.J_pagination',
         juicerRender: '#tpl',
         dataRender: '#J_template',
-        url: '/mock/admin/dish-sales-ranking.json',
+        url: '${website}admin/rank/sale/ajax/list',
         pageSize: 10,
+        timeout: 1000,
         configUrl: function(url,page,me,prevPaginationData){
-          return ${website}admin/rank/sale/ajax;
-          //return url + '/' + page;
-        },
-        data: '2015-11-11'
+          //return url;
+          return url + '/' + page;
+        }
+//        data: '2015-11-11'
       });
     });
   })

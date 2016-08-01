@@ -280,36 +280,40 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             // 判断前台有没有选中菜品大类
             if(tagId != 0){
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
-                if(dishSaleRankDtoList.size()%pageSize==0){
-                    if(pageNumber == 1){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                if(!dishSaleRankDtoList.isEmpty()){
+                    if(dishSaleRankDtoList.size()%pageSize==0){
+                        if(pageNumber == 1){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                        }else{
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        }
                     }else{
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
-                    }
-                }else{
-                    if(pageNumber == 1){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
-                    }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
-                    }else{
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        if(pageNumber == 1){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                        }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
+                        }else{
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        }
                     }
                 }
             } else {
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
-                if(dishSaleRankDtoList.size()%pageSize==0){
-                    if(pageNumber == 1){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                if(!dishSaleRankDtoList.isEmpty()){
+                    if(dishSaleRankDtoList.size()%pageSize==0){
+                        if(pageNumber == 1){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                        }else{
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        }
                     }else{
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
-                    }
-                }else{
-                    if(pageNumber == 1){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
-                    }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
-                    }else{
-                        dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        if(pageNumber == 1){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                        }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
+                        }else{
+                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                        }
                     }
                 }
             }
@@ -325,12 +329,20 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
         Integer number = 0;
         // 判断前台有没有选中菜品大类
         try{
-            if(tagId != 0){
+            if(tagId != null&& tagId != 0 ){
                 List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
-                number = dishSaleRankDtoList.size();
+                if(dishSaleRankDtoList == null){
+                    number = 0;
+                }else{
+                    number = dishSaleRankDtoList.size();
+                }
             }else{
-                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
-                number = dishSaleRankDtoList.size();
+                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+                if(dishSaleRankDtoList == null){
+                    number = 0;
+                }else{
+                    number = dishSaleRankDtoList.size();
+                }
             }
             return number;
         }catch(Exception e){
