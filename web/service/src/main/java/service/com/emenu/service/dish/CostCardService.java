@@ -32,7 +32,7 @@ public interface CostCardService {
      * @return int
      * @throws SSException
      */
-    public int newCostCard(CostCard costCard) throws SSException;
+    public CostCard newCostCard(CostCard costCard) throws SSException;
 
     /**
      * 删除成本卡

@@ -83,4 +83,13 @@ public interface TagMapper {
      * @throws SSException
      */
     public List<Tag> listByParentId(int parentId) throws SSException;
+
+    /**
+     * 根据父id和name查询tag
+     * @param pId
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public Tag queryByPidAndName(@Param("pId") int pId, @Param("name") String name) throws Exception;
 }

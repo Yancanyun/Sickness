@@ -10,6 +10,7 @@ import com.emenu.service.dish.CostCardService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,10 @@ public class CostCardServiceImpl implements CostCardService {
     @Qualifier("costCardItemMapper")
     private CostCardItemMapper costCardItemMapper;
 
+    @Autowired
+    @Qualifier("commonDao")
+    private CommonDao commonDao;//core包
+
     @Override
     public CostCardDto queryById(int id) throws SSException {
         CostCardDto costCardDto = null;
@@ -54,30 +59,33 @@ public class CostCardServiceImpl implements CostCardService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public int newCostCard(CostCard costCard) throws SSException
+    public CostCard newCostCard(CostCard costCard) throws SSException
     {
+        CostCard newCostCard = null;
         try {
-            if(!Assert.lessOrEqualZero(costCard.getDishId())&&Assert.isNotNull(costCard.getCostCardNumber())
-                    &&Assert.isNotNull(costCard.getMainCost())&&Assert.isNotNull(costCard.getAssistCost())
-                    &&Assert.isNotNull(costCard.getDeliciousCost())&&Assert.isNotNull(costCard.getStandardCost()))
+            if(!Assert.lessOrEqualZero(costCard.getDishId())
+                    && Assert.isNotNull(costCard.getCostCardNumber())
+                    && Assert.isNotNull(costCard.getMainCost())
+                    && Assert.isNotNull(costCard.getAssistCost())
+                    && Assert.isNotNull(costCard.getDeliciousCost())
+                    && Assert.isNotNull(costCard.getStandardCost()))
             {
-
+                // 盘段菜品是否重复添加了成本卡
                 CostCard costCard1 = queryCostCardByDishId(costCard.getDishId());
                 if (Assert.isNull(costCard1)){
-                    costCardMapper.newCostCard(costCard);
-                    return 1;//添加成功
+                    newCostCard =  commonDao.insert(costCard);
                 } else {
-                    return 0;//添加失败
+                    throw SSException.get(EmenuException.DishCostCardIsExist);
                 }
             }
-            else
-            {
-                return 0;//添加失败
+            else {
+                throw SSException.get(EmenuException.CostCardIdError);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CostCardInsertFailed, e);
         }
+        return newCostCard;
     }
 
     @Override
@@ -104,14 +112,16 @@ public class CostCardServiceImpl implements CostCardService {
     public int updateCostCard(CostCard costCard) throws SSException
     {
         try {
-            if(!Assert.lessOrEqualZero(costCard.getDishId())&&Assert.isNotNull(costCard.getCostCardNumber())
-                    &&Assert.isNotNull(costCard.getMainCost())&&Assert.isNotNull(costCard.getAssistCost())
-                    &&Assert.isNotNull(costCard.getDeliciousCost())&&Assert.isNotNull(costCard.getStandardCost()))
+            if(!Assert.lessOrEqualZero(costCard.getDishId())
+                    && Assert.isNotNull(costCard.getCostCardNumber())
+                    && Assert.isNotNull(costCard.getMainCost())
+                    && Assert.isNotNull(costCard.getAssistCost())
+                    && Assert.isNotNull(costCard.getDeliciousCost())
+                    && Assert.isNotNull(costCard.getStandardCost()))
             {
                 costCardMapper.updateCostCard(costCard);
                 return 1;//更新成功
-            }
-            else
+            } else
             {
                 return 0;//更新失败
             }

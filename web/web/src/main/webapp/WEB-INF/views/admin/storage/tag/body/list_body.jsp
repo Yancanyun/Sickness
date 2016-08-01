@@ -41,11 +41,11 @@
                                 <ul style="display: none;" class="margin-top-20 J_smallClassify" data-big-tag-id="${dishTagDto.tag.id}"
                                     data-big-tag-name="${dishTagDto.tag.name}">
                                     <c:forEach var="dto" items="${dishTagDto.childTagList}">
-                                        <li class="clearfix" data-small-tag-name="${dishTagDto.tag.name}" data-small-tag-id="${dishTagDto.tag.id}">
-                                            <input type="hidden" name="pId" value="${dishTagDto.tag.pId}"/>
-                                            <input type="hidden" name="id" value="${dishTagDto.tag.id}"/>
-                                            <input type="hidden" name="name" value="${dishTagDto.tag.name}"/>
-                                            <span class="small-tag">${dishTagDto.tag.name}</span>
+                                        <li class="clearfix" data-small-tag-name="${dto.tag.name}" data-small-tag-id="${dto.tag.id}">
+                                            <input type="hidden" name="pId" value="${dto.tag.pId}"/>
+                                            <input type="hidden" name="id" value="${dto.tag.id}"/>
+                                            <input type="hidden" name="name" value="${dto.tag.name}"/>
+                                            <span class="small-tag">${dto.tag.name}</span>
                                             <a href="javascript:;" class="label-info pull-right oper J_delSmallTag"><i
                                                     class="fa fa-times"></i>&nbsp;删除小类</a>
                                             <a href="javascript:;" class="label-info pull-right oper J_editSmallTag"><i

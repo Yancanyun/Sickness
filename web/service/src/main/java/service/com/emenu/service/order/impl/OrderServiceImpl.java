@@ -6,6 +6,7 @@ import com.emenu.common.entity.dish.DishImg;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
@@ -13,12 +14,14 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderMapper;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.Log;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,7 +43,11 @@ public class OrderServiceImpl implements OrderService{
     private CommonDao commonDao;
 
     @Autowired
+    @Qualifier("orderDishService")
     private OrderDishService orderDishService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @Override
     public List<Order> listByTableIdAndStatus(int tableId, int status) throws SSException {
@@ -101,6 +108,9 @@ public class OrderServiceImpl implements OrderService{
                 {
                     CheckOrderDto checkOrderDto = new CheckOrderDto();
                     checkOrderDto.setOrder(dto);
+                    if (Assert.isNull(orderDishService)){
+                        System.out.println("nihao");
+                    }
                     checkOrderDto.setOrderDishs(orderDishService.listByOrderId(dto.getId()));
                     checkOrderDtos.add(checkOrderDto);
                 }

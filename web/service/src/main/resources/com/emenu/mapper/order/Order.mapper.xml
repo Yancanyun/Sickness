@@ -14,10 +14,10 @@
    <select id = "listOrderByStatusAndIsCheckAndDate" resultMap="pw.Order">
        SELECT *
        FROM t_order
-       where  is_settlemented=#{isSettlemented}
+       where  is_settlemented = #{isSettlemented}
        and #{date}>=t_order.created_time
        <if test="status != null">
-       and t_order.status=#{status}
+       and t_order.status != #{status}
        </if>
    </select>
 

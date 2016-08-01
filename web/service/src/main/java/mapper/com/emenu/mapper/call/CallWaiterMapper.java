@@ -46,8 +46,7 @@ public interface CallWaiterMapper {
      * @param
      * @throws Exception
      */
-    public void updateCallWaiterStatus(@Param("status")int status
-            ,@Param("id") int id)throws Exception;
+    public void updateCallWaiterStatus(@Param("status")int status,@Param("id") int id)throws Exception;
 
     /**
      * 查询同名服务,同名服务再次添加没有意义

@@ -50,6 +50,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -98,6 +99,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     private IngredientService ingredientService;
 
     @Autowired
+    @Qualifier("orderService")
     private OrderService orderService;
 
     @Autowired
@@ -120,7 +122,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
      *
      * @throws Exception
      */
-//    @PostConstruct
+    @PreDestroy
     public void initCache() throws SSException {
         // 新
         // 库存盘点（单据的一次结算）= 已下单的未结账的单据.未盘点已经结账后的订单中的菜品（转换成原配料）+ 单据（审核通过、未结算）中的原配料（入库单特殊处理）
@@ -128,7 +130,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
             // 第二步取出已经审核通过和未结算的单据
             Date nowTime = new Date();
             List<StorageReportDto> storageReportDtoList = storageReportService.listUnsettleAndAuditedStorageReportByEndTime(nowTime);
-            // 第三步获取未结算（盘点）的订单当前时间之前
+            // 第三步获取未结算（未盘点）的订单当前时间之前
             List<CheckOrderDto> orderIdDtolist = orderService.listCheckOrderDtoForCheck(null,0,nowTime);
             // 获取所有库存原配料
             List<Ingredient> ingredientList = ingredientService.listAll();
@@ -461,7 +463,6 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                 endTime.setSeconds(59);
             }
             //取出时间段之间的所有已经审核通过的单据（结算和未结算都取出，包括startTime和endTime）
-
             List<StorageReportDto> storageReportDtoList = storageReportService.listReportDtoByTimeAndIsAudited(startTime, endTime,1);
             if (Assert.isEmpty(storageReportDtoList)) {
                 storageReportDtoList = Collections.emptyList();

@@ -57,38 +57,40 @@ public class CostCardItemServiceImpl implements CostCardItemService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public void updateCostCardItemList(List<CostCardItem> costCardItems,int cardId) throws SSException {
-        List<CostCardItem> preItems = new ArrayList<CostCardItem>();//保存原来有而修改的集合中没有的原配料，即删除
-        List<CostCardItem> preItems1 = new ArrayList<CostCardItem>();//将原来的原配料复制一份
-        List<CostCardItem> updateItems1 = new ArrayList<CostCardItem>();//将修改的原配料复制一份
-        List<CostCardItem> updateItems2 = new ArrayList<CostCardItem>();//将修改的原配料复制一份
-        for(CostCardItem costCardItem:costCardItems){
-            updateItems1.add(costCardItem);
-            updateItems2.add(costCardItem);
-        }
+    public void updateCostCardItemList(List<CostCardItem> updateCostCardItems,int cardId) throws SSException {
         try {
-            if (Assert.isNull(costCardItems) ||costCardItems.isEmpty()) {
+            if (Assert.isNull(updateCostCardItems)){
                 throw SSException.get(EmenuException.CostCardItemIsNotNUll);
             }
-            preItems = costCardItemMapper.listByCardId(cardId);
-            if(preItems.isEmpty()){
-                costCardItemMapper.newCostCardItems(costCardItems);
-            }else {
-                for(CostCardItem costCardItem:preItems){
-                    preItems1.add(costCardItem);
+            // 获取修改之前原配料详情
+            Assert.lessOrEqualZero(cardId,EmenuException.CostCardIdError);
+            List<CostCardItem> oldCostCardItemList = Collections.emptyList();
+            oldCostCardItemList = costCardItemMapper.listByCardId(cardId);
+
+            // 如果编辑后原配料详情数量为0，则清除原来原配料中的内容
+            if (updateCostCardItems.isEmpty()){
+                Assert.lessOrEqualZero(cardId,EmenuException.CostCardIdError);
+                // 如果编辑之前的的成本卡有成本卡详情，删除
+                if (Assert.isNotNull(oldCostCardItemList)
+                        && oldCostCardItemList.size()>0){
+                    costCardItemMapper.delByCostCardId(cardId);
+                    return;
                 }
-                preItems.removeAll(costCardItems);
-                if(!preItems.isEmpty()) {
-                    costCardItemMapper.delByCostCardItems(preItems);
+            }
+            // 如果编辑之前成本卡详情为空或者没有，添加成本卡详情
+            if(oldCostCardItemList.isEmpty()){
+                if (updateCostCardItems.size() > 0) {
+                    costCardItemMapper.newCostCardItems(updateCostCardItems);
+                    return;
                 }
-                updateItems1.retainAll(preItems1);//修改过的原配料
-                for(CostCardItem costCardItem:updateItems1){
-                  costCardItemMapper.updateByCardId(costCardItem);
-                }
-                updateItems2.removeAll(preItems1);//新增的原配料
-                if(!updateItems2.isEmpty()) {
-                    costCardItemMapper.newCostCardItems(updateItems2);
-                }
+            }
+            // 如果编辑前有成本卡详情，编辑后也有成本卡详情，则先删除
+            if (updateCostCardItems.size()>0
+                    && oldCostCardItemList.size()>0){
+                Assert.lessOrEqualZero(cardId,EmenuException.CostCardIdError);
+                costCardItemMapper.delByCostCardId(cardId);
+                costCardItemMapper.newCostCardItems(updateCostCardItems);
+                return;
             }
         }catch(Exception e){
             LogClerk.errLog.error(e);

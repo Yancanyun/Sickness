@@ -507,7 +507,7 @@ public class AdminStorageReportController extends AbstractController {
             if (Assert.isNull(storageReport)){
                 throw SSException.get(PartyException.UserNotExist);
             }
-            if (isAudited == StorageReportIsAuditedEnum.Passed.getId()) {
+            if (StorageReportIsAuditedEnum.Passed.getId().equals(isAudited)) {
                 if (storageReport.getType() == StorageReportTypeEnum.StockInReport.getId()) {
                     List<StorageReportItem> storageReportItemList = storageReportItemService.listByReportId(storageReport.getId());
                     Assert.isNotNull(storageReportItemList, EmenuException.StorageItemIsNotNull);

@@ -109,6 +109,7 @@ public enum EmenuException implements IBizExceptionMes {
     ListTagRootFailed("查询分类根节点列表失败！", 3019),
     QueryTagFailed("查询分类失败！", 3020),
     listPathTagFailed("查询分类祖先路径失败！", 3021),
+    TagChildrenIsExist("该分类下的子类已存在",3022),
 
     //菜品分类与备注关联
     DelByDishTagIdFailed("根据菜品分类id删除菜品分类失败",3022),
@@ -561,6 +562,8 @@ public enum EmenuException implements IBizExceptionMes {
     QueryByCostCardIdFailed("根据成本卡id查询其所有原料失败",8131),
     CostCardItemTypeIsNotNull("成本卡原料类别不为空",8132),
     CostCardItemIdError("成本卡原料主键错误",8133),
+    DishCostCardIsExist("该菜品成本卡已经存在",8134),
+    CostCardInfoError("成本卡信息不合法",8135),
 
     // 营业分析
     GetOrderDishByTimePeriodFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),

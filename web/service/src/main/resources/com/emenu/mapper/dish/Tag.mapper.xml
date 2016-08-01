@@ -82,4 +82,10 @@
         (3,4,5,6,7)
 				)
     </select>
+
+    <select id="queryByPidAndName" resultMap="pw.Tag">
+        SELECT *
+        FROM t_tag tag
+        WHERE tag.p_id = #{pId} AND tag.name = #{name}
+    </select>
 </mapper>

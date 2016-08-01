@@ -1,5 +1,7 @@
 package com.emenu.common.entity.dish;
 
+import com.pandawork.core.common.entity.AbstractEntity;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -12,7 +14,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name="t_cost_card")
-public class CostCard {
+public class CostCard extends AbstractEntity{
 
     //主键
     @Id

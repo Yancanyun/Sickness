@@ -6,6 +6,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.TagMapper;
 import com.emenu.service.dish.tag.TagCacheService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -32,6 +33,7 @@ public class TagCacheServiceImpl implements TagCacheService {
     @Autowired
     @Qualifier("tagMapper")
     private TagMapper tagMapper;
+
 
     //类别缓存
     private Map<Integer, TagDto> tagCache = new ConcurrentHashMap<Integer, TagDto>();

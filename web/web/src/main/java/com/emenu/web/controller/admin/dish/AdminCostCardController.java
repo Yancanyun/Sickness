@@ -16,6 +16,7 @@ import com.emenu.common.enums.dish.ItemTypeEnums;
 import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.cache.Cache;
@@ -298,6 +299,7 @@ public class AdminCostCardController extends AbstractController {
             if(itemType==ItemTypeEnums.AssistIngredient.getId()){
                 assistCost = assistCost.add(averagePrice.multiply(otherCount)).setScale(2, BigDecimal.ROUND_HALF_UP);
             }
+
             if(itemType==ItemTypeEnums.DeliciousIngredient.getId()){
                 deliciousCost = deliciousCost.add(averagePrice.multiply(otherCount)).setScale(2, BigDecimal.ROUND_HALF_UP);
             }
@@ -315,6 +317,18 @@ public class AdminCostCardController extends AbstractController {
         return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
     }
 
+    /**
+     * 添加和编辑提交后保存
+     * @param id
+     * @param dishId
+     * @param mainCost
+     * @param assistCost
+     * @param deliciousCost
+     * @param ingredientInfo
+     * @param request
+     * @return
+     * @throws SSException
+     */
     @RequestMapping(value = "save/all",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject saveAll(@RequestParam(required = false,value = "id")Integer id,
@@ -325,24 +339,28 @@ public class AdminCostCardController extends AbstractController {
                               @Param("ingredientInfo")String ingredientInfo,
                               ServletRequest request) throws SSException{
         try{
-            String[] aa = ingredientInfo.split("},");
+            // 接受的原配料数据是json数据，处理之后转成实体接受
             List<CostCardItem> ingredientInfos = new ArrayList<CostCardItem>();
-            for(int i=0;i<aa.length;i++){
-                if(i!=aa.length-1) {
-                    aa[i] = aa[i] + "}";
+            if (Assert.isNotNull(ingredientInfo)){
+                String[] aa = ingredientInfo.split("},");
+                for(int i=0;i<aa.length;i++){
+                    if(i!=aa.length-1) {
+                        aa[i] = aa[i] + "}";
+                    }
+                    CostCardItem item = (CostCardItem) JSON.parseObject(aa[i], CostCardItem.class);
+                    ingredientInfos.add(item);
                 }
-                CostCardItem item = (CostCardItem) JSON.parseObject(aa[i], CostCardItem.class);
-                ingredientInfos.add(item);
+                int listSize = ingredientInfos.size();
+                Map<Integer,CostCardItem> costItems = new HashMap<Integer,CostCardItem>();
+                for(CostCardItem costCardItem:ingredientInfos) {
+                    costItems.put(costCardItem.getIngredientId(),costCardItem);
+                }
+                int setSize = costItems.size();
+                if(listSize!=setSize){
+                    return sendMsgAndCode(AJAX_FAILURE_CODE,"添加失败,不能添加相同原材料");
+                }
             }
-            int listSize = ingredientInfos.size();
-            Map<Integer,CostCardItem> costItems = new HashMap<Integer,CostCardItem>();
-            for(CostCardItem costCardItem:ingredientInfos) {
-              costItems.put(costCardItem.getIngredientId(),costCardItem);
-            }
-            int setSize = costItems.size();
-            if(listSize!=setSize){
-                return sendMsgAndCode(AJAX_FAILURE_CODE,"添加失败,不能添加相同原材料");
-            }
+            //生成成卡编号
             String costCardNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.CostCardSerialNum);
             BigDecimal standardCost = mainCost.add(assistCost.add(deliciousCost)).setScale(2, BigDecimal.ROUND_HALF_UP);
             CostCard costCard = new CostCard();
@@ -354,21 +372,25 @@ public class AdminCostCardController extends AbstractController {
                 costCard.setAssistCost(assistCost);
                 costCard.setDeliciousCost(deliciousCost);
                 costCard.setStandardCost(standardCost);
-                costCardService.newCostCard(costCard);
-                int cardId = costCard.getId();
-                List<CostCardItem> costCardItemList = new ArrayList<CostCardItem>();
-                for (CostCardItem costCardItem : ingredientInfos) {
-                    CostCardItem item = new CostCardItem();
-                    item.setCostCardId(cardId);
-                    item.setIngredientId(costCardItem.getIngredientId());
-                    item.setItemType(costCardItem.getItemType());
-                    item.setIsAutoOut(costCardItem.getIsAutoOut());
-                    item.setNetCount(costCardItem.getNetCount());
-                    item.setOtherCount(costCardItem.getOtherCount());
-                    costCardItemList.add(item);
+                CostCard dbCostCard = costCardService.newCostCard(costCard);
+                Assert.isNotNull(dbCostCard, EmenuException.CostCardInsertFailed);
+                if (ingredientInfos.size()>0) {
+                    int cardId = costCard.getId();
+                    List<CostCardItem> costCardItemList = new ArrayList<CostCardItem>();
+                    for (CostCardItem costCardItem : ingredientInfos) {
+                        CostCardItem item = new CostCardItem();
+                        item.setCostCardId(cardId);
+                        item.setIngredientId(costCardItem.getIngredientId());
+                        item.setItemType(costCardItem.getItemType());
+                        item.setIsAutoOut(costCardItem.getIsAutoOut());
+                        item.setNetCount(costCardItem.getNetCount());
+                        item.setOtherCount(costCardItem.getOtherCount());
+                        costCardItemList.add(item);
+                    }
+                    costCardItemService.newCostCardItems(costCardItemList);
                 }
-                costCardItemService.newCostCardItems(costCardItemList);
-            }else if(Assert.isNotNull(id)&&!Assert.lessOrEqualZero(id)){
+            } else if(Assert.isNotNull(id)
+                    && !Assert.lessOrEqualZero(id)){
                 costCard.setId(id);
                 costCard.setDishId(dishId);
                 costCard.setCostCardNumber(costCardNumber);
@@ -377,6 +399,10 @@ public class AdminCostCardController extends AbstractController {
                 costCard.setDeliciousCost(deliciousCost);
                 costCard.setStandardCost(standardCost);
                 costCardService.updateCostCard(costCard);
+
+                Assert.isNotNull(id,EmenuException.CostCardIdError);
+                Assert.lessOrEqualZero(id,EmenuException.CostCardIdError);
+
                 for(CostCardItem costCardItem:ingredientInfos){
                     costCardItem.setCostCardId(id);
                 }
@@ -384,7 +410,16 @@ public class AdminCostCardController extends AbstractController {
             }
         }catch (SSException e){
             LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
+            JSONObject jsonObject = new JSONObject();
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            String path = httpRequest.getContextPath();
+            int port = httpRequest.getServerPort();
+            String href = httpRequest.getScheme() + "://" + httpRequest.getServerName()
+                    + (port == 80 ? "" : (":" + port)) + "/admin/dish/cost/card";
+            jsonObject.put("data",href);
+            jsonObject.put("code",AJAX_FAILURE_CODE);
+            jsonObject.put("errMsg", e.getMessage());
+            return jsonObject;
         }
         JSONObject jsonObject = new JSONObject();
         HttpServletRequest httpRequest = (HttpServletRequest) request;

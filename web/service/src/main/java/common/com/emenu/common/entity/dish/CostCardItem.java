@@ -135,7 +135,7 @@ public class CostCardItem extends AbstractEntity{
         if(this == obj) return true;
         CostCardItem obj1 = (CostCardItem) obj;
         boolean flag = true;
-        if(obj1.getId()!=null&&id!=null){
+        if(obj1.getId()!=null && id!=null){
             if(obj1.getId().equals(id)){
                 flag = false;
             }

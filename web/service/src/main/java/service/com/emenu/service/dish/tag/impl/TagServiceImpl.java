@@ -4,6 +4,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.dish.TagMapper;
 import com.emenu.service.dish.tag.TagService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -34,6 +35,8 @@ public class TagServiceImpl implements TagService{
     @Autowired
     private TagMapper tagMapper;
 
+
+
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
     public Tag newTag(Tag tag) throws SSException {
@@ -42,8 +45,13 @@ public class TagServiceImpl implements TagService{
             if (Assert.isNull(tag.getName())) {
                 throw SSException.get(EmenuException.TagNameIsNull);
             }
-            if (Assert.isNull(tag.getpId())&& Assert.lessOrEqualZero(tag.getpId())) {
+            if (Assert.isNull(tag.getpId())
+                    || Assert.lessOrEqualZero(tag.getpId())) {
                 throw SSException.get(EmenuException.TagPIdError);
+            }
+            Tag tag1 = tagMapper.queryByPidAndName(tag.getpId(),tag.getName());
+            if (Assert.isNotNull(tag1)){
+                throw SSException.get(EmenuException.TagChildrenIsExist);
             }
             return commonDao.insert(tag);
         } catch (Exception e) {
