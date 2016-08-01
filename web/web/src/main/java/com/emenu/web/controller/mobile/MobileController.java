@@ -50,23 +50,21 @@ public class MobileController extends AbstractController {
             /**
              * 检查是否访问者是否来自局域网内
              */
-            String customerIp = httpServletRequest.getRemoteAddr(); // 访问者的IP地址
+            // 访问者的IP地址(若未经过反向代理，则该地址为真实的访问者IP地址，否则为反向代理服务器的IP地址)
+            String customerIp = httpServletRequest.getRemoteAddr();
+            // 访问者的真实IP地址(若经过Nginx反向代理，则该地址为真实的访问者IP地址，否则为空)
+            String xRealIp = httpServletRequest.getHeader("X-Real-IP");
+            // 若存在X-Real-IP，则用X-Real-IP作为访问者的IP地址
+            if (Assert.isNotNull(xRealIp)) {
+                customerIp = xRealIp;
+            }
             // 常量表中配置的内网IP地址
             String internalNetworkAddress = constantService.queryValueByKey(ConstantEnum.InternalNetworkAddress.getKey());
-            // 常量表中配置的反向代理服务器IP地址
-            String reverseProxyAddress = constantService.queryValueByKey(ConstantEnum.ReverseProxyAddress.getKey());
-
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!" + httpServletRequest.getHeader("X-Real-IP"));
-
-            String[] customerIps = customerIp.split("\\.");
             String[] internalNetworkAddresses = internalNetworkAddress.split("\\.");
+            String[] customerIps = customerIp.split("\\.");
             // 若未正确配置内网地址，则直接报错
             if (internalNetworkAddresses.length != 4) {
                 throw SSException.get(EmenuException.InternalNetworkAddressError);
-            }
-            // 若访问者IP地址与反向代理服务器IP地址相同，则证明是外网访问，拒绝访问
-            if (customerIp.equals(reverseProxyAddress)) {
-                throw SSException.get(EmenuException.CustomerIsNotInLAN);
             }
             // 若不是本机进行访问，则对IP地址的前三组进行匹配。若匹配不成功，则证明是外网访问，拒绝访问
             if (!customerIp.equals("127.0.0.1")) {
