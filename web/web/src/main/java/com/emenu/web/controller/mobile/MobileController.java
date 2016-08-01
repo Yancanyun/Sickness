@@ -55,6 +55,9 @@ public class MobileController extends AbstractController {
             String internalNetworkAddress = constantService.queryValueByKey(ConstantEnum.InternalNetworkAddress.getKey());
             // 常量表中配置的反向代理服务器IP地址
             String reverseProxyAddress = constantService.queryValueByKey(ConstantEnum.ReverseProxyAddress.getKey());
+
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!" + customerIp);
+
             String[] customerIps = customerIp.split("\\.");
             String[] internalNetworkAddresses = internalNetworkAddress.split("\\.");
             // 若未正确配置内网地址，则直接报错
