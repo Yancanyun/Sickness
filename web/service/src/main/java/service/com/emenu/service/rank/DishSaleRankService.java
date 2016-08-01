@@ -59,10 +59,10 @@ public interface DishSaleRankService {
      * 导出Excel
      * @param startTime
      * @param endTime
-     * @param tagId
+     * @param tagIds
      * @throws SSException
      */
-    public void exportToExcel(Date startTime ,Date endTime,Integer tagId,HttpServletResponse response) throws SSException;
+    public void exportToExcel(Date startTime ,Date endTime,List<Integer> tagIds,HttpServletResponse response) throws SSException;
 
     /**
      * 根据起始时间和结束时间和菜品大类查询

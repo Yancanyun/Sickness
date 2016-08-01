@@ -196,10 +196,22 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
-    public void exportToExcel(Date startTime ,Date endTime,Integer tagId ,HttpServletResponse response) throws SSException{
+    public void exportToExcel(Date startTime ,Date endTime,List<Integer> tagIds ,HttpServletResponse response) throws SSException{
         OutputStream os = null;
         try {
-            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
+            List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
+            List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
+            if(tagIds!=null){
+                for(Integer tagId:tagIds){
+                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
+                    for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
+                        dishSaleRankDtoList2.add(dishSaleRankDto);
+                    }
+                }
+            }else{
+                dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+            }
+
             // 设置输出流
             // 设置excel文件名和sheetName
             String filename = "";
@@ -216,7 +228,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             // 获取sheet往sheet里面写数据
             WritableSheet sheet = outBook.getSheet(0) ;
             int row = 2;
-            for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
+            for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList2){
                 // 序号
                 Label labelNumber = new Label(0, row , String.valueOf(row - 1));
                 sheet.addCell(labelNumber);
@@ -281,40 +293,49 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             if(tagId != 0){
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
                 if(!dishSaleRankDtoList.isEmpty()){
-                    if(dishSaleRankDtoList.size()%pageSize==0){
-                        if(pageNumber == 1){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                    if(dishSaleRankDtoList.size()<=pageSize){
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
+                    }else {
+                        if(dishSaleRankDtoList.size()%pageSize==0){
+                            if(pageNumber == 1){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                            }else{
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            }
                         }else{
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
-                        }
-                    }else{
-                        if(pageNumber == 1){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
-                        }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
-                        }else{
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            if(pageNumber == 1){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                            }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
+                            }else{
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            }
                         }
                     }
                 }
             } else {
-                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime, endTime);
                 if(!dishSaleRankDtoList.isEmpty()){
-                    if(dishSaleRankDtoList.size()%pageSize==0){
-                        if(pageNumber == 1){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
-                        }else{
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
-                        }
+                    if(dishSaleRankDtoList.size()<=pageSize){
+                        dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
                     }else{
-                        if(pageNumber == 1){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
-                        }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
+                        if(dishSaleRankDtoList.size()%pageSize==0){
+                            if(pageNumber == 1){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                            }else{
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            }
                         }else{
-                            dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            if(pageNumber == 1){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(0,pageSize);
+                            }else if(pageNumber == ((dishSaleRankDtoList.size()/pageSize)+1)){
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize*(pageNumber - 1),dishSaleRankDtoList.size());
+                            }else{
+                                dishSaleRankDtoList = dishSaleRankDtoList.subList(pageSize * (pageNumber - 1), pageSize * pageNumber );
+                            }
                         }
                     }
+
                 }
             }
             return dishSaleRankDtoList;

@@ -7,9 +7,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.rank.DishSaleRankDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.other.ModuleEnums;
-import com.emenu.common.utils.DateUtils;
-import com.emenu.common.utils.URLConstants;
-import com.emenu.common.utils.WebConstants;
+import com.emenu.common.utils.*;
 import com.emenu.service.rank.DishSaleRankService;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -18,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -76,16 +76,18 @@ public class DishSaleRankController extends AbstractController {
     @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
     @RequestMapping(value = "ajax/list/{pageNumber}",method = RequestMethod.GET)
     @ResponseBody
-    public JSON ajaxSearch(@PathVariable("pageNumber")Integer pageNumber,
+    public JSONObject ajaxSearch(@PathVariable("pageNumber")Integer pageNumber,
                            @RequestParam("pageSize") Integer pageSize,
                            @RequestParam("startTime")Date startTime,
                            @RequestParam("endTime")Date endTime,
-                           @RequestParam(value = "tagId",required = false) List<Integer> tagIds){
+                           @RequestParam(value = "tagIds" ,required = false) List<Integer> tagIds,
+                           @RequestParam(value = "orderBy" ,required = false) String orderBy,
+                           @RequestParam(value = "orderType" ,required = false) Integer orderType){
         // 对页面大小和页码预处理
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         pageNumber = pageNumber == null ? 1 : pageNumber;
         List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
-        List<DishSaleRankDto> dishSaleRankDtoList2 = Collections.emptyList();
+        List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
         // 数据量
         int dataCount = 0;
         if(tagIds != null){
@@ -118,6 +120,25 @@ public class DishSaleRankController extends AbstractController {
             }
 
         }
+        // 排序
+        if(orderBy!=null&&orderType!=null){
+            MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
+            // 按销售数量
+            if("num".equals(orderBy)){
+                // 降序
+                if(orderType == 1){
+                    msList.sortByMethod(dishSaleRankDtoList2,"getNum",true);
+                }else{
+                    msList.sortByMethod(dishSaleRankDtoList2,"getNum",false);
+                }
+            }else{
+                if(orderType == 1){
+                    msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",true);
+                }else{
+                    msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",false);
+                }
+            }
+        }
         JSONArray jsonArray = new JSONArray();
             for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList2){
                 JSONObject jsonObject = new JSONObject();
@@ -131,4 +152,22 @@ public class DishSaleRankController extends AbstractController {
             }
         return sendJsonArray(jsonArray, dataCount, pageSize);
     }
+
+    @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
+    @RequestMapping(value = "exportToExcel",method = RequestMethod.GET)
+    @ResponseBody
+    public String exportToExcel(@RequestParam("startTime")Date startTime,
+                                @RequestParam("endTime")Date endTime,
+                                @RequestParam(value = "tagIds" ,required = false) List<Integer> tagIds){
+        try{
+            dishSaleRankService.exportToExcel(startTime,endTime,tagIds,getResponse());
+        }catch(SSException e){
+            sendErrMsg(e.getMessage());
+            LogClerk.errLog.error(e);
+            return WebConstants.sysErrorCode;
+        }
+        return "admin/rank/dishsale/list_home";
+    }
+
+
 }

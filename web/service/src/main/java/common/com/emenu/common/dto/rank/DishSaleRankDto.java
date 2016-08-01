@@ -4,6 +4,8 @@ import com.emenu.common.entity.order.OrderDish;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Comparator;
+
 
 /**
  * @Author guofengrui
@@ -86,5 +88,7 @@ public class DishSaleRankDto {
     public void setDishId(Integer dishId) {
         this.dishId = dishId;
     }
+
+
 
 }

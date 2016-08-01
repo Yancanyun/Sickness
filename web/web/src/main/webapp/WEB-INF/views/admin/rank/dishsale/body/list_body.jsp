@@ -27,9 +27,9 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label">时间段</label>
                   <div class="col-sm-8">
-                    <input type="text" class="J_startTime w180" data-start-time="2014-8-01" readonly="readonly" name="startTime" value="2014-8-01" />
+                    <input type="text" class="J_startTime w180" data-start-time="${firstToday}" readonly="readonly" name="startTime" value="${firstToday}" />
                     <span class="to">~</span>
-                    <input type="text" class="J_endTime w180" data-end-time="2015-9-11" readonly="readonly" name="endTime" value="2015-9-11" />
+                    <input type="text" class="J_endTime w180" data-end-time="${lastToday}" readonly="readonly" name="endTime" value="${lastToday}" />
                   </div>
                 </div>
                 <div class="form-group " >
@@ -48,12 +48,12 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label padding-R-17">菜品大类</label>
                   <div class="checkbox block col-sm-7">
-                    <label>
+                    <%--<label>
                       <input type="checkbox" class="J_selectAll" name="tagIds" value="1">全选
-                    </label>
+                    </label>--%>
                     <c:forEach items="${tag}" var="tag">
                       <label>
-                        <input type="checkbox" class="J_selectType" name="tagIds" value="${tag.id}" />${tag.name}11
+                        <input type="checkbox" class="J_selectType" name="tagIds" value="${tag.id}" />${tag.name}
                       </label>
                     </c:forEach>
                   </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="panel-body">
               <div class="text-right">
-                <a href="?sdff" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
+                <a href="${website}admin/rank/sale/exportToExcel" class="btn btn-warning margin-bottom-15 J_export"><i class="fa fa-download"></i>&nbsp;导出Excel</a>
               </div>
               <form class="J_operForm">
                 <div class="table-responsive">
