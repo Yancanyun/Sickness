@@ -122,7 +122,7 @@ public class DishSaleRankController extends AbstractController {
 
         }
         // 排序
-        if(orderBy!=null&&orderType!=null){
+        if(orderBy!=null && orderType!=null){
             MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
             // 按销售数量
             if("num".equals(orderBy)){

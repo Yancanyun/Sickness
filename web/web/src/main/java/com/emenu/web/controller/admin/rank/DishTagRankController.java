@@ -91,7 +91,7 @@ public class DishTagRankController extends AbstractController{
             return sendErrMsgAndErrCode(e);
         }
         // 排序
-        if(orderBy!=null&&orderType!=null){
+        if(orderBy!=null && orderType!=null){
             MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
             // 按销售数量
             if("num".equals(orderBy)){
