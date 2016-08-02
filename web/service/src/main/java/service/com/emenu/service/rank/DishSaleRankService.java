@@ -11,10 +11,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 营业分析中的菜品销售排行
  * DishSaleRankService
  *
- * @author guofengrui
- * @date 2016/7/26.
+ *
+ * @Author guofengrui
+ * @Date 2016/7/26.
  */
 public interface DishSaleRankService {
     /**
@@ -24,7 +26,7 @@ public interface DishSaleRankService {
      * @return
      * @throws SSException
      */
-    public List<OrderDish> queryOrderDishByTimePeroid(Date startTime ,Date endTime) throws SSException;
+    public List<OrderDish> queryOrderDishByTimePeriod(Date startTime ,Date endTime) throws SSException;
 
     /**
      * 查询一个时间段的DishSaleRankDto，包括起始时间和结束时间
@@ -33,7 +35,7 @@ public interface DishSaleRankService {
      * @return
      * @throws SSException
      */
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroid(Date startTime ,Date endTime) throws SSException;
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriod(Date startTime ,Date endTime) throws SSException;
 
     /**
      *
@@ -51,9 +53,9 @@ public interface DishSaleRankService {
      * @return
      * @throws SSException
      */
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagId(Date startTime
-                                                                            ,Date endTime
-                                                                            ,Integer tagId) throws SSException;
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagId(Date startTime,
+                                                                          Date endTime,
+                                                                          Integer tagId) throws SSException;
 
     /**
      * 导出Excel
@@ -75,7 +77,7 @@ public interface DishSaleRankService {
      * @return
      * @throws SSException
      */
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(Date startTime
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(Date startTime
                                                                                 ,Date endTime
                                                                                 ,Integer tagId
                                                                                 ,Integer pageSize
@@ -89,5 +91,5 @@ public interface DishSaleRankService {
      * @return
      * @throws SSException
      */
-    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException;
+    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException;
 }

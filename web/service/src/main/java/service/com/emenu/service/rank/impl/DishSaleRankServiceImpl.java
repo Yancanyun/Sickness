@@ -42,7 +42,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Created by guofengrui on 2016/7/26.
+ * 营业分析中的菜品销售排行
+ * DishSaleRankServiceImpl
+ *
+ *
+ * @Author guofengrui
+ * @Date 2016/7/26.
  */
 @Service("dishSaleRankService")
 public class DishSaleRankServiceImpl implements DishSaleRankService {
@@ -59,7 +64,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     private TagService tagService;
 
     @Override
-    public List<OrderDish> queryOrderDishByTimePeroid(Date startTime ,Date endTime) throws SSException{
+    public List<OrderDish> queryOrderDishByTimePeriod(Date startTime ,Date endTime) throws SSException{
         // 得到这个时间段中所下的订单，CheckOrderDto里面包含订单信息和订单菜品信息
         try{
             List<CheckOrderDto> checkOrderDtoList= orderService.queryOrderByTimePeroid2(startTime, endTime);
@@ -84,10 +89,10 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
         }
     }
     @Override
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroid(Date startTime ,Date endTime) throws SSException{
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriod(Date startTime ,Date endTime) throws SSException{
         try{
             List<DishSaleRankDto> dishSaleRankDtoList= new ArrayList<DishSaleRankDto>();
-            List<OrderDish> orderDishList = this.queryOrderDishByTimePeroid(startTime ,endTime);
+            List<OrderDish> orderDishList = this.queryOrderDishByTimePeriod(startTime ,endTime);
             // 存菜品(套餐)的数量的map
             Map<Integer,BigDecimal> mapQuality = new HashMap<Integer, BigDecimal>();
             // 存菜品(套餐)的总金额的map
@@ -170,7 +175,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
         try{
             Date startTime = new Date(0,0,0,0,0,0);
             Date endTime = new Date(1000,0,0,0,0,0);
-            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
             return dishSaleRankDtoList;
         }catch(Exception e){
             LogClerk.errLog.error(e);
@@ -179,9 +184,9 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagId(Date startTime ,Date endTime,Integer tagId) throws SSException{
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagId(Date startTime ,Date endTime,Integer tagId) throws SSException{
         try{
-            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
             List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
             for(DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
                 if((tagId).equals(dishSaleRankDto.getTagId())){
@@ -203,13 +208,13 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
             if(tagIds!=null){
                 for(Integer tagId:tagIds){
-                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
+                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
                     for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
                         dishSaleRankDtoList2.add(dishSaleRankDto);
                     }
                 }
             }else{
-                dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+                dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
             }
 
             // 设置输出流
@@ -282,16 +287,16 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(Date startTime
-                                                                                ,Date endTime
-                                                                                ,Integer tagId
-                                                                                ,Integer pageSize
-                                                                                ,Integer pageNumber) throws SSException{
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(Date startTime,
+                                                                                 Date endTime,
+                                                                                 Integer tagId,
+                                                                                 Integer pageSize,
+                                                                                 Integer pageNumber) throws SSException{
         List<DishSaleRankDto> dishSaleRankDtoList = new ArrayList<DishSaleRankDto>();
         try{
             // 判断前台有没有选中菜品大类
             if(tagId != 0){
-                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
                 if(!dishSaleRankDtoList.isEmpty()){
                     if(dishSaleRankDtoList.size()<=pageSize){
                         dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
@@ -314,7 +319,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                     }
                 }
             } else {
-                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime, endTime);
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime, endTime);
                 if(!dishSaleRankDtoList.isEmpty()){
                     if(dishSaleRankDtoList.size()<=pageSize){
                         dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
@@ -346,19 +351,19 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
-    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException{
+    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException{
         Integer number = 0;
         // 判断前台有没有选中菜品大类
         try{
             if(tagId != null&& tagId != 0 ){
-                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,tagId);
+                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
                 if(dishSaleRankDtoList == null){
                     number = 0;
                 }else{
                     number = dishSaleRankDtoList.size();
                 }
             }else{
-                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
                 if(dishSaleRankDtoList == null){
                     number = 0;
                 }else{

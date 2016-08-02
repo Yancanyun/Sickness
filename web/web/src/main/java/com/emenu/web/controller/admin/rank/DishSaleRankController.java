@@ -23,10 +23,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * DishSaleRankController
+ * 营业分析中的菜品销售排行
+ *DishSaleRankController
  *
- * @author guofengrui
- * @date 2016/7/26.
+ * @Author guofengrui
+ * @Date 2016/7/26.
  */
 @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
 @Controller
@@ -93,7 +94,7 @@ public class DishSaleRankController extends AbstractController {
         if(tagIds != null){
             try{
                 for(Integer tagId:tagIds){
-                    dataCount +=   dishSaleRankService.countByTimePeroidAndTagId(startTime,endTime,tagId);
+                    dataCount +=   dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,tagId);
                 }
             }catch(SSException e){
                 LogClerk.errLog.error(e);
@@ -101,7 +102,7 @@ public class DishSaleRankController extends AbstractController {
             }
             try{
                 for(Integer tagId:tagIds){
-                    dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
+                    dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
                     for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
                         dishSaleRankDtoList2.add(dishSaleRankDto);
                     }
@@ -112,8 +113,8 @@ public class DishSaleRankController extends AbstractController {
             }
         }else{
             try{
-                dataCount =   dishSaleRankService.countByTimePeroidAndTagId(startTime,endTime,0);
-                dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
+                dataCount =   dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,0);
+                dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
             }catch(SSException e){
                 LogClerk.errLog.error(e);
                 return sendErrMsgAndErrCode(e);

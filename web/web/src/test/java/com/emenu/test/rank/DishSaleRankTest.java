@@ -27,7 +27,7 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryOrderDishByTimePeroid1()throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<OrderDish> list = dishSaleRankService.queryOrderDishByTimePeroid(startTime,endTime);
+        List<OrderDish> list = dishSaleRankService.queryOrderDishByTimePeriod(startTime,endTime);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getId());
         }
@@ -37,7 +37,7 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryDishSaleRankDtoByTimePeroid() throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroid(startTime, endTime);
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeriod(startTime, endTime);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getDishName()+"   ");
             System.out.print(list.get(i).getTagName() + "   ");
@@ -80,7 +80,7 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryDishSaleRankDtoByTimeAndTagId() throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagId(startTime,endTime,92);
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,92);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getDishName()+"   ");
             System.out.print(list.get(i).getTagName() + "   ");
@@ -93,7 +93,7 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryDishTagRankPage() throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeroidAndTagIdAndPage(startTime, endTime, 92, 4, 1);
+        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 92, 4, 1);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getDishName()+"   ");
             System.out.print(list.get(i).getTagName() + "   ");
