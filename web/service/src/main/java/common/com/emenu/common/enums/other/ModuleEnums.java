@@ -289,11 +289,13 @@ public enum ModuleEnums {
     AdminCountCheckoutList("Admin:Revenue:Count:Checkout"),
 
     // 营业分析
-    AdminCountDishSaleRanking("Admin:Count"),
+    AdminCountDishSaleRanking("Admin:DishManagement:Count"),
     // 统计菜品销售排行
-    AdminCountDishSaleRankingList("Admin:Count:SaleRanking"),
+    AdminCountDishSaleRankingList("Admin:DishManagement:Count:SaleRanking"),
     //统计菜品大类销售排行
-    AdminCountDishTagRankingList("Admin:Count:TagRanking"),
+    AdminCountDishTagRankingList("Admin:DishManagement:Count:TagRanking"),
+
+
 
     // 顾客点餐平台
     Mobile("Mobile"),
