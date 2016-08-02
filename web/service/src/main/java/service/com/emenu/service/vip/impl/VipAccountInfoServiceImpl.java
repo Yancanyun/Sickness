@@ -40,7 +40,12 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
     private VipAccountInfoMapper vipAccountInfoMapper;
 
     @Override
-    public List<VipAccountInfoDto> listByPageAndMin(int curPage, int pageSize,int orderType,String orderBy) throws SSException {
+    public List<VipAccountInfoDto> listByPageAndMin(int curPage,
+                                                    int pageSize,
+                                                    int orderType,
+                                                    String orderBy,
+                                                    String keyWord,
+                                                    List<Integer> gradeIdList) throws SSException{
         List<VipAccountInfoDto> countList = Collections.emptyList();
         curPage = curPage <= 0 ? 0:curPage - 1;
         int offset = curPage * pageSize;
@@ -48,13 +53,15 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
             return countList;
         }
         try {
-            countList = vipAccountInfoMapper.listByPageAndMin(offset, pageSize,orderType,orderBy);
+            countList = vipAccountInfoMapper.listByPageAndMin(offset, pageSize,orderType,orderBy,keyWord,gradeIdList);
+
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListVipAccountFailed, e);
         }
         return countList;
     }
+
 
     @Override
     public int countAll() throws SSException {

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,9 @@ public class VipAccountInfoTest extends AbstractTestCase {
 
     @Test
     public void listByPageAndMin() throws SSException {
-        List<VipAccountInfoDto> countList = vipAccountInfoService.listByPageAndMin(2,3,0,"minConsumption");
+        List<Integer> gradeIdList = new ArrayList<Integer>();
+        gradeIdList.add(1);
+        List<VipAccountInfoDto> countList = vipAccountInfoService.listByPageAndMin(1,50,0,"minConsumption","测试",gradeIdList);
         for(VipAccountInfoDto vipAccountInfoDto : countList) {
             System.out.print(vipAccountInfoDto.getMinConsumption());
             System.out.print(vipAccountInfoDto.getName());

@@ -18,6 +18,19 @@
         LEFT JOIN `t_party_vip_info` vipinfo ON vipcount.`party_id` = vipinfo.`party_id`
         LEFT JOIN `t_vip_grade` grade ON grade.`id` = vipinfo.`grade_id`
         LEFT JOIN `t_vip_card` card ON vipcount.`party_id` = card.`vip_party_id`
+        <where>
+            <if test="gradeIdList != null and gradeIdList.size()>0">
+                 grade.`id` IN
+                <foreach collection="gradeIdList" index="index" item="gradeId" open="(" separator="," close=")">
+                    #{gradeId}
+                </foreach>
+            </if>
+            <if test="keyWord != null and keyWord != ''">
+                 AND (vipinfo.`name` LIKE CONCAT('%',#{keyWord},'%')
+                OR vipinfo.`phone` LIKE CONCAT('%',#{keyWord},'%')
+                OR  card.`card_number` LIKE CONCAT('%',#{keyWord},'%'))
+            </if>
+        </where>
         <if test="orderType == 1">
             ORDER BY ${orderBy} ASC
         </if>

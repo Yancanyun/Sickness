@@ -24,7 +24,12 @@ public interface VipAccountInfoService {
      * @return
      * @throws SSException
      */
-    public List<VipAccountInfoDto> listByPageAndMin(int curPage,int pageSize,int orderType,String orderBy) throws SSException;
+    public List<VipAccountInfoDto> listByPageAndMin(int curPage,
+                                                    int pageSize,
+                                                    int orderType,
+                                                    String orderBy,
+                                                    String keyWord,
+                                                    List<Integer> gradeIdList) throws SSException;
 
     /**
      * 查询所有会员账户数

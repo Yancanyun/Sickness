@@ -26,7 +26,9 @@ public interface VipAccountInfoMapper {
     public List<VipAccountInfoDto> listByPageAndMin(@Param("offset") int offset,
                                                   @Param("pageSize") int pageSize,
                                                   @Param("orderType")int orderType,
-                                                  @Param("orderBy")String orderBy) throws Exception;
+                                                  @Param("orderBy")String orderBy,
+                                                  @Param("keyWord")String keyWord,
+                                                  @Param("gradeIdList") List<Integer> gradeIdList) throws Exception;
 
     /**
      * 查询所有会员账户数
@@ -61,5 +63,7 @@ public interface VipAccountInfoMapper {
      * @throws Exception
      */
     public VipAccountInfo queryEntityByPartyId(@Param("partyId") int partyId) throws Exception;
+
+
 
 }

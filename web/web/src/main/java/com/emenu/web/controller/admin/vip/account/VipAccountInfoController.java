@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.vip.VipAccountInfoDto;
+import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.vip.StatusEnums;
 import com.emenu.common.utils.URLConstants;
@@ -12,6 +13,7 @@ import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +36,15 @@ public class VipAccountInfoController extends AbstractController{
      */
     @Module(ModuleEnums.AdminVipAccountList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
-    public String toListVipAccount() {
+    public String toListVipAccount(Model model) {
+        try{
+            List<VipGrade> list = vipGradeService.listAll();
+            model.addAttribute("list",list);
+        }catch(SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
         return "admin/vip/account/list_home";
     }
 
@@ -51,14 +61,16 @@ public class VipAccountInfoController extends AbstractController{
     public JSONObject ajaxListVipAccount(@PathVariable("curPage") Integer curPage,
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam(value = "orderType",required = false) Integer orderType,
-                                         @RequestParam(value = "orderBy",required = false)String orderBy) {
+                                         @RequestParam(value = "orderBy",required = false)String orderBy,
+                                         @RequestParam(value= "keyWord", required = false) String keyWord,
+                                         @RequestParam(value= "gradeIdList", required = false) List<Integer> gradeIdList) {
         if(orderType==null||Assert.isNull(orderBy)) {
             orderBy= "minConsumption";
             orderType = 0;
         }
         List<VipAccountInfoDto> accountList = Collections.emptyList();
         try {
-            accountList = vipAccountInfoService.listByPageAndMin(curPage, pageSize,orderType,orderBy);
+            accountList = vipAccountInfoService.listByPageAndMin(curPage, pageSize,orderType,orderBy,keyWord,gradeIdList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -67,10 +79,14 @@ public class VipAccountInfoController extends AbstractController{
         for (VipAccountInfoDto vipAccountInfoDto :accountList) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", vipAccountInfoDto.getId());
-            jsonObject.put("vipGrade", vipAccountInfoDto.getVipGrade());
-            jsonObject.put("name", vipAccountInfoDto.getName());
-            jsonObject.put("phone", vipAccountInfoDto.getPhone());
-            jsonObject.put("cardNumber", vipAccountInfoDto.getCardNumber());
+            String vipGrade = (vipAccountInfoDto.getVipGrade() == null)? "" : vipAccountInfoDto.getVipGrade();
+            jsonObject.put("vipGrade", vipGrade);
+            String name = (vipAccountInfoDto.getName() == null)? "" : vipAccountInfoDto.getName();
+            jsonObject.put("name", name);
+            String phone = (vipAccountInfoDto.getPhone() == null)? "" : vipAccountInfoDto.getPhone();
+            jsonObject.put("phone", phone);
+            String cardNumber = (vipAccountInfoDto.getCardNumber() == null)? "" : vipAccountInfoDto.getCardNumber();
+            jsonObject.put("cardNumber", cardNumber);
             jsonObject.put("balance", vipAccountInfoDto.getBalance());
             jsonObject.put("integral", vipAccountInfoDto.getIntegral());
             jsonObject.put("totalConsumption", vipAccountInfoDto.getTotalConsumption());
@@ -78,15 +94,11 @@ public class VipAccountInfoController extends AbstractController{
             jsonObject.put("status", vipAccountInfoDto.getStatus());
             jsonArray.add(jsonObject);
         }
-        int dataCount = 0;
-        try {
-            dataCount = vipAccountInfoService.countAll();
-        } catch (SSException e) {
-            LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
-        }
+        int  dataCount = accountList.size();
+
         return sendJsonArray(jsonArray, dataCount);
     }
+
 
     /**
      * ajax更改会员账户状态

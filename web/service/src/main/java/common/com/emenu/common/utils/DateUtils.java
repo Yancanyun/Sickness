@@ -1,6 +1,7 @@
 package com.emenu.common.utils;
 
 import java.text.DateFormat;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.SimpleFormatter;
@@ -378,4 +379,29 @@ public class DateUtils {
         return firstDay;
     }
 
+    /**
+     * 得到开始时间
+     * @param startTime
+     * @return
+     */
+    public static Date getStartTime(String startTime){
+        ParsePosition pos =new ParsePosition(0);
+        startTime = startTime.concat(" 00:00:00");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date result = sdf.parse(startTime, pos);
+        return result;
+    }
+
+    /**
+     * 得到结束时间
+     * @param endTime
+     * @return
+     */
+    public static Date getEndTime(String endTime){
+        ParsePosition pos =new ParsePosition(0);
+        endTime = endTime.concat(" 23:59:59");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date result = sdf.parse(endTime, pos);
+        return result;
+    }
 }
