@@ -506,6 +506,23 @@ public class EmployeeServiceImpl implements EmployeeService{
         return employee;
     }
 
+    @Override
+    public Employee queryByPartyIdWithoutDelete(int partyId) throws SSException {
+        Employee employee = null;
+        if (Assert.lessOrEqualZero(partyId)) {
+            return employee;
+        }
+
+        try {
+            employee = employeeMapper.queryByPartyIdWithoutDelete(partyId);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryEmployeeException, e);
+        }
+
+        return employee;
+    }
+
     public EmployeeDto queryEmployeeDtoByPartyId(int partyId) throws SSException{
         EmployeeDto employeeDto = new EmployeeDto();
         try{

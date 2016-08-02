@@ -17,7 +17,16 @@
       <c:if test="${classifyId eq null and keyword eq null}">
       <div class="carousel-inner" role="listbox">
         <div class="item active">
-          <a href="${website}mobile/dish/detail/${todayCheapActive.dishId}"><img src="${tinyWebsite}${todayCheapActive.bigImgList[0].imgPath}" alt="今日特价"></a>
+          <a href="${website}mobile/dish/detail/${todayCheapActive.dishId}">
+            <c:choose>
+              <c:when test="${empty todayCheapActive.bigImgList}">
+                <img src="${staticWebsite}img/mobile/common/default-img.png" alt="今日特价">
+              </c:when>
+              <c:otherwise>
+                <img src="${tinyWebsite}${todayCheapActive.bigImgList[0].imgPath}" alt="今日特价">
+              </c:otherwise>
+            </c:choose>
+          </a>
           <div class="carousel-caption">
             <p class="dish-title">今日特价</p>
             <p class="dish-name">${todayCheapActive.dishName}</p>
@@ -34,7 +43,16 @@
         </div>
 
           <div class="item">
-            <a href="${website}mobile/dish/detail/${todayCheapSecond.dishId}"><img src="${tinyWebsite}${todayCheapSecond.bigImgList[0].imgPath}" alt="今日特价"></a>
+            <a href="${website}mobile/dish/detail/${todayCheapSecond.dishId}">
+              <c:choose>
+                <c:when test="${empty todayCheapSecond.bigImgList}">
+                  <img src="${staticWebsite}img/mobile/common/default-img.png" alt="今日特价">
+                </c:when>
+                <c:otherwise>
+                  <img src="${tinyWebsite}${todayCheapSecond.bigImgList[0].imgPath}" alt="今日特价">
+                </c:otherwise>
+              </c:choose>
+            </a>
             <div class="carousel-caption">
               <p class="dish-title">今日特价</p>
               <p class="dish-name">${todayCheapSecond.dishName}</p>
@@ -52,7 +70,16 @@
 
         <c:forEach var="feature" items="${featureList}">
           <div class="item">
-            <a href="${website}mobile/dish/detail/${feature.dishId}"><img src="${tinyWebsite}${feature.bigImgList[0].imgPath}" alt="本店特色"></a>
+            <a href="${website}mobile/dish/detail/${feature.dishId}">
+              <c:choose>
+                <c:when test="${empty feature.bigImgList}">
+                  <img src="${staticWebsite}img/mobile/common/default-img.png" alt="本店特色">
+                </c:when>
+                <c:otherwise>
+                  <img src="${tinyWebsite}${feature.bigImgList[0].imgPath}" alt="本店特色">
+                </c:otherwise>
+              </c:choose>
+            </a>
             <div class="carousel-caption">
               <p class="dish-title">本店特色</p>
               <p class="dish-name">${feature.dishName}</p>

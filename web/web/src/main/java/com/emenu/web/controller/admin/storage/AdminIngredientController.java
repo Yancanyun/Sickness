@@ -11,6 +11,7 @@ import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.dish.UnitEnum;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.IngredientStatusEnums;
@@ -83,6 +84,9 @@ public class AdminIngredientController extends AbstractController{
         List<Ingredient> ingredientList = Collections.emptyList();
         JSONArray jsonArray = new JSONArray();
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             ingredientList = ingredientService.listBySearchDto(searchDto);
             int offset = 0;
             if (Assert.isNotNull(pageNo)){
@@ -105,21 +109,45 @@ public class AdminIngredientController extends AbstractController{
                 jsonObject.put("storageToCostCardRatio", ingredient.getStorageToCostCardRatio());
                 jsonObject.put("costCardUnitName", ingredient.getCostCardUnitName());
                 // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-                BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal maxStorageQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
                 String maxStorageQuantityStr = maxStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
                 // 最小库存
-                BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal minStorageQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
                 String minStorageQuantityStr = minStorageQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
                 // 实际库存
-                BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+                BigDecimal realQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
                 String realQuantityStr = realQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("realQuantityStr", realQuantityStr);
                 jsonObject.put("averagePrice", ingredient.getAveragePrice().toString());
                 jsonObject.put("realMoney", ingredient.getRealMoney().toString());
                 // 总数量
-                BigDecimal totalQuantity = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(),2);
+                BigDecimal totalQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    totalQuantity = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    totalQuantity = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
                 String totalQuantityStr = totalQuantity.toString() + unitService.queryById(ingredient.getStorageUnitId()).getName();
                 jsonObject.put("totalQuantityStr", totalQuantityStr);
                 jsonObject.put("totalMoney", ingredient.getTotalMoney().toString());
@@ -297,6 +325,9 @@ public class AdminIngredientController extends AbstractController{
     @RequestMapping(value = "toupdate/{id}",method = RequestMethod.GET)
     public String toUpdate(@PathVariable("id")Integer id,Model model){
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             List<Tag> tagList = storageTagService.listAllSmallTag();
             List<Unit> unitList = unitService.listAll();
             Ingredient ingredient = ingredientService.queryById(id);
@@ -320,13 +351,33 @@ public class AdminIngredientController extends AbstractController{
                 }
             }
             // 变换最大库存表现形式
-            ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio()));
+            if (roundingMode == 1) {
+                ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+            }
+            if (roundingMode == 0) {
+                ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
+            }
             // 最小库存
-            ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio()));
+            if (roundingMode == 1) {
+                ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+            }
+            if (roundingMode == 0) {
+                ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
+            }
             // 实际库存
-            ingredient.setRealQuantity(ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio()));
+            if (roundingMode == 1) {
+                ingredient.setRealQuantity(ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+            }
+            if (roundingMode == 0) {
+                ingredient.setRealQuantity(ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
+            }
             // 总库存
-            ingredient.setTotalQuantity(ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio()));
+            if (roundingMode == 1) {
+                ingredient.setTotalQuantity(ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+            }
+            if (roundingMode == 0) {
+                ingredient.setTotalQuantity(ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
+            }
             model.addAttribute("ingredient", ingredient);
             model.addAttribute("orderUnitType", orderUnitType);
             model.addAttribute("storageUnitType", storageUnitType);
@@ -383,15 +434,26 @@ public class AdminIngredientController extends AbstractController{
                                       @RequestParam("storageUnitId")Integer storageUnitId ,
                                       @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             Ingredient ingredientReal = ingredientService.queryById(id);
             JSONObject jsonObject = new JSONObject();
             if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
                 return sendJsonObject(AJAX_FAILURE_CODE);
             }else {
-                jsonObject.put("realQuantity",ingredientReal.getRealQuantity().divide(storageToCostCardRatio));
-                jsonObject.put("totalQuantity",ingredientReal.getTotalQuantity().divide(storageToCostCardRatio));
-                jsonObject.put("maxStorageQuantity",ingredientReal.getMaxStorageQuantity().divide(storageToCostCardRatio));
-                jsonObject.put("minStorageQuantity",ingredientReal.getMinStorageQuantity().divide(storageToCostCardRatio));
+                if (roundingMode == 1) {
+                    jsonObject.put("realQuantity", ingredientReal.getRealQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                    jsonObject.put("totalQuantity", ingredientReal.getTotalQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                    jsonObject.put("maxStorageQuantity", ingredientReal.getMaxStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                    jsonObject.put("minStorageQuantity", ingredientReal.getMinStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                }
+                if (roundingMode == 0) {
+                    jsonObject.put("realQuantity", ingredientReal.getRealQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                    jsonObject.put("totalQuantity", ingredientReal.getTotalQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                    jsonObject.put("maxStorageQuantity", ingredientReal.getMaxStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                    jsonObject.put("minStorageQuantity", ingredientReal.getMinStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                }
             }
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {

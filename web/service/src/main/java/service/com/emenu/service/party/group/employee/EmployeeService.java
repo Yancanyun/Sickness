@@ -113,6 +113,14 @@ public interface EmployeeService {
     public Employee queryByPartyId(int partyId) throws SSException;
 
     /**
+     * 根据partyId查询员工(忽略删除，即即使已删除仍可查出)
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public Employee queryByPartyIdWithoutDelete(int partyId) throws SSException;
+
+    /**
      * 根据partyId查询EmployeeDto
      * @param partyId
      * @return

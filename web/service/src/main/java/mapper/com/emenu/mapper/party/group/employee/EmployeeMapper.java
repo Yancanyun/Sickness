@@ -75,6 +75,13 @@ public interface EmployeeMapper {
     public Employee queryByPartyId(@Param("partyId") int partyId) throws  Exception;
 
     /**
+     * 根据partyId查询员工信息t_party_employee(忽略删除，即即使已删除仍可查出)
+     * @param partyId
+     * @throws Exception
+     */
+    public Employee queryByPartyIdWithoutDelete(@Param("partyId") int partyId) throws Exception;
+
+    /**
      * 根据获取对应角色的partyId
      * @param roles
      * @return

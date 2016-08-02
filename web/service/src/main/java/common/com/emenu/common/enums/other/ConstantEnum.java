@@ -21,7 +21,6 @@ public enum ConstantEnum {
     TakeoutMinCost("takeoutMinCost","起送价格"),
     TakeoutStartTime("takeoutStartTime","外卖开始时间"),
     TakeoutEndTime("takeoutEndTime","外卖结束时间"),
-    /*************************外卖相关参数*********************************/
 	ImgPath("imgPath","图片路径"),
 
 
@@ -38,13 +37,12 @@ public enum ConstantEnum {
 
     DishCategoryLayers("DISH_CATEGORY_LAYERS", "菜品分类等级数"),
 
-    /**************************会员等级相关参数*****************************/
-
-
     /**************************智能排菜相关参数*****************************/
-
     AutoPrintOrderDishStartStatus("AUTO_PRINT_ORDER_DISH_START_STATUS","智能排菜启动状态"),
     PrinterPrintMaxNum("PRINTER_PRINT_MAX_NUM","菜品打印机最多可打印的菜品数量,相同菜品若能同时在一锅中做出只算一份"),
+
+    /****************************库存相关参数*****************************/
+    RoundingMode("ROUNDING_MODE","库存计算时是否使用四舍五入, 0为不启用(即直接截断), 1为启用"),
     ;
 
 

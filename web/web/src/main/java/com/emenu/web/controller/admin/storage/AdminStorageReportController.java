@@ -9,6 +9,7 @@ import com.emenu.common.dto.storage.ReportSearchDto;
 import com.emenu.common.dto.storage.StorageReportDto;
 import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.storage.*;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.storage.IngredientStatusEnums;
 import com.emenu.common.enums.storage.StorageReportIsAuditedEnum;
@@ -416,9 +417,17 @@ public class AdminStorageReportController extends AbstractController {
             sendMsgAndCode(1,"添加失败");
         }
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             Ingredient ingredient = ingredientService.queryById(id);
             BigDecimal storageQuantity = new BigDecimal("0.00");
-            storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN));
+            if (roundingMode == 1) {
+                storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+            }
+            if (roundingMode == 1) {
+                storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
+            }
             jsonObject.put("storageQuantity", storageQuantity);
             jsonObject.put("storageUnitName", ingredient.getStorageUnitName());
         } catch (SSException e) {
@@ -495,6 +504,9 @@ public class AdminStorageReportController extends AbstractController {
                                       @RequestParam("isAudited")Integer isAudited,
                                       HttpSession httpSession){
         try{
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             StorageReport storageReport = storageReportService.queryById(id);
             if (Assert.isNull(storageReport)){
                 throw SSException.get(EmenuException.ReportIsNotExist);
@@ -533,7 +545,12 @@ public class AdminStorageReportController extends AbstractController {
                         Ingredient ingredient1 = ingredientService.queryById(storageItem.getIngredientId());
                         ingredient1.setTotalQuantity(ingredient1.getTotalQuantity().add(ingredientCacheQuntity));
                         ingredient1.setTotalMoney(ingredient1.getTotalMoney().add(reportItem.getCount()));
-                        ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(),2, BigDecimal.ROUND_HALF_EVEN));
+                        if (roundingMode == 1) {
+                            ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(), 2, BigDecimal.ROUND_HALF_EVEN));
+                        }
+                        if (roundingMode == 0) {
+                            ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(), 2, BigDecimal.ROUND_DOWN));
+                        }
                         ingredientService.updateIngredient(ingredient1, IngredientStatusEnums.CanUpdate.getId());
                         storageItemService.updateById(storageItem);
                     }

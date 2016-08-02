@@ -33,7 +33,7 @@
         </c:forEach>
         <c:if test="${empty dishDto.bigImgList}">
           <div class="item active">
-            <a href="#"><img src="${staticWebsite}img/mobile/carousel/dish-pic1.gif" alt="菜品展示"></a>
+            <a href="#"><img src="${staticWebsite}img/mobile/common/default-img.png" alt="菜品展示"></a>
           </div>
         </c:if>
       </div>

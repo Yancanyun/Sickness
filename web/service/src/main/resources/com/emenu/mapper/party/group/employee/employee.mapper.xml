@@ -60,6 +60,11 @@
         WHERE `party_id` = #{partyId} AND `status` != 3
     </select>
 
+    <select id="queryByPartyIdWithoutDelete" parameterType="Integer" resultMap="pw.Employee">
+        SELECT * from `t_party_employee`
+        WHERE `party_id` = #{partyId}
+    </select>
+
 
     <select id="listPartIdByRoles" parameterType="java.util.List" resultType="Integer">
         SELECT DISTINCT `party_id`

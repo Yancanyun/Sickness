@@ -10,6 +10,7 @@ import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.entity.storage.StorageReportIngredient;
 import com.emenu.common.entity.storage.StorageReportItem;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.storage.StorageItemStatusEnums;
@@ -19,6 +20,7 @@ import com.emenu.common.utils.StringUtils;
 import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.storage.StorageItemMapper;
 import com.emenu.service.dish.UnitService;
+import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.IngredientService;
 import com.emenu.service.storage.StorageItemService;
@@ -70,6 +72,9 @@ public class StorageItemServiceImpl implements StorageItemService {
 
     @Autowired
     private StorageReportService storageReportService;
+
+    @Autowired
+    private ConstantService constantService;
 
     @Autowired
     @Qualifier("commonDao")
@@ -512,37 +517,79 @@ public class StorageItemServiceImpl implements StorageItemService {
     }
 
     public void setQuantityFormat(List<StorageItem> storageItemList) throws SSException{
+        // 是否启用四舍五入
+        int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
         for (StorageItem storageItem : storageItemList) {
             // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal maxStorageQuantity = new BigDecimal(0);
+            if (roundingMode == 1) {
+                maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+            }
             String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
             storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
             // 最小库存
-            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal minStorageQuantity = new BigDecimal(0);
+            if (roundingMode == 1) {
+                minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+            }
             String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
             storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
 
             // 总数量
-            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity(),BigDecimal.ROUND_HALF_EVEN);
+            BigDecimal totalStockInQuantityStr = new BigDecimal(0);
+            if (roundingMode == 1) {
+                totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity(), 2, BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getTotalStockInQuantity(), 2, BigDecimal.ROUND_DOWN);
+            }
             String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
             storageItem.setTotalStockInQuantityStr(totalQuantityStr);
         }
     }
 
     public void setQuantityFormat(StorageItem storageItem) throws SSException{
+        // 是否启用四舍五入
+        int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
         // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-        BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal maxStorageQuantity = new BigDecimal(0);
+        if (roundingMode == 1) {
+            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
         // 最小库存
-        BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal minStorageQuantity = new BigDecimal(0);
+        if (roundingMode == 1) {
+            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMinStorageQuantityStr(minStorageQuantityStr);
 
         // 总数量
-        BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal totalStockInQuantityStr = new BigDecimal(0);
+        if (roundingMode == 1) {
+            totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
         storageItem.setTotalStockInQuantityStr(totalQuantityStr);
     }

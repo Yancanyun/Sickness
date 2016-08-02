@@ -12,6 +12,7 @@ import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.dish.UnitEnum;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.exception.EmenuException;
@@ -101,70 +102,86 @@ public class AdminStorageItemController extends AbstractController {
     public JSON ajaxList(@PathVariable("pageNo") Integer pageNo,
                          @RequestParam("pageSize") Integer pageSize,
                          ItemAndIngredientSearchDto searchDto) {
-        pageSize = (pageSize == null || pageSize<=0)   ? DEFAULT_PAGE_SIZE : pageSize;
+        pageSize = (pageSize == null || pageSize <= 0) ? DEFAULT_PAGE_SIZE : pageSize;
 //        ItemAndIngredientSearchDto searchDto = new ItemAndIngredientSearchDto();
         searchDto.setPageNo(pageNo);
         searchDto.setPageSize(pageSize);
         List<StorageItem> list = Collections.emptyList();
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             list = storageItemService.listBySearchDto(searchDto);
+            JSONArray jsonArray = new JSONArray();
+            int offset = 0;
+            if (Assert.isNotNull(pageNo)) {
+                pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+                offset = pageNo * pageSize;
+            }
+            int i = 0;
+            for (StorageItem storageItem : list) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", storageItem.getId());
+                jsonObject.put("sequenceNumber", offset + (++i));
+                jsonObject.put("name", storageItem.getName());
+                jsonObject.put("itemNumber", storageItem.getItemNumber());
+                jsonObject.put("assistantCode", storageItem.getAssistantCode());
+                jsonObject.put("ingredientName", storageItem.getIngredientName());
+                jsonObject.put("tagName", storageItem.getTagName());
+                jsonObject.put("supplierName", storageItem.getSupplierName());
+                // 各种单位
+                jsonObject.put("orderUnitName", storageItem.getOrderUnitName());
+                jsonObject.put("orderToStorageRatio", storageItem.getOrderToStorageRatio());
+                jsonObject.put("storageUnitName", storageItem.getStorageUnitName());
+                jsonObject.put("storageToCostCardRatio", storageItem.getStorageToCostCardRatio());
+                jsonObject.put("costCardUnitName", storageItem.getCostCardUnitName());
+                jsonObject.put("countUnitName", storageItem.getOrderUnitName());
+                // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+                BigDecimal maxStorageQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
+                String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
+                jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
 
-        } catch (SSException e) {
-        	LogClerk.errLog.error(e);
-        	return sendErrMsgAndErrCode(e);
-        }
-        JSONArray jsonArray = new JSONArray();
-        int offset = 0;
-        if (Assert.isNotNull(pageNo)){
-            pageNo = pageNo <= 0 ? 0 : pageNo - 1;
-            offset = pageNo * pageSize;
-        }
-        int i = 0;
-        for (StorageItem storageItem : list) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", storageItem.getId());
-            jsonObject.put("sequenceNumber",offset+(++i));
-            jsonObject.put("name", storageItem.getName());
-            jsonObject.put("itemNumber", storageItem.getItemNumber());
-            jsonObject.put("assistantCode", storageItem.getAssistantCode());
-            jsonObject.put("ingredientName",storageItem.getIngredientName());
-            jsonObject.put("tagName", storageItem.getTagName());
-            jsonObject.put("supplierName", storageItem.getSupplierName());
-            // 各种单位
-            jsonObject.put("orderUnitName", storageItem.getOrderUnitName());
-            jsonObject.put("orderToStorageRatio", storageItem.getOrderToStorageRatio());
-            jsonObject.put("storageUnitName", storageItem.getStorageUnitName());
-            jsonObject.put("storageToCostCardRatio", storageItem.getStorageToCostCardRatio());
-            jsonObject.put("costCardUnitName", storageItem.getCostCardUnitName());
-            jsonObject.put("countUnitName", storageItem.getOrderUnitName());
-            // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
+                // 最小库存
+                BigDecimal minStorageQuantity = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
+                String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
+                jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
+                jsonObject.put("lastStockInPrice", storageItem.getLastStockInPrice());
 
-            BigDecimal maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
-            String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
-            jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
-            // 最小库存
-            BigDecimal minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
-            String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
-            jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
-            jsonObject.put("lastStockInPrice", storageItem.getLastStockInPrice());
-            // 总数量
-            BigDecimal totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(),2, BigDecimal.ROUND_HALF_EVEN);
-            String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
-            jsonObject.put("totalStockInQuantityStr", totalQuantityStr);
-            jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());
-            jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
+                // 总数量
+                BigDecimal totalStockInQuantityStr = new BigDecimal(0);
+                if (roundingMode == 1) {
+                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                }
+                if (roundingMode == 0) {
+                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                }
+                String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
+                jsonObject.put("totalStockInQuantityStr", totalQuantityStr);
+                jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());
+                jsonObject.put("stockOutType", storageItem.getStockOutTypeStr());
 
-            jsonArray.add(jsonObject);
-        }
-        int dataCount = 0;
-        try {
+                jsonArray.add(jsonObject);
+            }
+            int dataCount = 0;
             dataCount = storageItemService.countBySearchDto(searchDto);
-        } catch (SSException e) {
-        	LogClerk.errLog.error(e);
-        	return sendErrMsgAndErrCode(e);
-        }
 
-        return sendJsonArray(jsonArray, dataCount);
+            return sendJsonArray(jsonArray, dataCount);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
     }
 
     /**
@@ -341,15 +358,25 @@ public class AdminStorageItemController extends AbstractController {
                                       @RequestParam("storageUnitId")Integer storageUnitId ,
                                       @RequestParam("storageToCostCardRatio")BigDecimal storageToCostCardRatio){
         try {
+            // 是否启用四舍五入
+            int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
             StorageItem storageItem = storageItemService.queryById(id);
 
             JSONObject jsonObject = new JSONObject();
             if(storageToCostCardRatio.compareTo(BigDecimal.ZERO)==0){
                 return sendJsonObject(AJAX_FAILURE_CODE);
             }else {
-                jsonObject.put("totalQuantity",storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
-                jsonObject.put("maxStorageQuantity",storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
-                jsonObject.put("minStorageQuantity",storageItem.getMinStorageQuantity().divide(storageToCostCardRatio,BigDecimal.ROUND_HALF_EVEN));
+                if (roundingMode == 1) {
+                    jsonObject.put("totalQuantity", storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                    jsonObject.put("maxStorageQuantity", storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                    jsonObject.put("minStorageQuantity", storageItem.getMinStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_HALF_EVEN));
+                }
+                if (roundingMode == 0) {
+                    jsonObject.put("totalQuantity", storageItem.getTotalStockInQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                    jsonObject.put("maxStorageQuantity", storageItem.getMaxStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                    jsonObject.put("minStorageQuantity", storageItem.getMinStorageQuantity().divide(storageToCostCardRatio, 2, BigDecimal.ROUND_DOWN));
+                }
             }
             return sendJsonObject(jsonObject,AJAX_SUCCESS_CODE);
         } catch (SSException e) {

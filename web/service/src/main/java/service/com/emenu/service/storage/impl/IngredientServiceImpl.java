@@ -11,6 +11,7 @@ import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.storage.*;
 import com.emenu.common.enums.ExcelExportTemplateEnums;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.storage.StorageReportTypeEnum;
 import com.emenu.common.exception.EmenuException;
@@ -20,6 +21,7 @@ import com.emenu.common.utils.StringUtils;
 import com.emenu.mapper.storage.IngredientMapper;
 import com.emenu.service.dish.CostCardService;
 import com.emenu.service.dish.UnitService;
+import com.emenu.service.other.ConstantService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.storage.IngredientService;
 import com.emenu.service.storage.StorageItemService;
@@ -78,6 +80,9 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Autowired
     private StorageReportService storageReportService;
+
+    @Autowired
+    private ConstantService constantService;
 
     private final static int DEFAULT_PAGE_SIZE = 10;
 
@@ -469,50 +474,101 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     public void setQuantityFormat(Ingredient ingredient) throws SSException{
+        // 是否启用四舍五入
+        int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
         // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-        BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+        BigDecimal maxStorageQuantity = new BigDecimal(0);
+        if (roundingMode == 1) {
+            maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String maxStorageQuantityStr = maxStorageQuantity.toString() + ingredient.getStorageUnitName();
         ingredient.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
         // 最小库存
-        BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+        BigDecimal minStorageQuantity = new BigDecimal(0);
+        if (roundingMode == 1) {
+            minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String minStorageQuantityStr = minStorageQuantity.toString() + ingredient.getStorageUnitName();
         ingredient.setMinStorageQuantityStr(minStorageQuantityStr);
 
         // 实际数量
-        BigDecimal realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
+        BigDecimal realQuantity = new BigDecimal(0);
+        if (roundingMode == 1) {
+            realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            realQuantity = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String realQuantityStr = realQuantity.toString() + ingredient.getStorageUnitName();
         ingredient.setRealQuantityStr(realQuantityStr);
 
         // 总数量
 
-        BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio());
+        BigDecimal totalStockInQuantityStr = new BigDecimal(0);
+        if (roundingMode == 1) {
+            totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+        }
+        if (roundingMode == 0) {
+            totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+        }
         String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
         ingredient.setTotalQuantityStr(totalQuantityStr);
-
-
-
     }
 
     public void setQuantityFormat(List<Ingredient> ingredientList) throws SSException{
+        // 是否启用四舍五入
+        int roundingMode = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.RoundingMode.getKey()));
+
         for (Ingredient ingredient : ingredientList) {
             // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
-            BigDecimal maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+            BigDecimal maxStorageQuantity = new BigDecimal(0);
+            if (roundingMode == 1) {
+                maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                maxStorageQuantity = ingredient.getMaxStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_DOWN);
+            }
             String maxStorageQuantityStr = maxStorageQuantity.toString() + ingredient.getStorageUnitName();
             ingredient.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
             // 最小库存
-            BigDecimal minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio());
+            BigDecimal minStorageQuantity = new BigDecimal(0);
+            if (roundingMode == 1) {
+                minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                minStorageQuantity = ingredient.getMinStorageQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_DOWN);
+            }
             String minStorageQuantityStr = minStorageQuantity.toString() + ingredient.getStorageUnitName();
             ingredient.setMinStorageQuantityStr(minStorageQuantityStr);
 
             // 总数量
-            BigDecimal totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity());
+            BigDecimal totalStockInQuantityStr = new BigDecimal(0);
+            if (roundingMode == 1) {
+                totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity(), BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                totalStockInQuantityStr = ingredient.getTotalQuantity().divide(ingredient.getTotalQuantity(), BigDecimal.ROUND_DOWN);
+            }
             String totalQuantityStr = totalStockInQuantityStr.toString() + ingredient.getStorageUnitName();
             ingredient.setTotalQuantityStr(totalQuantityStr);
 
             //数量
-            BigDecimal realStockInQuantityStr = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio());
+            BigDecimal realStockInQuantityStr = new BigDecimal(0);
+            if (roundingMode == 1) {
+                realStockInQuantityStr = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (roundingMode == 0) {
+                realStockInQuantityStr = ingredient.getRealQuantity().divide(ingredient.getStorageToCostCardRatio(), BigDecimal.ROUND_DOWN);
+            }
             String realQuantityStr = realStockInQuantityStr.toString() + ingredient.getStorageUnitName();
             ingredient.setRealQuantityStr(realQuantityStr);
         }
@@ -559,5 +615,4 @@ public class IngredientServiceImpl implements IngredientService {
             throw SSException.get(EmenuException.SystemException, e);
         }
     }
-
 }
