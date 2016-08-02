@@ -21,7 +21,7 @@ public interface VipAccountInfoMapper {
      * @param offset
      * @param pageSize
      * @return
-     * @throws SSException
+     * @throws Exception
      */
     public List<VipAccountInfoDto> listByPageAndMin(@Param("offset") int offset,
                                                   @Param("pageSize") int pageSize,

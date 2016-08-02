@@ -4,20 +4,20 @@
 
     <select id="listByPageAndMin" resultType="com.emenu.common.dto.vip.VipAccountInfoDto">
         SELECT vipcount.`id` AS id,
-               grade.`min_consumption` AS minConsumption,
-               grade.`name` AS vipGrade,
-               vipinfo.`name` AS name,
-               vipinfo.`phone` AS phone,
-               card.`card_number` AS cardNumber,
-               vipcount.`balance` AS balance,
-               vipcount.`integral` AS integral,
-               vipcount.`total_consumption` AS totalConsumption,
-               vipcount.`used_credit_amount` AS usedCreditAmount,
-               vipcount.`status` AS status
+                grade.`min_consumption` AS minConsumption,
+                grade.`name` AS vipGrade,
+                vipinfo.`name` AS NAME,
+                vipinfo.`phone` AS phone,
+                card.`card_number` AS cardNumber,
+                vipcount.`balance` AS balance,
+                vipcount.`integral` AS integral,
+                vipcount.`total_consumption` AS totalConsumption,
+                vipcount.`used_credit_amount` AS usedCreditAmount,
+                vipcount.`status` AS STATUS
         FROM `t_vip_account_info` vipcount
-        LEFT JOIN `t_vip_card` card ON vipcount.`party_id` = card.`vip_party_id`
-        LEFT JOIN `t_party_vip_info` vipinfo ON card.`vip_party_id` = vipinfo.`party_id`
+        LEFT JOIN `t_party_vip_info` vipinfo ON vipcount.`party_id` = vipinfo.`party_id`
         LEFT JOIN `t_vip_grade` grade ON grade.`id` = vipinfo.`grade_id`
+        LEFT JOIN `t_vip_card` card ON vipcount.`party_id` = card.`vip_party_id`
         <if test="orderType == 1">
             ORDER BY ${orderBy} ASC
         </if>
@@ -31,7 +31,7 @@
         SELECT
         COUNT(1)
         FROM
-        `t_unit`
+        `t_vip_account_info`
     </select>
 
     <update id="updateStatusById">
