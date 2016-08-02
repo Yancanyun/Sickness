@@ -516,8 +516,10 @@ public class AdminStorageReportController extends AbstractController {
                     for (StorageReportItem reportItem : storageReportItemList) {
                         StorageItem storageItem = storageItemService.queryById(reportItem.getItemId());
                         Assert.isNotNull(storageItem,EmenuException.StorageItemIsNotNull);
+                        // 设置最新入库价格总入库数量和金额
                         storageItem.setTotalStockInQuantity(storageItem.getTotalStockInMoney().add(reportItem.getQuantity()));
                         storageItem.setTotalStockInMoney(storageItem.getTotalStockInMoney().add(reportItem.getCount()));
+                        storageItem.setLastStockInPrice(reportItem.getPrice());
                         // 如果是入库单同时修改原配料缓存
                         BigDecimal ingredientCacheQuntity = storageSettlementService.queryCache(storageItem.getIngredientId());
                         if (Assert.isNull(ingredientCacheQuntity)){
