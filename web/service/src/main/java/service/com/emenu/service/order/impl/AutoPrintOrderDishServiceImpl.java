@@ -23,6 +23,7 @@ import com.emenu.service.table.TableService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -82,16 +83,15 @@ public class AutoPrintOrderDishServiceImpl implements AutoPrintOrderDishService 
 
         Timer timer = new Timer(true);
         try{
-
             // 若开启了智能排菜则每隔10秒钟执行一次,若符合条件则打印
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-
                     try{
                         List<Printer> printers = new ArrayList<Printer>();
-                        // 智能排菜服务启用
                         Integer autoPrintStartStatus = Integer.parseInt(constantService.queryValueByKey(ConstantEnum.AutoPrintOrderDishStartStatus.getKey()));
+
+                        // 智能排菜服务启用
                         if(autoPrintStartStatus == AutoPrintStartStatusEnums.IsStart.getId()){
 
                             // 形成智能排菜队列
@@ -111,83 +111,85 @@ public class AutoPrintOrderDishServiceImpl implements AutoPrintOrderDishService 
                                     PrintOrderDishDto temp = new PrintOrderDishDto();
                                     temp = ite.next();
 
-                                    // 未设置菜品打印机
+                                    // 未查找到关联打印机
                                     if(temp.getPrinterIp()==null
-                                            ||temp.getPrinterIp()==""){
+                                            ||temp.getPrinterIp().equals("")){
                                         throw SSException.get(EmenuException.OrderDishPrinterIsNotSet);
                                     }
                                     Integer printerPrintTotalDish = new Integer(0);
 
                                     // 获取当前菜品关联到的打印机打出来正在做的菜品个数
-                                    if(AutoPrintOrderDishServiceImpl.this.getPrinterPrintTotalDishMap()!=null)
-                                     printerPrintTotalDish = AutoPrintOrderDishServiceImpl.this.getPrinterPrintTotalDishMap().get(temp.getPrinterIp());
-//                                    printerPrintTotalDish =
-//                                            autoPrintOrderDishService.getPrinterPrintTotalDishMap().get(temp.getPrinterIp());
 
-                                    // 打印机未打过任何菜品,或打正在做的菜品数量小于最多正在做的数量
-                                    if(printerPrintTotalDish==null
-                                            ||printerPrintTotalDish < Integer.parseInt(constantService.queryValueByKey(ConstantEnum.PrinterPrintMaxNum.getKey()))){
+                                        if(AutoPrintOrderDishServiceImpl.this.getPrinterPrintTotalDishMap()!=null)
+                                            printerPrintTotalDish = AutoPrintOrderDishServiceImpl.this.getPrinterPrintTotalDishMap().get(temp.getPrinterIp());
 
-                                        // 口味和备注相同的菜品存储数组
-                                        List<PrintOrderDishDto> printOrderDishDtos =
-                                                new ArrayList<PrintOrderDishDto>();
+                                        // 打印机未打过任何菜品,或打正在做的菜品数量小于最多正在做的数量
+                                        if(printerPrintTotalDish==null
+                                                ||printerPrintTotalDish < Integer.parseInt(constantService.queryValueByKey(ConstantEnum.PrinterPrintMaxNum.getKey()))){
 
-                                        // 重新定义一个迭代器
-                                        Iterator<PrintOrderDishDto> ite1 =
-                                                AutoPrintOrderDishServiceImpl.this.getOrderDishQue().iterator();
+                                            // 口味和备注相同的菜品存储数组
+                                            List<PrintOrderDishDto> printOrderDishDtos =
+                                                    new ArrayList<PrintOrderDishDto>();
 
-                                        // 查询出菜品,然后根据菜品的小类Id查询tag
-                                        OrderDishDto orderDishDto = new OrderDishDto();
-                                        orderDishDto = orderDishService.queryDtoById(temp.getOrderDishId());
-                                        DishDto dishDto = new DishDto();
-                                        if(orderDishDto.getIsPackage()== PackageStatusEnums.IsPackage.getId()){
+                                            // 重新定义一个迭代器
+                                            Iterator<PrintOrderDishDto> ite1 =
+                                                    AutoPrintOrderDishServiceImpl.this.getOrderDishQue().iterator();
 
-                                            dishDto=dishService.queryById(orderDishDto.getPackageId());
-                                        }
-                                        else{
+                                            // 查询出菜品,然后根据菜品的小类Id查询tag
+                                            OrderDishDto orderDishDto = new OrderDishDto();
+                                            orderDishDto = orderDishService.queryDtoById(temp.getOrderDishId());
+                                            DishDto dishDto = new DishDto();
+                                            if(orderDishDto.getIsPackage()== PackageStatusEnums.IsPackage.getId()){
 
-                                            dishDto=dishService.queryById(orderDishDto.getDishId());
-                                        }
-                                        Tag tag = dishTagPrinterService.queryTagByTagId(dishDto.getTagId());
-
-                                        // 属于同一菜品小类的菜品一个锅同时可做最大数量
-                                        Integer maxMakeQuantity = tag.getMaxPrintNum();
-
-                                        //当前可做相同菜品数量
-                                        Integer currentSameDishQuantity = 0;
-
-                                        // 遍历队列找出口味相同备注相同的菜品,一起打印出来
-                                        while (ite1.hasNext()){
-
-                                            PrintOrderDishDto temp1 = new PrintOrderDishDto();
-                                            temp1 = ite1.next();
-                                            // 口味和备注相同且总数量不超过最大可做数量的菜品可以一起做
-                                            if(temp1.getDishId()==temp.getDishId()
-                                            &&((temp.getTaste()!=null
-                                                    &&temp1.getTaste()!=null
-                                                    &&temp.getTaste()==temp1.getTaste())
-                                            ||(temp.getTaste()==null&&temp1.getTaste()==null))
-                                                    &&((temp.getRemark()!=null
-                                                    &&temp1.getRemark()!=null
-                                                    &&temp1.getRemark()==temp.getRemark())
-                                                    ||(temp.getRemark()==null&&temp1.getRemark()==null))
-                                                    &&currentSameDishQuantity<maxMakeQuantity){
-
-                                                printOrderDishDtos.add(temp1);
-                                                currentSameDishQuantity++;
-                                                // 移除的时候可能存在问题
-                                                ite1.remove();
+                                                dishDto=dishService.queryById(orderDishDto.getPackageId());
                                             }
-                                        }
-                                        if(printOrderDishDtos!=null){
+                                            else{
 
+                                                dishDto=dishService.queryById(orderDishDto.getDishId());
+                                            }
+                                            Tag tag = dishTagPrinterService.queryTagByTagId(dishDto.getTagId());
+
+                                            // 属于同一菜品小类的菜品一个锅同时可做最大数量
+                                            Integer maxMakeQuantity = tag.getMaxPrintNum();
+
+                                            //当前可做相同菜品数量
+                                            Integer currentSameDishQuantity = 0;
+
+                                            // 遍历队列找出口味相同备注相同的菜品,一起打印出来
+                                            while (ite1.hasNext()){
+
+                                                PrintOrderDishDto temp1 = new PrintOrderDishDto();
+                                                temp1 = ite1.next();
+                                                // 总数量不超过最大可做数量且下单时间差小于等于上菜时限(做菜所用时间)
+                                                // 上菜时限为0的话代表无限制
+                                                // 屏蔽掉的部分为口味和备注均相同
+                                                if(/*temp1.getDishId()==temp.getDishId()
+                                                        &&((temp.getTaste()!=null
+                                                        &&temp1.getTaste()!=null
+                                                        &&temp.getTaste()==temp1.getTaste())
+                                                        ||(temp.getTaste()==null&&temp1.getTaste()==null))
+                                                        &&((temp.getRemark()!=null
+                                                        &&temp1.getRemark()!=null
+                                                        &&temp1.getRemark()==temp.getRemark())
+                                                        ||(temp.getRemark()==null&&temp1.getRemark()==null))
+                                                        &&*/currentSameDishQuantity<maxMakeQuantity
+                                                        &&((temp.getTimeLimit()!=0
+                                                        &&Math.abs(temp.getOrderTime().getTime()-temp1.getOrderTime().getTime())/1000<=temp.getTimeLimit())
+                                                        ||temp.getTimeLimit()==0)){
+
+                                                    printOrderDishDtos.add(temp1);
+                                                    currentSameDishQuantity++;
+                                                    // 移除
+                                                    ite1.remove();
+                                                }
+                                            }
                                             for(PrintOrderDishDto dto : printOrderDishDtos){
 
-                                                // 打印菜品
+                                                   // 打印菜品
                                                 orderDishPrintService.printOrderDish(dto);
                                             }
 
-                                            // 打印机打印出的未做的菜品个数+1
+                                               // 打印机打印出的未做的菜品个数+1
                                             if(printerPrintTotalDish==null)
                                                 AutoPrintOrderDishServiceImpl.this
                                                         .updatePrinterPrintTotalDishMap(temp.getPrinterIp(), 1);
@@ -195,10 +197,8 @@ public class AutoPrintOrderDishServiceImpl implements AutoPrintOrderDishService 
                                                 AutoPrintOrderDishServiceImpl.this
                                                         .updatePrinterPrintTotalDishMap(temp.getPrinterIp(), printerPrintTotalDish + 1);
                                         }
-                                    }
                                 }
                             }
-
                         }
                         // 清空智能排菜队列,实时保证排菜队列为空
                         else{

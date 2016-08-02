@@ -589,9 +589,15 @@ public class MyOrderController  extends AbstractController {
                 }
             }
             //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
-            orderDishCacheService.tableLockRemove(tableId);//点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
-            orderDishCacheService.cleanCacheByTableId(tableId);//清除掉菜品缓存
-            cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新页面
+            // 点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
+            orderDishCacheService.tableLockRemove(tableId);
+            // 更新缓存的原配料量
+            orderDishService.updateIngredientCache(tableOrderCache);
+            // 清除掉菜品缓存
+            orderDishCacheService.cleanCacheByTableId(tableId);
+            // 更新餐桌版本,以便获后厨管理端获得新的餐桌版本后更新页面
+            cookTableCacheService.updateTableVersion(tableId);
+
         }catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());

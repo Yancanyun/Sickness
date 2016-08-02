@@ -90,7 +90,8 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
             printOrderDishDto = this.getPrintOrderDishDtoById(orderDishId);//获取菜品打印信息
             if(printOrderDishDto!=null)
             {
-                if(printOrderDishDto.getPrinterIp()!=null)
+                if(printOrderDishDto.getPrinterIp()!=null
+                        &&!printOrderDishDto.getPrinterIp().equals(""))
                 this.printOrderDish(printOrderDishDto);//打印菜品
                 else
                     throw SSException.get(EmenuException.PrinterIpIsNull);
@@ -148,19 +149,21 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
                 if(printer!=null &&printer.getIpAddress()!=null)
                 {
-                    //菜品直接关联的打印机要比大类关联的打印机优先
+                    //菜品直接关联的打印机要比小类关联的打印机优先级高
                     temp.setPrinterIp(printer.getIpAddress());
                 }
-                else//否则根据菜品小类查询关联打印机
-                {
-                    if(dishDto.getTagId()!=null)
-                    {
+                //根据菜品小类查询关联打印机
+                else{
+
+                    if(dishDto.getTagId()!=null) {
+
                         Integer tagId = dishDto.getTagId();//菜品小类
                         printer=dishTagPrinterService.queryByTagIdAndType(tagId,PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
                 }
+
                 printOrderDishDto = temp;
             }
             else//为套餐
@@ -196,21 +199,23 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 //菜品小类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 Printer printer = new Printer();
                 printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
-                if(printer!=null &&printer.getIpAddress()!=null)//1-菜品类别，2-具体某一个菜
+                if(printer!=null &&printer.getIpAddress()!=null)
                 {
-                    // 菜品直接关联的打印机要比小类关联的打印机优先
+                    //菜品直接关联的打印机要比小类关联的打印机优先级高
                     temp.setPrinterIp(printer.getIpAddress());
                 }
-                else//否则根据菜品小类查询关联打印机
-                {
-                    if(dishDto.getTagId()!=null)
-                    {
-                        Integer tagId = dishDto.getTagId();//菜品的二级分类Id
-                        printer=dishTagPrinterService.queryByTagIdAndType(tagId, PrinterDishEnum.TagPrinter.getId());
+                //根据菜品小类查询关联打印机
+                else{
+
+                    if(dishDto.getTagId()!=null) {
+
+                        Integer tagId = dishDto.getTagId();//菜品小类
+                        printer=dishTagPrinterService.queryByTagIdAndType(tagId,PrinterDishEnum.TagPrinter.getId());
                         if(printer!=null&&printer.getIpAddress()!=null)
                             temp.setPrinterIp(printer.getIpAddress());
                     }
                 }
+                // 打印机Ip集合
                 printOrderDishDto = temp;
             }
         }catch (Exception e){
@@ -226,90 +231,95 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
         Socket socket = new Socket();
         InputStream is = null;
         OutputStream os = null;
+        List<String> printerIps = new ArrayList<String>();
+        int ok = 1;
         try{
             // 服务器的IP和端口,和服务器建立通信
-            if(printOrderDishDto.getPrinterIp()==null)
+            if(printOrderDishDto.getPrinterIp()==null
+                    ||printOrderDishDto.getPrinterIp().isEmpty())
                 throw SSException.get(EmenuException.PrinterIpIsNull);
-            socket.connect(new InetSocketAddress(printOrderDishDto.getPrinterIp(), 9100), 10000);
-            if (socket.isConnected()) {//成功建立了连接
 
-                os = socket.getOutputStream();
+                socket.connect(new InetSocketAddress(printOrderDishDto.getPrinterIp(), 9100), 10000);
+                if (socket.isConnected()) {//成功建立了连接
 
-                // 初始化打印机
-                os.write(PrintUtils.initPrinter());
+                    os = socket.getOutputStream();
 
-                //设置0为左对齐,1的话为设置为居中,2为右对齐
-                os.write(PrintUtils.setLocation(0));
+                    // 初始化打印机
+                    os.write(PrintUtils.initPrinter());
 
-                String str = "";
-                //套餐下的所有菜品的orderDishId均相同
-                //第一条显示,用来提醒上菜的服务员这个菜品可能为套餐,套餐的话服务员应该等所有菜品都做完了后再进行上菜扫码
-                str+= "菜品大类: " + printOrderDishDto.getDishBigTagName() + "\n";
-                str += "桌名: " + printOrderDishDto.getTableName() + "\n";
-                str += "菜品名称: " + printOrderDishDto.getDishName() + "\n";
+                    //设置0为左对齐,1的话为设置为居中,2为右对齐
+                    os.write(PrintUtils.setLocation(0));
 
-                // 先打印一波,因为数量要打印的大一点,所以分开打印
-                os.write(PrintUtils.printText(str));
-                str = "";
+                    String str = "";
+                    //套餐下的所有菜品的orderDishId均相同
+                    //第一条显示,用来提醒上菜的服务员这个菜品可能为套餐,套餐的话服务员应该等所有菜品都做完了后再进行上菜扫码
+                    str+= "菜品大类: " + printOrderDishDto.getDishBigTagName() + "\n";
+                    str += "桌名: " + printOrderDishDto.getTableName() + "\n";
+                    str += "菜品名称: " + printOrderDishDto.getDishName() + "\n";
 
-                str += "数量: " + String.valueOf(printOrderDishDto.getNum()) + "\n";
-                // 数量要打印的大一点
-                os.write(PrintUtils.setSize(1,1));
-                os.write(PrintUtils.printText(str));
-                str = "";
+                    // 先打印一波,因为数量要打印的大一点,所以分开打印
+                    os.write(PrintUtils.printText(str));
+                    str = "";
 
-                // 初始化一下
-                // 初始化打印机
-                os.write(PrintUtils.initPrinter());
+                    str += "数量: " + String.valueOf(printOrderDishDto.getNum()) + "\n";
+                    // 数量要打印的大一点
+                    os.write(PrintUtils.setSize(1,1));
+                    os.write(PrintUtils.printText(str));
+                    str = "";
 
-                //设置0为左对齐,1的话为设置为居中,2为右对齐
-                os.write(PrintUtils.setLocation(0));
+                    // 初始化一下
+                    // 初始化打印机
+                    os.write(PrintUtils.initPrinter());
 
-                str += " 口味: ";
-                if (printOrderDishDto.getTaste() != null)
-                {
-                    str+=printOrderDishDto.getTaste()+"\n";
+                    //设置0为左对齐,1的话为设置为居中,2为右对齐
+                    os.write(PrintUtils.setLocation(0));
+
+                    str += " 口味: ";
+                    if (printOrderDishDto.getTaste() != null)
+                    {
+                        str+=printOrderDishDto.getTaste()+"\n";
+                    }
+                    else//没有选择菜品口味
+                    {
+                        str+="正常\n";
+                    }
+                    str += "上菜方式: " + printOrderDishDto.getServerType()+ "\n";
+                    if (printOrderDishDto.getRemark() != null && !printOrderDishDto.getRemark().equals(""))
+                        str += "备注: " + printOrderDishDto.getRemark() + "\n";
+                    else
+                        str += "备注: 无" + "\n";
+
+
+                    os.write(PrintUtils.printText(str));//打印信息
+
+                    // 打印条码
+                    String orderDishIdStr = printOrderDishDto.getOrderDishId().toString();//条形码信息为OrderDishId
+                    os.write(PrintUtils.newPrintBarCode(orderDishIdStr));
+
+                    // 打印订单id和时间
+                    os.write(PrintUtils.printText(orderDishIdStr + "\n"));
+                    os.write(PrintUtils.printText(DateUtils.formatDate(new Date()) + "\n"));//打印菜品的时间
+
+                    os.write(PrintUtils.printText("--------------------------------\n"));
+                    os.write(PrintUtils.printText("聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n"));
+
+                    os.write(PrintUtils.println(4));
+                    //切纸
+                    os.write(PrintUtils.cutPaper());
+
+                    //修改订单菜品的状态
+                    OrderDish orderDish = new OrderDish();
+                    orderDish=orderDishService.queryById(printOrderDishDto.getOrderDishId());//查询出订单菜品
+                    orderDish.setStatus(OrderDishStatusEnums.IsMake.getId());//订单菜品状态：1.已下单  2.正在做  3.已上菜
+                    orderDishService.updateOrderDish(orderDish);//更新订单菜品的状态
+
+                    //修改餐台版本号
+                    Integer tableId = orderDishService.queryOrderDishTableId(orderDish.getId());//根据订单菜品id获取到tableId
+                    cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本号
                 }
-                else//没有选择菜品口味
-                {
-                    str+="正常\n";
-                }
-                str += "上菜方式: " + printOrderDishDto.getServerType()+ "\n";
-                if (printOrderDishDto.getRemark() != null && !printOrderDishDto.getRemark().equals(""))
-                    str += "备注: " + printOrderDishDto.getRemark() + "\n";
                 else
-                str += "备注: 无" + "\n";
+                    throw SSException.get(EmenuException.ConnectPrinterFail);
 
-
-                os.write(PrintUtils.printText(str));//打印信息
-
-                // 打印条码
-                String orderDishIdStr = printOrderDishDto.getOrderDishId().toString();//条形码信息为OrderDishId
-                os.write(PrintUtils.newPrintBarCode(orderDishIdStr));
-
-                // 打印订单id和时间
-                os.write(PrintUtils.printText(orderDishIdStr + "\n"));
-                os.write(PrintUtils.printText(DateUtils.formatDate(new Date()) + "\n"));//打印菜品的时间
-
-                os.write(PrintUtils.printText("--------------------------------\n"));
-                os.write(PrintUtils.printText("聚客多移动电子点餐系统由吉林省裕昌恒科技有限公司提供，合作洽谈请拨打热线电话:13234301365\n"));
-
-                os.write(PrintUtils.println(4));
-                //切纸
-                os.write(PrintUtils.cutPaper());
-
-                //修改订单菜品的状态
-                OrderDish orderDish = new OrderDish();
-                orderDish=orderDishService.queryById(printOrderDishDto.getOrderDishId());//查询出订单菜品
-                orderDish.setStatus(OrderDishStatusEnums.IsMake.getId());//订单菜品状态：1.已下单  2.正在做  3.已上菜
-                orderDishService.updateOrderDish(orderDish);//更新订单菜品的状态
-
-                //修改餐台版本号
-                Integer tableId = orderDishService.queryOrderDishTableId(orderDish.getId());//根据订单菜品id获取到tableId
-                cookTableCacheService.updateTableVersion(tableId);//更新餐桌版本号
-            }
-            else
-                throw SSException.get(EmenuException.ConnectPrinterFail);
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.PrintOrderDishFail,e);

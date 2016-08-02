@@ -26,12 +26,6 @@
       <c:if test="${not empty myOrderDto}">
         <c:forEach  var="dto" items="${myOrderDto}">
         <li class="ordering-dish clearfix J_swipeEvent" data-ordering-dish-id="${dto.orderDishCacheId}">
-          <!-- 套页需套以下input -->
-          <input type="hidden" name="dishId" value="${dto.dishId}">
-          <input type="hidden" name="dishName" value="${dto.name}">
-          <input type="hidden" name="dishPrice" value="${dto.salePrice}">
-          <!-- 菜品的最终售价 -->
-          <input type="hidden" name="dishUnit" value="${dto.unitName}">
           <c:choose>
             <c:when test="${not empty dto.taste}">
                 <input type="hidden" name="dishTaste" value="${dto.taste.name}">
@@ -83,7 +77,7 @@
     </ul>
     <!--默认刷页时后端返回本单消费的总金额，若客户在订单中调整菜品的数量，前端再其总计金额的基础上再进行计算-->
      <c:if test="${totalMoney >0}">
-       <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}</span></p>
+       <p class="curren-custom font-size-24">本单消费：<span class="general-color J_customPrice">￥${totalMoney}元</span></p>
      </c:if>
     <!-- 已下订单菜品列表 -->
     <ul class="ordered-dish-list clearfix J_scroll">
@@ -145,10 +139,10 @@
       <li>当前餐桌 : <span class="table-number">${tableId}</span>号桌</li>
       <li>
         <label>餐位人数 ：</label><span class="J_peopleNum">${personNum}</span>人
-        <label>餐位费用 ：</label><span class="J_seatPrice">${seatPrice}</span>/人
-        <label>餐台费用 ：</label><span class="J_tablePrice">${tablePrice}</span>元
+        <label>餐位费用 ：</label><span class="J_seatPrice">￥${seatPrice}</span>元/人
+        <label>餐台费用 ：</label><span class="J_tablePrice">￥${tablePrice}</span>元
       </li>
-      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${orderTotalMoney}</span></li>
+      <li><label>已下单消费 ：</label><span class="J_orderedPrice">￥${orderTotalMoney}元</span></li>
     </ul>
   </div>
 </div>

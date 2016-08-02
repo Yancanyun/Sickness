@@ -600,6 +600,7 @@ public enum EmenuException implements IBizExceptionMes {
     GetCurrentOperateCustomerIpFail("获取正在下单的顾客的Ip失败",10011),
     ReturnTotalMoneyFail("返回已点未下单的所有菜品总金额失败",10012),
     OrderNotEnoughIngredient("下单返回原材料不足的情况失败",10013),
+    UpdateIngredientCacheFail("更新元配料缓存失败",10014),
 
 
 
