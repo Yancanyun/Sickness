@@ -283,14 +283,17 @@ public enum ModuleEnums {
     AdminVipAccountList("Admin:Vip:Account:List"),
     AdminVipAccountUpdateStatus("Admin:Vip:Account:Update:Status"),
 
+    //营收统计
+    AdminCountSaleRanking("Admin:Revenue:Count"),
+    //账单稽查
+    AdminCountCheckoutList("Admin:Revenue:Count:Checkout"),
+
     // 营业分析
     AdminCountDishSaleRanking("Admin:Count"),
     // 统计菜品销售排行
     AdminCountDishSaleRankingList("Admin:Count:SaleRanking"),
     //统计菜品大类销售排行
     AdminCountDishTagRankingList("Admin:Count:TagRanking"),
-
-
 
     // 顾客点餐平台
     Mobile("Mobile"),

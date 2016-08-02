@@ -132,7 +132,7 @@ public interface CheckoutService {
      *
      * @author pengpeng
      */
-    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException;
+    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate, CheckoutDto checkoutDto) throws SSException;
 
     /**
      * 求出时间段里的所有账单单项的金钱总和

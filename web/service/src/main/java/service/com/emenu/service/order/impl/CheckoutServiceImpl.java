@@ -1139,13 +1139,15 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
-    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException{
-        List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
+    public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate, CheckoutDto checkoutDto1) throws SSException{
+        List<CheckoutDto> checkoutDtoList = Collections.emptyList();
         List<Checkout> checkoutList = new ArrayList<Checkout>();
         try{
             if(Assert.isNotNull(startDate) && Assert.isNotNull(endDate)){
+                Integer pageNo = checkoutDto1.getPageNo() <= 0 ? 0 : checkoutDto1.getPageNo() - 1;
+                Integer offset = pageNo * checkoutDto1.getPageSize();
                 // 从checkout表中取出该时间段的账单
-                checkoutList = checkoutMapper.queryCheckoutByTimePeriod(startDate, endDate);
+                checkoutList = checkoutMapper.queryCheckoutByTimePeriod(startDate, endDate, offset, checkoutDto1);
                 // 将checkoutList加入到checkoutDtoList里去
                 for(Checkout checkout : checkoutList){
                     // 该账单在如果免单或者并台，则在checkoutpay表里不生成

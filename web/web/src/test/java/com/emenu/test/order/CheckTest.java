@@ -104,10 +104,19 @@ public class CheckTest extends AbstractTestCase {
         Date startDate = sdf.parse(d0,pos1);
         ParsePosition pos2 = new ParsePosition(0);
         Date endDate = sdf.parse(d2,pos2);
-       List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
-        checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate);
-        for(CheckoutDto checkoutDto : checkoutDtoList){
-            System.out.println(checkoutDto);
+
+        CheckoutDto checkoutDto = new CheckoutDto();
+        Integer pageNo = 2;
+        Integer pageSize = 4;
+        pageNo = pageNo == null ? 0 : pageNo;
+        pageSize = pageSize == null ? 10 : pageSize;
+        checkoutDto.setPageNo(pageNo);
+        checkoutDto.setPageSize(pageSize);
+
+        List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
+        checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
+        for(CheckoutDto checkoutDto1 : checkoutDtoList){
+            System.out.println(checkoutDto1);
         }
     }
 
@@ -124,8 +133,8 @@ public class CheckTest extends AbstractTestCase {
         Date startDate = sdf.parse(d0,pos1);
         ParsePosition pos2 = new ParsePosition(0);
         Date endDate = sdf.parse(d2,pos2);
-        CheckoutEachItemSumDto checkoutEachItemSumDto = new  CheckoutEachItemSumDto();
+/*        CheckoutEachItemSumDto checkoutEachItemSumDto = new  CheckoutEachItemSumDto();
         checkoutEachItemSumDto = checkoutService.sumCheckoutEachItem(checkoutService.queryCheckoutByTimePeriod(startDate, endDate));
-        System.out.println(checkoutEachItemSumDto);
+        System.out.println(checkoutEachItemSumDto);*/
     }
 }

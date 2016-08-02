@@ -12,6 +12,15 @@ public class CheckoutDto {
     // 主键
     private Integer id;
 
+    // 页码
+    private Integer pageNo;
+
+    // 页面大小
+    private Integer pageSize;
+
+    // 开始数据
+    private Integer offset;
+
     // 结账单号
     private Integer checkoutId;
 
@@ -50,6 +59,36 @@ public class CheckoutDto {
 
     // 是否开发票
     private Integer isInvoiced;
+
+    public CheckoutDto() {
+        this.pageNo = -1;
+        this.pageSize = -1;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
 
     public BigDecimal getChangeMoney() {
         return changeMoney;

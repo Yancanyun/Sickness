@@ -16,9 +16,9 @@
         where  t_checkout.checkout_time >= #{startDate}
         AND #{endDate} >= t_checkout.checkout_time
         AND t_checkout.status = 1
-        <!--        <if test="offset >= 0 and searchDto.pageSize > 0">
-                    LIMIT #{offset}, #{searchDto.pageSize}
-                </if>-->
+        <if test="offset >= 0 and checkoutDto.pageSize > 0">
+            LIMIT #{offset}, #{checkoutDto.pageSize}
+        </if>
     </select>
 
 </mapper>

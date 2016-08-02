@@ -144,6 +144,9 @@ public final class URLConstants {
     //统计菜品大类销售的排行
     public static final String ADMIN_COUNT_DISH_TAG_RANKING_URL = "admin/rank/bigtag";
 
+    //账单稽查
+    public static final String ADMIN_REVENUE_CHECKOUT_URL = "admin/revenue/checkout";
+
 
 
     /**********************顾客点菜平台*************************/

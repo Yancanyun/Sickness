@@ -117,8 +117,7 @@ public class CostCardServiceImpl implements CostCardService {
                     && Assert.isNotNull(costCard.getMainCost())
                     && Assert.isNotNull(costCard.getAssistCost())
                     && Assert.isNotNull(costCard.getDeliciousCost())
-                    && Assert.isNotNull(costCard.getStandardCost()))
-            {
+                    && Assert.isNotNull(costCard.getStandardCost())) {
                 costCardMapper.updateCostCard(costCard);
                 return 1;//更新成功
             } else
