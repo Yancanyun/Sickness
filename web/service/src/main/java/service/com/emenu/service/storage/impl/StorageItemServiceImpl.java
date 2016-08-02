@@ -389,14 +389,20 @@ public class StorageItemServiceImpl implements StorageItemService {
                     }
                 }
             }
+            Integer jd = checkMap.get(id);
             if (Assert.isNull(id)
-                    ||Assert.lessOrEqualZero(id)){
-                if (Assert.isNull(checkMap.get(id))
-                        ||  checkMap.get(id) != 1){
+                    || Assert.lessOrEqualZero(id)){
+                return true;
+            } else {
+                if (Assert.isNull(checkMap.get(id))){
+                    return true;
+                }
+                if (checkMap.get(id) == 1){
                     return false;
+                } else {
+                    return true;
                 }
             }
-            return true;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);

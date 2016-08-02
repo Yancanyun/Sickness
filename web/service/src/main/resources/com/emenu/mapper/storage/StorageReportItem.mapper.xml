@@ -15,6 +15,7 @@
             `created_time` AS createdTime,
             `last_modified_time` AS lastModifiedTime
             FROM `t_storage_report_item`
+            ORDER BY `created_time` DESC
         </select>
 
         <select id="queryByReportId" parameterType="int" resultMap="pw.StorageReportItem">
@@ -29,6 +30,7 @@
             `last_modified_time` AS lastModifiedTime
             FROM `t_storage_report_item`
             WHERE `report_id` = #{reportId}
+            ORDER BY `created_time` DESC
         </select>
 
         <select id="listByReportId" parameterType="int" resultMap="pw.StorageReportItem">
@@ -46,6 +48,7 @@
             FROM `t_storage_report_item` AS reportItem
             INNER JOIN `t_storage_item` AS item ON reportItem.`item_id` = item.`id`
             WHERE reportItem.`report_id` = #{reportId}
+            ORDER BY reportItem.`created_time` DESC
         </select>
 
         <select id="listByReportIdAndItemIdList" resultMap="pw.StorageReportItem">
@@ -84,11 +87,12 @@
         FROM `t_storage_report_item`
         LEFT JOIN `t_storage_item` ON `t_storage_report_item`.`item_id` = `t_storage_item`.`id`
         WHERE `report_id` = #{reportId}
+        ORDER BY `created_time` DESC
     </select>
 
     <!--新-->
     <delete id="delByReportId" parameterType="int">
             DELETE FROM `t_storage_report_item` WHERE `report_id` = #{id}
-        </delete>
+    </delete>
 
 </mapper>

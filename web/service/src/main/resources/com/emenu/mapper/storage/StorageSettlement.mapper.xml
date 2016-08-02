@@ -17,6 +17,7 @@
         `last_modified_time`
         FROM t_storage_settlement_ingredient
         WHERE `settlement_id` = #{settlementId}
+        ORDER BY `created_time` DESC
     </select>
 
     <select id="listByDate" resultMap="pw.StorageSettlementItem">

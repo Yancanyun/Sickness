@@ -290,9 +290,9 @@ public class AdminStorageItemController extends AbstractController {
             model.addAttribute("tagList", tagList);
             model.addAttribute("ingredientList", ingredientList);
             if (storageItemService.checkIsCanDelById(id)){
-                model.addAttribute("isUpdated", 1);
-            } else {
                 model.addAttribute("isUpdated", 0);
+            } else {
+                model.addAttribute("isUpdated", 1);
             }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
