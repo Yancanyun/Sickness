@@ -25,9 +25,13 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
-
 /**
- * Created by guofengrui on 2016/7/27.
+ * 营业分析中的菜品大类销售排行
+ * DishTagRankServiceImpl
+ *
+ *
+ * @Author guofengrui
+ * @Date 2016/7/28.
  */
 @Service("dishTagRankService")
 public class DishTagRankServiceImpl implements DishTagRankService {
@@ -45,7 +49,7 @@ public class DishTagRankServiceImpl implements DishTagRankService {
         List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
 
         try{
-            dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeroid(startTime,endTime);
+            dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeriod(startTime, endTime);
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.GetDishSaleRankDtoByTimePeriodFailed,e);
@@ -172,7 +176,7 @@ public class DishTagRankServiceImpl implements DishTagRankService {
 
 
     @Override
-    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime) throws SSException{
+    public Integer countByTimePeriod(Date startTime,Date endTime) throws SSException{
         Integer number = 0;
         List<DishSaleRankDto> list = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
         if(list.isEmpty()){

@@ -23,7 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 营业分析中的菜品大类销售排行
  * DishTagRankController
+ *
+ *
  * @Author guofengrui
  * @Date 2016/7/28.
  */
@@ -81,7 +84,7 @@ public class DishTagRankController extends AbstractController{
         Integer dataCount = 0;
         List<DishSaleRankDto> list = new ArrayList<DishSaleRankDto>();
         try{
-            dataCount = dishTagRankService.countByTimePeroidAndTagId(startTime,endTime);
+            dataCount = dishTagRankService.countByTimePeriod(startTime,endTime);
             list = dishTagRankService.queryDishSaleRankDtoByTimePeriodAndPage(startTime, endTime, pageSize, pageNumber);
         }catch(SSException e){
             LogClerk.errLog.error(e);

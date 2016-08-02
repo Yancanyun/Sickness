@@ -6,12 +6,13 @@ import com.pandawork.core.common.exception.SSException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
-
 /**
+ * 营业分析中的菜品大类销售排行
  * DishTagRankService
  *
+ *
  * @Author guofengrui
- * @Date 2016/7/27.
+ * @Date 2016/7/28.
  */
 public interface DishTagRankService {
 
@@ -42,10 +43,10 @@ public interface DishTagRankService {
      * @return
      * @throws SSException
      */
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndPage(Date startTime
-                                                                        ,Date endTime
-                                                                        ,Integer pageSize
-                                                                        ,Integer pageNumber) throws SSException;
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndPage(Date startTime,
+                                                                         Date endTime,
+                                                                         Integer pageSize,
+                                                                         Integer pageNumber) throws SSException;
 
     /**
      * 根据开始时间和结束时间查询数据的条数
@@ -54,7 +55,7 @@ public interface DishTagRankService {
      * @return
      * @throws SSException
      */
-    public Integer countByTimePeroidAndTagId(Date startTime,Date endTime) throws SSException;
+    public Integer countByTimePeriod(Date startTime,Date endTime) throws SSException;
 
     /**
      * 根据开始时间和结束时间查询数据并导出表格
