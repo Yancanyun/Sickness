@@ -67,7 +67,7 @@ public class MobileController extends AbstractController {
                 throw SSException.get(EmenuException.InternalNetworkAddressError);
             }
             // 若不是本机进行访问，则对IP地址的前三组进行匹配。若匹配不成功，则证明是外网访问，拒绝访问
-            if (!customerIp.equals("127.0.0.1")) {
+            if (!customerIp.equals("127.0.0.1") && !customerIp.equals("0:0:0:0:0:0:0:1")) {
                 for (int i = 0; i < 3; i++) {
                     if (!customerIps[i].equals(internalNetworkAddresses[i])) {
                         throw SSException.get(EmenuException.CustomerIsNotInLAN);
