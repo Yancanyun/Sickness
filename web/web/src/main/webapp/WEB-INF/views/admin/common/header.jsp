@@ -94,16 +94,21 @@
                 <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
             </ul>
         </li>
-        <li>
-            <a class="menu-list J_layer_1_menu" data-menu-id="8" href="javascript:;">营业分析</a>
-            <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a></li>
-                <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
-                <li><a class="J_menu" href="${website}admin/rank/bigtag">菜品大类销售排行</a></li>
-                <li><a class="J_menu" href="javascript:;">餐台使用排行</a></li>
-                <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
-            </ul>
-        </li>
+
+        <shiro:checkPermission name="Admin:Count">
+            <li <c:if test="${PWModule eq 'Admin:Count'}">class="active"</c:if>>
+                <a class="menu-list J_layer_1_menu" data-menu-id="8" href="javascript:;">营业分析</a>
+                <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
+                    <li><a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
+                    <li><a class="J_menu" href="${website}admin/rank/bigtag">菜品大类销售排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">餐台使用排行</a></li>
+                    <li><a class="J_menu" href="javascript:;">餐台区域使用排行</a></li>
+                </ul>
+            </li>
+        </shiro:checkPermission>
+
+
         <shiro:checkPermission name="Admin:SAdmin">
         <li <c:if test="${PWModule eq 'Admin:SAdmin'}">class="active"</c:if> >
             <a class="menu-list J_layer_1_menu" data-menu-id="9" href="javascript:;">超级管理</a>

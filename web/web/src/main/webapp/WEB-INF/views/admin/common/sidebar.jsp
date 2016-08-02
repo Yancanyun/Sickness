@@ -378,21 +378,19 @@
             <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
         </ul>
     </li>
-    <shiro:checkPermission name="Admin:DishManagement:Count">
+    <shiro:checkPermission name="Admin:Count">
         <li id="firstMenu8" class="active hidden">
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营业分析</span><i
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
-                <shiro:checkPermission name="Admin:DishManagement:Count:SaleRanking">
-                    <li <c:if test="${ExtModule eq 'Admin:DishManagement:Count:SaleRanking'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Count:SaleRanking">
+                    <li <c:if test="${MethodModule eq 'Admin:Count:SaleRanking'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a>
                     </li>
                 </shiro:checkPermission>
-
                     <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
-
-                <shiro:checkPermission name="Admin:DishManagement:Count:TagRanking">
-                    <li <c:if test="${ExtModule eq 'Admin:DishManagement:Count:TagRanking'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Count:TagRanking">
+                    <li <c:if test="${MethodModule eq 'Admin:Count:TagRanking'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/rank/bigtag">菜品大类销售排行</a>
                     </li>
                 </shiro:checkPermission>
