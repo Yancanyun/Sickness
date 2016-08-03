@@ -75,16 +75,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         LogClerk.sysout.debug("class or method IgnoreLogin annotation is null, means this request need interceptor");
 
         // 若未进行注册，则把所有请求都拦截到注册页面
-        if (!registerService.isRegistered()){
-            String path = request.getContextPath();
-            int port = request.getServerPort();
-            String basePath = request.getScheme() + "://" + request.getServerName()
-                    + (port == 80 ? "" : (":" + port)) + path + "/";
-
-            response.sendRedirect(basePath + "register");
-
-            return false;
-        }
+//        if (!registerService.isRegistered()){
+//            String path = request.getContextPath();
+//            int port = request.getServerPort();
+//            String basePath = request.getScheme() + "://" + request.getServerName()
+//                    + (port == 80 ? "" : (":" + port)) + path + "/";
+//
+//            response.sendRedirect(basePath + "register");
+//
+//            return false;
+//        }
 
         // 执行到这里，说明用户没有记住登录
 

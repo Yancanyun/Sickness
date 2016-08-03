@@ -114,9 +114,9 @@ public class RegisterServiceImpl implements RegisterService {
     public Boolean isRegistered() throws SSException {
         try {
             // 每隔一小时检测一次，一小时内直接返回上次的结果
-//            if (System.currentTimeMillis() - lastCheck <= DefaultCheckTime) {
-//                return registered;
-//            }
+            if (System.currentTimeMillis() - lastCheck <= DefaultCheckTime) {
+                return registered;
+            }
 
             // 从数据库里获取系统指纹及注册码
             Register register = commonDao.queryById(Register.class, 1);
