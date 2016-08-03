@@ -73,10 +73,14 @@ public class DishTagRankController extends AbstractController{
     @ResponseBody
     public JSONObject ajaxSearch(@PathVariable("pageNumber")Integer pageNumber,
                                  @RequestParam("pageSize") Integer pageSize,
-                                 @RequestParam("startTime")Date startTime,
-                                 @RequestParam("endTime")Date endTime,
+                                 @RequestParam("startTime")String startTime1,
+                                 @RequestParam("endTime")String endTime1,
                                  @RequestParam(value = "orderBy" ,required = false) String orderBy,
                                  @RequestParam(value = "orderType" ,required = false) Integer orderType){
+        // 对开始时间和结束时间处理
+        Date startTime = DateUtils.getStartTime(startTime1);
+        Date endTime = DateUtils.getEndTime(endTime1);
+
         // 对页面大小和页码预处理
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         pageNumber = pageNumber == null ? 1 : pageNumber;
@@ -123,9 +127,11 @@ public class DishTagRankController extends AbstractController{
     @Module(value = ModuleEnums.AdminCountDishTagRankingList)
     @RequestMapping(value = "exportToExcel",method = RequestMethod.GET)
     @ResponseBody
-    public String exportToExcel(@RequestParam("startTime")Date startTime,
-                                @RequestParam("endTime")Date endTime){
+    public String exportToExcel(@RequestParam("startTime")String startTime1,
+                                @RequestParam("endTime")String endTime1){
         try{
+            Date startTime = DateUtils.getStartTime(startTime1);
+            Date endTime = DateUtils.getEndTime(endTime1);
             dishTagRankService.exportToExcel(startTime,endTime,getResponse());
         }catch(SSException e){
             sendErrMsg(e.getMessage());

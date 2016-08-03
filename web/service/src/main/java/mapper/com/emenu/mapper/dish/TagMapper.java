@@ -62,7 +62,7 @@ public interface TagMapper {
     public Tag queryDishTagByDishId(@Param("dishId") int dishId) throws Exception;
 
     /**
-     * 查找二级分类（菜品大类）
+     * 查找菜品大类
      * @return
      * @throws Exception
      */

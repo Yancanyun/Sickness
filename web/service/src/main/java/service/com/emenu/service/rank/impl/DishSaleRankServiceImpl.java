@@ -159,8 +159,8 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                 dishSaleRankDto.setDishName(dishService.queryById(entry.getKey()).getName());
                 // 数量取整
                 dishSaleRankDto.setNum(mapQuality.get(entry.getKey()).intValue());
-                dishSaleRankDto.setTagId(dishService.queryById(entry.getKey()).getTagId());
-                dishSaleRankDto.setTagName(tagService.queryById(dishService.queryById(entry.getKey()).getTagId()).getName());
+                dishSaleRankDto.setTagId(tagService.queryLayer2TagByDishId(entry.getKey()).getId());
+                dishSaleRankDto.setTagName(tagService.queryLayer2TagByDishId(entry.getKey()).getName());
                 dishSaleRankDtoList.add(dishSaleRankDto);
             }
             return dishSaleRankDtoList;

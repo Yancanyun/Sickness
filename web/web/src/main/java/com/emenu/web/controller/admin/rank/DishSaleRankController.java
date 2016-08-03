@@ -86,7 +86,6 @@ public class DishSaleRankController extends AbstractController {
                            @RequestParam(value = "orderBy" ,required = false) String orderBy,
                            @RequestParam(value = "orderType" ,required = false) Integer orderType){
         // 对起始时间和结束时间处理
-
         Date startTime =  DateUtils.getStartTime(startTime1);
         Date endTime =  DateUtils.getEndTime(endTime1);
         // 对页面大小和页码预处理
@@ -162,10 +161,12 @@ public class DishSaleRankController extends AbstractController {
     @Module(value = ModuleEnums.AdminCountDishSaleRankingList)
     @RequestMapping(value = "exportToExcel",method = RequestMethod.GET)
     @ResponseBody
-    public String exportToExcel(@RequestParam("startTime")Date startTime,
-                                @RequestParam("endTime")Date endTime,
+    public String exportToExcel(@RequestParam("startTime")String startTime1,
+                                @RequestParam("endTime")String endTime1,
                                 @RequestParam(value = "tagIds" ,required = false) List<Integer> tagIds){
         try{
+            Date startTime = DateUtils.getStartTime(startTime1);
+            Date endTime = DateUtils.getEndTime(endTime1);
             dishSaleRankService.exportToExcel(startTime,endTime,tagIds,getResponse());
         }catch(SSException e){
             sendErrMsg(e.getMessage());
