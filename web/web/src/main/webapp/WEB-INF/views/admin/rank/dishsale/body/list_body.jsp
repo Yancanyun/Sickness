@@ -48,9 +48,9 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label padding-R-17">菜品大类</label>
                   <div class="checkbox block col-sm-7">
-                    <%--<label>
+                    <label>
                       <input type="checkbox" class="J_selectAll" name="tagIds" value="1">全选
-                    </label>--%>
+                    </label>
                     <c:forEach items="${tag}" var="tag">
                       <label>
                         <input type="checkbox" class="J_selectType" name="tagIds" value="${tag.id}" />${tag.name}

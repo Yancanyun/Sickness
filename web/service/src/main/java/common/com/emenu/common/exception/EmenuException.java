@@ -651,6 +651,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderByCheckoutIdFail("根据结账单id查询订单失败",10065),
     QueryOrderByStatusFail("根据订单状态查询订单失败",10066),
     CallDishNotAllow("菜品未到达上菜时限，暂不能催菜",10067),
+    QueryBackDishCountDtoFailed("查询退菜得到相应的dto失败",10068),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),

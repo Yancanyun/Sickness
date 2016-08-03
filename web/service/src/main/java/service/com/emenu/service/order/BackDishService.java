@@ -1,8 +1,10 @@
 package com.emenu.service.order;
 
+import com.emenu.common.dto.revenue.BackDishCountDto;
 import com.emenu.common.entity.order.BackDish;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,4 +27,24 @@ public interface BackDishService {
      * @throws SSException
      */
     public List<BackDish> queryBackDishListByOrderId(Integer orderId) throws SSException;
+
+    /**
+     * 根据开始时间和结束时间查询这一段时间的退菜详情
+     * 包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<BackDish> queryOrderByTimePeriod(Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 根据开始时间和结束时间查询这一段时间的BackDishCountDto
+     * 包括开始时间和结束时间
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<BackDishCountDto>queryBackDishCountDtoByTimePeriod (Date startTime,Date endTime) throws SSException;
 }

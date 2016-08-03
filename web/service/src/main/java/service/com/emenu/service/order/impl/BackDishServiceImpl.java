@@ -1,6 +1,7 @@
 package com.emenu.service.order.impl;
 
 import com.emenu.common.dto.dish.DishPackageDto;
+import com.emenu.common.dto.revenue.BackDishCountDto;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
@@ -181,6 +182,33 @@ public class BackDishServiceImpl implements BackDishService {
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryBackDishListFailed, e);
+        }
+    }
+
+    @Override
+    public List<BackDish> queryOrderByTimePeriod(Date startTime,Date endTime) throws SSException{
+        try{
+            return backDishMapper.queryOrderByTimePeriod(startTime,endTime);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishListFailed, e);
+        }
+    }
+
+    @Override
+    public List<BackDishCountDto>queryBackDishCountDtoByTimePeriod (Date startTime,Date endTime) throws SSException{
+        try{
+            List<BackDish> backDishList = this.queryOrderByTimePeriod(startTime,endTime);
+            List<BackDishCountDto> backDishCountDtoList = new ArrayList<BackDishCountDto>();
+            for(BackDish backDish : backDishList){
+                BackDishCountDto backDishCountDto = new BackDishCountDto();
+
+
+            }
+            return backDishCountDtoList;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishCountDtoFailed, e);
         }
     }
 }

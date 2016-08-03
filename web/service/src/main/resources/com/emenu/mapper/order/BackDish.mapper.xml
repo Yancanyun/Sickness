@@ -17,4 +17,10 @@
         WHERE order_id = #{orderId}
     </select>
 
+    <select id = "queryOrderByTimePeriod" resultMap="pw.BackDish">
+        SELECT *
+        FROM t_back_dish
+        where  t_back_dish.created_time>=#{startTime}
+        AND #{endTime}>=t_back_dish.created_time
+    </select>
 </mapper>
