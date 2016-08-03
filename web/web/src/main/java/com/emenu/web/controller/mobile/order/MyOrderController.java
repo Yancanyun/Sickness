@@ -386,7 +386,8 @@ public class MyOrderController  extends AbstractController {
         try
         {
             tableOrderCache = orderDishCacheService.listByTableId(tableId);
-            if(tableOrderCache!=null)
+            if(tableOrderCache!=null
+                    &&!tableOrderCache.getOrderDishCacheList().isEmpty())
             orderDishCache = tableOrderCache.getOrderDishCacheList();//已点菜品缓存
             else//菜品缓存为空,则没有必要展示给用户空的列表
             {
@@ -398,7 +399,7 @@ public class MyOrderController  extends AbstractController {
 
             for(OrderDishCache dto :orderDishCache) {
 
-                JSONObject temp = jsonObject;
+                JSONObject temp = new JSONObject();
                 DishDto dishDto = dishService.queryById(dto.getDishId());//通过dishId查询出菜品的信息
                 temp.put("dishId",dto.getDishId());
                 temp.put("dishName",dishDto.getName());
@@ -419,6 +420,10 @@ public class MyOrderController  extends AbstractController {
                 jsonArray.add(temp);
             }
             jsonObject.put("orderList",jsonArray);
+            java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
+            String totalMoneyTemp = myformat.format(totalMoney);
+            totalMoney = new BigDecimal(totalMoneyTemp);
+            jsonObject.put("customPrice", totalMoney);
             if(orderStatus==1)//锁死菜品缓存
             {
                 // 把当前正在操作的顾客的Ip地址记录下
@@ -429,11 +434,6 @@ public class MyOrderController  extends AbstractController {
                     orderDishCacheService.setCurrentOperateCustomerIp(request.getHeader("x-forwarded-for"));
 
                 orderDishCacheService.tableLock(tableId);
-
-                java.text.DecimalFormat myformat=new java.text.DecimalFormat("0.00");//保留两位小数
-                String totalMoneyTemp = myformat.format(totalMoney);
-                totalMoney = new BigDecimal(totalMoneyTemp);
-                jsonObject.put("customPrice", totalMoney);
             }
             else//若点击了返回则解除锁死
             {
