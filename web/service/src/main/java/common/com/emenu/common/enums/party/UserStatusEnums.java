@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public enum UserStatusEnums {
 
-    Enabled(1, "启用"),
-    Disabled(2, "禁用"),
+    Enabled(1, "可用"),
+    Disabled(2, "停用"),
     Deleted(3, "删除");
 
     private Integer id;
