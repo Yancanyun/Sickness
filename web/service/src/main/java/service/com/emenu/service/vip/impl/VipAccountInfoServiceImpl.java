@@ -116,7 +116,7 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
             throw SSException.get(EmenuException.VipAccountInfoIdError);
         }
         try {
-            commonDao.deleteById(VipAccountInfo.class,id);
+            commonDao.deleteById(VipAccountInfo.class, id);
         } catch(Exception e) {
             LogClerk.errLog.equals(e);
             throw SSException.get(EmenuException.DeleteVipAccountInfoFailed);
@@ -176,6 +176,16 @@ public class VipAccountInfoServiceImpl implements VipAccountInfoService {
         } catch(Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryVipAccountFailed);
+        }
+    }
+
+    @Override
+    public int CountByKeywordAndGrade(String keyWord,List<Integer> gradeIdList) throws SSException{
+        try{
+            return vipAccountInfoMapper.CountByKeywordAndGrade(keyWord,gradeIdList);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountByKeywordAndGradeFailed);
         }
     }
 }

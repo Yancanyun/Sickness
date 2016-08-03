@@ -92,20 +92,11 @@ public class DishSaleRankController extends AbstractController {
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
         pageNumber = pageNumber == null ? 1 : pageNumber;
         List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
-        List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
         // 数据量
         int dataCount = 0;
         try{
-            if(tagIds != null){
-                for(Integer tagId:tagIds){
-                    dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
-                    dishSaleRankDtoList2.addAll(dishSaleRankDtoList);
-                }
-                dataCount = dishSaleRankDtoList2.size();
-            }else{
-                    dataCount = dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,0);
-                    dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
-            }
+            dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, tagIds, pageSize, pageNumber);
+            dataCount = dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,tagIds);
             // 排序
             if(orderBy!=null && orderType!=null){
                 MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
@@ -113,15 +104,15 @@ public class DishSaleRankController extends AbstractController {
                 if("num".equals(orderBy)){
                     // 降序
                     if(orderType == 1){
-                        msList.sortByMethod(dishSaleRankDtoList2,"getNum",true);
+                        msList.sortByMethod(dishSaleRankDtoList,"getNum",true);
                     }else{
-                        msList.sortByMethod(dishSaleRankDtoList2,"getNum",false);
+                        msList.sortByMethod(dishSaleRankDtoList,"getNum",false);
                     }
                 }else{
                     if(orderType == 1){
-                        msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",true);
+                        msList.sortByMethod(dishSaleRankDtoList,"getConsumeSum",true);
                     }else{
-                        msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",false);
+                        msList.sortByMethod(dishSaleRankDtoList,"getConsumeSum",false);
                     }
                 }
             }
@@ -131,7 +122,7 @@ public class DishSaleRankController extends AbstractController {
         }
 
         JSONArray jsonArray = new JSONArray();
-            for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList2){
+            for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("dishId",dishSaleRankDto.getDishId());
                 jsonObject.put("dishName",dishSaleRankDto.getDishName());

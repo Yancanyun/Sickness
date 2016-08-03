@@ -62,8 +62,9 @@ public class VipAccountInfoController extends AbstractController{
                                          @RequestParam("pageSize") Integer pageSize,
                                          @RequestParam(value = "orderType",required = false) Integer orderType,
                                          @RequestParam(value = "orderBy",required = false)String orderBy,
-                                         @RequestParam(value= "keyWord", required = false) String keyWord,
+                                         @RequestParam(value= "keyword", required = false) String keyWord,
                                          @RequestParam(value= "gradeIdList", required = false) List<Integer> gradeIdList) {
+        int  dataCount = 0;
         if(orderType==null||Assert.isNull(orderBy)) {
             orderBy= "minConsumption";
             orderType = 0;
@@ -71,6 +72,7 @@ public class VipAccountInfoController extends AbstractController{
         List<VipAccountInfoDto> accountList = Collections.emptyList();
         try {
             accountList = vipAccountInfoService.listByPageAndMin(curPage, pageSize,orderType,orderBy,keyWord,gradeIdList);
+            dataCount = vipAccountInfoService.CountByKeywordAndGrade(keyWord,gradeIdList);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -94,7 +96,7 @@ public class VipAccountInfoController extends AbstractController{
             jsonObject.put("status", vipAccountInfoDto.getStatus());
             jsonArray.add(jsonObject);
         }
-        int  dataCount = accountList.size();
+
 
         return sendJsonArray(jsonArray, dataCount);
     }

@@ -2,6 +2,7 @@ package com.emenu.mapper.vip;
 
 import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.vip.VipAccountInfo;
+import com.sun.tracing.dtrace.ProviderAttributes;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -65,5 +66,13 @@ public interface VipAccountInfoMapper {
     public VipAccountInfo queryEntityByPartyId(@Param("partyId") int partyId) throws Exception;
 
 
+    /**
+     * 根据keyWord和gradeIdList查询相应的数据条数
+     * @param keyWord
+     * @param gradeIdList
+     * @return
+     * @throws Exception
+     */
+    public int CountByKeywordAndGrade(@Param("keyWord")String keyWord,@Param("gradeIdList")List<Integer> gradeIdList) throws Exception;
 
 }

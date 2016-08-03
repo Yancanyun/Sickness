@@ -71,25 +71,25 @@ public interface DishSaleRankService {
      * 分页查询
      * @param startTime
      * @param endTime
-     * @param tagId
+     * @param tagIds
      * @param pageSize
      * @param pageNumber
      * @return
      * @throws SSException
      */
-    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(Date startTime
-                                                                                ,Date endTime
-                                                                                ,Integer tagId
-                                                                                ,Integer pageSize
-                                                                                ,Integer pageNumber) throws SSException;
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(Date startTime,
+                                                                                 Date endTime,
+                                                                                 List<Integer> tagIds,
+                                                                                 Integer pageSize,
+                                                                                 Integer pageNumber) throws SSException;
 
     /**
      * 根据起始时间和结束时间和菜品大类Id找到数据条数
      * @param startTime
      * @param endTime
-     * @param tagId
+     * @param tagIds
      * @return
      * @throws SSException
      */
-    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException;
+    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,List<Integer>tagIds) throws SSException;
 }

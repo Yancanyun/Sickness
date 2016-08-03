@@ -25,11 +25,11 @@
                     #{gradeId}
                 </foreach>
             </if>
-            <if test="keyWord != null and keyWord != ''">
-                 AND (vipinfo.`name` LIKE CONCAT('%',#{keyWord},'%')
-                OR vipinfo.`phone` LIKE CONCAT('%',#{keyWord},'%')
-                OR  card.`card_number` LIKE CONCAT('%',#{keyWord},'%'))
-            </if>
+            AND  (
+            vipinfo.`name` LIKE "%"#{keyWord}"%"
+            OR vipinfo.`phone` LIKE "%"#{keyWord}"%"
+            OR  card.`card_number` LIKE "%"#{keyWord}"%"
+            )
         </where>
         <if test="orderType == 1">
             ORDER BY ${orderBy} ASC
@@ -63,5 +63,39 @@
         SELECT * FROM `t_vip_account_info`
         WHERE `party_id` = #{partyId}
         AND `status` = 1
+    </select>
+
+    <select id="CountByKeywordAndGrade" resultType="int">
+        SELECT count(1)
+        FROM (
+        SELECT vipcount.`id` AS id,
+        grade.`min_consumption` AS minConsumption,
+        grade.`name` AS vipGrade,
+        vipinfo.`name` AS NAME,
+        vipinfo.`phone` AS phone,
+        card.`card_number` AS cardNumber,
+        vipcount.`balance` AS balance,
+        vipcount.`integral` AS integral,
+        vipcount.`total_consumption` AS totalConsumption,
+        vipcount.`used_credit_amount` AS usedCreditAmount,
+        vipcount.`status` AS STATUS
+        FROM `t_vip_account_info` vipcount
+        LEFT JOIN `t_party_vip_info` vipinfo ON vipcount.`party_id` = vipinfo.`party_id`
+        LEFT JOIN `t_vip_grade` grade ON grade.`id` = vipinfo.`grade_id`
+        LEFT JOIN `t_vip_card` card ON vipcount.`party_id` = card.`vip_party_id`
+        <where>
+            <if test="gradeIdList != null and gradeIdList.size()>0">
+                grade.`id` IN
+                <foreach collection="gradeIdList" index="index" item="gradeId" open="(" separator="," close=")">
+                    #{gradeId}
+                </foreach>
+            </if>
+            AND  (
+            vipinfo.`name` LIKE "%"#{keyWord}"%"
+            OR vipinfo.`phone` LIKE "%"#{keyWord}"%"
+            OR  card.`card_number` LIKE "%"#{keyWord}"%"
+            )
+        </where>
+        ) AS total
     </select>
 </mapper>

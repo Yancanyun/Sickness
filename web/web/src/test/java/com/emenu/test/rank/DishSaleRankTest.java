@@ -93,13 +93,13 @@ public class DishSaleRankTest extends AbstractTestCase {
     public void queryDishTagRankPage() throws SSException{
         Date startTime = DateUtils.getFirstDayOfWeek();
         Date endTime = DateUtils.getLastDayOfWeek();
-        List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 92, 4, 1);
+        /*List<DishSaleRankDto> list = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, new Integer(92), 4, 1);
         for(int i=0;i<list.size();i++){
             System.out.print(list.get(i).getDishName()+"   ");
             System.out.print(list.get(i).getTagName() + "   ");
             System.out.print(list.get(i).getNum() + "   ");
             System.out.println(list.get(i).getConsumeSum());
-        }
+        }*/
     }
     /*@Test
     public  void hh() {

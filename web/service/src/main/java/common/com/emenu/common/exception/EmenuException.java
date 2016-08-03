@@ -530,6 +530,8 @@ public enum EmenuException implements IBizExceptionMes {
     QueryVipAccountFailed("查询会员账户信息失败", 8131),
     QueryVipError("查询会员信息失败",8132),
     VipBalanceNotEnough("会员余额不足，无法结账", 8133),
+    CountByKeywordAndGradeFailed("根据keyWord和等级集合查询数据量失败",8134),
+
 
 
     //会员卡发放

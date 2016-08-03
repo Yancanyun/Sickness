@@ -34,6 +34,7 @@ import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -289,14 +290,20 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     @Override
     public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(Date startTime,
                                                                                  Date endTime,
-                                                                                 Integer tagId,
+                                                                                 List<Integer> tagIds,
                                                                                  Integer pageSize,
                                                                                  Integer pageNumber) throws SSException{
         List<DishSaleRankDto> dishSaleRankDtoList = new ArrayList<DishSaleRankDto>();
+        List<DishSaleRankDto> dishSaleRankDtoList2= new ArrayList<DishSaleRankDto>();
+
         try{
             // 判断前台有没有选中菜品大类
-            if(tagId != 0){
-                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
+            if(tagIds!=null){
+                for(Integer tagId : tagIds){
+                    dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
+                    dishSaleRankDtoList.addAll(dishSaleRankDtoList2);
+                }
+
                 if(!dishSaleRankDtoList.isEmpty()){
                     if(dishSaleRankDtoList.size()<=pageSize){
                         dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
@@ -351,19 +358,18 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
-    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,Integer tagId) throws SSException{
+    public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,List<Integer> tagIds) throws SSException{
         Integer number = 0;
         // 判断前台有没有选中菜品大类
         try{
-            if(tagId != null&& tagId != 0 ){
-                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
-                if(dishSaleRankDtoList == null){
-                    number = 0;
-                }else{
-                    number = dishSaleRankDtoList.size();
+            List<DishSaleRankDto> dishSaleRankDtoList = new ArrayList<DishSaleRankDto>();
+            if(tagIds != null){
+                for(Integer tagId : tagIds){
+                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
+                    number += dishSaleRankDtoList.size();
                 }
             }else{
-                List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
                 if(dishSaleRankDtoList == null){
                     number = 0;
                 }else{

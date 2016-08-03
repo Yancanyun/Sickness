@@ -87,4 +87,13 @@ public interface VipAccountInfoService {
      * @throws SSException
      */
     public VipAccountInfo queryByPartyId(int partyId) throws SSException;
+
+    /**
+     * 根据keyWord和gradeIdList查询对应的数据条数
+     * @param keyWord
+     * @param gradeIdList
+     * @return
+     * @throws SSException
+     */
+    public int CountByKeywordAndGrade(String keyWord,List<Integer> gradeIdList) throws SSException;
 }
