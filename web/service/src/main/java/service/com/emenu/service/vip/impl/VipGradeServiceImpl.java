@@ -133,7 +133,6 @@ public class VipGradeServiceImpl implements VipGradeService{
             }else {
                 commonDao.deleteById(VipGrade.class, id);
             }
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DeleteVipGradeFail, e);
@@ -217,6 +216,24 @@ public class VipGradeServiceImpl implements VipGradeService{
         }
     }
 
+    @Override
+    public Boolean minConsumptionCanUse(Integer id, BigDecimal minConsumption) throws SSException{
+        try{
+            if(Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.VipGradeIdIllegal);
+            }
+            VipGrade vipGrade = this.countMinConsumptionUsingNumber(minConsumption);
+            if (Assert.isNotNull(vipGrade) && vipGrade.getId() != id){
+                return false;
+            }else {
+                return true;
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipGradeFail, e);
+        }
+    }
+
     /**
      * 检查实体及其关键字段是否为空
      *
@@ -230,7 +247,7 @@ public class VipGradeServiceImpl implements VipGradeService{
         }
 
         Assert.isNotNull(vipGrade.getName(), EmenuException.VipGradeNameNotNull);
-        if (Assert.isNull(vipGrade.getVipDishPricePlanId()) || Assert.lessOrEqualZero(vipGrade.getVipDishPricePlanId())){
+        if (Assert.isNull(vipGrade.getVipDishPricePlanId())){
             throw SSException.get(EmenuException.VipDishPricePlanIdIllegal);
         }
         if (Assert.isNull(vipGrade.getMinConsumption())){
@@ -239,7 +256,7 @@ public class VipGradeServiceImpl implements VipGradeService{
         if (Assert.isNull(vipGrade.getCreditAmount())){
             throw SSException.get(EmenuException.CreditAmountIllegal);
         }
-        if (Assert.isNull(vipGrade.getSettlementCycle()) || Assert.lessOrEqualZero(vipGrade.getSettlementCycle())){
+        if (Assert.isNull(vipGrade.getSettlementCycle()) || Assert.lessZero(vipGrade.getSettlementCycle())){
             throw SSException.get(EmenuException.SettlementCycleIllegal);
         }
         if (Assert.isNull(vipGrade.getPreReminderAmount())){

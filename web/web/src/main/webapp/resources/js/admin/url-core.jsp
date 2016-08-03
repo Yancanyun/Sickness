@@ -250,7 +250,7 @@
             ['changeStatus', site.website + 'admin/vip/recharge/plan/ajax/status', 'put', '改变状态'],
             //会员等级页面
             ['delGrade', site.website + 'admin/vip/grade/ajax/&{id}', 'delete', '删除等级时发送id'],
-            ['sendMinConsumption', site.website + 'admin/vip/grade/ajax/min/&{id}', 'post', '填写最低消费时判断是否重复'],
+            ['sendMinConsumption', site.website + 'admin/vip/grade/ajax/min', 'get', '填写最低消费时判断是否重复'],
             //会员卡管理
             ['changeStatus', site.website + 'admin/vip/card/ajax/status', 'put', '挂失、解挂时，发送当前会员卡的id和status'],
             ['delCardId', site.website + 'admin/vip/card/ajax/&{id}', 'delete', 'ajax发送删除的会员卡id'],

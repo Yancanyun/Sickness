@@ -76,8 +76,8 @@ public class VipGradeServiceTest extends AbstractTestCase {
 
     @Test
     public void queryByConsumption() throws SSException{
-        BigDecimal bigDecimal = new BigDecimal(9000);
-        List<VipGrade> vipGrades = vipGradeService.listAll();
+        BigDecimal bigDecimal = new BigDecimal(250);
+        /*List<VipGrade> vipGrades = vipGradeService.listAll();
         Collections.sort(vipGrades, new Comparator<VipGrade>() {
             @Override
             public int compare(VipGrade o1, VipGrade o2) {
@@ -89,7 +89,9 @@ public class VipGradeServiceTest extends AbstractTestCase {
                 System.out.println(vipGrade);
                 break;
             }
-        }
+        }*/
+        VipGrade vipGrade = vipGradeService.queryByConsumption(bigDecimal);
+        System.out.println(vipGrade.getName());
     }
 
     @Test

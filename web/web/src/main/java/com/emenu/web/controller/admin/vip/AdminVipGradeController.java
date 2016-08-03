@@ -14,10 +14,7 @@ import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -140,6 +137,9 @@ public class AdminVipGradeController extends AbstractController {
                              HttpServletRequest httpServletRequest,
                              RedirectAttributes redirectAttributes) {
         try {
+            if (vipGrade.getSettlementCycle() == null){
+                vipGrade.setSettlementCycle(0);
+            }
             vipGradeService.updateById(vipGrade);
             String successUrl = "/" + URLConstants.ADMIN_VIP_GRADE_URL;
             redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
@@ -177,17 +177,18 @@ public class AdminVipGradeController extends AbstractController {
      * @param minConsumption
      * @return
      */
-    @RequestMapping(value = "ajax/min/{id}",method = RequestMethod.POST)
-    public JSONObject isMinConsumptionUsed(@PathVariable("id") Integer id,
-                                           @RequestParam("minConsumption")BigDecimal minConsumption){
+    @Module(ModuleEnums.AdminVipGradeUpdate)
+    @ResponseBody
+    @RequestMapping(value = "ajax/min", method = RequestMethod.GET)
+    public JSONObject isMinConsumptionUsed(@RequestParam("id") Integer id,
+                                           @RequestParam("minConsumption") BigDecimal minConsumption){
         try{
-            VipGrade vipGrade = vipGradeService.countMinConsumptionUsingNumber(minConsumption);
-            if (!Assert.isNull(vipGrade)){
-                if (vipGrade.getId() != id){
-                    throw SSException.get(EmenuException.MinConsumptionExist);
-                }
+            Boolean b = vipGradeService.minConsumptionCanUse(id,minConsumption);
+            if (b == true){
+                return sendJsonObject(AJAX_SUCCESS_CODE);
+            }else {
+                return sendMsgAndCode(AJAX_FAILURE_CODE,"该最低金额已存在！");
             }
-            return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

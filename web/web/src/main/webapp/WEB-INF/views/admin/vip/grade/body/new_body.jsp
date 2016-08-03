@@ -26,7 +26,7 @@
             </label>
             <div class="col-sm-6">
               <select class="form-control J_PlanSelect w180" name="vipDishPricePlanId">
-                <option value="-1">请选择</option>
+                <option value="0">不使用会员价方案</option>
                 <c:forEach var="vipDishPricePlan" items="${vipDishPricePlanList}">
                 <option value="${vipDishPricePlan.id}">${vipDishPricePlan.name}</option>
                 </c:forEach>

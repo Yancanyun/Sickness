@@ -201,7 +201,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
             //4.添加t_party_vip_info会员基本信息表
             vipInfo.setPartyId(partyId);
-            vipInfo.setGradeId(0);//注册时设置为默认最低等级
+            vipInfo.setGradeId(1);//注册时设置为默认最低等级
             vipInfo.setStatus(UserStatusEnums.Enabled.getId());
             commonDao.insert(vipInfo);
 
@@ -415,6 +415,20 @@ public class VipInfoServiceImpl implements VipInfoService{
             throw SSException.get(EmenuException.QueryVipError, e);
         }
         return vipInfo;
+    }
+
+    @Override
+    public VipInfo queryByPartyId(Integer partyId) throws SSException{
+        try{
+            if (Assert.lessOrEqualZero(partyId)){
+                throw SSException.get(EmenuException.PartyIdError);
+            }
+            VipInfo vipInfo = vipInfoMapper.queryByPartyId(partyId);
+            return vipInfo;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryVipError, e);
+        }
     }
 
 

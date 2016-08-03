@@ -1,11 +1,8 @@
 package com.emenu.service.vip.impl;
 
 import com.emenu.common.entity.party.group.vip.VipInfo;
-import com.emenu.common.entity.vip.ConsumptionActivity;
-import com.emenu.common.entity.vip.VipAccountInfo;
-import com.emenu.common.entity.vip.VipCard;
+import com.emenu.common.entity.vip.*;
 import com.emenu.common.dto.vip.VipRegisterDto;
-import com.emenu.common.entity.vip.VipRechargePlan;
 import com.emenu.common.enums.checkout.CheckoutTypeEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
 import com.emenu.common.exception.EmenuException;
@@ -15,10 +12,7 @@ import com.emenu.mapper.vip.VipAccountInfoMapper;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.sms.SmsService;
-import com.emenu.service.vip.VipAccountInfoService;
-import com.emenu.service.vip.VipCardService;
-import com.emenu.service.vip.VipOperationService;
-import com.emenu.service.vip.VipRechargePlanService;
+import com.emenu.service.vip.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -48,7 +42,7 @@ public class VipOperationServiceImpl implements VipOperationService{
     private VipCardService vipCardService;
 
     @Autowired
-    private VipRechargePlanService vipRechargePlanService;
+    private VipGradeService vipGradeService;
 
     @Autowired
     private VipAccountInfoService vipAccountInfoService;
@@ -166,10 +160,16 @@ public class VipOperationServiceImpl implements VipOperationService{
             vipAccountInfo.setTotalConsumption(vipAccountInfo.getTotalConsumption().add(rechargeAmount));// 总消费金额=原有总消费金额+充值金额
             commonDao.update(vipAccountInfo);
 
+            // 修改会员等级信息t_party_vip_info
+            VipAccountInfo vipAccountInfoAfter = vipAccountInfoService.queryByPartyId(vipPartyId);
+            VipGrade vipGrade = vipGradeService.queryByConsumption(vipAccountInfoAfter.getTotalConsumption());
+            VipInfo vipInfo = vipInfoMapper.queryByPartyId(vipPartyId);
+            vipInfo.setGradeId(vipGrade.getId());
+            commonDao.update(vipInfo);
+
             // 发送给会员短信
             // @author yangch
             String text = "【聚客多】您正在进行充值操作，充值金额：" + payAmount + "元。交易后余额：" + vipAccountInfo.getBalance() + "元。";
-            VipInfo vipInfo = vipInfoMapper.queryByPartyId(vipPartyId);
             smsService.sendSms(vipInfo.getPhone(), text);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

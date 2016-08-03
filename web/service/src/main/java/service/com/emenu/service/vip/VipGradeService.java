@@ -99,4 +99,13 @@ public interface VipGradeService {
      */
     public VipGrade countMinConsumptionUsingNumber(BigDecimal minConsumption) throws SSException;
 
+    /**
+     * 根据id和最低金额判断该最低金额是否可以使用
+     * @param id
+     * @param minConsumption
+     * @return
+     * @throws SSException
+     */
+    public Boolean minConsumptionCanUse(Integer id, BigDecimal minConsumption) throws SSException;
+
 }

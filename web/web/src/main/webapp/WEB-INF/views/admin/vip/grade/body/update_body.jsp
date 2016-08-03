@@ -20,13 +20,14 @@
       </div>
       <div class="panel-body">
         <form class="form-horizontal J_gradeForm" method="post" action="${website}admin/vip/grade/update/${vipGrade.id}" autocomplete="off">
+          <input class="J_gradeId" type="hidden" name="id" value="${vipGrade.id}">
           <div class="form-group">
             <label class="col-sm-3 control-label">
               <span class="requires">*</span>会员价方案
             </label>
             <div class="col-sm-6">
               <select class="form-control J_PlanSelect w180" name="vipDishPricePlanId">
-                <option value="-1">请选择</option>
+                <option value="0">不使用会员价方案</option>
                 <c:forEach var="vipDishPricePlan" items="${vipDishPricePlanList}">
                     <option value="${vipDishPricePlan.id}" <c:if test="${vipDishPricePlan.id == vipGrade.vipDishPricePlanId}">selected="selected"</c:if>>${vipDishPricePlan.name}</option>
                 </c:forEach>
@@ -46,7 +47,14 @@
               <span class="requires">*</span>最低消费金额
             </label>
                 <div class="col-sm-6">
-                  <input class="w180 J_minConsumption" type="text" name="minConsumption" value="${vipGrade.minConsumption}"/>&nbsp;元
+                  <c:choose>
+                    <c:when  test="${vipGrade.id eq 1}">
+                      <input class="w180" type="text" name="minConsumption" value="${vipGrade.minConsumption}" readonly/>&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条数据为系统默认，无法修改
+                    </c:when>
+                    <c:otherwise>
+                      <input class="w180 J_minConsumption" type="text" name="minConsumption" value="${vipGrade.minConsumption}"/>&nbsp;元
+                    </c:otherwise>
+                  </c:choose>
                 </div>
           </div>
           <div class="form-group">
@@ -70,7 +78,14 @@
               <span class="requires">*</span>升级预提醒额度
             </label>
                 <div class="col-sm-6">
-                  <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" data-valid-tip="请输入升级预提醒额度|升级预提醒额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+                  <c:choose>
+                    <c:when  test="${vipGrade.id eq 1}">
+                      <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" readonly />&nbsp;元&nbsp;&nbsp;&nbsp;&nbsp;本条数据为系统默认，无法修改
+                    </c:when>
+                    <c:otherwise>
+                      <input class="w180" type="text" name="preReminderAmount" value="${vipGrade.preReminderAmount}" data-valid-tip="请输入升级预提醒额度|升级预提醒额度不符合规格，请重新输入" data-valid-rule="notNull&isFloat"/>&nbsp;元
+                    </c:otherwise>
+                  </c:choose>
                 </div>
           </div>
           <div class="form-group">

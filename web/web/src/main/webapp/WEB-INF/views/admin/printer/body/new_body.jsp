@@ -80,7 +80,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label"><span class="requires">*</span>IP地址</label>
             <div class="col-sm-6">
-              <input class="w180 form-control" type="text" data-valid-tip="请输入长度为1~15个字符的IP地址|IP地址有误，请重新输入" data-valid-rule="length(0,16)" value="" name="ipAddress" />
+              <input class="w180 form-control" type="text" data-valid-tip="请输入IP地址|IP地址有误，请重新输入" data-valid-rule="isIP" value="" name="ipAddress" />
             </div>
           </div>
           <div class="form-group">

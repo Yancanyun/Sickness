@@ -161,4 +161,12 @@ public interface VipInfoService {
      * @throws SSException
      */
     public VipInfo queryByKeyWord(String keyword) throws SSException;
+
+    /**
+     * 根据会员partyId查询会员信息
+     * @param partyId
+     * @return
+     * @throws SSException
+     */
+    public VipInfo queryByPartyId(Integer partyId) throws SSException;
 }
