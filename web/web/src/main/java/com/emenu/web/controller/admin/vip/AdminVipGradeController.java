@@ -160,6 +160,7 @@ public class AdminVipGradeController extends AbstractController {
      * @return
      */
     @Module(ModuleEnums.AdminVipGradeDelete)
+    @ResponseBody
     @RequestMapping(value = "ajax/{id}", method = RequestMethod.DELETE)
     public JSONObject delById(@PathVariable("id") Integer id) {
         try {

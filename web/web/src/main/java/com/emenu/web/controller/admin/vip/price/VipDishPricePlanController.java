@@ -30,6 +30,11 @@ public class VipDishPricePlanController extends AbstractController{
     protected final static String NEW_SUCCESS_MSG = "添加成功";
     protected final static String NEW_FAIL_MSG = "添加失败";
 
+    /**
+     * 会员价方案列表
+     * @param model
+     * @return
+     */
     @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPricePlanList)
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String toList(Model model){
@@ -45,6 +50,12 @@ public class VipDishPricePlanController extends AbstractController{
         return "admin/vip/price/plan_list";
     }
 
+    /**
+     * 添加会员价方案
+     * @param vipDishPricePlan
+     * @param redirectAttributes
+     * @return
+     */
     @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPricePlanNew)
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newVipDishPricePlan(VipDishPricePlan vipDishPricePlan,
@@ -63,6 +74,12 @@ public class VipDishPricePlanController extends AbstractController{
         }
     }
 
+    /**
+     * ajax修改会员价方案
+     * @param vipDishPricePlan
+     * @param redirectAttributes
+     * @return
+     */
     @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPricePlanUpdate)
     @RequestMapping(value = "/ajax", method = RequestMethod.PUT)
     @ResponseBody
@@ -79,6 +96,11 @@ public class VipDishPricePlanController extends AbstractController{
         }
     }
 
+    /**
+     * ajax删除会员价方案
+     * @param id
+     * @return
+     */
     @Module(value = ModuleEnums.AdminVipVipDishPrice , extModule = ModuleEnums.AdminVipVipDishPricePlanDelete)
     @RequestMapping(value = "/ajax/{id}", method = RequestMethod.DELETE)
     @ResponseBody
