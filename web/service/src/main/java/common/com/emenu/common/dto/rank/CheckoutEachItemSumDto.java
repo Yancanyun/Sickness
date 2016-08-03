@@ -43,6 +43,17 @@ public class CheckoutEachItemSumDto {
     // 找零金额总和
     private BigDecimal changeMoneySum;
 
+    // 发票总和
+    private Integer invoiceSum;
+
+    public Integer getInvoiceSum() {
+        return invoiceSum;
+    }
+
+    public void setInvoiceSum(Integer invoiceSum) {
+        this.invoiceSum = invoiceSum;
+    }
+
     public BigDecimal getAlipaySum() {
         return alipaySum;
     }

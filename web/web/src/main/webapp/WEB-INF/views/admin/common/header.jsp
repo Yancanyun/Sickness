@@ -87,13 +87,17 @@
             </ul>
         </li>
         </shiro:checkPermission>
-        <li>
+
+        <shiro:checkPermission name = "Admin:Revenue:Count">
+        <li <c:if test = "${PWModule eq 'Admin:Revenue:Count'}">class = "active"</c:if>>
             <a class="menu-list J_layer_1_menu" data-menu-id="7" href="javascript:;">营收统计</a>
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
-                <li><a class="J_menu" href="javascript:;">账单统计</a></li>
+                <li><a class="J_menu" href="${website}admin/revenue/checkout">账单统计</a></li>
                 <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
+
             </ul>
         </li>
+        </shiro:checkPermission>
 
         <shiro:checkPermission name="Admin:Count">
             <li <c:if test="${PWModule eq 'Admin:Count'}">class="active"</c:if>>

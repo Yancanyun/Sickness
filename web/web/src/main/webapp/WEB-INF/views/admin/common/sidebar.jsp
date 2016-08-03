@@ -370,14 +370,21 @@
         </li>
     </shiro:checkPermission>
 
+    <shiro:checkPermission name = "Admin:Revenue:Count">
     <li id="firstMenu7" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营收统计</span><i
                 class="fa fa-angle-right angle-right"></i></a>
         <ul>
-            <li><a class="J_menu" href="javascript:;">账单统计</a></li>
-            <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
+            <shiro:checkPermission name="Admin:Revenue:Count:Checkout">
+                <li>
+                    <a class="J_menu" href="${website}admin/revenue/checkout">账单统计</a>
+                </li>
+            </shiro:checkPermission>
+                <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
         </ul>
     </li>
+    </shiro:checkPermission>
+
     <shiro:checkPermission name="Admin:Count">
         <li id="firstMenu8" class="active hidden">
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营业分析</span><i

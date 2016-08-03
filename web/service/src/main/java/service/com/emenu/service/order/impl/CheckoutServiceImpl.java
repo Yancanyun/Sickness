@@ -1140,7 +1140,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Override
     public List<CheckoutDto> queryCheckoutByTimePeriod(Date startDate, Date endDate, CheckoutDto checkoutDto1) throws SSException{
-        List<CheckoutDto> checkoutDtoList = Collections.emptyList();
+        List<CheckoutDto> checkoutDtoList = new ArrayList<CheckoutDto>();
         List<Checkout> checkoutList = new ArrayList<Checkout>();
         try{
             if(Assert.isNotNull(startDate) && Assert.isNotNull(endDate)){
@@ -1168,6 +1168,8 @@ public class CheckoutServiceImpl implements CheckoutService {
                     checkoutDto.setCheckoutTime(checkout.getCheckoutTime());
                     // 支付类型
                     checkoutDto.setCheckoutType(checkoutPayService.queryByCheckoutId(checkout.getId()).getCheckoutType());
+                    // 支付类型名
+                    checkoutDto.setCheckoutName(CheckoutTypeEnums.valueOf(checkoutDto.getCheckoutType()).name());
                     // 消费金额
                     checkoutDto.setConsumptionMoney(checkout.getConsumptionMoney());
                     // 抹零金额
@@ -1278,6 +1280,14 @@ public class CheckoutServiceImpl implements CheckoutService {
                     }else{
                         checkoutEachItemSumDto.setChangeMoneySum(checkoutEachItemSumDto.getChangeMoneySum().add(checkoutDto.getChangeMoney()));
                     }
+                    // 发票总计
+                    if(checkoutDto.getIsInvoiced() == 1){
+                        if(checkoutEachItemSumDto.getChangeMoneySum() == null){
+                            checkoutEachItemSumDto.setInvoiceSum(1);
+                        }else{
+                            checkoutEachItemSumDto.setInvoiceSum(checkoutEachItemSumDto.getInvoiceSum() + 1);
+                        }
+                    }
                 }
             }
         }catch(Exception e){
@@ -1285,5 +1295,24 @@ public class CheckoutServiceImpl implements CheckoutService {
             throw SSException.get(EmenuException.SumCheckoutEachItemFail,e);
         }
         return checkoutEachItemSumDto;
+    }
+
+    public Integer countCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException{
+        List<Checkout> checkoutList = new ArrayList<Checkout>();
+        Integer count = 0;
+        try{
+            checkoutList = checkoutMapper.countCheckoutByTimePeriod(startDate, endDate);
+            if(checkoutList != null){
+                for(Checkout dto : checkoutList){
+                    if(checkoutPayService.queryByCheckoutId(dto.getId()) != null){
+                        count++;
+                    }
+                }
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountCheckoutByTimePeriodFail,e);
+        }
+        return count;
     }
 }

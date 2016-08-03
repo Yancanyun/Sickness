@@ -26,7 +26,7 @@ public interface CheckoutMapper {
 
     /**
      * 根据时间段返回该时间段的所有结账单信息(已结账的账单)
-     *
+     * 分页查询
      * @param startDate
      * @param endDate
      * @param offset
@@ -38,4 +38,14 @@ public interface CheckoutMapper {
                                                     @Param("endDate") Date endDate,
                                                     @Param("offset") Integer offset,
                                                     @Param("checkoutDto") CheckoutDto checkoutDto) throws Exception;
+
+    /**
+     * 返回时间段里已结账的账单数
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws Exception
+     */
+    public List<Checkout> countCheckoutByTimePeriod(@Param("startDate") Date startDate,
+                                             @Param("endDate") Date endDate) throws Exception;
 }

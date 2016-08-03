@@ -21,4 +21,12 @@
         </if>
     </select>
 
+    <select id = "countCheckoutByTimePeriod" resultMap="pw.Checkout">
+        SELECT *
+        FROM t_checkout
+        where  t_checkout.checkout_time >= #{startDate}
+        AND #{endDate} >= t_checkout.checkout_time
+        AND t_checkout.status = 1
+    </select>
+
 </mapper>

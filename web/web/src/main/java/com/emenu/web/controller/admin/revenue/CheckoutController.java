@@ -1,4 +1,4 @@
-package com.emenu.web.controller.admin.rank;
+package com.emenu.web.controller.admin.revenue;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -72,16 +72,16 @@ public class CheckoutController  extends AbstractController{
             // 去年
             model.addAttribute("LastYearFirstDay", DateUtils.getLastYearFirstDay());
             model.addAttribute("LastYearLastDay", DateUtils.getLastYearLastDay());
-            return "admin/revenue/checkout/list_home";
         }catch(SSException e){
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);
             return WebConstants.sysErrorCode;
         }
+        return "admin/revenue/checkout/list_home";
     }
     /** 下面这个Module是干什么的 ？？*/
     @Module(value = ModuleEnums.AdminCountSaleRanking, extModule = ModuleEnums.AdminCountCheckoutList)
-    @RequestMapping(value = "ajax/list/{pageNumber}", method = RequestMethod.GET)
+    @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxSearch(@PathVariable("pageNo") Integer pageNo,
                            @RequestParam("pageSize") Integer pageSize,
@@ -110,11 +110,11 @@ public class CheckoutController  extends AbstractController{
         // 数据量
         Integer dataCount = 0;
         try{
-            // 得到时间段的账单
-            checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
+            // 得到时间段的账单数
+            dataCount = checkoutService.countCheckoutByTimePeriod(startDate,endDate);
             /**要是这个时间段没有账单呢？？？？？？？*/
-            if(!checkoutDtoList.isEmpty()){
-                dataCount = checkoutDtoList.size();
+            if(dataCount != 0){
+                checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
                 for(CheckoutDto dto : checkoutDtoList){
                     JSONObject json = new JSONObject();
                     // 结账单号
@@ -150,6 +150,6 @@ public class CheckoutController  extends AbstractController{
                 LogClerk.errLog.error(e);
                 return sendErrMsgAndErrCode(e);
         }
-        return jsonMessage;
+        return sendJsonObject(jsonMessage,AJAX_SUCCESS_CODE);
     }
 }

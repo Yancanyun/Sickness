@@ -669,6 +669,7 @@ public enum EmenuException implements IBizExceptionMes {
     DirectToCheckout("该餐台未消费，将直接进行结账", 10083),
     QueryCheckoutByTimePeriodFail("查询该时间段的结账单失败",10084),
     SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",10085),
+    CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",10086),
 
     /****************************后厨管理端****************************/
 

@@ -106,8 +106,8 @@ public class CheckTest extends AbstractTestCase {
         Date endDate = sdf.parse(d2,pos2);
 
         CheckoutDto checkoutDto = new CheckoutDto();
-        Integer pageNo = 2;
-        Integer pageSize = 4;
+        Integer pageNo = 1;
+        Integer pageSize = 12;
         pageNo = pageNo == null ? 0 : pageNo;
         pageSize = pageSize == null ? 10 : pageSize;
         checkoutDto.setPageNo(pageNo);
@@ -136,6 +136,22 @@ public class CheckTest extends AbstractTestCase {
 /*        CheckoutEachItemSumDto checkoutEachItemSumDto = new  CheckoutEachItemSumDto();
         checkoutEachItemSumDto = checkoutService.sumCheckoutEachItem(checkoutService.queryCheckoutByTimePeriod(startDate, endDate));
         System.out.println(checkoutEachItemSumDto);*/
+    }
+    @Test
+    public void countCheckoutByTimePeriod() throws SSException{
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String d0 = DateUtils.getLastWeekFirstDay();
+        String d2 = DateUtils.getLastWeekLastDay();
+        String db = "00:00:00";
+        String de = "23:59:59";
+        d0 = d0 + " " + db;
+        d2 = d2 + " " + de;
+        ParsePosition pos1 =new ParsePosition(0);
+        Date startDate = sdf.parse(d0,pos1);
+        ParsePosition pos2 = new ParsePosition(0);
+        Date endDate = sdf.parse(d2,pos2);
+        Integer count = checkoutService.countCheckoutByTimePeriod(startDate, endDate);
+        System.out.print(count);
     }
 }
 

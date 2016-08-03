@@ -143,4 +143,6 @@ public interface CheckoutService {
      * @author pengpeng
      */
     public CheckoutEachItemSumDto sumCheckoutEachItem(List<CheckoutDto> checkoutDtoList) throws SSException;
+
+    public Integer countCheckoutByTimePeriod(Date startDate, Date endDate) throws SSException;
 }

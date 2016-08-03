@@ -27,22 +27,22 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">时间段</label>
             <div class="col-sm-8">
-              <input type="text" class="J_startTime w180" data-start-time="2014-8-01" readonly="readonly" name="startTime" value="2014-8-01" />
+              <input type="text" class="J_startTime w180" data-start-time="${firstToday}" readonly="readonly" name="startTime" value="${firstToday}" />
               <span class="to">~</span>
-              <input type="text" class="J_endTime w180" data-end-time="2015-9-11" readonly="readonly" name="endTime" value="2015-9-11" />
+              <input type="text" class="J_endTime w180" data-end-time="${lastToday}" readonly="readonly" name="endTime" value="${lastToday}" />
             </div>
           </div>
           <div class="form-group " >
             <label class="col-sm-2 control-label">&nbsp;</label>
             <div class="col-sm-8">
-              <span class="timing J_shortcut" data-start-time="2015-10-01" data-end-time="2015-10-01">今天</span>
-              <span class="timing J_shortcut" data-start-time="2015-09-30" data-end-time="2015-09-30">昨天</span>
-              <span class="timing J_shortcut" data-start-time="2015-10-01" data-end-time="2015-10-08">本周</span>
-              <span class="timing J_shortcut" data-start-time="2015-09-23" data-end-time="2015-10-01">上周</span>
-              <span class="timing J_shortcut" data-start-time="2015-10-01" data-end-time="2015-10-31">本月</span>
-              <span class="timing J_shortcut" data-start-time="2015-09-01" data-end-time="2015-09-30">上月</span>
-              <span class="timing J_shortcut" data-start-time="2015-10-01" data-end-time="2016-10-01">整年</span>
-              <span class="timing J_shortcut" data-start-time="2014-10-01" data-end-time="2015-10-01">去年</span>
+              <span class = "timing J_shortcut" data-start-time = "${firstToday}" data-end-time = "${lastToday}">今天</span>
+              <span class = "timing J_shortcut" data-start-time = "${firstYesterday}" data-end-time = "${lastYesterday}">昨天</span>
+              <span class = "timing J_shortcut" data-start-time = "${currentWeekFirstDay}" data-end-time = "${currentWeekLastDay}">本周</span>
+              <span class = "timing J_shortcut" data-start-time = "${lastWeekFirstDay}" data-end-time = "${lastWeekLastDay}">上周</span>
+              <span class = "timing J_shortcut" data-start-time = "${currentMonthFirstDay}" data-end-time = "${currentMonthLastDay}">本月</span>
+              <span class = "timing J_shortcut" data-start-time = "${lastMonthFirstDay}" data-end-time = "${lastMonthLastDay}">上月</span>
+              <span class = "timing J_shortcut" data-start-time = "${currentYearFirstDay}" data-end-time = "${currentYearLastDay}">整年</span>
+              <span class = "timing J_shortcut" data-start-time = "${LastYearFirstDay}" data-end-time = "${LastYearLastDay}">去年</span>
             </div>
           </div>
           <div class="col-sm-6 col-sm-offset-4">
@@ -66,26 +66,18 @@
             <table class="table table-hover table-bordered">
               <thead>
               <tr>
-                <th rowspan="2">账单编号</th>
-                <th colspan="2">餐台</th>
-                <th rowspan="2">收银员</th>
-                <th rowspan="2">结账时间</th>
-                <th colspan="5">支付类型</th>
-                <th rowspan="2">消费金额</th>
-                <th rowspan="2">抹零金额</th>
-                <th rowspan="2">宾客付款</th>
-                <th rowspan="2">找零金额</th>
-                <th rowspan="2">实付金额</th>
-                <th rowspan="2">发票</th>
-              </tr>
-              <tr>
-                <th>台号</th>
-                <th>名称</th>
-                <th>现金</th>
-                <th>会员卡</th>
-                <th>银行卡</th>
-                <th>支付宝</th>
-                <th>微信支付</th>
+                <th>账单编号</th>
+                <th>餐台号</th>
+                <th>餐台名称</th>
+                <th>收银员</th>
+                <th>结账时间</th>
+                <th>支付类型</th>
+                <th>消费金额</th>
+                <th>抹零金额</th>
+                <th>宾客付款</th>
+                <th>找零金额</th>
+                <th>实付金额</th>
+                <th>发票</th>
               </tr>
               </thead>
               <tbody id="J_template"></tbody>
@@ -106,12 +98,10 @@
         <form class="J_sum">
           <div class="table-responsive">
             <table class="table table-hover table-bordered">
+              <!-- modify -->
               <thead>
               <tr>
-                <th rowspan="2">账单编号</th>
-                <th colspan="2">餐台</th>
-                <th rowspan="2">收银员</th>
-                <th rowspan="2">结账时间</th>
+                <th rowspan="2">账单总计</th>
                 <th colspan="5">支付类型</th>
                 <th rowspan="2">消费金额</th>
                 <th rowspan="2">抹零金额</th>
@@ -121,8 +111,6 @@
                 <th rowspan="2">发票</th>
               </tr>
               <tr>
-                <th>台号</th>
-                <th>名称</th>
                 <th>现金</th>
                 <th>会员卡</th>
                 <th>银行卡</th>
@@ -130,7 +118,8 @@
                 <th>微信支付</th>
               </tr>
               </thead>
-              <tbody id="J_template"></tbody>
+              <tbody id="dataRenderSum"></tbody>
+              <!-- modify -->
             </table>
           </div>
         </form>

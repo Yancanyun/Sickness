@@ -39,6 +39,9 @@ public class CheckoutDto {
     // 支付类型
     private Integer checkoutType;
 
+    // 支付类型
+    private String checkoutName;
+
     // 消费金额
     private BigDecimal consumptionMoney;
 
@@ -200,5 +203,13 @@ public class CheckoutDto {
 
     public void setWipeZeroMoney(BigDecimal wipeZeroMoney) {
         this.wipeZeroMoney = wipeZeroMoney;
+    }
+
+    public String getCheckoutName() {
+        return checkoutName;
+    }
+
+    public void setCheckoutName(String checkoutName) {
+        this.checkoutName = checkoutName;
     }
 }
