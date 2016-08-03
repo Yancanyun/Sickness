@@ -95,55 +95,41 @@ public class DishSaleRankController extends AbstractController {
         List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
         // 数据量
         int dataCount = 0;
-        if(tagIds != null){
-            try{
-                for(Integer tagId:tagIds){
-                    dataCount +=   dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,tagId);
-                }
-            }catch(SSException e){
-                LogClerk.errLog.error(e);
-                return sendErrMsgAndErrCode(e);
-            }
-            try{
+        try{
+            if(tagIds != null){
                 for(Integer tagId:tagIds){
                     dishSaleRankDtoList = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, tagId, pageSize, pageNumber);
-                    for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
-                        dishSaleRankDtoList2.add(dishSaleRankDto);
+                    dishSaleRankDtoList2.addAll(dishSaleRankDtoList);
+                }
+                dataCount = dishSaleRankDtoList2.size();
+            }else{
+                    dataCount = dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,0);
+                    dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
+            }
+            // 排序
+            if(orderBy!=null && orderType!=null){
+                MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
+                // 按销售数量
+                if("num".equals(orderBy)){
+                    // 降序
+                    if(orderType == 1){
+                        msList.sortByMethod(dishSaleRankDtoList2,"getNum",true);
+                    }else{
+                        msList.sortByMethod(dishSaleRankDtoList2,"getNum",false);
+                    }
+                }else{
+                    if(orderType == 1){
+                        msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",true);
+                    }else{
+                        msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",false);
                     }
                 }
-            }catch(SSException e){
-                LogClerk.errLog.error(e);
-                return sendErrMsgAndErrCode(e);
             }
-        }else{
-            try{
-                dataCount =   dishSaleRankService.countByTimePeriodAndTagId(startTime,endTime,0);
-                dishSaleRankDtoList2 = dishSaleRankService.queryDishSaleRankDtoByTimePeriodAndTagIdAndPage(startTime, endTime, 0, pageSize, pageNumber);
-            }catch(SSException e){
-                LogClerk.errLog.error(e);
-                return sendErrMsgAndErrCode(e);
-            }
+        } catch(SSException e){
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
 
-        }
-        // 排序
-        if(orderBy!=null && orderType!=null){
-            MySortList<DishSaleRankDto> msList = new MySortList<DishSaleRankDto>();
-            // 按销售数量
-            if("num".equals(orderBy)){
-                // 降序
-                if(orderType == 1){
-                    msList.sortByMethod(dishSaleRankDtoList2,"getNum",true);
-                }else{
-                    msList.sortByMethod(dishSaleRankDtoList2,"getNum",false);
-                }
-            }else{
-                if(orderType == 1){
-                    msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",true);
-                }else{
-                    msList.sortByMethod(dishSaleRankDtoList2,"getConsumeSum",false);
-                }
-            }
-        }
         JSONArray jsonArray = new JSONArray();
             for (DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList2){
                 JSONObject jsonObject = new JSONObject();
