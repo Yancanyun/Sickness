@@ -30,6 +30,7 @@ import com.emenu.service.party.security.SecurityUserService;
 import com.emenu.service.printer.DishTagPrinterService;
 import com.emenu.service.printer.PrinterService;
 import com.emenu.service.rank.DishSaleRankService;
+import com.emenu.service.register.RegisterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.call.CallWaiterService;
@@ -481,6 +482,10 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("dishTagRankService")
     protected static DishTagRankService dishTagRankService;
+
+    @StaticAutoWire
+    @Qualifier("registerService")
+    protected static RegisterService registerService;
 
     /**************************顾客点菜端**************************/
     //呼叫服务后台管理

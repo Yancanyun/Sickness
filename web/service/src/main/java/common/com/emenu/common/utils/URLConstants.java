@@ -147,6 +147,9 @@ public final class URLConstants {
     //账单稽查
     public static final String ADMIN_REVENUE_CHECKOUT_URL = "admin/revenue/checkout";
 
+    // 全局设置
+    public static final String ADMIN_CONSTANT_URL = "admin/constant";
+
 
 
     /**********************顾客点菜平台*************************/

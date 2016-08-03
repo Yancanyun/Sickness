@@ -295,6 +295,11 @@ public enum ModuleEnums {
     //统计菜品大类销售排行
     AdminCountDishTagRankingList("Admin:DishManagement:Count:TagRanking"),
 
+    // 全局设置
+    AdminConstant("Admin:Constant"),
+    AdminConstantList("Admin:Constant:List"),
+    AdminConstantUpdate("Admin:Constant:Update"),
+
 
 
     // 顾客点餐平台

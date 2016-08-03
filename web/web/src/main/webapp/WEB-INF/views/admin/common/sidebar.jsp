@@ -43,11 +43,14 @@
                             </ul>
                         </c:if>
                     </li>
+
+                    <li><a href="#">外卖参数设置</a></li>
+                    <shiro:checkPermission name="Admin:Constant:List">
+                        <li <c:if test="${MethodModule eq 'Admin:Constant:List'}">class="active"</c:if>>
+                            <a href="${website}admin/constant">全局设置</a>
+                        </li>
+                    </shiro:checkPermission>
                 </shiro:checkPermission>
-
-            <li><a href="#">外卖参数设置</a></li>
-            <li><a href="#">全局设置</a></li>
-
         </ul>
     </li>
     </shiro:checkPermission>

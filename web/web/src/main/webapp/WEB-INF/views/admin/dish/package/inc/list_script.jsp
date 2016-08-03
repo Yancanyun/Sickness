@@ -11,6 +11,7 @@
         <td>
             {@if it.status == 0}停售{@/if}
             {@if it.status == 1}销售中{@/if}
+            {@if it.status == 2}标缺{@/if}
         </td>
         <td>&{it.likeNums}</td>
         <td>

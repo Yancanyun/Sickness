@@ -21,7 +21,7 @@
                 <li><a class="J_menu" href="${website}admin/index/img">点餐平台首页</a></li>
                 <li><a class="J_menu" href="${website}admin/printer">打印机管理</a></li>
                 <li><a class="J_menu" href="javascript:;">外卖参数设置</a></li>
-                <li><a class="J_menu" href="javascript:;">全局设置</a></li>
+                <li><a class="J_menu" href="${website}admin/constant">全局设置</a></li>
             </ul>
         </li>
         </shiro:checkPermission>

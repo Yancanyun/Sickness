@@ -7,6 +7,7 @@ import com.emenu.common.utils.WebConstants;
 import com.emenu.service.party.group.PartyService;
 import com.emenu.service.party.login.LoginManageService;
 import com.emenu.service.party.security.SecurityUserService;
+import com.emenu.service.register.RegisterService;
 import com.pandawork.core.common.log.LogClerk;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private PartyService partyService;
 
+    @Autowired
+    private RegisterService registerService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+
         String ssoServerURL = (String) request.getAttribute("website");
         if (!(handler instanceof HandlerMethod)) {
             // 如果不是方法请求地址，则不拦截
@@ -67,6 +73,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         LogClerk.sysout.debug("class or method IgnoreLogin annotation is null, means this request need interceptor");
+
+        // 若未进行注册，则把所有请求都拦截到注册页面
+        if (!registerService.isRegistered()){
+            String path = request.getContextPath();
+            int port = request.getServerPort();
+            String basePath = request.getScheme() + "://" + request.getServerName()
+                    + (port == 80 ? "" : (":" + port)) + path + "/";
+
+            response.sendRedirect(basePath + "register");
+
+            return false;
+        }
 
         // 执行到这里，说明用户没有记住登录
 
