@@ -5,10 +5,12 @@ import com.emenu.common.dto.revenue.BackDishCountDto;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.BackDishMapper;
+import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.dish.DishPackageService;
 import com.emenu.service.order.BackDishService;
 import com.emenu.service.order.OrderDishService;
@@ -52,6 +54,9 @@ public class BackDishServiceImpl implements BackDishService {
 
     @Autowired
     private DishPackageService dishPackageService;
+
+    @Autowired
+    private CookTableCacheService cookTableCacheService;
 
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
@@ -135,6 +140,8 @@ public class BackDishServiceImpl implements BackDishService {
                 backDish.setBackTime(new Date());
                 commonDao.insert(backDish);
             }
+            // 更新餐台版本号
+            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
 
         } catch (Exception e){
             LogClerk.errLog.error(e);

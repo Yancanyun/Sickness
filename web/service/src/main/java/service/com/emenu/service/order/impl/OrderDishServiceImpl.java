@@ -19,6 +19,7 @@ import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderDishMapper;
+import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.dish.CostCardItemService;
 import com.emenu.service.dish.CostCardService;
 import com.emenu.service.dish.DishPackageService;
@@ -78,6 +79,9 @@ public class OrderDishServiceImpl implements OrderDishService{
 
     @Autowired
     private StorageSettlementService storageSettlementService;
+
+    @Autowired
+    private CookTableCacheService cookTableCacheService;
 
 
     @Override
@@ -357,6 +361,10 @@ public class OrderDishServiceImpl implements OrderDishService{
                 }
                 commonDao.update(orderDish);
             }
+
+            // 更新餐台版本号
+            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
+
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException. CallDishFailed,e);
