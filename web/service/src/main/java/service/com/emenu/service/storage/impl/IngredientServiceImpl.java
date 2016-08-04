@@ -443,12 +443,23 @@ public class IngredientServiceImpl implements IngredientService {
         if (Assert.isNull(ingredient)) {
             return false;
         }
+        Ingredient ingredientOld = null;
         Assert.isNotNull(ingredient.getTagId(), EmenuException.IngredientTagIdIsNotNull);
         Assert.isNotNull(ingredient.getName(), EmenuException.IngredientNameIsNotNull);
-        Ingredient ingredientOld = this.queryById(ingredient.getId());
-        if (checkIngredientNameIsExist(ingredient.getName()) && ingredient.getName() != ingredientOld.getName()){
-            throw SSException.get(EmenuException.IngredientIsExist);
+        if(ingredient.getId() != null){
+            ingredientOld = this.queryById(ingredient.getId());
         }
+
+        if (ingredientOld == null){
+            if (checkIngredientNameIsExist(ingredient.getName())){
+                throw SSException.get(EmenuException.IngredientIsExist);
+            }
+        }else {
+            if (checkIngredientNameIsExist(ingredient.getName()) && ingredient.getName() != ingredientOld.getName()){
+                throw SSException.get(EmenuException.IngredientIsExist);
+            }
+        }
+
         Assert.isNotNull(ingredient.getOrderUnitId(), EmenuException.IngredientOrderUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getStorageUnitId(), EmenuException.IngredientStorageUnitIdIsNotNull);
         Assert.isNotNull(ingredient.getCostCardUnitId(), EmenuException.IngredientCostCardUnitIdIsNotNull);
