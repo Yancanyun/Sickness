@@ -85,6 +85,9 @@ public class AdminVipGradeController extends AbstractController {
     public String newVipGrade(VipGrade vipGrade, HttpServletRequest httpServletRequest,
                               RedirectAttributes redirectAttributes) {
         try {
+            if (vipGrade.getSettlementCycle() == null){
+                vipGrade.setSettlementCycle(0);
+            }
             vipGradeService.newVipGrade(vipGrade);
             String successUrl = "/" + URLConstants.ADMIN_VIP_GRADE_URL;
             redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);

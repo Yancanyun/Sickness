@@ -256,7 +256,7 @@ public class VipGradeServiceImpl implements VipGradeService{
         if (Assert.isNull(vipGrade.getCreditAmount())){
             throw SSException.get(EmenuException.CreditAmountIllegal);
         }
-        if (Assert.isNull(vipGrade.getSettlementCycle()) || Assert.lessZero(vipGrade.getSettlementCycle())){
+        if (Assert.lessZero(vipGrade.getSettlementCycle())){
             throw SSException.get(EmenuException.SettlementCycleIllegal);
         }
         if (Assert.isNull(vipGrade.getPreReminderAmount())){
