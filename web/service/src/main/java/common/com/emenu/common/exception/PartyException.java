@@ -11,6 +11,7 @@ import com.pandawork.core.common.exception.IBizExceptionMes;
 public enum PartyException implements IBizExceptionMes {
 
     SystemException("系统内部异常!", 1),
+    UploadLicenceFailed("上传注册文件失败", 2),
 
     PermissionInsertFailed("添加权限失败", 1020),
     PermissionQueryFailed("查询权限失败", 1021),

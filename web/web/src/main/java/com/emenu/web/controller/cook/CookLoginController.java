@@ -36,6 +36,7 @@ public class CookLoginController extends AbstractController{
      *
      * @return
      */
+    @IgnoreLogin
     @IgnoreAuthorization
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String toLogin() {

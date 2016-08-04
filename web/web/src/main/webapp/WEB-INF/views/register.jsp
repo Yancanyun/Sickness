@@ -16,6 +16,14 @@
         </div>
     </div>
     <div class="row">
+        <c:if test="${!empty successMsg}">
+            <div class="col-sm-offset-1 col-sm-10 alert alert-success
+							J_msg" role="alert">${successMsg}</div>
+        </c:if>
+        <c:if test="${!empty failedMsg}">
+            <div class="col-sm-offset-1 col-sm-10 alert alert-danger
+							J_msg" role="alert">${failedMsg}</div>
+        </c:if>
         <div class="licence-body login-box">
             <div class="title">
                 <h4 class="text-center margin-bottom-30">请注册</h4>

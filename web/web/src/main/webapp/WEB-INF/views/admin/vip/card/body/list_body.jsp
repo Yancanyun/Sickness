@@ -25,24 +25,24 @@
             <div class="panel-body">
                 <form class="form-horizontal J_searchForm" action="" method="">
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">发卡开始日期</label>
+                        <label class="col-sm-3 control-label">发卡开始日期</label>
                         <div class="col-sm-2">
                             <input type="text" class="col-sm-3 form-control J_date" name="startTime" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">发卡结束日期</label>
+                        <label class="col-sm-3 control-label">发卡结束日期</label>
                         <div class="col-sm-2">
                             <input type="text" class="col-sm-3 form-control J_date" name="endTime" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-5 control-label">关键字</label>
+                        <label class="col-sm-3 control-label">关键字</label>
                         <div class="col-sm-2">
                             <input type="text" class="col-sm-3 form-control J_key" placeholder="请输入会员手机号/姓名" name="keyword" value="">
                         </div>
                     </div>
-                    <div class="col-sm-6 col-sm-offset-5">
+                    <div class="col-sm-6 col-sm-offset-3">
                         <div class="btn-toolbar">
                             <button class="btn btn-primary J_search" type="button"><i class="fa fa-search"></i>&nbsp;搜索</button>
                         </div>

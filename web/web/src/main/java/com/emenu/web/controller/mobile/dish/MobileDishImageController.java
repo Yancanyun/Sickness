@@ -85,8 +85,13 @@ public class MobileDishImageController extends AbstractController {
 
             // 从今日特价中获取前两个
             List<DishTagDto> todayCheapList = dishTagService.listDtoByTagId(TagEnum.TodayCheap.getId());
-            model.addAttribute("todayCheapActive", todayCheapList.get(0));
-            model.addAttribute("todayCheapSecond", todayCheapList.get(1));
+            if (todayCheapList.size() == 1) {
+                model.addAttribute("todayCheapActive", todayCheapList.get(0));
+            }
+            if (todayCheapList.size() >= 2) {
+                model.addAttribute("todayCheapActive", todayCheapList.get(0));
+                model.addAttribute("todayCheapSecond", todayCheapList.get(1));
+            }
 
             // 从本店特色中获取前两个
             List<DishTagDto> featureListAll = dishTagService.listDtoByTagId(TagEnum.Feature.getId());

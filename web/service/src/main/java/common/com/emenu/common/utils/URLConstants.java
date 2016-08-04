@@ -264,4 +264,8 @@ public final class URLConstants {
     public static final String COOK_URL = "cook";
 
     public static final String COOK_ORDER_MANAGEMENT_URL = "cook/ordermanage";
+
+    /**********************注册机*************************/
+    public static final String REGISTER_URL = "register";
+
 }

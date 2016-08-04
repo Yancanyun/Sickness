@@ -59,16 +59,15 @@ public class AdminConstantController extends AbstractController {
                     roundingMode);
 
             String successUrl = "/" + URLConstants.ADMIN_CONSTANT_URL;
-            // 返回添加成功信息
+            // 返回修改成功信息
             redirectAttributes.addFlashAttribute("successMsg", UPDATE_SUCCESS_MSG);
             return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
             String failedUrl = "/" + URLConstants.ADMIN_CONSTANT_URL;
-            // 返回添加失败信息
+            // 返回修改失败信息
             redirectAttributes.addFlashAttribute("failedMsg", e.getMessage());
-            // 返回添加页
             return "redirect:" + failedUrl;
         }
     }

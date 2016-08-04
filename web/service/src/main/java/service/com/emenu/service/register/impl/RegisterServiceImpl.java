@@ -170,11 +170,11 @@ public class RegisterServiceImpl implements RegisterService {
                 commonDao.update(register);
             }
 
-            // 将上次检测时间设为空，让系统立即开始检测是否已注册
+            // 将上次检测时间设为0，让系统立即开始检测是否已注册
             lastCheck = 0;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(PartyException.SystemException, e);
+            throw SSException.get(PartyException.UploadLicenceFailed, e);
         }
     }
 

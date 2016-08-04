@@ -1,11 +1,13 @@
 package com.emenu.web.interceptor;
 
 import com.emenu.common.annotation.IgnoreAuthorization;
+import com.emenu.common.annotation.IgnoreRegister;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.PartyTypeEnums;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.party.login.LoginManageService;
+import com.emenu.service.register.RegisterService;
 import com.pandawork.core.common.log.LogClerk;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
@@ -26,9 +28,11 @@ import java.io.IOException;
  * @time: 2015/8/26 15:03
  **/
 public class AuthorInterceptor extends HandlerInterceptorAdapter {
-
     @Autowired
     private LoginManageService loginManageService;
+
+    @Autowired
+    private RegisterService registerService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -36,6 +40,27 @@ public class AuthorInterceptor extends HandlerInterceptorAdapter {
             // 如果不是方法请求地址，则不拦截
             return true;
         }
+
+//        // 验证是否有忽略注册机注解
+//        IgnoreRegister ignoreRegisterClazz = ((HandlerMethod) handler).getBean().getClass().getAnnotation(IgnoreRegister.class);
+//        IgnoreRegister ignoreRegisterMethod = ((HandlerMethod) handler).getMethod().getAnnotation(IgnoreRegister.class);
+//        // 有忽略注解，直接通过
+//        if (ignoreRegisterClazz != null || ignoreRegisterMethod != null) {
+//            return true;
+//        }
+//        // 否则验证是否进行了注册
+//        else {
+//            // 若未进行注册，则把所有请求都拦截到注册页面
+//            if (!registerService.isRegistered()){
+//                String path = request.getContextPath();
+//                int port = request.getServerPort();
+//                String basePath = request.getScheme() + "://" + request.getServerName()
+//                        + (port == 80 ? "" : (":" + port)) + path + "/";
+//                response.sendRedirect(basePath + "register");
+//
+//                return false;
+//            }
+//        }
 
         // 获取subject
         Subject subject = loginManageService.querySubject(request);
