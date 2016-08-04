@@ -412,7 +412,6 @@ public class OrderDishServiceImpl implements OrderDishService{
         // 得到缓存中的的菜品和套餐
         List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
         // 要返回的异常集合
-        List<String> exceptionList = new ArrayList<String>();
         String exceptionString = "";
         try {
 
@@ -499,11 +498,11 @@ public class OrderDishServiceImpl implements OrderDishService{
                     }
                     number = Math.floor(number);
                     if(number <1){
-                        exceptionList.add("菜品：" + dishDto.getName() + ", 某原材料库存为空，暂时无法提供该菜品");
+                        exceptionString += "菜品：" + dishDto.getName() + "因某原材料库存不足导致暂时无法提供该菜品！\n";
                     }
                     // 该菜可以做，但是份数少于点的
                     else if(number < quantity.floatValue()){
-                        exceptionList.add("菜品" + dishDto.getName() + ", 原材料不足，目前只能做" + number + dishDto.getName());
+                       exceptionString += "菜品" + dishDto.getName() + ", 因原材料不足，目前只能做" + number + dishDto.getUnitName()+"\n";
                         // 将该菜所耗费的原料的量从ingredientMap里减去
                         for (CostCardItemDto costCardItemDto : listCostCardItemDto) {
                             // 将做的份数float->BigDecimal转换

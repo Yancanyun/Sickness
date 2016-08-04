@@ -457,6 +457,7 @@ public class MyOrderController  extends AbstractController {
      */
     @Module(ModuleEnums.MobileMyOrderList)
     @RequestMapping(value = "/ajax/confirm/order" ,method = RequestMethod.POST)
+    @ResponseBody
     public JSONObject confirmOrder (@RequestParam("confirmDishId")List<Integer> confirmDishId
             ,@RequestParam("confirmDishNumber")List<Float> confirmDishNumber
             ,@RequestParam("serviceWay")Integer serviceWay
