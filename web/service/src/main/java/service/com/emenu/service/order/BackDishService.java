@@ -56,4 +56,13 @@ public interface BackDishService {
      * @throws SSException
      */
     public BackDish queryBackDishById(Integer id) throws SSException;
+
+    /**
+     * 根据orderDishId查询退菜信息
+     * @param orderDishId
+     * @return
+     * @author quanyibo
+     * @throws SSException
+     */
+    public BackDish queryBackDishByOrderDishId(Integer orderDishId) throws SSException;
 }

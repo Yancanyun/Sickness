@@ -43,4 +43,10 @@ public class BackDishTest extends AbstractTestCase{
 
         backDishService.queryBackDishById(22);
     }
+
+    @Test
+    public void testQueryByOrderDishId () throws SSException{
+
+        backDishService.queryBackDishByOrderDishId(1);
+    }
 }

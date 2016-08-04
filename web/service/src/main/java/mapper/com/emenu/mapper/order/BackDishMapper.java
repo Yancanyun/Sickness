@@ -41,4 +41,13 @@ public interface BackDishMapper {
      * @throws Exception
      */
     public BackDish queryBackDishById(@Param("id")Integer id) throws Exception;
+
+    /**
+     * 根据orderDishId查询退菜信息
+     * @param orderDishId
+     * @return
+     * @author quanyibo
+     * @throws Exception
+     */
+    public BackDish queryBackDishByOrderDishId(@Param("orderDishId") Integer orderDishId) throws Exception;
 }

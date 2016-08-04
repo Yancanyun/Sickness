@@ -29,4 +29,10 @@
         FROM t_back_dish
         WHERE id = #{id}
     </select>
+
+    <select id="queryBackDishByOrderDishId" resultMap="pw.BackDish">
+        SELECT *
+        FROM  t_back_dish
+        WHERE order_dish_id = #{orderDishId}
+    </select>
 </mapper>

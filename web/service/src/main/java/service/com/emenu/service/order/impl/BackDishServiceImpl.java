@@ -109,6 +109,11 @@ public class BackDishServiceImpl implements BackDishService {
                         backDish.setEmployeePartyId(partyId);
                         backDish.setBackTime(new Date());
                         commonDao.insert(backDish);
+
+                        // 重新获取一下，可以得到id属性
+                        backDish = backDishMapper.queryBackDishByOrderDishId(tempOrderDish.getId());
+                        // 更新原配料缓存数量
+                        orderDishService.backDishUpdateIngredientCache(backDish.getId());
                     }
                 }
             }else if (orderDish.getIsPackage() == PackageStatusEnums.IsNotPackage.getId()){ // 非套餐
@@ -135,6 +140,11 @@ public class BackDishServiceImpl implements BackDishService {
                 backDish.setEmployeePartyId(partyId);
                 backDish.setBackTime(new Date());
                 commonDao.insert(backDish);
+
+                // 重新获取一下，可以得到id属性
+                backDish = backDishMapper.queryBackDishByOrderDishId(orderDish.getId());
+                // 更新原配料缓存数量
+                orderDishService.backDishUpdateIngredientCache(backDish.getId());
             }
 
         } catch (Exception e){
@@ -222,6 +232,21 @@ public class BackDishServiceImpl implements BackDishService {
            if(Assert.isNotNull(id)
                    &&!Assert.lessOrEqualZero(id))
                backDish = backDishMapper.queryBackDishById(id);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishByIdFailed, e);
+        }
+        return backDish;
+    }
+
+    @Override
+    public BackDish queryBackDishByOrderDishId(Integer orderDishId) throws SSException{
+
+        BackDish backDish = new BackDish();
+        try{
+            if(Assert.isNotNull(orderDishId)
+                    &&!Assert.lessOrEqualZero(orderDishId))
+                backDish = backDishMapper.queryBackDishByOrderDishId(orderDishId);
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryBackDishByIdFailed, e);
