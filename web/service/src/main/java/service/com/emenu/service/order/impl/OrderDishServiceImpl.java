@@ -58,6 +58,9 @@ public class OrderDishServiceImpl implements OrderDishService{
     private OrderService orderService;
 
     @Autowired
+    private BackDishService backDishService;
+
+    @Autowired
     private CommonDao commonDao;
 
     @Autowired
@@ -74,12 +77,6 @@ public class OrderDishServiceImpl implements OrderDishService{
 
     @Autowired
     private StorageSettlementService storageSettlementService;
-
-    @Autowired
-    private CookTableCacheService cookTableCacheService;
-
-    @Autowired
-    private BackDishService backDishService;
 
     @Override
     public List<OrderDishDto> listDtoByOrderId(int orderId) throws SSException {
@@ -358,10 +355,6 @@ public class OrderDishServiceImpl implements OrderDishService{
                 }
                 commonDao.update(orderDish);
             }
-
-            // 更新餐台版本号
-            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
-
         } catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException. CallDishFailed,e);

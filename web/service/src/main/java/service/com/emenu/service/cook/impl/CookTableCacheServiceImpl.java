@@ -47,7 +47,7 @@ public class CookTableCacheServiceImpl implements CookTableCacheService{
      * 服务器启动时将桌子的版本初始化
      * @PostConstruct注解的方法将在类实例化后调用
      */
-    //@PostConstruct
+    @PostConstruct
     public void init() throws Exception
     {
         List<Table> tables = new ArrayList<Table>();

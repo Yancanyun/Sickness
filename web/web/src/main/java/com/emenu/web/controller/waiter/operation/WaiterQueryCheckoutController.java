@@ -184,6 +184,9 @@ public class WaiterQueryCheckoutController extends AbstractController {
     public JSONObject callDish(@RequestParam("orderDishId") Integer orderDishId){
         try{
             orderDishService.callDish(orderDishId);
+            // 更新餐台版本号
+            OrderDish orderDish = orderDishService.queryById(orderDishId);
+            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

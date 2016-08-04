@@ -2,6 +2,7 @@ package com.emenu.web.controller.bar.operation;
 
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
@@ -35,6 +36,9 @@ public class BarCallDishController extends AbstractController {
     public JSONObject callDish(@RequestParam("orderDishId") Integer orderDishId){
         try{
             orderDishService.callDish(orderDishId);
+            // 更新餐台版本号
+            OrderDish orderDish = orderDishService.queryById(orderDishId);
+            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

@@ -199,6 +199,9 @@ public class WaiterBackDishController extends AbstractController {
         try{
             Integer partyId = (Integer)httpSession.getAttribute("partyId");
             backDishService.backDishByOrderDishId(orderDishId, backNumber, backRemarks, partyId);
+            // 更新餐台版本号
+            OrderDish orderDish = orderDishService.queryById(orderDishId);
+            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

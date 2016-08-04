@@ -54,10 +54,6 @@ public class BackDishServiceImpl implements BackDishService {
 
     @Autowired
     private DishPackageService dishPackageService;
-
-    @Autowired
-    private CookTableCacheService cookTableCacheService;
-
     @Override
     @Transactional(rollbackFor = {Exception.class, RuntimeException.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void backDishByOrderDishId(Integer orderDishId, Float backNumber, String backRemarks, Integer partyId) throws SSException{
@@ -140,8 +136,6 @@ public class BackDishServiceImpl implements BackDishService {
                 backDish.setBackTime(new Date());
                 commonDao.insert(backDish);
             }
-            // 更新餐台版本号
-            cookTableCacheService.updateTableVersion(orderService.queryById(orderDish.getOrderId()).getTableId());
 
         } catch (Exception e){
             LogClerk.errLog.error(e);

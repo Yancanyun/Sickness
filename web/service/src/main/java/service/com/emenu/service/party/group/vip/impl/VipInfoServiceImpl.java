@@ -116,7 +116,7 @@ public class VipInfoServiceImpl implements VipInfoService{
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class,SSException.class},propagation = Propagation.REQUIRED)
-    public VipInfo newVipInfo(Integer userPartyId, VipInfo vipInfo) throws SSException{
+    public synchronized VipInfo newVipInfo(Integer userPartyId, VipInfo vipInfo) throws SSException{
         try{
             if (!checkBeforeSave(vipInfo)){
                 throw SSException.get(EmenuException.InsertVipInfoFail);
