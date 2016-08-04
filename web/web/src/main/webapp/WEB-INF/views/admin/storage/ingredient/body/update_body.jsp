@@ -160,7 +160,7 @@
                         <div class="col-sm-6 col-sm-offset-3">
                             <div class="btn-toolbar">
                                 <button class="btn btn-primary J_submit" type="submit"><i class="fa fa-save"></i>&nbsp;保存</button>
-                                <button class="btn btn-default" onclick="history.go(-1);"><i class="fa fa-undo"></i>&nbsp;返回</button>
+                                <button class="btn btn-default" onclick="window.history.go(-1);" type="button"><i class="fa fa-undo"></i>&nbsp;返回</button>
                             </div>
                         </div>
                     </div>
