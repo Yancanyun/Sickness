@@ -41,8 +41,7 @@
             <label class="col-sm-3 control-label">联系地址</label>
 
             <div class="col-sm-9">
-                <input class="w180" type="text" data-valid-rule="isNull" data-valid-tip="请输入联系地址|地址不能为空,请重新输入"
-                       value="&{address}" name="address"/>
+                <input class="w180" type="text" data-valid-rule="length(0,100,1)" data-valid-tip="请输入联系地址|请输入100个字符以内的地址" value="&{address}" name="address" />
             </div>
         </div>
         <div class="form-group">
@@ -65,8 +64,7 @@
             <label class="col-sm-3 control-label">描述</label>
 
             <div class="col-sm-9">
-                <textarea cols="50" rows="5" data-valid-rule="isNull" data-valid-tip="请输入描述|描述不能为空,请重新输入"
-                          name="description">&{description}</textarea>
+                <textarea cols="50" rows="5" name="description">&{description}</textarea>
             </div>
         </div>
     </form>

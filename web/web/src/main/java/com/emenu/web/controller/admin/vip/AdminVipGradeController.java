@@ -181,9 +181,17 @@ public class AdminVipGradeController extends AbstractController {
     @Module(ModuleEnums.AdminVipGradeUpdate)
     @ResponseBody
     @RequestMapping(value = "ajax/min", method = RequestMethod.GET)
-    public JSONObject isMinConsumptionUsed(@RequestParam("id") Integer id,
+    public JSONObject isMinConsumptionUsed(@RequestParam(value = "id",required = false) Integer id,
                                            @RequestParam("minConsumption") BigDecimal minConsumption){
         try{
+            if (id == null){
+                VipGrade vipGrade = vipGradeService.countMinConsumptionUsingNumber(minConsumption);
+                if (vipGrade == null){
+                    return sendJsonObject(AJAX_SUCCESS_CODE);
+                }else {
+                    return sendMsgAndCode(AJAX_FAILURE_CODE,"该最低金额已存在！");
+                }
+            }
             Boolean b = vipGradeService.minConsumptionCanUse(id,minConsumption);
             if (b == true){
                 return sendJsonObject(AJAX_SUCCESS_CODE);
