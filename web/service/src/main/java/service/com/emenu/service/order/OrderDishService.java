@@ -157,10 +157,10 @@ public interface OrderDishService {
      * 确认订单的时候返回什么菜品因原材料不足只能做几份
      * @param tableOrderCache
      * @author pengpengp
-     * @return
+     * @return 返回异常信息
      * @throws SSException
      */
-    public void isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
+    public String  isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException;
 
     /**
      * 根据订单号和套餐id查询套餐的所有菜品
@@ -224,10 +224,10 @@ public interface OrderDishService {
     /**
      * 退菜后修改原配料缓存数量
      * 因为套餐是拆成菜品存的，所以要退的是套餐的话要多次调用此方法
-     * @param orderDishId
+     * @param backDishId
      * @author quanyibo
      * @return
      * @throws SSException
      */
-    public void backDishUpdateIngredientCache(Integer orderDishId) throws  SSException;
+    public void backDishUpdateIngredientCache(Integer backDishId) throws  SSException;
 }

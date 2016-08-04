@@ -13,7 +13,8 @@ KISSY.add(function(S){
         apiData = {
             table:[
                 ['getTablesVersion', 'cook/ordermanage/ajax/tables/version', 'get', '获取所有桌的版本号'],
-                ['getTableInfoById', 'cook/ordermanage/ajax/&{tableId}', 'get', '根据桌id获取桌的详细信息']
+                ['getTableInfoById', 'cook/ordermanage/ajax/&{tableId}', 'get', '根据桌id获取桌的详细信息'],
+                ['getPrintInfo', 'cook/ordermanage/ajax/check/printer', 'get', '获取打印机信息，是否可用']
             ],
             dish:[
                 ['printDish', 'cook/ordermanage/ajax/print', 'post', '根据id将才打印至厨房'],

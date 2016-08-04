@@ -354,6 +354,7 @@ public class BarNewOrderDishController extends AbstractController{
 
         //下单时间
         Date orderTime=new Date();
+        String errMsg = "";
         try {
             TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
             List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
@@ -362,7 +363,10 @@ public class BarNewOrderDishController extends AbstractController{
             // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
             if(tableOrderCache!=null
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty())
-                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+                errMsg=orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+            // 存在异常信息
+            if(!errMsg.equals(""))
+                return sendMsgAndCode(1,errMsg);
 
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单

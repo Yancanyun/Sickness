@@ -23,4 +23,10 @@
         where  t_back_dish.created_time>=#{startTime}
         AND #{endTime}>=t_back_dish.created_time
     </select>
+
+    <select id="queryBackDishById" resultMap="pw.BackDish">
+        SELECT *
+        FROM t_back_dish
+        WHERE id = #{id}
+    </select>
 </mapper>

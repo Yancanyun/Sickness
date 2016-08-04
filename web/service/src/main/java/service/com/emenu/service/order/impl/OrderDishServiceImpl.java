@@ -58,9 +58,6 @@ public class OrderDishServiceImpl implements OrderDishService{
     private OrderService orderService;
 
     @Autowired
-    private BackDishService backDishService;
-
-    @Autowired
     private CommonDao commonDao;
 
     @Autowired
@@ -72,8 +69,6 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Autowired
     private CostCardItemService costCardItemService;
 
-    @Autowired
-    private IngredientService ingredientService;
 
     @Autowired DishService dishService;
 
@@ -83,6 +78,8 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Autowired
     private CookTableCacheService cookTableCacheService;
 
+    @Autowired
+    private BackDishService backDishService;
 
     @Override
     public List<OrderDishDto> listDtoByOrderId(int orderId) throws SSException {
@@ -417,7 +414,7 @@ public class OrderDishServiceImpl implements OrderDishService{
 
 
     @Override
-    public void isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException {
+    public String isOrderHaveEnoughIngredient(TableOrderCache tableOrderCache) throws SSException {
 
         // 得到缓存中的的菜品和套餐
         List<OrderDishCache> orderDishCacheList = new ArrayList<OrderDishCache>();
@@ -481,14 +478,14 @@ public class OrderDishServiceImpl implements OrderDishService{
                     // 遍历所用的原料，得到能做该菜的份数
                     for(CostCardItemDto costCardItemDto : listCostCardItemDto){
                         // 库存里没有这种原料
-                        if(storageSettlementService.queryCache(costCardItemDto.getIngredientId()) == null
-                                ||storageSettlementService.queryCache(costCardItemDto.getIngredientId()).doubleValue()==0){
+                        if(storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId()) == null
+                                ||storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId()).doubleValue()==0){
                             number = -1;
                             break;
                         }
                         // 原料Map里没有该原料
                         if (ingredientMap.get(costCardItemDto.getIngredientId()) == null) {
-                            ingredientMap.put(costCardItemDto.getIngredientId(), storageSettlementService.queryCache(costCardItemDto.getIngredientId()));
+                            ingredientMap.put(costCardItemDto.getIngredientId(), storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId()));
                         }
                         // 原料的当前存量(在Map里)
                         BigDecimal allCount = ingredientMap.get(costCardItemDto.getIngredientId());
@@ -532,17 +529,12 @@ public class OrderDishServiceImpl implements OrderDishService{
                         }
                     }
                 }
-                if(!exceptionList.isEmpty()){
-                    for(String list : exceptionList){
-                        exceptionString.concat(list.toString()).concat("\n");
-                    }
-                    throw SSException.get(EmenuException.valueOf(exceptionString));
-                }
             }
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.OrderNotEnoughIngredient, e);
         }
+        return exceptionString;
     }
 
     @Override
@@ -680,7 +672,6 @@ public class OrderDishServiceImpl implements OrderDishService{
         List<String> exceptionList = new ArrayList<String>();
         String exceptionString = "";
         try {
-
             if (tableOrderCache != null)
                 orderDishCacheList = tableOrderCache.getOrderDishCacheList();
             // dishId和quantity（菜品数量）
@@ -734,14 +725,14 @@ public class OrderDishServiceImpl implements OrderDishService{
                     for(CostCardItemDto costCardItemDto : listCostCardItemDto){
 
                         // 库存里没有这种原料
-                        if(storageSettlementService.queryCache(costCardItemDto.getIngredientId()) == null
-                                ||storageSettlementService.queryCache(costCardItemDto.getIngredientId()).doubleValue()==0){
+                        if(storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId()) == null
+                                ||storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId()).doubleValue()==0){
                             throw SSException.get(EmenuException.IngredientNotExist);
                         }
 
                         // 需要的原配料总量
                         BigDecimal allCount = costCardItemDto.getOtherCount().multiply(quantity);
-                        BigDecimal storageCount = storageSettlementService.queryCache(costCardItemDto.getIngredientId());
+                        BigDecimal storageCount = storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId());
                         storageSettlementService.updateSettlementCache(costCardItemDto.getIngredientId(),storageCount.subtract(allCount));
 
                     }
@@ -754,14 +745,15 @@ public class OrderDishServiceImpl implements OrderDishService{
     }
 
     @Override
-    public void backDishUpdateIngredientCache(Integer orderDishId) throws  SSException{
+    public void backDishUpdateIngredientCache(Integer backDishId) throws  SSException{
 
-        OrderDish orderDish = new OrderDish();
+        BackDish backDish = new BackDish();
         CostCard costCard = new CostCard();
         List<CostCardItemDto> costCardItemDtos = new ArrayList<CostCardItemDto>();
         try {
-            orderDish = this.queryById(orderDishId);
-            costCard = costCardService.queryCostCardByDishId(orderDish.getDishId());
+
+            backDish = backDishService.queryBackDishById(backDishId);
+            costCard = costCardService.queryCostCardByDishId(this.queryById(backDish.getOrderDishId()).getDishId());
             if(costCard!=null){
 
                 costCardItemDtos = costCardItemService.listByCostCardId(costCard.getId());
@@ -769,11 +761,11 @@ public class OrderDishServiceImpl implements OrderDishService{
 
                     // 需要增加的数量
                     BigDecimal allCount = new BigDecimal(0);
-                    allCount = costCardItemDto.getOtherCount().multiply(new BigDecimal(orderDish.getDishQuantity()));
+                    allCount = costCardItemDto.getOtherCount().multiply(new BigDecimal(backDish.getBackNumber()));
 
                     // 库存数量
                     BigDecimal storageCount = new BigDecimal(0);
-                    storageCount = storageSettlementService.queryCache(costCardItemDto.getIngredientId());
+                    storageCount = storageSettlementService.queryCacheForDish(costCardItemDto.getIngredientId());
 
                     //更新缓存量
                     storageSettlementService.updateSettlementCache(costCardItemDto.getIngredientId(),storageCount.add(allCount));

@@ -358,6 +358,7 @@ public class WaiterOrderDishConfirmController extends AbstractController{
         //下单时间
         Date orderTime=new Date();
         Table table = new Table();
+        String errMsg = "";
         try {
             TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
             List<OrderDishCache> orderDishCache = new ArrayList<OrderDishCache>();
@@ -368,10 +369,14 @@ public class WaiterOrderDishConfirmController extends AbstractController{
             table.setPersonNum(personNum);
             tableService.updateTable(table);
 
-            // 对缓存里的进行原配料是否够用的判断,若存在无法完成要求数量的菜品则会抛出异常
+            // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
             if(tableOrderCache!=null
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty())
-                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+                errMsg=orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+            // 存在异常信息
+            if(!errMsg.equals(""))
+                return sendMsgAndCode(1,errMsg);
+
             // 有菜品则生成新的结账单,没有的话认为服务员只是想修改一些就餐实际的人数
             if(tableOrderCache!=null
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty()){

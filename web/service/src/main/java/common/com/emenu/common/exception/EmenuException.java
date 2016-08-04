@@ -66,6 +66,7 @@ public enum EmenuException implements IBizExceptionMes {
     InitSettlementCacheFail("初始化盘点缓存失败",3036),
     UpdateSettlementCacheFail("更新盘点缓存失败",3037),
     SettlementCacheKeyError("缓存key不合法",3038),
+    QueryCacheFail("查询原配料缓存失败",3039),
 
     // 原配料
     IngredientTagIdIsNotNull("原配料分类id不能为空",3100),
@@ -341,6 +342,7 @@ public enum EmenuException implements IBizExceptionMes {
     PrinterDishExist("关联信息已存在",5058),
     BarPrinterIsNotExistOrIpNotSet("未设置吧台打印机或打印机Ip地址未设置",5059),
     PrinterConnectFaiil("打印机连接失败",5060),
+    PrinterNotOpen("存在某一订单菜品关联的打印机未开启或未连接网线,请检查打印机!",5061),
 
     //用户管理模块
     QueryEmployeeInfoFail("获取员工信息失败",6001),
@@ -602,7 +604,7 @@ public enum EmenuException implements IBizExceptionMes {
     SetCurrentOperateCustomerIpFail("设置正在下单的顾客的Ip失败",10010),
     GetCurrentOperateCustomerIpFail("获取正在下单的顾客的Ip失败",10011),
     ReturnTotalMoneyFail("返回已点未下单的所有菜品总金额失败",10012),
-    OrderNotEnoughIngredient("下单返回原材料不足的情况失败",10013),
+    OrderNotEnoughIngredient("判断缓存菜品原材料是否够用失败",10013),
     UpdateIngredientCacheFail("更新元配料缓存失败",10014),
 
 
@@ -655,6 +657,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryOrderByStatusFail("根据订单状态查询订单失败",10066),
     CallDishNotAllow("菜品未到达上菜时限，暂不能催菜",10067),
     QueryBackDishCountDtoFailed("查询退菜得到相应的dto失败",10068),
+    QueryBackDishByIdFailed("根据id查询退菜失败",10069),
 
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),
@@ -690,17 +693,18 @@ public enum EmenuException implements IBizExceptionMes {
     WipeOrderDishFail("菜品划单失败",10099),
     PrinterIpIsNull("打印机Ip地址未设置",10100),
     ConnectPrinterFail("连接打印机失败",10101),
+    CheckOrderDishPrinter("检查订单菜品打印机失败",10102),
 
     // 智能排菜
-    CreateQueFail("生成智能排菜队列失败",10102),
-    OrderDishPrinterIsNotSet("未设置菜品打印机",10103),
+    CreateQueFail("生成智能排菜队列失败",10200),
+    OrderDishPrinterIsNotSet("未设置菜品打印机",10201),
 
     /****************************吧台端****************************/
-    QueryTagFail("查询菜品一级分类和对应的二级分类失败",10200),
-    QueryDishByTagFail("根据菜品大类查询菜品失败",10201),
-    QueryDishByKeyFail("根据关键字查询菜品失败",10202),
+    QueryTagFail("查询菜品一级分类和对应的二级分类失败",10300),
+    QueryDishByTagFail("根据菜品大类查询菜品失败",10301),
+    QueryDishByKeyFail("根据关键字查询菜品失败",10302),
 
-    QueryDishTagByNameFail("根据关键字查询分类失败",10203),
+    QueryDishTagByNameFail("根据关键字查询分类失败",10303),
     ;
 
 
@@ -714,7 +718,7 @@ public enum EmenuException implements IBizExceptionMes {
         this.code = code;
     }
 
-    EmenuException(String msg) {
+     EmenuException(String msg) {
         this.msg = msg;
     }
 

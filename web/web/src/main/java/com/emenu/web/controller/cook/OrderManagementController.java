@@ -60,6 +60,7 @@ public class OrderManagementController extends AbstractController {
 
     /**
      * ajax获取所有餐台的信息
+     * 每次获取的时候判断订单菜品打印是否可用,存在不可用的则抛出异常
      * @return
      */
     @Module(ModuleEnums.CookOrderTableList)
@@ -68,6 +69,7 @@ public class OrderManagementController extends AbstractController {
     public JSONObject ajaxGetAllTable()
     {
         JSONObject jsonObject = new JSONObject();
+        String errMsg ;
         try {
            jsonObject = cookTableCacheService.getAllTableVersion();
         } catch (SSException e) {
@@ -186,6 +188,32 @@ public class OrderManagementController extends AbstractController {
                 //否则更新餐桌版本号
                 cookTableCacheService.updateTableVersion(orderDishService.queryOrderDishTableId(orderDishId));
             }
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonObject(AJAX_SUCCESS_CODE);
+    }
+
+    /**
+     * 判断所有订单菜品能否被打印
+     * @param
+     * @return
+     */
+
+    @Module(ModuleEnums.CookOrderDishPrintCheck)
+    @RequestMapping(value = "/ajax/check/printer" ,method = RequestMethod.GET)
+    @ResponseBody
+    public  JSONObject ajaxCheckPrinter(){
+
+        String errMsg;
+        try {
+            errMsg=orderDishPrintService.checkOrderDishPrinter();
+
+            // 异常信息不为空
+            if(!errMsg.equals(""))
+                return sendMsgAndCode(AJAX_FAILURE_CODE,errMsg);
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

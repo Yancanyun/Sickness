@@ -40,5 +40,13 @@ public interface OrderDishPrintService {
      */
     public void printOrderDish(PrintOrderDishDto printOrderDishDto) throws SSException;
 
-
+    /**
+     * 检查所有已下单的菜品的打印机是否已设置和是否能成功和打印机成功进行连接
+     * 即是否能成功的打印出菜品
+     *
+     * @param
+     * @return 返回异常的信息
+     * @throws com.pandawork.core.common.exception.SSException
+     */
+    public String checkOrderDishPrinter() throws SSException;
 }

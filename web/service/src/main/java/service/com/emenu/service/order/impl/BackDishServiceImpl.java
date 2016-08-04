@@ -218,4 +218,20 @@ public class BackDishServiceImpl implements BackDishService {
             throw SSException.get(EmenuException.QueryBackDishCountDtoFailed, e);
         }
     }
+
+    @Override
+    public BackDish queryBackDishById(Integer id) throws SSException{
+
+        BackDish backDish = new BackDish();
+        try{
+            backDish.setId(id);
+           if(Assert.isNotNull(id)
+                   &&!Assert.lessOrEqualZero(id))
+               backDish = backDishMapper.queryBackDishById(id);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryBackDishByIdFailed, e);
+        }
+        return backDish;
+    }
 }

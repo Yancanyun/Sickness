@@ -461,13 +461,14 @@ public class MyOrderController  extends AbstractController {
             ,@RequestParam("confirmDishNumber")List<Float> confirmDishNumber
             ,@RequestParam("serviceWay")Integer serviceWay
             ,@RequestParam("confirmOrderRemark") String confirmOrderRemark
-            ,HttpSession httpSession)
-    {
+            ,HttpSession httpSession) {
+
         //下单时间
         Date orderTime=new Date();
         //获取桌子号
         String tableIdStr = httpSession.getAttribute("tableId").toString();
         Integer tableId = Integer.parseInt(tableIdStr);
+        String errMsg ="";
         try {
 
             TableOrderCache tableOrderCache = new TableOrderCache();//菜品缓存
@@ -477,7 +478,10 @@ public class MyOrderController  extends AbstractController {
             // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
             if(tableOrderCache!=null
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty())
-                orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+                errMsg=orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
+            // 存在异常信息
+            if(!errMsg.equals(""))
+                return sendMsgAndCode(AJAX_FAILURE_CODE,errMsg);
 
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单

@@ -32,4 +32,13 @@ public interface BackDishMapper {
      */
     public List<BackDish> queryOrderByTimePeriod(@Param("startTime") Date startTime,
                                                  @Param("endTime")Date endTime) throws Exception;
+
+    /**
+     * 根据退菜Id查询退菜信息
+     * @param id
+     * @return
+     * @author quanyibo
+     * @throws Exception
+     */
+    public BackDish queryBackDishById(@Param("id")Integer id) throws Exception;
 }

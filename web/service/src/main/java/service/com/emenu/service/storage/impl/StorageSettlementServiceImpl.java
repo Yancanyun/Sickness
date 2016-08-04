@@ -1225,4 +1225,18 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
     public void test() {
         System.out.println("test quartz");
     }
+
+    @Override
+    public BigDecimal queryCacheForDish(Integer key) throws SSException {
+        try {
+            if (Assert.isNull(key)){
+                throw SSException.get(EmenuException.SettlementCacheKeyError);
+            }
+            BigDecimal quantity = settlementCache.get(key);
+            return quantity;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryCacheFail, e);
+        }
+    }
 }

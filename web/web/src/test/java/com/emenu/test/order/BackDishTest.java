@@ -37,4 +37,10 @@ public class BackDishTest extends AbstractTestCase{
             System.out.println(" 退菜数量：" + backDish.getBackNumber());
         }
     }
+
+    @Test
+    public void testQueryById() throws SSException{
+
+        backDishService.queryBackDishById(22);
+    }
 }

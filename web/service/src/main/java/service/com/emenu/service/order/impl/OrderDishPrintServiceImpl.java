@@ -1,15 +1,18 @@
 package com.emenu.service.order.impl;
 
+import com.emenu.common.annotation.IgnoreAuthorization;
 import com.emenu.common.dto.dish.DishDto;
 import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.order.PrintOrderDishDto;
 import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.DishTaste;
+import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
+import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.enums.printer.PrinterDishEnum;
 import com.emenu.common.exception.EmenuException;
@@ -38,9 +41,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * OrderDishPrintService
@@ -342,5 +343,107 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 }
             }
         }
+    }
+
+    @Override
+    public String checkOrderDishPrinter() throws SSException{
+
+        List<Order> orders = new ArrayList<Order>();
+        List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+
+        // 关键字为打印机Ip地址,1的话代表打印机存在问题,0的话没问题
+        Map<Printer,Integer> printerMap = new HashMap<Printer, Integer>();
+        String exceptionStr = "";
+        Socket socket = new Socket();
+        try{
+            // 所有已下单的订单
+            orders = orderService.listOrdersByStatus(OrderStatusEnums.IsBooked.getId());
+            for(Order order :orders){
+                // 所有已下单的菜品
+                orderDishs.addAll(orderDishService.listOrderDishByOrderIdAndStatus(order.getId(),OrderDishStatusEnums.IsBooked.getId()));
+            }
+
+            for(OrderDish orderDish :orderDishs){
+
+                // 菜品小类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
+                DishDto dishDto = new DishDto();
+                dishDto = dishService.queryById(orderDish.getDishId());
+                Printer printer = new Printer();
+                printer = dishTagPrinterService.queryByTagIdAndType(orderDish.getDishId(),PrinterDishEnum.DishPrinter.getId());//根据dishId查,看能否查到
+                // 判断打印机是否好使
+                if(printer!=null &&printer.getIpAddress()!=null) {
+
+                    // 尝试建立连接,如果打印机未打开的话会抛异常
+                    try{
+                        socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 10000);
+                    }catch (Exception e){
+                        LogClerk.errLog.error(e);
+                        throw SSException.get(EmenuException.PrinterNotOpen);
+                    }
+
+                    // 成功建立连接证明该打印好使
+                    if(socket.isConnected()){
+                        // 第一次加入
+                        if(printerMap.get(printer.getIpAddress())==null)
+                            printerMap.put(printer,0);
+                        // 断开连接
+                        socket.close();
+                    }
+                    // 不能和打印机成功建立连接,打印机存在问题
+                    else
+                        printerMap.put(printer, 1);
+                }
+                // 根据菜品小类查询关联打印机
+                else{
+
+                    if(dishDto.getTagId()!=null) {
+
+                        Integer tagId = dishDto.getTagId();//菜品小类
+                        printer=dishTagPrinterService.queryByTagIdAndType(tagId,PrinterDishEnum.TagPrinter.getId());
+                        // 判断打印机是否好使
+                        if(printer!=null&&printer.getIpAddress()!=null){
+
+                            // 尝试建立连接,如果打印机未打开的话会抛异常
+                            try{
+                                socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 10000);
+                            }catch (Exception e){
+                                LogClerk.errLog.error(e);
+                                throw SSException.get(EmenuException.PrinterNotOpen);
+                            }
+
+                            // 成功建立连接证明该打印好使
+                            if(socket.isConnected()){
+                                // 第一次加入
+                                if(printerMap.get(printer.getIpAddress())==null)
+                                    printerMap.put(printer,0);
+                                // 断开连接
+                                socket.close();
+                            }
+                            // 不能和打印机成功建立连接,打印机存在问题
+                            else
+                                printerMap.put(printer,1);
+                        }
+                        // 为将菜品直接关联到打印机也没有将菜品的小类关联到打印机(认为菜品打印机未设置)
+                        else
+                            exceptionStr += "菜品： "+dishDto.getName()+ "的打印机未设置导致该菜品无法正常打印!\n";
+                    }
+                }
+
+                // 检查是否有不好使的打印机
+                for(Map.Entry<Printer,Integer> entry :printerMap.entrySet()){
+
+                    Printer tempPrinter = entry.getKey();
+                    Integer status = entry.getValue();
+                    // 打印机不好使
+                    if(status==1)
+                        exceptionStr += tempPrinter.getName() + "存在问题导致部分菜品无法正常打印,请检查打印机!\n";
+                }
+            }
+
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckOrderDishPrinter,e);
+        }
+        return exceptionStr;
     }
 }

@@ -115,4 +115,12 @@ public interface StorageSettlementService {
                                                 HttpServletResponse response)throws SSException;
 
     public void test();
+
+    /**
+     * 根据原配料Id来查询缓存剩余量，可能为null
+     * @param key
+     *
+     * @throws SSException
+     */
+    public BigDecimal queryCacheForDish(Integer key) throws SSException;
 }

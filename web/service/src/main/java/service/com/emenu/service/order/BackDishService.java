@@ -47,4 +47,13 @@ public interface BackDishService {
      * @throws SSException
      */
     public List<BackDishCountDto>queryBackDishCountDtoByTimePeriod (Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 根据d查询退菜信息
+     * @param id
+     * @return
+     * @author quanyibo
+     * @throws SSException
+     */
+    public BackDish queryBackDishById(Integer id) throws SSException;
 }
