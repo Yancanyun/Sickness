@@ -485,14 +485,12 @@ public class AdminIngredientController extends AbstractController{
     @ResponseBody
     public JSONObject delById(@PathVariable("id")Integer id) {
         try {
-//            if (ingredientService.checkIsCanUpdate(id)){
-//                ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
-//                return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
-//            } else {
-//                return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
-//            }
-            ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Normal.getId());
-            return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
+            if (ingredientService.checkIsCanUpdate(id)){
+                ingredientService.updateIngredientStatusById(id, IngredientStatusEnums.Delete.getId());
+                return sendMsgAndCode(AJAX_SUCCESS_CODE,"修改成功");
+            } else {
+                return sendMsgAndCode(AJAX_FAILURE_CODE,"修改失败，当前原配料正在使用");
+            }
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
