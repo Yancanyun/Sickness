@@ -104,6 +104,7 @@ public class CheckoutController  extends AbstractController{
                 checkoutDtoList = billAuditService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
                 // 按时间字段对账单排序
                 MySortList<CheckoutDto>  list = new MySortList<CheckoutDto>();
+                // false->升序
                 list.sortByMethod(checkoutDtoList,"getCheckoutTime",false);
                 for(CheckoutDto dto : checkoutDtoList){
                     JSONObject json = new JSONObject();
