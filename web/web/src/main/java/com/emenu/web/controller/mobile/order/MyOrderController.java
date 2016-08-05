@@ -165,12 +165,16 @@ public class MyOrderController  extends AbstractController {
             int ok = -1;//记录套餐的packageFlag
             for(OrderDishDto tempOrderDishDto :orderDishDtos)
             {
+                // 是套餐的话
                 if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())!=null
                         &&tempOrderDishDto.getPackageFlag()>0
                         &&ok!=tempOrderDishDto.getPackageFlag()
                         &&tempOrderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//为4的话为退了的菜
                 {
+
                     ok = tempOrderDishDto.getPackageFlag();
+                    // 若套餐中存在一个菜品状态可其他不一样的时候，套餐状态不能改变
+                    tempOrderDishDto.setStatus(orderDishService.queryPackageStatusByFirstOrderDishId(tempOrderDishDto.getId()).getId());
                     sendOrderDishDtos.add(tempOrderDishDto);
                 }
                 else if(packageFlagMap.get(tempOrderDishDto.getPackageFlag())==null

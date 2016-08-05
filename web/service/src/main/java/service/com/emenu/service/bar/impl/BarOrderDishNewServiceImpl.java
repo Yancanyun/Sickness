@@ -60,7 +60,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
             bigTagList = tagList;
             for(Tag dto1 : tagList) {
                 // 若父类Id为1则是一级分类
-                if(dto1.getpId()==TagEnum.DishAndGoods.getId()){
+                if(dto1.getpId().equals(TagEnum.DishAndGoods.getId())){
 
                     JSONObject json = new JSONObject();
                     json.put("rootId",dto1.getId());
@@ -68,7 +68,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
                     // 查询出一级分来下的所有二级分类
                     JSONArray jsonArrayTemp = new JSONArray();
                     for(Tag dto2 : bigTagList) {
-                        if(dto2.getpId()==dto1.getId()){
+                        if(dto2.getpId().equals(dto1.getId())){
 
                             JSONObject temp = new JSONObject();
                             temp.put("tagId",dto2.getId());
@@ -97,7 +97,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
             // 根据二级分类查询出所有菜品
             // 若父类为其它的话
             JSONArray jsonArray = new JSONArray();
-            if(tagService.queryById(bigTagId).getpId()==TagEnum.Others.getId()){
+            if(tagService.queryById(bigTagId).getpId().equals(TagEnum.Others.getId())){
 
                 dishTagDtos = dishTagService.listDtoByTagId(bigTagId);
                 for(DishTagDto dto : dishTagDtos) {
@@ -145,7 +145,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
 
                     JSONObject temp = new JSONObject();
                     // 若菜品小类的父类等于要搜索的大类
-                    if(tagService.queryById(dto.getTagId()).getpId()==bigTagId){
+                    if(tagService.queryById(dto.getTagId()).getpId().equals(bigTagId)){
 
                         temp.put("dishId",dto.getId());
                         temp.put("dishName",dto.getName());
@@ -201,44 +201,49 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
             // 根据二级分类查询出所有菜品
             // 若父类为其它的话
             JSONArray jsonArray = new JSONArray();
-            if(tagService.queryById(bigTagId).getpId()==TagEnum.Others.getId()){
+            if(tagService.queryById(bigTagId).getpId().equals(TagEnum.Others.getId())){
 
                 dishTagDtos = dishTagService.listDtoByTagId(bigTagId);
                 for(DishTagDto dto : dishTagDtos) {
 
-                    JSONObject temp = new JSONObject();
-                    temp.put("dishId",dto.getDishId());
-                    temp.put("dishName",dto.getDishName());
-                    temp.put("dishSalePrice",dto.getDishSalePrice());
-                    temp.put("dishUnit",dto.getDishUnitName());
-                    temp.put("assistantCode",dto.getDishAssistantCode());
+                    if(dto.getDishName().contains(key)
+                            ||dto.getDishAssistantCode().contains(key)
+                            ||dto.getId().toString().contains(key)){
 
-                    // 获取菜品具有的全部口味
-                    DishDto dishDto = new DishDto();
-                    dishDto = dishService.queryById(dto.getDishId());
-                    List<Taste> tastes = new ArrayList<Taste>();
-                    tastes = dishDto.getTasteList();
-                    JSONArray jsonArray1 = new JSONArray();
-                    for(Taste taste : tastes) {
-                        JSONObject temp1 = new JSONObject();
-                        temp1.put("tasteId", taste.getId());
-                        // 获得口味名称
-                        temp1.put("name",taste.getName());
-                        jsonArray1.add(temp1);
-                    }
-                    temp.put("dishTasteList",jsonArray1);
+                        JSONObject temp = new JSONObject();
+                        temp.put("dishId",dto.getDishId());
+                        temp.put("dishName",dto.getDishName());
+                        temp.put("dishSalePrice",dto.getDishSalePrice());
+                        temp.put("dishUnit",dto.getDishUnitName());
+                        temp.put("assistantCode",dto.getDishAssistantCode());
 
-                    //获取菜品的关联备注
-                    List<Remark> remarks = new ArrayList<Remark>();
-                    remarks = dishService.queryDishRemarkByDishId(dto.getDishId());
-                    JSONArray jsonArray2 = new JSONArray();
-                    for(Remark remark : remarks){
-                        JSONObject temp1 = new JSONObject();
-                        temp1.put("remark",remark.getName());
-                        jsonArray2.add(temp1);
+                        // 获取菜品具有的全部口味
+                        DishDto dishDto = new DishDto();
+                        dishDto = dishService.queryById(dto.getDishId());
+                        List<Taste> tastes = new ArrayList<Taste>();
+                        tastes = dishDto.getTasteList();
+                        JSONArray jsonArray1 = new JSONArray();
+                        for(Taste taste : tastes) {
+                            JSONObject temp1 = new JSONObject();
+                            temp1.put("tasteId", taste.getId());
+                            // 获得口味名称
+                            temp1.put("name",taste.getName());
+                            jsonArray1.add(temp1);
+                        }
+                        temp.put("dishTasteList",jsonArray1);
+
+                        //获取菜品的关联备注
+                        List<Remark> remarks = new ArrayList<Remark>();
+                        remarks = dishService.queryDishRemarkByDishId(dto.getDishId());
+                        JSONArray jsonArray2 = new JSONArray();
+                        for(Remark remark : remarks){
+                            JSONObject temp1 = new JSONObject();
+                            temp1.put("remark",remark.getName());
+                            jsonArray2.add(temp1);
+                        }
+                        temp.put("dishRemarkList",jsonArray2);
+                        jsonArray.add(temp);
                     }
-                    temp.put("dishRemarkList",jsonArray2);
-                    jsonArray.add(temp);
                 }
             }
             // 父类不是其它的话
@@ -249,7 +254,7 @@ public class BarOrderDishNewServiceImpl implements BarOrderDishNewService {
 
                     JSONObject temp = new JSONObject();
                     // 若菜品小类的父类等于要搜索的大类
-                    if(tagService.queryById(dto.getTagId()).getpId()==bigTagId
+                    if(tagService.queryById(dto.getTagId()).getpId().equals(bigTagId)
                             &&(dto.getName().contains(key)
                             ||dto.getAssistantCode().contains(key)
                             ||dto.getId().toString().contains(key))){
