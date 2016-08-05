@@ -248,23 +248,29 @@ public class VipCardServiceImpl implements VipCardService {
 
             //获取数据库中最后的一条数据，如果该条数据是今天的，则将新发卡的卡号递增
             VipCard lastVipCard = vipCardMapper.queryLastVipCard();
-            String lastVipCardNumber = lastVipCard.getCardNumber();
             String newVipCardNumber = null;
-            if (lastVipCardNumber.substring(0, 8).equals(todayStr)) {
-                int newNum = Integer.parseInt(lastVipCardNumber.substring(8, 11)) + 1;
-                if (newNum < 10) {
-                    newVipCardNumber = todayStr + "00" + newNum;
-                }
-                if (newNum < 100 && newNum >= 10) {
-                    newVipCardNumber = todayStr + "0" + newNum;
-                }
-                if (newNum >= 100){
-                    newVipCardNumber = todayStr + newNum;
-                }
-            }
-            //若最后一条数据不是今天的，则新发卡的卡号为今天的日期+001
-            else {
+
+            // 如果数据库里一条数据都没有，则不需要检测，直接计算卡号
+            if (Assert.isNull(lastVipCard)) {
                 newVipCardNumber = todayStr + "001";
+            } else {
+                String lastVipCardNumber = lastVipCard.getCardNumber();
+                if (lastVipCardNumber.substring(0, 8).equals(todayStr)) {
+                    int newNum = Integer.parseInt(lastVipCardNumber.substring(8, 11)) + 1;
+                    if (newNum < 10) {
+                        newVipCardNumber = todayStr + "00" + newNum;
+                    }
+                    if (newNum < 100 && newNum >= 10) {
+                        newVipCardNumber = todayStr + "0" + newNum;
+                    }
+                    if (newNum >= 100) {
+                        newVipCardNumber = todayStr + newNum;
+                    }
+                }
+                //若最后一条数据不是今天的，则新发卡的卡号为今天的日期+001
+                else {
+                    newVipCardNumber = todayStr + "001";
+                }
             }
             vipCard.setCardNumber(newVipCardNumber);
 

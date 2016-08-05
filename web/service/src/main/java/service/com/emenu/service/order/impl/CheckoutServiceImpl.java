@@ -480,6 +480,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             setTableStatusToCheckouted(tableId);
 
             // 把本餐台的缓存删掉
+            orderDishCacheService.tableLockRemove(tableId);
             orderDishCacheService.cleanCacheByTableId(tableId);
 
             // 如果并台，则需要把和它并的所有的餐台的都结账
@@ -513,6 +514,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
                 // 把并台的缓存都删掉
                 for (Table t : tableList) {
+                    orderDishCacheService.tableLockRemove(t.getId());
                     orderDishCacheService.cleanCacheByTableId(t.getId());
                 }
 
@@ -735,6 +737,7 @@ public class CheckoutServiceImpl implements CheckoutService {
             setTableStatusToCheckouted(tableId);
 
             // 把本餐台的缓存删掉
+            orderDishCacheService.tableLockRemove(tableId);
             orderDishCacheService.cleanCacheByTableId(tableId);
 
             // 如果并台，则需要把和它并的所有的餐台的都免单
@@ -764,6 +767,7 @@ public class CheckoutServiceImpl implements CheckoutService {
                         checkoutList.add(c);
 
                         // 然后把餐台状态改为"占用已结账"
+                        orderDishCacheService.tableLockRemove(t.getId());
                         setTableStatusToCheckouted(t.getId());
                     }
                 }

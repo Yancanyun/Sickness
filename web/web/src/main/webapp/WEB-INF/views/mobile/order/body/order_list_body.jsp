@@ -26,22 +26,22 @@
       <c:if test="${not empty myOrderDto}">
         <c:forEach  var="dto" items="${myOrderDto}">
         <li class="ordering-dish clearfix J_swipeEvent" data-ordering-dish-id="${dto.orderDishCacheId}">
-          <c:choose>
-            <c:when test="${not empty dto.taste}">
-                <input type="hidden" name="dishTaste" value="${dto.taste.name}">
-            </c:when>
-            <c:otherwise>
-                <input type="hidden" name="dishTaste" value="菜品口味：默认">
-            </c:otherwise>
-          </c:choose>
-          <c:choose>
-            <c:when test="${not empty dto.remark}">
-              <input type="hidden" name="dishRemark" value="${dto.remark}">
-            </c:when>
-            <c:otherwise>
-              <input type="hidden" name="dishRemark" value="无">
-            </c:otherwise>
-          </c:choose>
+          <%--<c:choose>--%>
+            <%--<c:when test="${not empty dto.taste}">--%>
+                <%--<input type="hidden" name="dishTaste" value="${dto.taste.name}">--%>
+            <%--</c:when>--%>
+            <%--<c:otherwise>--%>
+                <%--<input type="hidden" name="dishTaste" value="菜品口味：默认">--%>
+            <%--</c:otherwise>--%>
+          <%--</c:choose>--%>
+          <%--<c:choose>--%>
+            <%--<c:when test="${not empty dto.remark}">--%>
+              <%--<input type="hidden" name="dishRemark" value="${dto.remark}">--%>
+            <%--</c:when>--%>
+            <%--<c:otherwise>--%>
+              <%--<input type="hidden" name="dishRemark" value="无">--%>
+            <%--</c:otherwise>--%>
+          <%--</c:choose>--%>
           <img class="ordering-dish-img" src="${tinyWebsite}${dto.imgPath}" alt="暂无菜品展示图片">
           <div class="ordering-dish-info">
             <div class="ordered-dish-info-box">
