@@ -261,6 +261,11 @@
             ['sendStatus', site.website + 'admin/vip/integral/plan/ajax/status', 'get','积分管理是否开启积分'],
             ['sendId', site.website + 'admin/vip/integral/plan/ajax/del', 'get', '删除是发送Id']
         ],
+        // 营收统计分析
+        BusinessAnalysis: [
+        //账单稽核
+            ['billAuditSum', site.website + 'admin/revenue/checkout/ajax/sum/list', 'get', '账单稽核总计']
+        ],
         // 公共模块
         Module: [
             ['mulSelectSearch', site.staticWebsite + 'mock/admin/search-item-list.json', 'get', '多选'],

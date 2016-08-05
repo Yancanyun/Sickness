@@ -1,4 +1,4 @@
-package com.emenu.common.dto.rank;
+package com.emenu.common.dto.revenue;
 
 import java.math.BigDecimal;
 
@@ -45,6 +45,21 @@ public class CheckoutEachItemSumDto {
 
     // 发票总和
     private Integer invoiceSum;
+
+    public CheckoutEachItemSumDto(){
+        this.checkSum = 0;
+        this.cashSum = new BigDecimal(0);
+        this.vipCardSum = new BigDecimal(0);
+        this.bankCardSum = new BigDecimal(0);
+        this.alipaySum = new BigDecimal(0);
+        this.weChatSum = new BigDecimal(0);
+        this.consumptionMoneySum = new BigDecimal(0);
+        this.wipeZeroMoneySum = new BigDecimal(0);
+        this.shouldPayMoneySum = new BigDecimal(0);
+        this.totalPayMoneySum = new BigDecimal(0);
+        this.changeMoneySum = new BigDecimal(0);
+        this.invoiceSum = 0;
+    }
 
     public Integer getInvoiceSum() {
         return invoiceSum;

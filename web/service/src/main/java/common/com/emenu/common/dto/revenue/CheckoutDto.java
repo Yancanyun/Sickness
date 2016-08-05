@@ -1,4 +1,4 @@
-package com.emenu.common.dto.rank;
+package com.emenu.common.dto.revenue;
 
 import java.math.BigDecimal;
 import java.util.Date;

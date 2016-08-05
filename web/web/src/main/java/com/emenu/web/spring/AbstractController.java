@@ -34,6 +34,7 @@ import com.emenu.service.register.RegisterService;
 import com.emenu.service.remark.RemarkService;
 import com.emenu.service.remark.RemarkTagService;
 import com.emenu.service.call.CallWaiterService;
+import com.emenu.service.revenue.BillAuditService;
 import com.emenu.service.sms.SmsService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
@@ -472,6 +473,12 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("smsService")
     protected static SmsService smsService;
+
+    /**************************营收统计**************************/
+    // 账单稽查
+    @StaticAutoWire
+    @Qualifier("billAuditService")
+    protected static BillAuditService billAuditService;
 
     // 营业分析中的菜品销售排行
     @StaticAutoWire

@@ -152,6 +152,4 @@ public class DishSaleRankController extends AbstractController {
         }
         return "admin/rank/dishsale/list_home";
     }
-
-
 }

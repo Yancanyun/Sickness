@@ -572,6 +572,13 @@ public enum EmenuException implements IBizExceptionMes {
     DishCostCardIsExist("该菜品成本卡已经存在",8134),
     CostCardInfoError("成本卡信息不合法",8135),
 
+    // 营收统计
+    QueryCheckoutByTimePeriodFail("查询该时间段的结账单失败",8900),
+    SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",8901),
+    CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",8902),
+    BillAuditListExportToExcelFailed("账单稽查清单导出Excel表格失败",8903),
+
+
     // 营业分析
     GetOrderDishByTimePeriodFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),
     GetDishSaleRankDtoByTimePeriodFailed("根据开始时间和结束时间获取消费菜品并处理放入dto中失败",9002),
@@ -674,9 +681,6 @@ public enum EmenuException implements IBizExceptionMes {
     CheckoutIdError("结账单ID不合法",10081),
     PrintCheckoutFail("打印结账单失败",10082),
     DirectToCheckout("该餐台未消费，将直接进行结账", 10083),
-    QueryCheckoutByTimePeriodFail("查询该时间段的结账单失败",10084),
-    SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",10085),
-    CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",10086),
 
     /****************************后厨管理端****************************/
 

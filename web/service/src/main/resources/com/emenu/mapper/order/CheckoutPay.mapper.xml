@@ -14,4 +14,14 @@
         WHERE `checkout_type` = 1
         AND `created_time` &gt; #{startTime}
     </select>
+
+    <select id = "queryCheckoutPayByTimePeriod" resultMap="pw.CheckoutPay">
+        SELECT *
+        FROM t_checkout_pay
+        where  t_checkout_pay.created_time >= #{startDate}
+        AND #{endDate} >= t_checkout_pay.created_time
+        <if test="offset >= 0 and checkoutDto.pageSize > 0">
+            LIMIT #{offset}, #{checkoutDto.pageSize}
+        </if>
+    </select>
 </mapper>

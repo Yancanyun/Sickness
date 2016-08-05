@@ -10,23 +10,26 @@
         WHERE t_checkout.`table_id` = #{tableId} AND t_checkout.`status` = #{status}
     </select>
 
-    <select id = "queryCheckoutByTimePeriod" resultMap="pw.Checkout">
-        SELECT *
-        FROM t_checkout
-        where  t_checkout.checkout_time >= #{startDate}
-        AND #{endDate} >= t_checkout.checkout_time
-        AND t_checkout.status = 1
-        <if test="offset >= 0 and checkoutDto.pageSize > 0">
-            LIMIT #{offset}, #{checkoutDto.pageSize}
-        </if>
-    </select>
-
     <select id = "countCheckoutByTimePeriod" resultMap="pw.Checkout">
         SELECT *
         FROM t_checkout
         where  t_checkout.checkout_time >= #{startDate}
         AND #{endDate} >= t_checkout.checkout_time
         AND t_checkout.status = 1
+    </select>
+
+    <select id = "queryCheckoutByTime" resultMap="pw.Checkout">
+        SELECT *
+        FROM t_checkout
+        where  t_checkout.checkout_time >= #{startDate}
+        AND #{endDate} >= t_checkout.checkout_time
+        AND t_checkout.status = 1
+    </select>
+
+    <select id = "queryById" resultMap="pw.Checkout">
+        SELECT *
+        FROM t_checkout
+        where  #{id} = id
     </select>
 
 </mapper>

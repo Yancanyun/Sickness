@@ -379,7 +379,7 @@
                 class="fa fa-angle-right angle-right"></i></a>
         <ul>
             <shiro:checkPermission name="Admin:Revenue:Count:Checkout">
-                <li>
+                <li <c:if test="${MethodModule eq 'Admin:Revenue:Count:Checkout'}">class="active"</c:if>>
                     <a class="J_menu" href="${website}admin/revenue/checkout">账单统计</a>
                 </li>
             </shiro:checkPermission>

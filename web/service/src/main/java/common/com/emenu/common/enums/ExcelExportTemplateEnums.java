@@ -30,8 +30,11 @@ public enum ExcelExportTemplateEnums implements ExcelTemplateEnum {
             "classpath:template/excel/admin_rank_dishsale_excel_template.xls"),
 
     AdminRankBigTagList("菜品大类销售排行",
-            "classpath:template/excel/admin_rank_bigtag_excel_template.xls");
+            "classpath:template/excel/admin_rank_bigtag_excel_template.xls"),
 
+
+    AdminBillAuditList("账单稽查清单",
+            "classpath:template/excel/admin_revenue_billaudit_excel_template.xls");
 
 
     private String name;

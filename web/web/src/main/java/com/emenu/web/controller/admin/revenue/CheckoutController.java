@@ -4,27 +4,24 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
-import com.emenu.common.dto.rank.CheckoutDto;
-import com.emenu.common.dto.rank.CheckoutEachItemSumDto;
-import com.emenu.common.dto.rank.DishSaleRankDto;
-import com.emenu.common.dto.storage.ItemAndIngredientSearchDto;
+import com.emenu.common.dto.revenue.CheckoutDto;
+import com.emenu.common.dto.revenue.CheckoutEachItemSumDto;
 import com.emenu.common.entity.dish.Tag;
-import com.emenu.common.entity.storage.StorageItem;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.DateUtils;
+import com.emenu.common.utils.MySortList;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
-import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -79,8 +76,8 @@ public class CheckoutController  extends AbstractController{
         }
         return "admin/revenue/checkout/list_home";
     }
-    /** 下面这个Module是干什么的 ？？*/
-    @Module(value = ModuleEnums.AdminCountSaleRanking, extModule = ModuleEnums.AdminCountCheckoutList)
+    /** 权限*/
+    @Module(value = ModuleEnums.AdminCountCheckoutList)
     @RequestMapping(value = "ajax/list/{pageNo}", method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxSearch(@PathVariable("pageNo") Integer pageNo,
@@ -88,17 +85,8 @@ public class CheckoutController  extends AbstractController{
                            @RequestParam("startTime") String startTime,
                            @RequestParam("endTime") String endTime,
                            CheckoutDto checkoutDto) throws SSException {
-        /** CheckoutEachItemSumDto checkoutEachItemSumDto = new CheckoutEachItemSumDto();
-            各项的总计
-         */
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        startTime = startTime + " " + "00:00:00";
-        ParsePosition pos1 =new ParsePosition(0);
-        Date startDate = sdf.parse(startTime, pos1);
-        endTime = endTime + " " + "23:59:59";
-        ParsePosition pos2 = new ParsePosition(0);
-        Date endDate = sdf.parse(endTime, pos2);
-
+        Date startDate = DateUtils.getStartTime(startTime);
+        Date endDate = DateUtils.getEndTime(endTime);
         // 对页面大小和页码预处理
         pageNo = pageNo == null ? 0 : pageNo;
         pageSize = pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
@@ -111,10 +99,12 @@ public class CheckoutController  extends AbstractController{
         Integer dataCount = 0;
         try{
             // 得到时间段的账单数
-            dataCount = checkoutService.countCheckoutByTimePeriod(startDate,endDate);
-            /**要是这个时间段没有账单呢？？？？？？？*/
+            dataCount = billAuditService.countCheckoutByTimePeriod(startDate,endDate);
             if(dataCount != 0){
-                checkoutDtoList = checkoutService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
+                checkoutDtoList = billAuditService.queryCheckoutByTimePeriod(startDate, endDate, checkoutDto);
+                // 按时间字段对账单排序
+                MySortList<CheckoutDto>  list = new MySortList<CheckoutDto>();
+
                 for(CheckoutDto dto : checkoutDtoList){
                     JSONObject json = new JSONObject();
                     // 结账单号
@@ -126,9 +116,10 @@ public class CheckoutController  extends AbstractController{
                     // 收款人partyId
                     json.put("checkerPartyId",dto.getCheckerPartyId());
                     // 结账时间
-                    json.put("checkoutTime",dto.getCheckoutTime());
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    json.put("checkoutTime",sdf.format(dto.getCheckoutTime()));
                     // 支付类型
-                    json.put("checkoutType",dto.getCheckoutType());
+                    json.put("checkoutType",dto.getCheckoutName());
                     // 消费金额
                     json.put("consumptionMoney",dto.getConsumptionMoney());
                     // 抹零金额
@@ -146,10 +137,65 @@ public class CheckoutController  extends AbstractController{
                 jsonMessage.put("list", jsonArray);
                 jsonMessage.put("dataCount", dataCount);
             }
+            return sendJsonArray(jsonArray, dataCount, pageSize);
         }catch(SSException e){
-                LogClerk.errLog.error(e);
-                return sendErrMsgAndErrCode(e);
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
         }
-        return sendJsonObject(jsonMessage,AJAX_SUCCESS_CODE);
+    }
+
+    @Module(value = ModuleEnums.AdminCountCheckoutList)
+    @RequestMapping(value = {"ajax/sum/list"}, method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxSearchSum(@RequestParam("startTime") String startTime,
+                              @RequestParam("endTime") String endTime) throws SSException {
+        Date startDate = DateUtils.getStartTime(startTime);
+        Date endDate = DateUtils.getEndTime(endTime);
+        Integer dataCount = 0;
+        try {
+            JSONObject json = new JSONObject();
+            JSONObject jsonMessage = new JSONObject();
+            // 得到时间段的账单数
+            dataCount = billAuditService.countCheckoutByTimePeriod(startDate, endDate);
+            if (dataCount != 0) {
+                // 总计这块的json
+                CheckoutEachItemSumDto checkoutEachItemSumDto = new CheckoutEachItemSumDto();
+                checkoutEachItemSumDto = billAuditService.sumCheckoutEachItem(billAuditService.queryCheckoutByTime(startDate, endDate));
+                json.put("billSum", checkoutEachItemSumDto.getCheckSum());
+                json.put("cashSum", checkoutEachItemSumDto.getCashSum());
+                json.put("vipCardSum", checkoutEachItemSumDto.getVipCardSum());
+                json.put("bankCardSum", checkoutEachItemSumDto.getBankCardSum());
+                json.put("alipaySum", checkoutEachItemSumDto.getAlipaySum());
+                json.put("weChatSum", checkoutEachItemSumDto.getWeChatSum());
+                json.put("consumptionMoneySum", checkoutEachItemSumDto.getConsumptionMoneySum());
+                json.put("wipeZeroMoneySum", checkoutEachItemSumDto.getWipeZeroMoneySum());
+                json.put("totalPayMoneySum", checkoutEachItemSumDto.getTotalPayMoneySum());
+                json.put("changeMoneySum", checkoutEachItemSumDto.getChangeMoneySum());
+                json.put("shouldPayMoneySum", checkoutEachItemSumDto.getShouldPayMoneySum());
+                json.put("invoiceSum", checkoutEachItemSumDto.getInvoiceSum());
+
+            }
+            return sendJsonObject(json,AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+    @Module(value = ModuleEnums.AdminCountCheckoutList)
+    @RequestMapping(value = "exportToExcel",method = RequestMethod.GET)
+    @ResponseBody
+    public String exportToExcel(@RequestParam("startTime")String startTime,
+                                @RequestParam("endTime")String endTime){
+        try{
+            Date startDate = DateUtils.getStartTime(startTime);
+            Date endDate = DateUtils.getEndTime(endTime);
+            billAuditService.exportToExcel(startDate,endDate,getResponse());
+        }catch(SSException e){
+            sendErrMsg(e.getMessage());
+            LogClerk.errLog.error(e);
+            return WebConstants.sysErrorCode;
+        }
+        return "admin/revenue/checkout/list_home";
     }
 }

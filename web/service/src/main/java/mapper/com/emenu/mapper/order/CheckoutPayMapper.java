@@ -1,10 +1,13 @@
 package com.emenu.mapper.order;
 
+import com.emenu.common.dto.revenue.CheckoutDto;
+import com.emenu.common.entity.order.Checkout;
 import com.emenu.common.entity.order.CheckoutPay;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * CheckoutPayMapper
@@ -28,4 +31,19 @@ public interface CheckoutPayMapper {
      * @throws Exception
      */
     public BigDecimal queryCashIncomeFromDate(@Param("startTime") Date startTime) throws Exception;
+
+    /**
+     * 根据时间段返回该时间段的所有结账单信息(已结账的账单)
+     * 分页查询
+     * @param startDate
+     * @param endDate
+     * @param offset
+     * @param checkoutDto
+     * @return
+     * @throws Exception
+     */
+    public List<CheckoutPay> queryCheckoutPayByTimePeriod(@Param("startDate") Date startDate,
+                                                    @Param("endDate") Date endDate,
+                                                    @Param("offset") Integer offset,
+                                                    @Param("checkoutDto") CheckoutDto checkoutDto) throws Exception;
 }
