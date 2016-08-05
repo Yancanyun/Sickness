@@ -67,7 +67,7 @@ public class BillAuditTest extends AbstractTestCase{
         String de = "23:59:59";
         d0 = d0 + " " + db;
         d2 = d2 + " " + de;
-        ParsePosition pos1 =new ParsePosition(0);
+        ParsePosition pos1 = new ParsePosition(0);
         Date startDate = sdf.parse(d0,pos1);
         ParsePosition pos2 = new ParsePosition(0);
         Date endDate = sdf.parse(d2,pos2);
