@@ -714,7 +714,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                     //总金额
                     BigDecimal totalMoney = new BigDecimal(0.00);
                     for (StorageItemDto storageItemDto : storageItemDtoList) {
-                        if (storageItemDto.getSupplierPartyId() == supplier1.getPartyId()) {
+                        if (storageItemDto.getSupplierPartyId().equals(supplier1.getPartyId())) {
                             // 每个供货商供应的物品
                             childItemDtoList.add(storageItemDto);
                             // 每个供货商总金额
