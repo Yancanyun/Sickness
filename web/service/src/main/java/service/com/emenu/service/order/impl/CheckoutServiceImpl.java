@@ -29,10 +29,7 @@ import com.emenu.common.utils.PrintUtils;
 import com.emenu.mapper.order.CheckoutMapper;
 import com.emenu.mapper.party.group.vip.VipInfoMapper;
 import com.emenu.service.dish.DishService;
-import com.emenu.service.order.CheckoutPayService;
-import com.emenu.service.order.CheckoutService;
-import com.emenu.service.order.OrderDishService;
-import com.emenu.service.order.OrderService;
+import com.emenu.service.order.*;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.party.group.vip.VipInfoService;
 import com.emenu.service.printer.PrinterService;
@@ -102,6 +99,9 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private OrderDishCacheService orderDishCacheService;
 
     @Autowired
     private VipInfoMapper vipInfoMapper;
@@ -482,6 +482,9 @@ public class CheckoutServiceImpl implements CheckoutService {
             // 把餐台状态改为"占用已结账"
             setTableStatusToCheckouted(tableId);
 
+            // 把本餐台的缓存删掉
+            orderDishCacheService.cleanCacheByTableId(tableId);
+
             // 如果并台，则需要把和它并的所有的餐台的都结账
             if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
                 // 与本餐台并台的其他餐台的列表
@@ -509,6 +512,11 @@ public class CheckoutServiceImpl implements CheckoutService {
                         // 然后把餐台状态改为"占用已结账"
                         setTableStatusToCheckouted(t.getId());
                     }
+                }
+
+                // 把并台的缓存都删掉
+                for (Table t : tableList) {
+                    orderDishCacheService.cleanCacheByTableId(t.getId());
                 }
 
                 // 若餐台为"已并台"状态，则将它从并台表中删除
@@ -729,6 +737,9 @@ public class CheckoutServiceImpl implements CheckoutService {
             // 把餐台状态改为"占用已结账"
             setTableStatusToCheckouted(tableId);
 
+            // 把本餐台的缓存删掉
+            orderDishCacheService.cleanCacheByTableId(tableId);
+
             // 如果并台，则需要把和它并的所有的餐台的都免单
             if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
                 // 与本餐台并台的其他餐台的列表
@@ -758,6 +769,11 @@ public class CheckoutServiceImpl implements CheckoutService {
                         // 然后把餐台状态改为"占用已结账"
                         setTableStatusToCheckouted(t.getId());
                     }
+                }
+
+                // 把并台的缓存都删掉
+                for (Table t : tableList) {
+                    orderDishCacheService.cleanCacheByTableId(t.getId());
                 }
 
                 // 若餐台为"已并台"状态，则将它从并台表中删除
