@@ -139,12 +139,10 @@ public class BackDishServiceImpl implements BackDishService {
                 backDish.setTasteId(orderDish.getTasteId());
                 backDish.setEmployeePartyId(partyId);
                 backDish.setBackTime(new Date());
-                commonDao.insert(backDish);
 
-                // 重新获取一下，可以得到id属性
-                backDish = backDishMapper.queryBackDishByOrderDishId(orderDish.getId());
+                BackDish backDishNew = commonDao.insert(backDish);
                 // 更新原配料缓存数量
-                orderDishService.backDishUpdateIngredientCache(backDish.getId());
+                orderDishService.backDishUpdateIngredientCache(backDishNew.getId());
             }
 
         } catch (Exception e){

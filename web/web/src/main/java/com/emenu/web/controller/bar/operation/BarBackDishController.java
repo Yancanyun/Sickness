@@ -9,11 +9,14 @@ import com.emenu.common.entity.dish.Taste;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
+import com.emenu.common.entity.party.group.employee.Employee;
+import com.emenu.common.entity.party.security.SecurityUser;
 import com.emenu.common.entity.remark.Remark;
 import com.emenu.common.entity.remark.RemarkTag;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -178,7 +181,7 @@ public class BarBackDishController extends AbstractController {
      * @param orderDishId
      * @param backNumber
      * @param backRemarks
-     * @param httpSession
+     * @param uid
      * @return
      */
     @RequestMapping(value = "confirm", method = RequestMethod.POST)
@@ -187,9 +190,15 @@ public class BarBackDishController extends AbstractController {
     public JSONObject backDishConfirm(@RequestParam("orderDishId") Integer orderDishId,
                                       @RequestParam("backNumber") Float backNumber,
                                       @RequestParam("backRemarks") String backRemarks,
-                                      HttpSession httpSession){
+                                      @RequestParam("uid") Integer uid){
         try{
-            Integer partyId = (Integer)httpSession.getAttribute("partyId");
+
+            // 根据uid获取收款人
+            SecurityUser securityUser = securityUserService.queryById(uid);
+            if (Assert.isNull(securityUser)) {
+                throw SSException.get(EmenuException.QueryEmployeeInfoFail);
+            }
+            int partyId = securityUser.getPartyId();
             backDishService.backDishByOrderDishId(orderDishId, backNumber, backRemarks, partyId);
             // 更新餐台版本号
             OrderDish orderDish = orderDishService.queryById(orderDishId);
