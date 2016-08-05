@@ -45,7 +45,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">卡号</label>
                         <div class="col-sm-6">
-                            <p class="form-control-static">0000000001</p>
+                            <p class="form-control-static">${vipInfoDto.cardNumber}</p>
                         </div>
                     </div>
                     <div class="form-group">

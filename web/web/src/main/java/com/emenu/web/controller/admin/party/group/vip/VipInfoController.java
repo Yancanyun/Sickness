@@ -93,6 +93,8 @@ public class VipInfoController extends AbstractController {
                 VipCard vipCard = vipCardService.queryByPartyId(partyId);
                 if (vipCard != null) {
                     jsonObject.put("cardNum", vipCard.getCardNumber());
+                }else {
+                    jsonObject.put("cardNum", "暂无实体卡");
                 }
 
                 jsonArray.add(jsonObject);
@@ -305,6 +307,14 @@ public class VipInfoController extends AbstractController {
             vipInfoDto.setPhone(vipInfo.getPhone());
             vipInfoDto.setQq(vipInfo.getQq());
             vipInfoDto.setEmail(vipInfo.getEmail());
+            // 卡号
+            VipCard vipCard = vipCardService.queryByPartyId(vipInfo.getPartyId());
+            if (vipCard == null){
+                vipInfoDto.setCardNumber("暂无实体卡");
+            }else {
+                vipInfoDto.setCardNumber(vipCard.getCardNumber());
+            }
+
             model.addAttribute("vipInfoDto", vipInfoDto);
         } catch (SSException e) {
             LogClerk.errLog.error(e);

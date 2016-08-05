@@ -30,6 +30,9 @@ public class VipInfoDto {
     // 邮箱
     private String email;
 
+    // 卡号
+    private String cardNumber;
+
     // 帐号状态(1-启用,2-停用,3-删除)
     private String status;
 
@@ -88,6 +91,14 @@ public class VipInfoDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public String getStatus() {

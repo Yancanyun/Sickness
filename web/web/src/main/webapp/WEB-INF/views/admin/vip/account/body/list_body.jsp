@@ -55,13 +55,13 @@
                                     <table class="table table-hover table-bordered">
                                         <thead>
                                         <tr>
-                                            <th class="order pagination-reorder" data-order-key="grade">会员等级</th>
+                                            <th>会员等级</th>
                                             <th>姓名</th>
                                             <th>电话</th>
                                             <th>卡号</th>
                                             <th class="order pagination-reorder" data-order-key="balance">卡内余额</th>
                                             <th>会员积分</th>
-                                            <th>总消费额</th>
+                                            <th class="order pagination-reorder" data-order-key="totalConsumption">总消费额</th>
                                             <th>已挂账金额</th>
                                             <th>状态</th>
                                             <th>操作</th>
