@@ -482,8 +482,12 @@ public class MyOrderController  extends AbstractController {
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty())
                 errMsg=orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
             // 存在异常信息
-            if(!errMsg.equals(""))
+            // 要把餐桌解锁，再提示信息
+            if(!errMsg.equals("")){
+                orderDishCacheService.tableLockRemove(tableId);
                 return sendMsgAndCode(AJAX_FAILURE_CODE,errMsg);
+            }
+
 
             Checkout checkout = new Checkout();
             checkout = checkoutService.queryByTableIdAndStatus(tableId, CheckOutStatusEnums.IsNotCheckOut.getId());//是否存在未结账的结账单
