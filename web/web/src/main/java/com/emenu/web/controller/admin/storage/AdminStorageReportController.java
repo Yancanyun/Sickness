@@ -170,6 +170,7 @@ public class AdminStorageReportController extends AbstractController {
                     for (StorageReportItem storageReportItem : storageReportItemList){
                         // 存放单据详情
                         JSONObject jsonObjectItem = new JSONObject();
+                        jsonObjectItem.put("itemId",storageReportItem.getItemId());
                         jsonObjectItem.put("itemName",storageReportItem.getItemName());
                         jsonObjectItem.put("itemNumber",storageReportItem.getItemNumber());
                         jsonObjectItem.put("orderUnitName",storageReportItem.getOrderUnitName());
