@@ -24,6 +24,32 @@
         AND #{endTime}>=t_back_dish.created_time
     </select>
 
+    <select id="queryBackDishCountDtoByTimePeriod" resultType="com.emenu.common.dto.revenue.BackDishCountDto">
+        SELECT
+        backdish.`order_id` AS orderId,
+        backdish.`created_time` AS backDish,
+        orderdish.`created_time` AS orderDish,
+        partyemployee.`name` AS backMan,
+        t_table.`name` AS tableName,
+        dish.`name` AS dishName,
+        orderdish.`sale_price` AS salePrice,
+        orderdish.`vip_dish_price` AS vipSalePrice,
+        backdish.`back_number` AS num,
+        backdish.`back_remarks` AS reason,
+        orderdish.`package_id` AS packageId,
+        orderdish.`is_package` AS isPackage,
+        orderdish.`package_flag` AS packageFlag,
+        dish.`tag_id` AS tagId,
+        backdish.`order_dish_id` AS orderDishId
+        FROM `t_back_dish` backdish
+        LEFT JOIN `t_order_dish` orderdish ON backdish.`order_dish_id` = orderdish.`id`
+        LEFT JOIN `t_dish` dish ON  dish.`id` = orderdish.`dish_id`
+        LEFT JOIN `t_party_employee` partyemployee ON backdish.`employee_party_id` = partyemployee.`party_id`
+        LEFT JOIN `t_order` t_order ON 	backdish.`order_id` = t_order.`id`
+        LEFT JOIN `t_table` t_table ON  t_table.`id` = t_order.`table_id`
+        where backdish.created_time>=#{startTime}
+        AND #{endTime}>=backdish.created_time
+    </select>
     <select id="queryBackDishById" resultMap="pw.BackDish">
         SELECT *
         FROM t_back_dish

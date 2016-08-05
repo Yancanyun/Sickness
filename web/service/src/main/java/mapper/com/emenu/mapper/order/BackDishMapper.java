@@ -1,5 +1,6 @@
 package com.emenu.mapper.order;
 
+import com.emenu.common.dto.revenue.BackDishCountDto;
 import com.emenu.common.entity.order.BackDish;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,6 +33,21 @@ public interface BackDishMapper {
      */
     public List<BackDish> queryOrderByTimePeriod(@Param("startTime") Date startTime,
                                                  @Param("endTime")Date endTime) throws Exception;
+
+    /**
+     * 根据开始时间和结束时间查询这一段时间的BackDishCountDto
+     * 不过需要在service方法中进行相应的处理才能在前台页面上显示
+     * 包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws Exception
+     */
+    public List<BackDishCountDto> queryBackDishCountDtoByTimePeriod(@Param("startTime") Date startTime,
+                                                                    @Param("endTime")Date endTime) throws Exception;
+
+
 
     /**
      * 根据退菜Id查询退菜信息

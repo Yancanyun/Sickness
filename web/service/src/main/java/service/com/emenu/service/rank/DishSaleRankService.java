@@ -57,6 +57,19 @@ public interface DishSaleRankService {
                                                                           Date endTime,
                                                                           Integer tagId) throws SSException;
 
+
+    /**
+     * 根据起始时间和结束时间和菜品大类的集合查询
+     * 可用于导出Excel
+     * @param startTime
+     * @param endTime
+     * @param tagIds
+     * @return
+     * @throws SSException
+     */
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIds(Date startTime,
+                                                                           Date endTime,
+                                                                           List<Integer> tagIds) throws SSException;
     /**
      * 导出Excel
      * @param startTime

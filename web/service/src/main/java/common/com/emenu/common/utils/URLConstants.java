@@ -147,6 +147,8 @@ public final class URLConstants {
     //账单稽查
     public static final String ADMIN_REVENUE_CHECKOUT_URL = "admin/revenue/checkout";
 
+    // 退菜清单
+    public static final String ADMIN_REVENUE_BACKDISH_URL = "admin/revenue/backdish";
     // 全局设置
     public static final String ADMIN_CONSTANT_URL = "admin/constant";
 

@@ -287,13 +287,15 @@ public enum ModuleEnums {
     AdminCountSaleRanking("Admin:Revenue:Count"),
     //账单稽查
     AdminCountCheckoutList("Admin:Revenue:Count:Checkout"),
+    // 退菜清单
+    AdminCountBackDishList("Admin:Revenue:Count:BackDish"),
 
     // 营业分析
-    AdminCountDishSaleRanking("Admin:Count"),
+    AdminCountDishSaleRanking("Admin:Rank:Count"),
     // 统计菜品销售排行
-    AdminCountDishSaleRankingList("Admin:Count:SaleRanking"),
+    AdminCountDishSaleRankingList("Admin:Rank:Count:SaleRanking"),
     //统计菜品大类销售排行
-    AdminCountDishTagRankingList("Admin:Count:TagRanking"),
+    AdminCountDishTagRankingList("Admin:Rank:Count:TagRanking"),
 
     // 全局设置
     AdminConstant("Admin:Constant"),

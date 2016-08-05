@@ -94,13 +94,14 @@
             <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                 <li><a class="J_menu" href="${website}admin/revenue/checkout">账单统计</a></li>
                 <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
+                <li><a class="J_menu" href="${website}admin/revenue/backdish">退项清单</a></li>
 
             </ul>
         </li>
         </shiro:checkPermission>
 
-        <shiro:checkPermission name="Admin:Count">
-            <li <c:if test="${PWModule eq 'Admin:Count'}">class="active"</c:if>>
+        <shiro:checkPermission name="Admin:Rank:Count">
+            <li <c:if test="${PWModule eq 'Admin:Rank:Count'}">class="active"</c:if>>
                 <a class="menu-list J_layer_1_menu" data-menu-id="8" href="javascript:;">营业分析</a>
                 <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
                     <li><a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a></li>

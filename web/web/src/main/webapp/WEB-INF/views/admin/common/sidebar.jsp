@@ -384,23 +384,28 @@
                 </li>
             </shiro:checkPermission>
                 <li><a class="J_menu" href="javascript:;">会员充值统计</a></li>
+            <shiro:checkPermission name="Admin:Revenue:Count:BackDish">
+                <li <c:if test="${MethodModule eq 'Admin:Revenue:Count:BackDish'}">class="active"</c:if>>
+                    <a class="J_menu" href="${website}admin/revenue/backdish">退项清单</a>
+                </li>
+            </shiro:checkPermission>
         </ul>
     </li>
     </shiro:checkPermission>
 
-    <shiro:checkPermission name="Admin:Count">
+    <shiro:checkPermission name="Admin:Rank:Count">
         <li id="firstMenu8" class="active hidden">
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营业分析</span><i
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
-                <shiro:checkPermission name="Admin:Count:SaleRanking">
-                    <li <c:if test="${MethodModule eq 'Admin:Count:SaleRanking'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Rank:Count:SaleRanking">
+                    <li <c:if test="${MethodModule eq 'Admin:Rank:Count:SaleRanking'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/rank/sale">菜品销售排行</a>
                     </li>
                 </shiro:checkPermission>
                     <li><a class="J_menu" href="javascript:;">菜品销售趋势排行</a></li>
-                <shiro:checkPermission name="Admin:Count:TagRanking">
-                    <li <c:if test="${MethodModule eq 'Admin:Count:TagRanking'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Rank:Count:TagRanking">
+                    <li <c:if test="${MethodModule eq 'Admin:Rank:Count:TagRanking'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/rank/bigtag">菜品大类销售排行</a>
                     </li>
                 </shiro:checkPermission>

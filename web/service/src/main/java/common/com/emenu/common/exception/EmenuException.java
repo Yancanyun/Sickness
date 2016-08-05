@@ -587,6 +587,11 @@ public enum EmenuException implements IBizExceptionMes {
     GetDishTagAllFailed("获取所有的菜品大类排行失败",9009),
     GetPageDishTagRankByTimePeriodAndTagIdFailed("根据开始时间和结束时间和菜品大类Id获取菜品大类销售排行分页失败",9010),
     BigTagRankExportToExcelFailed("菜品大类销售排行导出Excel表格失败",9011),
+    // 营收统计
+    GetBackDishDtoByTimePeriodFailed("根据开始时间和结束时间获取退菜Dto失败",9012),
+    GetPageBackDishDtoByTimePeriodFailed("根据开始时间和结束时间获取退菜Dto分页失败",9013),
+    GetCountBackDishDtoByTimePeriodFailed("根据开始时间和结束时间获取退菜Dto数据总量失败",9014),
+    BackDishCountExportToExcelFailed("退项清单导出Excel表格失败",9015),
     // 吧台对账
     NewBarContrastFailed("新增吧台对账记录失败", 9020),
     QueryBarContrastFailed("查询吧台对账记录失败", 9021),

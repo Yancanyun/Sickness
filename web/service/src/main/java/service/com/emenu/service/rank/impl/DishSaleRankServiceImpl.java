@@ -110,7 +110,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                             mapQuality.put(orderDish.getPackageId(),BigDecimal.valueOf(orderDish.getPackageQuantity()));
                         }
                         // 会员和非会员的价格
-                        if(orderDish.getVipDishPrice()!=null){
+                        if(orderDish.getVipDishPrice()==null){
                             BigDecimal money = orderDish.getSalePrice().multiply(BigDecimal.valueOf(orderDish.getPackageQuantity())).multiply(orderDish.getDiscount()).multiply(BigDecimal.valueOf(0.1));
                             if(mapMoney.containsKey(orderDish.getPackageId())){
                                 mapMoney.put(orderDish.getPackageId(),mapMoney.get(orderDish.getPackageId()).add(money));
@@ -160,8 +160,9 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
                 dishSaleRankDto.setDishName(dishService.queryById(entry.getKey()).getName());
                 // 数量取整
                 dishSaleRankDto.setNum(mapQuality.get(entry.getKey()).intValue());
-                dishSaleRankDto.setTagId(tagService.queryLayer2TagByDishId(entry.getKey()).getId());
-                dishSaleRankDto.setTagName(tagService.queryLayer2TagByDishId(entry.getKey()).getName());
+                // 存放菜品的大类Id
+                dishSaleRankDto.setTagId(tagService.queryLayer2TagByDishId(entry.getKey()).getpId());
+                dishSaleRankDto.setTagName(tagService.queryById(tagService.queryLayer2TagByDishId(entry.getKey()).getpId()).getName());
                 dishSaleRankDtoList.add(dishSaleRankDto);
             }
             return dishSaleRankDtoList;
@@ -202,20 +203,34 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
     }
 
     @Override
+    public List<DishSaleRankDto> queryDishSaleRankDtoByTimePeriodAndTagIds(Date startTime,
+                                                                           Date endTime,
+                                                                           List<Integer> tagIds) throws SSException{
+        try{
+            List<DishSaleRankDto> dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
+            List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
+            for(DishSaleRankDto dishSaleRankDto :dishSaleRankDtoList){
+                if(tagIds.contains(dishSaleRankDto.getTagId())){
+                    dishSaleRankDtoList2.add(dishSaleRankDto);
+                }
+            }
+            return dishSaleRankDtoList2;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.GetOrderDishDtoByTimePeriodAndTagIdFailed,e);
+        }
+    }
+
+    @Override
     public void exportToExcel(Date startTime ,Date endTime,List<Integer> tagIds ,HttpServletResponse response) throws SSException{
         OutputStream os = null;
         try {
-            List<DishSaleRankDto> dishSaleRankDtoList2 = new ArrayList<DishSaleRankDto>();
             List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
+
             if(tagIds!=null){
-                for(Integer tagId:tagIds){
-                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
-                    for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
-                        dishSaleRankDtoList2.add(dishSaleRankDto);
-                    }
-                }
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagIds(startTime,endTime,tagIds);
             }else{
-                dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
             }
 
             // 设置输出流
@@ -234,7 +249,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
             // 获取sheet往sheet里面写数据
             WritableSheet sheet = outBook.getSheet(0) ;
             int row = 2;
-            for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList2){
+            for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
                 // 序号
                 Label labelNumber = new Label(0, row , String.valueOf(row - 1));
                 sheet.addCell(labelNumber);
@@ -299,11 +314,7 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
         try{
             // 判断前台有没有选中菜品大类
             if(tagIds!=null){
-                for(Integer tagId : tagIds){
-                    dishSaleRankDtoList2 = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
-                    dishSaleRankDtoList.addAll(dishSaleRankDtoList2);
-                }
-
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagIds(startTime,endTime,tagIds);
                 if(!dishSaleRankDtoList.isEmpty()){
                     if(dishSaleRankDtoList.size()<=pageSize){
                         dishSaleRankDtoList = dishSaleRankDtoList.subList(0,dishSaleRankDtoList.size());
@@ -359,22 +370,19 @@ public class DishSaleRankServiceImpl implements DishSaleRankService {
 
     @Override
     public Integer countByTimePeriodAndTagId(Date startTime,Date endTime,List<Integer> tagIds) throws SSException{
-        Integer number = 0;
         // 判断前台有没有选中菜品大类
         try{
-            List<DishSaleRankDto> dishSaleRankDtoList = new ArrayList<DishSaleRankDto>();
+            int number = 0;
+            List<DishSaleRankDto> dishSaleRankDtoList = Collections.emptyList();
             if(tagIds != null){
-                for(Integer tagId : tagIds){
-                    dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagId(startTime,endTime,tagId);
-                    number += dishSaleRankDtoList.size();
-                }
+                dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriodAndTagIds(startTime, endTime, tagIds);
             }else{
                 dishSaleRankDtoList = this.queryDishSaleRankDtoByTimePeriod(startTime,endTime);
-                if(dishSaleRankDtoList == null){
-                    number = 0;
-                }else{
-                    number = dishSaleRankDtoList.size();
-                }
+            }
+            if(dishSaleRankDtoList.isEmpty()){
+                number = 0;
+            }else{
+                number = dishSaleRankDtoList.size();
             }
             return number;
         }catch(Exception e){

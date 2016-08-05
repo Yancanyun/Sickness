@@ -55,6 +55,14 @@ public class DateUtils {
     }
 
     /**
+     * 格式化日期时间
+     * 日期时间格式yyyy-MM-dd HH:mm:ss
+     *
+     * @param date
+     * @return
+     */
+    public static String formatDatetime2(Date date){ return sdf.format(date);}
+    /**
      * 获取当前日期
      * 日期时间格式yyyy.MM.dd
      *
@@ -112,6 +120,30 @@ public class DateUtils {
         hour = (between / (60 * 60 * 1000) - day * 24);
         min = ((between / (60 * 1000)) - (day * 24 + hour) * 60);
         return (day + "天" + hour + "小时" + min + "分钟");
+    }
+
+    /**
+     * 计算时间差，并转换为"X小时X分钟X秒"的格式
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static String calculateDiffTimeAndFormat2(Date beginTime, Date endTime) {
+        long between = 0;
+        long day = 0;
+        long hour = 0;
+        long min = 0;
+        long sec = 0;
+        try {
+            between = (endTime.getTime() - beginTime.getTime());// 得到两者的毫秒数
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        day = (between / (60 * 60 * 1000 * 24));
+        hour = (between / (60 * 60 * 1000) - day * 24);
+        min = ((between / (60 * 1000)) - (day * 24 + hour) * 60);
+        sec = ((between / 1000) - (((day * 24 + hour) * 60 + min) * 60));
+        return ( hour + "小时" + min + "分钟" + sec + "秒");
     }
 
     public static Date getTodayStartTime() {

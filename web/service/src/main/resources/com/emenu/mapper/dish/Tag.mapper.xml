@@ -75,8 +75,7 @@
         SELECT  *
         FROM  t_tag tag
         WHERE
-        tag.p_id IN
-        (3,4,5,6)
+        tag.p_id =1
     </select>
 
     <select id="queryByPidAndName" resultMap="pw.Tag">

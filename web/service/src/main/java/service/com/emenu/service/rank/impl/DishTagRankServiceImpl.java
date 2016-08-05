@@ -61,16 +61,17 @@ public class DishTagRankServiceImpl implements DishTagRankService {
             Map<Integer,BigDecimal> mapMoney = new HashMap<Integer, BigDecimal>();
             for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
                 // 获得菜品大类的销售数量
-                if(mapQuality.containsKey(dishSaleRankDto.getTagId())){
-                    mapQuality.put(dishSaleRankDto.getTagId(),mapQuality.get(dishSaleRankDto.getTagId()).add(BigDecimal.valueOf(dishSaleRankDto.getNum())));
+                int bigTagId = dishSaleRankDto.getTagId();
+                if(mapQuality.containsKey(bigTagId)){
+                    mapQuality.put(bigTagId,mapQuality.get(bigTagId).add(BigDecimal.valueOf(dishSaleRankDto.getNum())));
                 }else{
-                    mapQuality.put(dishSaleRankDto.getTagId(),BigDecimal.valueOf(dishSaleRankDto.getNum()));
+                    mapQuality.put(bigTagId,BigDecimal.valueOf(dishSaleRankDto.getNum()));
                 }
                 // 获得菜品大类的销售金额
-                if(mapMoney.containsKey(dishSaleRankDto.getTagId())){
-                    mapMoney.put(dishSaleRankDto.getTagId(),mapMoney.get(dishSaleRankDto.getTagId()).add(dishSaleRankDto.getConsumeSum()));
+                if(mapMoney.containsKey(bigTagId)){
+                    mapMoney.put(bigTagId,mapMoney.get(bigTagId).add(dishSaleRankDto.getConsumeSum()));
                 }else{
-                    mapMoney.put(dishSaleRankDto.getTagId(),dishSaleRankDto.getConsumeSum());
+                    mapMoney.put(bigTagId,dishSaleRankDto.getConsumeSum());
                 }
             }
             // 遍历map
@@ -108,16 +109,17 @@ public class DishTagRankServiceImpl implements DishTagRankService {
             Map<Integer,BigDecimal> mapMoney = new HashMap<Integer, BigDecimal>();
             for(DishSaleRankDto dishSaleRankDto : dishSaleRankDtoList){
                 // 获得菜品大类的销售数量
-                if(mapQuality.containsKey(dishSaleRankDto.getTagId())){
-                    mapQuality.put(dishSaleRankDto.getTagId(),mapQuality.get(dishSaleRankDto.getTagId()).add(BigDecimal.valueOf(dishSaleRankDto.getNum())));
+                int bigTagId = dishSaleRankDto.getTagId();
+                if(mapQuality.containsKey(bigTagId)){
+                    mapQuality.put(bigTagId,mapQuality.get(bigTagId).add(BigDecimal.valueOf(dishSaleRankDto.getNum())));
                 }else{
-                    mapQuality.put(dishSaleRankDto.getTagId(),BigDecimal.valueOf(dishSaleRankDto.getNum()));
+                    mapQuality.put(bigTagId,BigDecimal.valueOf(dishSaleRankDto.getNum()));
                 }
                 // 获得菜品大类的销售金额
-                if(mapMoney.containsKey(dishSaleRankDto.getTagId())){
-                    mapMoney.put(dishSaleRankDto.getTagId(),mapMoney.get(dishSaleRankDto.getTagId()).add(dishSaleRankDto.getConsumeSum()));
+                if(mapMoney.containsKey(bigTagId)){
+                    mapMoney.put(bigTagId,mapMoney.get(bigTagId).add(dishSaleRankDto.getConsumeSum()));
                 }else{
-                    mapMoney.put(dishSaleRankDto.getTagId(),dishSaleRankDto.getConsumeSum());
+                    mapMoney.put(bigTagId,dishSaleRankDto.getConsumeSum());
                 }
             }
             // 遍历map
