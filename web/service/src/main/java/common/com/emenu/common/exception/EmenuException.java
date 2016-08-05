@@ -573,11 +573,7 @@ public enum EmenuException implements IBizExceptionMes {
     CostCardInfoError("成本卡信息不合法",8135),
 
     // 营收统计
-    QueryCheckoutByTimePeriodFail("查询该时间段的结账单失败",8900),
-    SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",8901),
-    CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",8902),
-    BillAuditListExportToExcelFailed("账单稽查清单导出Excel表格失败",8903),
-
+     BillAuditListExportToExcelFailed("账单稽查清单导出Excel表格失败",8903),
 
     // 营业分析
     GetOrderDishByTimePeriodFailed("根据开始时间和结束时间获取所消费的菜品失败",9001),
@@ -681,6 +677,9 @@ public enum EmenuException implements IBizExceptionMes {
     CheckoutIdError("结账单ID不合法",10081),
     PrintCheckoutFail("打印结账单失败",10082),
     DirectToCheckout("该餐台未消费，将直接进行结账", 10083),
+    QueryCheckoutByTimePeriodFail("查询该时间段的结账单失败",10084),
+    SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",10085),
+    CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",10086),
 
     /****************************后厨管理端****************************/
 
@@ -698,6 +697,7 @@ public enum EmenuException implements IBizExceptionMes {
     PrinterIpIsNull("打印机Ip地址未设置",10100),
     ConnectPrinterFail("连接打印机失败",10101),
     CheckOrderDishPrinter("检查订单菜品打印机失败",10102),
+    PrintOrderDishAtOnceFail("下单后立即打印菜品失败",10103),
 
     // 智能排菜
     CreateQueFail("生成智能排菜队列失败",10200),
@@ -722,7 +722,7 @@ public enum EmenuException implements IBizExceptionMes {
         this.code = code;
     }
 
-     EmenuException(String msg) {
+    EmenuException(String msg) {
         this.msg = msg;
     }
 

@@ -6,11 +6,13 @@ import com.emenu.common.dto.dish.DishPackageDto;
 import com.emenu.common.dto.order.PrintOrderDishDto;
 import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.dish.DishTaste;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.printer.Printer;
 import com.emenu.common.entity.table.Table;
 import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishAutoPrintStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
@@ -455,5 +457,57 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
             throw SSException.get(EmenuException.CheckOrderDishPrinter,e);
         }
         return exceptionStr;
+    }
+
+    @Override
+    public void autoPrintOrderDish (Integer orderId) throws SSException{
+
+        List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+        try{
+            if(Assert.isNotNull(orderId)
+                    &&!Assert.lessOrEqualZero(orderId)){
+
+                orderDishs=orderDishService.listByOrderId(orderId);
+
+                for(OrderDish dto : orderDishs){
+
+                    // 是套餐的话,根据套餐的Id来查询tag,小类需要自动打印且当前菜品状态为已下单的时候再打印
+                    if(dto.getIsPackage()==PackageStatusEnums.IsPackage.getId()){
+
+                        if(dto.getStatus()==OrderDishStatusEnums.IsBooked.getId()){
+
+                            // 查询小类，看是否下单后立即打印
+                            Tag tag = new Tag();
+                            DishDto dishDto = new DishDto();
+                            dishDto = dishService.queryById(dto.getPackageId());
+                            tag = tagService.queryById(dishDto.getTagId());
+                            // 小类需要下单后立即打印
+                            if(tag.getPrintAfterConfirmOrder()== OrderDishAutoPrintStatusEnums.PrintAtOnce.getId()){
+
+                                this.printOrderDishById(dto.getId());
+                            }
+                        }
+                    }
+                    else{
+                        if(dto.getStatus()==OrderDishStatusEnums.IsBooked.getId()){
+
+                            // 查询小类，看是否下单后立即打印
+                            Tag tag = new Tag();
+                            DishDto dishDto = new DishDto();
+                            dishDto = dishService.queryById(dto.getDishId());
+                            tag = tagService.queryById(dishDto.getTagId());
+                            // 小类需要下单后立即打印
+                            if(tag.getPrintAfterConfirmOrder()== OrderDishAutoPrintStatusEnums.PrintAtOnce.getId()){
+
+                                this.printOrderDishById(dto.getId());
+                            }
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.PrintOrderDishAtOnceFail,e);
+        }
     }
 }

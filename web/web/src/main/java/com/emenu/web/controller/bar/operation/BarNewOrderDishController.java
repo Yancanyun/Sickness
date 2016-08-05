@@ -486,6 +486,17 @@ public class BarNewOrderDishController extends AbstractController{
                     orderDishService.newOrderDish(orderDish);
                 }
             }
+
+            // 获取生成后的订单,主要是获取到新生成订单的Id,首先获取到所有未结账的订单,新增的订单应该为数据库中的最后一条记录
+            List<Order> orders = new ArrayList<Order>();
+            orders = orderService.queryOrdersByCheckoutId(checkout.getId());
+
+            // 最后一条记录即应该是新生成的订单
+            order = orders.get(orders.size()-1);
+
+            // 查看新生成的结账单是否有需要自动打印的菜品,若存在的话则自动打印出来
+            orderDishPrintService.autoPrintOrderDish(order.getId());
+
             //下面的这两个顺序很重要,餐台在锁定的情况下不允许任何操作,所以要先给餐台解锁
             // 点击确认点菜的时候上了锁,返回和确认下单后都要把锁解除,否则不能继续点菜
             orderDishCacheService.tableLockRemove(tableId);

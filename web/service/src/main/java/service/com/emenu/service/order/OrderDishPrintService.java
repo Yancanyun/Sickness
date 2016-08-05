@@ -49,4 +49,14 @@ public interface OrderDishPrintService {
      * @throws com.pandawork.core.common.exception.SSException
      */
     public String checkOrderDishPrinter() throws SSException;
+
+    /**
+     * 店家可在小类上设置下单后自动打印
+     * 下单时判断哪些菜品自动打印然后自动打印出来
+     *
+     * @param orderId
+     * @return 返回异常的信息
+     * @throws com.pandawork.core.common.exception.SSException
+     */
+    public void autoPrintOrderDish (Integer orderId) throws SSException;
 }
