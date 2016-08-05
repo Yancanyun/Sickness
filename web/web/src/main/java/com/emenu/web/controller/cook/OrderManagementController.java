@@ -5,15 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.IgnoreLogin;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.dish.DishDto;
+import com.emenu.common.dto.order.PrintOrderDishDto;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.table.Table;
+import com.emenu.common.enums.auto.AutoPrintStartStatusEnums;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
+import com.emenu.common.enums.other.ConstantEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
+import com.emenu.service.order.impl.AutoPrintOrderDishServiceImpl;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -178,16 +182,27 @@ public class OrderManagementController extends AbstractController {
         try {
             orderDishService.wipeOrderDish(orderDishId);
             //划单后要对餐桌是否还有未上的菜品进行判断
+
+            //判断这个餐桌是否还有菜品,没有的话餐台版本号清空
             if(orderDishService.isTableHaveOrderDish(orderDishService.queryOrderDishTableId(orderDishId))==0)
-            {
-                //判断这个餐桌是否还有菜品,没有的话餐台版本号清空
                 cookTableCacheService.deleteTable(orderDishService.queryOrderDishTableId(orderDishId));
-            }
+
+            //否则更新餐桌版本号
             else
-            {
-                //否则更新餐桌版本号
-                cookTableCacheService.updateTableVersion(orderDishService.queryOrderDishTableId(orderDishId));
+            cookTableCacheService.updateTableVersion(orderDishService.queryOrderDishTableId(orderDishId));
+
+            // 若开启了智能排菜,打印出来之后还要把对应的打印机的打出的数量减少1
+            if(Integer.parseInt(constantService.queryValueByKey(ConstantEnum.AutoPrintOrderDishStartStatus.getKey()))
+                    == AutoPrintStartStatusEnums.IsStart.getId()){
+
+                PrintOrderDishDto printOrderDishDto = new PrintOrderDishDto();
+                printOrderDishDto = orderDishPrintService.getPrintOrderDishDtoById(orderDishId);
+                Integer temp = AutoPrintOrderDishServiceImpl.getPrinterPrintTotalDishMap().get(printOrderDishDto.getPrinterIp());
+                // 若打印机打出来的小票数量不为null,则减少1
+                if(temp!=null)
+                    AutoPrintOrderDishServiceImpl.updatePrinterPrintTotalDishMap(printOrderDishDto.getPrinterIp(),temp-1);
             }
+
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);

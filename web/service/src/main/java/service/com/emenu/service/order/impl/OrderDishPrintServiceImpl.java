@@ -353,8 +353,10 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
 
         // 关键字为打印机Ip地址,1的话代表打印机存在问题,0的话没问题
         Map<Printer,Integer> printerMap = new HashMap<Printer, Integer>();
+
+        // 关键字为菜品的Id,相同菜品若打印机不可用的话只显示一次
+        Map<Integer,Integer> dishMap = new HashMap<Integer, Integer>();
         String exceptionStr = "";
-        Socket socket = new Socket();
         try{
             // 所有已下单的订单
             orders = orderService.listOrdersByStatus(OrderStatusEnums.IsBooked.getId());
@@ -365,6 +367,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
 
             for(OrderDish orderDish :orderDishs){
 
+                Socket socket = new Socket();
                 // 菜品小类对应的打印机的ip地址或者是菜品对应的打印机,要看类型
                 DishDto dishDto = new DishDto();
                 dishDto = dishService.queryById(orderDish.getDishId());
@@ -375,6 +378,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
 
                     // 尝试建立连接,如果打印机未打开的话会抛异常
                     try{
+
                         socket.connect(new InetSocketAddress(printer.getIpAddress(), 9100), 10000);
                     }catch (Exception e){
                         LogClerk.errLog.error(e);
@@ -384,7 +388,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                     // 成功建立连接证明该打印好使
                     if(socket.isConnected()){
                         // 第一次加入
-                        if(printerMap.get(printer.getIpAddress())==null)
+                        if(printerMap.get(printer)==null)
                             printerMap.put(printer,0);
                         // 断开连接
                         socket.close();
@@ -414,7 +418,7 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                             // 成功建立连接证明该打印好使
                             if(socket.isConnected()){
                                 // 第一次加入
-                                if(printerMap.get(printer.getIpAddress())==null)
+                                if(printerMap.get(printer)==null)
                                     printerMap.put(printer,0);
                                 // 断开连接
                                 socket.close();
@@ -424,20 +428,26 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                                 printerMap.put(printer,1);
                         }
                         // 为将菜品直接关联到打印机也没有将菜品的小类关联到打印机(认为菜品打印机未设置)
-                        else
-                            exceptionStr += "菜品： "+dishDto.getName()+ "的打印机未设置导致该菜品无法正常打印!\n";
+                        else{
+                            // 这个菜品未被加到Map中
+                            if(dishMap.get(orderDish.getDishId())==null){
+
+                                exceptionStr += "菜品： "+dishDto.getName()+ "的打印机未设置导致该菜品无法正常打印!\n";
+                                dishMap.put(orderDish.getDishId(),1);
+                            }
+                        }
+
                     }
                 }
+            }
+            // 检查是否有不好使的打印机
+            for(Map.Entry<Printer,Integer> entry :printerMap.entrySet()){
 
-                // 检查是否有不好使的打印机
-                for(Map.Entry<Printer,Integer> entry :printerMap.entrySet()){
-
-                    Printer tempPrinter = entry.getKey();
-                    Integer status = entry.getValue();
-                    // 打印机不好使
-                    if(status==1)
-                        exceptionStr += tempPrinter.getName() + "存在问题导致部分菜品无法正常打印,请检查打印机!\n";
-                }
+                Printer tempPrinter = entry.getKey();
+                Integer status = entry.getValue();
+                // 打印机不好使
+                if(status==1)
+                    exceptionStr += tempPrinter.getName() + "存在问题导致部分菜品无法正常打印,请检查打印机!\n";
             }
 
         }catch (Exception e){

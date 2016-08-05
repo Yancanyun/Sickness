@@ -11,7 +11,6 @@ import com.emenu.common.entity.dish.DishPackage;
 import com.emenu.common.entity.order.BackDish;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
-import com.emenu.common.entity.storage.Ingredient;
 import com.emenu.common.enums.dish.PackageStatusEnums;
 import com.emenu.common.enums.order.OrderDishCallStatusEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
@@ -19,7 +18,6 @@ import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.enums.order.ServeTypeEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.order.OrderDishMapper;
-import com.emenu.service.cook.CookTableCacheService;
 import com.emenu.service.dish.CostCardItemService;
 import com.emenu.service.dish.CostCardService;
 import com.emenu.service.dish.DishPackageService;
@@ -27,9 +25,8 @@ import com.emenu.service.dish.DishService;
 import com.emenu.service.order.BackDishService;
 import com.emenu.service.order.OrderDishService;
 import com.emenu.service.order.OrderService;
-import com.emenu.service.storage.IngredientService;
+import com.emenu.service.other.ConstantService;
 import com.emenu.service.storage.StorageSettlementService;
-import com.pandawork.core.common.exception.IBizExceptionMes;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -72,11 +69,11 @@ public class OrderDishServiceImpl implements OrderDishService{
     @Autowired
     private CostCardItemService costCardItemService;
 
-
     @Autowired DishService dishService;
 
     @Autowired
     private StorageSettlementService storageSettlementService;
+
 
     @Override
     public List<OrderDishDto> listDtoByOrderId(int orderId) throws SSException {
@@ -260,8 +257,9 @@ public class OrderDishServiceImpl implements OrderDishService{
                         throw SSException.get(EmenuException.OrderDishStatusWrong);
                     else if(orderDish.getStatus()==OrderDishStatusEnums.IsFinish.getId())
                         throw SSException.get(EmenuException.OrderDishWipeIsFinsh);
-                    else//修改订单菜品状态
-                    {
+                    // 修改订单菜品状态
+                    else
+                     {
                         orderDish.setStatus(OrderDishStatusEnums.IsFinish.getId());
                         this.updateOrderDish(orderDish);
                     }

@@ -6,7 +6,9 @@ import com.emenu.common.dto.order.OrderDishDto;
 import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
+import com.emenu.service.order.AutoPrintOrderDishService;
 import com.emenu.service.order.OrderDishService;
+import com.emenu.service.order.impl.AutoPrintOrderDishServiceImpl;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.xpath.SourceTree;
@@ -226,5 +228,13 @@ public class OrderDishTest extends AbstractTestCase {
     public void testListByOrderIdAndStatus() throws SSException{
 
         orderDishService.listOrderDishByOrderIdAndStatus(133,1);
+    }
+
+    @Test
+    public void testAutoPrint () throws  SSException{
+
+        AutoPrintOrderDishServiceImpl.updatePrinterPrintTotalDishMap("111",123);
+        Integer num = AutoPrintOrderDishServiceImpl.getPrinterPrintTotalDishMap().get("111");
+        System.out.println(11);
     }
 }

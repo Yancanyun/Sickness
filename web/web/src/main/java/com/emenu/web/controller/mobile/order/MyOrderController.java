@@ -477,6 +477,7 @@ public class MyOrderController  extends AbstractController {
             tableOrderCache=orderDishCacheService.listByTableId(tableId);
 
             // 对缓存里的进行原配料是否够用的判断,若存在无法完成的菜品则会抛出异常
+
             if(tableOrderCache!=null
                     &&!tableOrderCache.getOrderDishCacheList().isEmpty())
                 errMsg=orderDishService.isOrderHaveEnoughIngredient(tableOrderCache);
