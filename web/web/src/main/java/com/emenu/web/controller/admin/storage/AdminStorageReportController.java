@@ -533,7 +533,10 @@ public class AdminStorageReportController extends AbstractController {
                         storageItem.setTotalStockInMoney(storageItem.getTotalStockInMoney().add(reportItem.getCount()));
                         storageItem.setLastStockInPrice(reportItem.getPrice());
                         // 如果是入库单同时修改原配料缓存
-                        BigDecimal ingredientCacheQuntity = storageSettlementService.queryCache(storageItem.getIngredientId());
+                        BigDecimal ingredientCacheQuntity = storageSettlementService.queryCacheForDish(storageItem.getIngredientId());
+                        if(ingredientCacheQuntity == null){
+                            ingredientCacheQuntity = new BigDecimal("0.00");
+                        }
                         if (Assert.isNull(ingredientCacheQuntity)){
                             ingredientCacheQuntity = reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio());
                             storageSettlementService.updateSettlementCache(storageItem.getIngredientId(),ingredientCacheQuntity);

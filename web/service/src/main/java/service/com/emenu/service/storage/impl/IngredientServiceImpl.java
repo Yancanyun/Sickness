@@ -455,7 +455,8 @@ public class IngredientServiceImpl implements IngredientService {
                 throw SSException.get(EmenuException.IngredientIsExist);
             }
         }else {
-            if (checkIngredientNameIsExist(ingredient.getName()) && ingredient.getName() != ingredientOld.getName()){
+            if (checkIngredientNameIsExist(ingredient.getName())
+                    && !(ingredient.getName().equals(ingredientOld.getName()))){
                 throw SSException.get(EmenuException.IngredientIsExist);
             }
         }
