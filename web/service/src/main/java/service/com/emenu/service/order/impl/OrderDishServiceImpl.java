@@ -94,11 +94,11 @@ public class OrderDishServiceImpl implements OrderDishService{
         try{
             Assert.lessOrEqualZero(orderId, EmenuException.OrderIdError);
             orderDishList = orderDishMapper.listByOrderId(orderId);
+            return orderDishList;
         }catch (Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListOrderDishByOrderIdFailed,e);
         }
-        return orderDishList;
     }
 
     @Override

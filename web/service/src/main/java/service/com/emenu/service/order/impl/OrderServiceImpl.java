@@ -8,6 +8,7 @@ import com.emenu.common.entity.order.Order;
 import com.emenu.common.entity.order.OrderDish;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.enums.dish.PackageStatusEnums;
+import com.emenu.common.enums.order.OrderDishPresentedEnums;
 import com.emenu.common.enums.order.OrderDishStatusEnums;
 import com.emenu.common.enums.order.OrderStatusEnums;
 import com.emenu.common.exception.EmenuException;
@@ -202,7 +203,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public BigDecimal returnOrderTotalMoney(Integer tabldId) throws SSException
+    public BigDecimal returnOrderTotalMoney(Integer tableId) throws SSException
     {
         List<Order> orders = new ArrayList<Order>();
         List<OrderDish> orderDishs = new ArrayList<OrderDish>();
@@ -210,7 +211,7 @@ public class OrderServiceImpl implements OrderService{
         // 保留两位小数
         java.text.DecimalFormat  df=new java.text.DecimalFormat("#.00");
         try{
-            orders=this.listByTableIdAndStatus(tabldId,OrderStatusEnums.IsBooked.getId());//获取餐桌的未结账的订单
+            orders=this.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());//获取餐桌的未结账的订单
             if(orders!=null)
             {
                 for(Order dto : orders)
@@ -230,6 +231,56 @@ public class OrderServiceImpl implements OrderService{
                     }
                     else if(orderDishDto.getIsPackage()==PackageStatusEnums.IsPackage.getId()
                             &&orderDishDto.getStatus()!=OrderDishStatusEnums.IsBack.getId())//套餐的话会有重复，在数据库里套餐被拆成菜品
+                    {
+                        if(packageFlagMap.get(orderDishDto.getPackageFlag())==null)//没有出现过的套餐
+                        {
+                            totalMoney=totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getPackageQuantity()).multiply(orderDishDto.getDiscount().divide(new BigDecimal(10))));
+                            packageFlagMap.put(orderDishDto.getPackageFlag(),1);//标记为出现过
+                        }
+                    }
+                }
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ReturnTableOrderTotalMoneyFail,e);
+        }
+        // 保留两位小数
+        String temp =df.format(totalMoney);
+        totalMoney = new BigDecimal(temp);
+        return totalMoney;
+    }
+
+    @Override
+    public BigDecimal returnOrderTotalMoneyWithoutFree(Integer tableId) throws SSException
+    {
+        List<Order> orders = new ArrayList<Order>();
+        List<OrderDish> orderDishs = new ArrayList<OrderDish>();
+        BigDecimal totalMoney = new BigDecimal(0);
+        // 保留两位小数
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#.00");
+        try{
+            orders=this.listByTableIdAndStatus(tableId,OrderStatusEnums.IsBooked.getId());//获取餐桌的未结账的订单
+            if(orders!=null)
+            {
+                for(Order dto : orders)
+                {
+                    orderDishs.addAll(orderDishService.listByOrderId(dto.getId()));//获取订单菜品
+                }
+            }
+            if(orderDishs!=null)
+            {
+                HashMap<Integer,Integer> packageFlagMap = new HashMap<Integer, Integer>();//用来判断套餐标识是否出现过
+                for(OrderDish orderDishDto :orderDishs)
+                {
+                    if(orderDishDto.getIsPackage().equals(PackageStatusEnums.IsNotPackage.getId())
+                            && !orderDishDto.getStatus().equals(OrderDishStatusEnums.IsBack.getId())
+                        && !orderDishDto.getIsPresentedDish().equals(OrderDishPresentedEnums.IsPresentedDish.getId()))//非套餐非退菜非赠送
+                    {
+                        totalMoney= totalMoney.add(new BigDecimal(orderDishDto.getSalePrice().doubleValue()*orderDishDto.getDishQuantity()).multiply(orderDishDto.getDiscount().divide(new BigDecimal(10))));
+                    }
+                    else if(orderDishDto.getIsPackage().equals(PackageStatusEnums.IsPackage.getId())
+                            && !orderDishDto.getStatus().equals(OrderDishStatusEnums.IsBack.getId())
+                            && !orderDishDto.getIsPresentedDish().equals(OrderDishPresentedEnums.IsPresentedDish.getId()))//套餐的话会有重复，在数据库里套餐被拆成菜品
                     {
                         if(packageFlagMap.get(orderDishDto.getPackageFlag())==null)//没有出现过的套餐
                         {

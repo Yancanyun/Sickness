@@ -274,6 +274,11 @@ public class VipCardServiceImpl implements VipCardService {
             }
             vipCard.setCardNumber(newVipCardNumber);
 
+            // 若永久有效，则把有效期设置为空
+            if (vipCard.getPermanentlyEffective().equals(1)) {
+                vipCard.setValidityTime(null);
+            }
+
             return commonDao.insert(vipCard);
         } catch (Exception e) {
             LogClerk.errLog.error(e);

@@ -107,10 +107,11 @@ public interface CheckoutService {
      * 吧台打印结账单(并桌的话则会将多个结账单合并到一起打印)
      * @throws SSException
      * @param checkouts
+     * @param consumptionMoney
      *
      * @author quanyibo
      */
-    public void printCheckOut(List<Checkout> checkouts) throws SSException;
+    public void printCheckOut(List<Checkout> checkouts, BigDecimal consumptionMoney) throws SSException;
 
     /**
      * 把餐台改成"占用已结账"状态

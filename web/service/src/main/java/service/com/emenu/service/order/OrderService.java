@@ -83,8 +83,16 @@ public interface OrderService {
      * @return
      * @throws Exception
      */
+    public BigDecimal returnOrderTotalMoney(Integer tableId) throws SSException;
 
-    public BigDecimal returnOrderTotalMoney(Integer tabldId) throws SSException;
+    /**
+     * 根据tableId查询对应订单且未结账的订单的所有菜品的总金额(不包括赠送菜品的金额也不包括退菜的菜品金额)
+     * 菜品的金额为售价*折扣
+     * @param
+     * @return
+     * @throws Exception
+     */
+    public BigDecimal returnOrderTotalMoneyWithoutFree(Integer tableId) throws SSException;
 
     /**
      * 根据订单菜品查询订单

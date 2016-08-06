@@ -217,6 +217,11 @@ public class BarTableController extends AbstractController {
                         jsonObject.put("orderTime", "");
                     }
                     jsonObject.put("remark", orderDishDto.getRemark());
+                    if (orderDishDto.getIsPresentedDish() == 1) {
+                        jsonObject.put("isFree", "已赠送");
+                    } else {
+                        jsonObject.put("isFree", "");
+                    }
 
                     jsonArray.add(jsonObject);
                 }

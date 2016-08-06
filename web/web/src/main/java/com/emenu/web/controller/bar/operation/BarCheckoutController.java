@@ -164,8 +164,8 @@ public class BarCheckoutController extends AbstractController {
                     checkoutType, serialNum, isInvoiced);
 
             // 打印消费清单
-            if (checkoutService.isPrinterOk() == true) {
-                checkoutService.printCheckOut(checkoutList);
+            if (checkoutService.isPrinterOk()) {
+                checkoutService.printCheckOut(checkoutList, consumptionMoney);
             }
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -255,8 +255,8 @@ public class BarCheckoutController extends AbstractController {
             List<Checkout> checkoutList = checkoutService.freeOrder(tableId, partyId, consumptionMoney, freeRemark);
 
             // 打印消费清单
-            if (checkoutService.isPrinterOk() == true) {
-                checkoutService.printCheckOut(checkoutList);
+            if (checkoutService.isPrinterOk()) {
+                checkoutService.printCheckOut(checkoutList, consumptionMoney);
             }
 
             return sendJsonObject(AJAX_SUCCESS_CODE);
@@ -334,6 +334,11 @@ public class BarCheckoutController extends AbstractController {
                         Table t = tableService.queryById(order.getTableId());
                         jsonObject.put("tableName", t.getName());
                     }
+                    if (orderDishDto.getIsPresentedDish() == 1) {
+                        jsonObject.put("isFree", "已赠送");
+                    } else {
+                        jsonObject.put("isFree", "");
+                    }
 
                     jsonArray.add(jsonObject);
                 }
@@ -399,7 +404,19 @@ public class BarCheckoutController extends AbstractController {
     public JSONObject checkoutPrint(@RequestParam("tableId")Integer tableId) {
         JSONObject jsonObject = new JSONObject();
         try {
-            return checkoutService.printCheckOutByTableId(tableId);
+            jsonObject = checkoutService.printCheckOutByTableId(tableId);
+
+            // 若已并台，则还需要打印其他台的结账单
+            Table table = tableService.queryById(tableId);
+            if (table.getStatus().equals(TableStatusEnums.Merged.getId())) {
+                // 与本餐台并台的其他餐台的列表
+                List<Table> tableList = tableMergeService.listOtherTableByTableId(tableId);
+                for (Table t : tableList) {
+                    checkoutService.printCheckOutByTableId(t.getId());
+                }
+            }
+
+            return jsonObject;
         }
         catch (SSException e) {
             LogClerk.errLog.error(e);

@@ -43,9 +43,9 @@
 
     <select id="queryOrdersByCheckoutId" resultMap="pw.Order">
         SELECT *
-        FROM t_checkout, t_order
-        WHERE t_checkout.id = t_order.checkout_id
-        AND t_checkout.id=#{checkoutId}
+        FROM t_order
+        INNER JOIN t_checkout ON t_checkout.id = t_order.checkout_id
+        WHERE t_checkout.id = #{checkoutId}
     </select>
 
     <select id="listOrdersByStatus" resultMap="pw.Order">
