@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
-/**账单稽查
+/**账单统计
  * @athor pengpeng
  * @time 2016/8/4  10:25
  */

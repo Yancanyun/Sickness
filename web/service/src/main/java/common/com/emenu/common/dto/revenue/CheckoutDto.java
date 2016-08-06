@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 账单稽查
+ * 账单统计
  * @author pengpeng
  * @time 2016/7/26 11:06
  */

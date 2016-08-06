@@ -9,6 +9,8 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +27,13 @@ public class BillAuditTest extends AbstractTestCase{
 
     @Test
     public void countCheckoutByTimePeriod() throws SSException{
+/*        BigDecimal haha = new BigDecimal(1110);
+        BigDecimal haha1 = new BigDecimal(1210);
+        DecimalFormat df = new DecimalFormat("0.00");
+        String aha = df.format(haha);
+        String xixi = df.format(haha1);
+        new DecimalFormat("0.00").format(3.14);
+        */
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String d0 = DateUtils.getLastWeekFirstDay();
         String d2 = DateUtils.getLastWeekLastDay();
@@ -71,7 +80,6 @@ public class BillAuditTest extends AbstractTestCase{
         Date startDate = sdf.parse(d0,pos1);
         ParsePosition pos2 = new ParsePosition(0);
         Date endDate = sdf.parse(d2,pos2);
-
         CheckoutDto checkoutDto = new CheckoutDto();
         Integer pageNo = 1;
         Integer pageSize = 10;

@@ -3,8 +3,7 @@
 <script type="text/template" id="tpl">
   {@each list as it}
   <tr>
-    <td>&{it.checkoutId}</td>
-    <td>&{it.tableId}</td>
+    <td>&{it.checkoutPayId}</td>
     <td>&{it.tableName}</td>
     <td>&{it.checkerPartyId}</td>
     <td>&{it.checkoutTime}</td>

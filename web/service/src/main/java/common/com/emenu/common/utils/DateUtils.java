@@ -317,7 +317,7 @@ public class DateUtils {
     public static String getCurrentWeekFirstDay(){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        calendar.add(Calendar.DAY_OF_WEEK, 0);
         calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         String firstDay = format.format(calendar.getTime());
         return firstDay;

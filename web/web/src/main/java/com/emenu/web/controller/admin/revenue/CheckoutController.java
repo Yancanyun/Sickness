@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,28 +110,25 @@ public class CheckoutController  extends AbstractController{
                 for(CheckoutDto dto : checkoutDtoList){
                     JSONObject json = new JSONObject();
                     // 结账单号
-                    json.put("checkoutId",dto.getCheckoutId());
-                    // 餐台号
-                    json.put("tableId",dto.getTableId());
+                    json.put("checkoutPayId",checkoutPayService.queryByCheckoutId(dto.getCheckoutId()).getId());
                     // 餐台名
                     json.put("tableName",dto.getTableName());
                     // 收款人partyId
-                    json.put("checkerPartyId",dto.getCheckerPartyId());
+                    json.put("checkerPartyId",employeeService.queryByPartyId(dto.getCheckerPartyId()).getName());
                     // 结账时间
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    json.put("checkoutTime",sdf.format(dto.getCheckoutTime()));
+                    json.put("checkoutTime",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dto.getCheckoutTime()));
                     // 支付类型
                     json.put("checkoutType",dto.getCheckoutName());
                     // 消费金额
-                    json.put("consumptionMoney",dto.getConsumptionMoney());
+                    json.put("consumptionMoney",new DecimalFormat("0.00").format(dto.getConsumptionMoney()));
                     // 抹零金额
-                    json.put("wipeZeroMoney",dto.getWipeZeroMoney());
+                    json.put("wipeZeroMoney",new DecimalFormat("0.00").format(dto.getWipeZeroMoney()));
                     // 实付金额
-                    json.put("shouldPayMoney",dto.getShouldPayMoney());
+                    json.put("shouldPayMoney",new DecimalFormat("0.00").format(dto.getShouldPayMoney()));
                     // 宾客付款
-                    json.put("totalPayMoney",dto.getTotalPayMoney());
+                    json.put("totalPayMoney",new DecimalFormat("0.00").format(dto.getTotalPayMoney()));
                     // 找零金额
-                    json.put("changeMoney",dto.getChangeMoney());
+                    json.put("changeMoney",new DecimalFormat("0.00").format(dto.getChangeMoney()));
                     // 是否开发票
                     json.put("isInvoiced",dto.getIsInvoiced());
                     jsonArray.add(json);
@@ -163,16 +161,16 @@ public class CheckoutController  extends AbstractController{
                 CheckoutEachItemSumDto checkoutEachItemSumDto = new CheckoutEachItemSumDto();
                 checkoutEachItemSumDto = billAuditService.sumCheckoutEachItem(billAuditService.queryCheckoutByTime(startDate, endDate));
                 json.put("billSum", checkoutEachItemSumDto.getCheckSum());
-                json.put("cashSum", checkoutEachItemSumDto.getCashSum());
-                json.put("vipCardSum", checkoutEachItemSumDto.getVipCardSum());
-                json.put("bankCardSum", checkoutEachItemSumDto.getBankCardSum());
-                json.put("alipaySum", checkoutEachItemSumDto.getAlipaySum());
-                json.put("weChatSum", checkoutEachItemSumDto.getWeChatSum());
-                json.put("consumptionMoneySum", checkoutEachItemSumDto.getConsumptionMoneySum());
-                json.put("wipeZeroMoneySum", checkoutEachItemSumDto.getWipeZeroMoneySum());
-                json.put("totalPayMoneySum", checkoutEachItemSumDto.getTotalPayMoneySum());
-                json.put("changeMoneySum", checkoutEachItemSumDto.getChangeMoneySum());
-                json.put("shouldPayMoneySum", checkoutEachItemSumDto.getShouldPayMoneySum());
+                json.put("cashSum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getCashSum()));
+                json.put("vipCardSum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getVipCardSum()));
+                json.put("bankCardSum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getBankCardSum()));
+                json.put("alipaySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getAlipaySum()));
+                json.put("weChatSum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getWeChatSum()));
+                json.put("consumptionMoneySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getConsumptionMoneySum()));
+                json.put("wipeZeroMoneySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getWipeZeroMoneySum()));
+                json.put("totalPayMoneySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getTotalPayMoneySum()));
+                json.put("changeMoneySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getChangeMoneySum()));
+                json.put("shouldPayMoneySum", new DecimalFormat("0.00").format(checkoutEachItemSumDto.getShouldPayMoneySum()));
                 json.put("invoiceSum", checkoutEachItemSumDto.getInvoiceSum());
 
             }

@@ -13,10 +13,10 @@
             <a href="#">营业分析</a>
           </li>
           <li>
-            <a href="#" class="active">账单稽核</a>
+            <a href="#" class="active">账单统计</a>
           </li>
         </ol>
-        <h2>账单稽核</h2>
+        <h2>账单统计</h2>
       </div>
       <div class="col-sm-12">
         <div class="panel panel-info">
@@ -68,7 +68,6 @@
                   <thead>
                   <tr>
                     <th>账单编号</th>
-                    <th>餐台号</th>
                     <th>餐台名称</th>
                     <th>收银员</th>
                     <th>结账时间</th>
