@@ -112,9 +112,11 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
         OrderDish orderDish = new OrderDish();
         DishDto dishDto = new DishDto();
         Table table = new Table();
+        Order order = new Order();
 
         try{
             orderDish = orderDishService.queryById(orderDishId);//查询出订单菜品
+            order = orderService.queryById(orderDish.getOrderId());
             //非套餐
             if(orderDish.getIsPackage()== PackageStatusEnums.IsNotPackage.getId())
             {
@@ -135,6 +137,8 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setIsCall(orderDish.getIsCall());
                 // 菜品主键
                 temp.setDishId(orderDish.getDishId());
+                // 整单备注
+                temp.setOrderRemark(order.getOrderRemark());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null
@@ -188,6 +192,8 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                 temp.setIsCall(orderDish.getIsCall());
                 // 菜品主键
                 temp.setDishId(orderDish.getPackageId());
+                // 整单备注
+                temp.setOrderRemark(order.getOrderRemark());
 
                 String tasteName = new String();//菜品口味名称
                 if(orderDish.getTasteId()!=null
@@ -292,6 +298,12 @@ public class OrderDishPrintServiceImpl implements OrderDishPrintService{
                     else
                         str += "备注: 无" + "\n";
 
+                    if(printOrderDishDto.getOrderRemark()!=null)
+                        str += "整单备注: " +printOrderDishDto.getOrderRemark() + "\n";
+                    else
+                    str += "整单备注: 无\n";
+
+                    // 加上菜品对应订单的整单备注
 
                     os.write(PrintUtils.printText(str));//打印信息
 

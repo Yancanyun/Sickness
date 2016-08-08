@@ -50,6 +50,17 @@ public class PrintOrderDishDto {
     // 是否被催菜
     private Integer isCall;
 
+    // 整单备注,打印的时候也要打印出来
+    private  String orderRemark;
+
+    public String getOrderRemark() {
+        return orderRemark;
+    }
+
+    public void setOrderRemark(String orderRemark) {
+        this.orderRemark = orderRemark;
+    }
+
     public Integer getDishId() {
         return dishId;
     }
