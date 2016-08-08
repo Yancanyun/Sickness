@@ -10,11 +10,9 @@
             <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
           </li>
           <li>
-            <a href="#">营业分析</a>
+            <a href="#">营收统计</a>
           </li>
-          <li>
-            <a href="#" class="active">账单统计</a>
-          </li>
+          <li class="active">账单统计</li>
         </ol>
         <h2>账单统计</h2>
       </div>

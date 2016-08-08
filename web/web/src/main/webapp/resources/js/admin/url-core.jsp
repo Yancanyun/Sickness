@@ -134,13 +134,6 @@
             //原配料管理
             ['inventory', site.website + 'admin/storage/settlement/check/ajax/settlement/check', 'put', '库存盘点']
         ],
-            // 营业分析
-        BusinessAnalysis: [
-            //菜品销售排行
-            ['dishSalesRanking', site.staticWebsite + 'mock/admin/dish-sales-ranking.json', 'get', '菜品销售排行列表'],
-            ['dishBigtagSalesRanking', site.staticWebsite + 'mock/admin/dish-bigtag-sales-ranking.json', 'get', '菜品大类销售排行列表']
-
-        ],
         // 菜品管理
         DishManagement: [
             // 单位管理--列表
@@ -261,10 +254,10 @@
             ['sendStatus', site.website + 'admin/vip/integral/plan/ajax/status', 'get','积分管理是否开启积分'],
             ['sendId', site.website + 'admin/vip/integral/plan/ajax/del', 'get', '删除是发送Id']
         ],
-        // 营收统计分析
-        BusinessAnalysis: [
-        //账单稽核
-            ['billAuditSum', site.website + 'admin/revenue/checkout/ajax/sum/list', 'get', '账单稽核总计']
+        // 营收统计
+        Statistics: [
+            //账单统计
+            ['billAuditSum', site.website + 'admin/revenue/checkout/ajax/sum/list', 'get', '账单统计']
         ],
         // 公共模块
         Module: [

@@ -43,8 +43,8 @@
 
 <script type="text/javascript">
   KISSY.ready(function(S){
-    S.use('page/business-analysis/bill-audit', function(){
-      PW.page.BusinessAnalysis.BillAudit({
+    S.use('page/statistics/bill-audit', function(){
+      PW.page.Statistics.BillAudit({
         renderTo: '.J_pagination',
         juicerRender: '#tpl',
         dataRender: '#J_template',
