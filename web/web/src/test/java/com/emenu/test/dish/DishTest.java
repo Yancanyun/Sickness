@@ -85,11 +85,13 @@ public class DishTest extends AbstractTestCase {
     @Test
     public void listByTagIds() throws Exception{
         List<Integer> tagIds = new ArrayList<Integer>();
-        tagIds.add(71);
-        tagIds.add(117);
-        tagIds.add(124);
+        tagIds.add(158);
+        tagIds.add(177);
+        tagIds.add(189);
         List<Dish> dishList = dishService.listByTagIdList(tagIds);
-        System.out.println("x");
+        for (Dish dish : dishList){
+            System.out.println(dish.getName());
+        }
     }
 
 }

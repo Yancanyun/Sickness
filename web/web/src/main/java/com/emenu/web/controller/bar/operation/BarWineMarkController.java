@@ -6,6 +6,7 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.dish.Dish;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.enums.dish.DishStatusEnums;
+import com.emenu.common.enums.dish.TagEnum;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
@@ -44,7 +45,7 @@ public class BarWineMarkController extends AbstractController{
     @ResponseBody
     public JSONObject toMarkWine() {
         try {
-            Tag tag = tagService.queryByName("酒水");
+            Tag tag = tagService.queryById(TagEnum.Drinks.getId());
             Assert.isNotNull(tag, EmenuException.TagNotExist);
             List<Tag> tagList = tagService.listByParentId(tag.getId());
             if (Assert.isNull(tagList)
