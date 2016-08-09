@@ -12,6 +12,7 @@ import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.party.SexEnums;
 import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.enums.vip.ConsumptionActivityTypeEnums;
+import com.emenu.common.enums.vip.StatusEnums;
 import com.emenu.common.enums.vip.VipCardStatusEnums;
 import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
@@ -214,7 +215,8 @@ public class VipInfoController extends AbstractController {
     public JSONObject ajaxDelById(@RequestParam("id") Integer id) {
         try {
             vipInfoService.updateStatusById(id, UserStatusEnums.Deleted);
-
+            // vipAccountInfo状态同步
+            vipAccountInfoService.updateStatusById(id, StatusEnums.Deleted);
             //将对应的会员卡也删除
             VipInfo vipInfo = vipInfoService.queryById(id);
             vipCardService.updateStatusByPartyId(vipInfo.getPartyId(), VipCardStatusEnums.Deleted.getId());
@@ -262,6 +264,11 @@ public class VipInfoController extends AbstractController {
         try {
             UserStatusEnums vipInfostatus = UserStatusEnums.valueOf(status);
             vipInfoService.updateStatusById(id, vipInfostatus);
+            if(status == 2){
+                status = 0;
+            }
+            // vipAccountInfo状态同步
+            vipAccountInfoService.updateStatusById(id, StatusEnums.valueOf(status));
 
             //将对应的会员卡也修改状态
             VipInfo vipInfo = vipInfoService.queryById(id);

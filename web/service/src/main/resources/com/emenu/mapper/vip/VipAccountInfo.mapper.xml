@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.emenu.mapper.vip.VipAccountInfoMapper">
 
+    <!-- pengpeng 2016.8.9修改  加入status判断,以及status按DESC显示到页面-->
     <select id="listByPageAndMin" resultType="com.emenu.common.dto.vip.VipAccountInfoDto">
         SELECT vipcount.`id` AS id,
                 grade.`min_consumption` AS minConsumption,
@@ -30,12 +31,13 @@
             OR vipinfo.`phone` LIKE "%"#{keyWord}"%"
             OR  card.`card_number` LIKE "%"#{keyWord}"%"
             )
+            AND vipcount.`status` != 2
         </where>
         <if test="orderType == 1">
-            ORDER BY ${orderBy} ASC
+            ORDER BY vipcount.`status` DESC, ${orderBy} ASC
         </if>
         <if test="orderType == 0">
-            ORDER BY ${orderBy} DESC
+            ORDER BY vipcount.`status` DESC, ${orderBy} DESC
         </if>
         LIMIT #{offset},#{pageSize}
     </select>
@@ -58,11 +60,12 @@
         WHERE `party_id` = #{partyId}
         AND `status` = 1
     </select>
-
+    <!--/   pengpeng做的修改  2016.8.9  -->
     <select id="queryEntityByPartyId" resultMap="pw.VipAccountInfo">
         SELECT * FROM `t_vip_account_info`
         WHERE `party_id` = #{partyId}
-        AND `status` = 1
+        /*AND `status` = 1*/
+        AND `status` != 2
     </select>
 
     <select id="CountByKeywordAndGrade" resultType="int">

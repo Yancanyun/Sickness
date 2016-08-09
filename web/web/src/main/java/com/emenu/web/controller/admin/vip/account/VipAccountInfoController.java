@@ -6,7 +6,9 @@ import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.vip.VipAccountInfoDto;
 import com.emenu.common.entity.vip.VipGrade;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.enums.party.UserStatusEnums;
 import com.emenu.common.enums.vip.StatusEnums;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -115,6 +117,10 @@ public class VipAccountInfoController extends AbstractController{
     public JSONObject updateStatus(@RequestParam("id") Integer id,
                                    @RequestParam("status") Integer status) {
         try {
+            // vipInfo表里该id被停用，则不能在vipAccount处启用
+            if(status == StatusEnums.Enabled.getId() && vipInfoService.queryById(id).getStatus() == UserStatusEnums.Disabled.getId()){
+                throw SSException.get(EmenuException.VipAccountInfoStatusError);
+            }
             StatusEnums vipCountStatus = StatusEnums.valueOf(status);
             vipAccountInfoService.updateStatusById(id, vipCountStatus);
             return sendJsonObject(AJAX_SUCCESS_CODE);
