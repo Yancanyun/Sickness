@@ -67,16 +67,22 @@ public class LoginManageServiceImpl implements LoginManageService {
 
     @Override
     public Subject isLogined(HttpServletRequest request) throws SSException {
-        // 从Request中的Header中的set-cookie中获取tgt，然后放入subjectId中。
-        // 仅C#客户端需要使用，Web端可以直接从Cookie中获取。
-        // @author: yangch
-        // @time: 2016/7/13 17:09
+        /**
+         *从Header的set-cookie字段中获取tgt，然后放入Attribute的subjectId字段中。
+         * C#客户端在登陆后的第一次请求执行该操作，使之后的请求可以使用Attribute中的subjectId通过登录验证。
+         * 仅C#客户端需要使用，Web端登陆后自动将subjectId放入Cookie中，之后的请求使用Cookie通过登录验证即可。
+         *
+         * @author: yangch
+         * @time: 2016/7/13 17:09
+         */
         String setCookie = request.getHeader("set-cookie");
         if (setCookie != null && setCookie.length() > 0) {
             String[] strings = setCookie.split(";");
             String tgt = strings[0].substring(4);
             request.setAttribute("subjectId", tgt);
         }
+
+
 
         Subject subject = null;
         String uidStr = this.queryCookieValue(request, USER_ID_COOKIE_NAME);
@@ -233,7 +239,7 @@ public class LoginManageServiceImpl implements LoginManageService {
         if (Assert.isNull(subjectId)) {
             subjectId = request.getParameter(subjectId);
         }
-        // 如果参数中还没有，判断是否在Attribute中
+        // 如果参数中还没有，判断是否在Attribute中(C#端使用这种方法)
         if (Assert.isNull(subjectId)) {
             subjectId = (String)request.getAttribute("subjectId");
         }
