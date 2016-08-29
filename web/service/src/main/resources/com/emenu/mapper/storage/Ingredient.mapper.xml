@@ -181,7 +181,10 @@
                 `order_to_storage_ratio` = #{ingredient.orderToStorageRatio},
                 `storage_to_cost_card_ratio` = #{ingredient.storageToCostCardRatio},
                 `max_storage_quantity` = #{ingredient.maxStorageQuantity},
-                `min_storage_quantity` = #{ingredient.minStorageQuantity}
+                `min_storage_quantity` = #{ingredient.minStorageQuantity},
+                `average_price` = #{ingredient.averagePrice},
+                `total_quantity` = #{ingredient.totalQuantity},
+                `total_money` = #{ingredient.totalMoney}
           WHERE `id` = #{ingredient.id};
     </update>
 

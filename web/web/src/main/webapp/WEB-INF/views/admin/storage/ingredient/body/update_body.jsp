@@ -104,7 +104,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">成本卡单位</label>
                         <div class="col-sm-6">
-                            <input class="J_isDisabled" type="hidden" name="costCardUnitId" value="${ingredient.id}">
+                            <input class="J_isDisabled" type="hidden" name="costCardUnitId" value="${ingredient.costCardUnitId}">
                             <input type="text" class="w180 J_isDisabled" value="${ingredient.costCardUnitName}" readonly="readonly">
                         </div>
                     </div>

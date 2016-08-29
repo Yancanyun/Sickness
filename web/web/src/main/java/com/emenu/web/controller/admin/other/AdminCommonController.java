@@ -76,28 +76,30 @@ public class AdminCommonController extends AbstractController {
     @ResponseBody
     public JSON ajaxSearchStorageItem(@RequestParam("keyword") String keyword) {
         List<StorageItem> storageItemList = Collections.emptyList();
+        JSONArray jsonArray = new JSONArray();
         try {
             storageItemList = storageItemService.listByKeyword(keyword);
-        } catch (SSException e) {
-        	LogClerk.errLog.error(e);
-        	return sendErrMsgAndErrCode(e);
-        }
+            for (StorageItem storageItem : storageItemList) {
+                JSONObject jsonObject = new JSONObject();
+                StorageItem storageItem1 = storageItemService.queryById(storageItem.getId());
+                jsonObject.put("id", storageItem.getId());
+                jsonObject.put("name", storageItem.getName());
+                jsonObject.put("assistantCode", storageItem.getAssistantCode());
+                BigDecimal price = new BigDecimal("0.00");
+                if (storageItem.getTotalStockInQuantity().compareTo(BigDecimal.ZERO) != 0) {
+                    price = storageItem.getTotalStockInMoney().divide(storageItem.getTotalStockInQuantity(), 10, BigDecimal.ROUND_HALF_DOWN);
+                    price = price.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+                }
+                jsonObject.put("price", price);
+                jsonObject.put("costCardUnitName",storageItem1.getCostCardUnitName());
+                jsonObject.put("storageUnitName",storageItem1.getStorageUnitName());
+                jsonObject.put("orderUnitName",storageItem1.getOrderUnitName());
 
-        JSONArray jsonArray = new JSONArray();
-        for (StorageItem storageItem : storageItemList) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", storageItem.getId());
-            jsonObject.put("name", storageItem.getName());
-            jsonObject.put("assistantCode", storageItem.getAssistantCode());
-
-            BigDecimal price = new BigDecimal("0.00");
-            if (storageItem.getTotalStockInQuantity().compareTo(BigDecimal.ZERO) != 0) {
-                price = storageItem.getTotalStockInMoney().divide(storageItem.getTotalStockInQuantity(), 10, BigDecimal.ROUND_HALF_DOWN);
-                price = price.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+                jsonArray.add(jsonObject);
             }
-            jsonObject.put("price", price);
-
-            jsonArray.add(jsonObject);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
         }
 
         return sendJsonArray(jsonArray);
@@ -117,6 +119,9 @@ public class AdminCommonController extends AbstractController {
                     jsonObject.put("id",ingredient.getId());
                     jsonObject.put("name",ingredient.getName());
                     jsonObject.put("assistantCode",ingredient.getAssistantCode());
+                    jsonObject.put("costCardUnitName",ingredient.getCostCardUnitName());
+                    jsonObject.put("storageUnitName",ingredient.getStorageUnitName());
+                    jsonObject.put("orderUnitName",ingredient.getOrderUnitName());
                     jsonArray.add(jsonObject);
                 }
             }
@@ -127,6 +132,9 @@ public class AdminCommonController extends AbstractController {
                     jsonObject.put("id", ingredient.getId());
                     jsonObject.put("name", ingredient.getName());
                     jsonObject.put("assistantCode", ingredient.getAssistantCode());
+                    jsonObject.put("costCardUnitName",ingredient.getCostCardUnitName());
+                    jsonObject.put("storageUnitName",ingredient.getStorageUnitName());
+                    jsonObject.put("orderUnitName",ingredient.getOrderUnitName());
                     jsonArray.add(jsonObject);
                 }
             } else {
@@ -138,6 +146,9 @@ public class AdminCommonController extends AbstractController {
                     jsonObject.put("id", ingredient.getId());
                     jsonObject.put("name", ingredient.getName());
                     jsonObject.put("assistantCode", ingredient.getAssistantCode());
+                    jsonObject.put("costCardUnitName",ingredient.getCostCardUnitName());
+                    jsonObject.put("storageUnitName",ingredient.getStorageUnitName());
+                    jsonObject.put("orderUnitName",ingredient.getOrderUnitName());
                     jsonArray.add(jsonObject);
                     }
                 }

@@ -126,8 +126,9 @@ public class IngredientServiceImpl implements IngredientService {
             if (isUpdated == 0) {
                 if (this.checkBeforeSave(ingredient)) {
                     Ingredient ingredient1 = queryById(ingredient.getId());
-                    ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
-                    ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+                    ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity());
+                    ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity());
+
                     Assert.isNotNull(ingredient1,EmenuException.IngredientIsNotNull);
                     if (ingredient1.getName().equals(ingredient.getName())){
                         ingredientMapper.updateIngredient(ingredient);

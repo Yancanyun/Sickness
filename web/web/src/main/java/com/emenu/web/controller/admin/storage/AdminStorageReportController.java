@@ -236,7 +236,7 @@ public class AdminStorageReportController extends AbstractController {
             return sendJsonObject(AJAX_SUCCESS_CODE);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
-            return sendErrMsgAndErrCode(e);
+            return sendMsgAndCode(AJAX_FAILURE_CODE,"添加单据失败");
         }
     }
 

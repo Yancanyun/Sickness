@@ -139,10 +139,10 @@ public class AdminStorageItemController extends AbstractController {
                 // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
                 BigDecimal maxStorageQuantity = new BigDecimal(0);
                 if (roundingMode == 1) {
-                    maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                    maxStorageQuantity = storageItem.getMaxStorageQuantity();
                 }
                 if (roundingMode == 0) {
-                    maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                    maxStorageQuantity = storageItem.getMaxStorageQuantity();
                 }
                 String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
                 jsonObject.put("maxStorageQuantityStr", maxStorageQuantityStr);
@@ -150,10 +150,10 @@ public class AdminStorageItemController extends AbstractController {
                 // 最小库存
                 BigDecimal minStorageQuantity = new BigDecimal(0);
                 if (roundingMode == 1) {
-                    minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                    minStorageQuantity = storageItem.getMinStorageQuantity();
                 }
                 if (roundingMode == 0) {
-                    minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                    minStorageQuantity = storageItem.getMinStorageQuantity();
                 }
                 String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
                 jsonObject.put("minStorageQuantityStr", minStorageQuantityStr);
@@ -162,10 +162,10 @@ public class AdminStorageItemController extends AbstractController {
                 // 总数量
                 BigDecimal totalStockInQuantityStr = new BigDecimal(0);
                 if (roundingMode == 1) {
-                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getOrderToStorageRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
                 }
                 if (roundingMode == 0) {
-                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+                    totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getOrderToStorageRatio(), 2, BigDecimal.ROUND_DOWN);
                 }
                 String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
                 jsonObject.put("totalStockInQuantityStr", totalQuantityStr);

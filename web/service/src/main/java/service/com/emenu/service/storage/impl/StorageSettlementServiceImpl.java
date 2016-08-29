@@ -61,6 +61,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.math.BigDecimal.ROUND_DOWN;
+
 /**
  * StorageSettlementServiceImpl
  * 库存结算
@@ -694,8 +696,10 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                 BigDecimal totalMoeny = new BigDecimal(0.00);
                 for (StorageItemDto storageItemDto : storageItemDtoList) {
                     if (storageItemDto.getSupplierPartyId().equals(supplier.getPartyId())) {
+                        storageItemDto.setItemMoney(storageItemDto.getItemMoney().setScale(2,ROUND_DOWN));
                         childItemDtoList.add(storageItemDto);
                         totalMoeny = totalMoeny.add(storageItemDto.getItemMoney());
+                        totalMoeny = totalMoeny.setScale(2, ROUND_DOWN);
                     }
                 }
                 storageSupplierDto.setStorageItemDtoList(childItemDtoList);
@@ -716,9 +720,11 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                     for (StorageItemDto storageItemDto : storageItemDtoList) {
                         if (storageItemDto.getSupplierPartyId().equals(supplier1.getPartyId())) {
                             // 每个供货商供应的物品
+                            storageItemDto.setItemMoney(storageItemDto.getItemMoney().setScale(2,ROUND_DOWN));
                             childItemDtoList.add(storageItemDto);
                             // 每个供货商总金额
                             totalMoney = totalMoney.add(storageItemDto.getItemMoney());
+                            totalMoney = totalMoney.setScale(2, ROUND_DOWN);
                         }
                     }
                     storageSupplierDto.setStorageItemDtoList(childItemDtoList);

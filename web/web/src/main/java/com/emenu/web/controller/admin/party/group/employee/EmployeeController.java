@@ -417,18 +417,30 @@ public class EmployeeController  extends AbstractController {
     public JSONObject checkNumberIsExist(@RequestParam("partyId")Integer partyId,@RequestParam("employeeNumber")String employeeNumber){
         try {
             if (Assert.isNotNull(partyId)&&Assert.isZero(partyId)){
+                if (Assert.isNotNull(employeeNumber)){
+                    employeeNumber = employeeNumber.replace(" ","");
+                    if (employeeNumber.equals("")){
+                        return sendJsonObject(AJAX_FAILURE_CODE);
+                    }
+                }
                 if (employeeService.checkNumberIsExist(employeeNumber)){
-                    return sendJsonObject(AJAX_FAILURE_CODE);
+                    return sendMsgAndCode(AJAX_FAILURE_CODE,"员工编号已存在");
                 }else {
                     return sendJsonObject(AJAX_SUCCESS_CODE);
                 }
             }
             if (Assert.isNotNull(partyId)&&!Assert.lessOrEqualZero(partyId)){
+                if (Assert.isNotNull(employeeNumber)){
+                    employeeNumber = employeeNumber.replace(" ","");
+                    if (employeeNumber.equals("")){
+                        return sendJsonObject(AJAX_FAILURE_CODE);
+                    }
+                }
                 Employee employee = employeeService.queryByNumber(employeeNumber);
                 if (employee.getPartyId().equals(partyId)){
                     return sendJsonObject(AJAX_SUCCESS_CODE);
                 } else {
-                    return sendJsonObject(AJAX_FAILURE_CODE);
+                    return sendMsgAndCode(AJAX_FAILURE_CODE,"员工编号已存在");
                 }
             }
             throw SSException.get(EmenuException.CheckEmployeeNumberFail);
