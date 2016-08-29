@@ -83,7 +83,7 @@ public interface StorageItemMapper {
      * @return
      * @throws Exception
      */
-    public int countByNameAndTagIdAndsupplierPartyId(String name,Integer tagId,Integer supplierPartyId) throws Exception;
+    public int countByNameAndTagIdAndsupplierPartyId(@Param("name")String name,@Param("tagId")Integer tagId,@Param("supplierPartyId")Integer supplierPartyId) throws Exception;
 
     /**
      * 根据ID修改状态

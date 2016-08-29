@@ -370,13 +370,16 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                             if (orderDish.getIsPackage() == 0) {
                                 // 获取菜品成本卡
                                 CostCard costCard = costCardService.queryCostCardByDishId(orderDish.getDishId());
+
                                 // 根据成卡中的原配料和菜品数量计算出库数量
-                                List<CostCardItemDto> costCardItemDtoList = costCardItemService.listByCostCardId(costCard.getId());
-                                for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
-                                    // 判断是否自动出库
-                                    if (costCardItemDto.getIsAutoOut() == 1) {
-                                        if (costCardItemDto.getIngredientId() == ingredient.getId()) {
-                                            stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                if (Assert.isNotNull(costCard)) {
+                                    List<CostCardItemDto> costCardItemDtoList = costCardItemService.listByCostCardId(costCard.getId());
+                                    for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
+                                        // 判断是否自动出库
+                                        if (costCardItemDto.getIsAutoOut() == 1) {
+                                            if (costCardItemDto.getIngredientId() == ingredient.getId()) {
+                                                stockOutQuantity = stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                            }
                                         }
                                     }
                                 }
@@ -548,7 +551,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                 for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
                                     if (costCardItemDto.getIsAutoOut() == 1) {
                                         if (costCardItemDto.getIngredientId() == settlementIngredient.getIngredientId()) {
-                                            stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                            stockOutQuantity = stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
                                         }
                                     }
                                 }
@@ -564,7 +567,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                     for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
                                         if (costCardItemDto.getIsAutoOut() == 1) {
                                             if (costCardItemDto.getIngredientId() == settlementIngredient.getIngredientId()) {
-                                                stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                                stockOutQuantity = stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
                                             }
                                         }
                                     }
@@ -1100,7 +1103,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                     for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
                                         if (costCardItemDto.getIsAutoOut() == 1) {
                                             if (costCardItemDto.getIngredientId() == ingredient.getId()) {
-                                                stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                                stockOutQuantity =  stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
                                             }
                                         }
                                     }
@@ -1116,7 +1119,7 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                         for (CostCardItemDto costCardItemDto : costCardItemDtoList) {
                                             if (costCardItemDto.getIsAutoOut() == 1) {
                                                 if (costCardItemDto.getIngredientId() == ingredient.getId()) {
-                                                    stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
+                                                    stockOutQuantity = stockOutQuantity.add(costCardItemDto.getNetCount().multiply(new BigDecimal(orderDish.getDishQuantity())));
                                                 }
                                             }
                                         }

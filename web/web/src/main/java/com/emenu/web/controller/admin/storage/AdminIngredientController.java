@@ -21,6 +21,7 @@ import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.framework.annotations.validator.constraints.Strage;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.velocity.util.introspection.Uberspect;
 import org.springframework.stereotype.Controller;
@@ -255,6 +256,12 @@ public class AdminIngredientController extends AbstractController{
             return sendJsonObject(AJAX_FAILURE_CODE);
         }
         try {
+            if (Assert.isNotNull(name)){
+                String name1 = name.replaceAll(" ","");
+                if (name1.equals("")){
+                    return sendMsgAndCode(AJAX_FAILURE_CODE,"原配料名不能为空");
+                }
+            }
             if (Assert.isNull(id)
                     || Assert.lessOrEqualZero(id)){
                 if (ingredientService.checkIngredientNameIsExist(name)){

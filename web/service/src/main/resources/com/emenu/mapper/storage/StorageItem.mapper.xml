@@ -155,13 +155,13 @@
         ORDER BY storageItem.`tag_id` ASC, storageItem.`id` ASC
     </select>
 
-    <select id="countByNameAndTagIdAndsupplierPartyId">
+    <select id="countByNameAndTagIdAndsupplierPartyId" resultType="int">
         SELECT
             COUNT(1)
         FROM `t_storage_item`
         WHERE `tag_id` = #{tagId}
-              `name` = #{name}
-              `supplier_party_id` = #{supplierPartyId}
+              AND `name` = #{name}
+              AND `supplier_party_id` = #{supplierPartyId}
               AND `status` != 2
     </select>
 

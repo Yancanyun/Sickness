@@ -52,7 +52,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
                         <div class="col-sm-6">
-                            <select class="w180 form-control J_isDisabled" name="tagName">
+                            <select class="w180 form-control J_isDisabled" name="tagId">
                                 <c:forEach var="tag" items="${tagList}">
                                     <option value="${tag.id}" <c:if test="${tag.id == storageItem.tagId}">selected="selected"</c:if> >${tag.name}</option>
                                 </c:forEach>

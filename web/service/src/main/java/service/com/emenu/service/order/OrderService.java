@@ -48,9 +48,7 @@ public interface OrderService {
      * @return
      * @throws Exception
      */
-    public List<CheckOrderDto> listCheckOrderDtoForCheck(Integer status
-            ,Integer isSettlemented
-            ,Date date) throws SSException;
+    public List<CheckOrderDto> listCheckOrderDtoForCheck(Integer status,Integer isSettlemented,Date date) throws SSException;
 
     /**
      * 修改订单盘点状态

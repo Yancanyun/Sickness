@@ -78,9 +78,10 @@ public class AdminStorageItemController extends AbstractController {
     public String toDetails(@PathVariable("id")Integer id, Model model) {
         try {
             StorageItem storageItem = storageItemService.queryById(id);
-            if (Assert.isNotNull(storageItem)){
-                storageItemService.setQuantityFormat(storageItem);
-            }
+//            if (Assert.isNotNull(storageItem)){
+//                storageItemService.setQuantityFormat(storageItem);
+//            }
+
             model.addAttribute("storageItem",storageItem);
         } catch (SSException e) {
             LogClerk.errLog.error(e);
@@ -167,6 +168,7 @@ public class AdminStorageItemController extends AbstractController {
                 if (roundingMode == 0) {
                     totalStockInQuantityStr = storageItem.getTotalStockInQuantity().divide(storageItem.getOrderToStorageRatio(), 2, BigDecimal.ROUND_DOWN);
                 }
+
                 String totalQuantityStr = totalStockInQuantityStr.toString() + storageItem.getStorageUnitName();
                 jsonObject.put("totalStockInQuantityStr", totalQuantityStr);
                 jsonObject.put("totalStockInMoney", storageItem.getTotalStockInMoney());

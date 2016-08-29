@@ -260,6 +260,7 @@ public class StorageItemServiceImpl implements StorageItemService {
             Ingredient ingredient = ingredientService.queryById(storageItem.getIngredientId());
             storageItem.setCostCardUnitId(ingredient.getCostCardUnitId());
             storageItem.setItemNumber(serialNumService.generateSerialNum(SerialNumTemplateEnums.StorageItemNum));
+
             commonDao.insert(storageItem);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -277,14 +278,16 @@ public class StorageItemServiceImpl implements StorageItemService {
                     StorageItem storageItem1 = storageItemMapper.queryById(storageItem.getId());
                     Assert.isNotNull(storageItem1,EmenuException.StorageItemIsNotNull);
                     if (storageItem.getName().equals(storageItem1.getName())
-                            && storageItem.getTagId() == storageItem1.getTagId()
-                            && storageItem.getSupplierPartyId() == storageItem1.getSupplierPartyId()){
-                        if (checkStorageItemIsExist(storageItem)){
+                            && storageItem.getTagId().equals(storageItem1.getTagId())
+                            && storageItem.getSupplierPartyId().equals(storageItem1.getSupplierPartyId())){
+
                             storageItemMapper.updateStorageItemById(storageItem);
-                        }
+
                     } else {
                         if (checkStorageItemIsExist(storageItem)){
                             throw SSException.get(EmenuException.StorageItemIsExist);
+                        } else {
+                            storageItemMapper.updateStorageItemById(storageItem);
                         }
                     }
                 }
@@ -480,6 +483,12 @@ public class StorageItemServiceImpl implements StorageItemService {
         if (storageItem.getStockOutType()<1 || storageItem.getStockOutType()>2){
             throw SSException.get(EmenuException.StorageItemNameNotNull);
         }
+        if (Assert.isNotNull(storageItem.getName())){
+            String name1 = storageItem.getName().replaceAll(" ","");
+            if (name1.equals("")){
+                throw SSException.get(EmenuException.StorageItemNameNotNull);
+            }
+        }
         Assert.isNotNull(storageItem.getName(), EmenuException.StorageItemNameNotNull);
         Assert.isNotNull(storageItem.getIngredientId(), EmenuException.StorageItemIngredientIdNotNull);
         Assert.isNotNull(storageItem.getSupplierPartyId(), EmenuException.StorageItemSupplierNotNull);
@@ -568,22 +577,34 @@ public class StorageItemServiceImpl implements StorageItemService {
 
         // 将数量和单位拼接成string，并将成本卡单位表示的数量转换为库存单位表示
         BigDecimal maxStorageQuantity = new BigDecimal(0);
+//        if (roundingMode == 1) {
+//            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+//        }
+//        if (roundingMode == 0) {
+//            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+//        }
         if (roundingMode == 1) {
-            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+            maxStorageQuantity = storageItem.getMaxStorageQuantity();
         }
         if (roundingMode == 0) {
-            maxStorageQuantity = storageItem.getMaxStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+            maxStorageQuantity = storageItem.getMaxStorageQuantity();
         }
         String maxStorageQuantityStr = maxStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMaxStorageQuantityStr(maxStorageQuantityStr);
 
         // 最小库存
         BigDecimal minStorageQuantity = new BigDecimal(0);
+//        if (roundingMode == 1) {
+//            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+//        }
+//        if (roundingMode == 0) {
+//            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+//        }
         if (roundingMode == 1) {
-            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN);
+            minStorageQuantity = storageItem.getMinStorageQuantity();
         }
         if (roundingMode == 0) {
-            minStorageQuantity = storageItem.getMinStorageQuantity().divide(storageItem.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN);
+            minStorageQuantity = storageItem.getMinStorageQuantity();
         }
         String minStorageQuantityStr = minStorageQuantity.toString() + storageItem.getStorageUnitName();
         storageItem.setMinStorageQuantityStr(minStorageQuantityStr);

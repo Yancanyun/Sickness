@@ -59,7 +59,7 @@
                     AND report.`is_audited` = #{reportSearchDto.isAudited}
                 </if>
                 <if test="reportSearchDto.startTime != null">
-                    AND report.`last_modified_time` &gt;= #{reportSearchDto.startTime}
+                    AND report.`created_time` &gt;= #{reportSearchDto.startTime}
                 </if>
                 <if test="reportSearchDto.endTime != null">
                     AND report.`last_modified_time` &lt;= #{reportSearchDto.endTime}
