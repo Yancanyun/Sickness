@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
+
 
 /**
  * 单据controller
@@ -424,7 +426,7 @@ public class AdminStorageReportController extends AbstractController {
             Ingredient ingredient = ingredientService.queryById(id);
             BigDecimal storageQuantity = new BigDecimal("0.00");
             if (roundingMode == 1) {
-                storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_HALF_EVEN));
+                storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(), 2, ROUND_HALF_EVEN));
             }
             if (roundingMode == 1) {
                 storageQuantity = storageQuantity.add(costCardQuantity.divide(ingredient.getStorageToCostCardRatio(), 2, BigDecimal.ROUND_DOWN));
@@ -530,7 +532,7 @@ public class AdminStorageReportController extends AbstractController {
                         StorageItem storageItem = storageItemService.queryById(reportItem.getItemId());
                         Assert.isNotNull(storageItem,EmenuException.StorageItemIsNotNull);
                         // 设置最新入库价格总入库数量和金额
-                        storageItem.setTotalStockInQuantity(storageItem.getTotalStockInQuantity().add(reportItem.getQuantity()));
+                        storageItem.setTotalStockInQuantity(storageItem.getTotalStockInQuantity().add(reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio())));
                         storageItem.setTotalStockInMoney(storageItem.getTotalStockInMoney().add(reportItem.getCount()));
                         storageItem.setLastStockInPrice(reportItem.getPrice());
                         // 如果是入库单同时修改原配料缓存
@@ -539,21 +541,29 @@ public class AdminStorageReportController extends AbstractController {
                             ingredientCacheQuntity = new BigDecimal("0.00");
                         }
                         if (Assert.isNull(ingredientCacheQuntity)){
-                            ingredientCacheQuntity = reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio());
+                            ingredientCacheQuntity = ingredientCacheQuntity.add(reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                             storageSettlementService.updateSettlementCache(storageItem.getIngredientId(),ingredientCacheQuntity);
                         } else {
                             ingredientCacheQuntity = ingredientCacheQuntity.add(reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio()).multiply(storageItem.getStorageToCostCardRatio()));
                             storageSettlementService.updateSettlementCache(storageItem.getIngredientId(),ingredientCacheQuntity);
                         }
-                        // 设置原配料入库总金额、入库总数量、均价
+                        // 设置原配料入库总金额、入库总数量、均价，实际数量和金额
                         Ingredient ingredient1 = ingredientService.queryById(storageItem.getIngredientId());
-                        ingredient1.setTotalQuantity(ingredient1.getTotalQuantity().add(ingredientCacheQuntity));
+                        // 实际数量
+                        ingredient1.setRealQuantity(ingredientCacheQuntity);
+                        // 入库总数量
+                        ingredient1.setTotalQuantity(ingredient1.getTotalQuantity().add(reportItem.getQuantity().multiply(storageItem.getOrderToStorageRatio().multiply(storageItem.getStorageToCostCardRatio()))));
+                        // 入库总金额
                         ingredient1.setTotalMoney(ingredient1.getTotalMoney().add(reportItem.getCount()));
                         if (roundingMode == 1) {
-                            ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(), 2, BigDecimal.ROUND_HALF_EVEN));
+                            // 平均价格
+                            ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(), 2, ROUND_HALF_EVEN));
+                            // 结存金额
+                            ingredient1.setRealMoney(ingredient1.getAveragePrice().multiply(ingredient1.getRealQuantity()));
                         }
                         if (roundingMode == 0) {
                             ingredient1.setAveragePrice(ingredient1.getTotalMoney().divide(ingredient1.getTotalQuantity(), 2, BigDecimal.ROUND_DOWN));
+                            ingredient1.setRealMoney(ingredient1.getAveragePrice().multiply(ingredient1.getRealQuantity()));
                         }
                         ingredientService.updateIngredient(ingredient1, IngredientStatusEnums.CanUpdate.getId());
                         storageItemService.updateById(storageItem);
@@ -567,14 +577,16 @@ public class AdminStorageReportController extends AbstractController {
                         // 如果是入库单同时修改原配料缓存
                         BigDecimal ingredientCacheQuntity = storageSettlementService.queryCache(storageReportIngredient.getIngredientId());
                         if (Assert.isNull(ingredientCacheQuntity)){
-                            ingredientCacheQuntity = storageReportIngredient.getQuantity();
-                            storageSettlementService.updateSettlementCache(ingredient.getId(),ingredientCacheQuntity);
+                            throw SSException.get(EmenuException.SettlementCacheQuantityIsNotNull);
                         } else {
-                            ingredientCacheQuntity = ingredientCacheQuntity.subtract( storageReportIngredient.getQuantity());
+                            ingredientCacheQuntity = ingredientCacheQuntity.subtract(storageReportIngredient.getQuantity());
+                            // 出库修改原配料实际库存数量
+                            ingredient.setRealQuantity(ingredientCacheQuntity);
+                            ingredient.setRealMoney(ingredientCacheQuntity.multiply(ingredient.getAveragePrice()));
+                            ingredientService.updateIngredient(ingredient, IngredientStatusEnums.CanUpdate.getId());
                             storageSettlementService.updateSettlementCache(ingredient.getId(),ingredientCacheQuntity);
                         }
                     }
-
                 }
             }
             storageReport.setAuditPartyId(securityUser.getPartyId());

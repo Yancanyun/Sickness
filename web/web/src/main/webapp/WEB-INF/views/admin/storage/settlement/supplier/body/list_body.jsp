@@ -24,13 +24,13 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间：</label>
                         <div class="col-sm-2">
-                            <input type="text" class="w190 form-control date" readonly name="startDate" value="">
+                            <input type="text" class="w190 form-control date" readonly name="startDate" value="${currentDay}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">结束时间：</label>
                         <div class="col-sm-2">
-                            <input type="text" class="w190 form-control date" readonly name="endDate" value="">
+                            <input type="text" class="w190 form-control date" readonly name="endDate" value="${currentDay}">
                         </div>
                     </div>
                     <div class="form-group">

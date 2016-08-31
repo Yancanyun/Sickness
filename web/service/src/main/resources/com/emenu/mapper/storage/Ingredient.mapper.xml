@@ -184,7 +184,9 @@
                 `min_storage_quantity` = #{ingredient.minStorageQuantity},
                 `average_price` = #{ingredient.averagePrice},
                 `total_quantity` = #{ingredient.totalQuantity},
-                `total_money` = #{ingredient.totalMoney}
+                `total_money` = #{ingredient.totalMoney},
+                `real_quantity` = #{ingredient.realQuantity},
+                `real_money` = #{ingredient.realMoney}
           WHERE `id` = #{ingredient.id};
     </update>
 

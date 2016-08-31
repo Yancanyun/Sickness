@@ -89,7 +89,6 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public Ingredient newIngredient(Ingredient ingredient) throws SSException {
-        System.out.println("xiao");
         if (!checkBeforeSave(ingredient)) {
             return null;
         }
@@ -126,9 +125,8 @@ public class IngredientServiceImpl implements IngredientService {
             if (isUpdated == 0) {
                 if (this.checkBeforeSave(ingredient)) {
                     Ingredient ingredient1 = queryById(ingredient.getId());
-                    ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity());
-                    ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity());
-
+//                    ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity());
+//                    ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity());
                     Assert.isNotNull(ingredient1,EmenuException.IngredientIsNotNull);
                     if (ingredient1.getName().equals(ingredient.getName())){
                         ingredientMapper.updateIngredient(ingredient);
@@ -149,9 +147,10 @@ public class IngredientServiceImpl implements IngredientService {
                 }
                 Assert.isNotNull(ingredient.getMaxStorageQuantity(), EmenuException.IngredientMaxStorageQuantityIsNotNull);
                 Assert.isNotNull(ingredient.getMinStorageQuantity(), EmenuException.IngredientMinStorageQuantityIsNotNull);
-                ingredient.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
-                ingredient.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
-                ingredientMapper.updateIngredientCodeAndLimitById(ingredient);
+                Ingredient ingredient1 = queryById(ingredient.getId());
+                ingredient1.setMaxStorageQuantity(ingredient.getMaxStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+                ingredient1.setMinStorageQuantity(ingredient.getMinStorageQuantity().multiply(ingredient.getStorageToCostCardRatio()));
+                ingredientMapper.updateIngredientCodeAndLimitById(ingredient1);
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -595,6 +594,12 @@ public class IngredientServiceImpl implements IngredientService {
             List<CostCardDto> costCardDtoList = costCardService.listAllCostCardDto();
             // map中的key为原配料的id，value为原配料存在状态0或者空代表没有，1代表有
             Map<Integer,Integer> checkMap = new HashMap<Integer, Integer>();
+            List<StorageItem> storageItemList = storageItemService.listAll();
+            for (StorageItem storageItem : storageItemList){
+                if (storageItem.getIngredientId().equals(id)){
+                    return false;
+                }
+            }
             for (CostCardDto costCardDto : costCardDtoList){
                 List<CostCardItemDto> costCardItemDtoList = costCardDto.getCostCardItemDtos();
                 for (CostCardItemDto costCardItemDto : costCardItemDtoList){

@@ -7,6 +7,7 @@ import com.emenu.common.dto.storage.StorageItemDto;
 import com.emenu.common.dto.storage.StorageSupplierDto;
 import com.emenu.common.entity.party.group.supplier.Supplier;
 import com.emenu.common.enums.other.ModuleEnums;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
@@ -48,7 +49,8 @@ public class AdminSettlementSupplierController extends AbstractController{
         try {
             //获取供货商
             List<Supplier> supplierList = supplierService.listAll();
-            List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(0,null,null);
+            Date nowTime = new Date();
+            List<StorageSupplierDto> storageSupplierDtoList = storageSettlementService.listSettlementSupplier(0,nowTime,nowTime);
             if (Assert.isNotNull(storageSupplierDtoList)
                     && storageSupplierDtoList.size() > 0){
                 Iterator<StorageSupplierDto> iter = storageSupplierDtoList.iterator();
@@ -61,6 +63,7 @@ public class AdminSettlementSupplierController extends AbstractController{
                     }
                 }
             }
+            model.addAttribute("currentDay", DateUtils.getToday());
             model.addAttribute("supplierDtoList", storageSupplierDtoList);
             model.addAttribute("supplierList", supplierList);
             model.addAttribute("eMsg", eMsg);

@@ -115,14 +115,14 @@
                         <label class="col-sm-3 control-label"><span class="requires">*</span>成本卡单位</label>
                         <div class="col-sm-6">
                             <input type="hidden" name="costCardUnitId" value="">
-                            <input type="text" class="w180 J_costCardUnit" value="" >
+                            <input type="text" class="w180 J_costCardUnit" value="" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label"><span class="requires">*</span>计数单位</label>
                         <div class="col-sm-6">
                             <input type="hidden" name="countUnitId" value="">
-                            <input type="text" class="w180 J_countUnit" value="" >
+                            <input type="text" class="w180 J_countUnit" value="" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-group">

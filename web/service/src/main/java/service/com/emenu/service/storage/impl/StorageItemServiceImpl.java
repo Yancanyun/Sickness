@@ -260,6 +260,9 @@ public class StorageItemServiceImpl implements StorageItemService {
             Ingredient ingredient = ingredientService.queryById(storageItem.getIngredientId());
             storageItem.setCostCardUnitId(ingredient.getCostCardUnitId());
             storageItem.setItemNumber(serialNumService.generateSerialNum(SerialNumTemplateEnums.StorageItemNum));
+            if (checkStorageItemIsExist(storageItem)){
+                throw SSException.get(EmenuException.StorageItemIsExist);
+            }
 
             commonDao.insert(storageItem);
         } catch (Exception e) {

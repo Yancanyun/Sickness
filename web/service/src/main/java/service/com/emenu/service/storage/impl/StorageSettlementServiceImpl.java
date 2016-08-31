@@ -681,6 +681,18 @@ public class StorageSettlementServiceImpl implements StorageSettlementService {
                                                            Date startDate,
                                                            Date endDate) throws SSException {
         List<StorageSupplierDto> storageSupplierDtoList = new ArrayList<StorageSupplierDto>();
+        if (startDate != null){
+            startDate.setHours(0);
+            startDate.setMinutes(0);
+            startDate.setSeconds(0);
+        }
+
+        // 时间格式设置
+        if (startDate != null) {
+            startDate.setHours(23);
+            startDate.setMinutes(59);
+            startDate.setSeconds(59);
+        }
         try {
             //供货商partyId
             Integer supplierPartyId = 0;

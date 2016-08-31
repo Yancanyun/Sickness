@@ -471,12 +471,15 @@ public class AdminIngredientController extends AbstractController{
     }
 
 
-
+    /**
+     * excel导出
+     * @param searchDto
+     * @param response
+     */
     @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
     @RequestMapping(value = "export",method = RequestMethod.GET)
     public void export(ItemAndIngredientSearchDto searchDto,
                        HttpServletResponse response) {
-        //if(searchDto==null)System.out.println("searchDto is null!!!");
         try {
             ingredientService.exportExcel(searchDto,response);
             sendErrMsg("导出成功");
@@ -487,6 +490,11 @@ public class AdminIngredientController extends AbstractController{
     }
 
 
+    /**
+     * 删除原配料
+     * @param id
+     * @return
+     */
     @Module(value = ModuleEnums.AdminStorageIngredient,extModule = ModuleEnums.AdminStorageIngredientDelete)
     @RequestMapping(value = "ajax/del/{id}",method = RequestMethod.DELETE)
     @ResponseBody

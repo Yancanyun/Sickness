@@ -67,6 +67,7 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateSettlementCacheFail("更新盘点缓存失败",3037),
     SettlementCacheKeyError("缓存key不合法",3038),
     QueryCacheFail("查询原配料缓存失败",3039),
+    SettlementCacheQuantityIsNotNull("缓存不能为空",3040),
 
     // 原配料
     IngredientTagIdIsNotNull("原配料分类id不能为空",3100),
