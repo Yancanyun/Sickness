@@ -55,7 +55,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             }
 
             // 若已被加锁，则不允许执行接下来的操作
-            if (tableOrderCache.getLock() == true) {
+            if (tableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
 
@@ -76,7 +76,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
                 orderDishCacheList.add(orderDishCache);
             } else {
                 // 若不是快捷点餐，直接将本次点餐加入缓存
-                if (isQuickly == false) {
+                if (!isQuickly) {
                     orderDishCache.setId(++orderDishCacheId); // 设置OrderDishCache中的ID
                     orderDishCacheList.add(orderDishCache);
                 }
@@ -98,7 +98,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
                         }
                     }
                     // 若OrderDishCacheList中不存在同DishID的快捷点餐记录，则将本次快捷点餐加入缓存
-                    if (isAdded == false) {
+                    if (!isAdded) {
                         orderDishCache.setId(++orderDishCacheId); // 设置OrderDishCache中的ID
                         orderDishCacheList.add(orderDishCache);
                     }
@@ -126,7 +126,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             }
 
             // 若已被加锁，则不允许执行接下来的操作
-            if (tableOrderCache.getLock() == true) {
+            if (tableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
 
@@ -165,7 +165,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             }
 
             // 若已被加锁，则不允许执行接下来的操作
-            if (tableOrderCache.getLock() == true) {
+            if (tableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
 
@@ -179,7 +179,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
 
             // 从OrderDishCacheList寻找要编辑的OrderDishCache，编辑之
             for (OrderDishCache orderDishCache1 : orderDishCacheList) {
-                if (orderDishCache1.getId().equals(orderDishCache)) {
+                if (orderDishCache1.getId().equals(orderDishCache.getId())) {
                     orderDishCacheList.remove(orderDishCache1);
                     orderDishCacheList.add(orderDishCache);
                     break;
@@ -209,7 +209,7 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             TableOrderCache tableOrderCache = tableOrderCacheMap.get(tableId);
 
             // 若已被加锁，则不允许执行接下来的操作
-            if (tableOrderCache != null && tableOrderCache.getLock() == true) {
+            if (tableOrderCache != null && tableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
 
@@ -295,10 +295,10 @@ public class OrderDishCacheServiceImpl implements OrderDishCacheService {
             TableOrderCache newTableOrderCache = tableOrderCacheMap.get(newTableId);
 
             // 若已被加锁，则不允许执行接下来的操作
-            if (oldTableOrderCache != null && oldTableOrderCache.getLock() == true) {
+            if (oldTableOrderCache != null && oldTableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
-            if (newTableOrderCache != null && newTableOrderCache.getLock() == true) {
+            if (newTableOrderCache != null && newTableOrderCache.getLock()) {
                 throw SSException.get(EmenuException.TableIsLock);
             }
 

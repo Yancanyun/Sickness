@@ -203,7 +203,7 @@
             //base-config.html
             ['saveAuthority', site.website + 'admin/party/security/permission/ajax/update', 'put', '保存编辑后的权限'],
             ['saveNewAuthority', site.website + 'admin/party/security/permission/ajax/new', 'post', '保存新添加的权限'],
-            ['delAuthority', site.website + 'admin/party/security/permission/ajax/del', 'delete', '删除权限时，发送权限id'],
+            ['delAuthority', site.website + 'admin/party/security/permission/ajax/del', 'get', '删除权限时，发送权限id'],
 
             //authority-group-list.html
             ['saveAuthorityGroup', site.website + 'admin/party/security/group/ajax/update', 'put', '保存编辑后的权限组'],

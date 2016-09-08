@@ -126,9 +126,9 @@ public class SecurityPermissionController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminPartySecurity, extModule = ModuleEnums.AdminPartySecurityPermissionDelete)
-    @RequestMapping(value = "ajax/del/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "ajax/del", method = RequestMethod.GET)
     @ResponseBody
-    public JSON ajaxDelete(@PathVariable("id") Integer id) {
+    public JSON ajaxDelete(@RequestParam("id") Integer id) {
         try {
             securityPermissionService.delById(id);
         } catch (SSException e) {
