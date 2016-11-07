@@ -41,6 +41,12 @@ public class AdminAreaController extends AbstractController {
             return ADMIN_SYS_ERR_PAGE;
         }
         return "admin/restaurant/area/list_home";
+
+
+
+
+
+
     }
 
     /**

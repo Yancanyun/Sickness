@@ -54,7 +54,7 @@ public class AreaTest extends AbstractTestCase {
     public void updateArea() throws SSException{
         Area area = new Area();
         area.setId(1);
-        area.setName("11楼");
+        area.setName("111楼");
         areaService.updateArea(1, area);
     }
 
