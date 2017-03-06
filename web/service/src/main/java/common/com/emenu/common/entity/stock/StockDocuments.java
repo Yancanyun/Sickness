@@ -55,11 +55,11 @@ public class StockDocuments extends AbstractEntity {
     @Column(name = "money")
     private BigDecimal money;
 
-    //结算状态
+    //结算状态(0-未结算、1-已结算)
     @Column(name = "is_settled")
     private Integer isSettled;
 
-    //审核状态
+    //审核状态(0-未审核、1-代表已通过、2-代表未通过)
     @Column(name = "is_audited")
     private Integer isAudited;
 
