@@ -10,7 +10,7 @@ import com.pandawork.core.common.exception.SSException;
  * @author pengpeng
  * @time 2017/3/4 9:55
  */
-public interface ItemService {
+public interface StockItemService {
 
     public StockItem newItem(StockItem stockItem) throws SSException;
 }

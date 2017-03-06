@@ -1,7 +1,7 @@
 package com.emenu.test.stock;
 
 import com.emenu.common.entity.stock.StockItem;
-import com.emenu.service.stock.ItemService;
+import com.emenu.service.stock.StockItemService;
 import com.emenu.test.AbstractTestCase;
 import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
@@ -13,14 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author pengpeng
  * @time 2017/3/6 8:44
  */
-public class ItemServiceTest extends AbstractTestCase{
+public class StockItemServiceTest extends AbstractTestCase{
 
     @Autowired
-    private ItemService itemService;
+    private StockItemService stockItemService;
 
     @Test
     public void newItem() throws SSException{
         StockItem stockItem = new StockItem();
-
+        stockItem.setName("土豆");
+        stockItem.setRemark("xixi");
+        stockItemService.newItem(stockItem);
     }
 }

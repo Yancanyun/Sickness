@@ -6,7 +6,7 @@ import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.StringUtils;
 import com.emenu.service.other.SerialNumService;
-import com.emenu.service.stock.ItemService;
+import com.emenu.service.stock.StockItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @time 2017/3/4 9:55
  */
 @Service("itemService")
-public class ItemServiceImpl implements ItemService{
+public class StockItemServiceImpl implements StockItemService {
 
     @Autowired
     private CommonDao commonDao;
