@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.emenu.mapper.stock.SpecificationsMapper">
+    <resultMap id="SpecResultMap" type="Specifications">
+        <id column="id" property="id"/>
+        <result column="order_unit_id" property="orderUnitId"/>
+        <result column="storage_unit_id" property="storageUnitId"/>
+        <result column="cost_card_id" property="costCardId"/>
+        <result column="order_to_storage_ratio" property="orderToStorage"/>
+        <result column="storage_to_cost_card_ratio" property="storageToCost"/>
+    </resultMap>
+
+    <insert id="add">
+        INSERT INTO t_stock_specification (id, order_unit_id, storage_unit_id,cost_card_id,
+         order_to_storage_ratio, storage_to_cost_card_ratio)
+        VALUES(#{spec.id}, #{spec.orderUnitId},#{spec.storageUnitId}, #{spec.costCardId},
+              #{spec.orderToStorage},#{spec.storageToCost})
+    </insert>
+
+    <update id="update">
+        UPDATE t_stock_specification
+        SET
+        order_unit_id = #{spec.orderUnitId},
+        storage_unit_id = #{spec.storageUnitId},
+        cost_card_id = #{spec.costCardId},
+        order_to_storage_ratio = #{spec.orderToStorage},
+        storage_to_cost_card_ratio = #{spec.storageToCost}
+        WHERE id = #{spec.id}
+    </update>
+
+    <select id="queryById" resultMap="SpecResultMap">
+        SELECT * FROM t_stock_specification WHERE id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM t_stock_specification WHERE id = #{id}
+    </delete>
+
+</mapper>

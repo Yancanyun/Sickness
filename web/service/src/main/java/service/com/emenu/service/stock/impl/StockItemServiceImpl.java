@@ -5,8 +5,9 @@ import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.StringUtils;
+import com.emenu.mapper.stock.StockItemMapper;
 import com.emenu.service.other.SerialNumService;
-import com.emenu.service.stock.ItemService;
+import com.emenu.service.stock.StockItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -23,13 +24,16 @@ import org.springframework.transaction.annotation.Transactional;
  * @time 2017/3/4 9:55
  */
 @Service("itemService")
-public class ItemServiceImpl implements ItemService{
+public class StockItemServiceImpl implements StockItemService {
 
     @Autowired
     private CommonDao commonDao;
 
     @Autowired
     private SerialNumService serialNumService;
+
+    @Autowired
+    private StockItemMapper stockItemMapper;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -54,6 +58,16 @@ public class ItemServiceImpl implements ItemService{
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StockItemInsertFailed, e);
+        }
+    }
+
+    @Override
+    public boolean checkIsExist(String name) throws SSException{
+        try{
+            return stockItemMapper.countByName(name) > 0 ? true : false;
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
         }
     }
 }

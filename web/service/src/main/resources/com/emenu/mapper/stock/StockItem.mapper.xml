@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.stock.StockItemMapper">
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(1)
+        FROM t_stock_item
+        WHERE  name = #{name}
+    </select>
+
+</mapper>
