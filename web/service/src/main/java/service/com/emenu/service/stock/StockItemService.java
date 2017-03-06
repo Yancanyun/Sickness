@@ -12,5 +12,21 @@ import com.pandawork.core.common.exception.SSException;
  */
 public interface StockItemService {
 
+    /**
+     * 物品添加
+     *
+     * @param stockItem
+     * @return
+     * @throws SSException
+     */
     public StockItem newItem(StockItem stockItem) throws SSException;
+
+    /**
+     * 检查物品是否存在（true-存在，false-不存在）
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public boolean checkIsExist(String name) throws SSException;
 }

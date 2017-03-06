@@ -25,4 +25,11 @@ public class StockItemServiceTest extends AbstractTestCase{
         stockItem.setRemark("xixi");
         stockItemService.newItem(stockItem);
     }
+
+    @Test
+    public void checkIsExist() throws SSException{
+        String name = "番茄";
+        boolean a = stockItemService.checkIsExist(name);
+        System.out.println("123");
+    }
 }

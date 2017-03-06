@@ -5,6 +5,7 @@ import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
 import com.emenu.common.utils.StringUtils;
+import com.emenu.mapper.stock.StockItemMapper;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.stock.StockItemService;
 import com.pandawork.core.common.exception.SSException;
@@ -31,6 +32,9 @@ public class StockItemServiceImpl implements StockItemService {
     @Autowired
     private SerialNumService serialNumService;
 
+    @Autowired
+    private StockItemMapper stockItemMapper;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public StockItem newItem(StockItem stockItem) throws SSException{
@@ -54,6 +58,16 @@ public class StockItemServiceImpl implements StockItemService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.StockItemInsertFailed, e);
+        }
+    }
+
+    @Override
+    public boolean checkIsExist(String name) throws SSException{
+        try{
+            return stockItemMapper.countByName(name) > 0 ? true : false;
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
         }
     }
 }
