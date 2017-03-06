@@ -21,6 +21,7 @@ public enum SerialNumTemplateEnums {
     IngredientNum("原配料编号","IDG-|yyyyMMdd|####"),
     CostCardSerialNum("成本卡流水号", "CBK-|yyyyMMdd|####"),
     StorageItemNum("库存物品编号","KCI-|yyyyMMdd|####"),
+    StockItemNum("物品编号","NSI-|yyyyMMdd|####"),
     ;
 
     private String name;

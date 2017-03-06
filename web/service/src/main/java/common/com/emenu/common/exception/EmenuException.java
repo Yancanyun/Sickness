@@ -687,6 +687,10 @@ public enum EmenuException implements IBizExceptionMes {
     SumCheckoutEachItemFail("对所有结账单的单项金钱求和失败",10085),
     CountCheckoutByTimePeriodFail("统计该时间段里已结账的结账单失败",10086),
 
+    // 新版库存模块
+    StockItemInsertFailed("添加物品失败", 11000),
+
+
     /****************************后厨管理端****************************/
 
     //后厨管理模块
