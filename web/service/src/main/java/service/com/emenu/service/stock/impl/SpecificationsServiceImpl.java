@@ -6,6 +6,8 @@ import com.emenu.service.stock.SpecificationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by apple on 17/2/27.
  */
@@ -56,6 +58,15 @@ public class SpecificationsServiceImpl implements SpecificationsService {
         try {
             return specificationsMapper.queryById(id);
         } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Specifications> listAll() throws Exception {
+        try {
+            return specificationsMapper.listAll();
+        }catch (Exception e){
             throw new Exception(e.getMessage());
         }
     }

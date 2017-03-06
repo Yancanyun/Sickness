@@ -3,6 +3,8 @@ package com.emenu.mapper.stock;
 import com.emenu.common.entity.stock.Specifications;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * Created by apple on 17/2/27.
  */
@@ -39,4 +41,11 @@ public interface SpecificationsMapper {
      * @throws Exception
      */
     public Specifications queryById(@Param("id") int id) throws Exception;
+
+    /**
+     * 显示所有规格信息
+     * @return
+     * @throws Exception
+     */
+    public List<Specifications> listAll() throws Exception;
 }

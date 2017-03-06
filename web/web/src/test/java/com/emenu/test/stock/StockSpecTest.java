@@ -46,4 +46,9 @@ public class StockSpecTest extends AbstractTestCase {
     public void queryById()throws Exception{
         specificationsService.queryById(2);
     }
+
+    @Test
+    public void listAll()throws Exception{
+        specificationsService.listAll();
+    }
 }

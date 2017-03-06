@@ -3,6 +3,8 @@ package com.emenu.service.stock;
 
 import com.emenu.common.entity.stock.Specifications;
 
+import java.util.List;
+
 /**
  * Created by apple on 17/2/27.
  */
@@ -37,5 +39,12 @@ public interface SpecificationsService {
      * @throws Exception
      */
     public Specifications queryById(int id) throws Exception;
+
+    /**
+     * 显示所有规格信息
+     * @return
+     * @throws Exception
+     */
+    public List<Specifications> listAll()throws Exception;
 
 }
