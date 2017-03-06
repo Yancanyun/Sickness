@@ -27,7 +27,7 @@
         cost_card_id = #{spec.costCardId},
         order_to_storage_ratio = #{spec.orderToStorage},
         storage_to_cost_card_ratio = #{spec.storageToCost}
-        WHERE id = #{spec.id}
+        WHERE id = #{id}
     </update>
 
     <select id="queryById" resultMap="SpecResultMap">

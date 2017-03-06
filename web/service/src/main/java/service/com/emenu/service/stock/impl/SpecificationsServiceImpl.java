@@ -38,11 +38,12 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     }
 
     @Override
-    public void update(Specifications specifications) throws Exception {
+    public void update(Integer id, Specifications specifications) throws Exception {
         if (specifications == null) return;
+        if (id <= 0) return;
 
         try {
-            specificationsMapper.update(specifications);
+            specificationsMapper.update(id, specifications);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

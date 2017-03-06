@@ -13,18 +13,23 @@ public class Specifications {
     @Id
     private Integer id;
 
+    //订货单位id
     @Column(name = "order_unit_id")
     private Integer orderUnitId;
 
+    //库存单位id
     @Column(name = "storage_unit_id")
     private Integer storageUnitId;
 
+    //成本卡单位id
     @Column(name = "cost_card_id")
     private Integer costCardId;
 
+    //订货单位到库存单位转换比例
     @Column(name = "order_to_storage_ratio")
     private BigDecimal orderToStorage;
 
+    //库存单位到成本卡单位转换比例
     @Column(name = "storage_to_cost_card_ratio")
     private BigDecimal storageToCost;
 
