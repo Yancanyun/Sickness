@@ -302,6 +302,14 @@ public enum ModuleEnums {
     AdminConstantList("Admin:Constant:List"),
     AdminConstantUpdate("Admin:Constant:Update"),
 
+    // 新版库存管理
+    AdminStock("Admin:Stock"),
+
+    //物品管理
+    AdminStockItem("Admin:Stock:Item"),
+    AdminStockItemList("Admin:Stock:Item:List"),
+    AdminStockItemNew("Admin:Stock:Item:New"),
+
 
 
     // 顾客点餐平台
