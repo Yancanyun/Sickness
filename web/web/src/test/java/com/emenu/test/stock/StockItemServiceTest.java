@@ -7,6 +7,9 @@ import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ItemServiceTest
  *
@@ -32,4 +35,15 @@ public class StockItemServiceTest extends AbstractTestCase{
         boolean a = stockItemService.checkIsExist(name);
         System.out.println("123");
     }
+
+    @Test
+    public void listToString() throws SSException{
+       List<Integer> list = new ArrayList<Integer>();
+        list.add(0,1);
+        list.add(1,2);
+        String xixi = stockItemService.listToString(list);
+        System.out.println(xixi);
+    }
+
+
 }

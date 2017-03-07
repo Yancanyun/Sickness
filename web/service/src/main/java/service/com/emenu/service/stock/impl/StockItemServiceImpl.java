@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ItemServiceImpl
  *
@@ -69,5 +72,36 @@ public class StockItemServiceImpl implements StockItemService {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);
         }
+    }
+
+    @Override
+    public String listToString(List<Integer> list) throws SSException{
+        String string = new String();
+        string = "";
+        try{
+            for(int i = 0; i < list.size(); i++)
+            {
+                if(i==0)
+                    string += list.get(i).toString();
+                else
+                    string += ',' + list.get(i).toString();
+            }
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return string;
+    }
+
+    @Override
+    public List<Integer> StringTolist(String string) throws SSException{
+        List<Integer> list = new ArrayList<Integer>();
+        try{
+
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return list;
     }
 }

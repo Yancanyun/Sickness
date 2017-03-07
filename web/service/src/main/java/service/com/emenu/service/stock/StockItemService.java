@@ -1,7 +1,10 @@
 package com.emenu.service.stock;
 
+import com.emenu.common.entity.stock.Specifications;
 import com.emenu.common.entity.stock.StockItem;
 import com.pandawork.core.common.exception.SSException;
+
+import java.util.List;
 
 /**
  * ItemService
@@ -29,4 +32,22 @@ public interface StockItemService {
      * @throws SSException
      */
     public boolean checkIsExist(String name) throws SSException;
+
+    /**
+     * list转化成String
+     *
+     * @param list
+     * @return
+     * @throws SSException
+     */
+    public String listToString(List<Integer> list) throws SSException;
+
+    /**
+     * String转化成list
+     *
+     * @param string
+     * @return
+     * @throws SSException
+     */
+    public List<Integer> StringTolist(String string) throws SSException;
 }
