@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.stock.StockKitchenMapper">
+    <resultMap id="StockKitchen" type="com.emenu.common.entity.stock.StockKitchen">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="introduction" property="introduction"/>
+        <result column="principal" property="principal"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modified_time" property="lastModifiedTime"/>
+    </resultMap>
+    <select id="listStockKitchen" resultMap="StockKitchen">
+        SELECT *
+        FROM t_stock_kitchen
+    </select>
+
+    <insert id="addStockKitchen">
+        INSERT INTO
+        t_stock_kitchen(name,introduction,principal)
+        VALUES (#{stockKitchen.name},#{stockKitchen.introduction},#{stockKitchen.principal})
+    </insert>
+
+    <update id="updateStockKitchen">
+        UPDATE
+        t_stock_kitchen
+        SET
+        name = #{stockKitchen.name},
+        introduction = #{stockKitchen.introduction},
+        principal = #{stockKitchen.principal}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateStockKitchenStatus">
+        UPDATE
+        t_stock_kitchen
+        SET
+        status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryStockKitchenDetails" resultMap="StockKitchen">
+        SELECT *
+        FROM t_stock_kitchen
+        WHERE id = #{id}
+    </select>
+</mapper>
