@@ -49,5 +49,5 @@ public interface StockItemService {
      * @return
      * @throws SSException
      */
-    public List<Integer> StringTolist(String string) throws SSException;
+    public List<Integer> stringTolist(String string) throws SSException;
 }
