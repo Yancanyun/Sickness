@@ -3,12 +3,14 @@ package com.emenu.service.stock.impl;
 import com.emenu.common.dto.stock.DocumentsDto;
 import com.emenu.common.entity.stock.StockDocuments;
 import com.emenu.common.entity.stock.StockDocumentsItem;
+import com.emenu.common.entity.stock.StockItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.stock.StockDocumentsItemService;
 import com.emenu.service.stock.StockDocumentsService;
+import com.emenu.service.stock.StockItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -41,6 +43,9 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
     @Autowired
     private StockDocumentsItemService stockDocumentsItemService;
 
+    @Autowired
+    private StockItemService stockItemService;
+
 
     /**
      * 添加单据Dto
@@ -57,11 +62,11 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             //判断单据类型
             if (Assert.isNull(documentsDto.getStockDocuments().getType()) ||
                     Assert.lessOrEqualZero(documentsDto.getStockDocuments().getType())){
-                throw SSException.get(EmenuException.ReportTypeError);
+                throw SSException.get(EmenuException.DocumentsTypeError);
             }
             //判断是否为空
             if(Assert.isNull(documentsDto.getStockDocuments())){
-                throw SSException.get(EmenuException.ReportIsNotNull);
+                throw SSException.get(EmenuException.DocumentsIsNotNull);
             }
             //根据单据类型生成单据编号
             String serialNumber="";
@@ -81,14 +86,14 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                 case 5:
                     serialNumber = serialNumService.generateSerialNum(SerialNumTemplateEnums.LossOnSerialNum);
                     break;
-                default: throw SSException.get(EmenuException.ReportTypeError);
+                default: throw SSException.get(EmenuException.DocumentsTypeError);
             }
             documentsDto.getStockDocuments().setSerialNumber(serialNumber);
             //计算入库单总计金额
             if(documentsDto.getStockDocuments().getType()== StockDocumentsTypeEnum.StockInDocuments.getId()){
                 //单据明细判空
                 if(Assert.isNotNull(documentsDto.getStockDocumentsItemList())||Assert.lessOrEqualZero(documentsDto.getStockItemList().size())){
-                    throw SSException.get(EmenuException.ReportItemListIsNotNull);
+                    throw SSException.get(EmenuException.DocumentsItemListIsNotNull);
                 }
                 //单据总计金额
                 BigDecimal documentsMoney = new BigDecimal("0.00");
@@ -105,11 +110,16 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                     stockDocumentsItem.setDocumentsId(stockDocuments.getId());
                     //添加单据明细表
                     stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
+                    //根据入库信息修改库存物品
+                    StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
+                    //入库物品增加数量
+//                    BigDecimal itemQuantity = stockDocumentsItem.getQuantity().add(stockItem.getStorageQuantity());
+//                    stockItem.setStorageQuantity(itemQuantity);
                 }
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportFail, e);
+            throw SSException.get(EmenuException.InsertDocumentsFail, e);
         }
     }
 
@@ -127,7 +137,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
 
         try {
             if(Assert.isNull(stockDocuments)){
-                throw SSException.get(EmenuException.ReportIsNotNull);
+                throw SSException.get(EmenuException.DocumentsIsNotNull);
             }
             //单据判空
             if(checkStockDocumentsBeforeSave(stockDocuments)){
@@ -135,7 +145,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportFail, e);
+            throw SSException.get(EmenuException.InsertDocumentsFail, e);
         }
         return null;
     }
@@ -155,30 +165,30 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         }
         // 操作人
         if (Assert.isNull(stockDocuments.getCreatedPartyId()) || Assert.lessOrEqualZero(stockDocuments.getCreatedPartyId())){
-            throw SSException.get(EmenuException.CreatedPartyIdError);
+            throw SSException.get(EmenuException.DocumentsCreatedPartyIdError);
         }
         // 经手人
         if (Assert.isNull(stockDocuments.getHandlerPartyId()) || Assert.lessOrEqualZero(stockDocuments.getHandlerPartyId())){
-            throw SSException.get(EmenuException.HandlerPartyId);
+            throw SSException.get(EmenuException.DocumentsHandlerPartyId);
         }
         // 单据类型
         if (Assert.isNull(stockDocuments.getType())
                 && Assert.lessOrEqualZero(stockDocuments.getType())){
-            throw SSException.get(EmenuException.ReportTypeError);
+            throw SSException.get(EmenuException.DocumentsTypeError);
         }
         // 入库单存放点
         if (stockDocuments.getType() == StockDocumentsTypeEnum.StockInDocuments.getId()){
             if (Assert.isNull(stockDocuments.getKitchenId())
                     || Assert.lessOrEqualZero(stockDocuments.getKitchenId())){
-                throw SSException.get(EmenuException.DepotIdError);
+                throw SSException.get(EmenuException.KitchenIdError);
+
             }
         }
         // 单据编号
         Assert.isNotNull(stockDocuments.getSerialNumber(), EmenuException.SerialNumberError);
         // 单据金额
-        Assert.isNotNull(stockDocuments.getMoney(), EmenuException.ReportMoneyError);
+        Assert.isNotNull(stockDocuments.getMoney(), EmenuException.DocumentsMoneyError);
         return true;
     }
-
 
 }

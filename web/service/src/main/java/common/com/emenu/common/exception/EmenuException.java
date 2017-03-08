@@ -422,8 +422,6 @@ public enum EmenuException implements IBizExceptionMes {
     CheckDepotNameFailed("检查存放点名称是否重复失败", 7036),
     CheckDepotNameConflictFailed("检查名称是否与其他存放点冲突失败", 7037),
 
-    //
-
 
 
     //会员基本信息管理模块
@@ -695,12 +693,6 @@ public enum EmenuException implements IBizExceptionMes {
     QueryStockItemByIdFailed("根据Id查找库存物品失败", 110001),
     UpdateStockItemFailed("修改库存物品失败", 110002),
 
-    //厨房管理
-    ListKitchenFailed("查看厨房列表失败",10401),
-    AddKitchenFailed("添加厨房失败",10402),
-    UpdateKitchenFailed("修改厨房失败",10403),
-    DeleteKitchenFailed("删除厨房失败",10404),
-    QueryKitchenDetailsFailed("查看厨房明细失败",10405),
 
     /****************************后厨管理端****************************/
 
@@ -730,9 +722,6 @@ public enum EmenuException implements IBizExceptionMes {
     QueryDishByKeyFail("根据关键字查询菜品失败",10302),
 
     QueryDishTagByNameFail("根据关键字查询分类失败",10303),
-
-
-
     ;
 
 
