@@ -1,8 +1,11 @@
 package com.emenu.service.stock.impl;
 
 import com.emenu.common.entity.stock.StockKitchen;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.stock.StockKitchenMapper;
 import com.emenu.service.stock.StockKitchenService;
+import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +18,7 @@ import java.util.List;
  * @author nigbo
  * @date 2017/3/6 15:55
  */
-@Service
+@Service("stockKitchenService")
 public class StockKitchenServiceImpl implements StockKitchenService{
     @Autowired
     private StockKitchenMapper stockKitchenMapper;
@@ -23,15 +26,16 @@ public class StockKitchenServiceImpl implements StockKitchenService{
     /**
      * 查看厨房列表
      * @return
-     * @throws Exception
+     * @throws SSException
      */
     @Override
-    public List<StockKitchen> listStockKitchen()throws Exception{
+    public List<StockKitchen> listStockKitchen()throws SSException {
         List<StockKitchen> stockKitchenList = new ArrayList<StockKitchen>();
         try{
             stockKitchenList = stockKitchenMapper.listStockKitchen();
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListKitchenFailed);
         }
         return stockKitchenList;
     }
@@ -40,14 +44,15 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      * 添加厨房
      *
      * @param stockKitchen
-     * @throws Exception
+     * @throws SSException
      */
     @Override
-    public void addStockKitchen(StockKitchen stockKitchen)throws Exception{
+    public void addStockKitchen(StockKitchen stockKitchen)throws SSException{
         try{
             stockKitchenMapper.addStockKitchen(stockKitchen);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.AddKitchenFailed);
         }
     }
 
@@ -55,14 +60,15 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      * 修改厨房
      *
      * @param stockKitchen
-     * @throws Exception
+     * @throws SSException
      */
     @Override
-    public void updateStockKitchen(int id,StockKitchen stockKitchen)throws Exception{
+    public void updateStockKitchen(int id,StockKitchen stockKitchen)throws SSException{
         try{
             stockKitchenMapper.updateStockKitchen(id,stockKitchen);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateKitchenFailed);
         }
     }
 
@@ -70,14 +76,15 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      * 删除厨房（将厨房设为停用）
      *
      * @param id
-     * @throws Exception
+     * @throws SSException
      */
     @Override
-    public void updateStockKitchenStatus(int id,int status)throws Exception{
+    public void updateStockKitchenStatus(int id,int status)throws SSException{
         try{
             stockKitchenMapper.updateStockKitchenStatus(id,status);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DeleteKitchenFailed);
         }
     }
 
@@ -86,15 +93,16 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      *
      * @param id
      * @return
-     * @throws Exception
+     * @throws SSException
      */
     @Override
-    public StockKitchen queryStockKitchenDetails(int id)throws Exception{
+    public StockKitchen queryStockKitchenDetails(int id)throws SSException{
         StockKitchen stockKitchen = new StockKitchen();
         try{
             stockKitchen = stockKitchenMapper.queryStockKitchenDetails(id);
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryKitchenDetailsFailed);
         }
         return stockKitchen;
     }

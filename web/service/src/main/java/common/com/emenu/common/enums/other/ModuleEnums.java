@@ -305,6 +305,10 @@ public enum ModuleEnums {
     // 新版库存管理
     AdminStock("Admin:Stock"),
 
+    //新版库存厨房管理
+    AdminStockKitchen("Admin:Stock:Kitchen"),
+    AdminStockKitchenList("Admin:Stock:Kitchen:List"),
+
     //物品管理
     AdminStockItem("Admin:Stock:Item"),
     AdminStockItemList("Admin:Stock:Item:List"),
