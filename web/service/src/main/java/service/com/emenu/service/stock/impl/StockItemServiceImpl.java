@@ -130,6 +130,7 @@ public class StockItemServiceImpl implements StockItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStockItem(StockItem stockItem) throws SSException{
         try{
             commonDao.update(stockItem);
