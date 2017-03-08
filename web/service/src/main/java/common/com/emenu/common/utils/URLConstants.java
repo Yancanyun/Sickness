@@ -155,6 +155,9 @@ public final class URLConstants {
     // 新版库存-物品管理
     public static final String ADMIN_STOCK_ITEM_URL = "admin/stock/item";
 
+    //新版库存-规格管理
+    public static final String ADMIN_STOCK_SPECIFICATIONS_URL="admin/stock/specifications";
+
 
 
     /**********************顾客点菜平台*************************/
