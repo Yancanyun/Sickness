@@ -45,5 +45,8 @@ public class StockItemServiceTest extends AbstractTestCase{
         System.out.println(xixi);
     }
 
+    @Test
+    public void stringToList() throws SSException{
 
+    }
 }
