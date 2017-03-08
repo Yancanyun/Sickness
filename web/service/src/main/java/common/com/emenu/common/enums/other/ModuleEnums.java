@@ -310,6 +310,7 @@ public enum ModuleEnums {
     AdminStockItemList("Admin:Stock:Item:List"),
     AdminStockItemNew("Admin:Stock:Item:New"),
 
+    //规格管理
 
 
 
