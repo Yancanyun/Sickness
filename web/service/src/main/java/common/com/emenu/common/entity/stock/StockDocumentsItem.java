@@ -43,6 +43,10 @@ public class StockDocumentsItem extends AbstractEntity{
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
+    //成本价=单价*数量
+    @Column(name = "price")
+    private BigDecimal price;
+
     //创建时间
     @Column(name = "created_time")
     private Date createdTime;
@@ -114,5 +118,17 @@ public class StockDocumentsItem extends AbstractEntity{
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public void setSpecificationId(Integer specificationId) {
+        this.specificationId = specificationId;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

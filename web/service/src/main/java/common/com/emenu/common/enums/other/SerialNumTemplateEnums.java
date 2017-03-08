@@ -14,7 +14,8 @@ import com.emenu.common.entity.storage.StorageItem;
 public enum SerialNumTemplateEnums {
 
     StockInSerialNum("入库单流水号", "RKD-|yyyyMMdd|####"),
-    StockOutSerialNum("出库单流水号", "CKD-|yyyyMMdd|####"),
+    StockOutSerialNum("领用单流水号", "LYD-|yyyyMMdd|####"),
+    StockBackSerialNum("回库单流水号", "HKD-|yyyyMMdd|####"),
     IncomeOnSerialNum("盘盈单流水号", "PYD-|yyyyMMdd|####"),
     LossOnSerialNum("盘亏单流水号", "PKD-|yyyyMMdd|####"),
     SettlementSerialNum("结算表流水号", "JSD-|yyyyMMdd|####"),
