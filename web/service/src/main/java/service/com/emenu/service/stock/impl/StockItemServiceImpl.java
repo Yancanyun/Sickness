@@ -97,7 +97,19 @@ public class StockItemServiceImpl implements StockItemService {
     public List<Integer> stringTolist(String string) throws SSException{
         List<Integer> list = new ArrayList<Integer>();
         try{
-
+            int num = 0;
+            for(int i=0;i<string.length();i++) {
+                char a = string.charAt(i);
+                if(a!=','){
+                    num = num * 10 +  a - '0';
+                }else{
+                    list.add(num);
+                    num = 0;
+                }
+                if(i==string.length()-1){
+                    list.add(num);
+                }
+            }
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(PartyException.SystemException, e);

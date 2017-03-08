@@ -47,6 +47,10 @@ public class StockItemServiceTest extends AbstractTestCase{
 
     @Test
     public void stringToList() throws SSException{
-
+        List<Integer> list = new ArrayList<Integer>();
+        String string = new String();
+        string = "5,6,78,110,12";
+        list = stockItemService.stringTolist(string);
+        System.out.println("xixi");
     }
 }
