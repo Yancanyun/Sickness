@@ -693,6 +693,27 @@ public enum EmenuException implements IBizExceptionMes {
     QueryStockItemByIdFailed("根据Id查找库存物品失败", 110001),
     UpdateStockItemFailed("修改库存物品失败", 110002),
 
+    //新版库存-厨房管理
+    ListKitchenFailed("查看厨房列表失败",10401),
+    AddKitchenFailed("添加厨房失败",10402),
+    UpdateKitchenFailed("修改厨房失败",10403),
+    DeleteKitchenFailed("删除厨房失败",10404),
+    QueryKitchenDetailsFailed("查看厨房明细失败",10405),
+
+    //新版库存-单据管理
+    InsertDocumentsFail("添加单据失败",110010),
+    NewSerialNumberFail("生成单据编号失败",110011),
+    DocumentsIsNotNull("单据不能为空",110012),
+    DocumentsItemIsNotNull("单据详情不能为空",110013),
+    DocumentsHandlerPartyId("操作人id不能为空或者小于0",110014),
+    KitchenIdError("存储点ID为空或者小于0",110015),
+    DocumentsStatusError("状态不能为空或小于0",110016),
+    DocumentsMoneyError("单据金额不能为空或小于0",110017),
+    DocumentsTypeError("类型不能为空或小于0",110018),
+    DocumentsItemListIsNotNull("单据详情list不能为空",110019),
+    DocumentsCreatedPartyIdError("经办人id不能为空或者小于零",110020),
+
+
 
     /****************************后厨管理端****************************/
 
