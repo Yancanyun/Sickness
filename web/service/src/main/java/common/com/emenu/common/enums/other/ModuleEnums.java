@@ -311,8 +311,10 @@ public enum ModuleEnums {
     AdminStockItemNew("Admin:Stock:Item:New"),
 
     //规格管理
-
-
+    AdminStockSpecifications("Admin:Stock:Specifications"),
+    AdminStockSpecificationsList("Admin:Stock:Specifications:List"),
+    AdminStockSpecificationsAdd("Admin:Stock:Specifications:Add"),
+    AdminStockSpecificationsEdit("Admin:Stock:Specifications:Edit"),
 
 
     // 顾客点餐平台
