@@ -53,4 +53,10 @@ public class StockItemServiceTest extends AbstractTestCase{
         list = stockItemService.stringTolist(string);
         System.out.println("xixi");
     }
+
+    @Test
+    public void queryById() throws SSException{
+        StockItem stockItem = stockItemService.queryById(5);
+        System.out.println("111");
+    }
 }

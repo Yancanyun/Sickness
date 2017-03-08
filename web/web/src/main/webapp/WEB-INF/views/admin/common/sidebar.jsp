@@ -373,6 +373,16 @@
         </li>
     </shiro:checkPermission>
 
+    <shiro:checkPermission name="Admin:Stock">
+        <li id="firstMenu6.5" class="active hidden">
+            <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理2.0</span><i
+                    class="fa fa-angle-right angle-right"></i></a>
+            <ul>
+
+            </ul>
+        </li>
+    </shiro:checkPermission>
+
     <shiro:checkPermission name = "Admin:Revenue:Count">
     <li id="firstMenu7" class="active hidden">
         <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">营收统计</span><i

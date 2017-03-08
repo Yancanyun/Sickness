@@ -88,6 +88,16 @@
         </li>
         </shiro:checkPermission>
 
+        <shiro:checkPermission name="Admin:Stock">
+            <li <c:if test="${PWModule eq 'Admin:Stock'}">class="active"</c:if> >
+                <a class="menu-list J_layer_1_menu" data-menu-id="6.5" href="javascript:;">库存管理2.0</a>
+                <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
+                    <li><a class="J_menu" href="${website}admin/stock/item">库存物品管理</a></li>
+                    <li><a class="J_menu" href="#">规格管理</a></li>
+                </ul>
+            </li>
+        </shiro:checkPermission>
+
         <shiro:checkPermission name = "Admin:Revenue:Count">
         <li <c:if test = "${PWModule eq 'Admin:Revenue:Count'}">class = "active"</c:if>>
             <a class="menu-list J_layer_1_menu" data-menu-id="7" href="javascript:;">营收统计</a>
@@ -126,6 +136,7 @@
             </ul>
         </li>
         </shiro:checkPermission>
+
     </ul>
     <ul class="nav navbar-nav hello-administrator pull-right">
         <li>

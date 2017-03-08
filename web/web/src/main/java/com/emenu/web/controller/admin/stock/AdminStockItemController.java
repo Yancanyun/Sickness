@@ -18,4 +18,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Module(ModuleEnums.AdminStock)
 @RequestMapping(value = URLConstants.ADMIN_STOCK_ITEM_URL)
 public class AdminStockItemController extends AbstractController{
+
 }

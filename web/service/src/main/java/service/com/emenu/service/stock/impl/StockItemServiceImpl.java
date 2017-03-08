@@ -116,4 +116,26 @@ public class StockItemServiceImpl implements StockItemService {
         }
         return list;
     }
+
+    @Override
+    public StockItem queryById(int id) throws SSException{
+        StockItem stockItem = new StockItem();
+        try{
+            stockItem = commonDao.queryById(stockItem.getClass(),id);
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryStockItemByIdFailed, e);
+        }
+        return stockItem;
+    }
+
+    @Override
+    public void updateStockItem(StockItem stockItem) throws SSException{
+        try{
+            commonDao.update(stockItem);
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStockItemFailed, e);
+        }
+    }
 }

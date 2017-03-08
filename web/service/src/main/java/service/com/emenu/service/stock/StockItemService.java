@@ -50,4 +50,22 @@ public interface StockItemService {
      * @throws SSException
      */
     public List<Integer> stringTolist(String string) throws SSException;
+
+    /**
+     * 根据Id返回实体
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StockItem queryById(int id) throws SSException;
+
+    /**
+     * 修改stockItem
+     *
+     * @param stockItem
+     * @return
+     * @throws SSException
+     */
+    public void updateStockItem(StockItem stockItem) throws SSException;
 }
