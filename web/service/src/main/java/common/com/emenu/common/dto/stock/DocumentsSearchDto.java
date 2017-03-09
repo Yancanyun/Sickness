@@ -44,6 +44,17 @@ public class DocumentsSearchDto {
     // 单据类型：1-入库单、2-领用单、3-回库单、4-盘盈单、5-盘亏单
     private Integer type;
 
+    // 存放点
+    private Integer kitchenId;
+
+    public Integer getKitchenId() {
+        return kitchenId;
+    }
+
+    public void setKitchenId(Integer kitchenId) {
+        this.kitchenId = kitchenId;
+    }
+
     public Date getStartTime() {
         return startTime;
     }
