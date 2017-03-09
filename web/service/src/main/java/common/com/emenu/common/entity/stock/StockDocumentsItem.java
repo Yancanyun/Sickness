@@ -39,6 +39,18 @@ public class StockDocumentsItem extends AbstractEntity{
     @Column(name = "quantity")
     private BigDecimal quantity;
 
+    //单位Id
+    @Column(name = "unit_id")
+    private Integer unitId;
+
+    public Integer getUnitId() {
+        return unitId;
+    }
+
+    public void setUnitId(Integer unitId) {
+        this.unitId = unitId;
+    }
+
     //单价
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
