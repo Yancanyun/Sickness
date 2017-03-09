@@ -48,6 +48,10 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      */
     @Override
     public void addStockKitchen(StockKitchen stockKitchen)throws SSException{
+        //检查存放点名称是否已存在
+        if(checkNameIsExist(stockKitchen.getName())) {
+            throw SSException.get(EmenuException.KitchenNameIsExist);
+        }
         try{
             stockKitchenMapper.addStockKitchen(stockKitchen);
         }catch (SSException e){
@@ -64,6 +68,10 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      */
     @Override
     public void updateStockKitchen(int id,StockKitchen stockKitchen)throws SSException{
+        //检查厨房名称是否和其他厨房名称冲突
+        if(checkNameIsExist(stockKitchen.getName())) {
+            throw SSException.get(EmenuException.KitchenNameIsExist);
+        }
         try{
             stockKitchenMapper.updateStockKitchen(id,stockKitchen);
         }catch (SSException e){
@@ -73,7 +81,7 @@ public class StockKitchenServiceImpl implements StockKitchenService{
     }
 
     /**
-     * 删除厨房（将厨房设为停用）
+     * 将厨房设为停用或重新启用厨房
      *
      * @param id
      * @throws SSException
@@ -97,7 +105,7 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      */
     @Override
     public StockKitchen queryStockKitchenDetails(int id)throws SSException{
-        StockKitchen stockKitchen = new StockKitchen();
+        StockKitchen stockKitchen ;
         try{
             stockKitchen = stockKitchenMapper.queryStockKitchenDetails(id);
         }catch (SSException e){
@@ -105,5 +113,24 @@ public class StockKitchenServiceImpl implements StockKitchenService{
             throw SSException.get(EmenuException.QueryKitchenDetailsFailed);
         }
         return stockKitchen;
+    }
+
+    /**
+     * 检查厨房名称是否已存在
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public Boolean checkNameIsExist(String name)throws SSException{
+        int count = 0;
+        try{
+            count = stockKitchenMapper.checkNameIsExist(name);
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckKitchenNameFailed);
+        }
+        return count == 0 ? false : true;
     }
 }

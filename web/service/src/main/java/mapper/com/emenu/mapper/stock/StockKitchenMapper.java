@@ -54,4 +54,13 @@ public interface StockKitchenMapper {
      * @throws SSException
      */
     public StockKitchen queryStockKitchenDetails(@Param("id") int id)throws SSException;
+
+    /**
+     * 检查厨房名称是否已存在
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public Integer checkNameIsExist(@Param("name") String name)throws SSException;
 }

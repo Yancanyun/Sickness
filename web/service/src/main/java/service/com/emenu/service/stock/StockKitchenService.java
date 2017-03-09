@@ -51,4 +51,13 @@ public interface StockKitchenService {
      * @throws SSException
      */
     public StockKitchen queryStockKitchenDetails(int id)throws SSException;
+
+    /**
+     * 检查厨房名称是否存在
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
+    public Boolean checkNameIsExist(String name)throws SSException;
 }

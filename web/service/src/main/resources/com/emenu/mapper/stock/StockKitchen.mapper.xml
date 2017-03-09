@@ -46,4 +46,10 @@
         FROM t_stock_kitchen
         WHERE id = #{id}
     </select>
+
+    <select id="checkNameIsExist" resultType="int">
+        SELECT count(1)
+        FROM t_stock_kitchen
+        WHERE name = #{name}
+    </select>
 </mapper>

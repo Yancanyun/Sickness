@@ -74,4 +74,14 @@ public class StockKitchenTest extends AbstractTestCase {
             throw new Exception(e.getMessage());
         }
     }
+    @Test
+    public void checkNameIsExist()throws Exception{
+        Boolean n ;
+        try{
+           n =stockKitchenService.checkNameIsExist("山哥的厨房");
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+        System.out.println("山哥的厨房存在是"+ n);
+    }
 }
