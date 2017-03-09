@@ -2,10 +2,7 @@ package com.emenu.common.entity.stock;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -35,6 +32,10 @@ public class StockDocuments extends AbstractEntity {
     @Column(name = "kitchen_id")
     private Integer kitchenId;
 
+    //厨房名称
+    @Transient
+    private String kichenName;
+
     //单据备注
     @Column(name = "comment")
     private String comment;
@@ -43,13 +44,24 @@ public class StockDocuments extends AbstractEntity {
     @Column(name = "created_party_id")
     private Integer createdPartyId;
 
+    //当事人姓名
+    @Transient
+    private String createdName;
+
     //经手人Id
     @Column(name = "handler_party_id")
     private Integer handlerPartyId;
 
+    //经手人姓名
+    private String handlerName;
+
     //审核人Id
     @Column(name = "audit_party_id")
     private Integer auditPartyId;
+
+    //审核人姓名
+    @Transient
+    private String auditName;
 
     //金额
     @Column(name = "money")
@@ -79,7 +91,9 @@ public class StockDocuments extends AbstractEntity {
         return id;
     }
 
+
     @Override
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -186,5 +200,37 @@ public class StockDocuments extends AbstractEntity {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    public String getKichenName() {
+        return kichenName;
+    }
+
+    public void setKichenName(String kichenName) {
+        this.kichenName = kichenName;
+    }
+
+    public String getCreatedName() {
+        return createdName;
+    }
+
+    public void setCreatedName(String createdName) {
+        this.createdName = createdName;
+    }
+
+    public String getHandlerName() {
+        return handlerName;
+    }
+
+    public void setHandlerName(String handlerName) {
+        this.handlerName = handlerName;
+    }
+
+    public String getAuditName() {
+        return auditName;
+    }
+
+    public void setAuditName(String auditName) {
+        this.auditName = auditName;
     }
 }

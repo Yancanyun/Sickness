@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.stock.StockDocumentsMapper">
+
+    <select id="listAll" resultMap="pw.StockDocuments">
+        SELECT `id` AS id,
+        `supplier_id` AS supplierId,
+        `kitchen_id` AS kitchenId,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `created_party_id` AS createdPartyId,
+        `handler_party_id` AS handlerPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settled` AS isSettled,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_stock_documents` ORDER BY `created_time` DESC
+    </select>
+    <select id="queryById" resultMap="pw.StockDocuments" >
+        SELECT `id` AS id,
+        `supplier_id` AS supplierId,
+        `kitchen_id` AS kitchenId,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `created_party_id` AS createdPartyId,
+        `handler_party_id` AS handlerPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settled` AS isSettled,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_stock_documents` WHERE id = #{id}
+    </select>
+</mapper>

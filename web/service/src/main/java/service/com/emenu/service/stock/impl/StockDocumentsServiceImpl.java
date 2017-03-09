@@ -1,13 +1,16 @@
 package com.emenu.service.stock.impl;
 
 import com.emenu.common.dto.stock.DocumentsDto;
+import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.stock.StockDocuments;
 import com.emenu.common.entity.stock.StockDocumentsItem;
 import com.emenu.common.entity.stock.StockItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.mapper.stock.StockDocumentsMapper;
 import com.emenu.service.other.SerialNumService;
+import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.stock.StockDocumentsItemService;
 import com.emenu.service.stock.StockDocumentsService;
 import com.emenu.service.stock.StockItemService;
@@ -22,6 +25,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * StockDocumentsServiceImpl
@@ -45,6 +50,12 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
 
     @Autowired
     private StockItemService stockItemService;
+
+    @Autowired
+    private StockDocumentsMapper stockDocumentsMapper;
+
+    @Autowired
+    private EmployeeService employeeService;
 
 
     /**
@@ -191,4 +202,56 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         return true;
     }
 
+    /**************************************by chenwenyan ***************************************/
+    /**
+     *获取单据list
+     *
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public List<StockDocuments> listAll() throws SSException{
+        List<StockDocuments> documentsList = Collections.emptyList();
+        try{
+            documentsList = stockDocumentsMapper.listAll();
+            //设置经手人、操作人、审核人名字
+            for(StockDocuments stockDocuments : documentsList){
+                setStockDOcumentsRelatedName(stockDocuments);
+            }
+            return documentsList;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListDocumentsFail, e);
+        }
+    }
+
+    /******************************** 私有方法 ********************************************/
+
+    /**
+     * 设置经手人、操作人、审核人名字
+     *
+     * @param stockDocuments
+     * @throws SSException
+     */
+    private void setStockDOcumentsRelatedName(StockDocuments stockDocuments) throws SSException{
+        // 设置经手人、操作人、审核人名字
+        Employee createdEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getCreatedPartyId());
+        if (Assert.isNull(createdEmployee)){
+            throw SSException.get(EmenuException.SystemException);
+        }
+        stockDocuments.setCreatedName(createdEmployee.getName());
+
+        Employee auditEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getAuditPartyId());
+        if (Assert.isNull(auditEmployee)){
+            stockDocuments.setAuditName("");
+        } else {
+            stockDocuments.setAuditName(auditEmployee.getName());
+        }
+        Employee handlerEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getHandlerPartyId());
+        if (Assert.isNull(handlerEmployee)){
+            throw SSException.get(EmenuException.SystemException);
+        } else {
+            stockDocuments.setHandlerName(handlerEmployee.getName());
+        }
+    }
 }

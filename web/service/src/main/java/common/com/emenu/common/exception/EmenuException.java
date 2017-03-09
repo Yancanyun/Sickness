@@ -712,6 +712,7 @@ public enum EmenuException implements IBizExceptionMes {
     DocumentsTypeError("类型不能为空或小于0",110018),
     DocumentsItemListIsNotNull("单据详情list不能为空",110019),
     DocumentsCreatedPartyIdError("经办人id不能为空或者小于零",110020),
+    ListDocumentsFail("加载单据信息失败",110021),
 
 
 
