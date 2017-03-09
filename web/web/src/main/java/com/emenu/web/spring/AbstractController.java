@@ -37,7 +37,7 @@ import com.emenu.service.call.CallWaiterService;
 import com.emenu.service.revenue.BillAuditService;
 import com.emenu.service.revenue.BackDishCountService;
 import com.emenu.service.sms.SmsService;
-import com.emenu.service.stock.StockKitchenService;
+import com.emenu.service.stock.SpecificationsService;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
@@ -583,12 +583,11 @@ public class AbstractController extends Base {
     protected static BarContrastService barContrastService;
 
 
-    /**************************新版库存**************************/
-
-    //厨房管理
+    /****************新版库存*************************/
+    //规格管理
     @StaticAutoWire
-    @Qualifier("stockKitchenService")
-    protected static StockKitchenService stockKitchenService;
+    @Qualifier("specificationsService")
+    protected static SpecificationsService specificationsService;
 }
 
 

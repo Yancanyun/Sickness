@@ -2,6 +2,7 @@ package com.emenu.service.stock;
 
 
 import com.emenu.common.entity.stock.Specifications;
+import com.pandawork.core.common.exception.SSException;
 
 import java.util.List;
 
@@ -12,39 +13,44 @@ public interface SpecificationsService {
 
     /**
      * 增加一条规格信息
+     *
      * @param specifications
-     * @throws Exception
+     * @throws SSException
      */
-    public void add(Specifications specifications) throws Exception;
+    public void add(Specifications specifications) throws SSException;
 
     /**
      * 根据id删除一条规格信息
+     *
      * @param id
-     * @throws Exception
+     * @throws SSException
      */
-    public void deleteById(int id) throws Exception;
+    public void deleteById(int id) throws SSException;
 
     /**
      * 根据id更改规格信息
+     *
      * @param id
      * @param specifications
-     * @throws Exception
+     * @throws SSException
      */
-    public void update(Integer id, Specifications specifications) throws Exception;
+    public void update(Integer id, Specifications specifications) throws SSException;
 
     /**
      * 根据id查询规格信息
+     *
      * @param id
      * @return
-     * @throws Exception
+     * @throws SSException
      */
-    public Specifications queryById(int id) throws Exception;
+    public Specifications queryById(int id) throws SSException;
 
     /**
      * 显示所有规格信息
+     *
      * @return
-     * @throws Exception
+     * @throws SSException
      */
-    public List<Specifications> listAll()throws Exception;
+    public List<Specifications> listAll() throws SSException;
 
 }

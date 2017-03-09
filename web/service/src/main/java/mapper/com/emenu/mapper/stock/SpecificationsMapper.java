@@ -1,6 +1,7 @@
 package com.emenu.mapper.stock;
 
 import com.emenu.common.entity.stock.Specifications;
+import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,39 +14,41 @@ public interface SpecificationsMapper {
      * 增加一条规格信息
      *
      * @param specifications
-     * @throws Exception
+     * @throws SSException
      */
-    public void add(@Param("spec") Specifications specifications) throws Exception;
+    public void add(@Param("spec") Specifications specifications) throws SSException;
 
     /**
      * 根据id删除一条规格信息
      *
      * @param id
-     * @throws Exception
+     * @throws SSException
      */
-    public void deleteById(@Param("id") int id) throws Exception;
+    public void deleteById(@Param("id") int id) throws SSException;
 
     /**
      * 更改一条规格信息
+     *
      * @param id
      * @param specifications
-     * @throws Exception
+     * @throws SSException
      */
-    public void update(@Param("id") Integer id, @Param("spec") Specifications specifications) throws Exception;
+    public void update(@Param("id") Integer id, @Param("spec") Specifications specifications) throws SSException;
 
     /**
      * 根据id查询一条规格信息
      *
      * @param id
      * @return
-     * @throws Exception
+     * @throws SSException
      */
-    public Specifications queryById(@Param("id") int id) throws Exception;
+    public Specifications queryById(@Param("id") int id) throws SSException;
 
     /**
      * 显示所有规格信息
+     *
      * @return
-     * @throws Exception
+     * @throws SSException
      */
-    public List<Specifications> listAll() throws Exception;
+    public List<Specifications> listAll() throws SSException;
 }

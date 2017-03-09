@@ -1,14 +1,20 @@
 package com.emenu.common.entity.stock;
 
+import com.pandawork.core.common.entity.AbstractEntity;
+
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * Created by apple on 17/2/27.
  */
-public class Specifications {
+@Entity
+@Table(name = "t_stock_specification")
+public class Specifications extends AbstractEntity{
 
     @Id
     private Integer id;

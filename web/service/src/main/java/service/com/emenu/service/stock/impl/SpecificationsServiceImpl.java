@@ -1,73 +1,98 @@
 package com.emenu.service.stock.impl;
 
 import com.emenu.common.entity.stock.Specifications;
+import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.stock.SpecificationsMapper;
 import com.emenu.service.stock.SpecificationsService;
+import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by apple on 17/2/27.
  */
-@Service("SpecificationsService")
+@Service("specificationsService")
 public class SpecificationsServiceImpl implements SpecificationsService {
 
     @Autowired
     private SpecificationsMapper specificationsMapper;
 
+    @Qualifier("commonDao")
+    private CommonDao commonDao;
+
     @Override
-    public void add(Specifications specifications) throws Exception {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void add(Specifications specifications) throws SSException {
         if (specifications == null) return;
 
         try {
-            specificationsMapper.add(specifications);
+            if (Assert.isNull(specifications)) {
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
+            commonDao.insert(specifications);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
     }
 
     @Override
-    public void deleteById(int id) throws Exception {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void deleteById(int id) throws SSException {
         if (id <= 0) return;
 
         try {
-            specificationsMapper.deleteById(id);
+            commonDao.deleteById(Specifications.class, id);
+
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
     }
 
     @Override
-    public void update(Integer id, Specifications specifications) throws Exception {
-        if (specifications == null) return;
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void update(Integer id, Specifications specifications) throws SSException {
         if (id <= 0) return;
 
         try {
+            if (Assert.isNull(specifications)) {
+                throw SSException.get(EmenuException.ReportIsNotNull);
+            }
             specificationsMapper.update(id, specifications);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
     }
 
     @Override
-    public Specifications queryById(int id) throws Exception {
+    public Specifications queryById(int id) throws SSException {
         if (id <= 0) return null;
 
         try {
-            return specificationsMapper.queryById(id);
+            return commonDao.queryById(Specifications.class, id);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
     }
 
     @Override
-    public List<Specifications> listAll() throws Exception {
+    public List<Specifications> listAll() throws SSException {
         try {
             return specificationsMapper.listAll();
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.InsertReportItemFail, e);
         }
     }
 }
