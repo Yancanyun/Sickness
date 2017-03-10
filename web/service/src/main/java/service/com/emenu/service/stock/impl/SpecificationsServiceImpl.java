@@ -31,16 +31,14 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void add(Specifications specifications) throws SSException {
-        if (specifications == null) return;
-
         try {
             if (Assert.isNull(specifications)) {
-                throw SSException.get(EmenuException.ReportIsNotNull);
+                throw SSException.get(EmenuException.SpecificationsIsNull);
             }
             commonDao.insert(specifications);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportItemFail, e);
+            throw SSException.get(EmenuException.AddSpecificationsFail, e);
         }
     }
 
@@ -54,7 +52,7 @@ public class SpecificationsServiceImpl implements SpecificationsService {
 
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportItemFail, e);
+            throw SSException.get(EmenuException.DeleteSpecificationsFail, e);
         }
     }
 
@@ -65,12 +63,12 @@ public class SpecificationsServiceImpl implements SpecificationsService {
 
         try {
             if (Assert.isNull(specifications)) {
-                throw SSException.get(EmenuException.ReportIsNotNull);
+                throw SSException.get(EmenuException.SpecificationsIsNull);
             }
             specificationsMapper.update(id, specifications);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportItemFail, e);
+            throw SSException.get(EmenuException.UpdateSpecificationsFail, e);
         }
     }
 
@@ -82,7 +80,7 @@ public class SpecificationsServiceImpl implements SpecificationsService {
             return commonDao.queryById(Specifications.class, id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportItemFail, e);
+            throw SSException.get(EmenuException.QuerySpecificationsByIdFail, e);
         }
     }
 
@@ -92,7 +90,7 @@ public class SpecificationsServiceImpl implements SpecificationsService {
             return specificationsMapper.listAll();
         } catch (Exception e) {
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.InsertReportItemFail, e);
+            throw SSException.get(EmenuException.ListAllSpecificationsFail, e);
         }
     }
 }

@@ -716,6 +716,14 @@ public enum EmenuException implements IBizExceptionMes {
     DocumentsCreatedPartyIdError("经办人id不能为空或者小于零",110020),
     ListDocumentsFail("加载单据信息失败",110021),
 
+    //新版库存-规格管理
+    AddSpecificationsFail("添加规格失败",111000),
+    DeleteSpecificationsFail("删除规格失败",111001),
+    UpdateSpecificationsFail("更新规格失败",111002),
+    QuerySpecificationsByIdFail("通过id查询规格失败",111003),
+    SpecificationsIsNull("规格为空",111004),
+    ListAllSpecificationsFail("列举所有规格失败",111005),
+
 
 
     /****************************后厨管理端****************************/
