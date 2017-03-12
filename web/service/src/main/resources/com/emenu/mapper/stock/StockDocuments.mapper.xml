@@ -21,6 +21,69 @@
         `last_modified_time` AS lastModifiedTime
         FROM `t_stock_documents` ORDER BY `created_time` DESC
     </select>
+
+    <select id="listDocumentsBySearchDto" resultMap="pw.StockDocuments" >
+        SELECT `id` AS id,
+        `supplier_id` AS supplierId,
+        `kitchen_id` AS kitchenId,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `created_party_id` AS createdPartyId,
+        `handler_party_id` AS handlerPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settled` AS isSettled,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM `t_stock_documents` AS document
+        <where>
+            <if test="documentsSearchDto != null">
+                <if test="documentsSearchDto.startTime != null">
+                    document.`created_time` &gt;= #{documentsSearchDto.startTime}
+                </if>
+                <if test="documentsSearchDto.endTime != null">
+                    AND document.`last_modified_time` &lt;= #{documentsSearchDto.endTime}
+                </if>
+                <if test="documentsSearchDto.createdPartyId != null and documentsSearchDto.createdPartyId >= 0">
+                    AND document.`created_party_id` = #{documentsSearchDto.createdPartyId}
+                </if>
+                <if test="documentsSearchDto.handlerPartyId != null and documentsSearchDto.handlerPartyId >= 0">
+                    AND document.`handler_party_id` = #{documentsSearchDto.handlerPartyId}
+                </if>
+                <if test="documentsSearchDto.auditPartyId != null and documentsSearchDto.auditPartyId >= 0">
+                    AND document.`audit_party_id` = #{documentsSearchDto.auditPartyId}
+                </if>
+                <if test="documentsSearchDto.kitchenId != null and documentsSearchDto.kitchenId >= 0">
+                    AND document.`kitchen_id` = #{documentsSearchDto.kitchenId}
+                </if>
+                <if test="documentsSearchDto.isSettled != null and documentsSearchDto.isSettled >= 0">
+                    AND document.`is_settled` = #{documentsSearchDto.isSettled}
+                </if>
+                <if test="documentsSearchDto.isAudited != null and documentsSearchDto.isAudited >= 0">
+                    AND document.`is_audited` = #{documentsSearchDto.isAudited}
+                </if>
+                <if test="documentsSearchDto.type != null and documentsSearchDto.type >= 0">
+                    AND document.`type` = #{documentsSearchDto.type}
+                </if>
+                ORDER BY `created_time` DESC
+                <if test="documentsSearchDto != null
+                      and documentsSearchDto.offset != null
+                      and documentsSearchDto.offset >= 0
+                      and documentsSearchDto.pageSize != null
+                      and documentsSearchDto.pageSize >= 0">
+                    LIMIT #{documentsSearchDto.offset},#{documentsSearchDto.pageSize}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <delete id="delById" >
+        DELETE FROM t_stock_documents
+        WHERE id = #{id}
+    </delete>
+
     <select id="queryById" resultMap="pw.StockDocuments" >
         SELECT `id` AS id,
         `supplier_id` AS supplierId,

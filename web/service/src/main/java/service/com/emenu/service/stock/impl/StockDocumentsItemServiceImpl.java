@@ -2,6 +2,7 @@ package com.emenu.service.stock.impl;
 
 import com.emenu.common.entity.stock.StockDocumentsItem;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.mapper.stock.StockDocumentsItemMapper;
 import com.emenu.service.stock.StockDocumentsItemService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * StockDocumentsItemServiceImpl
@@ -26,6 +30,9 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
     @Autowired
     @Qualifier("commonDao")
     private CommonDao commonDao;
+
+    @Autowired
+    private StockDocumentsItemMapper stockDocumentsItemMapper;
 
     /**
      * 添加单据明细
@@ -72,5 +79,48 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
             Assert.lessOrEqualZero(stockDocumentsItem.getDocumentsId(),EmenuException.ReportIdError);
         }
         return true;
+    }
+
+    /**
+     * 根据单据id删除单据详情
+     *
+     * @param documentsId
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public boolean delByDocumentsId(int documentsId) throws SSException{
+        try{
+            if(Assert.lessOrEqualZero(documentsId)){
+                throw SSException.get(EmenuException.DocumentsIdError);
+            }
+            stockDocumentsItemMapper.delByDocumentsId(documentsId);
+            return true;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelStockDocumentsItemFailed, e);
+        }
+    }
+
+    /**
+     * 根据单据id获取该单据下的所有物品详情
+     *
+     * @param documentsId
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public List<StockDocumentsItem> queryByDocumentsId(int documentsId) throws SSException{
+        List<StockDocumentsItem> stockDocumentsItems = new ArrayList<StockDocumentsItem>();
+        try{
+            if(Assert.lessOrEqualZero(documentsId)){
+                throw SSException.get(EmenuException.DocumentsIdError);
+            }
+            stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(documentsId);
+            return stockDocumentsItems;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw  SSException.get(EmenuException.QueryDocumentsItemByDocumentsIdError,e);
+        }
     }
 }

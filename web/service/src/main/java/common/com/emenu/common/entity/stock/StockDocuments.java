@@ -34,7 +34,7 @@ public class StockDocuments extends AbstractEntity {
 
     //厨房名称
     @Transient
-    private String kichenName;
+    private String kitchenName;
 
     //单据备注
     @Column(name = "comment")
@@ -202,12 +202,12 @@ public class StockDocuments extends AbstractEntity {
         this.lastModifiedTime = lastModifiedTime;
     }
 
-    public String getKichenName() {
-        return kichenName;
+    public String getKitchenName() {
+        return kitchenName;
     }
 
-    public void setKichenName(String kichenName) {
-        this.kichenName = kichenName;
+    public void setKitchenName(String kitchenName) {
+        this.kitchenName = kitchenName;
     }
 
     public String getCreatedName() {

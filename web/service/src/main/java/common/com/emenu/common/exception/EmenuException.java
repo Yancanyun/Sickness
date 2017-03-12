@@ -715,6 +715,13 @@ public enum EmenuException implements IBizExceptionMes {
     DocumentsItemListIsNotNull("单据详情list不能为空",110019),
     DocumentsCreatedPartyIdError("经办人id不能为空或者小于零",110020),
     ListDocumentsFail("加载单据信息失败",110021),
+    QueryDocumentsByDtoFail("根据条件dto查询单据信息失败",110022),
+    DocumentsIdError("单据Id不能为空或小于0",110023),
+    QueryDocumentsByIdFailed("根据ID查询单据信息失败",110024),
+    DelDocumentsByIdFailed("根据ID删除单据信息失败",110025),
+    DocumentsIsNotExist("单据不存在",110026),
+    DelStockDocumentsItemFailed("根据单据id删除单据详情失败",110027),
+    QueryDocumentsItemByDocumentsIdError("根据单据id获取该单据下的详情失败",110027),
 
     //新版库存-规格管理
     AddSpecificationsFail("添加规格失败",111000),

@@ -1,6 +1,7 @@
 package com.emenu.service.stock.impl;
 
 import com.emenu.common.dto.stock.DocumentsDto;
+import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.stock.Specifications;
 import com.emenu.common.entity.stock.StockDocuments;
@@ -225,24 +226,155 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
 
     /**************************************by chenwenyan ***************************************/
     /**
-     *获取单据list
+     * 获取单据list
      *
      * @return
      * @throws SSException
      */
     @Override
-    public List<StockDocuments> listAll() throws SSException{
+    public List<StockDocuments> listAll() throws SSException {
         List<StockDocuments> documentsList = Collections.emptyList();
-        try{
+        try {
             documentsList = stockDocumentsMapper.listAll();
             //设置经手人、操作人、审核人名字
-            for(StockDocuments stockDocuments : documentsList){
+            for (StockDocuments stockDocuments : documentsList) {
                 setStockDOcumentsRelatedName(stockDocuments);
             }
             return documentsList;
-        }catch (Exception e){
+        } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListDocumentsFail, e);
+        }
+    }
+
+    /**
+     * 根据查询条件获取单据
+     *
+     * @param documentsSearchDto
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public List<StockDocuments> listStockDocumentsBySearchDto(DocumentsSearchDto documentsSearchDto) throws SSException {
+
+        List<StockDocuments> documentsList = Collections.emptyList();
+
+        int pageNo = 0;
+        int offset = 0;
+
+        try {
+            if (Assert.isNotNull(documentsSearchDto.getPageNo())) {
+                pageNo = documentsSearchDto.getPageNo() <= 0 ? 0 : documentsSearchDto.getPageNo();
+            }
+            if (Assert.isNotNull(documentsSearchDto.getOffset())) {
+                offset = documentsSearchDto.getOffset() <= 0 ? 0 : documentsSearchDto.getOffset();
+            }
+            if (documentsSearchDto.getStartTime() != null) {
+                documentsSearchDto.getStartTime().setHours(0);
+                documentsSearchDto.getStartTime().setMinutes(0);
+                documentsSearchDto.getStartTime().setSeconds(0);
+            }
+            if (documentsSearchDto.getEndTime() != null) {
+                documentsSearchDto.getEndTime().setHours(23);
+                documentsSearchDto.getEndTime().setMinutes(59);
+                documentsSearchDto.getEndTime().setSeconds(59);
+            }
+            documentsList = stockDocumentsMapper.listDocumentsBySearchDto(documentsSearchDto);
+            //设置经手人、操作人、审核人名字
+            for (StockDocuments stockDocuments : documentsList) {
+                setStockDOcumentsRelatedName(stockDocuments);
+            }
+            return documentsList;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDocumentsByDtoFail, e);
+        }
+    }
+
+
+    @Override
+    public StockDocuments queryById(int id) throws SSException {
+        StockDocuments stockDocuments = new StockDocuments();
+        try {
+            if (Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.DocumentsIdError);
+            } else {
+                stockDocuments = commonDao.queryById(StockDocuments.class, id);
+                if (Assert.isNotNull(stockDocuments)) {
+                    setStockDOcumentsRelatedName(stockDocuments);
+                }
+                return stockDocuments;
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDocumentsByIdFailed, e);
+        }
+    }
+
+    @Override
+    public boolean delDocumentsDtoById(int id) throws SSException {
+        StockDocuments stockDocuments = new StockDocuments();
+        try {
+            stockDocuments = queryById(id);
+            if (Assert.isNull(stockDocuments)) {
+                throw SSException.get(EmenuException.DocumentsIsNotExist);
+            }
+            //已经审核，不能删除
+            if (stockDocuments.getIsAudited() == 1) {
+                return false;
+            }
+            List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemService.queryByDocumentsId(id);
+            if(Assert.isNotNull(stockDocumentsItems)){
+                for (StockDocumentsItem stockDocumentsItem : stockDocumentsItems) {
+                    StockItem stockItem = new StockItem();
+                    stockItem = commonDao.queryById(stockItem.getClass(),stockDocumentsItem.getItemId());
+                    BigDecimal currentQuatity = new BigDecimal(0.00);
+                    //入库单or出库单
+                    if(stockDocuments.getType() == StockDocumentsTypeEnum.StockInDocuments.getId() || stockDocuments.getType() == StockDocumentsTypeEnum.StockOutDocuments.getId()){
+                        //入库单
+                        if (stockDocuments.getType() == StockDocumentsTypeEnum.StockInDocuments.getId()) {
+                            //减去入库的item的数量
+                            currentQuatity = stockItem.getStorageQuantity().subtract(stockDocumentsItem.getQuantity());
+                        }
+                        //出库单
+                        if(stockDocuments.getType() == StockDocumentsTypeEnum.StockOutDocuments.getId()){
+                            //加上出库的item的数量
+                            currentQuatity = stockItem.getStorageQuantity().add(stockDocumentsItem.getQuantity());
+                        }
+                        //更新库存物品数量
+                        stockItem.setStorageQuantity(currentQuatity);
+                        stockItemService.updateStockItem(stockItem);
+                    }
+                    //盘盈/亏单
+                }
+                stockDocumentsItemService.delByDocumentsId(id);
+                delById(id);
+            }
+
+
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelDocumentsByIdFailed, e);
+        }
+        return true;
+    }
+
+    /**
+     * 根据Id删除单据信息
+     *
+     * @param id
+     * @throws SSException
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public boolean delById(int id) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(id)) {
+                throw SSException.get(EmenuException.DocumentsIdError);
+            }
+            stockDocumentsMapper.delById(id);
+            return true;
+        } catch (Exception e) {
+            throw SSException.get(EmenuException.DelDocumentsByIdFailed, e);
         }
     }
 
@@ -254,22 +386,22 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
      * @param stockDocuments
      * @throws SSException
      */
-    private void setStockDOcumentsRelatedName(StockDocuments stockDocuments) throws SSException{
+    private void setStockDOcumentsRelatedName(StockDocuments stockDocuments) throws SSException {
         // 设置经手人、操作人、审核人名字
         Employee createdEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getCreatedPartyId());
-        if (Assert.isNull(createdEmployee)){
+        if (Assert.isNull(createdEmployee)) {
             throw SSException.get(EmenuException.SystemException);
         }
         stockDocuments.setCreatedName(createdEmployee.getName());
 
         Employee auditEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getAuditPartyId());
-        if (Assert.isNull(auditEmployee)){
+        if (Assert.isNull(auditEmployee)) {
             stockDocuments.setAuditName("");
         } else {
             stockDocuments.setAuditName(auditEmployee.getName());
         }
         Employee handlerEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getHandlerPartyId());
-        if (Assert.isNull(handlerEmployee)){
+        if (Assert.isNull(handlerEmployee)) {
             throw SSException.get(EmenuException.SystemException);
         } else {
             stockDocuments.setHandlerName(handlerEmployee.getName());
