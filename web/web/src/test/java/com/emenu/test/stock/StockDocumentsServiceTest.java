@@ -6,7 +6,6 @@ import com.emenu.common.entity.stock.StockDocuments;
 import com.emenu.common.entity.stock.StockDocumentsItem;
 import com.emenu.service.stock.StockDocumentsService;
 import com.emenu.test.AbstractTestCase;
-import com.pandawork.core.common.exception.SSException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -103,8 +102,10 @@ public class StockDocumentsServiceTest extends AbstractTestCase{
 
     @Test
     public void delStockDocumentsById() throws Exception{
+        Boolean result;
         try{
-            stockDocumentsService.delDocumentsDtoById(1);
+            result = stockDocumentsService.delDocumentsDtoById(1);
+            System.out.println(result);
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }

@@ -324,39 +324,13 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             if (Assert.isNull(stockDocuments)) {
                 throw SSException.get(EmenuException.DocumentsIsNotExist);
             }
-            //已经审核，不能删除
-            if (stockDocuments.getIsAudited() == 1) {
+            //已审核，不能删除
+            if (stockDocuments.getIsAudited().equals(1)) {
                 return false;
             }
-            List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemService.queryByDocumentsId(id);
-            if(Assert.isNotNull(stockDocumentsItems)){
-                for (StockDocumentsItem stockDocumentsItem : stockDocumentsItems) {
-                    StockItem stockItem = new StockItem();
-                    stockItem = commonDao.queryById(stockItem.getClass(),stockDocumentsItem.getItemId());
-                    BigDecimal currentQuatity = new BigDecimal(0.00);
-                    //入库单or出库单
-                    if(stockDocuments.getType() == StockDocumentsTypeEnum.StockInDocuments.getId() || stockDocuments.getType() == StockDocumentsTypeEnum.StockOutDocuments.getId()){
-                        //入库单
-                        if (stockDocuments.getType() == StockDocumentsTypeEnum.StockInDocuments.getId()) {
-                            //减去入库的item的数量
-                            currentQuatity = stockItem.getStorageQuantity().subtract(stockDocumentsItem.getQuantity());
-                        }
-                        //出库单
-                        if(stockDocuments.getType() == StockDocumentsTypeEnum.StockOutDocuments.getId()){
-                            //加上出库的item的数量
-                            currentQuatity = stockItem.getStorageQuantity().add(stockDocumentsItem.getQuantity());
-                        }
-                        //更新库存物品数量
-                        stockItem.setStorageQuantity(currentQuatity);
-                        stockItemService.updateStockItem(stockItem);
-                    }
-                    //盘盈/亏单
-                }
-                stockDocumentsItemService.delByDocumentsId(id);
-                delById(id);
-            }
-
-
+            //未审核，删除单据以及单据详情
+            stockDocumentsItemService.delByDocumentsId(id);
+            delById(id);
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelDocumentsByIdFailed, e);
