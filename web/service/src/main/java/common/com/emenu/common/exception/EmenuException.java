@@ -731,6 +731,14 @@ public enum EmenuException implements IBizExceptionMes {
     SpecificationsIsNull("规格为空",111004),
     ListAllSpecificationsFail("列举所有规格失败",111005),
 
+    //新版库存-厨房物品列表管理
+    AddKitchenItemFail("厨房物品添加失败",112000),
+    DelKitchenItemFail("厨房物品删除失败",112001),
+    UpdateKitchenItemFail("厨房物品更新失败",112002),
+    QueryAllKitchenItemFail("查询所有厨房物品失败",112003),
+    QueryKitchenItemFail("查询某个厨房物品失败",112004),
+
+
 
 
     /****************************后厨管理端****************************/

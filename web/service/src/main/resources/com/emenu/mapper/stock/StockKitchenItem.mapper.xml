@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emenu.mapper.stock.StockKitchenItemMapper">
+    <insert id="newStockKitchenItem">
+        INSERT INTO
+        t_stock_kitchen_item(kitchen_id,item_number,item_id,assistant_code,specifications,storage_quantity,cost_card_unit_id,remark,status)
+        VALUES (stockKitchenItem.kitchenId,stockKitchenItem.itemNnumber,stockKitchenItem.itemId,stockKitchenItem.assistantCode,stockKitchenItem.specifications,stockKitchenItem.storageQuantity,stockKitchenItem.costCardUnitId,stockKitchenItem.remark,stockKitchenItem.status)
+    </insert>
+
+    <delete id="delStockKitchenItem">
+        DELETE
+        FROM t_stock_kitchen_item
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateStockKitchenItem">
+        UPDATE t_stock_kitchen_item
+        SET
+        kitchen_id = #{stockKitchenItem.kitchenId},
+        item_number = #{stockKitchenItem.itemNnumber},
+        item_id = #{stockKitchenItem.itemId},
+        assistant_code = #{stockKitchenItem.assistantCode},
+        specifications = #{stockKitchenItem.specifications},
+        storage_quantity = #{stockKitchenItem.storageQuantity},
+        cost_card_unit_id = #{stockKitchenItem.costCardUnitId},
+        remark = #{stockKitchenItem.remark},
+        status = #{stockKitchenItem.status}
+        WHERE id = #{stockKitchenItem.id}
+    </update>
+
+    <select id="queryAllItem" resultMap="pw.StockKitchenItem">
+        SELECT *
+        FROM t_stock_kitchen_item
+    </select>
+
+    <select id="queryById" resultMap="pw.StockKitchenItem">
+        SELECT *
+        FROM t_stock_kitchen_item
+        WHERE id = #{id}
+    </select>
+
+</mapper>
