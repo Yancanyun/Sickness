@@ -3,20 +3,14 @@ package com.emenu.service.stock.impl;
 import com.emenu.common.dto.stock.DocumentsDto;
 import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.party.group.employee.Employee;
-import com.emenu.common.entity.stock.Specifications;
-import com.emenu.common.entity.stock.StockDocuments;
-import com.emenu.common.entity.stock.StockDocumentsItem;
-import com.emenu.common.entity.stock.StockItem;
+import com.emenu.common.entity.stock.*;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.stock.StockDocumentsMapper;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.party.group.employee.EmployeeService;
-import com.emenu.service.stock.SpecificationsService;
-import com.emenu.service.stock.StockDocumentsItemService;
-import com.emenu.service.stock.StockDocumentsService;
-import com.emenu.service.stock.StockItemService;
+import com.emenu.service.stock.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
@@ -63,6 +57,9 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
     @Autowired
     private SpecificationsService specificationsService;
 
+    @Autowired
+    private StockItemDetailService stockItemDetailService;
+
 
     /**
      * 添加单据Dto
@@ -106,10 +103,10 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                 default: throw SSException.get(EmenuException.DocumentsTypeError);
             }
             documentsDto.getStockDocuments().setSerialNumber(serialNumber);
-            //计算入库单总计金额
+            //若为入库单则计算入库单总计金额
             if(documentsDto.getStockDocuments().getType()== StockDocumentsTypeEnum.StockInDocuments.getId()){
                 //单据明细判空
-                if(Assert.isNotNull(documentsDto.getStockDocumentsItemList())||Assert.lessOrEqualZero(documentsDto.getStockItemList().size())){
+                if(Assert.isNull(documentsDto.getStockDocumentsItemList())||Assert.lessOrEqualZero(documentsDto.getStockDocumentsItemList().size())){
                     throw SSException.get(EmenuException.DocumentsItemListIsNotNull);
                 }
                 //单据总计金额
@@ -130,7 +127,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                     stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
                     //根据入库信息修改库存物品
                     StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
-                    //入库物品增加数量
+                    //查询规格
                     Specifications specifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                     //通过规格转换为成本卡单位更新库存
                     if(stockDocumentsItem.getUnitId() == stockItem.getCostCardUnitId()){
@@ -148,6 +145,14 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                         stockItem.setStorageQuantity(itemQuantity);
                         stockItemService.updateStockItem(stockItem);
                     }
+                    //添加物品明细
+                    StockItemDetail stockItemDetail = new StockItemDetail();
+                    stockItemDetail.setItemId(stockDocumentsItem.getItemId());
+                    stockItemDetail.setKitchenId(documentsDto.getStockDocuments().getKitchenId());
+                    stockItemDetail.setSpecificationId(stockDocumentsItem.getSpecificationId());
+                    stockItemDetail.setQuantity(stockDocumentsItem.getQuantity());
+                    stockItemDetail.setUnitId(stockDocumentsItem.getUnitId());
+                    stockItemDetailService.newStockItemDetail(stockItemDetail);
                 }
             }
         } catch (Exception e) {
