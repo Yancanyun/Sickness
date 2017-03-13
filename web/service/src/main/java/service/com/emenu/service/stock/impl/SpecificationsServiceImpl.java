@@ -25,6 +25,7 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     @Autowired
     private SpecificationsMapper specificationsMapper;
 
+    @Autowired
     @Qualifier("commonDao")
     private CommonDao commonDao;
 

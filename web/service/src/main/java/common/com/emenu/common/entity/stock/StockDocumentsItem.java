@@ -96,10 +96,6 @@ public class StockDocumentsItem extends AbstractEntity{
         return specificationId;
     }
 
-    public void setSpectificationId(Integer specificationId) {
-        this.specificationId = specificationId;
-    }
-
     public BigDecimal getQuantity() {
         return quantity;
     }

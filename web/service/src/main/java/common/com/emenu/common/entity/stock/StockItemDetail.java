@@ -1,5 +1,7 @@
 package com.emenu.common.entity.stock;
 
+import com.pandawork.core.common.entity.AbstractEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +16,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "t_stock_item_detail")
-public class StockItemDetail {
+public class StockItemDetail extends AbstractEntity {
     @Id
     private Integer id;
 
