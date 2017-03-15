@@ -48,4 +48,12 @@ public interface StockKitchenItemMapper {
      * @throws SSException
      */
     public StockKitchenItem queryById(@Param("id") Integer id) throws SSException;
+
+    /**
+     * 根据item_id查询物品
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public StockKitchenItem queryByItemId(@Param("id") Integer id) throws SSException;
 }

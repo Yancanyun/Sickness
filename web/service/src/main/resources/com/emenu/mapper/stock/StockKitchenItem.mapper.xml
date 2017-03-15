@@ -41,4 +41,9 @@
         WHERE id = #{id}
     </select>
 
+    <select id="queryByItemId" resultMap="pw.StockKitchenItem">
+        SELECT *
+        FROM t_stock_kitchen_item
+        WHERE item_id = #{id}
+    </select>
 </mapper>

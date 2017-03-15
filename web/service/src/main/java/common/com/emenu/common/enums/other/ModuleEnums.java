@@ -320,6 +320,15 @@ public enum ModuleEnums {
     AdminStockSpecificationsAdd("Admin:Stock:Specifications:Add"),
     AdminStockSpecificationsEdit("Admin:Stock:Specifications:Edit"),
 
+    //新版库存单据管理
+    AdminStockDocuments("Admin:Stock:Documents"),
+    AdminStockDocumentsList("Admin:Stock:Documents:List"),
+    AdminStockDocumentsNew("Admin:Stock:Documents:New"),
+    AdminStockDocumentsUpdate("Admin:Stock:Documents:Update"),
+    AdminStockDocumentsDelete("Admin:Stock:Documents:Delete"),
+    AdminStockDocumentsSearch("Admin:Stock:Documents:Search"),
+    AdminStockDocumentsExport("Admin:Stock:Documents:Export"),
+
 
     // 顾客点餐平台
     Mobile("Mobile"),

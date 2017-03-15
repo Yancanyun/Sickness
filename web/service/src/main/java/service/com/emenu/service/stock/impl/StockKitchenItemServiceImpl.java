@@ -86,4 +86,16 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
         }
         return stockKitchenItem;
     }
+
+    @Override
+    public StockKitchenItem queryByItemId(Integer id) throws SSException{
+        StockKitchenItem  stockKitchenItem = new StockKitchenItem();
+        try{
+            stockKitchenItem = stockKitchenItemMapper.queryByItemId(id);
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryKitchenItemFail, e);
+        }
+        return stockKitchenItem;
+    }
 }

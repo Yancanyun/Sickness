@@ -54,6 +54,7 @@ public class Specifications extends AbstractEntity{
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
     }
@@ -74,6 +75,14 @@ public class Specifications extends AbstractEntity{
         this.storageUnitId = storageUnitId;
     }
 
+    public Integer getCostCardId() {
+        return costCardId;
+    }
+
+    public void setCostCardId(Integer costCardId) {
+        this.costCardId = costCardId;
+    }
+
     public BigDecimal getOrderToStorage() {
         return orderToStorage;
     }
@@ -88,14 +97,6 @@ public class Specifications extends AbstractEntity{
 
     public void setStorageToCost(BigDecimal storageToCost) {
         this.storageToCost = storageToCost;
-    }
-
-    public Integer getCostCardId() {
-        return costCardId;
-    }
-
-    public void setCostCardId(Integer costCardId) {
-        this.costCardId = costCardId;
     }
 
     public Integer getStatus() {

@@ -60,6 +60,9 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
     @Autowired
     private StockItemDetailService stockItemDetailService;
 
+    @Autowired
+    private StockKitchenItemService stockKitchenItemService;
+
 
     /**
      * 添加单据Dto
@@ -118,8 +121,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             }
             //添加到单据表返回实体
             StockDocuments stockDocuments = this.newDocuments(documentsDto.getStockDocuments());
-            //入库单
-            if(documentsDto.getStockDocuments().getType()== StockDocumentsTypeEnum.StockInDocuments.getId()){
+            if(stockDocuments.getType()== StockDocumentsTypeEnum.StockInDocuments.getId()){
+                //入库单
                 //设置单据明细表中的单据Id
                 for(StockDocumentsItem stockDocumentsItem:documentsDto.getStockDocumentsItemList()){
                     stockDocumentsItem.setDocumentsId(stockDocuments.getId());
@@ -130,21 +133,45 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                     //查询规格
                     Specifications specifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                     //通过规格转换为成本卡单位更新库存
-                    if(stockDocumentsItem.getUnitId() == stockItem.getCostCardUnitId()){
-                        BigDecimal itemQuantity = stockItem.getStorageQuantity().add(stockDocumentsItem.getQuantity());
-                        stockItem.setStorageQuantity(itemQuantity);
-                        stockItemService.updateStockItem(stockItem);
-                    }else if(stockDocumentsItem.getUnitId() == specifications.getOrderUnitId()){
-                        BigDecimal documentsItemQuantity = stockDocumentsItem.getQuantity().multiply(specifications.getOrderToStorage().multiply(specifications.getStorageToCost()));
-                        BigDecimal itemQuantity = stockItem.getStorageQuantity().add(documentsItemQuantity);
-                        stockItem.setStorageQuantity(itemQuantity);
-                        stockItemService.updateStockItem(stockItem);
-                    }else if(stockDocumentsItem.getUnitId() == specifications.getStorageUnitId()){
-                        BigDecimal documentsItemQuantity = stockDocumentsItem.getQuantity().multiply(specifications.getStorageToCost());
-                        BigDecimal itemQuantity = stockItem.getStorageQuantity().add(documentsItemQuantity);
-                        stockItem.setStorageQuantity(itemQuantity);
-                        stockItemService.updateStockItem(stockItem);
-                    }
+                    BigDecimal itemQuantity = stockItem.getStorageQuantity().add(toCostCardUnitQuantity(stockDocumentsItem,stockItem,specifications));
+                    //更新总库存
+                    stockItem.setStorageQuantity(itemQuantity);
+                    stockItem.setCostCardUnitId(specifications.getCostCardId());
+                    stockItemService.updateStockItem(stockItem);
+
+                    //添加物品明细
+                    StockItemDetail stockItemDetail = new StockItemDetail();
+                    stockItemDetail.setItemId(stockDocumentsItem.getItemId());
+                    stockItemDetail.setKitchenId(documentsDto.getStockDocuments().getKitchenId());
+                    stockItemDetail.setSpecificationId(stockDocumentsItem.getSpecificationId());
+                    stockItemDetail.setQuantity(stockDocumentsItem.getQuantity());
+                    stockItemDetail.setUnitId(stockDocumentsItem.getUnitId());
+                    stockItemDetailService.newStockItemDetail(stockItemDetail);
+                }
+            }else if(stockDocuments.getType() == StockDocumentsTypeEnum.StockOutDocuments.getId()){
+                //领用单
+                //设置单据明细表中的单据Id
+                for(StockDocumentsItem stockDocumentsItem:documentsDto.getStockDocumentsItemList()){
+                    stockDocumentsItem.setDocumentsId(stockDocuments.getId());
+                    //添加单据明细表
+                    stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
+                    //根据入库信息修改库存物品
+                    StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
+                    //查询规格
+                    Specifications specifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
+                    //通过规格转换为成本卡单位
+                    BigDecimal itemQuantity =  stockItem.getStorageQuantity().subtract(toCostCardUnitQuantity(stockDocumentsItem,stockItem,specifications));
+                    //更新总库存
+                    stockItem.setStorageQuantity(itemQuantity);
+                    stockItem.setCostCardUnitId(specifications.getCostCardId());
+                    stockItemService.updateStockItem(stockItem);
+                    //更新领用厨房库存
+//                    StockKitchenItem stockKitchenItem = stockKitchenItemService.queryByItemId(stockItem.getId());
+//                    if(stockKitchenItem.getStatus()!=3){
+//                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications()){
+//
+//                        }
+//                    }
                     //添加物品明细
                     StockItemDetail stockItemDetail = new StockItemDetail();
                     stockItemDetail.setItemId(stockDocumentsItem.getItemId());
@@ -161,7 +188,10 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         }
     }
 
+
+
     /**---------------------------------------------------私有方法---------------------------------------------------**/
+
     /**
      * 添加单据
      *
@@ -228,6 +258,27 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         Assert.isNotNull(stockDocuments.getMoney(), EmenuException.DocumentsMoneyError);
         return true;
     }
+
+    /**
+     * 将数量按照成本卡单位转化
+     * @param stockDocumentsItem
+     * @param stockItem
+     * @param specifications
+     * @return
+     * @throws SSException
+     */
+    private BigDecimal toCostCardUnitQuantity(StockDocumentsItem stockDocumentsItem,StockItem stockItem,Specifications specifications)throws SSException{
+        BigDecimal documentsItemQuantity = BigDecimal.ZERO;
+        if(stockDocumentsItem.getUnitId() == specifications.getCostCardId()){
+            documentsItemQuantity = stockItem.getStorageQuantity().subtract(stockDocumentsItem.getQuantity());
+        }else if(stockDocumentsItem.getUnitId() == specifications.getOrderUnitId()){
+            documentsItemQuantity = stockDocumentsItem.getQuantity().multiply(specifications.getOrderToStorage().multiply(specifications.getStorageToCost()));
+        }else if(stockDocumentsItem.getUnitId() == specifications.getStorageUnitId()){
+            documentsItemQuantity = stockDocumentsItem.getQuantity().multiply(specifications.getStorageToCost());
+        }
+        return documentsItemQuantity;
+    }
+
 
     /**************************************by chenwenyan ***************************************/
     /**
