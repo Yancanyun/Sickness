@@ -725,6 +725,7 @@ public enum EmenuException implements IBizExceptionMes {
     DocumentsIsNotExist("单据不存在",110026),
     DelStockDocumentsItemFailed("根据单据id删除单据详情失败",110027),
     QueryDocumentsItemByDocumentsIdError("根据单据id获取该单据下的详情失败",110027),
+    DocumentsIdOrStatusIdError("单据id或单据状态有误",110028),
 
     //新版库存-规格管理
     AddSpecificationsFail("添加规格失败",111000),

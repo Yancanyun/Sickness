@@ -60,8 +60,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
     @Autowired
     private StockItemDetailService stockItemDetailService;
 
-    @Autowired
-    private StockKitchenItemService stockKitchenItemService;
+//    @Autowired
+//    private StockKitchenItemService stockKitchenItemService;
 
 
     /**
@@ -186,6 +186,50 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertDocumentsFail, e);
         }
+    }
+
+    /**
+     * 修改单据审核状态
+     * @param documentsId
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public boolean updateIsAudited(int documentsId, int isAudited) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(documentsId) ||
+                    Assert.lessOrEqualZero(isAudited)){
+                throw SSException.get(EmenuException.DocumentsIdOrStatusIdError);
+            }
+            stockDocumentsMapper.updateIsAudited(documentsId,isAudited);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return true;
+    }
+
+    /**
+     * 修改单据结算状态
+     * @param documentsId
+     * @param isSettlemented
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public boolean updateIsSettled(int documentsId, int isSettled) throws SSException {
+        try {
+            if (Assert.lessOrEqualZero(documentsId) ||
+                    Assert.lessOrEqualZero(isSettled)){
+                throw SSException.get(EmenuException.DocumentsIdOrStatusIdError);
+            }
+            stockDocumentsMapper.updateIsSettled(documentsId,isSettled);
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.SystemException, e);
+        }
+        return true;
     }
 
 

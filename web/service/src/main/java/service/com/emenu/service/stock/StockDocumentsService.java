@@ -27,6 +27,26 @@ public interface StockDocumentsService {
      */
     public void newDocumentsDto(DocumentsDto documentsDto) throws SSException;
 
+    /**
+     * 更改单据结算状态
+     *
+     * @param documentsId
+     * @param isSettled
+     * @return
+     * @throws SSException
+     */
+    public boolean updateIsSettled(int documentsId, int isSettled) throws SSException;
+
+    /**
+     * 更改单据审核状态
+     *
+     * @param documentsId
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public boolean updateIsAudited(int documentsId, int isAudited) throws SSException;
+
 
 
     /*************************************** by chenwenyan  ************************************************/

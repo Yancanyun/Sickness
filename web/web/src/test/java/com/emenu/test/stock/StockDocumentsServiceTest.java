@@ -59,6 +59,15 @@ public class StockDocumentsServiceTest extends AbstractTestCase{
            throw new Exception(e.getMessage());
         }
     }
+    @Test
+    public void updateIsAudited()throws Exception{
+        try{
+            stockDocumentsService.updateIsAudited(4,1);
+            stockDocumentsService.updateIsSettled(4,1);
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
 
     @Test
     public void listAll() throws Exception {
@@ -94,7 +103,8 @@ public class StockDocumentsServiceTest extends AbstractTestCase{
     public void queryById() throws Exception{
         StockDocuments stockDocuments = new StockDocuments();
         try{
-            stockDocuments = stockDocumentsService.queryById(1);
+            stockDocuments = stockDocumentsService.queryById(4);
+            System.out.println(stockDocuments.getMoney());
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }

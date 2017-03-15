@@ -31,6 +31,7 @@ public class StockKitchenItem extends AbstractEntity{
     private String assistantCode;
 
     //规格
+    @Column(name = "specifications")
     private String specifications;
 
     //库存量
@@ -42,9 +43,11 @@ public class StockKitchenItem extends AbstractEntity{
     private Integer costCardUnitId;
 
     //备注
+    @Column(name = "remark")
     private String remark;
 
     //物品状态(1-正常使用,2-标缺，3-删除)
+    @Column(name = "status")
     private Integer status;
 
     //创建时间

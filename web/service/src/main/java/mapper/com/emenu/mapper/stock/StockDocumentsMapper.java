@@ -42,4 +42,21 @@ public interface StockDocumentsMapper {
      */
     public boolean delById(@Param("id") int id) throws SSException;
 
+    /**
+     * 修改单据审核状态
+     * @param documentsId
+     * @param isAudited
+     * @throws Exception
+     */
+    public void updateIsAudited(@Param("documentsId") int documentsId, @Param("isAudited") int isAudited) throws Exception;
+
+    /**
+     * 修改入库单据结算状态
+     * @param documentsId
+     * @param isSettled
+     * @return
+     * @throws Exception
+     */
+    public boolean updateIsSettled(@Param("documentsId") int documentsId, @Param("isSettled") int isSettled) throws Exception;
+
 }
