@@ -9,6 +9,7 @@ import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.framework.dao.CommonDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * @author yaojf
  * @date 2017/3/13 10:16
  */
+@Service("stockItemService")
 public class StockKitchenItemServiceImpl implements StockKitchenItemService{
     @Autowired
     private StockKitchenItemMapper stockKitchenItemMapper;

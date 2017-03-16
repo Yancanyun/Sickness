@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface StockDocumentsItemService{
 
+    /**
+     * 添加单据物品明细
+     * @param stockDocumentsItem
+     * @return
+     * @throws SSException
+     */
     public StockDocumentsItem newDocumentsItem(StockDocumentsItem stockDocumentsItem) throws SSException;
 
     /**
