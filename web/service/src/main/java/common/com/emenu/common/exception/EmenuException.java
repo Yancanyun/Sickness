@@ -692,6 +692,7 @@ public enum EmenuException implements IBizExceptionMes {
     StockItemInsertFailed("添加库存物品失败", 11000),
     QueryStockItemByIdFailed("根据Id查找库存物品失败", 110001),
     UpdateStockItemFailed("修改库存物品失败", 110002),
+    ListStockItemFailed("获取物品列表失败",110003),
 
     //新版库存-厨房管理
     ListKitchenFailed("查看厨房列表失败",10401),

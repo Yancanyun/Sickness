@@ -313,6 +313,8 @@ public enum ModuleEnums {
     AdminStockItem("Admin:Stock:Item"),
     AdminStockItemList("Admin:Stock:Item:List"),
     AdminStockItemNew("Admin:Stock:Item:New"),
+    AdminStockItemDelete("Admin:Stock:Item:Delete"),
+    AdminStockItemUpdate("Admin:Stock:Item:Update"),
 
     //规格管理
     AdminStockSpecifications("Admin:Stock:Specifications"),

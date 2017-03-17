@@ -1,7 +1,11 @@
 package com.emenu.mapper.stock;
 
+import com.emenu.common.dto.stock.StockItemSearchDto;
+import com.emenu.common.entity.stock.StockItem;
 import com.pandawork.core.common.exception.SSException;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * StockItemMapper
@@ -19,4 +23,12 @@ public interface StockItemMapper {
      * @throws SSException
      */
     public int countByName(@Param("name") String name) throws SSException;
+
+    /**
+     * 根据SearchDto列举Item
+     * @param searchDto
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listBySearchDto(@Param("searchDto") StockItemSearchDto searchDto) throws SSException;
 }

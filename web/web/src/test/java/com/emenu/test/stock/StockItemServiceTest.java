@@ -1,5 +1,6 @@
 package com.emenu.test.stock;
 
+import com.emenu.common.dto.stock.StockItemSearchDto;
 import com.emenu.common.entity.stock.StockItem;
 import com.emenu.service.stock.StockItemService;
 import com.emenu.test.AbstractTestCase;
@@ -58,5 +59,11 @@ public class StockItemServiceTest extends AbstractTestCase{
     public void queryById() throws SSException{
         StockItem stockItem = stockItemService.queryById(5);
         System.out.println("111");
+    }
+
+    @Test
+    public void testListItem()throws SSException{
+        StockItemSearchDto searchDto = new StockItemSearchDto();
+        List<StockItem> itemList = stockItemService.listItem(searchDto);
     }
 }

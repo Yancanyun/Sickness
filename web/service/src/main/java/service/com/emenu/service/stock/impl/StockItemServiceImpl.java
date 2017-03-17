@@ -1,5 +1,6 @@
 package com.emenu.service.stock.impl;
 
+import com.emenu.common.dto.stock.StockItemSearchDto;
 import com.emenu.common.entity.stock.StockItem;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.exception.EmenuException;
@@ -137,6 +138,17 @@ public class StockItemServiceImpl implements StockItemService {
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateStockItemFailed, e);
+        }
+    }
+
+    @Override
+    public List<StockItem> listItem(StockItemSearchDto searchDto)throws SSException{
+        try {
+            return stockItemMapper.listBySearchDto(searchDto);
+        }
+        catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStockItemFailed,e);
         }
     }
 }
