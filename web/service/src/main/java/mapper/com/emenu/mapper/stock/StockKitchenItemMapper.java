@@ -50,10 +50,10 @@ public interface StockKitchenItemMapper {
     public StockKitchenItem queryById(@Param("id") Integer id) throws SSException;
 
     /**
-     * 根据item_id查询物品
-     * @param id
+     * 根据物品id查询厨房物品
+     * @param itemId
      * @return
      * @throws SSException
      */
-    public StockKitchenItem queryByItemId(@Param("id") Integer id) throws SSException;
+    public StockKitchenItem queryByItemId(@Param("itemId") Integer itemId) throws SSException;
 }

@@ -30,9 +30,9 @@ public class StockKitchenItem extends AbstractEntity{
     @Column(name = "assistant_code")
     private String assistantCode;
 
-    //规格
-    @Column(name = "specifications")
-    private String specifications;
+    //规格id
+    @Column(name = "specifications_id")
+    private Integer specificationsId;
 
     //库存量
     @Column(name = "storage_quantity")
@@ -43,11 +43,9 @@ public class StockKitchenItem extends AbstractEntity{
     private Integer costCardUnitId;
 
     //备注
-    @Column(name = "remark")
     private String remark;
 
     //物品状态(1-正常使用,2-标缺，3-删除)
-    @Column(name = "status")
     private Integer status;
 
     //创建时间
@@ -91,12 +89,12 @@ public class StockKitchenItem extends AbstractEntity{
         this.assistantCode = assistantCode;
     }
 
-    public String getSpecifications() {
-        return specifications;
+    public Integer getSpecificationsId() {
+        return specificationsId;
     }
 
-    public void setSpecifications(String specifications) {
-        this.specifications = specifications;
+    public void setSpecificationsId(Integer specificationsId) {
+        this.specificationsId = specificationsId;
     }
 
     public float getStorage_quantity() {

@@ -15,7 +15,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="t_stock_kitchen")
-public class StockKitchen extends AbstractEntity{
+public class StockKitchen extends AbstractEntity {
 
     @Id
     private Integer id;
@@ -32,14 +32,17 @@ public class StockKitchen extends AbstractEntity{
     //厨房状态（状态(1-正常使用,2-已删除)）
     private Integer status;
 
+    //是否是总库存（0-是总库存，1-是厨房）
+    @Column(name = "is_item")
+    private Integer isItem;
+
     //创建时间
-    @Column(name="created_time")
+    @Column(name = "created_time")
     private String createdTime;
 
     //最近修改时间
     @Column(name = "last_modified_time")
     private String lastModifiedTime;
-
 
     public Integer getId() {
         return id;
@@ -80,6 +83,14 @@ public class StockKitchen extends AbstractEntity{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getIsItem() {
+        return isItem;
+    }
+
+    public void setIsItem(Integer isItem) {
+        this.isItem = isItem;
     }
 
     public String getCreatedTime() {

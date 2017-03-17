@@ -90,7 +90,7 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
     }
 
     @Override
-    public StockKitchenItem queryByItemId(Integer id) throws SSException{
+    public StockKitchenItem  queryByItemId(Integer id) throws SSException{
         StockKitchenItem  stockKitchenItem = new StockKitchenItem();
         try{
             stockKitchenItem = stockKitchenItemMapper.queryByItemId(id);
