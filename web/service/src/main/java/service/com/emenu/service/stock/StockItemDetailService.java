@@ -3,6 +3,8 @@ package com.emenu.service.stock;
 import com.emenu.common.entity.stock.StockItemDetail;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.List;
+
 /**
  * StockItemDetailService
  *
@@ -26,4 +28,22 @@ public interface StockItemDetailService {
      * @throws SSException
      */
     public void deleteStockItemDetailById(int id) throws SSException;
+
+    /**
+     * 根据物品id与存放点id查询对应的物品明细
+     *
+     * @param itemId
+     * @param kitchenId
+     * @return
+     * @throws SSException
+     */
+    public List<StockItemDetail> queryDetailById(int itemId,int kitchenId) throws SSException;
+
+    /**
+     * 修改单据明细表
+     * @param stockItemDetail
+     * @return
+     * @throws SSException
+     */
+    public void updateStockItemDetail(StockItemDetail stockItemDetail) throws SSException;
 }

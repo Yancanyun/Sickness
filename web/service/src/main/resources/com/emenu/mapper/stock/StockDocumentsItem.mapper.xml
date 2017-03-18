@@ -10,18 +10,9 @@
     </delete>
 
     <select id="queryByDocumentsId" resultMap="pw.StockDocumentsItem">
-        SELECT `id` AS `id`
-        `documents_id` AS documentsId
-        `item_id` AS itemId
-        `standard_id` AS standardId
-        `quantity` AS quatity
-        `unit` As unit
-        `unit_price` AS unitPrice
-        `price` AS price
-        `created_time` AS createdTime
-        `last_modified_time` AS lastModifiedTime
+        SELECT *
         FROM t_stock_documents_item
-        ORDER BY `created_time` DESC
+        WHERE documents_id = #{documentsId}
     </select>
 
 </mapper>

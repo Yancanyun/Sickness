@@ -727,6 +727,11 @@ public enum EmenuException implements IBizExceptionMes {
     DelStockDocumentsItemFailed("根据单据id删除单据详情失败",110027),
     QueryDocumentsItemByDocumentsIdError("根据单据id获取该单据下的详情失败",110027),
     DocumentsIdOrStatusIdError("单据id或单据状态有误",110028),
+    QueryItemDetailByIdFailed("根据物品id与存放点id查询物品明细失败",110029),
+    ItemIdOrKitchenIdError("物品id或厨房有误",110030),
+    updateStockItemDetailFailed("修改物品明细失败",110031),
+    StockItemNotEnough("库存剩余不足",110032),
+    OutOfStockItem("入库物品数量超过库存上限",110033),
 
     //新版库存-规格管理
     AddSpecificationsFail("添加规格失败",111000),

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -111,7 +112,7 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
      */
     @Override
     public List<StockDocumentsItem> queryByDocumentsId(int documentsId) throws SSException{
-        List<StockDocumentsItem> stockDocumentsItems = new ArrayList<StockDocumentsItem>();
+        List<StockDocumentsItem> stockDocumentsItems = Collections.emptyList();
         try{
             if(Assert.lessOrEqualZero(documentsId)){
                 throw SSException.get(EmenuException.DocumentsIdError);

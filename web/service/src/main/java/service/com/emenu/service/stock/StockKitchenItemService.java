@@ -23,5 +23,5 @@ public interface StockKitchenItemService {
 
     public StockKitchenItem queryById(Integer id) throws SSException;
 
-    public StockKitchenItem queryByItemId(Integer id) throws SSException;
+    public StockKitchenItem queryByItemId(Integer itemId,Integer kitchenId) throws SSException;
 }

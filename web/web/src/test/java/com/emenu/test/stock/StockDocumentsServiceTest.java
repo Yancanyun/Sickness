@@ -62,12 +62,13 @@ public class StockDocumentsServiceTest extends AbstractTestCase{
     @Test
     public void updateIsAudited()throws Exception{
         try{
-            stockDocumentsService.updateIsAudited(4,1);
-            stockDocumentsService.updateIsSettled(4,1);
+            stockDocumentsService.updateIsAudited(1,1);
+            stockDocumentsService.updateIsSettled(1,1);
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }
     }
+
 
     @Test
     public void listAll() throws Exception {

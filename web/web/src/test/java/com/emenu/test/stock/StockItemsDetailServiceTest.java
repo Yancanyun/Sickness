@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * StockItemsDetailServiceTest
@@ -33,5 +34,19 @@ public class StockItemsDetailServiceTest extends AbstractTestCase {
     @Test
     public void delStockItemDetail() throws Exception {
         stockItemDetailService.deleteStockItemDetailById(2);
+    }
+    @Test
+    public void queryDetailById() throws Exception{
+        List<StockItemDetail> itemDetailList = stockItemDetailService.queryDetailById(4,1);
+        for(StockItemDetail stockItemDetail:itemDetailList){
+            System.out.println(stockItemDetail.getQuantity());
+        }
+    }
+    @Test
+    public void updateStockItemDetail() throws Exception{
+        StockItemDetail stockItemDetail = new StockItemDetail();
+        stockItemDetail.setId(3);
+        stockItemDetail.setQuantity(BigDecimal.valueOf(60.00));
+        stockItemDetailService.updateStockItemDetail(stockItemDetail);
     }
 }

@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * StockKitchenItem
@@ -31,12 +32,12 @@ public class StockKitchenItem extends AbstractEntity{
     private String assistantCode;
 
     //规格id
-    @Column(name = "specifications_id")
-    private Integer specificationsId;
+    @Column(name = "specifications")
+    private String specifications;
 
     //库存量
     @Column(name = "storage_quantity")
-    private float storage_quantity;
+    private BigDecimal storage_quantity;
 
     //成本卡单位
     @Column(name = "cost_card_unit_id")
@@ -89,19 +90,19 @@ public class StockKitchenItem extends AbstractEntity{
         this.assistantCode = assistantCode;
     }
 
-    public Integer getSpecificationsId() {
-        return specificationsId;
+    public String getSpecifications() {
+        return specifications;
     }
 
-    public void setSpecificationsId(Integer specificationsId) {
-        this.specificationsId = specificationsId;
+    public void setSpecifications(String specifications) {
+        this.specifications = specifications;
     }
 
-    public float getStorage_quantity() {
+    public BigDecimal getStorage_quantity() {
         return storage_quantity;
     }
 
-    public void setStorage_quantity(float storage_quantity) {
+    public void setStorage_quantity(BigDecimal storage_quantity) {
         this.storage_quantity = storage_quantity;
     }
 
