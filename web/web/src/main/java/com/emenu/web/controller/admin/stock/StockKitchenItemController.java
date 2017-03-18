@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Module(ModuleEnums.AdminStock)
 @Controller
-@RequestMapping(value = URLConstants.ADMIN_STOCK_DOCUMENTS_URL)
+@RequestMapping(value = URLConstants.ADMIN_STOCK_KITCHEN_ITEM_URL)
 public class StockKitchenItemController extends AbstractController{
     @Autowired
     StockKitchenItemService stockKitchenItemService;
@@ -42,4 +42,6 @@ public class StockKitchenItemController extends AbstractController{
             return WebConstants.sysErrorCode;
         }
     }
+
+
 }
