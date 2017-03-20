@@ -134,6 +134,12 @@ public class StockKitchenServiceImpl implements StockKitchenService{
         return count == 0 ? false : true;
     }
 
+    /**
+     * 判断存放点是否是总库，0为总库
+     * @param id
+     * @return
+     * @throws SSException
+     */
     public Boolean checkIsItem(Integer id)throws SSException{
         int number;
         try{

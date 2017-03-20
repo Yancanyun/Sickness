@@ -28,6 +28,11 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
     private StockKitchenItemMapper stockKitchenItemMapper;
 
 
+    /**
+     * 添加新的厨房物品
+     * @param stockKitchenItem
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void newStockKitchenItem(StockKitchenItem stockKitchenItem)throws SSException {
@@ -39,10 +44,16 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
         }
     }
 
+    /**
+     * 删除厨房的某个物品
+     * @param id
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void delStockKitchenItem(Integer id) throws SSException{
         try{
+            //这里还要判断菜品表中是否有该物品，有的话不能删除，暂时未写
             stockKitchenItemMapper.delStockKitchenItem(id);
         }catch (Exception e) {
             LogClerk.errLog.error(e);
@@ -51,6 +62,11 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
 
     }
 
+    /**
+     * 更新库存物品列表
+     * @param id
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStockKitchenItem(Integer id) throws SSException{
@@ -63,6 +79,11 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
 
     }
 
+    /**
+     * 列出所有的物品
+     * @return
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public List<StockKitchenItem> queryAllItem() throws SSException{
@@ -76,6 +97,12 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
         return stockKitchenItemList;
     }
 
+    /**
+     * 根据id查询某个物品
+     * @param id
+     * @return
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public StockKitchenItem queryById(Integer id) throws SSException{
@@ -89,6 +116,13 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
         return stockKitchenItem;
     }
 
+    /**
+     * 根据itemId（物品表中的物品id）来查询物品
+     * @param itemId
+     * @param kitchenId
+     * @return
+     * @throws SSException
+     */
     @Override
     public StockKitchenItem queryByItemId(Integer itemId,Integer kitchenId) throws SSException{
         StockKitchenItem  stockKitchenItem = new StockKitchenItem();
