@@ -133,4 +133,16 @@ public class StockKitchenServiceImpl implements StockKitchenService{
         }
         return count == 0 ? false : true;
     }
+
+    public Boolean checkIsItem(Integer id)throws SSException{
+        int number;
+        try{
+            number = stockKitchenMapper.queryIsItem(id);
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CheckIsItemFailed);
+        }
+        //为0是总库
+        return number == 0 ? true : false;
+    }
 }

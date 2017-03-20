@@ -60,4 +60,6 @@ public interface StockKitchenService {
      * @throws SSException
      */
     public Boolean checkNameIsExist(String name)throws SSException;
+
+    public Boolean checkIsItem(Integer id)throws SSException;
 }

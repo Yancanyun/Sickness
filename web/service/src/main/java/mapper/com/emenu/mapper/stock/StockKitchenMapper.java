@@ -63,4 +63,12 @@ public interface StockKitchenMapper {
      * @throws SSException
      */
     public Integer checkNameIsExist(@Param("name") String name)throws SSException;
+
+    /**
+     * 查询是否是总库
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Integer queryIsItem(@Param("id") Integer id) throws SSException;
 }

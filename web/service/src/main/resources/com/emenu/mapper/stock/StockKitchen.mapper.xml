@@ -52,4 +52,10 @@
         FROM t_stock_kitchen
         WHERE name = #{name}
     </select>
+
+    <select id="queryIsItem" resultType="int">
+        SELECT is_item
+        FROM t_stock_kitchen
+        WHERE id = #{id}
+    </select>
 </mapper>
