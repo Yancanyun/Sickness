@@ -6,6 +6,7 @@ import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.stock.StockDocuments;
 import com.pandawork.core.common.exception.SSException;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,7 +49,6 @@ public interface StockDocumentsService {
     public boolean updateIsAudited(int documentsId, int isAudited) throws SSException;
 
 
-
     /*************************************** by chenwenyan  ************************************************/
 
     /**
@@ -78,10 +78,123 @@ public interface StockDocumentsService {
     public StockDocuments queryById(int id) throws SSException;
 
     /**
+     * 根据id获取单据以及单据详情
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public DocumentsDto queryDocumentsDtoById(int id) throws SSException;
+
+    /**
      * 根据Id删除对应单据
      *
      * @param id
      * @throws SSException
      */
     public boolean delDocumentsDtoById(int id) throws SSException;
+
+    /**
+     * 根据查询条件获取单据和单据详情
+     *
+     * @param documentsSearchDto
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoBySearchDto(DocumentsSearchDto documentsSearchDto) throws SSException;
+
+    /**
+     * 获取时间段之间的单据，不包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StockDocuments> listDocumentsByTime(Date startTime, Date endTime) throws SSException;
+
+    /**
+     * 获取时间段时间的单据以及 单据详情，不包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoByTime(Date startTime,Date endTime) throws SSException;
+
+    /**
+     * 根据审核条件获取时间段之间的单据，包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<StockDocuments> listDocumentsByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException;
+
+
+    /**
+     * 根据审核条件获取时间段之间的单据以及单据详情，包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException;
+
+
+    /**
+     * 根据审核条件获取时间段之间的单据，不包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<StockDocuments> listDocumentsByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws SSException;
+
+    /**
+     * 根据审核条件获取时间段之间的单据以及单据详情，不包括开始时间和结束时间
+     *
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws SSException;
+
+    /**
+     * 根据查询条件获取单据计数
+     *
+     * @param documentsSearchDto
+     * @return
+     * @throws SSException
+     */
+    public int countByDocumentsSearchDto(DocumentsSearchDto documentsSearchDto) throws SSException;
+
+    /**
+     * 获取指定时间之前审核通过且未结算的单据和单据详情,如果endTime为空，时间不作为查询条件
+     *
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<StockDocuments> listUnsettleAndAuditedDocumentsByEndTime(Date endTime) throws SSException;
+
+    /**
+     * 根据页码获取单据以及单据详情
+     *
+     * @param page
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoByPage(int page,int pageSize) throws SSException;
 }
+

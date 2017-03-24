@@ -7,6 +7,8 @@ import com.emenu.common.entity.stock.*;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
+import com.emenu.common.exception.PartyException;
+import com.emenu.mapper.stock.StockDocumentsItemMapper;
 import com.emenu.mapper.stock.StockDocumentsMapper;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.party.group.employee.EmployeeService;
@@ -22,7 +24,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,6 +66,9 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
 
     @Autowired
     private StockKitchenItemService stockKitchenItemService;
+
+    @Autowired
+    private StockDocumentsItemMapper stockDocumentsItemMapper;
 
 
     /**
@@ -121,12 +128,12 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             }
             //添加到单据表返回实体
             StockDocuments stockDocuments = this.newDocuments(documentsDto.getStockDocuments());
-                //设置单据明细表中的单据Id
-                for(StockDocumentsItem stockDocumentsItem:documentsDto.getStockDocumentsItemList()){
-                    stockDocumentsItem.setDocumentsId(stockDocuments.getId());
-                    //添加单据明细表
-                    stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
-                }
+            //设置单据明细表中的单据Id
+            for(StockDocumentsItem stockDocumentsItem:documentsDto.getStockDocumentsItemList()){
+                stockDocumentsItem.setDocumentsId(stockDocuments.getId());
+                //添加单据明细表
+                stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
+            }
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.InsertDocumentsFail, e);
@@ -159,7 +166,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
     /**
      * 修改单据结算状态
      * @param documentsId
-     * @param isSettlemented
+     * @param isSettled
      * @return
      * @throws SSException
      */
@@ -368,7 +375,6 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         return documentsItemQuantity;
     }
 
-
     /**************************************by chenwenyan ***************************************/
     /**
      * 获取单据list
@@ -424,7 +430,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                 documentsSearchDto.getEndTime().setMinutes(59);
                 documentsSearchDto.getEndTime().setSeconds(59);
             }
-            documentsList = stockDocumentsMapper.listDocumentsBySearchDto(documentsSearchDto);
+            documentsList = stockDocumentsMapper.listBySearchDto(documentsSearchDto);
             //设置经手人、操作人、审核人名字
             for (StockDocuments stockDocuments : documentsList) {
                 setStockDOcumentsRelatedName(stockDocuments);
@@ -453,6 +459,28 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryDocumentsByIdFailed, e);
+        }
+    }
+
+    @Override
+    public DocumentsDto queryDocumentsDtoById(int id) throws SSException {
+        DocumentsDto documentsDto = new DocumentsDto();
+        try{
+            if(Assert.isNull(id)){
+                throw SSException.get(EmenuException.DocumentsIdError);
+            } else {
+                StockDocuments stockDocuments = commonDao.queryById(StockDocuments.class,id);
+                if(Assert.isNotNull(stockDocuments)){
+                    List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocuments.getId());
+                    documentsDto.setStockDocuments(stockDocuments);
+                    documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                    setStockDOcumentsRelatedName(stockDocuments);
+                }
+            }
+            return documentsDto;
+        } catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.QueryDocumentsByIdFailed,e);
         }
     }
 
@@ -493,7 +521,224 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
             stockDocumentsMapper.delById(id);
             return true;
         } catch (Exception e) {
+            LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.DelDocumentsByIdFailed, e);
+        }
+    }
+
+
+    /**
+     * 根据查询条件获取单据以及单据详情
+     *
+     * @param documentsSearchDto
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public List<DocumentsDto> listDocumentsDtoBySearchDto(DocumentsSearchDto documentsSearchDto) throws SSException {
+        List<StockDocuments> stockDocuments = Collections.emptyList();
+        List<DocumentsDto> documentsDtos = new ArrayList<DocumentsDto>();
+        try {
+            stockDocuments = stockDocumentsMapper.listBySearchDto(documentsSearchDto);
+            if (Assert.isNull(stockDocuments) || Assert.lessOrEqualZero(stockDocuments.size())) {
+                return documentsDtos;
+            } else {
+                for (StockDocuments stockDocument : stockDocuments) {
+                    List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                    if (Assert.isNotNull(stockDocumentsItems)) {
+                        setStockDOcumentsRelatedName(stockDocument);
+                        DocumentsDto documentsDto = new DocumentsDto();
+                        documentsDto.setStockDocuments(stockDocument);
+                        documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                        documentsDtos.add(documentsDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return documentsDtos;
+    }
+
+    @Override
+    public List<StockDocuments> listDocumentsByTime(Date startTime, Date endTime) throws SSException {
+        List<StockDocuments> stockDocuments = new ArrayList<StockDocuments>();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTime(startTime, endTime);
+            for (StockDocuments stockDocument : stockDocuments) {
+                setStockDOcumentsRelatedName(stockDocument);
+            }
+            return stockDocuments;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<DocumentsDto> listDocumentsDtoByTime(Date startTime, Date endTime) throws SSException {
+        List<StockDocuments> stockDocuments = Collections.emptyList();
+        List<DocumentsDto> documentsDtos = new ArrayList<DocumentsDto>();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTime(startTime, endTime);
+            if (Assert.isNull(stockDocuments) || Assert.lessOrEqualZero(stockDocuments.size())) {
+                return documentsDtos;
+            } else {
+                for (StockDocuments stockDocument : stockDocuments) {
+                    List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                    if (Assert.isNotNull(stockDocumentsItems)) {
+                        setStockDOcumentsRelatedName(stockDocument);
+                        DocumentsDto documentsDto = new DocumentsDto();
+                        documentsDto.setStockDocuments(stockDocument);
+                        documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                        documentsDtos.add(documentsDto);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(PartyException.SystemException, e);
+        }
+        return documentsDtos;
+    }
+
+    @Override
+    public List<StockDocuments> listDocumentsByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException {
+        List<StockDocuments> stockDocuments = new ArrayList<StockDocuments>();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited(startTime, endTime, isAudited);
+            if (Assert.isNotNull(stockDocuments) && !Assert.lessOrEqualZero(stockDocuments.size())) {
+                for (StockDocuments stockDocument : stockDocuments) {
+                    setStockDOcumentsRelatedName(stockDocument);
+                }
+            }
+            return stockDocuments;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<DocumentsDto> listDocumentsDtoByTimeAndIsAudited(Date startTime, Date endTime, int isAudited) throws SSException {
+        List<DocumentsDto> documentsDtos = new ArrayList<DocumentsDto>();
+        List<StockDocuments> stockDocuments = Collections.emptyList();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited(startTime, endTime, isAudited);
+            if (Assert.isNotNull(stockDocuments)) {
+                for (StockDocuments stockDocument : stockDocuments) {
+                    List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                    if (Assert.isNotNull(stockDocumentsItems)) {
+                        setStockDOcumentsRelatedName(stockDocument);
+                        DocumentsDto documentsDto = new DocumentsDto();
+                        documentsDto.setStockDocuments(stockDocument);
+                        documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                        documentsDtos.add(documentsDto);
+                    }
+                }
+            }
+            return documentsDtos;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+
+    @Override
+    public List<StockDocuments> listDocumentsByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws SSException {
+        List<StockDocuments> stockDocuments = new ArrayList<StockDocuments>();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited1(startTime, endTime, isAudited);
+            for (StockDocuments stockDocument : stockDocuments) {
+                setStockDOcumentsRelatedName(stockDocument);
+            }
+            return stockDocuments;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public List<DocumentsDto> listDocumentsDtoByTimeAndIsAudited1(Date startTime, Date endTime, int isAudited) throws SSException {
+        List<DocumentsDto> documentsDtos = new ArrayList<DocumentsDto>();
+        List<StockDocuments> stockDocuments = Collections.emptyList();
+        try {
+            stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited1(startTime, endTime, isAudited);
+            if (Assert.isNotNull(stockDocuments)) {
+                for (StockDocuments stockDocument : stockDocuments) {
+                    List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                    if (Assert.isNotNull(stockDocumentsItems)) {
+                        setStockDOcumentsRelatedName(stockDocument);
+                        DocumentsDto documentsDto = new DocumentsDto();
+                        documentsDto.setStockDocuments(stockDocument);
+                        documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                        documentsDtos.add(documentsDto);
+                    }
+                }
+            }
+            return documentsDtos;
+        } catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail, e);
+        }
+    }
+
+    @Override
+    public int countByDocumentsSearchDto(DocumentsSearchDto documentsSearchDto) throws SSException{
+        try{
+            if(Assert.isNotNull(documentsSearchDto)){
+                return stockDocumentsMapper.countBySearchDto(documentsSearchDto);
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail,e);
+        }
+        return 0;
+    }
+
+    @Override
+    public List<StockDocuments> listUnsettleAndAuditedDocumentsByEndTime(Date endTime) throws SSException{
+        List<StockDocuments> stockDocuments = new ArrayList<StockDocuments>();
+        try{
+            if(Assert.isNotNull(endTime)){
+                stockDocuments = stockDocumentsMapper.listUnsettleAndAuditedDocumentsByEndTime(endTime);
+                return stockDocuments;
+            }else {
+                return null;
+            }
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail,e);
+        }
+
+    }
+
+    @Override
+    public List<DocumentsDto> listDocumentsDtoByPage(int page, int pageSize) throws SSException{
+        List<DocumentsDto> documentsDtos = new ArrayList<DocumentsDto>();
+
+        try{
+             if(Assert.isNotNull(page) && !Assert.lessOrEqualZero(page) && Assert.isNotNull(pageSize) && !Assert.lessOrEqualZero(pageSize)){
+                 int offset = pageSize * page + 1;
+                 List<StockDocuments> stockDocuments = stockDocumentsMapper.listByPage(offset,pageSize);
+                 if(Assert.isNotNull(stockDocuments)){
+                     for(StockDocuments stockDocument : stockDocuments){
+                         List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                         setStockDOcumentsRelatedName(stockDocument);
+                         DocumentsDto documentsDto = new DocumentsDto();
+                         documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                         documentsDto.setStockDocuments(stockDocument);
+                         documentsDtos.add(documentsDto);
+                     }
+                 }
+             }
+             return documentsDtos;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListReportFail,e);
         }
     }
 
