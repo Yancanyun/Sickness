@@ -339,7 +339,7 @@ public class CallCacheServiceImpl implements CallCacheService {
                             if(o1.getCallTime().getTime() > o2.getCallTime().getTime()){
                                 return 1;
                             }
-                            if(o1.getCallTime().getTime() == o2.getCallTime().getTime())
+                            if(o1.getCallTime().getTime() ==  o2.getCallTime().getTime())
                                 return 0;
                             return -1;
                         }

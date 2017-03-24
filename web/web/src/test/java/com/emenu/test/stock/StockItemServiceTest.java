@@ -62,6 +62,15 @@ public class StockItemServiceTest extends AbstractTestCase{
     }
 
     @Test
+    public void updateStockItemStatusById() throws SSException{
+        int itemId = 1;
+        int status = 0;
+        stockItemService.updateStockItemStatusById(itemId,status);
+        System.out.println("xixi");
+
+    }
+
+    @Test
     public void testListItem()throws SSException{
         StockItemSearchDto searchDto = new StockItemSearchDto();
         List<StockItem> itemList = stockItemService.listItem(searchDto);

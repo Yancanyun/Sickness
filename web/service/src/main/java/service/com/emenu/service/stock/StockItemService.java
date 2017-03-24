@@ -1,7 +1,6 @@
 package com.emenu.service.stock;
 
 import com.emenu.common.dto.stock.StockItemSearchDto;
-import com.emenu.common.entity.stock.Specifications;
 import com.emenu.common.entity.stock.StockItem;
 import com.pandawork.core.common.exception.SSException;
 
@@ -78,4 +77,15 @@ public interface StockItemService {
      * @throws SSException
      */
     public List<StockItem> listItem(StockItemSearchDto searchDto)throws SSException;
+
+
+    /**
+     * 根据id修改物品的状态
+     *
+     * @param itemId
+     * @param status
+     * @throws SSException
+     */
+    public void updateStockItemStatusById(int itemId,int status) throws SSException;
+
 }

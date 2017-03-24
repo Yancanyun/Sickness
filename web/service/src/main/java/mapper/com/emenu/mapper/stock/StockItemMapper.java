@@ -24,6 +24,8 @@ public interface StockItemMapper {
      */
     public int countByName(@Param("name") String name) throws SSException;
 
+    public void updateStockItemStatusById(@Param("itemId") int itemId, @Param("status") int status) throws SSException;
+
     /**
      * 根据SearchDto列举Item
      * @param searchDto

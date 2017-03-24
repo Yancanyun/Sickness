@@ -692,6 +692,8 @@ public enum EmenuException implements IBizExceptionMes {
     StockItemInsertFailed("添加库存物品失败", 11000),
     QueryStockItemByIdFailed("根据Id查找库存物品失败", 110001),
     UpdateStockItemFailed("修改库存物品失败", 110002),
+    UpdateStockStatusFailed("修改库存物品状态失败", 110002),
+
     ListStockItemFailed("获取物品列表失败",110003),
 
     //新版库存-厨房管理
@@ -748,6 +750,12 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateKitchenItemFail("厨房物品更新失败",112002),
     QueryAllKitchenItemFail("查询所有厨房物品失败",112003),
     QueryKitchenItemFail("查询某个厨房物品失败",112004),
+
+    //新版库存-库存预警
+    AddStockWarnFail("添加物品预警失败",113000),
+    UpdateStateToResolveFail("修改状态为已解决失败",113001),
+    UpdateStateToIgnoreFail("修改状态为已忽略失败",113002),
+    QueryAllUntreatedWarnFail("获取所有未处理的预警信息失败",113003),
 
 
 

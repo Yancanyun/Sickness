@@ -142,6 +142,23 @@ public class StockItemServiceImpl implements StockItemService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateStockItemStatusById(int itemId,int status) throws SSException{
+        try{
+            if(Assert.isNull(itemId)
+                    || Assert.lessOrEqualZero(itemId)
+                    || Assert.isNull(status)
+                    || Assert.lessOrEqualZero(status)){
+                throw SSException.get(EmenuException.UpdateStockStatusFailed);
+            }
+            stockItemMapper.updateStockItemStatusById(itemId,status);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStockStatusFailed,e);
+        }
+    }
+
+    @Override
     public List<StockItem> listItem(StockItemSearchDto searchDto)throws SSException{
         try {
             return stockItemMapper.listBySearchDto(searchDto);

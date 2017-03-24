@@ -10,7 +10,13 @@
         WHERE  name = #{name}
     </select>
 
-    <select id="listBySearchDto" resultMap="pw.StockItem">
+    <update id="updateStockItemStatusById">
+        UPDATE 't_stock_item'
+        SET 'status' = #{status}
+        WHERE 'id' = #{itemId};
+    </update>
+
+    <select id="listBySearchDto" resultMap="pw.StockItem" resultType="com.emenu.common.entity.stock.StockItem">
         SELECT
           stockItem.`id` AS id,
           stockItem.`item_number` AS itemNumber,
