@@ -17,7 +17,7 @@
                 <h4>存放点列表</h4>
             </div>
             <div class="panel-body">
-                <a href="${website}admin/stock/kitchen/tonew" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加存放点</a>
+                <a href="${website}admin/stock/kitchen/add" class="btn btn-success margin-bottom-15"><i class="fa fa-plus"></i>&nbsp;添加存放点</a>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                         <thead>

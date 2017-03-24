@@ -6,9 +6,9 @@
         <td>&{it.responsiblePerson}</td>
         <td>&{it.introduction}</td>
         <td>
-            <a href="${website}admin/stock/kitchen/toedit" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-            <a href="javascript:;" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
-            <a href="#" class="label-info"><i class="fa fa-search"></i>&nbsp;查看物品</a>
+            <a href="${website}admin/stock/kitchen/edit" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+            <a href="${website}admin/stock/kitchen/delete" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
+            <a href="${website}admin/stock/kitchenItem/list" class="label-info"><i class="fa fa-search"></i>&nbsp;查看物品</a>
         </td>
     </tr>
     {@/each}

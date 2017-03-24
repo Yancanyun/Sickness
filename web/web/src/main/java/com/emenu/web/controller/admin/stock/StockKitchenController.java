@@ -37,4 +37,12 @@ public class StockKitchenController extends AbstractController{
         }
         return "admin/stock/kitchen/list_home";
     }
+
+    @Module(ModuleEnums.AdminStockKitchenAdd)
+    @RequestMapping(value = {"/add"},method = RequestMethod.GET)
+    public String toAddPage(Model model){
+        return "admin/stock/kitchen/add_home";
+    }
+
+
 }

@@ -702,7 +702,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryKitchenDetailsFailed("查看厨房明细失败",10405),
     KitchenNameIsExist("厨房名称已存在",10406),
     CheckKitchenNameFailed("检查厨房名称是否已存在失败",10407),
-    CheckIsItemFailed("判断存放点是否是总库失败",10408),
+    CheckTypeFailed("判断存放点是否是总库失败",10408),
 
     //新版库存-单据管理
     InsertDocumentsFail("添加单据失败",110010),

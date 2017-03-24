@@ -61,5 +61,12 @@ public interface StockKitchenService {
      */
     public Boolean checkNameIsExist(String name)throws SSException;
 
-    public Boolean checkIsItem(Integer id)throws SSException;
+
+    /**
+     * 根据id查询存放点的type，如果是总库（type=1）,则返回该存放点id
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public Integer checkType  (Integer id)throws SSException;
 }

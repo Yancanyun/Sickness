@@ -135,20 +135,24 @@ public class StockKitchenServiceImpl implements StockKitchenService{
     }
 
     /**
-     * 判断存放点是否是总库，0为总库
+     * 判断存放点是否是总库，1为总库
      * @param id
      * @return
      * @throws SSException
      */
-    public Boolean checkIsItem(Integer id)throws SSException{
-        int number;
+    public Integer checkType(Integer id)throws SSException{
+        int type;
         try{
-            number = stockKitchenMapper.queryIsItem(id);
+            type = stockKitchenMapper.queryType(id);
+            if(type == 1){
+                return id;
+            }
+            else{
+                return null;
+            }
         }catch (SSException e){
             LogClerk.errLog.error(e);
-            throw SSException.get(EmenuException.CheckIsItemFailed);
+            throw SSException.get(EmenuException.CheckTypeFailed);
         }
-        //为0是总库
-        return number == 0 ? true : false;
     }
 }

@@ -54,7 +54,7 @@
     </select>
 
     <select id="queryIsItem" resultType="int">
-        SELECT is_item
+        SELECT type
         FROM t_stock_kitchen
         WHERE id = #{id}
     </select>

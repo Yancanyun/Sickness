@@ -35,7 +35,7 @@ public class StockKitchenItemController extends AbstractController{
         try{
             List<StockKitchenItem> kitchenItemList = stockKitchenItemService.queryAllItem();
             model.addAttribute("kitchenItemList",kitchenItemList);
-            return "/";
+            return "admin/stock/kitchenItem/list_home";
         } catch(SSException e) {
             sendErrMsg(e.getMessage());
             LogClerk.errLog.error(e);

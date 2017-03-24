@@ -70,5 +70,5 @@ public interface StockKitchenMapper {
      * @return
      * @throws SSException
      */
-    public Integer queryIsItem(@Param("id") Integer id) throws SSException;
+    public Integer queryType(@Param("id") Integer id) throws SSException;
 }

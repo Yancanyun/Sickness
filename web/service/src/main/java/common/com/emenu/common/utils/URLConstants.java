@@ -159,7 +159,7 @@ public final class URLConstants {
     public static final String ADMIN_STOCK_KITCHEN_URL = "admin/stock/kitchen";
 
     //新版库存-厨房物品管理
-    public static final String ADMIN_STOCK_KITCHEN_ITEM_URL = "admin/stock/kitchen/item";
+    public static final String ADMIN_STOCK_KITCHEN_ITEM_URL = "admin/stock/kitchenItem";
 
     //新版库存-规格管理
     public static final String ADMIN_STOCK_SPECIFICATIONS_URL="admin/stock/specifications";

@@ -32,9 +32,8 @@ public class StockKitchen extends AbstractEntity {
     //厨房状态（状态(1-正常使用,2-已删除)）
     private Integer status;
 
-    //是否是总库存（0-是总库存，1-是厨房）
-    @Column(name = "is_item")
-    private Integer isItem;
+    //是否是总库存（0-是厨房，1-是总库存）
+    private Integer type;
 
     //创建时间
     @Column(name = "created_time")
@@ -85,12 +84,12 @@ public class StockKitchen extends AbstractEntity {
         this.status = status;
     }
 
-    public Integer getIsItem() {
-        return isItem;
+    public Integer getType() {
+        return type;
     }
 
-    public void setIsItem(Integer isItem) {
-        this.isItem = isItem;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getCreatedTime() {
