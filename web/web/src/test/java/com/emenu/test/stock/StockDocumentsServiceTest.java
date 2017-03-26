@@ -28,7 +28,7 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
     private StockDocumentsService stockDocumentsService;
 
     @Test
-    public void newDocumentsDto() throws Exception {
+    public void newDocumentsDto()throws Exception{
 
         StockDocuments stockDocuments = new StockDocuments();
         stockDocuments.setComment("不嘛不辣家糖醋");
@@ -54,11 +54,11 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
         documentsDto.setStockDocuments(stockDocuments);
         documentsDto.setStockDocumentsItemList(itemList);
 
-        try {
+        try{
             stockDocumentsService.newDocumentsDto(documentsDto);
 
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        }catch(Exception e){
+           throw new Exception(e.getMessage());
         }
     }
 
@@ -68,6 +68,17 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
             stockDocumentsService.updateIsAudited(1,1);
             stockDocumentsService.updateIsSettled(1,1);
         }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Test
+    public void updateDocuments()throws Exception{
+        try{
+            StockDocuments stockDocuments = stockDocumentsService.queryById(1);
+            stockDocuments.setMoney(BigDecimal.TEN);
+            stockDocumentsService.updateDocuments(stockDocuments);
+        }catch(Exception e){
             throw new Exception(e.getMessage());
         }
     }
@@ -106,6 +117,8 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
     @Test
     public void queryById() throws Exception {
         StockDocuments stockDocuments = new StockDocuments();
+        try{
+            stockDocuments = stockDocumentsService.queryById(1);
         try {
             stockDocuments = stockDocumentsService.queryById(1);
             System.out.println(stockDocuments.getMoney());

@@ -48,6 +48,22 @@ public interface StockDocumentsService {
      */
     public boolean updateIsAudited(int documentsId, int isAudited) throws SSException;
 
+    /**
+     * 修改单据Dto
+     *
+     * @param documentsDto
+     * @throws SSException
+     */
+    public void updateDocumentsDto(DocumentsDto documentsDto) throws SSException;
+
+    /**
+     * 修改单据
+     *
+     * @param stockDocuments
+     * @throws SSException
+     */
+    public void updateDocuments(StockDocuments stockDocuments) throws SSException;
+
 
     /*************************************** by chenwenyan  ************************************************/
 

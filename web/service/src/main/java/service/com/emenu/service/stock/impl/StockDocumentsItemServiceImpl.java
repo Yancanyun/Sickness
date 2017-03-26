@@ -60,6 +60,34 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
         }
     }
 
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void delDocumentsItemById(int id) throws SSException{
+        try{
+            if(Assert.lessOrEqualZero(id)&&Assert.isNull(id)){
+                throw SSException.get(EmenuException.DocumentsItemIdError);
+            }
+            commonDao.deleteById(StockDocumentsItem.class,id);
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.DelDocumentsItemByIdFailed);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void updateDocumentsItem(StockDocumentsItem stockDocumentsItem)throws SSException{
+        try{
+            if(Assert.isNull(stockDocumentsItem)){
+                throw SSException.get(EmenuException.StockDocumentsItemIsNotNull);
+            }
+            commonDao.update(stockDocumentsItem);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.UpdateStockDocumentsItemFailed);
+        }
+    }
+
     /**
      * 保存StorageReportItem检查关键字段是否合法
      *
@@ -124,4 +152,5 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
             throw  SSException.get(EmenuException.QueryDocumentsItemByDocumentsIdError,e);
         }
     }
+
 }

@@ -668,6 +668,7 @@ public enum EmenuException implements IBizExceptionMes {
     QueryBackDishCountDtoFailed("查询退菜得到相应的dto失败",10068),
     QueryBackDishByIdFailed("根据id查询退菜失败",10069),
 
+
     //结账单模块
     QueryCheckoutByTableIdFailed("根据桌号查询结账单失败",10070),
     CheckoutIsNotNull("结账单不为空",10071),
@@ -735,6 +736,13 @@ public enum EmenuException implements IBizExceptionMes {
     updateStockItemDetailFailed("修改物品明细失败",110031),
     StockItemNotEnough("库存剩余不足",110032),
     OutOfStockItem("入库物品数量超过库存上限",110033),
+    UpdateItemQuantityFailed("更新库存数量失败",110034),
+    UpdateDocumentsFail("修改单据信息失败",110035),
+    DocumentsDtoIsNotNull("单据Dto不能为空",110036),
+    UpdateStockDocumentsItemFailed("修改单据物品失败",110037),
+    StockDocumentsItemIsNotNull("单据物品不能为空",110038),
+    DelDocumentsItemByIdFailed("删除单据物品明细失败",110039),
+    DocumentsItemIdError("单据明细Id不能为空或小于0",110018),
 
     //新版库存-规格管理
     AddSpecificationsFail("添加规格失败",111000),

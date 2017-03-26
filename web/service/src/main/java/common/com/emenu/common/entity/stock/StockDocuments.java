@@ -53,6 +53,7 @@ public class StockDocuments extends AbstractEntity {
     private Integer handlerPartyId;
 
     //经手人姓名
+    @Transient
     private String handlerName;
 
     //审核人Id

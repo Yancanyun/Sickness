@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by apple on 17/3/6.
@@ -49,6 +50,9 @@ public class StockSpecTest extends AbstractTestCase {
 
     @Test
     public void listAll()throws Exception{
-        specificationsService.listAll();
+        List<Specifications> specificationsList = specificationsService.listAll();
+        for(Specifications specifications:specificationsList){
+            System.out.println(specifications.getOrderUnitId());
+        }
     }
 }

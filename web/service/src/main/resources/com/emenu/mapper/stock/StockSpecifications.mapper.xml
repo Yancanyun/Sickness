@@ -45,14 +45,8 @@
         DELETE FROM t_stock_specification WHERE id = #{id}
     </delete>
 
-    <select id="listAll" resultMap="SpecResultMap">
-        SELECT
-        'id',
-        'order_unit_id',
-        'storage_unit_id',
-        'cost_card_id',
-        'order_to_storage_ratio',
-        'storage_to_cost_card_ratio'
-        FROM t_stock_specification WHERE 'status'=1
+    <select id="listAll" resultMap="pw.Specifications">
+        SELECT *
+        FROM t_stock_specification WHERE status = 1
     </select>
 </mapper>

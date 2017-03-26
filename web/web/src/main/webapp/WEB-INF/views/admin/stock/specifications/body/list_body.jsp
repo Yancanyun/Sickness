@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: apple
@@ -44,7 +45,10 @@
                   <th class="col-sm-1">操作</th>
                 </tr>
                 </thead>
-                <tbody id="J_template"></tbody>
+                <c:forEach items="${specificationsList}" var="specifications">
+                <tbody id="J_template">
+                </tbody>
+                </c:forEach>
               </table>
               <div class="J_pagination"></div>
             </div>

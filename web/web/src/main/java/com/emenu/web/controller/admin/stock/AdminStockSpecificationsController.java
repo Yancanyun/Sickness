@@ -31,9 +31,9 @@ public class AdminStockSpecificationsController extends AbstractController {
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsList)
+    @Module(value = ModuleEnums.AdminStockSpecificationsList)
     @RequestMapping(value = {"","list"},method = RequestMethod.GET)
-    public String ListSpecifications(Model model){
+    public String toList(Model model){
         try{
             List<Specifications> specificationsList=specificationsService.listAll();
             model.addAttribute("specificationsList",specificationsList);
@@ -52,7 +52,7 @@ public class AdminStockSpecificationsController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
-    @RequestMapping(value = {"","add"},method = RequestMethod.GET)
+    @RequestMapping(value = {"add"},method = RequestMethod.POST)
     public String AddSpecifications(Model model){
         try{
             List<Specifications> specificationsList = specificationsService.listAll();

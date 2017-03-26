@@ -95,7 +95,7 @@
                     <li><a class="J_menu" href="${website}admin/stock/item">库存物品管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/kitchen">厨房管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a></li>
-                    <li><a class="J_menu" href="#">规格管理</a></li>
+                    <li><a class="J_menu" href="${website}admin/stock/specifications">规格管理</a></li>
                 </ul>
             </li>
         </shiro:checkPermission>

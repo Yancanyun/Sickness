@@ -37,4 +37,20 @@ public interface StockDocumentsItemService{
      * @throws SSException
      */
     public List<StockDocumentsItem> queryByDocumentsId(int documentsId) throws SSException;
+
+    /**
+     * 修改单据明细信息
+     *
+     * @param stockDocumentsItem
+     * @throws SSException
+     */
+    public void updateDocumentsItem(StockDocumentsItem stockDocumentsItem)throws SSException;
+
+    /**
+     * 根据单据物品明细Id删除
+     *
+     * @param id
+     * @throws SSException
+     */
+    public void delDocumentsItemById(int id)throws SSException;
 }

@@ -75,10 +75,12 @@ public class SpecificationsServiceImpl implements SpecificationsService {
 
     @Override
     public Specifications queryById(int id) throws SSException {
+        Specifications specifications = new Specifications();
         if (id <= 0) return null;
 
         try {
-            return commonDao.queryById(Specifications.class, id);
+            specifications = commonDao.queryById(specifications.getClass(), id);
+            return specifications;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QuerySpecificationsByIdFail, e);
@@ -88,7 +90,8 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     @Override
     public List<Specifications> listAll() throws SSException {
         try {
-            return specificationsMapper.listAll();
+            List<Specifications> specificationsList = specificationsMapper.listAll();
+            return specificationsList;
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListAllSpecificationsFail, e);

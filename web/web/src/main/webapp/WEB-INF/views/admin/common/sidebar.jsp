@@ -378,7 +378,11 @@
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理2.0</span><i
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
-
+                <shiro:checkPermission name="Admin:Stock:Specifications:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Specifications:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/specifications">规格管理</a>
+                    </li>
+                </shiro:checkPermission>
             </ul>
         </li>
     </shiro:checkPermission>
