@@ -44,5 +44,14 @@ public class StockKitchenController extends AbstractController{
         return "admin/stock/kitchen/add_home";
     }
 
+    @Module(ModuleEnums.AdminStockKitchenAdd)
+    @RequestMapping(value = {"/edit"},method = RequestMethod.GET)
+    public String toEditPage(Model model){
+        return "admin/stock/kitchen/edit_home";
+    }
+
+
+
+    /*你好*/
 
 }
