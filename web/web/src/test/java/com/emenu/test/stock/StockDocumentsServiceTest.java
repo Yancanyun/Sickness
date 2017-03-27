@@ -117,8 +117,6 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
     @Test
     public void queryById() throws Exception {
         StockDocuments stockDocuments = new StockDocuments();
-        try{
-            stockDocuments = stockDocumentsService.queryById(1);
         try {
             stockDocuments = stockDocumentsService.queryById(1);
             System.out.println(stockDocuments.getMoney());

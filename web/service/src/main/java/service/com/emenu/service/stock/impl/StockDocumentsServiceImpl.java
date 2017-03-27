@@ -597,7 +597,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService{
                 documentsSearchDto.getEndTime().setMinutes(59);
                 documentsSearchDto.getEndTime().setSeconds(59);
             }
-            documentsList = stockDocumentsMapper.listDocumentsBySearchDto(documentsSearchDto);
+            //documentsList = stockDocumentsMapper.listDocumentsBySearchDto(documentsSearchDto);
             //设置经手人、操作人、审核人名字
             for (StockDocuments stockDocuments : documentsList) {
                 setStockDOcumentsRelatedName(stockDocuments);

@@ -45,10 +45,21 @@
                   <th class="col-sm-1">操作</th>
                 </tr>
                 </thead>
-                <c:forEach items="${specificationsList}" var="specifications">
                 <tbody id="J_template">
-                </tbody>
+                <c:forEach items="${specificationsList}" var="specifications">
+                <tr data-specification-id="&{it.id}">
+                  <td class="J_orderUnitId">&{it.orderUnitId}</td>
+                  <td class="J_orderToStorage">&{it.orderToStorage}</td>
+                  <td class="J_storageUnitId">&{it.storageUnitId}</td>
+                  <td class="J_storageToCost">&{it.storageToCost}</td>
+                  <td class="J_costCardId">&{it.costCardId}</td>
+                  <td>
+                    <a class="label-info J_edit" href="#"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+                    <a class="label-info J_del" href="javascript:;"><i class="fa fa-times"></i>&nbsp;删除</a>
+                  </td>
+                </tr>
                 </c:forEach>
+                </tbody>
               </table>
               <div class="J_pagination"></div>
             </div>
