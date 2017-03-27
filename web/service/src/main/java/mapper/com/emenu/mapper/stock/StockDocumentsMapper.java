@@ -114,7 +114,7 @@ public interface StockDocumentsMapper {
     /**
      * 根据页码获取单据
      *
-     * @param page
+     * @param offset
      * @param pageSize
      * @return
      * @throws Exception
