@@ -2,10 +2,7 @@ package com.emenu.common.entity.stock;
 
 import com.pandawork.core.common.entity.AbstractEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -23,13 +20,25 @@ public class Specifications extends AbstractEntity{
     @Column(name = "order_unit_id")
     private Integer orderUnitId;
 
+    //订货单位名称
+    @Transient
+    private String orderUnitName;
+
     //库存单位id
     @Column(name = "storage_unit_id")
     private Integer storageUnitId;
 
+    //库存单位名称
+    @Transient
+    private String storageUnitName;
+
     //成本卡单位id
     @Column(name = "cost_card_id")
     private Integer costCardId;
+
+    //成本卡单位名称
+    @Transient
+    private String costCardUnitName;
 
     //订货单位到库存单位转换比例
     @Column(name = "order_to_storage_ratio")
@@ -39,7 +48,8 @@ public class Specifications extends AbstractEntity{
     @Column(name = "storage_to_cost_card_ratio")
     private BigDecimal storageToCost;
 
-    // 状态
+    // 状态 (2-已删除 1-正常使用)
+    @Column(name = "status")
     private Integer status;
 
     //创建时间
@@ -73,6 +83,30 @@ public class Specifications extends AbstractEntity{
 
     public void setStorageUnitId(Integer storageUnitId) {
         this.storageUnitId = storageUnitId;
+    }
+
+    public String getOrderUnitName() {
+        return orderUnitName;
+    }
+
+    public void setOrderUnitName(String orderUnitName) {
+        this.orderUnitName = orderUnitName;
+    }
+
+    public String getStorageUnitName() {
+        return storageUnitName;
+    }
+
+    public void setStorageUnitName(String storageUnitName) {
+        this.storageUnitName = storageUnitName;
+    }
+
+    public String getCostCardUnitName() {
+        return costCardUnitName;
+    }
+
+    public void setCostCardUnitName(String costCardUnitName) {
+        this.costCardUnitName = costCardUnitName;
     }
 
     public Integer getCostCardId() {

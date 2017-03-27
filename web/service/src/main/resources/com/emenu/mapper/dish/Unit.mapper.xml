@@ -31,5 +31,9 @@
         </if>
     </select>
 
+    <select id ="listByType" resultMap="pw.Unit">
+        SELECT *
+        FROM `t_unit` WHERE `type` = #{type}
+    </select>
 
 </mapper>

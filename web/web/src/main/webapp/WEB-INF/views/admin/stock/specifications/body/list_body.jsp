@@ -12,23 +12,25 @@
     <div class="col-sm-12">
       <ol class="breadcrumb">
         <li>
-          <a href="#"><i class="fa fa-home"></i>&nbsp;首页</a>
+          <a href="${website}admin"><i class="fa fa-home"></i>&nbsp;首页</a>
         </li>
         <li>
-          <a href="#">菜品管理</a>
+          <a href="${website}admin/specifications">库存管理</a>
         </li>
         <li class="active">规格管理</li>
       </ol>
       <h2>规格管理</h2>
     </div>
     <div class="col-sm-12">
-      <div class="alert alert-success J_tip" role="alert">添加成功!</div>
+      <c:if test="${code == 0}">
+        <div class="alert alert-success J_tip" role="alert">添加成功!</div>
+      </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">
           <h4>规格列表</h4>
         </div>
         <div class="panel-body">
-          <a class="btn btn-success margin-bottom-15 J_addBtn" href="javascript:;">
+          <a class="btn btn-success margin-bottom-15 J_addBtn" href="${website}admin/stock/specifications/tonew">
             <i class="fa fa-plus"></i>&nbsp;添加规格
           </a>
           <form class="J_operForm">
@@ -45,21 +47,7 @@
                   <th class="col-sm-1">操作</th>
                 </tr>
                 </thead>
-                <tbody id="J_template">
-                <c:forEach items="${specificationsList}" var="specifications">
-                <tr data-specification-id="&{it.id}">
-                  <td class="J_orderUnitId">&{it.orderUnitId}</td>
-                  <td class="J_orderToStorage">&{it.orderToStorage}</td>
-                  <td class="J_storageUnitId">&{it.storageUnitId}</td>
-                  <td class="J_storageToCost">&{it.storageToCost}</td>
-                  <td class="J_costCardId">&{it.costCardId}</td>
-                  <td>
-                    <a class="label-info J_edit" href="#"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
-                    <a class="label-info J_del" href="javascript:;"><i class="fa fa-times"></i>&nbsp;删除</a>
-                  </td>
-                </tr>
-                </c:forEach>
-                </tbody>
+                <tbody id="J_template"></tbody>
               </table>
               <div class="J_pagination"></div>
             </div>

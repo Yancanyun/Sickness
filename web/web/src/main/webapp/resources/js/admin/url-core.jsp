@@ -134,6 +134,13 @@
             //原配料管理
             ['inventory', site.website + 'admin/storage/settlement/check/ajax/settlement/check', 'put', '库存盘点']
         ],
+
+        // 新版库存管理
+        StockManagement: [
+             // 规格管理
+            ['getSpecificationsList', site.website + 'admin/stock/specifications/ajax/list/&{pageNo}', 'get','获取规格列表']
+        ],
+
         // 菜品管理
         DishManagement: [
             // 单位管理--列表

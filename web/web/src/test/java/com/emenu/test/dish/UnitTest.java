@@ -62,7 +62,13 @@ public class UnitTest extends AbstractTestCase {
         System.out.print(unit.getName());
     }
 
-
+    @Test
+    public void listByType() throws SSException{
+       List<Unit> unitList = unitService.listByType(1);
+        for(Unit unit:unitList){
+            System.out.println(unit.getName());
+        }
+    }
 }
 
 

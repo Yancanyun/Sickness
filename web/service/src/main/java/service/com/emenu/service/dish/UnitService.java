@@ -63,4 +63,13 @@ public interface UnitService {
      * @throws SSException
      */
     public void updateUnit(Unit unit) throws SSException;
+
+    /**
+     * 根据单位类型刷单位列表
+     *
+     * @param type
+     * @return
+     * @throws SSException
+     */
+    public List<Unit> listByType(int type) throws SSException;
 }

@@ -1,8 +1,10 @@
 package com.emenu.service.stock.impl;
 
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.stock.Specifications;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.stock.SpecificationsMapper;
+import com.emenu.service.dish.UnitService;
 import com.emenu.service.stock.SpecificationsService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
@@ -28,6 +30,9 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     @Autowired
     @Qualifier("commonDao")
     private CommonDao commonDao;
+
+    @Autowired
+    private UnitService unitService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
@@ -95,6 +100,39 @@ public class SpecificationsServiceImpl implements SpecificationsService {
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.ListAllSpecificationsFail, e);
+        }
+    }
+
+    @Override
+    public List<Specifications> listByPage(int offset,int pageSize) throws SSException{
+        try{
+            if(Assert.isNull(offset)){
+                throw SSException.get(EmenuException.OffsetIsNotNull);
+            }
+            List<Specifications> list = specificationsMapper.listByPage(offset,pageSize);
+            //遍历规格立刻表查询单位名称
+            for(Specifications specifications:list){
+                Unit unit = unitService.queryById(specifications.getOrderUnitId());
+                specifications.setOrderUnitName(unit.getName());
+                unit = unitService.queryById(specifications.getStorageUnitId());
+                specifications.setStorageUnitName(unit.getName());
+                unit = unitService.queryById(specifications.getCostCardId());
+                specifications.setCostCardUnitName(unit.getName());
+            }
+            return list;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListByPageFailed, e);
+        }
+    }
+
+    @Override
+    public int count()throws SSException{
+        try{
+            return specificationsMapper.count();
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountError,e);
         }
     }
 }

@@ -53,4 +53,21 @@ public interface SpecificationsService {
      */
     public List<Specifications> listAll() throws SSException;
 
+    /**
+     * 查询分页信息
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Specifications> listByPage(int offset,int pageSize) throws SSException;
+
+    /**
+     * 获取数据总量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int count() throws SSException;
+
+
 }

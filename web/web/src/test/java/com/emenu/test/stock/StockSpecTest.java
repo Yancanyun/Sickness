@@ -55,4 +55,19 @@ public class StockSpecTest extends AbstractTestCase {
             System.out.println(specifications.getOrderUnitId());
         }
     }
+
+    @Test
+    public void listByPage()throws Exception{
+        List<Specifications> specificationsList = specificationsService.listByPage(0,10);
+        for(Specifications specifications:specificationsList){
+            System.out.print(specifications.getOrderUnitName());
+            System.out.print(specifications.getStorageUnitName());
+            System.out.println(specifications.getCostCardUnitName());
+        }
+    }
+
+    @Test
+    public void count()throws Exception{
+        System.out.println(specificationsService.count());
+    }
 }

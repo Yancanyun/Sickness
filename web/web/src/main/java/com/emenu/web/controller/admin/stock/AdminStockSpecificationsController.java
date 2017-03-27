@@ -1,5 +1,8 @@
 package com.emenu.web.controller.admin.stock;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.stock.Specifications;
@@ -9,13 +12,13 @@ import com.emenu.common.utils.URLConstants;
 import com.emenu.web.spring.AbstractController;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,31 +30,87 @@ import java.util.List;
 public class AdminStockSpecificationsController extends AbstractController {
 
     /**
-     * 列举所有规格
-     * @param model
+     * 去列表页
      * @return
      */
     @Module(value = ModuleEnums.AdminStockSpecificationsList)
     @RequestMapping(value = {"","list"},method = RequestMethod.GET)
-    public String toList(Model model){
-        try{
-            List<Specifications> specificationsList=specificationsService.listAll();
-            model.addAttribute("specificationsList",specificationsList);
-        }catch (SSException e)
-        {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
-        }
+    public String toList(){
         return "admin/stock/specifications/list_home";
     }
 
     /**
+     * ajax刷分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStockSpecifications, extModule = ModuleEnums.AdminStockSpecificationsList)
+    @RequestMapping(value = "ajax/list/{pageNo}",method = RequestMethod.GET)
+    @ResponseBody
+    public JSON ajaxList(@PathVariable("pageNo")Integer pageNo,
+                         @RequestParam("pageSize") Integer pageSize){
+        pageSize = (pageSize == null || pageSize <= 0) ? DEFAULT_PAGE_SIZE : pageSize;
+        int offset = 0;
+        if (Assert.isNotNull(pageNo)) {
+            pageNo = pageNo <= 0 ? 0 : pageNo - 1;
+            offset = pageNo * pageSize;
+        }
+        List<Specifications> list = Collections.emptyList();
+        try{
+            list = specificationsService.listByPage(offset,pageSize);
+        }catch(SSException e){
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (Specifications  specifications: list){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", specifications.getId());
+            jsonObject.put("orderUnitName", specifications.getOrderUnitName());
+            jsonObject.put("orderToStorage", specifications.getOrderToStorage());
+            jsonObject.put("storageUnitName", specifications.getStorageUnitName());
+            jsonObject.put("storageToCost", specifications.getStorageToCost());
+            jsonObject.put("costCardUnitName", specifications.getCostCardUnitName());
+            jsonArray.add(jsonObject);
+        }
+        int dataCount = 0;
+        try {
+            dataCount = specificationsService.count();
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+        return sendJsonArray(jsonArray, dataCount);
+    }
+
+
+    /**
+     * 去添加页
+     *
+     * @param model
+     * @return
+     */
+    @Module(value = ModuleEnums.AdminStockSpecifications, extModule = ModuleEnums.AdminStockSpecificationsAdd)
+    @RequestMapping(value = "tonew", method = RequestMethod.GET)
+    public String toNew(Model model) {
+            try {
+                List<Unit> unitList = unitService.listByType(1);
+            } catch (SSException e) {
+                LogClerk.errLog.error(e);
+                sendErrMsg(e.getMessage());
+                return ADMIN_SYS_ERR_PAGE;
+            }
+        return "admin/stock/specifications/add_home";
+    }
+
+     /**
      * 添加规格
      * @param model
      * @return
      */
-    @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
+     @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
     @RequestMapping(value = {"add"},method = RequestMethod.POST)
     public String AddSpecifications(Model model){
         try{

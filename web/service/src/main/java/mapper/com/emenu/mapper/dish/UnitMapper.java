@@ -45,4 +45,13 @@ public interface UnitMapper {
      */
     public int checkNameIsExist(@Param("name") String name,
                                 @Param("oldname") String oldname) throws Exception;
+
+    /**
+     * 根据单位类型查询
+     *
+     * @param type
+     * @return
+     * @throws Exception
+     */
+    public List<Unit> listByType(@Param("type") Integer type)throws Exception;
 }

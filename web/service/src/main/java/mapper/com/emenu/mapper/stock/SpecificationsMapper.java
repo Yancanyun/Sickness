@@ -24,7 +24,7 @@ public interface SpecificationsMapper {
      * @param id
      * @throws SSException
      */
-    public void deleteById(@Param("id") int id) throws SSException;
+    public void deleteById(@Param("id") Integer id) throws SSException;
 
     /**
      * 更改一条规格信息
@@ -42,7 +42,7 @@ public interface SpecificationsMapper {
      * @return
      * @throws SSException
      */
-    public Specifications queryById(@Param("id") int id) throws SSException;
+    public Specifications queryById(@Param("id") Integer id) throws SSException;
 
     /**
      * 显示所有规格信息
@@ -51,4 +51,20 @@ public interface SpecificationsMapper {
      * @throws SSException
      */
     public List<Specifications> listAll() throws SSException;
+
+    /**
+     * 显示所有规格信息
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<Specifications> listByPage(@Param("offset") Integer offset,@Param("pageSize") Integer pageSize) throws SSException;
+
+    /**
+     * 获取数据总量
+     *
+     * @return
+     * @throws SSException
+     */
+    public Integer count()throws SSException;
 }

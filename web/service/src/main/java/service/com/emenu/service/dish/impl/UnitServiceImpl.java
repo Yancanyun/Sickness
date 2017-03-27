@@ -189,4 +189,14 @@ public class UnitServiceImpl implements UnitService {
         return count == 0 ? false : true;
     }
 
+    @Override
+    public List<Unit> listByType(int type) throws SSException
+    {
+        try{
+            return unitMapper.listByType(type);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListByTypeFailed);
+        }
+    }
 }
