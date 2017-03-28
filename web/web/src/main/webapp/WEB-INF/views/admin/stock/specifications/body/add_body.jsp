@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: apple
@@ -32,14 +33,14 @@
                   <option value="2">数量单位</option>
                 </select>
                 <select class="w180 form-control J_orderUnit" name="orderUnitId">
-                  <option value="aa" data-unit-name="aa">aa</option>
-                  <option value="bb" data-unit-name="bb">bb</option>
-                  <option value="cc" data-unit-name="cc">cc</option>
+                    <c:forEach items="${weightUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
                 <select class="w180 form-control hidden J_orderUnit" name="orderUnitId" disabled="disabled">
-                  <option value="dd" data-unit-name="dd">dd</option>
-                  <option value="ee" data-unit-name="ee">ee</option>
-                  <option value="ff" data-unit-name="ff">ff</option>
+                    <c:forEach items="${quantityUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
               </div>
             </div>
@@ -57,14 +58,14 @@
                   <option value="2">数量单位</option>
                 </select>
                 <select class="w180 form-control J_storageUnit" name="storageUnitId">
-                  <option value="aa" data-unit-name="aa">aa</option>
-                  <option value="bb" data-unit-name="bb">bb</option>
-                  <option value="cc" data-unit-name="cc">cc</option>
+                    <c:forEach items="${weightUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
                 <select class="w180 form-control hidden J_storageUnit" name="storageUnitId" disabled="disabled">
-                  <option value="dd" data-unit-name="dd">dd</option>
-                  <option value="ee" data-unit-name="ee">ee</option>
-                  <option value="ff" data-unit-name="ff">ff</option>
+                    <c:forEach items="${quantityUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
               </div>
             </div>
@@ -82,14 +83,14 @@
                   <option value="2">数量单位</option>
                 </select>
                 <select class="w180 form-control" name="costCardUnitId">
-                  <option value="aa" data-unit-name="aa">aa</option>
-                  <option value="bb" data-unit-name="bb">bb</option>
-                  <option value="cc" data-unit-name="cc">cc</option>
+                    <c:forEach items="${weightUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
                 <select class="w180 form-control hidden" name="costCardUnitId" disabled="disabled">
-                  <option value="dd" data-unit-name="dd">dd</option>
-                  <option value="ee" data-unit-name="ee">ee</option>
-                  <option value="ff" data-unit-name="ff">ff</option>
+                    <c:forEach items="${quantityUnit}" var="unit">
+                        <option value="${unit.id}" data-unit-name="${unit.name}">${unit.name}</option>
+                    </c:forEach>
                 </select>
               </div>
             </div>

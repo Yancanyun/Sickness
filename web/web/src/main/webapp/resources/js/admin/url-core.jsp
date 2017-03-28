@@ -138,7 +138,8 @@
         // 新版库存管理
         StockManagement: [
              // 规格管理
-            ['getSpecificationsList', site.website + 'admin/stock/specifications/ajax/list/&{pageNo}', 'get','获取规格列表']
+            ['getSpecificationsList', site.website + 'admin/stock/specifications/ajax/list/&{pageNo}', 'get','获取规格列表'],
+            ['submitSpecifications', site.website + 'admin/stock/specifications/ajax/new}', 'post','提交规格添加']
         ],
 
         // 菜品管理

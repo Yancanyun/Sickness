@@ -96,7 +96,18 @@ public class AdminStockSpecificationsController extends AbstractController {
     @RequestMapping(value = "tonew", method = RequestMethod.GET)
     public String toNew(Model model) {
             try {
-                List<Unit> unitList = unitService.listByType(1);
+                List<Unit> unitList = unitService.listAll();
+                List<Unit> weightUnit = new ArrayList<Unit>();
+                List<Unit> quantityUnit = new ArrayList<Unit>();
+                for (Unit unit : unitList) {
+                    if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
+                        weightUnit.add(unit);
+                    } else {
+                        quantityUnit.add(unit);
+                    }
+                }
+                model.addAttribute("weightUnit", weightUnit);
+                model.addAttribute("quantityUnit", quantityUnit);
             } catch (SSException e) {
                 LogClerk.errLog.error(e);
                 sendErrMsg(e.getMessage());
@@ -105,36 +116,22 @@ public class AdminStockSpecificationsController extends AbstractController {
         return "admin/stock/specifications/add_home";
     }
 
-     /**
+    /**
      * 添加规格
-     * @param model
+     * @param specifications
      * @return
      */
      @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
-    @RequestMapping(value = {"add"},method = RequestMethod.POST)
-    public String AddSpecifications(Model model){
-        try{
-            List<Specifications> specificationsList = specificationsService.listAll();
-            List<Unit> unitList = unitService.listAll();
-            List<Unit> weightUnit = new ArrayList<Unit>();
-            List<Unit> quantityUnit = new ArrayList<Unit>();
-            for (Unit unit : unitList) {
-                if (UnitEnum.HundredWeight.getId().equals(unit.getType())) {
-                    weightUnit.add(unit);
-                } else {
-                    quantityUnit.add(unit);
-                }
-            }
-            model.addAttribute("specificationsList",specificationsList);
-            model.addAttribute("weightUnit", weightUnit);
-            model.addAttribute("quantityUnit", quantityUnit);
-        }catch (SSException e)
-        {
-            LogClerk.errLog.error(e);
-            sendErrMsg(e.getMessage());
-            return ADMIN_SYS_ERR_PAGE;
-        }
-        return "admin/stock/specifications/add_home";
+    @RequestMapping(value = {"ajax/new"},method = RequestMethod.POST)
+    public JSON AddSpecifications(Specifications specifications){
+         try{
+             specificationsService.add(specifications);
+             return sendJsonObject(AJAX_SUCCESS_CODE);
+         } catch (SSException e) {
+             LogClerk.errLog.error(e);
+             sendErrMsg(e.getMessage());
+             return sendErrMsgAndErrCode(e);
+         }
     }
 
     /**

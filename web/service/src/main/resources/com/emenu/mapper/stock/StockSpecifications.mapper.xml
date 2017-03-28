@@ -59,6 +59,7 @@
         `order_to_storage_ratio` AS orderToStorage,
         `storage_to_cost_card_ratio` AS storageToCost
         FROM t_stock_specification WHERE status = 1
+        ORDER BY `created_time` DESC
         LIMIT #{offset},#{pageSize}
     </select>
 
