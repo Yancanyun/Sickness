@@ -212,5 +212,21 @@ public interface StockDocumentsService {
      * @throws SSException
      */
     public List<DocumentsDto> listDocumentsDtoByPage(int page,int pageSize) throws SSException;
+
+    /**
+     * 根据时间、存放点、经手人、操作人分页单据详情获取单据和单据详情
+     * @param stockDocuments
+     * @param page
+     * @param pageSize
+     * @param startTime
+     * @param endTime
+     * @return
+     * @throws SSException
+     */
+    public List<DocumentsDto> listDocumentsDtoByCondition(StockDocuments stockDocuments,
+                                                           int page,
+                                                           int pageSize,
+                                                           Date startTime,
+                                                           Date endTime) throws SSException;
 }
 

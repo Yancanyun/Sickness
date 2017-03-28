@@ -22,7 +22,7 @@
         FROM `t_stock_documents` ORDER BY `created_time` DESC
     </select>
 
-    <select id="listBySearchDto" resultMap="pw.StockDocuments" >
+    <select id="listBySearchDto" resultMap="pw.StockDocuments">
         SELECT `id` AS id,
         `supplier_id` AS supplierId,
         `kitchen_id` AS kitchenId,
@@ -79,12 +79,12 @@
         </where>
     </select>
 
-    <delete id="delById" >
+    <delete id="delById">
         DELETE FROM t_stock_documents
         WHERE id = #{id}
     </delete>
 
-    <select id="queryById" resultMap="pw.StockDocuments" >
+    <select id="queryById" resultMap="pw.StockDocuments">
         SELECT `id` AS id,
         `supplier_id` AS supplierId,
         `kitchen_id` AS kitchenId,
@@ -189,7 +189,7 @@
     </select>
 
     <select id="countBySearchDto" resultType="int">
-       SELECT COUNT(id)
+        SELECT COUNT(id)
         FROM `t_stock_documents` AS document
         <where>
             <if test="documentsSearchDto != null">
@@ -242,7 +242,7 @@
         FROM t_stock_documents
         <where>
             <if test="endTime != null || endTime != ''">
-               `created_time` &lt;= #{endTime}
+                `created_time` &lt;= #{endTime}
             </if>
             AND `is_audited` = 1
             AND `is_settled` = 0
@@ -267,7 +267,47 @@
         `last_modified_time` AS lastModifiedTime
         FROM t_stock_documents
         ORDER BY `created_time` DESC
-        LIMIT #{offset} #{pageSize}
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="listDocumentsByCondition" resultMap="pw.StockDocuments">
+        SELECT `id` AS id,
+        `supplier_id` AS supplierId,
+        `kitchen_id` AS kitchenId,
+        `serial_number` AS serialNumber,
+        `comment` AS comment,
+        `created_party_id` AS createdPartyId,
+        `handler_party_id` AS handlerPartyId,
+        `audit_party_id` AS auditPartyId,
+        `money` AS money,
+        `is_audited` AS isAudited,
+        `is_settled` AS isSettled,
+        `type` AS type,
+        `created_time` AS createdTime,
+        `last_modified_time` AS lastModifiedTime
+        FROM t_stock_documents
+        <where>
+            <if test="startTime != null">
+                `created_time` &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND `created_time` &lt;= #{endTime}
+            </if>
+            <if test="stockDocument.id>0 and stockDocument.id != null">
+                AND `id` = #{stockDocument.id}
+            </if>
+            <if test="stockDocument.serialNumber != null">
+                AND `serial_number` LIKE '%${stockDocument.serialNumber}'
+            </if>
+            <if test="stockDocument.createdPartyId>0 and stockDocument.createdPartyId != null">
+                AND `created_party_id` = #{report.createdPartyId}
+            </if>
+            <if test="stockDocument.handlerPartyId>0 and stockDocument.handlerPartyId != null">
+                AND `handler_party_id` = #{report.handlerPartyId}
+            </if>
+        </where>
+        ORDER BY `created_time` DESC
+        LIMIT #{offset}, #{pageSize}
     </select>
 
 </mapper>
