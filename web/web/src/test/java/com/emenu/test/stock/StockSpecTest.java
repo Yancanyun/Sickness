@@ -21,7 +21,7 @@ public class StockSpecTest extends AbstractTestCase {
         Specifications specifications = new Specifications();
         specifications.setOrderUnitId(34);
         specifications.setStorageUnitId(12);
-        specifications.setCostCardId(56);
+        specifications.setCostCardUnitId(56);
         specifications.setOrderToStorage(BigDecimal.valueOf(23.31));
         specifications.setStorageToCost(BigDecimal.valueOf(34.32));
         specificationsService.add(specifications);
@@ -37,7 +37,7 @@ public class StockSpecTest extends AbstractTestCase {
         Specifications specifications = new Specifications();
         specifications.setOrderUnitId(233);
         specifications.setStorageUnitId(22);
-        specifications.setCostCardId(33);
+        specifications.setCostCardUnitId(33);
         specifications.setOrderToStorage(BigDecimal.valueOf(23.33));
         specifications.setStorageToCost(BigDecimal.valueOf(33.22));
         specificationsService.update(4,specifications);

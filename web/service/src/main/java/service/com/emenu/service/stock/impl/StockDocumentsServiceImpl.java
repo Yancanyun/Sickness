@@ -337,7 +337,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     throw SSException.get(EmenuException.OutOfStockItem);
                 }
                 stockItem.setStorageQuantity(itemQuantity);
-                stockItem.setCostCardUnitId(specifications.getCostCardId());
+                stockItem.setCostCardUnitId(specifications.getCostCardUnitId());
                 stockItemService.updateStockItem(stockItem);
                 //添加物品明细
                 StockItemDetail stockItemDetail = new StockItemDetail();
@@ -363,7 +363,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 BigDecimal itemQuantity = stockItem.getStorageQuantity().subtract(toCostCardUnitQuantity(stockDocumentsItem, specifications));
                 //更新总库存
                 stockItem.setStorageQuantity(itemQuantity);
-                stockItem.setCostCardUnitId(specifications.getCostCardId());
+                stockItem.setCostCardUnitId(specifications.getCostCardUnitId());
                 stockItemService.updateStockItem(stockItem);
                 //更新总库存物品明细
                 List<StockItemDetail> stockItemDetailList = stockItemDetailService.queryDetailById(stockDocumentsItem.getItemId(), 1);//总库存放点Id标记Tag为0是总库
@@ -447,7 +447,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     throw SSException.get(EmenuException.OutOfStockItem);
                 }
                 stockItem.setStorageQuantity(itemQuantity);
-                stockItem.setCostCardUnitId(specifications.getCostCardId());
+                stockItem.setCostCardUnitId(specifications.getCostCardUnitId());
                 stockItemService.updateStockItem(stockItem);
                 //更新总库存物品明细
                 List<StockItemDetail> stockItemDetailList = stockItemDetailService.queryDetailById(stockDocumentsItem.getItemId(), 1);//总库存放点Id标记Tag为0是总库
@@ -513,7 +513,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
      */
     private BigDecimal toCostCardUnitQuantity(StockDocumentsItem stockDocumentsItem, Specifications specifications) throws SSException {
         BigDecimal documentsItemQuantity = BigDecimal.ZERO;
-        if (stockDocumentsItem.getUnitId() == specifications.getCostCardId()) {
+        if (stockDocumentsItem.getUnitId() == specifications.getCostCardUnitId()) {
             documentsItemQuantity = stockDocumentsItem.getQuantity();
         } else if (stockDocumentsItem.getUnitId() == specifications.getOrderUnitId()) {
             documentsItemQuantity = stockDocumentsItem.getQuantity().multiply(specifications.getOrderToStorage().multiply(specifications.getStorageToCost()));

@@ -33,8 +33,8 @@ public class Specifications extends AbstractEntity{
     private String storageUnitName;
 
     //成本卡单位id
-    @Column(name = "cost_card_id")
-    private Integer costCardId;
+    @Column(name = "cost_card_unit_id")
+    private Integer costCardUnitId;
 
     //成本卡单位名称
     @Transient
@@ -109,12 +109,12 @@ public class Specifications extends AbstractEntity{
         this.costCardUnitName = costCardUnitName;
     }
 
-    public Integer getCostCardId() {
-        return costCardId;
+    public Integer getCostCardUnitId() {
+        return costCardUnitId;
     }
 
-    public void setCostCardId(Integer costCardId) {
-        this.costCardId = costCardId;
+    public void setCostCardUnitId(Integer costCardUnitId) {
+        this.costCardUnitId = costCardUnitId;
     }
 
     public BigDecimal getOrderToStorage() {

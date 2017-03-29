@@ -121,16 +121,18 @@ public class AdminStockSpecificationsController extends AbstractController {
      * @param specifications
      * @return
      */
-     @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
-    @RequestMapping(value = {"ajax/new"},method = RequestMethod.POST)
-    public JSON AddSpecifications(Specifications specifications){
+    @Module(value = ModuleEnums.AdminStockSpecifications,extModule = ModuleEnums.AdminStockSpecificationsAdd)
+    @RequestMapping(value = "ajax/new",method = RequestMethod.POST)
+    @ResponseBody
+    public String AddSpecifications(Specifications specifications){
          try{
+             Specifications specifications1 = specifications;
              specificationsService.add(specifications);
-             return sendJsonObject(AJAX_SUCCESS_CODE);
+             return "admin/stock/specifications/list_home";
          } catch (SSException e) {
              LogClerk.errLog.error(e);
              sendErrMsg(e.getMessage());
-             return sendErrMsgAndErrCode(e);
+             return ADMIN_SYS_ERR_PAGE;
          }
     }
 

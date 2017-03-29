@@ -116,7 +116,7 @@ public class SpecificationsServiceImpl implements SpecificationsService {
                 specifications.setOrderUnitName(unit.getName());
                 unit = unitService.queryById(specifications.getStorageUnitId());
                 specifications.setStorageUnitName(unit.getName());
-                unit = unitService.queryById(specifications.getCostCardId());
+                unit = unitService.queryById(specifications.getCostCardUnitId());
                 specifications.setCostCardUnitName(unit.getName());
             }
             return list;

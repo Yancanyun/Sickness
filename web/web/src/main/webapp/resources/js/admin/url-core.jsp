@@ -135,13 +135,6 @@
             ['inventory', site.website + 'admin/storage/settlement/check/ajax/settlement/check', 'put', '库存盘点']
         ],
 
-        // 新版库存管理
-        StockManagement: [
-             // 规格管理
-            ['getSpecificationsList', site.website + 'admin/stock/specifications/ajax/list/&{pageNo}', 'get','获取规格列表'],
-            ['submitSpecifications', site.website + 'admin/stock/specifications/ajax/new}', 'post','提交规格添加']
-        ],
-
         // 菜品管理
         DishManagement: [
             // 单位管理--列表
@@ -199,7 +192,8 @@
             ['afterEditIngredient', site.website + 'admin/dish/cost/card/afterEdit/getPrice', 'get', '获取菜品成本卡的一些列成本'],
             ['delIngredient', site.website + 'admin/dish/cost/card/afterDel/getPrice', 'get', '删除原配料'],
             ['submitData', site.website + 'admin/dish/cost/card/save/all', 'get', '保存成本卡所有信息'],
-            ['getPrice', site.website + 'admin/dish/cost/card/afterHand/getPrice', 'get','手动添加成本时，发送成本']
+            ['getPrice', site.website + 'admin/dish/cost/card/afterHand/getPrice', 'get','手动添加成本时，发送成本'],
+            ['submitSpecification', site.website + 'admin/stock/specifications/ajax/new', 'post','提交规格添加']
         ],
         // 权限管理
         AuthorityManagement: [

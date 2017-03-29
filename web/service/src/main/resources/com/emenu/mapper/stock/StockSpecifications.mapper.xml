@@ -55,7 +55,7 @@
         `id` AS id,
         `order_unit_id` AS orderUnitId,
         `storage_unit_id` AS storageUnitId,
-        `cost_card_id` AS costCardId,
+        `cost_card_unit_id` AS costCardUnitId,
         `order_to_storage_ratio` AS orderToStorage,
         `storage_to_cost_card_ratio` AS storageToCost
         FROM t_stock_specification WHERE status = 1
