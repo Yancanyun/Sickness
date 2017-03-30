@@ -379,6 +379,27 @@
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
                 <shiro:checkPermission name="Admin:Stock:Specifications:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:item:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/item">库存物品管理</a>
+                    </li>
+                </shiro:checkPermission>
+            </ul>
+            <ul>
+                <shiro:checkPermission name="Admin:Stock:Specifications:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:kitchen:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/kitchen">厨房管理</a>
+                    </li>
+                </shiro:checkPermission>
+            </ul>
+            <ul>
+                <shiro:checkPermission name="Admin:Stock:Specifications:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:kitchenItem:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a>
+                    </li>
+                </shiro:checkPermission>
+            </ul>
+            <ul>
+                <shiro:checkPermission name="Admin:Stock:Specifications:List">
                     <li <c:if test="${MethodModule eq 'Admin:Stock:Specifications:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/specifications">规格管理</a>
                     </li>
