@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="${staticWebsite}css/base/reset.css" />
 <link rel="stylesheet" href="${staticWebsite}tool/bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="${staticWebsite}css/admin/common/common.css" />
+<link rel="stylesheet" href="${staticWebsite}css/admin/dish-management/dish-management.css" />
 <!--[if lt IE 9]>
 <link rel="stylesheet" href="${staticWebsite}tool/base-widget/css/ie8.css">
 <script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>

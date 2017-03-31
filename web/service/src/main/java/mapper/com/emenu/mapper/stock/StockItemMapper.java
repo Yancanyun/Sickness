@@ -33,4 +33,22 @@ public interface StockItemMapper {
      * @throws SSException
      */
     public List<StockItem> listBySearchDto(@Param("searchDto") StockItemSearchDto searchDto) throws SSException;
+
+    /**
+     * 分页显示库存物品列表
+     *
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listByPage(@Param("offset") Integer offset,@Param("pageSize") Integer pageSize) throws SSException;
+
+    /**
+     * 统计物品数量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int count() throws SSException;
 }

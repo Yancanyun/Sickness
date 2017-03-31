@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="margin-bottom-15">
-            <a href="javasscript:;" class="btn btn-success J_add" disabled="disabled"><i class="fa fa-plus"></i>&nbsp;添加</a>
+            <a href="javascript:;" class="btn btn-success J_add" disabled="disabled"><i class="fa fa-plus"></i>&nbsp;添加</a>
             <a href="javascript:;" class="btn btn-success J_reset"><i class="fa fa-eraser"></i>&nbsp;重置</a>
             <a href="javascript:;" class="btn btn-success J_del" disabled="disabled"><i class="fa fa-minus"></i>&nbsp;删除</a>
         </div>

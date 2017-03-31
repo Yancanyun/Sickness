@@ -88,4 +88,21 @@ public interface StockItemService {
      */
     public void updateStockItemStatusById(int itemId,int status) throws SSException;
 
+    /**
+     * 分页显示库存物品列表
+     *
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listByPage(int offset,int pageSize) throws SSException;
+
+    /**
+     * 统计物品数量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int count() throws SSException;
 }

@@ -37,11 +37,12 @@
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
-                url: '/mock/admin/store-item-list.json',
+//                url: '/mock/admin/store-item-l.json',
+                url: '${website}admin/stock/item/ajax/list',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
-                    return url;
-//							return url + '/' + page;
+//                    return url;
+                    return url + '/' + page;
                 }
             });
         });

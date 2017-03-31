@@ -16,7 +16,7 @@
         WHERE 'id' = #{itemId};
     </update>
 
-    <select id="listBySearchDto" resultMap="pw.StockItem" resultType="com.emenu.common.entity.stock.StockItem">
+    <select id="listBySearchDto" resultMap="pw.StockItem">
         SELECT
           stockItem.`id` AS id,
           stockItem.`item_number` AS itemNumber,
@@ -32,7 +32,7 @@
           stockItem.`lower_quantity` AS lowerQuantity,
           stockItem.`remark`AS remark,
           stockItem.`stock_out_type` AS stockOutType,
-          stockItem.`status` AS ststus,
+          stockItem.`status` AS status,
           stockItem.`created_time` AS createdTime,
           stockItem.`last_modified_time` AS lastModifiedTime
         FROM `t_stock_item`stockItem
@@ -61,5 +61,37 @@
         <if test="searchDto != null and searchDto.offset >= 0 and searchDto.pageSize > 0 ">
             LIMIT #{searchDto.offset}, #{searchDto.pageSize}
         </if>
+    </select>
+    <select id="listByPage" resultMap="pw.StockItem">
+        SELECT
+        stockItem.`id` AS id,
+        stockItem.`item_number` AS itemNumber,
+        stockItem.`name` AS name,
+        stockItem.`assistant_code` AS assistantCode,
+        stockItem.`tag_id` AS tagId,
+        tag.`name` AS tagName,
+        stockItem.`specifications` AS specifications,
+        stockItem.`storage_quantity` AS storageQuantity,
+        stockItem.`cost_card_unit_id` AS costCardUnitId,
+        unit.`name` AS costCardName,
+        stockItem.`upper_quantity` AS upperQuantity,
+        stockItem.`lower_quantity` AS lowerQuantity,
+        stockItem.`remark`AS remark,
+        stockItem.`stock_out_type` AS stockOutType,
+        stockItem.`status` AS status,
+        stockItem.`created_time` AS createdTime,
+        stockItem.`last_modified_time` AS lastModifiedTime
+        FROM `t_stock_item`stockItem
+        LEFT JOIN `t_tag`tag ON tag.`id` = stockItem.`tag_id`
+        LEFT JOIN `t_unit`unit ON stockItem.`cost_card_unit_id` = unit.`id`
+        WHERE stockItem.`status` = 1
+        ORDER BY stockItem.`tag_id` ASC ,stockItem.`id` ASC
+        <if test="offset >= 0 and pageSize > 0 ">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+    </select>
+    <select id="count" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_stock_item` WHERE status = 1
     </select>
 </mapper>
