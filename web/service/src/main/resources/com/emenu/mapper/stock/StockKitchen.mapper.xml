@@ -17,6 +17,19 @@
         FROM t_stock_kitchen
     </select>
 
+    <select id="listByPage" resultMap="pw.StockKitchen">
+        SELECT
+        `id` AS id,
+        `name` AS name,
+        `introduction` AS introduction,
+        `principal` AS principal,
+        `status` AS status,
+        `type` AS type
+        FROM t_stock_kitchen WHERE status = 1
+        ORDER BY `created_time` DESC
+        LIMIT #{offset},#{pageSize}
+    </select>
+
     <insert id="addStockKitchen">
         INSERT INTO
         t_stock_kitchen(name,introduction,principal)
@@ -57,5 +70,10 @@
         SELECT type
         FROM t_stock_kitchen
         WHERE id = #{id}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(1)
+        FROM `t_stock_kitchen` WHERE status = 1
     </select>
 </mapper>

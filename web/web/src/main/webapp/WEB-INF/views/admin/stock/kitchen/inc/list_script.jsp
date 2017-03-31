@@ -6,7 +6,7 @@
         <td>&{it.responsiblePerson}</td>
         <td>&{it.introduction}</td>
         <td>
-            <a href="${website}admin/stock/kitchen/edit" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+            <a href="<%--${website}admin/stock/kitchen/edit--%>${website}admin/stock/kitchen/edit/&{it.id}" class="label-info"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
             <a href="${website}admin/stock/kitchen/delete" class="label-info J_del"><i class="fa fa-times"></i>&nbsp;删除</a>
             <a href="${website}admin/stock/kitchenItem/list" class="label-info"><i class="fa fa-search"></i>&nbsp;查看物品</a>
         </td>
@@ -20,11 +20,11 @@
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
-                url: '/mock/admin/depot-management-list.json',
+                url: '${website}admin/stock/kitchen/ajax/list',
                 pageSize: 10,
                 configUrl: function(url,page,me,prevPaginationData){
-                    return url;
-                    // return url + '/' + page;
+                    //return url;
+                    return url + '/' + page;
                 }
             });
         });

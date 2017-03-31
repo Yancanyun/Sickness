@@ -64,19 +64,35 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
 
     /**
      * 更新库存物品列表
-     * @param id
+     * @param stockKitchenItem
      * @throws SSException
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStockKitchenItem(Integer id) throws SSException{
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException{
         try{
-            stockKitchenItemMapper.updateStockKitchenItem(id);
+            stockKitchenItemMapper.updateStockKitchenItem(stockKitchenItem);
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateKitchenItemFail, e);
         }
 
+    }
+
+    /**
+     * 修改厨房物品的备注
+     * @param id
+     * @throws SSException
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
+    public void editRemark(Integer id) throws SSException{
+        try{
+            stockKitchenItemMapper.editRemark(id);
+        }catch (Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.EditRemarkFail, e);
+        }
     }
 
     /**

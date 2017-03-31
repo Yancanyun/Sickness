@@ -22,6 +22,15 @@ public interface StockKitchenMapper {
     public List<StockKitchen> listStockKitchen()throws SSException;
 
     /**
+     *刷分页
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StockKitchen> listByPage(@Param("offset") Integer offset,@Param("pageSize") Integer pageSize) throws SSException;
+
+    /**
      * 添加厨房
      *
      * @param stockKitchen
@@ -71,4 +80,11 @@ public interface StockKitchenMapper {
      * @throws SSException
      */
     public Integer queryType(@Param("id") Integer id) throws SSException;
+
+    /**
+     * 获取数据总量
+     * @return
+     * @throws SSException
+     */
+    public Integer count()throws SSException;
 }

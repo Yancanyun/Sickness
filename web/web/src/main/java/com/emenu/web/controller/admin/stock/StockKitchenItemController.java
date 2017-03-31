@@ -30,7 +30,8 @@ public class StockKitchenItemController extends AbstractController{
     StockKitchenItemService stockKitchenItemService;
 
     @Module(ModuleEnums.AdminStockKitchenItem)
-    @RequestMapping(value = {""}, method = RequestMethod.GET)
+    @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
+    //去厨房物品列表页
     public String toKitchenItemList(Model model){
         try{
             List<StockKitchenItem> kitchenItemList = stockKitchenItemService.queryAllItem();
@@ -42,6 +43,4 @@ public class StockKitchenItemController extends AbstractController{
             return WebConstants.sysErrorCode;
         }
     }
-
-
 }

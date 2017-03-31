@@ -29,10 +29,18 @@ public interface StockKitchenItemService {
 
     /**
      * 更新库存物品列表
+     * @param stockKitchenItem
+     * @throws SSException
+     */
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException;
+
+
+    /**
+     * 修改厨房物品的备注
      * @param id
      * @throws SSException
      */
-    public void updateStockKitchenItem(Integer id) throws SSException;
+    public void editRemark(Integer id) throws SSException;
 
     /**
      * 列出所有的物品

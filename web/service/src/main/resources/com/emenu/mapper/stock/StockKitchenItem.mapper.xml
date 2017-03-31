@@ -30,6 +30,13 @@
         WHERE id = #{stockKitchenItem.id}
     </update>
 
+    <update id="editRemark">
+        UPDATE t_stock_kitchen_item
+        SET
+        remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
     <select id="queryAllItem" resultMap="pw.StockKitchenItem">
         SELECT *
         FROM t_stock_kitchen_item
