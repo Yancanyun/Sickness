@@ -23,7 +23,8 @@ public class StockKitchenTest extends AbstractTestCase {
     public void toStockKitchenList()throws Exception{
         try{
             List<StockKitchen> stockKitchenList = new ArrayList<StockKitchen>();
-            stockKitchenList = stockKitchenService.listStockKitchen();
+            /*stockKitchenList = stockKitchenService.listStockKitchen();*/
+            stockKitchenList = stockKitchenService.listByPage(2,2);
             for(StockKitchen stockKitchen:stockKitchenList){
                 System.out.println("kitchen name is "+ stockKitchen.getName()+",instruction is "+stockKitchen.getIntroduction()+"\n");
             }
@@ -36,8 +37,7 @@ public class StockKitchenTest extends AbstractTestCase {
             StockKitchen stockKitchen = new StockKitchen();
             stockKitchen.setName("相楠的厨房");
             stockKitchen.setIntroduction("吉林口味");
-            //不能为空
-//            stockKitchen.setPrincipal("坤神");
+            stockKitchen.setPrincipal("坤神");
             stockKitchenService.addStockKitchen(stockKitchen);
         }catch (Exception e){
             throw new Exception(e.getMessage());
@@ -58,7 +58,7 @@ public class StockKitchenTest extends AbstractTestCase {
     @Test
     public void updateStockKitchenStatus()throws Exception{
         try{
-            stockKitchenService.updateStockKitchenStatus(2,1);
+            stockKitchenService.updateStockKitchenStatus(2,0);
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }

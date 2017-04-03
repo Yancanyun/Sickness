@@ -1,11 +1,14 @@
 package com.emenu.service.stock.impl;
 
+import com.emenu.common.entity.dish.Unit;
 import com.emenu.common.entity.stock.StockKitchen;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.mapper.stock.StockKitchenMapper;
+import com.emenu.service.dish.UnitService;
 import com.emenu.service.stock.StockKitchenService;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
+import com.pandawork.core.common.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,9 @@ public class StockKitchenServiceImpl implements StockKitchenService{
     @Autowired
     private StockKitchenMapper stockKitchenMapper;
 
+    @Autowired
+    private UnitService unitService;
+
     /**
      * 查看厨房列表
      * @return
@@ -38,6 +44,27 @@ public class StockKitchenServiceImpl implements StockKitchenService{
             throw SSException.get(EmenuException.ListKitchenFailed);
         }
         return stockKitchenList;
+    }
+
+    /**
+     * 查询分页信息
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    @Override
+    public List<StockKitchen> listByPage(int offset, int pageSize) throws SSException{
+        try{
+            if(Assert.isNull(offset)){
+                throw SSException.get(EmenuException.OffsetIsNotNull);
+            }
+            List<StockKitchen> list = stockKitchenMapper.listByPage(offset,pageSize);
+            return list;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListByPageFailed, e);
+        }
     }
 
     /**
@@ -153,6 +180,20 @@ public class StockKitchenServiceImpl implements StockKitchenService{
         }catch (SSException e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CheckTypeFailed);
+        }
+    }
+
+    /**
+     * 数据量（即有多少个厨房）
+     * @return
+     * @throws SSException
+     */
+    public Integer count()throws SSException {
+        try{
+            return stockKitchenMapper.count();
+        }catch(Exception e) {
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountError, e);
         }
     }
 }

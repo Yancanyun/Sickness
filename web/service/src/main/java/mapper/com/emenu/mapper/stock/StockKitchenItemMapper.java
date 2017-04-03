@@ -27,12 +27,21 @@ public interface StockKitchenItemMapper {
      */
     public void delStockKitchenItem(@Param("id") Integer id) throws SSException;
 
+
     /**
-     * 编辑物品
+     * 根据id修改备注
      * @param id
      * @throws SSException
      */
-    public void updateStockKitchenItem(@Param("id") Integer id) throws SSException;
+    public void editRemark(@Param("id") Integer id) throws SSException;
+
+
+    /**
+     * 编辑物品
+     * @param stockKitchenItem
+     * @throws SSException
+     */
+    public void updateStockKitchenItem(@Param("stockKitchenItem") StockKitchenItem stockKitchenItem) throws SSException;
 
     /**
      * 列出所有物品
