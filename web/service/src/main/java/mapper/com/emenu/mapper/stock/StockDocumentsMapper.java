@@ -133,5 +133,13 @@ public interface StockDocumentsMapper {
      * @throws Exception
      */
     public List<StockDocuments> listDocumentsByCondition(@Param("stockDocument") StockDocuments stockDocuments, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("startTime") Date startTime, @Param("endTime") Date endTime) throws Exception;
+
+    /**
+     * 统计单据数量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int count() throws SSException;
 }
 

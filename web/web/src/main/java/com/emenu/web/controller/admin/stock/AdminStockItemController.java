@@ -42,7 +42,7 @@ public class AdminStockItemController extends AbstractController{
     }
 
 
-    @Module(value = ModuleEnums.AdminStockSpecifications, extModule = ModuleEnums.AdminStockItemList)
+    @Module(value = ModuleEnums.AdminStockItem, extModule = ModuleEnums.AdminStockItemList)
     @RequestMapping(value = "ajax/list/{pageNo}",method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxList(@PathVariable("pageNo")Integer pageNo,

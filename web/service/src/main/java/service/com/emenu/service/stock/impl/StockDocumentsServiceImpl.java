@@ -556,7 +556,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             documentsList = stockDocumentsMapper.listAll();
             //设置经手人、操作人、审核人名字
             for (StockDocuments stockDocuments : documentsList) {
-                setStockDOcumentsRelatedName(stockDocuments);
+                setStockDocumentsRelatedName(stockDocuments);
             }
             return documentsList;
         } catch (Exception e) {
@@ -599,8 +599,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             }
             //documentsList = stockDocumentsMapper.listDocumentsBySearchDto(documentsSearchDto);
             //设置经手人、操作人、审核人名字
-            for (StockDocuments stockDocuments : documentsList) {
-                setStockDOcumentsRelatedName(stockDocuments);
+            for (StockDocuments stockDocument : documentsList) {
+                setStockDocumentsRelatedName(stockDocument);
             }
             return documentsList;
         } catch (Exception e) {
@@ -619,7 +619,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             } else {
                 stockDocuments = commonDao.queryById(StockDocuments.class, id);
                 if (Assert.isNotNull(stockDocuments)) {
-                    setStockDOcumentsRelatedName(stockDocuments);
+                    setStockDocumentsRelatedName(stockDocuments);
                 }
                 return stockDocuments;
             }
@@ -641,7 +641,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocuments.getId());
                     documentsDto.setStockDocuments(stockDocuments);
                     documentsDto.setStockDocumentsItemList(stockDocumentsItems);
-                    setStockDOcumentsRelatedName(stockDocuments);
+                    setStockDocumentsRelatedName(stockDocuments);
                 }
             }
             return documentsDto;
@@ -713,7 +713,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 for (StockDocuments stockDocument : stockDocuments) {
                     List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
                     if (Assert.isNotNull(stockDocumentsItems)) {
-                        setStockDOcumentsRelatedName(stockDocument);
+                        setStockDocumentsRelatedName(stockDocument);
                         DocumentsDto documentsDto = new DocumentsDto();
                         documentsDto.setStockDocuments(stockDocument);
                         documentsDto.setStockDocumentsItemList(stockDocumentsItems);
@@ -734,7 +734,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
         try {
             stockDocuments = stockDocumentsMapper.listByTime(startTime, endTime);
             for (StockDocuments stockDocument : stockDocuments) {
-                setStockDOcumentsRelatedName(stockDocument);
+                setStockDocumentsRelatedName(stockDocument);
             }
             return stockDocuments;
         } catch (Exception e) {
@@ -755,7 +755,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 for (StockDocuments stockDocument : stockDocuments) {
                     List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
                     if (Assert.isNotNull(stockDocumentsItems)) {
-                        setStockDOcumentsRelatedName(stockDocument);
+                        setStockDocumentsRelatedName(stockDocument);
                         DocumentsDto documentsDto = new DocumentsDto();
                         documentsDto.setStockDocuments(stockDocument);
                         documentsDto.setStockDocumentsItemList(stockDocumentsItems);
@@ -777,7 +777,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited(startTime, endTime, isAudited);
             if (Assert.isNotNull(stockDocuments) && !Assert.lessOrEqualZero(stockDocuments.size())) {
                 for (StockDocuments stockDocument : stockDocuments) {
-                    setStockDOcumentsRelatedName(stockDocument);
+                    setStockDocumentsRelatedName(stockDocument);
                 }
             }
             return stockDocuments;
@@ -797,7 +797,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 for (StockDocuments stockDocument : stockDocuments) {
                     List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
                     if (Assert.isNotNull(stockDocumentsItems)) {
-                        setStockDOcumentsRelatedName(stockDocument);
+                        setStockDocumentsRelatedName(stockDocument);
                         DocumentsDto documentsDto = new DocumentsDto();
                         documentsDto.setStockDocuments(stockDocument);
                         documentsDto.setStockDocumentsItemList(stockDocumentsItems);
@@ -819,7 +819,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
         try {
             stockDocuments = stockDocumentsMapper.listByTimeAndIsAudited1(startTime, endTime, isAudited);
             for (StockDocuments stockDocument : stockDocuments) {
-                setStockDOcumentsRelatedName(stockDocument);
+                setStockDocumentsRelatedName(stockDocument);
             }
             return stockDocuments;
         } catch (Exception e) {
@@ -838,7 +838,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 for (StockDocuments stockDocument : stockDocuments) {
                     List<StockDocumentsItem> stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
                     if (Assert.isNotNull(stockDocumentsItems)) {
-                        setStockDOcumentsRelatedName(stockDocument);
+                        setStockDocumentsRelatedName(stockDocument);
                         DocumentsDto documentsDto = new DocumentsDto();
                         documentsDto.setStockDocuments(stockDocument);
                         documentsDto.setStockDocumentsItemList(stockDocumentsItems);
@@ -901,6 +901,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 List<StockDocumentsItem> stockDocumentsItems = Collections.emptyList();
                 //根据单据id获取单据详情信息
                 stockDocumentsItems = stockDocumentsItemMapper.queryByDocumentsId(stockDocument.getId());
+                setStockDocumentsRelatedName(stockDocument);
                 //数据存入documentDto
                 documentDto.setStockDocuments(stockDocument);
                 documentDto.setStockDocumentsItemList(stockDocumentsItems);
@@ -954,6 +955,34 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
     }
 
 
+    @Override
+    public List<StockDocuments> listByPage(int offset,int pageSize) throws SSException{
+        List<StockDocuments> list = Collections.emptyList();
+        try{
+            list =  stockDocumentsMapper.listByPage(offset,pageSize);
+            if(Assert.isNotNull(list)){
+                for(StockDocuments stockDocument: list){
+                    setStockDocumentsRelatedName(stockDocument);
+                }
+            }
+            return list;
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListDocumentsFail, e);
+        }
+    }
+
+    @Override
+    public int count() throws SSException{
+        try{
+            return stockDocumentsMapper.count();
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountDocumentsError,e);
+        }
+    }
+
+
     /******************************** 私有方法 ********************************************/
 
     /**
@@ -962,9 +991,11 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
      * @param stockDocuments
      * @throws SSException
      */
-    private void setStockDOcumentsRelatedName(StockDocuments stockDocuments) throws SSException {
+    private void setStockDocumentsRelatedName(StockDocuments stockDocuments) throws SSException {
         // 设置经手人、操作人、审核人名字
-        Employee createdEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getCreatedPartyId());
+        int id = stockDocuments.getCreatedPartyId();
+//        Employee createdEmployee = employeeService.queryByPartyIdWithoutDelete(stockDocuments.getCreatedPartyId());
+        Employee createdEmployee = employeeService.queryByPartyIdWithoutDelete(id);
         if (Assert.isNull(createdEmployee)) {
             throw SSException.get(EmenuException.SystemException);
         }

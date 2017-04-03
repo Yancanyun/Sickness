@@ -378,22 +378,22 @@
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理2.0</span><i
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
-                <shiro:checkPermission name="Admin:Stock:Specifications:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:item:List'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Stock:Item:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Item:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/item">库存物品管理</a>
                     </li>
                 </shiro:checkPermission>
             </ul>
             <ul>
-                <shiro:checkPermission name="Admin:Stock:Specifications:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:kitchen:List'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Stock:Kitchen:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Kitchen:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/kitchen">厨房管理</a>
                     </li>
                 </shiro:checkPermission>
             </ul>
             <ul>
-                <shiro:checkPermission name="Admin:Stock:Specifications:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:kitchenItem:List'}">class="active"</c:if>>
+                <shiro:checkPermission name="Admin:Stock:KitchenItem:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:KitchenItem:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a>
                     </li>
                 </shiro:checkPermission>
@@ -402,6 +402,13 @@
                 <shiro:checkPermission name="Admin:Stock:Specifications:List">
                     <li <c:if test="${MethodModule eq 'Admin:Stock:Specifications:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/specifications">规格管理</a>
+                    </li>
+                </shiro:checkPermission>
+            </ul>
+            <ul>
+                <shiro:checkPermission name="Admin:Stock:Documents:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Documents:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/specifications">单据管理</a>
                     </li>
                 </shiro:checkPermission>
             </ul>

@@ -743,8 +743,9 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateStockDocumentsItemFailed("修改单据物品失败",110037),
     StockDocumentsItemIsNotNull("单据物品不能为空",110038),
     DelDocumentsItemByIdFailed("删除单据物品明细失败",110039),
-    DocumentsItemIdError("单据明细Id不能为空或小于0",110018),
-    ListByTypeFailed("根据类型查询单位失败",110019),
+    DocumentsItemIdError("单据明细Id不能为空或小于0",110040),
+    ListByTypeFailed("根据类型查询单位失败",110042),
+    CountDocumentsError("统计单据数量失败",110043),
 
 
 

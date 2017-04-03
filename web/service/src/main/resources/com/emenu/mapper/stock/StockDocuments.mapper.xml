@@ -310,4 +310,8 @@
         LIMIT #{offset}, #{pageSize}
     </select>
 
+    <select id="count" resultType="int">
+        SELECT COUNT(1) FROM `t_stock_documents`
+    </select>
+
 </mapper>

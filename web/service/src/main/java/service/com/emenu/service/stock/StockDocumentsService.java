@@ -228,5 +228,23 @@ public interface StockDocumentsService {
                                                            int pageSize,
                                                            Date startTime,
                                                            Date endTime) throws SSException;
+
+    /**
+     * 根据页码获取单据列表
+     *
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
+    public List<StockDocuments> listByPage(int offset,int pageSize) throws SSException;
+
+    /**
+     * 统计单据数量
+     *
+     * @return
+     * @throws SSException
+     */
+    public int count() throws SSException;
 }
 
