@@ -75,4 +75,12 @@ public class StockItemServiceTest extends AbstractTestCase{
         StockItemSearchDto searchDto = new StockItemSearchDto();
         List<StockItem> itemList = stockItemService.listItem(searchDto);
     }
+
+    @Test
+    public void listAll()throws SSException{
+        List<StockItem> stockItemList = stockItemService.listAll();
+        for(StockItem stockItem:stockItemList){
+            System.out.println(stockItem.getSpecifications());
+        }
+    }
 }

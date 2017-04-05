@@ -18,7 +18,7 @@
       <h2>规格类型添加</h2>
     </div>
     <div class="col-sm-12">
-      <div class="alert hidden J_tip" role="alert">保存成功！</div>
+      <div class="alert alert-danger J_tip" role="alert">保存失败！</div>
       <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
         <div class="panel panel-info">
           <div class="panel-heading">
@@ -47,7 +47,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位与库存换算关系</label>
               <div class="col-sm-6">
-                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="">
+                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorage" value="${specification.orderToStorage}">
               </div>
             </div>
             <div class="form-group">
@@ -72,7 +72,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位与成本卡换算关系</label>
               <div class="col-sm-6">
-                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="">
+                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCost" value="${specification.storageToCost}">
               </div>
             </div>
             <div class="form-group">

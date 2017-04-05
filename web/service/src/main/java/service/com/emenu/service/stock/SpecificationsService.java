@@ -30,11 +30,10 @@ public interface SpecificationsService {
     /**
      * 根据id更改规格信息
      *
-     * @param id
      * @param specifications
      * @throws SSException
      */
-    public void update(Integer id, Specifications specifications) throws SSException;
+    public void update(Specifications specifications) throws SSException;
 
     /**
      * 根据id查询规格信息

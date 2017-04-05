@@ -383,32 +383,41 @@
                         <a class="J_menu" href="${website}admin/stock/item">库存物品管理</a>
                     </li>
                 </shiro:checkPermission>
-            </ul>
-            <ul>
                 <shiro:checkPermission name="Admin:Stock:Kitchen:List">
                     <li <c:if test="${MethodModule eq 'Admin:Stock:Kitchen:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/kitchen">厨房管理</a>
                     </li>
                 </shiro:checkPermission>
-            </ul>
-            <ul>
                 <shiro:checkPermission name="Admin:Stock:KitchenItem:List">
                     <li <c:if test="${MethodModule eq 'Admin:Stock:KitchenItem:List'}">class="active"</c:if>>
                         <a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a>
                     </li>
                 </shiro:checkPermission>
-            </ul>
-            <ul>
-                <shiro:checkPermission name="Admin:Stock:Specifications:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:Specifications:List'}">class="active"</c:if>>
-                        <a class="J_menu" href="${website}admin/stock/specifications">规格管理</a>
-                    </li>
-                </shiro:checkPermission>
-            </ul>
-            <ul>
-                <shiro:checkPermission name="Admin:Stock:Documents:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:Documents:List'}">class="active"</c:if>>
-                        <a class="J_menu" href="${website}admin/stock/specifications">单据管理</a>
+                <shiro:checkPermission name="Admin:Stock:Specifications">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Specifications'
+                                    or MethodModule eq 'Admin:Stock:Specifications:List'}">class="active"</c:if>>
+                            <a class="J_menu" href="${website}admin/stock/specifications/list">
+                                规格管理
+                            <c:if test="${ExtModule eq 'Admin:Stock:Specifications:New'
+                                        or ExtModule eq 'Admin:Stock:Specifications:Update'}">
+                                <i class="fa fa-angle-right angle-right"></i>
+                            </c:if>
+                            </a>
+                            <c:if test="${ExtModule eq 'Admin:Stock:Specifications:New'
+                                        or ExtModule eq 'Admin:Stock:Specifications:Update'}">
+                                <ul>
+                                <shiro:checkPermission name="Admin:Stock:Specifications:New">
+                                <li <c:if test="${ExtModule eq 'Admin:Stock:Specifications:New'}"> class="active" </c:if>>
+                                    <a href="${website}admin/stock/specifications/tonew">添加规格</a>
+                                </li>
+                                </shiro:checkPermission>
+                                <c:if test="${ExtModule eq 'Admin:Stock:Specifications:Update'}">
+                                <li class="active">
+                                    <a href="#">编辑规格</a>
+                                </li>
+                                </c:if>
+                                </ul>
+                            </c:if>
                     </li>
                 </shiro:checkPermission>
             </ul>

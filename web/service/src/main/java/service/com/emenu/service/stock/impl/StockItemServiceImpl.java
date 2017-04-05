@@ -170,6 +170,17 @@ public class StockItemServiceImpl implements StockItemService {
     }
 
     @Override
+    public List<StockItem> listAll()throws SSException{
+        try{
+            List<StockItem> stockItemList = stockItemMapper.listAll();
+            return stockItemList;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListStockItemFailed,e);
+        }
+    }
+
+    @Override
     public List<StockItem> listByPage(int offset, int pageSize) throws SSException{
         try{
            return stockItemMapper.listByPage(offset,pageSize);

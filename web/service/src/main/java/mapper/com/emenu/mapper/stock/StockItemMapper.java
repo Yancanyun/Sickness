@@ -24,6 +24,13 @@ public interface StockItemMapper {
      */
     public int countByName(@Param("name") String name) throws SSException;
 
+
+    /**
+     * 修改
+     * @param itemId
+     * @param status
+     * @throws SSException
+     */
     public void updateStockItemStatusById(@Param("itemId") int itemId, @Param("status") int status) throws SSException;
 
     /**
@@ -33,6 +40,14 @@ public interface StockItemMapper {
      * @throws SSException
      */
     public List<StockItem> listBySearchDto(@Param("searchDto") StockItemSearchDto searchDto) throws SSException;
+
+    /**
+     * 获取全部库存物品
+     *
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listAll() throws SSException;
 
     /**
      * 分页显示库存物品列表

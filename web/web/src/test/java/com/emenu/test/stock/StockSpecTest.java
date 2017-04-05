@@ -29,18 +29,19 @@ public class StockSpecTest extends AbstractTestCase {
 
     @Test
     public void deleteById() throws Exception{
-        specificationsService.deleteById(1);
+        specificationsService.deleteById(13);
     }
 
     @Test
     public void update()throws Exception{
         Specifications specifications = new Specifications();
-        specifications.setOrderUnitId(233);
-        specifications.setStorageUnitId(22);
-        specifications.setCostCardUnitId(33);
-        specifications.setOrderToStorage(BigDecimal.valueOf(23.33));
-        specifications.setStorageToCost(BigDecimal.valueOf(33.22));
-        specificationsService.update(4,specifications);
+        specifications.setId(3);
+        specifications.setOrderUnitId(3);
+        specifications.setStorageUnitId(3);
+        specifications.setCostCardUnitId(3);
+        specifications.setOrderToStorage(BigDecimal.valueOf(1003.33));
+        specifications.setStorageToCost(BigDecimal.valueOf(100.22));
+        specificationsService.update(specifications);
     }
 
     @Test

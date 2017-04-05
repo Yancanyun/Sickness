@@ -94,4 +94,28 @@
         SELECT COUNT(1)
         FROM `t_stock_item` WHERE status = 1
     </select>
+
+    <select id="listAll" resultMap="pw.StockItem">
+        SELECT
+        stockItem.`id` AS id,
+        stockItem.`item_number` AS itemNumber,
+        stockItem.`name` AS name,
+        stockItem.`assistant_code` AS assistantCode,
+        stockItem.`tag_id` AS tagId,
+        tag.`name` AS tagName,
+        stockItem.`specifications` AS specifications,
+        stockItem.`storage_quantity` AS storageQuantity,
+        stockItem.`cost_card_unit_id` AS costCardUnitId,
+        unit.`name` AS costCardName,
+        stockItem.`upper_quantity` AS upperQuantity,
+        stockItem.`lower_quantity` AS lowerQuantity,
+        stockItem.`remark`AS remark,
+        stockItem.`stock_out_type` AS stockOutType,
+        stockItem.`status` AS ststus,
+        stockItem.`created_time` AS createdTime,
+        stockItem.`last_modified_time` AS lastModifiedTime
+        FROM `t_stock_item`stockItem
+        LEFT JOIN `t_tag`tag ON tag.`id` = stockItem.`tag_id`
+        LEFT JOIN `t_unit`unit ON stockItem.`cost_card_unit_id` = unit.`id`
+    </select>
 </mapper>

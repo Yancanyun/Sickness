@@ -193,7 +193,8 @@
             ['delIngredient', site.website + 'admin/dish/cost/card/afterDel/getPrice', 'get', '删除原配料'],
             ['submitData', site.website + 'admin/dish/cost/card/save/all', 'get', '保存成本卡所有信息'],
             ['getPrice', site.website + 'admin/dish/cost/card/afterHand/getPrice', 'get','手动添加成本时，发送成本'],
-            ['submitSpecification', site.website + 'admin/stock/specifications/ajax/new', 'post','提交规格添加']
+            ['submitSpecification', site.website + 'admin/stock/specifications/ajax/new', 'post','提交规格添加'],
+            ['delSpecification', site.website + 'admin/stock/specifications/ajax/del/&{id}', 'get', '删除规格']
         ],
         // 权限管理
         AuthorityManagement: [

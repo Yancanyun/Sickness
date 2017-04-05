@@ -89,6 +89,13 @@ public interface StockItemService {
     public void updateStockItemStatusById(int itemId,int status) throws SSException;
 
     /**
+     * 获取所有物品列表
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listAll()throws SSException;
+
+    /**
      * 分页显示库存物品列表
      *
      * @param offset

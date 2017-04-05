@@ -325,8 +325,9 @@ public enum ModuleEnums {
     //规格管理
     AdminStockSpecifications("Admin:Stock:Specifications"),
     AdminStockSpecificationsList("Admin:Stock:Specifications:List"),
-    AdminStockSpecificationsAdd("Admin:Stock:Specifications:Add"),
-    AdminStockSpecificationsEdit("Admin:Stock:Specifications:Edit"),
+    AdminStockSpecificationsNew("Admin:Stock:Specifications:New"),
+    AdminStockSpecificationsUpdate("Admin:Stock:Specifications:Update"),
+    AdminStockSpecificationDelete("Admin:Stock:Specifications:Delete"),
 
     //新版库存单据管理
     AdminStockDocuments("Admin:Stock:Documents"),

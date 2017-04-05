@@ -16,7 +16,7 @@
     <td class="J_storageToCost">&{it.storageToCost}</td>
     <td class="J_costCardId">&{it.costCardUnitName}</td>
     <td>
-      <a class="label-info J_edit" href="${website}admin/stock/specifications/edit/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
+      <a class="label-info J_edit" href="${website}admin/stock/specifications/toUpdate/&{it.id}"><i class="fa fa-pencil"></i>&nbsp;编辑</a>
       <a class="label-info J_del" href="javascript:;"><i class="fa fa-times"></i>&nbsp;删除</a>
     </td>
   </tr>
@@ -32,7 +32,7 @@
         url: '${website}admin/stock/specifications/ajax/list',
         pageSize: 10,
         configUrl: function(url,page,me,prevPaginationData){
-//          return url;
+//        return url;
           return url + '/' + page;
         }
       });

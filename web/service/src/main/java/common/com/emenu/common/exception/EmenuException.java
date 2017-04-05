@@ -744,7 +744,6 @@ public enum EmenuException implements IBizExceptionMes {
     StockDocumentsItemIsNotNull("单据物品不能为空",110038),
     DelDocumentsItemByIdFailed("删除单据物品明细失败",110039),
     DocumentsItemIdError("单据明细Id不能为空或小于0",110040),
-    ListByTypeFailed("根据类型查询单位失败",110042),
     CountDocumentsError("统计单据数量失败",110043),
 
 
@@ -758,6 +757,9 @@ public enum EmenuException implements IBizExceptionMes {
     ListAllSpecificationsFail("列举所有规格失败",111005),
     OffsetIsNotNull("分页偏移量不能为空",111006),
     ListByPageFailed("根据页码查询规格失败",111007),
+    ListByTypeFailed("根据类型查询单位失败",111008),
+    SpecificationIsUsed("该规格被使用无法删除或修改",111009),
+
 
     //新版库存-厨房物品列表管理
     AddKitchenItemFail("厨房物品添加失败",112000),
