@@ -54,12 +54,12 @@ public interface StockKitchenService {
     public void updateStockKitchenStatus(int id,int status)throws SSException;
 
     /**
-     * 查看厨房明细信息
+     * 根据id查看厨房明细信息
      * @param id
      * @return
      * @throws SSException
      */
-    public StockKitchen queryStockKitchenDetails(int id)throws SSException;
+    public StockKitchen queryById(int id)throws SSException;
 
     /**
      * 检查厨房名称是否存在
@@ -72,12 +72,12 @@ public interface StockKitchenService {
 
 
     /**
-     * 根据id查询存放点的type，如果是总库（type=1）,则返回该存放点id
+     * 根据id查询存放点的type，如果是总库（type=1）,则返回该存放点true
      * @param id
      * @return
      * @throws SSException
      */
-    public Integer checkType  (Integer id)throws SSException;
+    public Boolean checkType  (int  id)throws SSException;
 
     /**
      * 数据量（即有多少个厨房）

@@ -124,14 +124,14 @@ public class StockKitchenServiceImpl implements StockKitchenService{
     }
 
     /**
-     * 查看厨房明细信息
+     * 根据id查看厨房明细信息
      *
      * @param id
      * @return
      * @throws SSException
      */
     @Override
-    public StockKitchen queryStockKitchenDetails(int id)throws SSException{
+    public StockKitchen queryById(int id)throws SSException{
         StockKitchen stockKitchen ;
         try{
             stockKitchen = stockKitchenMapper.queryStockKitchenDetails(id);
@@ -167,15 +167,15 @@ public class StockKitchenServiceImpl implements StockKitchenService{
      * @return
      * @throws SSException
      */
-    public Integer checkType(Integer id)throws SSException{
+    public Boolean  checkType(int id)throws SSException{
         int type;
         try{
             type = stockKitchenMapper.queryType(id);
             if(type == 1){
-                return id;
+                return true;
             }
             else{
-                return null;
+                return false;
             }
         }catch (SSException e){
             LogClerk.errLog.error(e);

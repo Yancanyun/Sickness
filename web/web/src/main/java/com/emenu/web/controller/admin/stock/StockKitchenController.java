@@ -101,23 +101,46 @@ public class StockKitchenController extends AbstractController{
     }
 
 
-    /**
-     * 去厨房添加页
-     * @param model
-     * @return
-     */
     @Module(ModuleEnums.AdminStockKitchenAdd)
+    @RequestMapping(value = {"/add"},method = RequestMethod.GET)
+    public String toAddPage(){
+        return "admin/stock/kitchen/add_home";
+    }
+
+    @Module(ModuleEnums.AdminStockKitchenAdd)
+    @RequestMapping(value = "ajax/add", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject ajaxNewChildRemarkTag(@RequestParam("id") Integer id,
+                                            @RequestParam("name") String name,
+                                            @RequestParam("introduction") String introduction,
+                                            @RequestParam("principal") String principal) {
+        try {
+            StockKitchen stockKitchen = new StockKitchen();
+            stockKitchen.setId(id);
+            stockKitchen.setName(name);
+            stockKitchen.setIntroduction(introduction);
+            stockKitchen.setPrincipal(principal);
+            //设置状态为可用
+            //remarkTag.setStatus(RemarkTagStatusEnums.Enabled.getId());
+            //remarkTagService.newRemarkTag(remarkTag);
+            stockKitchenService.addStockKitchen(stockKitchen);
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", stockKitchen.getId());
+            return sendJsonObject(jsonObject, AJAX_SUCCESS_CODE);
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            return sendErrMsgAndErrCode(e);
+        }
+    }
+
+
+/*    @Module(ModuleEnums.AdminStockKitchenAdd)
     @RequestMapping(value = {"/add"},method = RequestMethod.GET)
     public String toAddPage(Model model){
         return "admin/stock/kitchen/add_home";
     }
 
-    /**
-     * 添加厨房
-     * @param model
-     * @param stockKitchen
-     * @return
-     */
     @Module(ModuleEnums.AdminStockKitchenAdd)
     @RequestMapping(value = {"/add"},method = RequestMethod.POST)
     public String AddKitchen(Model model,StockKitchen stockKitchen){
@@ -129,7 +152,7 @@ public class StockKitchenController extends AbstractController{
             return ADMIN_SYS_ERR_PAGE;
         }
         return "redirect:list";
-    }
+    }*/
 
 
     /**
@@ -143,9 +166,16 @@ public class StockKitchenController extends AbstractController{
         return "admin/stock/kitchen/edit_home";
     }
 
+    /**
+     * 编辑
+     * @param model
+     * @param id
+     * @param stockKitchen
+     * @return
+     */
     @Module(ModuleEnums.AdminStockKitchenEdit)
-    @RequestMapping(value = {"/edit"},method = RequestMethod.POST)
-    public String EditKitchen(Model model,int id ,StockKitchen stockKitchen){
+    @RequestMapping(value = {"/edit{id}"},method = RequestMethod.POST)
+    public String EditKitchen(Model model,@PathVariable("id")Integer id,StockKitchen stockKitchen){
         try{
             stockKitchenService.updateStockKitchen(id,stockKitchen);
         }catch (SSException e){
