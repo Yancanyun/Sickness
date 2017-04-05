@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.stock.DocumentsDto;
-import com.emenu.common.entity.stock.StockDocuments;
-import com.emenu.common.entity.stock.StockDocumentsItem;
-import com.emenu.common.entity.stock.StockItem;
-import com.emenu.common.entity.stock.StockKitchen;
+import com.emenu.common.entity.stock.*;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.utils.URLConstants;
@@ -25,8 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +46,7 @@ public class AdminStockDocumentsController extends AbstractController {
 
     @Module(ModuleEnums.AdminStockDocumentsList)
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
-    public String toList(HttpServletRequest request, HttpServletResponse response,Model model){
+    public String toList(Model model){
         try{
             List<StockKitchen> kitchenList = stockKitchenService.listStockKitchen();
             //经手人、操作人、审核人
@@ -109,7 +104,7 @@ public class AdminStockDocumentsController extends AbstractController {
             jsonObject.put("depotId",stockDocument.getKitchenId());
             jsonObject.put("depotName",(stockKitchenService.queryById(stockDocument.getKitchenId())).getName());
             jsonObject.put("comment",stockDocument.getComment());
-            List<StockDocumentsItem> stockDocumentsItemList = Collections.emptyList();
+            List<StockDocumentsItem> stockDocumentsItemList = documentsDto.getStockDocumentsItemList();
             JSONArray itemList = new JSONArray();
             if(Assert.isNotNull(stockDocumentsItemList)){
                 for(StockDocumentsItem stockDocumentsItem: stockDocumentsItemList){
@@ -120,13 +115,23 @@ public class AdminStockDocumentsController extends AbstractController {
                             StockItem item = stockItemService.queryById(stockDocumentsItem.getItemId());
                             documentItem.put("itemName",item.getName());//物品名称
                             documentItem.put("itemNumber",item.getItemNumber());//物品编号
-                            documentItem.put("itemSpecification",stockDocumentsItem.getSpecificationId());//规格
-                            documentItem.put("orderUnitName",item.getStorageQuantity());//入库单位
-                            documentItem.put("orderQuantity",stockDocumentsItem.getQuantity());//入库量
-                            documentItem.put("storageUnitName",stockDocumentsItem.getUnitId());//单位
+                            Specifications specification = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
+                            String orderUnitName = unitService.queryById(specification.getOrderUnitId()).getName();
+                            String storageUnitName = unitService.queryById(specification.getStorageUnitId()).getName();
+                            String costCardUnitName = unitService.queryById(specification.getCostCardUnitId()).getName();
+
+                            String itemSpecification = "1" + orderUnitName + "*"
+                                    + specification.getOrderToStorage() + "*" + storageUnitName
+                                    + specification.getStorageToCost() + "*" + costCardUnitName;
+
+                            documentItem.put("itemSpecification",itemSpecification);//规格
+                            documentItem.put("orderUnitName",orderUnitName);//订货单位
+                            documentItem.put("orderQuantity",stockDocumentsItem.getQuantity());//订货量
+                            documentItem.put("storageUnitName",storageUnitName);//库存单位
+                            documentItem.put("storageQuantity",item.getStorageQuantity());//库存量
                             documentItem.put("price",stockDocumentsItem.getPrice());//金额
                             documentItem.put("count",stockDocumentsItem.getQuantity());//数量
-                            itemList.add(item);
+                            itemList.add(documentItem);
                         }catch (SSException e){
                             LogClerk.errLog.error(e);
                             return sendErrMsgAndErrCode(e);
