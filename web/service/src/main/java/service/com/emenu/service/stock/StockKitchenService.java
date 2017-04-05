@@ -77,7 +77,7 @@ public interface StockKitchenService {
      * @return
      * @throws SSException
      */
-    public Boolean checkType  (int  id)throws SSException;
+    public Boolean checkType  (int id)throws SSException;
 
     /**
      * 数据量（即有多少个厨房）

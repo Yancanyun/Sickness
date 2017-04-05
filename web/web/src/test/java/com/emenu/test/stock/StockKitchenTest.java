@@ -67,7 +67,7 @@ public class StockKitchenTest extends AbstractTestCase {
     public void queryStockKitchenDetails()throws Exception{
         StockKitchen stockKitchen= new StockKitchen();
         try{
-            stockKitchen = stockKitchenService.queryStockKitchenDetails(2);
+            stockKitchen = stockKitchenService.queryById(2);
             System.out.println("name is "+ stockKitchen.getName()+", principal is "
                     +stockKitchen.getPrincipal());
         }catch (Exception e){
@@ -79,6 +79,17 @@ public class StockKitchenTest extends AbstractTestCase {
         Boolean n ;
         try{
            n =stockKitchenService.checkNameIsExist("山哥的厨房");
+        }catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+        System.out.println("山哥的厨房存在是"+ n);
+    }
+
+    @Test
+    public void testCheckType() throws Exception{
+        Boolean n ;
+        try{
+            n =stockKitchenService.checkType(1);
         }catch (Exception e){
             throw new Exception(e.getMessage());
         }

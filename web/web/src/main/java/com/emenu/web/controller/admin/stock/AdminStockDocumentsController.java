@@ -107,7 +107,7 @@ public class AdminStockDocumentsController extends AbstractController {
             jsonObject.put("isSettlemented",stockDocument.getIsSettled());
             jsonObject.put("money",stockDocument.getMoney());
             jsonObject.put("depotId",stockDocument.getKitchenId());
-            jsonObject.put("depotName",(stockKitchenService.queryStockKitchenDetails(stockDocument.getKitchenId())).getName());
+            jsonObject.put("depotName",(stockKitchenService.queryById(stockDocument.getKitchenId())).getName());
             jsonObject.put("comment",stockDocument.getComment());
             List<StockDocumentsItem> stockDocumentsItemList = Collections.emptyList();
             JSONArray itemList = new JSONArray();
