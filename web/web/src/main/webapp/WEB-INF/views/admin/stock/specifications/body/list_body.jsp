@@ -22,8 +22,8 @@
       <h2>规格管理</h2>
     </div>
     <div class="col-sm-12">
-      <c:if test="${code == 0}">
-        <div class="alert alert-success J_tip" role="alert">添加成功!</div>
+      <c:if test="${!empty msg}">
+        <div class="alert alert-success J_tip" role="alert">${msg}!</div>
       </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">

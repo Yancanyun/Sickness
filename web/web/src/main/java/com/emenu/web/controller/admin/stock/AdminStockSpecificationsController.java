@@ -24,6 +24,8 @@ import java.util.List;
 
 /**
  * Created by apple on 17/3/8.
+ *
+ * update by Renhongshuai
  */
 @Module(ModuleEnums.AdminStock)
 @Controller
@@ -144,11 +146,9 @@ public class AdminStockSpecificationsController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminStockSpecifications, extModule = ModuleEnums.AdminStockSpecificationsNew)
-    @RequestMapping(value = "ajax/new", method = RequestMethod.POST)
-    @ResponseBody
+    @RequestMapping(value = "new", method = RequestMethod.POST)
     public String AddSpecifications(Specifications specifications, RedirectAttributes redirectAttributes) {
         try {
-            Specifications specifications1 = specifications;
             specificationsService.add(specifications);
             String successUrl = "/" + URLConstants.ADMIN_STOCK_SPECIFICATIONS_URL + "/list";
             redirectAttributes.addFlashAttribute("msg", NEW_SUCCESS_MSG);
@@ -214,16 +214,19 @@ public class AdminStockSpecificationsController extends AbstractController {
      * @return
      */
     @Module(value = ModuleEnums.AdminStockSpecifications, extModule= ModuleEnums.AdminStockSpecificationsUpdate)
-    @RequestMapping(value = "ajax/update", method = RequestMethod.PUT)
-    @ResponseBody
-    public JSON updateStorageItem(Specifications specifications,@RequestParam("isUpdated")Integer isUpdated) {
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public String updateStorageItem(Specifications specifications,RedirectAttributes redirectAttributes) {
         try{
             specificationsService.update(specifications);
-            return sendJsonObject(AJAX_SUCCESS_CODE);
+            String successUrl = "/" + URLConstants.ADMIN_STOCK_SPECIFICATIONS_URL + "/list";
+            redirectAttributes.addFlashAttribute("msg", UPDATE_SUCCESS_MSG);
+            return "redirect:" + successUrl;
         } catch (SSException e) {
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
-            return sendErrMsgAndErrCode(e);
+            String failedUrl = "/" + URLConstants.ADMIN_STOCK_SPECIFICATIONS_URL + "/toupdate";
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+            return "redirect:" + failedUrl;
         }
     }
 }

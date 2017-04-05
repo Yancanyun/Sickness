@@ -18,8 +18,10 @@
       <h2>规格类型编辑</h2>
     </div>
     <div class="col-sm-12">
-      <div class="alert hidden J_tip" role="alert">保存成功！</div>
-      <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
+      <c:if test="${!empty msg}">
+        <div class="alert alert-danger J_tip" role="alert">修改失败:${msg}</div>
+      </c:if>
+      <form class="form-horizontal J_submitForm" action="${website}admin/stock/specifications/update" method="post" autocomplete="off">
         <div class="panel panel-info">
           <div class="panel-heading">
             <h4>编辑</h4>

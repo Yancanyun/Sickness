@@ -18,8 +18,10 @@
       <h2>规格类型添加</h2>
     </div>
     <div class="col-sm-12">
-      <div class="alert alert-danger J_tip" role="alert">保存失败！</div>
-      <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
+        <c:if test="${!empty msg}">
+            <div class="alert alert-danger J_tip" role="alert">保存失败:${msg}</div>
+        </c:if>
+      <form class="form-horizontal J_submitForm" action="${website}admin/stock/specifications/new" method="post" autocomplete="off">
         <div class="panel panel-info">
           <div class="panel-heading">
             <h4>添加</h4>

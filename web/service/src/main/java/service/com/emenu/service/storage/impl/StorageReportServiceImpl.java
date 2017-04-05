@@ -219,7 +219,6 @@ public class StorageReportServiceImpl implements StorageReportService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.SystemException, e);
         }
-
         return reportList;
     }
 
