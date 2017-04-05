@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,8 +93,9 @@ public class AdminStockDocumentsController extends AbstractController {
             StockDocuments stockDocument = documentsDto.getStockDocuments();
             jsonObject.put("id", stockDocument.getId());
             jsonObject.put("type", stockDocument.getType());
-            jsonObject.put("createdTime",stockDocument.getCreatedTime());
-            jsonObject.put("date",stockDocument.getCreatedTime());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            jsonObject.put("createdTime",sdf.format(stockDocument.getCreatedTime()));
+            jsonObject.put("date",sdf.format(stockDocument.getCreatedTime()));
             jsonObject.put("serialNumber",stockDocument.getSerialNumber());
             jsonObject.put("createdPartyId",stockDocument.getCreatedPartyId());
             jsonObject.put("createdName",stockDocument.getCreatedName());
