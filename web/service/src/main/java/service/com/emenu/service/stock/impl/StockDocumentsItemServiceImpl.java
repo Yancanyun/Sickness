@@ -95,7 +95,6 @@ public class StockDocumentsItemServiceImpl implements StockDocumentsItemService 
      * @return
      * @throws SSException
      */
-
     private boolean checkStockDocumentsItemBeforeSave(StockDocumentsItem stockDocumentsItem) throws SSException{
         if (Assert.isNull(stockDocumentsItem)){
             return false;

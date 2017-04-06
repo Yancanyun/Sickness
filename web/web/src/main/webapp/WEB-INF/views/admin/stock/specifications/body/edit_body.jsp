@@ -27,7 +27,7 @@
             <h4>编辑</h4>
           </div>
           <div class="panel-body">
-            <input class="J_id" type="hidden" name="id" value="112233">
+            <input class="J_id" type="hidden" name="id" value="${specification.id}">
             <div class="form-group">
               <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位</label>
               <div class="col-sm-6">
@@ -50,7 +50,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位与库存换算关系</label>
               <div class="col-sm-6">
-                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="${specification.orderToStorage}">
+                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorage" value="${specification.orderToStorage}">
               </div>
             </div>
             <div class="form-group">
@@ -75,7 +75,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位与成本卡换算关系</label>
               <div class="col-sm-6">
-                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="${specification.storageToCost}">
+                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCost" value="${specification.storageToCost}">
               </div>
             </div>
             <div class="form-group">

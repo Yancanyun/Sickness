@@ -23,7 +23,7 @@
     </div>
     <div class="col-sm-12">
       <c:if test="${!empty msg}">
-        <div class="alert alert-success J_tip" role="alert">${msg}!</div>
+        <div class="alert alert-success J_tip" role="alert">${msg}</div>
       </c:if>
       <div class="panel panel-info">
         <div class="panel-heading">
