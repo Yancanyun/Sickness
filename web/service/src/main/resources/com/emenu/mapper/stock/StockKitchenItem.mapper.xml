@@ -60,7 +60,7 @@
         cost_card_unit_id = #{stockKitchenItem.costCardUnitId},
         remark = #{stockKitchenItem.remark},
         status = #{stockKitchenItem.status}
-        WHERE id = #{stockKitchenItem.id}
+        WHERE id = #{id}
     </update>
 
     <update id="editRemark">

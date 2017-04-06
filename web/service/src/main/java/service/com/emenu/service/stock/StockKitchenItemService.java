@@ -32,7 +32,7 @@ public interface StockKitchenItemService {
      * @param stockKitchenItem
      * @throws SSException
      */
-    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException;
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem,int id) throws SSException;
 
 
     /**
@@ -40,7 +40,7 @@ public interface StockKitchenItemService {
      * @param id
      * @throws SSException
      */
-    public void editRemark(int id) throws SSException;
+    public void editRemark(int id,String remark) throws SSException;
 
     /**
      * 列出所有的物品

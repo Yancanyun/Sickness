@@ -33,7 +33,7 @@ public interface StockKitchenItemMapper {
      * @param id
      * @throws SSException
      */
-    public void editRemark(@Param("id") Integer id) throws SSException;
+    public void editRemark(@Param("id") Integer id,@Param("remark")String remark) throws SSException;
 
 
     /**
@@ -41,7 +41,7 @@ public interface StockKitchenItemMapper {
      * @param stockKitchenItem
      * @throws SSException
      */
-    public void updateStockKitchenItem(@Param("stockKitchenItem") StockKitchenItem stockKitchenItem) throws SSException;
+    public void updateStockKitchenItem(@Param("stockKitchenItem") StockKitchenItem stockKitchenItem,@Param("id")Integer id) throws SSException;
 
     /**
      * 列出所有物品

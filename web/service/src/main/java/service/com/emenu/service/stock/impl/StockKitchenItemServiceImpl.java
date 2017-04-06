@@ -69,9 +69,9 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException{
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem,int id) throws SSException{
         try{
-            stockKitchenItemMapper.updateStockKitchenItem(stockKitchenItem);
+            stockKitchenItemMapper.updateStockKitchenItem(stockKitchenItem,id);
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateKitchenItemFail, e);
@@ -86,9 +86,9 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void editRemark(int id) throws SSException{
+    public void editRemark(int id,String remark) throws SSException{
         try{
-            stockKitchenItemMapper.editRemark(id);
+            stockKitchenItemMapper.editRemark(id,remark);
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.EditRemarkFail, e);
