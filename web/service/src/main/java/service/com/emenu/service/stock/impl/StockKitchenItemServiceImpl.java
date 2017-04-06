@@ -27,6 +27,10 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
     @Autowired
     private StockKitchenItemMapper stockKitchenItemMapper;
 
+    @Autowired
+    @Qualifier("commonDao")
+    private CommonDao commonDao;
+
 
     /**
      * 添加新的厨房物品
@@ -63,15 +67,16 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
     }
 
     /**
-     * 更新库存物品列表
+     * 更新库存物品
      * @param stockKitchenItem
      * @throws SSException
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem,int id) throws SSException{
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException{
         try{
-            stockKitchenItemMapper.updateStockKitchenItem(stockKitchenItem,id);
+            //stockKitchenItemMapper.updateStockKitchenItem(stockKitchenItem,id);
+            commonDao.update(stockKitchenItem);
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateKitchenItemFail, e);

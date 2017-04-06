@@ -32,7 +32,7 @@ public interface StockKitchenItemService {
      * @param stockKitchenItem
      * @throws SSException
      */
-    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem,int id) throws SSException;
+    public void updateStockKitchenItem(StockKitchenItem stockKitchenItem) throws SSException;
 
 
     /**

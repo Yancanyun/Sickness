@@ -49,27 +49,7 @@ public class StockKitchenItemTest extends AbstractTestCase {
         }
     }
 
-    @Test
-    public void testUpdateStockKitchenItem()throws Exception{
-        try{
-            StockKitchenItem stockKitchenItem = new StockKitchenItem();
-            stockKitchenItem.setId(1);
-            stockKitchenItem.setItemId(1);
-            stockKitchenItem.setKitchenId(1);
-            stockKitchenItem.setRemark("你好");
-            stockKitchenItem.setItemNumber(1);
-            stockKitchenItem.setAssistantCode("happy");
-            stockKitchenItem.setSpecifications("规格");
-            BigDecimal quality = new BigDecimal(3.00);
-            stockKitchenItem.setStorageQuantity(quality);
-            stockKitchenItem.setCostCardUnitId(1);
-            stockKitchenItem.setStatus(0);
-            stockKitchenItemService.updateStockKitchenItem(stockKitchenItem,2);
 
-        }catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
 
     @Test
     public void testEditRemark()throws Exception{
@@ -97,12 +77,6 @@ public class StockKitchenItemTest extends AbstractTestCase {
         StockKitchenItem stockKitchenItem = new StockKitchenItem();
         try{
             stockKitchenItem = stockKitchenItemService.queryById(2);
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
-            System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
             System.out.println("这个厨房物品的备注是："+stockKitchenItem.getRemark());
 
         }catch (Exception e){
