@@ -23,6 +23,10 @@ public class StockKitchenItem extends AbstractEntity{
     @Column(name = "kitchen_id")
     private Integer kitchenId;
 
+    //物品编号
+    @Column(name = "item_number")
+    private Integer itemNumber;
+
     //物品id
     @Column(name = "item_id")
     private Integer itemId;
@@ -37,7 +41,7 @@ public class StockKitchenItem extends AbstractEntity{
 
     //库存量
     @Column(name = "storage_quantity")
-    private BigDecimal storage_quantity;
+    private BigDecimal storageQuantity;
 
     //成本卡单位
     @Column(name = "cost_card_unit_id")
@@ -74,6 +78,14 @@ public class StockKitchenItem extends AbstractEntity{
         this.kitchenId = kitchenId;
     }
 
+    public Integer getItemNumber() {
+        return itemNumber;
+    }
+
+    public void setItemNumber(Integer itemNumber) {
+        this.itemNumber = itemNumber;
+    }
+
     public Integer getItemId() {
         return itemId;
     }
@@ -98,12 +110,12 @@ public class StockKitchenItem extends AbstractEntity{
         this.specifications = specifications;
     }
 
-    public BigDecimal getStorage_quantity() {
-        return storage_quantity;
+    public BigDecimal getStorageQuantity() {
+        return storageQuantity;
     }
 
-    public void setStorage_quantity(BigDecimal storage_quantity) {
-        this.storage_quantity = storage_quantity;
+    public void setStorageQuantity(BigDecimal storageQuantity) {
+        this.storageQuantity = storageQuantity;
     }
 
     public Integer getCostCardUnitId() {

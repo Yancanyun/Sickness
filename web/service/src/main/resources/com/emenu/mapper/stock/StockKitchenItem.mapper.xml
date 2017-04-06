@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.emenu.mapper.stock.StockKitchenItemMapper">
-    <resultMap id="StockKitchen" type="com.emenu.common.entity.stock.StockKitchenItem">
+<!--    <resultMap id="StockKitchen" type="com.emenu.common.entity.stock.StockKitchenItem">
         <id column="id" property="id"/>
         <result column="kitchen_id" property="kitchenId"/>
         <result column="item_number" property="itemNumber"/>
@@ -16,7 +16,7 @@
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
         <result column="last_modified_time" property="lastModifiedTime"/>
-    </resultMap>
+    </resultMap>-->
     <insert id="newStockKitchenItem">
         INSERT INTO
         t_stock_kitchen_item(
@@ -28,7 +28,8 @@
         storage_quantity,
         cost_card_unit_id,
         remark,
-        status)
+        status
+        )
         VALUES (
         #{stockKitchenItem.kitchenId},
         #{stockKitchenItem.itemNumber},
