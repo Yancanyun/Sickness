@@ -1,9 +1,9 @@
 package com.emenu.service.stock;
 
-        import com.emenu.common.entity.stock.StockKitchenItem;
-        import com.pandawork.core.common.exception.SSException;
+import com.emenu.common.entity.stock.StockKitchenItem;
+import com.pandawork.core.common.exception.SSException;
 
-        import java.util.List;
+import java.util.List;
 
 /**
  * StockKitchenItemService
@@ -25,7 +25,7 @@ public interface StockKitchenItemService {
      * @param id
      * @throws SSException
      */
-    public void delStockKitchenItem(Integer id) throws SSException;
+    public void delStockKitchenItem(int id) throws SSException;
 
     /**
      * 更新库存物品列表
@@ -40,7 +40,7 @@ public interface StockKitchenItemService {
      * @param id
      * @throws SSException
      */
-    public void editRemark(Integer id) throws SSException;
+    public void editRemark(int id) throws SSException;
 
     /**
      * 列出所有的物品
@@ -55,7 +55,7 @@ public interface StockKitchenItemService {
      * @return
      * @throws SSException
      */
-    public StockKitchenItem queryById(Integer id) throws SSException;
+    public StockKitchenItem queryById(int id) throws SSException;
 
     /**
      * 根据itemId（物品表中的物品id）来查询物品
@@ -64,5 +64,5 @@ public interface StockKitchenItemService {
      * @return
      * @throws SSException
      */
-    public StockKitchenItem queryByItemId(Integer itemId,Integer kitchenId) throws SSException;
+    public StockKitchenItem queryByItemId(int itemId,int kitchenId) throws SSException;
 }

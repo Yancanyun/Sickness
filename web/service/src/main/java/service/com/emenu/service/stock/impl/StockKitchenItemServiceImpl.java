@@ -51,7 +51,7 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void delStockKitchenItem(Integer id) throws SSException{
+    public void delStockKitchenItem(int id) throws SSException{
         try{
             //这里还要判断菜品表中是否有该物品，有的话不能删除，暂时未写
             stockKitchenItemMapper.delStockKitchenItem(id);
@@ -86,7 +86,7 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public void editRemark(Integer id) throws SSException{
+    public void editRemark(int id) throws SSException{
         try{
             stockKitchenItemMapper.editRemark(id);
         }catch (Exception e) {
@@ -121,7 +121,7 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
-    public StockKitchenItem queryById(Integer id) throws SSException{
+    public StockKitchenItem queryById(int id) throws SSException{
         StockKitchenItem  stockKitchenItem = new StockKitchenItem();
         try{
             stockKitchenItem = stockKitchenItemMapper.queryById(id);
@@ -140,7 +140,7 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      * @throws SSException
      */
     @Override
-    public StockKitchenItem queryByItemId(Integer itemId,Integer kitchenId) throws SSException{
+    public StockKitchenItem queryByItemId(int itemId,int kitchenId) throws SSException{
         StockKitchenItem  stockKitchenItem = new StockKitchenItem();
         try{
             stockKitchenItem = stockKitchenItemMapper.queryByItemId(itemId,kitchenId);

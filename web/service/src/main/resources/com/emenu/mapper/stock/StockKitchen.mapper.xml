@@ -32,8 +32,14 @@
 
     <insert id="addStockKitchen">
         INSERT INTO
-        t_stock_kitchen(name,introduction,principal)
-        VALUES (#{stockKitchen.name},#{stockKitchen.introduction},#{stockKitchen.principal})
+        t_stock_kitchen(
+        name,
+        introduction,
+        principal)
+        VALUES (
+        #{stockKitchen.name},
+        #{stockKitchen.introduction},
+        #{stockKitchen.principal})
     </insert>
 
     <update id="updateStockKitchen">
