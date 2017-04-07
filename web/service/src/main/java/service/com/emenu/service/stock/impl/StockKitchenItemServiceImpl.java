@@ -24,6 +24,7 @@ import java.util.List;
  */
 @Service("stockItemService")
 public class StockKitchenItemServiceImpl implements StockKitchenItemService{
+
     @Autowired
     private StockKitchenItemMapper stockKitchenItemMapper;
 

@@ -6,11 +6,12 @@ import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.stock.StockDocuments;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
 /**
- * 单据管理Srvice
+ * 单据管理Service
  * StockDocumentsService
  *
  * @author renhongshuai
@@ -63,6 +64,20 @@ public interface StockDocumentsService {
      * @throws SSException
      */
     public void updateDocuments(StockDocuments stockDocuments) throws SSException;
+
+    /**
+     * 导出到Excel
+     *
+     * @param stockDocuments
+     * @param startTime
+     * @param endTime
+     * @param deports
+     * @param handlerPartyId
+     * @param createdPartyId
+     * @param response
+     */
+    public void exportToExcel(StockDocuments stockDocuments,Date startTime, Date endTime,List<Integer> deports,
+                              Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
 
 
     /*************************************** by chenwenyan  ************************************************/

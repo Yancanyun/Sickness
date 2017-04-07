@@ -8,6 +8,7 @@ import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
+import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.stock.StockDocumentsItemMapper;
 import com.emenu.mapper.stock.StockDocumentsMapper;
 import com.emenu.service.other.SerialNumService;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -290,6 +294,69 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
         return true;
     }
 
+    /**
+     * 导出到Excel表格
+     *
+     * @param stockDocuments
+     * @param startTime
+     * @param endTime
+     * @param deports
+     * @param handlerPartyId
+     * @param createdPartyId
+     * @param response
+     * @throws SSException
+     */
+    @Override
+    @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
+    public void exportToExcel(StockDocuments stockDocuments,Date startTime, Date endTime,List<Integer> deports,
+                              Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException{
+        OutputStream outputStream = null;
+        List<DocumentsDto> documentsDtoList = Collections.emptyList();
+        try{
+            DocumentsSearchDto documentsSearchDto = new DocumentsSearchDto();
+            documentsSearchDto.setAuditPartyId(stockDocuments.getAuditPartyId());
+            documentsSearchDto.setCreatedPartyId(stockDocuments.getCreatedPartyId());
+            documentsSearchDto.setKitchenId(stockDocuments.getKitchenId());
+            documentsSearchDto.setEndTime(endTime);
+            documentsSearchDto.setHandlerPartyId(stockDocuments.getHandlerPartyId());
+            documentsSearchDto.setIsAudited(stockDocuments.getIsAudited());
+            documentsSearchDto.setIsSettled(stockDocuments.getIsSettled());
+            documentsSearchDto.setStartTime(startTime);
+            documentsDtoList = this.listDocumentsDtoBySearchDto(documentsSearchDto);
+            for (DocumentsDto documentsDto : documentsDtoList){
+                //EntityUtil.setNullFieldDefault(documentsDto);
+            }
+
+        }catch(SSException e){
+            LogClerk.errLog.error(e);
+            response.setContentType("text/html");
+            response.setHeader("Content-Type", "text/html");
+            response.setHeader("Content-disposition", "");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                String eMsg = "系统内部异常，请联系管理员！";
+                eMsg= java.net.URLEncoder.encode(eMsg.toString(),"UTF-8");
+                response.sendRedirect("/admin/storage/report?eMsg="+eMsg);
+                outputStream.close();
+            } catch (IOException e1) {
+                LogClerk.errLog.error(e1.getMessage());
+            }
+            throw SSException.get(EmenuException.ExportReportFail, e);
+        }
+        finally {
+            if(outputStream != null){
+                try{
+                    outputStream.flush();
+                    outputStream.close();
+                }catch(Exception e){
+                    LogClerk.errLog.error(e);
+                    throw SSException.get(EmenuException.ExportReportFail, e);
+                }
+            }
+        }
+
+    }
+
 
     /**---------------------------------------------------私有方法---------------------------------------------------**/
 
@@ -450,7 +517,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 //更新领用厨房库存
                 StockKitchenItem stockKitchenItem = new StockKitchenItem();
                 stockKitchenItem = stockKitchenItemService.queryByItemId(stockItem.getId(), stockDocuments.getKitchenId());
-                if (stockKitchenItem.getStatus() != 3 || Assert.isNotNull(stockKitchenItem)) {
+                if (stockKitchenItem.getStatus() != 3 && Assert.isNotNull(stockKitchenItem)) {
                     List<StockItemDetail> itemDetailList = stockItemDetailService.queryDetailById(stockDocumentsItem.getItemId(), stockDocuments.getKitchenId());
                     for (StockItemDetail stockItemDetail : itemDetailList) {
                         if (stockDocumentsItem.getSpecificationId() == stockItemDetail.getSpecificationId()) {
@@ -537,12 +604,12 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             StockKitchen stockKitchen  = stockKitchenService.queryById(stockDocuments.getKitchenId());
             if(stockKitchenService.checkType(stockDocuments.getKitchenId())){
                 for (StockDocumentsItem stockDocumentsItem : documentsItemList) {
-                    //根据盘盈信息修改库存物品
+                    //根据盘亏信息修改库存物品
                     StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
                     //查询规格
                     Specifications specifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                     //通过规格转换为成本卡单位更新库存
-                    BigDecimal itemQuantity = stockItem.getStorageQuantity().add(toCostCardUnitQuantity(stockDocumentsItem, specifications));
+                    BigDecimal itemQuantity = stockItem.getStorageQuantity().subtract(toCostCardUnitQuantity(stockDocumentsItem, specifications));
                     //更新总库存
                     stockItem.setStorageQuantity(itemQuantity);
                     stockItem.setCostCardUnitId(specifications.getCostCardUnitId());
@@ -560,7 +627,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 }
             }else{
                 for (StockDocumentsItem stockDocumentsItem : documentsItemList) {
-                    //根据盘盈信息修改厨房库存物品
+                    //根据盘亏信息修改厨房库存物品
                     StockKitchenItem stockKitchenItem = stockKitchenItemService.queryByItemId(stockDocumentsItem.getItemId(),stockDocuments.getKitchenId());
                     if(stockKitchenItem.getCostCardUnitId() ==  stockDocumentsItem.getUnitId()){
                         BigDecimal kitchenItemQuantity = stockKitchenItem.getStorageQuantity().subtract(stockDocumentsItem.getQuantity());
@@ -572,7 +639,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     for(StockItemDetail stockItemDetail:stockItemDetailList){
                         if(stockItemDetail.getSpecificationId() == stockDocumentsItem.getSpecificationId()
                                 &&stockItemDetail.getUnitId() == stockDocumentsItem.getUnitId()){
-                            BigDecimal detailQuantity = stockItemDetail.getQuantity().add(stockDocumentsItem.getQuantity());
+                            BigDecimal detailQuantity = stockItemDetail.getQuantity().subtract(stockDocumentsItem.getQuantity());
                             stockItemDetail.setQuantity(detailQuantity);
                         }
                     }

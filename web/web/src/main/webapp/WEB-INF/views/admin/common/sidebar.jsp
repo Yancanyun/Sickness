@@ -378,9 +378,30 @@
             <a href="javascript:;"><i class="fa fa-list"></i>&nbsp;<span class="J_firstMenu">库存管理2.0</span><i
                     class="fa fa-angle-right angle-right"></i></a>
             <ul>
-                <shiro:checkPermission name="Admin:Stock:Item:List">
-                    <li <c:if test="${MethodModule eq 'Admin:Stock:Item:List'}">class="active"</c:if>>
-                        <a class="J_menu" href="${website}admin/stock/item">库存物品管理</a>
+                <shiro:checkPermission name="Admin:Stock:Item">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Item'
+                                      or MethodModule eq 'Admin:Stock:Item:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/item">库存物品管理
+                        <c:if test="${ExtModule eq 'Admin:Stock:Item:New'
+                                        or ExtModule eq 'Admin:Stock:Item:Update'}">
+                            <i class="fa fa-angle-right angle-right"></i>
+                        </c:if>
+                        </a>
+                        <c:if test="${ExtModule eq 'Admin:Stock:Item:New'
+                                        or ExtModule eq 'Admin:Stock:Item:Update'}">
+                            <ul>
+                                <shiro:checkPermission name="Admin:Stock:Item:New">
+                                    <li <c:if test="${ExtModule eq 'Admin:Stock:Item:New'}"> class="active" </c:if>>
+                                        <a href="${website}admin/stock/tem/tonew">添加物品</a>
+                                    </li>
+                                </shiro:checkPermission>
+                                <c:if test="${ExtModule eq 'Admin:Stock:Item:Update'}">
+                                    <li class="active">
+                                        <a href="#">编辑物品</a>
+                                    </li>
+                                </c:if>
+                            </ul>
+                        </c:if>
                     </li>
                 </shiro:checkPermission>
                 <shiro:checkPermission name="Admin:Stock:Kitchen:List">

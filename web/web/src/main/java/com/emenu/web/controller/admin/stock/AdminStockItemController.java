@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.stock.StockItem;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.utils.URLConstants;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * AdminStockItemController
  * 新版库存-物品管理Controller
- *
+ * Update By Renhongshuai
  * @author pengpeng
  * @time 2017/3/6 9:37
  */
@@ -37,7 +38,15 @@ public class AdminStockItemController extends AbstractController{
      */
     @Module(value = ModuleEnums.AdminStockItemList)
     @RequestMapping(value = {"","list"},method = RequestMethod.GET)
-    public String ToList(){
+    public String ToList(Model model){
+        try{
+            List<Tag> tagList = storageTagService.listAllSmallTag();
+            model.addAttribute("tagList",tagList);
+        }catch (SSException e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+            return ADMIN_SYS_ERR_PAGE;
+        }
         return "admin/stock/item/list_home";
     }
 
@@ -61,8 +70,10 @@ public class AdminStockItemController extends AbstractController{
             return sendErrMsgAndErrCode(e);
         }
         JSONArray jsonArray = new JSONArray();
+        int i = 1 + pageNo * 10;
         for (StockItem item: list){
             JSONObject jsonObject = new JSONObject();
+            jsonObject.put("sequenceNumber",i++);
             jsonObject.put("id", item.getId());
             jsonObject.put("name",item.getName());
             jsonObject.put("itemNumber",item.getItemNumber());

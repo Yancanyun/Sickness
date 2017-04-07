@@ -61,15 +61,11 @@
                                     <label>
                                         <input class="J_selectAll"  type="checkbox" value="1" name="tagIdList"> 全部
                                     </label>
-                                    <label>
-                                        <input class="J_storeType" type="checkbox" value="11" name="tagIdList"> 分类1
-                                    </label>
-                                    <label>
-                                        <input class="J_storeType" type="checkbox" value="12" name="tagIdList"> 分类2
-                                    </label>
-                                    <label>
-                                        <input class="J_storeType" type="checkbox" value="13" name="tagIdList"> 分类3
-                                    </label>
+                                    <c:forEach var="tag" items="${tagList}">
+                                        <label>
+                                            <input class="J_storeType" type="checkbox" value="${tag.name}" name="${tag.id}">${tag.name}
+                                        </label>
+                                    </c:forEach>
                                 </div>
                             </div>
                         </div>
