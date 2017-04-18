@@ -759,6 +759,8 @@ public enum EmenuException implements IBizExceptionMes {
     ListByPageFailed("根据页码查询规格失败",111007),
     ListByTypeFailed("根据类型查询单位失败",111008),
     SpecificationIsUsed("该规格被使用无法删除或修改",111009),
+    ToSpecificationStringFailed("规格转化字符串失败",111010),
+    SpecificationIdIsNotLessOrEqualZero("规格Id不能小于等于零",111011),
 
 
     //新版库存-厨房物品列表管理

@@ -68,5 +68,12 @@ public interface SpecificationsService {
      */
     public int count() throws SSException;
 
-
+    /**
+     * 根据id将规格拼成字符串
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public String toSpecificationString(int id) throws SSException;
 }

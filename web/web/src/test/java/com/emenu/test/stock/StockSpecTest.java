@@ -71,4 +71,10 @@ public class StockSpecTest extends AbstractTestCase {
     public void count()throws Exception{
         System.out.println(specificationsService.count());
     }
+
+    @Test
+    public void toSpecificationString()throws Exception{
+        String string = specificationsService.toSpecificationString(2);
+        System.out.println(string);
+    }
 }

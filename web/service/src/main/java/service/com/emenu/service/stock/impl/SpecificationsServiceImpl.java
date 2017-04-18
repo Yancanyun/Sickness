@@ -103,7 +103,9 @@ public class SpecificationsServiceImpl implements SpecificationsService {
     @Override
     public Specifications queryById(int id) throws SSException {
         Specifications specifications = new Specifications();
-        if (id <= 0) return null;
+        if(Assert.lessOrEqualZero(id)){
+            throw SSException.get(EmenuException.SpecificationIdIsNotLessOrEqualZero);
+        }
         try {
             specifications = commonDao.queryById(specifications.getClass(), id);
             return specifications;
@@ -154,6 +156,33 @@ public class SpecificationsServiceImpl implements SpecificationsService {
         }catch(Exception e){
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountError,e);
+        }
+    }
+
+    @Override
+    public String toSpecificationString(int id) throws SSException{
+        try{
+            if(Assert.lessOrEqualZero(id)){
+                throw SSException.get(EmenuException.SpecificationIdIsNotLessOrEqualZero);
+            }
+            Specifications specifications = queryById(id);
+            if(Assert.isNull(specifications)){
+                throw SSException.get(EmenuException.QuerySpecificationsByIdFail);
+            }
+            StringBuffer buf = new StringBuffer();
+            String orderUnitName = unitService.queryById(specifications.getOrderUnitId()).getName();
+            String storageUnitName = unitService.queryById(specifications.getStorageUnitId()).getName();
+            String costUnitName = unitService.queryById(specifications.getCostCardUnitId()).getName();
+            buf.append(orderUnitName);
+            buf.append(specifications.getOrderToStorage());
+            buf.append(storageUnitName);
+            buf.append(specifications.getStorageToCost());
+            buf.append(costUnitName);
+            String specificationString = buf.toString();
+            return specificationString;
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ToSpecificationStringFailed,e);
         }
     }
 }

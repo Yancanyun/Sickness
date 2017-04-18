@@ -4,20 +4,28 @@ import com.emenu.common.dto.stock.DocumentsDto;
 import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.party.group.employee.Employee;
 import com.emenu.common.entity.stock.*;
+import com.emenu.common.enums.ExcelExportTemplateEnums;
 import com.emenu.common.enums.other.SerialNumTemplateEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
 import com.emenu.common.exception.EmenuException;
 import com.emenu.common.exception.PartyException;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.EntityUtil;
 import com.emenu.mapper.stock.StockDocumentsItemMapper;
 import com.emenu.mapper.stock.StockDocumentsMapper;
+import com.emenu.service.dish.UnitService;
 import com.emenu.service.other.SerialNumService;
 import com.emenu.service.party.group.employee.EmployeeService;
 import com.emenu.service.stock.*;
 import com.pandawork.core.common.exception.SSException;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
+import com.pandawork.core.common.util.IOUtil;
 import com.pandawork.core.framework.dao.CommonDao;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -26,8 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -76,6 +86,9 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
 
     @Autowired
     private StockDocumentsItemMapper stockDocumentsItemMapper;
+
+    @Autowired
+    private UnitService unitService;
 
 
     /**
@@ -217,8 +230,6 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     stockDocumentsItemService.newDocumentsItem(stockDocumentsItem);
                 }
             }
-
-
         } catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.UpdateDocumentsFail, e);
@@ -324,10 +335,127 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
             documentsSearchDto.setStartTime(startTime);
             documentsDtoList = this.listDocumentsDtoBySearchDto(documentsSearchDto);
             for (DocumentsDto documentsDto : documentsDtoList){
-                //EntityUtil.setNullFieldDefault(documentsDto);
+                EntityUtil.setNullFieldDefault(documentsDto);
             }
+            //设置输出流
+            //设置excel文件名和sheetName
+            String filename = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+            filename = ExcelExportTemplateEnums.AdminStockDocumentsList.getName()+sdf.format(new Date());
+            response.setContentType("application/msexcel");
+            response.setHeader("Content-disposition",
+                    "attachment; filename=" + new String(filename.getBytes("gbk"), "ISO8859-1") + ".xls");
+            outputStream = response.getOutputStream();
+            //获取模板
+            InputStream tplStream = IOUtil.getFileAsStream(ExcelExportTemplateEnums.AdminStockDocumentsList.getFilePath());
+            Workbook tplWorkBook = Workbook.getWorkbook(tplStream);
+            WritableWorkbook outBook = Workbook.createWorkbook(outputStream,tplWorkBook);
+            //获取sheet往sheet中写入数据
+            WritableSheet sheet = outBook.getSheet(0);
+            int row = 3;
+            int rowchildren = 0;
+            int up = 3;
+            for(DocumentsDto documentsDto : documentsDtoList){
+                //单据类型
+                Label labelDocumentsType = new Label(0 , row + rowchildren , StockDocumentsTypeEnum.valueOf(documentsDto.getStockDocuments().getType()).getName());
+                sheet.addCell(labelDocumentsType);
+                //单据编号
+                Label labelSerialNumber = new Label(1 , row + rowchildren , documentsDto.getStockDocuments().getSerialNumber());
+                sheet.addCell(labelSerialNumber);
+                //存放点(厨房)
+                String kitchenName = "";
+                if (documentsDto.getStockDocuments().getKitchenId() != 0) {
+                    kitchenName = stockKitchenService.queryById(documentsDto.getStockDocuments().getKitchenId()).getName();
+                } else {
+                    kitchenName = "无";
+                }
+                Label labelKitchen = new Label(2 , row + rowchildren ,kitchenName);
+                sheet.addCell(labelKitchen);
+                //经手人
+                String handlerName = employeeService.queryByPartyIdWithoutDelete(documentsDto.getStockDocuments().getHandlerPartyId()).getName();
+                Label labelHandlerName = new Label(3 , row + rowchildren ,handlerName);
+                sheet.addCell(labelHandlerName);
+                //操作人
+                String createdName = employeeService.queryByPartyIdWithoutDelete(documentsDto.getStockDocuments().getCreatedPartyId()).getName();
+                Label labelCreatedName = new Label(4 , row + rowchildren , createdName);
+                sheet.addCell(labelCreatedName);
+                //审核人
+                String auditName = null;
+                if(documentsDto.getStockDocuments().getAuditPartyId() != 0){
+                    auditName = employeeService.queryByPartyIdWithoutDelete(documentsDto.getStockDocuments().getAuditPartyId()).getName();
+                }else{
+                    auditName = "无";
+                }
+                Label labelAuditName = new Label(5 , row + rowchildren , auditName);
+                sheet.addCell(labelAuditName);
+                //总金额
+                Label labelMoney = new Label(6, row + rowchildren, documentsDto.getStockDocuments().getMoney().toString());
+                sheet.addCell(labelMoney);
+                // 单据备注
+                String comment = ("".equals(documentsDto.getStockDocuments().getComment())?"无":documentsDto.getStockDocuments().getComment());
+                Label labelReportComment = new Label(7, row + rowchildren, comment);
+                sheet.addCell(labelReportComment);
+                // 日期
+                String createdTime = DateUtils.yearMonthDayFormat(documentsDto.getStockDocuments().getCreatedTime());
+                Label labelCreatedTime = new Label(8, row + rowchildren, createdTime);
+                sheet.addCell(labelCreatedTime);
+                // 物品列表
+                List<StockDocumentsItem> stockDocumentsItemList = documentsDto.getStockDocumentsItemList();
+                for (StockDocumentsItem stockDocumentsItem : stockDocumentsItemList) {
+                        // 物品名称
+                        Label labelItemName = new Label(9, row + rowchildren, stockItemService.queryById(stockDocumentsItem.getItemId()).getName());
+                        sheet.addCell(labelItemName);
+                        // 物品编号
+                        String itemNumber = null;
+                        if (stockDocumentsItem.getItemId() != null &&
+                                !"".equals(stockDocumentsItem.getItemId()) &&
+                                (stockItemService.queryById(stockDocumentsItem.getItemId())) != null) {
+                            itemNumber = stockItemService.queryById(stockDocumentsItem.getItemId()).getItemNumber();
+                        } else {
+                            itemNumber = "无";
+                        }
+                        Label labelItemNumber = new Label(10, row + rowchildren, itemNumber);
+                        sheet.addCell(labelItemNumber);
 
-        }catch(SSException e){
+                        // 物品规格
+                        Label labelSpecification = new Label(11, row + rowchildren, specificationsService.toSpecificationString(stockDocumentsItem.getSpecificationId()));
+                        sheet.addCell(labelSpecification);
+
+                        // 物品数量(库存订货)
+                        Label labelQuantity = new Label(12 , row + rowchildren, stockDocumentsItem.getQuantity().toString());
+                        sheet.addCell(labelQuantity);
+
+                        // 物品单位(库存订货)
+                        String unit = unitService.queryById(stockDocumentsItem.getUnitId()).getName();
+                        Label labelUnit = new Label(13 , row + rowchildren, unit);
+                        sheet.addCell(labelUnit);
+
+                        // 物品价格
+                        Label labelPrice = new Label(14 , row + rowchildren, stockDocumentsItem.getPrice().toString());
+                        sheet.addCell(labelPrice);
+                        rowchildren++;
+                }
+
+                  // 合并单元格
+                    sheet.mergeCells(0, up , 0, up+stockDocumentsItemList.size()-1 );
+                    sheet.mergeCells(1, up, 1, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(2, up, 2, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(3, up, 3, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(4, up, 4, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(5, up, 5, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(6, up, 6, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(7, up, 7, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(8, up, 8, up+stockDocumentsItemList.size()-1);
+                    up = up+stockDocumentsItemList.size();
+                    row++;
+                    rowchildren--;
+                outBook.write();
+                outBook.close();
+                tplWorkBook.close();
+                tplStream.close();
+                outputStream.close();
+            }
+        }catch(Exception e){
             LogClerk.errLog.error(e);
             response.setContentType("text/html");
             response.setHeader("Content-Type", "text/html");
