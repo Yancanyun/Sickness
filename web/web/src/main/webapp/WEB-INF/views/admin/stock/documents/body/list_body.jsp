@@ -34,22 +34,23 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label billType ">单据类型</label>
                             <div class="col-sm-2">
-                                <select class="col-sm-2 form-control w180" name="billType">
+                                <select class="col-sm-2 form-control w180" name="type">
                                     <option value="-1">请选择</option>
                                     <option value="1">入库单</option>
                                     <option value="2">领用单</option>
-                                    <option value="3">盘点单</option>
-                                    <option value="4">领回单</option>
+                                    <option value="3">领回单</option>
+                                    <option value="4">盘盈单</option>
+                                    <option value="5">盘亏单</option>
                                 </select>
                             </div>
                             <label class="col-sm-1 control-label">时间段</label>
                             <div class="col-sm-6">
                                 <div class="billType">
-                                    <input type="text" class="J_startTime w180" data-start-time="2014-8-01" readonly="readonly" name="startTime" value="2014-8-01" />
+                                    <input type="text" class="J_startTime w180" data-start-time="${currentMonthFirstDay}" readonly="readonly" name="startTime" value="${currentMonthFirstDay}" />
                                     <span class="to">~</span>
-                                    <input type="text" class="J_endTime w180" data-end-time="2015-9-11" readonly="readonly" name="endTime" value="2015-9-11" />
-                                    <span class="month J_shortcut" data-start-time="2015-10-01" data-end-time="2015-10-31">本月</span>
-                                    <span class="month J_shortcut" data-start-time="2015-09-01" data-end-time="2015-09-30">上月</span>
+                                    <input type="text" class="J_endTime w180" data-end-time="${currentDay}" readonly="readonly" name="endTime" value="${currentDay}" />
+                                    <span class="month J_shortcut" data-start-time="${currentMonthFirstDay}" data-end-time="${currentMonthFirstDay}">本月</span>
+                                    <span class="month J_shortcut" data-start-time="${lastMonthFirstDay}" data-end-time="${lastMonthFirstDay}">上月</span>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +63,7 @@
                                     </c:if>
                                     <c:if test="${fn:length(handlerList) > 0}">
                                         <c:forEach var="handler" items="${handlerList}">
-                                            <option value="${handler.employee}">${handler.loginName}</option>
+                                            <option value="${handler.employee.id}">${handler.loginName}</option>
                                         </c:forEach>
                                     </c:if>
                                 </select>
@@ -75,7 +76,7 @@
                                     </c:if>
                                     <c:if test="${fn:length(createdList) > 0}">
                                         <c:forEach var="creator" items="${createdList}">
-                                            <option value="${creator.employee}">${creator.loginName}</option>
+                                            <option value="${creator.employee.id}">${creator.loginName}</option>
                                         </c:forEach>
                                     </c:if>
                                 </select>
@@ -88,7 +89,7 @@
                                     </c:if>
                                     <c:if test="${fn:length(auditedList) > 0}">
                                         <c:forEach var="auditor" items="${auditedList}">
-                                            <option value="${auditor.employee}">${auditor.loginName}</option>
+                                            <option value="${auditor.employee.id}">${auditor.loginName}</option>
                                         </c:forEach>
                                     </c:if>
                                 </select>
@@ -97,7 +98,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">存放点</label>
                             <div class="col-sm-2">
-                                <select class="col-sm-2 form-control w180" name="depotId">
+                                <select class="col-sm-2 form-control w180" name="kitchenId">
                                     <c:if test="${fn:length(kitchenList) == 0}">
                                         <option>无</option>
                                     </c:if>
@@ -110,7 +111,7 @@
                             </div>
                             <label class="col-sm-1 control-label">结算状态</label>
                             <div class="col-sm-2">
-                                <select class=" form-control w180" name="isSettlemented">
+                                <select class=" form-control w180" name="isSettled">
                                     <option value="-1">请选择</option>
                                     <option value="0">未结算</option>
                                     <option value="1">已结算</option>
@@ -143,9 +144,10 @@
                         <a class="btn btn-success margin-bottom-15 J_inStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加入库单</a>
                         <a class="btn btn-success margin-bottom-15 J_outStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加领用单</a>
                         <a class="btn btn-success margin-bottom-15 J_backStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加领回单</a>
-                        <a class="btn btn-success margin-bottom-15 J_checkStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加盘点单</a>
-                        <a class="btn btn-warning margin-bottom-15 pull-right J_allExport" href="#" target="_blank"><i class="fa fa-download"></i>&nbsp;全部导出excel</a>
-                        <a class="btn btn-warning margin-bottom-15 margin-right-10 pull-right J_export" href="#?" target="_blank"><i class="fa fa-download"></i>&nbsp;按条件导出excel</a>
+                        <a class="btn btn-success margin-bottom-15 J_checkStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加盘盈单</a>
+                        <a class="btn btn-success margin-bottom-15 J_checkStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加盘亏单</a>
+                        <a class="btn btn-warning margin-bottom-15 pull-right J_allExport" href="" target="_blank"><i class="fa fa-download"></i>&nbsp;全部导出excel</a>
+                        <a class="btn btn-warning margin-bottom-15 margin-right-10 pull-right J_export" href="${website}admin/stock/documents/exportbycd" target="_blank"><i class="fa fa-download"></i>&nbsp;按条件导出excel</a>
                     </p>
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered">

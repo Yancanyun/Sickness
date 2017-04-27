@@ -6,9 +6,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
 import com.emenu.common.dto.party.group.employee.EmployeeDto;
 import com.emenu.common.dto.stock.DocumentsDto;
+import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.stock.*;
 import com.emenu.common.enums.other.ModuleEnums;
 import com.emenu.common.enums.stock.StockDocumentsTypeEnum;
+import com.emenu.common.utils.DateUtils;
 import com.emenu.common.utils.URLConstants;
 import com.emenu.common.utils.WebConstants;
 import com.emenu.service.stock.StockDocumentsService;
@@ -22,8 +24,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 
@@ -56,6 +61,11 @@ public class AdminStockDocumentsController extends AbstractController {
             model.addAttribute("handlerList", employeeDtoList);
             model.addAttribute("createdList", employeeDtoList);
             model.addAttribute("auditedList", employeeDtoList);
+            model.addAttribute("lastMonthFirstDay", DateUtils.getLastMonthFirstDay());
+            model.addAttribute("lastMonthLastDay", DateUtils.getLastMonthLastDay());
+            model.addAttribute("currentMonthFirstDay", DateUtils.getCurrentMonthFirstDay());
+            model.addAttribute("currentMonthLastDay", DateUtils.getCurrentMonthLastDay());
+            model.addAttribute("currentDay", DateUtils.yearMonthDayFormat(DateUtils.now()));
             return "admin/stock/documents/list_home";
         } catch(SSException e) {
             sendErrMsg(e.getMessage());
@@ -150,6 +160,40 @@ public class AdminStockDocumentsController extends AbstractController {
             return sendErrMsgAndErrCode(e);
         }
         return sendJsonArray(jsonArray, dataCount);
+    }
+
+    /**
+     * 条件导出单据
+     * @param createdPartyId
+     * @param handlerPartyId
+     * @param auditPartyId
+     * @param startTime
+     * @param endTime
+     * @param isAudited
+     * @param isSettlemented
+     * @param depotId
+     */
+    @Module(ModuleEnums.AdminStockDocumentsExport)
+    @RequestMapping(value = "exportbycd", method = RequestMethod.GET)
+    public void toReportExport(DocumentsSearchDto searchDto,
+                                HttpServletResponse response){
+        try{
+            System.out.println(searchDto.getKitchenId());
+            StockDocuments documents = new StockDocuments();
+            documents.setCreatedPartyId(searchDto.getCreatedPartyId());
+            documents.setHandlerPartyId(searchDto.getHandlerPartyId());
+            documents.setIsAudited(searchDto.getIsAudited());
+            documents.setIsSettled(searchDto.getIsSettled());
+            documents.setAuditPartyId(searchDto.getAuditPartyId());
+            documents.setKitchenId(searchDto.getKitchenId());
+            Date startTime = searchDto.getStartTime();
+            Date endTime = searchDto.getEndTime();
+            stockDocumentsService.exportToExcel(documents, startTime, endTime, response);
+            sendErrMsg("导出成功");
+        }catch (Exception e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
     }
 
 }

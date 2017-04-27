@@ -64,5 +64,5 @@ public interface StockKitchenItemMapper {
      * @return
      * @throws SSException
      */
-    public StockKitchenItem queryByItemId(@Param("itemId") Integer id,@Param("kitchenId") Integer kitchenId) throws SSException;
+    public List<StockKitchenItem> queryByItemId(@Param("itemId") Integer id,@Param("kitchenId") Integer kitchenId) throws SSException;
 }

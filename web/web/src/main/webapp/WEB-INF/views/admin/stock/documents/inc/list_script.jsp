@@ -159,8 +159,8 @@
     {@each list as it}
     <tr data-store-bill-createdTime="&{it.createdTime}" data-store-bill-handlerPartyId="&{it.handlerPartyId}" data-store-bill-createdPartyId="&{it.createdPartyId}"  data-store-bill-auditPartyId="&{it.auditPartyId}" data-store-bill-depotId="&{it.depotId}" data-store-bill-type="&{it.type}" data-store-bill-itemNumber="&{it.itemNumber}" data-store-bill-id="&{it.id}" data-store-bill-comment="&{it.comment}" data-store-bill-isAudited="&{it.isAudited}" data-store-bill-isSettlemented="&{it.isSettlemented}">
         <input type="hidden" name="id" value="&{it.id}"/>
-        <input type="hidden" name="depotId" value="&{it.depotId}"/>
-        <input type="hidden" name="depotName" value="&{it.depotName}"/>
+        <input type="hidden" name="kitchenId" value="&{it.kitchenId}"/>
+        <input type="hidden" name="kitchenName" value="&{it.kitchenName}"/>
         <input type="hidden" name="type" value="&{it.type}"/>
         <input type="hidden" name="money" value="&{it.money}"/>
         <input type="hidden" name="serialNumber" value="&{it.serialNumber}"/>
@@ -171,7 +171,7 @@
         <input type="hidden" name="auditPartyId" value="&{it.auditPartyId}"/>
         <input type="hidden" name="auditName" value="&{it.auditName}"/>
         <input type="hidden" name="isAudited" value="&{it.isAudited}"/>
-        <input type="hidden" name="isSettlemented" value="&{it.isSettlemented}"/>
+        <input type="hidden" name="isSettled" value="&{it.isSettled}"/>
         <td class="J_reportItem hidden">
             {@each it.reportItem as item}
             {@if it.type == 1}
@@ -236,7 +236,7 @@
 <script type="text/javascript">
     KISSY.ready(function(S){
         S.use('page/store-management/store-bill-management', function(){
-            PW.page.StoreManagement.StoreBillManagement({
+            PW.page.StockManagement.StockBillManagement({
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',

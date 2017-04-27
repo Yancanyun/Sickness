@@ -64,5 +64,5 @@ public interface StockKitchenItemService {
      * @return
      * @throws SSException
      */
-    public StockKitchenItem queryByItemId(int itemId,int kitchenId) throws SSException;
+    public List<StockKitchenItem> queryByItemId(int itemId,int kitchenId) throws SSException;
 }

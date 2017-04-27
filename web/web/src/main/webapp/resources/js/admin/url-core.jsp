@@ -135,6 +135,44 @@
             ['inventory', site.website + 'admin/storage/settlement/check/ajax/settlement/check', 'put', '库存盘点']
         ],
 
+            // 新库存管理
+        StockManagement: [
+            // 库存物品管理
+            ['sendName', site.staticWebsite + 'mock/admin/sendName.json', 'get','物品名称验重'],
+            ['delStoreItem', site.staticWebsite + 'mock/admin/login.json', 'get','删除库存物品'],
+            ['editStoreItemConversionRatio', site.staticWebsite + 'mock/admin/login.json', 'get','编辑换算比例'],
+            ['getCostCardUnit', site.staticWebsite + 'mock/admin/get-cost-card-unit.json', 'get', '获取成本卡单位'],
+            ['submitStorageItem', site.staticWebsite + 'mock/admin/submit-store-item.json', 'get', '提交添加的库存物品'],
+            ['submitEditedStorageItem', site.staticWebsite + 'mock/admin/submit-edited-store-item.json', 'get', '提交编辑的库存物品'],
+            ['getStorageUnitRelatedSettings', site.staticWebsite + 'mock/admin/get-storage-unit-related-settings.json', '获取库存预警、总数量'],
+
+            //库存单据列表管理
+            ['checkStoreBill', site.staticWebsite + 'mock/admin/login.json', 'get', '审核库存单据'],
+            ['delStoreBill', site.staticWebsite + 'mock/admin/login.json', 'get', '删除库存单据'],
+
+            //库存单据管理-回库单管理
+            ['getSpecification', site.staticWebsite + 'mock/admin/get-specification-list.json', 'get', '发送物品id,获取规格列表'],
+            ['sendData', site.staticWebsite + 'mock/admin/login.json', 'get', '发送回库单'],
+            ['getNumber', site.staticWebsite + 'mock/admin/get-number.json', 'get', '获取成本卡数量'],
+
+            //库存单据管理-领用单管理
+            ['getSpecificationType', site.staticWebsite + 'mock/admin/get-specification-type.json', 'get', '发送物品id,获取规格列表'],
+            ['getData', site.staticWebsite + 'mock/admin/get-store-using-data.json', 'get', '获取成本卡数量'],
+            ['sendUsingData', site.staticWebsite + 'mock/admin/login.json', 'get', '发送领用单'],
+
+            //库存单据管理-盘盈单管理
+            ['getProfitSpecification', site.staticWebsite + 'mock/admin/get-specification-list.json', 'get', '发送物品id,获取规格列表'],
+            ['sendProfitData', site.staticWebsite + 'mock/admin/login.json', 'get', '发送盘盈单'],
+            ['getQuantity', site.staticWebsite + 'mock/admin/get-number.json', 'get', '获取成本卡数量'],
+
+            //存放点管理
+            ['delDepot', site.staticWebsite + 'mock/admin/del-depot.json', 'get', '删除存放点'],
+            ['editRemark', site.staticWebsite + 'mock/admin/edit-depot-item-remark.json', 'get', '修改备注'],
+            ['addRemark', site.staticWebsite + 'mock/admin/add-depot-item-remark.json', 'get', '添加备注']
+
+         ],
+
+
         // 菜品管理
         DishManagement: [
             // 单位管理--列表

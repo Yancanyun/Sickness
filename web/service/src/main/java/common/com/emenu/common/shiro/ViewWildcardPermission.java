@@ -80,7 +80,6 @@ public class ViewWildcardPermission extends WildcardPermission {
                 return false;
             }
         }
-
         return true;
     }
 }

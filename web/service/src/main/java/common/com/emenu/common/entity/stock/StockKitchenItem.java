@@ -23,32 +23,21 @@ public class StockKitchenItem extends AbstractEntity{
     @Column(name = "kitchen_id")
     private Integer kitchenId;
 
-    //物品编号
-    @Column(name = "item_number")
-    private Integer itemNumber;
-
     //物品id
     @Column(name = "item_id")
     private Integer itemId;
 
-    //助记码
-    @Column(name = "assistant_code")
-    private String assistantCode;
-
     //规格id
     @Column(name = "specifications")
-    private String specifications;
+    private Integer specifications;
 
     //库存量
     @Column(name = "storage_quantity")
     private BigDecimal storageQuantity;
 
-    //成本卡单位
-    @Column(name = "cost_card_unit_id")
-    private Integer costCardUnitId;
-
-    //备注
-    private String remark;
+    //单位
+    @Column(name = "unit_id")
+    private Integer unitId;
 
     //物品状态(1-正常使用,2-标缺，3-删除)
     private Integer status;
@@ -78,14 +67,6 @@ public class StockKitchenItem extends AbstractEntity{
         this.kitchenId = kitchenId;
     }
 
-    public Integer getItemNumber() {
-        return itemNumber;
-    }
-
-    public void setItemNumber(Integer itemNumber) {
-        this.itemNumber = itemNumber;
-    }
-
     public Integer getItemId() {
         return itemId;
     }
@@ -94,19 +75,11 @@ public class StockKitchenItem extends AbstractEntity{
         this.itemId = itemId;
     }
 
-    public String getAssistantCode() {
-        return assistantCode;
-    }
-
-    public void setAssistantCode(String assistantCode) {
-        this.assistantCode = assistantCode;
-    }
-
-    public String getSpecifications() {
+    public Integer getSpecifications() {
         return specifications;
     }
 
-    public void setSpecifications(String specifications) {
+    public void setSpecifications(Integer specifications) {
         this.specifications = specifications;
     }
 
@@ -118,20 +91,12 @@ public class StockKitchenItem extends AbstractEntity{
         this.storageQuantity = storageQuantity;
     }
 
-    public Integer getCostCardUnitId() {
-        return costCardUnitId;
+    public Integer getUnitId() {
+        return unitId;
     }
 
-    public void setCostCardUnitId(Integer costCardUnitId) {
-        this.costCardUnitId = costCardUnitId;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setUnitId(Integer unitId) {
+        this.unitId = unitId;
     }
 
     public Integer getStatus() {

@@ -66,18 +66,22 @@ public interface StockDocumentsService {
     public void updateDocuments(StockDocuments stockDocuments) throws SSException;
 
     /**
-     * 导出到Excel
-     *
+     * 根据条件导出到Excel
      * @param stockDocuments
      * @param startTime
      * @param endTime
-     * @param deports
-     * @param handlerPartyId
-     * @param createdPartyId
      * @param response
+     * @throws SSException
      */
-    public void exportToExcel(StockDocuments stockDocuments,Date startTime, Date endTime,List<Integer> deports,
-                              Integer handlerPartyId, Integer createdPartyId, HttpServletResponse response) throws SSException;
+    public void exportToExcel(StockDocuments stockDocuments,Date startTime, Date endTime,
+                               HttpServletResponse response) throws SSException;
+
+    /**
+     * 导出全部Excel
+     * @param response
+     * @throws SSException
+     */
+    public void exportToExcelAll(HttpServletResponse response)throws SSException;
 
 
     /*************************************** by chenwenyan  ************************************************/

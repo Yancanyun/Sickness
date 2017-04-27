@@ -146,14 +146,14 @@ public class StockKitchenItemServiceImpl implements StockKitchenItemService{
      * @throws SSException
      */
     @Override
-    public StockKitchenItem queryByItemId(int itemId,int kitchenId) throws SSException{
+    public List<StockKitchenItem> queryByItemId(int itemId,int kitchenId) throws SSException{
         StockKitchenItem  stockKitchenItem = new StockKitchenItem();
         try{
-            stockKitchenItem = stockKitchenItemMapper.queryByItemId(itemId,kitchenId);
+            List<StockKitchenItem> stockKitchenItems = stockKitchenItemMapper.queryByItemId(itemId,kitchenId);
+            return stockKitchenItems;
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.QueryKitchenItemFail, e);
         }
-        return stockKitchenItem;
     }
 }
