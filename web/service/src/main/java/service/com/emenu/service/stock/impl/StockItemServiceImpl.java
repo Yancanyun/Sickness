@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ import java.util.List;
  *
  * @author pengpeng
  * @time 2017/3/4 9:55
+ * updated by renhongshuai
  */
 @Service("itemService")
 public class StockItemServiceImpl implements StockItemService {
@@ -198,5 +200,24 @@ public class StockItemServiceImpl implements StockItemService {
             LogClerk.errLog.error(e);
             throw SSException.get(EmenuException.CountStockItemFailed,e);
         }
+    }
+
+    @Override
+    public List<StockItem> listBySearchDto(StockItemSearchDto stockItemSearchDto)throws SSException{
+        List<StockItem> stockItemList = Collections.emptyList();
+        int pageNo = stockItemSearchDto.getPageNo() <= 0 ? 0 : stockItemSearchDto.getPageNo() - 1;
+        if (Assert.isNull(stockItemSearchDto.getPageSize())
+                || Assert.lessOrEqualZero(stockItemSearchDto.getPageSize())){
+            stockItemSearchDto.setPageSize(10);
+        }
+        int offset = pageNo * stockItemSearchDto.getPageSize();
+        stockItemSearchDto.setOffset(offset);
+        try{
+            stockItemList = stockItemMapper.listBySearchDto(stockItemSearchDto);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.ListBySearchFailed,e);
+        }
+        return stockItemList;
     }
 }

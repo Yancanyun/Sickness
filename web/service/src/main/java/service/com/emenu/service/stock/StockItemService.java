@@ -112,4 +112,12 @@ public interface StockItemService {
      * @throws SSException
      */
     public int count() throws SSException;
+
+    /**
+     * 搜索物品列表
+     * @param stockItemSearchDto
+     * @return
+     * @throws SSException
+     */
+    public List<StockItem> listBySearchDto(StockItemSearchDto stockItemSearchDto)throws SSException;
 }

@@ -33,7 +33,7 @@
 <script type="text/javascript">
     KISSY.ready(function(S){
         S.use('page/store-management/store-item-management', function(S){
-            PW.page.StoreManagement.StoreItemManagement.List({
+            PW.page.StockManagement.StockItemManagement.List({
                 renderTo: '.J_pagination',
                 juicerRender: '#tpl',
                 dataRender: '#J_template',
