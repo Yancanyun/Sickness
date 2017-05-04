@@ -80,7 +80,7 @@ public class StockItemServiceTest extends AbstractTestCase{
     public void listAll()throws SSException{
         List<StockItem> stockItemList = stockItemService.listAll();
         for(StockItem stockItem:stockItemList){
-            System.out.println(stockItem.getSpecifications());
+            System.out.println(stockItem.getSupplierName());
         }
     }
 }

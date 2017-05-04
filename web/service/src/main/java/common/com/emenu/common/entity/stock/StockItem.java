@@ -5,6 +5,7 @@ import com.pandawork.core.common.entity.AbstractEntity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * StockItem
@@ -39,11 +40,44 @@ public class StockItem extends AbstractEntity {
     private String tagName;
 
     // 规格Id（所有规格Id，以字符串存在该字段里）
+    @Column(name = "specifications")
     private String specifications;
 
     // 刷出所有规格,规格管理表还没写
-/*    @Transient
-    private List<>*/
+//    @Transient
+//    private List<Specifications> specificationsList;
+
+    //供应商Id
+   @Column(name = "supplier_id")
+    private Integer supplierId;
+
+//    public List<Specifications> getSpecificationsList() {
+//        return specificationsList;
+//    }
+//
+//    public void setSpecificationsList(List<Specifications> specificationsList) {
+//        this.specificationsList = specificationsList;
+//    }
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    //供应商名称
+    @Transient
+    private String supplierName;
 
     // 库存量
     @Column(name = "storage_quantity")
@@ -66,6 +100,7 @@ public class StockItem extends AbstractEntity {
     private BigDecimal lowerQuantity;
 
     // 备注
+    @Column(name = "remark")
     private String remark;
 
     // 出库方式(1-加权平均，2-手动)

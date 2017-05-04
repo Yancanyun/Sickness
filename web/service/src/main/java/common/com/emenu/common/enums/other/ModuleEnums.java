@@ -338,6 +338,13 @@ public enum ModuleEnums {
     AdminStockDocumentsSearch("Admin:Stock:Documents:Search"),
     AdminStockDocumentsExport("Admin:Stock:Documents:Export"),
 
+    //新版库存供货商管理
+    AdminStockSupplier("Admin:Stock:Supplier"),
+    AdminStockSupplierList("Admin:Stock:Supplier:List"),
+    AdminStockSupplierNew("Admin:Stock:Supplier:New"),
+    AdminStockSupplierUpdate("Admin:Stock:Supplier:Update"),
+    AdminStockSupplierDelete("Admin:Stock:Supplier:Delete"),
+
 
     // 顾客点餐平台
     Mobile("Mobile"),

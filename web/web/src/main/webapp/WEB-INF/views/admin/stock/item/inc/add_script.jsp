@@ -1,17 +1,10 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Karl_SC
-  Date: 2017/3/17
-  Time: 11:02
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/template" id="tpl">
     <form class="form-horizontal J_searchForm"  style="text-align:center;" action="" method="">
         <input type="hidden" class="J_id" value="&{id}" name="id">
         <div class="form-group">
             <label class="col-sm-2"><span class="requires">*</span>规格</label>
             <div class="col-sm-6" id="basic"></div>
+            <a href="#" class="btn btn-success margin-left-130" target="_blank"><i class="fa fa-share"></i>&nbsp;添加规格</a>
         </div>
         <div class="form-group">
             <label class="col-sm-2">订货单位</label>
@@ -36,7 +29,7 @@
             </div>
         </div>
         <div class="margin-bottom-15">
-            <a href="javascript:;" class="btn btn-success J_add" disabled="disabled"><i class="fa fa-plus"></i>&nbsp;添加</a>
+            <a href="javasscript:;" class="btn btn-success J_add" disabled="disabled"><i class="fa fa-plus"></i>&nbsp;添加</a>
             <a href="javascript:;" class="btn btn-success J_reset"><i class="fa fa-eraser"></i>&nbsp;重置</a>
             <a href="javascript:;" class="btn btn-success J_del" disabled="disabled"><i class="fa fa-minus"></i>&nbsp;删除</a>
         </div>
@@ -64,7 +57,7 @@
 <script type="text/template" id="tableTpl">
     <tr>
         <td>
-            <input type="checkbox" name="check">
+            <input type="checkbox" name="check" class="J_select">
             <input type="hidden" name="id" value="&{id}">
             <input type="hidden" name="orderUnitId" value="&{orderUnitId}">
             <input type="hidden" name="orderToStorage" value="&{orderToStorage}">
@@ -89,7 +82,7 @@
 <script type="text/javascript">
     KISSY.ready(function(S){
         S.use('page/store-management/store-item-management-add', function(S){
-            PW.page.StoreManagement.StoreItemManagementAdd();
+            PW.page.StockManagement.StoreItemManagementAdd();
         });
     });
 </script>

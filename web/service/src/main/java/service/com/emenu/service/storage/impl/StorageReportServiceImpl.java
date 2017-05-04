@@ -1486,11 +1486,11 @@ public class StorageReportServiceImpl implements StorageReportService {
                 }*/
 
 
-            outBook.write();
-            outBook.close();
-            tplWorkBook.close();
-            tplStream.close();
-            os.close();
+                outBook.write();
+                outBook.close();
+                tplWorkBook.close();
+                tplStream.close();
+                os.close();
         }catch (Exception e) {
             LogClerk.errLog.error(e);
             response.setContentType("text/html");

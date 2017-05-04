@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.emenu.common.annotation.Module;
+import com.emenu.common.dto.stock.StockItemSearchDto;
 import com.emenu.common.entity.dish.Tag;
 import com.emenu.common.entity.stock.StockItem;
 import com.emenu.common.enums.other.ModuleEnums;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,11 +53,19 @@ public class AdminStockItemController extends AbstractController{
     }
 
 
+    /**
+     * 刷分页及搜索
+     * @param pageNo
+     * @param pageSize
+     * @param searchDto
+     * @return
+     */
     @Module(value = ModuleEnums.AdminStockItem, extModule = ModuleEnums.AdminStockItemList)
     @RequestMapping(value = "ajax/list/{pageNo}",method = RequestMethod.GET)
     @ResponseBody
     public JSON ajaxList(@PathVariable("pageNo")Integer pageNo,
-                         @RequestParam("pageSize") Integer pageSize){
+                         @RequestParam("pageSize") Integer pageSize,
+                         StockItemSearchDto searchDto){
         pageSize = (pageSize == null || pageSize <= 0) ? DEFAULT_PAGE_SIZE : pageSize;
         int offset = 0;
         if (Assert.isNotNull(pageNo)) {
@@ -64,7 +74,11 @@ public class AdminStockItemController extends AbstractController{
         }
         List<StockItem> list = Collections.emptyList();
         try{
-            list = stockItemService.listByPage(offset,pageSize);
+            if(Assert.isNull(searchDto)){
+                list = stockItemService.listByPage(offset,pageSize);
+            }else{
+                list = stockItemService.listBySearchDto(searchDto);
+            }
         }catch(SSException e){
             LogClerk.errLog.error(e);
             return sendErrMsgAndErrCode(e);
@@ -93,6 +107,24 @@ public class AdminStockItemController extends AbstractController{
             return sendErrMsgAndErrCode(e);
         }
         return sendJsonArray(jsonArray, dataCount);
+    }
+
+    /**
+     * 导出excel
+     * @param searchDto
+     * @param response
+     */
+    @Module(value = ModuleEnums.AdminStorageIngredientList,extModule = ModuleEnums.AdminStorageIngredientList)
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportExcel(StockItemSearchDto searchDto, HttpServletResponse response){
+        try {
+            stockItemService.exportExcelBySearchDto(searchDto,response);
+            sendErrMsg("导出成功");
+        } catch (SSException e) {
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+
     }
 
     /**

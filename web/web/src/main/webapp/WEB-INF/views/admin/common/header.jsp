@@ -92,6 +92,7 @@
             <li <c:if test="${PWModule eq 'Admin:Stock'}">class="active"</c:if> >
                 <a class="menu-list J_layer_1_menu" data-menu-id="6.5" href="javascript:;">库存管理2.0</a>
                 <ul class="dropdown-menu arrow" aria-labelledby="dLabel">
+                    <li><a class="J_menu" href="${website}admin/stock/supplier">供货商管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/item">库存物品管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/kitchen">厨房管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a></li>

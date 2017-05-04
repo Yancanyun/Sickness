@@ -165,6 +165,11 @@
             ['sendProfitData', site.staticWebsite + 'mock/admin/login.json', 'get', '发送盘盈单'],
             ['getQuantity', site.staticWebsite + 'mock/admin/get-number.json', 'get', '获取成本卡数量'],
 
+            // 供货商管理
+            ['addSupplier', site.website + 'admin/stock/supplier/ajax', 'post','添加供货商'],
+            ['editSupplier', site.website + 'admin/stock/supplier/ajax', 'put','编辑供货商'],
+            ['delSupplier', site.website + 'admin/stock/supplier/ajax/&{id}', 'delete','删除供货商'],
+
             //存放点管理
             ['delDepot', site.staticWebsite + 'mock/admin/del-depot.json', 'get', '删除存放点'],
             ['editRemark', site.staticWebsite + 'mock/admin/edit-depot-item-remark.json', 'get', '修改备注'],

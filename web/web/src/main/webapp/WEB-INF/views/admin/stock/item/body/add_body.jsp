@@ -19,7 +19,7 @@
             <h2>库存物品添加</h2>
             <div class="alert alert-warning J_tip">保存成功！</div>
         </div>
-        < class="col-sm-12">
+        <div class="col-sm-12">
             <form class="form-horizontal J_form" action="" method="">
                 <form class="panel panel-info">
                     <div class="panel-heading">

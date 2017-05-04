@@ -4,6 +4,7 @@ import com.emenu.common.dto.stock.StockItemSearchDto;
 import com.emenu.common.entity.stock.StockItem;
 import com.pandawork.core.common.exception.SSException;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -120,4 +121,12 @@ public interface StockItemService {
      * @throws SSException
      */
     public List<StockItem> listBySearchDto(StockItemSearchDto stockItemSearchDto)throws SSException;
+
+    /**
+     * 导出Excel
+     * @param searchDto
+     * @param response
+     * @throws SSException
+     */
+    public void exportExcelBySearchDto(StockItemSearchDto searchDto, HttpServletResponse response) throws SSException;
 }
