@@ -124,7 +124,6 @@ public class AdminStockItemController extends AbstractController{
             LogClerk.errLog.error(e);
             sendErrMsg(e.getMessage());
         }
-
     }
 
     /**

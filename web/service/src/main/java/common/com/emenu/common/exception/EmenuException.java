@@ -747,7 +747,6 @@ public enum EmenuException implements IBizExceptionMes {
     CountDocumentsError("统计单据数量失败",110043),
 
 
-
     //新版库存-规格管理
     AddSpecificationsFail("添加规格失败",111000),
     DeleteSpecificationsFail("删除规格失败",111001),
@@ -777,6 +776,15 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateStateToIgnoreFail("修改状态为已忽略失败",113002),
     QueryAllUntreatedWarnFail("获取所有未处理的预警信息失败",113003),
 
+
+    //新版库存-库存分类管理
+    StockTagQueryFailed("查询库存分类失败", 113013),
+    StockTagInsertFailed("添加库存分类失败", 113014),
+    StockTagUpdateFailed("更新库存分类失败", 113015),
+    StockTagDeleteFailed("删除库存分类失败", 113016),
+    StockTagNameNotNull("库存分类名称不能为空", 113017),
+    StockTagHasItem("有库存物品属于该分类，请先移除分类下的物品", 113018),
+    CountByStockTagIdFailed("获取菜品分类个数失败",113019),
 
 
 

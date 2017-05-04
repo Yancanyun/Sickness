@@ -12,6 +12,7 @@ import com.emenu.service.other.SerialNumService;
 import com.emenu.service.party.group.supplier.SupplierService;
 import com.emenu.service.stock.StockItemService;
 import com.pandawork.core.common.exception.SSException;
+import com.pandawork.core.common.log.Log;
 import com.pandawork.core.common.log.LogClerk;
 import com.pandawork.core.common.util.Assert;
 import com.pandawork.core.common.util.IOUtil;
@@ -337,6 +338,15 @@ public class StockItemServiceImpl implements StockItemService {
                     throw SSException.get(EmenuException.ExportStorageSettlementCheckFailed, e);
                 }
             }
+        }
+    }
+
+    public int countByTagId(int id)throws SSException{
+        try{
+            return stockItemMapper.countByTagId(id);
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            throw SSException.get(EmenuException.CountByStockTagIdFailed,e);
         }
     }
 }

@@ -10,6 +10,12 @@
         WHERE  name = #{name}
     </select>
 
+    <select id="countByTagId" resultType="int">
+        SELECT COUNT(1)
+        FROM t_stock_item
+        WHERE tag_id = #{id} AND status = 1
+    </select>
+
     <update id="updateStockItemStatusById">
         UPDATE 't_stock_item'
         SET 'status' = #{status}

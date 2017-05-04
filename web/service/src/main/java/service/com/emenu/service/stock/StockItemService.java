@@ -129,4 +129,12 @@ public interface StockItemService {
      * @throws SSException
      */
     public void exportExcelBySearchDto(StockItemSearchDto searchDto, HttpServletResponse response) throws SSException;
+
+    /**
+     * 检测分类是否正在被使用
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public int countByTagId(int id)throws SSException;
 }

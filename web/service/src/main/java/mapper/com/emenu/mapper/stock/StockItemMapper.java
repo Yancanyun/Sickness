@@ -24,6 +24,14 @@ public interface StockItemMapper {
      */
     public int countByName(@Param("name") String name) throws SSException;
 
+    /**
+     * 根据分类Id查询物品个数
+     * @param id
+     * @return
+     * @throws SSException
+     */
+    public int countByTagId(@Param("id") int id) throws SSException;
+
 
     /**
      * 修改

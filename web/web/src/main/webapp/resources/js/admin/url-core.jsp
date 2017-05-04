@@ -170,6 +170,11 @@
             ['editSupplier', site.website + 'admin/stock/supplier/ajax', 'put','编辑供货商'],
             ['delSupplier', site.website + 'admin/stock/supplier/ajax/&{id}', 'delete','删除供货商'],
 
+            // 库存分类管理
+            ['addStoreClassify', site.website + 'admin/stock/tag/ajax', 'post','添加库存分类'],
+            ['editStoreClassify', site.website + 'admin/stock/tag/ajax/&{id}', 'put','编辑库存分类'],
+            ['delStoreClassify', site.website + 'admin/stock/tag/ajax/&{id}', 'delete','删除库存分类'],
+
             //存放点管理
             ['delDepot', site.staticWebsite + 'mock/admin/del-depot.json', 'get', '删除存放点'],
             ['editRemark', site.staticWebsite + 'mock/admin/edit-depot-item-remark.json', 'get', '修改备注'],

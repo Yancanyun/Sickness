@@ -83,4 +83,10 @@ public class StockItemServiceTest extends AbstractTestCase{
             System.out.println(stockItem.getSupplierName());
         }
     }
+
+    @Test
+    public void CountByTagId()throws SSException{
+        int itemCount = stockItemService.countByTagId(2);
+        System.out.println(itemCount);
+    }
 }

@@ -315,6 +315,13 @@ public enum ModuleEnums {
     AdminStockKitchenItem("Admin:Stock:KitchenItem"),
     AdminStockKitchenItemList("Admin:Stock:KitchenItem:List"),
 
+    //新版库存分类管理
+    AdminStockTag("Admin:Stock:Tag"),
+    AdminStockTagList("Admin:Stock:Tag:List"),
+    AdminStockTagNew("Admin:Stock:Tag:New"),
+    AdminStockTagUpdate("Admin:Stock:Tag:Update"),
+    AdminStockTagDelete("Admin:Stock:Tag:Delete"),
+
     //物品管理
     AdminStockItem("Admin:Stock:Item"),
     AdminStockItemList("Admin:Stock:Item:List"),

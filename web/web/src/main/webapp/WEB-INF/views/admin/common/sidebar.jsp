@@ -383,6 +383,11 @@
                         <a class="J_menu" href="${website}admin/stock/supplier">供货商管理</a>
                     </li>
                 </shiro:checkPermission>
+                <shiro:checkPermission name="Admin:Stock:Tag:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Tag:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/tag">库存分类管理</a>
+                    </li>
+                </shiro:checkPermission>
                 <shiro:checkPermission name="Admin:Stock:Item">
                     <li <c:if test="${MethodModule eq 'Admin:Stock:Item'
                                       or MethodModule eq 'Admin:Stock:Item:List'}">class="active"</c:if>>
