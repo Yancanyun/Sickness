@@ -1,10 +1,8 @@
 package com.emenu.common.entity.stock;
 
 import com.pandawork.core.common.entity.AbstractEntity;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
@@ -30,6 +28,30 @@ public class StockKitchenItem extends AbstractEntity{
     //规格id
     @Column(name = "specifications")
     private Integer specifications;
+
+    //供货商id
+    @Column(name = "supplier_id")
+    private Integer supplierId;
+
+    //供应商名称
+    @Transient
+    private String supplierName;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
 
     //库存量
     @Column(name = "storage_quantity")

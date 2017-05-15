@@ -47,9 +47,6 @@ public class StockItem extends AbstractEntity {
 //    @Transient
 //    private List<Specifications> specificationsList;
 
-    //供应商Id
-   @Column(name = "supplier_id")
-    private Integer supplierId;
 
 //    public List<Specifications> getSpecificationsList() {
 //        return specificationsList;
@@ -59,25 +56,6 @@ public class StockItem extends AbstractEntity {
 //        this.specificationsList = specificationsList;
 //    }
 
-    public Integer getSupplierId() {
-        return supplierId;
-    }
-
-    public void setSupplierId(Integer supplierId) {
-        this.supplierId = supplierId;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
-    //供应商名称
-    @Transient
-    private String supplierName;
 
     // 库存量
     @Column(name = "storage_quantity")

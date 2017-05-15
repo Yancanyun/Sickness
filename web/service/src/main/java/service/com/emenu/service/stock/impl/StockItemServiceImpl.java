@@ -60,6 +60,13 @@ public class StockItemServiceImpl implements StockItemService {
     @Autowired
     private SupplierService supplierService;
 
+    /**
+     * 添加物品
+     *
+      * @param stockItem
+     * @return
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public StockItem newItem(StockItem stockItem) throws SSException{
@@ -86,6 +93,13 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 检查是否存在
+     *
+     * @param name
+     * @return
+     * @throws SSException
+     */
     @Override
     public boolean checkIsExist(String name) throws SSException{
         try{
@@ -96,6 +110,13 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 列表转换成字符串
+     *
+     * @param list
+     * @return
+     * @throws SSException
+     */
     @Override
     public String listToString(List<Integer> list) throws SSException{
         String string = new String();
@@ -115,6 +136,13 @@ public class StockItemServiceImpl implements StockItemService {
         return string;
     }
 
+    /**
+     * 字符串转换成列表
+     *
+     * @param string
+     * @return
+     * @throws SSException
+     */
     @Override
     public List<Integer> stringTolist(String string) throws SSException{
         List<Integer> list = new ArrayList<Integer>();
@@ -139,6 +167,13 @@ public class StockItemServiceImpl implements StockItemService {
         return list;
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     * @throws SSException
+     */
     @Override
     public StockItem queryById(int id) throws SSException{
         StockItem stockItem = new StockItem();
@@ -151,6 +186,12 @@ public class StockItemServiceImpl implements StockItemService {
         return stockItem;
     }
 
+    /**
+     * 修改库存物品
+     *
+     * @param stockItem
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStockItem(StockItem stockItem) throws SSException{
@@ -162,6 +203,13 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 根据物品id修改状态
+     *
+     * @param itemId
+     * @param status
+     * @throws SSException
+     */
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {SSException.class, Exception.class, RuntimeException.class})
     public void updateStockItemStatusById(int itemId,int status) throws SSException{
@@ -179,6 +227,13 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 查询出SearchDto的物品列表
+     *
+     * @param searchDto
+     * @return
+     * @throws SSException
+     */
     @Override
     public List<StockItem> listItem(StockItemSearchDto searchDto)throws SSException{
         try {
@@ -190,6 +245,12 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 查询全部的物品列表
+     *
+     * @return
+     * @throws SSException
+     */
     @Override
     public List<StockItem> listAll()throws SSException{
         try{
@@ -201,6 +262,14 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 分页查询
+     *
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
     @Override
     public List<StockItem> listByPage(int offset, int pageSize) throws SSException{
         try{
@@ -211,6 +280,12 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 物品数量
+     *
+     * @return
+     * @throws SSException
+     */
     @Override
     public int count() throws SSException{
         try{
@@ -221,6 +296,13 @@ public class StockItemServiceImpl implements StockItemService {
         }
     }
 
+    /**
+     * 根据SearchDto查询物品列表
+     *
+     * @param stockItemSearchDto
+     * @return
+     * @throws SSException
+     */
     @Override
     public List<StockItem> listBySearchDto(StockItemSearchDto stockItemSearchDto)throws SSException{
         List<StockItem> stockItemList = Collections.emptyList();
@@ -289,9 +371,6 @@ public class StockItemServiceImpl implements StockItemService {
                 //所属类别
                 Label labelTag = new Label(4,row,stockItem.getTagName());
                 sheet.addCell(labelTag);
-                //供货商
-                Label labelSupplier = new Label(5,row,stockItem.getSupplierName());
-                sheet.addCell(labelSupplier);
                 //库存量
                 Label labelStorageQuantity = new Label(6,row,stockItem.getStorageQuantity().toString());
                 sheet.addCell(labelStorageQuantity);

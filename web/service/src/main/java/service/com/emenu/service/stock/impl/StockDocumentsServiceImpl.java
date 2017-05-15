@@ -712,17 +712,20 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
                 List<StockKitchenItem> stockKitchenItems = stockKitchenItemService.queryByItemId(stockDocumentsItem.getItemId(),stockId);
                 for(StockKitchenItem stockKitchenItem : stockKitchenItems){
-                    if(Assert.isNull(stockKitchenItem) || stockDocumentsItem.getSpecificationId() != stockKitchenItem.getSpecifications()){
+                    if(Assert.isNull(stockKitchenItem) || stockDocumentsItem.getSpecificationId() != stockKitchenItem.getSpecifications()
+                            ||stockDocuments.getSupplierId() != stockKitchenItem.getSupplierId()){
                         StockKitchenItem newKitchenItem = new StockKitchenItem();
                         newKitchenItem.setItemId(stockDocumentsItem.getItemId());
                         newKitchenItem.setKitchenId(stockId);
                         newKitchenItem.setSpecifications(stockDocumentsItem.getSpecificationId());
+                        newKitchenItem.setSupplierId(stockDocuments.getSupplierId());
                         newKitchenItem.setUnitId(stockDocumentsItem.getUnitId());
                         newKitchenItem.setStorageQuantity(stockDocumentsItem.getQuantity());
                         stockKitchenItemService.newStockKitchenItem(newKitchenItem);
                     }else{
                         //若表中已经存在
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications specifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
@@ -761,17 +764,20 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 //更新领用厨房库存
                 List<StockKitchenItem> kitchenItems = stockKitchenItemService.queryByItemId(stockDocumentsItem.getItemId(),stockDocuments.getKitchenId());
                 for(StockKitchenItem stockKitchenItem : kitchenItems){
-                    if(Assert.isNull(stockKitchenItem) || stockDocumentsItem.getSpecificationId() != stockKitchenItem.getSpecifications()){
+                    if(Assert.isNull(stockKitchenItem) || stockDocumentsItem.getSpecificationId() != stockKitchenItem.getSpecifications()
+                            ||stockDocuments.getSupplierId() != stockKitchenItem.getSupplierId()){
                         StockKitchenItem newKitchenItem = new StockKitchenItem();
                         newKitchenItem.setItemId(stockDocumentsItem.getItemId());
                         newKitchenItem.setKitchenId(stockDocuments.getKitchenId());
                         newKitchenItem.setSpecifications(stockDocumentsItem.getSpecificationId());
+                        newKitchenItem.setSupplierId(stockDocuments.getSupplierId());
                         newKitchenItem.setUnitId(stockDocumentsItem.getUnitId());
                         newKitchenItem.setStorageQuantity(stockDocumentsItem.getQuantity());
                         stockKitchenItemService.newStockKitchenItem(newKitchenItem);
                     }else{
                         //若表中已经存在
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications kitchenSpecifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
@@ -796,7 +802,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 List<StockKitchenItem> stockKitchenItems = stockKitchenItemService.queryByItemId(stockItem.getId(), stockDocuments.getKitchenId());
                 for(StockKitchenItem stockKitchenItem : stockKitchenItems){
                     if (stockKitchenItem.getStatus() != 3 && Assert.isNotNull(stockKitchenItem)) {
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications kitchenSpecifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
@@ -816,7 +823,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 List<StockKitchenItem> stockItems = stockKitchenItemService.queryByItemId(stockItem.getId(), stockId);
                 for(StockKitchenItem stockKitchenItem : stockItems){
                     if (stockKitchenItem.getStatus() != 3 && Assert.isNotNull(stockKitchenItem)) {
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications stockSpecifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
@@ -834,14 +842,15 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 }
             }
         }else if(stockDocuments.getType() == StockDocumentsTypeEnum.IncomeOnDocuments.getId()){
-            /*********************************/
+
             //盘盈单
             for (StockDocumentsItem stockDocumentsItem : documentsItemList) {
                 StockItem stockItem = stockItemService.queryById(stockDocumentsItem.getItemId());
                 List<StockKitchenItem> stockItems = stockKitchenItemService.queryByItemId(stockItem.getId(), stockDocuments.getKitchenId());
                 for(StockKitchenItem stockKitchenItem : stockItems){
                     if (stockKitchenItem.getStatus() != 3 && Assert.isNotNull(stockKitchenItem)) {
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications stockSpecifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
@@ -865,7 +874,8 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 List<StockKitchenItem> stockItems = stockKitchenItemService.queryByItemId(stockItem.getId(), stockDocuments.getKitchenId());
                 for(StockKitchenItem stockKitchenItem : stockItems){
                     if (stockKitchenItem.getStatus() != 3 && Assert.isNotNull(stockKitchenItem)) {
-                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()){
+                        if(stockDocumentsItem.getSpecificationId() == stockKitchenItem.getSpecifications() && stockDocumentsItem.getUnitId() == stockKitchenItem.getUnitId()
+                                &&stockDocuments.getSupplierId() == stockKitchenItem.getSupplierId()){
                             //查询规格
                             Specifications stockSpecifications = specificationsService.queryById(stockDocumentsItem.getSpecificationId());
                             //通过规格转换为成本卡单位更新库存
