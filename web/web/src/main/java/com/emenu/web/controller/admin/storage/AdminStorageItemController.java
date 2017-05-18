@@ -219,7 +219,6 @@ public class AdminStorageItemController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-
         return "admin/storage/item/new_home";
     }
 
@@ -301,7 +300,6 @@ public class AdminStorageItemController extends AbstractController {
             sendErrMsg(e.getMessage());
             return ADMIN_SYS_ERR_PAGE;
         }
-
         return "admin/storage/item/update_home";
     }
 

@@ -21,15 +21,12 @@
         </div>
         <div class="col-sm-12">
             <form class="form-horizontal J_form" action="" method="">
-                <form class="panel panel-info">
+                <div class="panel panel-info">
                     <div class="panel-heading">
                         <h4>添加</h4>
                     </div>
                     <div class="panel-body">
                         <!--编辑时添加-->
-                        <!--
-                            <input type="hidden" name="id" value="1">
-                        -->
                         <div class="form-group">
                             <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
                             <div class="col-sm-6">
@@ -132,7 +129,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
-        </form>
-    </div>
+       </div>
+   </div>
 </div>

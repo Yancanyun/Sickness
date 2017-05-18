@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <script type="text/template" id="tpl">
     <form class="form-horizontal J_searchForm"  style="text-align:center;" action="" method="">
         <input type="hidden" class="J_id" value="&{id}" name="id">

@@ -349,7 +349,6 @@ public class StockItemServiceImpl implements StockItemService {
             WritableWorkbook outBook = Workbook.createWorkbook(os, tplWorkBook);
             WritableSheet sheet = outBook.getSheet(0);
             int row=3;
-
             for(StockItem stockItem :stockItemlist){
                 //单元格居中格式
                 WritableCellFormat cellFormat=new WritableCellFormat();
@@ -372,17 +371,17 @@ public class StockItemServiceImpl implements StockItemService {
                 Label labelTag = new Label(4,row,stockItem.getTagName());
                 sheet.addCell(labelTag);
                 //库存量
-                Label labelStorageQuantity = new Label(6,row,stockItem.getStorageQuantity().toString());
+                Label labelStorageQuantity = new Label(5,row,stockItem.getStorageQuantity().toString());
                 sheet.addCell(labelStorageQuantity);
                 //入库上限
-                Label labelUpperQuantity = new Label(7,row,stockItem.getUpperQuantity().toString());
+                Label labelUpperQuantity = new Label(6,row,stockItem.getUpperQuantity().toString());
                 sheet.addCell(labelUpperQuantity);
                 //入库下限
-                Label labelLowerQuantity = new Label(8,row,stockItem.getLowerQuantity().toString());
+                Label labelLowerQuantity = new Label(7,row,stockItem.getLowerQuantity().toString());
                 sheet.addCell(labelLowerQuantity);
                 // 出库方式
                 String stockOutType = ((stockItem.getStockOutType() == 1)?"加权平均":"手动");
-                Label labelStockOutType = new Label(9,row,stockOutType);
+                Label labelStockOutType = new Label(8,row,stockOutType);
                 sheet.addCell(labelStockOutType);
                 row++;
             }
