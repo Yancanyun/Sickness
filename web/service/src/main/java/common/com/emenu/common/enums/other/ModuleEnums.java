@@ -352,6 +352,11 @@ public enum ModuleEnums {
     AdminStockSupplierUpdate("Admin:Stock:Supplier:Update"),
     AdminStockSupplierDelete("Admin:Stock:Supplier:Delete"),
 
+    //新版库存预警管理
+    AdminStockWarn("Admin:Stock:Warn"),
+    AdminStockWarnList("Admin:Stock:Warn:List"),
+    AdminStockWarnIgnore("Admin:Stock:Warn:Ignore"),
+
 
     // 顾客点餐平台
     Mobile("Mobile"),

@@ -456,6 +456,11 @@
                         <a class="J_menu" href="${website}admin/stock/documents">单据管理</a>
                     </li>
                 </shiro:checkPermission>
+                <shiro:checkPermission name="Admin:Stock:Warn:List">
+                    <li <c:if test="${MethodModule eq 'Admin:Stock:Warn:List'}">class="active"</c:if>>
+                        <a class="J_menu" href="${website}admin/stock/warn">预警管理</a>
+                    </li>
+                </shiro:checkPermission>
             </ul>
         </li>
     </shiro:checkPermission>

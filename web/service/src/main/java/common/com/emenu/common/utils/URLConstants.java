@@ -173,6 +173,9 @@ public final class URLConstants {
     //新版库存-供货商管理
     public static final String ADMIN_STOCK_SUPPLIER_URL="admin/stock/supplier";
 
+    //新版库存-预警管理
+    public static final String ADMIN_STOCK_WARN_URL="admin/stock/warn";
+
 
 
     /**********************顾客点菜平台*************************/

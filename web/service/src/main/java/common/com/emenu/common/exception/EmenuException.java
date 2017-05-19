@@ -775,7 +775,9 @@ public enum EmenuException implements IBizExceptionMes {
     UpdateStateToResolveFail("修改状态为已解决失败",113001),
     UpdateStateToIgnoreFail("修改状态为已忽略失败",113002),
     QueryAllUntreatedWarnFail("获取所有未处理的预警信息失败",113003),
-
+    WarnOffsetIsNotNull("获取分页信息失败",113004),
+    QueryAllWarnFail("查询所有未处理预警的信息失败",113005),
+    CountAllWarnFail("查询所有预警数量失败",113006),
 
     //新版库存-库存分类管理
     StockTagQueryFailed("查询库存分类失败", 113013),

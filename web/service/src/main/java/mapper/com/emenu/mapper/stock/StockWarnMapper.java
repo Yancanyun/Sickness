@@ -1,6 +1,6 @@
 package com.emenu.mapper.stock;
 
-import com.emenu.common.dto.stock.StockWarnDto;
+import com.emenu.common.entity.stock.StockWarn;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * StockWarnMapper
  *
- * @author yuzhengfei
+ * @author Flying
  * @date 2017/3/15 15:56
  */
 public interface StockWarnMapper  {
@@ -38,7 +38,40 @@ public interface StockWarnMapper  {
      * @return
      * @throws Exception
      */
-    public List<StockWarnDto> queryAllUntreatedWarn(@Param("kitchenId") Integer kitchenId) throws Exception;
+    public List<StockWarn> queryAllUntreatedWarnByKitchenId(@Param("kitchenId") Integer kitchenId) throws Exception;
 
+    /**
+     * 查询所有未处理的预警信息
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<StockWarn> queryAllUntreatedWarn() throws Exception;
+
+    /**
+     *查询所有未处理的预警信息
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<StockWarn> queryAllWarn() throws Exception;
+
+    /**
+     * 获取所有未处理预警的数量
+     *
+     * @return
+     * @throws Exception
+     */
+    public int countAllWarn() throws Exception;
+
+    /**
+     * 获取分页
+     *
+     * @param offset
+     * @param pageSize
+     * @return
+     * @throws Exception
+     */
+    public List<StockWarn> listByPage(@Param("offset") int offset , @Param("pageSize") int pageSize) throws Exception;
 
 }

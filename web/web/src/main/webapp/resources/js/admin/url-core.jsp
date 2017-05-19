@@ -178,7 +178,11 @@
             //存放点管理
             ['delDepot', site.staticWebsite + 'mock/admin/del-depot.json', 'get', '删除存放点'],
             ['editRemark', site.staticWebsite + 'mock/admin/edit-depot-item-remark.json', 'get', '修改备注'],
-            ['addRemark', site.staticWebsite + 'mock/admin/add-depot-item-remark.json', 'get', '添加备注']
+            ['addRemark', site.staticWebsite + 'mock/admin/add-depot-item-remark.json', 'get', '添加备注'],
+
+            //库存预警管理
+            ['delForewarning', site.website + '/admin/del-forewarning.json', 'get', '忽略预警，发送当前预警id'],
+            ['handleForewarning', site.website + '/admin/del-forewarning.json', 'get', '处理预警，发送当前预警id']
 
          ],
 

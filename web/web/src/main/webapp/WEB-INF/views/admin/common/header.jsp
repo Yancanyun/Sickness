@@ -99,6 +99,7 @@
                     <li><a class="J_menu" href="${website}admin/stock/kitchenItem">厨房物品管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/specifications">规格管理</a></li>
                     <li><a class="J_menu" href="${website}admin/stock/documents">单据管理</a></li>
+                    <li><a class="J_menu" href="${website}admin/stock/warn">预警管理</a></li>
                 </ul>
             </li>
         </shiro:checkPermission>

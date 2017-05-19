@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * StockWarn
  *
- * @author yuzhengfei
+ * @author Flying
  * @date 2017/3/13 14:53
  */
 
@@ -25,13 +25,15 @@ public class StockWarn extends AbstractEntity {
     @Column(name = "item_id")
     private Integer itemId;
 
+    //物品名称
+    private String itemName;
+
     //厨房id
     @Column(name = "kitchen_id")
     private Integer kitchenId;
 
-    //规格id
-    @Column(name = "specification_id")
-    private Integer specificationId;
+    //厨房名称
+    private String kitchenName;
 
     //预警内容
     private String content;
@@ -78,14 +80,6 @@ public class StockWarn extends AbstractEntity {
         return id;
     }
 
-    public Integer getSpecificationId() {
-        return specificationId;
-    }
-
-    public void setSpecificationId(Integer specificationId) {
-        this.specificationId = specificationId;
-    }
-
     @Override
     public void setId(Integer id) {
         this.id = id;
@@ -97,6 +91,22 @@ public class StockWarn extends AbstractEntity {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
+    }
+
+    public String getKitchenName() {
+        return kitchenName;
+    }
+
+    public void setKitchenName(String kitchenName) {
+        this.kitchenName = kitchenName;
     }
 
 }

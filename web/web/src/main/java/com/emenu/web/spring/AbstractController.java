@@ -37,10 +37,7 @@ import com.emenu.service.call.CallWaiterService;
 import com.emenu.service.revenue.BillAuditService;
 import com.emenu.service.revenue.BackDishCountService;
 import com.emenu.service.sms.SmsService;
-import com.emenu.service.stock.SpecificationsService;
-import com.emenu.service.stock.StockItemService;
-import com.emenu.service.stock.StockKitchenService;
-import com.emenu.service.stock.StockTagService;
+import com.emenu.service.stock.*;
 import com.emenu.service.storage.*;
 import com.emenu.service.table.*;
 import com.emenu.service.vip.*;
@@ -607,6 +604,11 @@ public class AbstractController extends Base {
     @StaticAutoWire
     @Qualifier("stockTagService")
     protected static StockTagService stockTagService;
+
+    //物品管理
+    @StaticAutoWire
+    @Qualifier("stockWarnService")
+    protected  static StockWarnService stockWarnService;
 }
 
 
