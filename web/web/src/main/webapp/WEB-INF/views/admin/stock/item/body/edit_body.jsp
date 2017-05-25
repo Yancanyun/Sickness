@@ -12,102 +12,115 @@
         <div class="col-sm-12">
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-home"></i>&nbsp;首页</a></li>
-                <li><a href="#">规格管理</a></li>
-                <li class="active">规格类型添加</li>
+                <li><a href="#">库存管理</a></li>
+                <li><a href="#" class="active">库存物品添加</a></li>
             </ol>
-            <h2>规格类型添加</h2>
+            <h2>库存物品添加</h2>
+            <div class="alert alert-warning J_tip">保存成功！</div>
         </div>
         <div class="col-sm-12">
-            <div class="alert hidden J_tip" role="alert">保存成功！</div>
-            <form class="form-horizontal J_submitForm" action="" method="" autocomplete="off">
+            <form class="form-horizontal J_form" action="" method="">
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <h4>添加</h4>
                     </div>
                     <div class="panel-body">
-                        <!-- 隐藏的id，若为编辑页则套该input -->
-                        <input class="J_id" type="hidden" name="id" value="112233">
+                        <!--编辑时添加-->
+                        <!--
+                            <input type="hidden" name="id" value="1">
+                        -->
                         <div class="form-group">
-                            <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位</label>
+                            <label class="col-sm-3 control-label"><span class="requires">*</span>名称</label>
                             <div class="col-sm-6">
-                                <select class="w180 form-control J_unitType J_orderUnitType">
-                                    <option value="1">重量单位</option>
-                                    <option value="2">数量单位</option>
-                                </select>
-                                <select class="w180 form-control J_orderUnit" name="orderUnitId">
-                                    <option value="aa" data-unit-name="aa">aa</option>
-                                    <option value="bb" data-unit-name="bb">bb</option>
-                                    <option value="cc" data-unit-name="cc">cc</option>
-                                </select>
-                                <select class="w180 form-control hidden J_orderUnit" name="orderUnitId" disabled="disabled">
-                                    <option value="dd" data-unit-name="dd">dd</option>
-                                    <option value="ee" data-unit-name="ee">ee</option>
-                                    <option value="ff" data-unit-name="ff">ff</option>
+                                <input type="text" name="name" class="form-control w180 J_name" placeholder="请输入名称" data-valid-rule="length(1,30,1)" data-valid-tip="请输入1-30个字符|输入有误，请重新填写">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">助记码</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="assistantCode" class="form-control w180" placeholder="请输入助记码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><span class="requires">*</span>所属分类</label>
+                            <div class="col-sm-6">
+                                <select class="w180 form-control" name="tagId">
+                                    <option value="aa">aa</option>
+                                    <option value="bb">bb</option>
+                                    <option value="cc">cc</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label"><span class="requires">*</span>订货单位与库存换算关系</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入订货单位与库存转换关系|转换关系有误，请重新填写" name="orderToStorageRatio" value="">
+                            <label class="control-label col-sm-3"><span class="requires">*</span>库存预警上限</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="upperQuantity" class="w180 J_maxStorageQuantity" data-valid-rule="isFloat" data-valid-tip="请输入库存预警上限|输入有误，请重新填写" placeholder="请输入预警上限">
+                                <input type="text" class="w50 J_storage" value="aa" readonly>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位</label>
+                            <label class="control-label col-sm-3"><span class="requires">*</span>库存预警下限</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="lowerQuantity" class="w180 J_minStorageQuantity" data-valid-rule="isFloat" data-valid-tip="请输入库存预警下限|输入有误，请重新填写" placeholder="请输入预警下限">
+                                <input type="text" class="w50 J_storage" value="aa" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><span class="requires">*</span>库存量</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="storageQuantity" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存量|输入有误，请重新填写" placeholder="请输入预警量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">出库方式</label>
                             <div class="col-sm-6">
-                                <select class="w180 form-control J_unitType J_storageUnitType">
-                                    <option value="1">重量单位</option>
-                                    <option value="2">数量单位</option>
-                                </select>
-                                <select class="w180 form-control J_storageUnit" name="storageUnitId">
-                                    <option value="aa" data-unit-name="aa">aa</option>
-                                    <option value="bb" data-unit-name="bb">bb</option>
-                                    <option value="cc" data-unit-name="cc">cc</option>
-                                </select>
-                                <select class="w180 form-control hidden J_storageUnit" name="storageUnitId" disabled="disabled">
-                                    <option value="dd" data-unit-name="dd">dd</option>
-                                    <option value="ee" data-unit-name="ee">ee</option>
-                                    <option value="ff" data-unit-name="ff">ff</option>
+                                <select class="w180 form-control" name="stockOutType">
+                                    <option value="1">自动出库</option>
+                                    <option value="2">手动出库</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label"><span class="requires">*</span>库存单位与成本卡换算关系</label>
+                            <label class="col-sm-3 control-label">备注</label>
                             <div class="col-sm-6">
-                                <input type="text" class="w180" data-valid-rule="isFloat" data-valid-tip="请输入库存单位与成本卡换算关系|转换关系有误，请重新填写" name="storageToCostCardRatio" value="">
+                                <input type="text" name="remark" placeholder="请输入备注" class="w180 form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label"><span class="requires">*</span>成本卡单位</label>
                             <div class="col-sm-6">
-                                <select class="w180 form-control J_unitType">
-                                    <option value="1">重量单位</option>
-                                    <option value="2">数量单位</option>
-                                </select>
                                 <select class="w180 form-control" name="costCardUnitId">
-                                    <option value="aa" data-unit-name="aa">aa</option>
-                                    <option value="bb" data-unit-name="bb">bb</option>
-                                    <option value="cc" data-unit-name="cc">cc</option>
-                                </select>
-                                <select class="w180 form-control hidden" name="costCardUnitId" disabled="disabled">
-                                    <option value="dd" data-unit-name="dd">dd</option>
-                                    <option value="ee" data-unit-name="ee">ee</option>
-                                    <option value="ff" data-unit-name="ff">ff</option>
+                                    <option value="aa">aa</option>
+                                    <option value="bb">bb</option>
+                                    <option value="cc">cc</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-sm-6 col-sm-offset-3">
-                                <div class="btn-toolbar">
-                                    <button class="btn btn-primary J_submit" type="button"><i class="fa fa-save"></i>&nbsp;保存</button>
-                                    <button type="reset" class="btn btn-default"><i class="fa fa-undo"></i>&nbsp;重置</button>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><span class="requires">*</span>选择规格</label>
+                            <div class="col-sm-6 clearfix">
+                                <div class="taste-list J_contain">
+                                    <div class="select-tag" data-id="1" data-orderUnitId="箱" data-orderToStorage="15" data-storageUnitId="瓶" data-storageToCost="500" data-costCardId="毫升">箱15瓶500毫升<i class="fa fa-times J_delTab"></i>
+                                        <input type="hidden" value="1" name="specifications">
+                                    </div>
+                                    <div class="select-tag" data-id="2" data-orderUnitId="箱" data-orderToStorage="15" data-storageUnitId="瓶" data-storageToCost="500" data-costCardId="毫升">箱15瓶500毫升<i class="fa fa-times J_delTab"></i>
+                                        <input type="hidden" value="2" name="specifications">
+                                    </div>
+                                </div>
+                                <a href="javascript:;" class="btn btn-success J_addTrigger"><i class="fa fa-plus"></i>&nbsp;添加规格</a>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-sm-6 col-sm-offset-3">
+                                    <div class="btn-toolbar">
+                                        <button class="btn btn-primary J_submit" type="button"><i class="fa fa-save"></i>&nbsp;保存</button>
+                                        <button class="btn btn-default" type="reset"><i class="fa fa-undo"></i>&nbsp;重置</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </form>
         </div>
     </div>

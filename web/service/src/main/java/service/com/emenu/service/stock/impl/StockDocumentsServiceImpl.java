@@ -491,15 +491,31 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
 
     }
 
+    /**
+     * 导出所有单据
+     *
+     * @param response
+     * @throws SSException
+     */
     @Override
     @Transactional(rollbackFor = {Exception.class, SSException.class}, propagation = Propagation.REQUIRED)
     public void exportToExcelAll(HttpServletResponse response) throws SSException{
         OutputStream outputStream = null;
-        List<DocumentsDto> documentsDtoList = Collections.emptyList();
+        List<DocumentsDto> documentsDtoList = new ArrayList<DocumentsDto>();
+        List<StockDocuments> stockDocumentsList = new ArrayList<StockDocuments>();
+        List<StockDocumentsItem> stockDocumentsItemList = new ArrayList<StockDocumentsItem>();
         try{
-//            documentsDtoList = this.listAll();
-            for (DocumentsDto documentsDto : documentsDtoList){
-                EntityUtil.setNullFieldDefault(documentsDto);
+            stockDocumentsList = listAll();
+            //将查询的单据信息赋值给单据Dto
+            for (StockDocuments stockDocument : stockDocumentsList) {
+                DocumentsDto documentsDto = new DocumentsDto();
+                List<StockDocumentsItem> stockDocumentsItems = new ArrayList<StockDocumentsItem>();
+                //根据单据id获取单据详情信息
+                stockDocumentsItems = stockDocumentsItemService.queryByDocumentsId(stockDocument.getId());
+                //数据存入documentsDto
+                documentsDto.setStockDocuments(stockDocument);
+                documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+                documentsDtoList.add(documentsDto);
             }
             //设置输出流
             //设置excel文件名和sheetName
@@ -569,7 +585,7 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                 Label labelCreatedTime = new Label(8, row + rowchildren, createdTime);
                 sheet.addCell(labelCreatedTime);
                 // 物品列表
-                List<StockDocumentsItem> stockDocumentsItemList = documentsDto.getStockDocumentsItemList();
+                stockDocumentsItemList = documentsDto.getStockDocumentsItemList();
                 for (StockDocumentsItem stockDocumentsItem : stockDocumentsItemList) {
                     // 物品名称
                     Label labelItemName = new Label(9, row + rowchildren, stockItemService.queryById(stockDocumentsItem.getItemId()).getName());
@@ -604,22 +620,23 @@ public class StockDocumentsServiceImpl implements StockDocumentsService {
                     sheet.addCell(labelPrice);
                     rowchildren++;
                 }
-                // 单元格合并函数
-                if(stockDocumentsItemList.size()>1){
-                    sheet.mergeCells(0, row, 0, row + rowchildren-1);
-                    sheet.mergeCells(1, row, 1, row + rowchildren-1);
-                    sheet.mergeCells(2, row, 2, row + rowchildren-1);
-                    sheet.mergeCells(3, row, 3, row + rowchildren-1);
-                    sheet.mergeCells(4, row, 4, row + rowchildren-1);
-                    sheet.mergeCells(5, row, 5, row + rowchildren-1);
-                    sheet.mergeCells(6, row, 6, row + rowchildren-1);
-                    sheet.mergeCells(7, row, 7, row + rowchildren-1);
-                    sheet.mergeCells(8, row, 8, row + rowchildren-1);
-                }
-                if(rowchildren<=1){
-                    row ++;
+               // 单元格合并函数
+                if(stockDocumentsItemList.size()>=1){
+                    sheet.mergeCells(0, up , 0, up+stockDocumentsItemList.size()-1 );
+                    sheet.mergeCells(1, up, 1, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(2, up, 2, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(3, up, 3, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(4, up, 4, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(5, up, 5, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(6, up, 6, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(7, up, 7, up+stockDocumentsItemList.size()-1);
+                    sheet.mergeCells(8, up, 8, up+stockDocumentsItemList.size()-1);
+                    up = up+stockDocumentsItemList.size();
+                    row++;
+                    rowchildren--;
                 }else{
-                    row = row + rowchildren;
+                    row++;
+                    rowchildren--;
                 }
             }
             outBook.write();

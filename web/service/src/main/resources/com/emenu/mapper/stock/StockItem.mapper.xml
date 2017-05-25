@@ -110,8 +110,6 @@
         stockItem.`tag_id` AS tagId,
         tag.`name` AS tagName,
         stockItem.`specifications` AS specifications,
-        stockItem.`supplier_id` AS supplierId,
-        supplier.`name` AS supplierName,
         stockItem.`storage_quantity` AS storageQuantity,
         stockItem.`cost_card_unit_id` AS costCardUnitId,
         unit.`name` AS costCardName,
@@ -125,6 +123,5 @@
         FROM `t_stock_item`stockItem
         LEFT JOIN `t_tag`tag ON tag.`id` = stockItem.`tag_id`
         LEFT JOIN `t_unit`unit ON stockItem.`cost_card_unit_id` = unit.`id`
-        LEFT JOIN `t_party_supplier` supplier ON supplier.`id` = stockItem.`supplier_id`
     </select>
 </mapper>

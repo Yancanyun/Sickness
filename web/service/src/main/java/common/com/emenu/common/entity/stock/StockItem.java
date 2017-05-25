@@ -25,6 +25,7 @@ public class StockItem extends AbstractEntity {
     private String itemNumber;
 
     // 名称
+    @Column(name = "name")
     private String name;
 
     // 助记码

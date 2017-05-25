@@ -49,6 +49,12 @@ public class AdminStockDocumentsController extends AbstractController {
     @Autowired
     private StockKitchenService stockKitchenService;
 
+    /**
+     * 去列表页
+     *
+     * @param model
+     * @return
+     */
     @Module(ModuleEnums.AdminStockDocumentsList)
     @RequestMapping(value = {"","list"}, method = RequestMethod.GET)
     public String toList(Model model){
@@ -74,6 +80,14 @@ public class AdminStockDocumentsController extends AbstractController {
         }
     }
 
+    /**
+     * 刷分页
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return
+     * @throws SSException
+     */
     @Module(value = ModuleEnums.AdminStockDocuments, extModule = ModuleEnums.AdminStockDocumentsList)
     @RequestMapping(value = "ajax/list/{pageNo}",method = RequestMethod.GET)
     @ResponseBody
@@ -196,4 +210,15 @@ public class AdminStockDocumentsController extends AbstractController {
         }
     }
 
+    @Module(ModuleEnums.AdminStockDocumentsExport)
+    @RequestMapping(value = "exportall", method = RequestMethod.GET)
+    public void toReportExport(){
+        try{
+            stockDocumentsService.exportToExcelAll(getResponse());
+            sendErrMsg("导出成功");
+        }catch(Exception e){
+            LogClerk.errLog.error(e);
+            sendErrMsg(e.getMessage());
+        }
+    }
 }

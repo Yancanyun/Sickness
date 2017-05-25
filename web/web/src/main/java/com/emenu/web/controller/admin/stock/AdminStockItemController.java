@@ -173,8 +173,8 @@ public class AdminStockItemController extends AbstractController{
      * @return
      */
     @Module(value = ModuleEnums.AdminStockItem, extModule = ModuleEnums.AdminStockItemUpdate)
-    @RequestMapping(value = "update_stock_item",method = RequestMethod.GET)
-    public String toStockItemUpdate(Integer id,Model model){
+    @RequestMapping(value = "edit/{id}",method = RequestMethod.GET)
+    public String toStockItemUpdate(@PathVariable("id")Integer id,Model model){
         try {
             StockItem stockItem = stockItemService.queryById(id);
             model.addAttribute("stockItem",stockItem);

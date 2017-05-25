@@ -146,7 +146,7 @@
                         <a class="btn btn-success margin-bottom-15 J_backStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加领回单</a>
                         <a class="btn btn-success margin-bottom-15 J_checkStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加盘盈单</a>
                         <a class="btn btn-success margin-bottom-15 J_checkStoreBill" href="#"><i class="fa fa-plus"></i>&nbsp;添加盘亏单</a>
-                        <a class="btn btn-warning margin-bottom-15 pull-right J_allExport" href="" target="_blank"><i class="fa fa-download"></i>&nbsp;全部导出excel</a>
+                        <a class="btn btn-warning margin-bottom-15 pull-right J_allExport" href="${website}admin/stock/documents/exportall" target="_blank"><i class="fa fa-download"></i>&nbsp;全部导出excel</a>
                         <a class="btn btn-warning margin-bottom-15 margin-right-10 pull-right J_export" href="${website}admin/stock/documents/exportbycd" target="_blank"><i class="fa fa-download"></i>&nbsp;按条件导出excel</a>
                     </p>
                     <div class="table-responsive">

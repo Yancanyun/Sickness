@@ -4,8 +4,10 @@ import com.emenu.common.dto.stock.DocumentsDto;
 import com.emenu.common.dto.stock.DocumentsSearchDto;
 import com.emenu.common.entity.stock.StockDocuments;
 import com.emenu.common.entity.stock.StockDocumentsItem;
+import com.emenu.service.stock.StockDocumentsItemService;
 import com.emenu.service.stock.StockDocumentsService;
 import com.emenu.test.AbstractTestCase;
+import org.apache.xpath.SourceTree;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +28,9 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
 
     @Autowired
     private StockDocumentsService stockDocumentsService;
+
+    @Autowired
+    private StockDocumentsItemService stockDocumentsItemService;
 
     @Test
     public void newDocumentsDto() throws Exception {
@@ -303,5 +308,25 @@ public class StockDocumentsServiceTest extends AbstractTestCase {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Test
+    public void queryDocumentsDto() throws Exception{
+        List<DocumentsDto> documentsDtoList = new ArrayList<DocumentsDto>();
+        List<StockDocuments> stockDocumentsList = new ArrayList<StockDocuments>();
+        stockDocumentsList = stockDocumentsService.listAll();
+        //将查询的单据信息赋值给单据Dto
+        for (StockDocuments stockDocument : stockDocumentsList) {
+            DocumentsDto documentsDto = new DocumentsDto();
+            List<StockDocumentsItem> stockDocumentsItems = new ArrayList<StockDocumentsItem>();
+            //根据单据id获取单据详情信息
+            stockDocumentsItems = stockDocumentsItemService.queryByDocumentsId(stockDocument.getId());
+            //数据存入documentsDto
+            documentsDto.setStockDocuments(stockDocument);
+            documentsDto.setStockDocumentsItemList(stockDocumentsItems);
+            documentsDtoList.add(documentsDto);
+            System.out.println(documentsDto.getStockDocuments().getSerialNumber());
+        }
+        System.out.println(documentsDtoList.get(0).getStockDocuments().getAuditName());
     }
 }
